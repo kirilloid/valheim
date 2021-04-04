@@ -1,6 +1,6 @@
 import { SkillType } from "./model/skills";
 
-const enum Biome {
+export const enum Biome {
   Meadows,
   BlackForest,
   Swamp,
@@ -37,7 +37,7 @@ export const enum DamageType {
   Spirit,
 };
 
-export const enum DamageModifiers {
+export const enum DamageModifier {
   Normal,    // 1x
   Resistant, // 0.5x
   Weak,      // 1.5x
@@ -46,6 +46,8 @@ export const enum DamageModifiers {
   VeryResistant, // 0.25x
   VeryWeak,  // 2x
 };
+
+export type DamageModifiers = Record<DamageType, DamageModifier>;
 
 type DamageProfile = {
   type: DamageType;
@@ -84,7 +86,7 @@ export interface Creature {
   hp: number;
   staggerFactor?: number;
   attacks: DamageProfile[];
-  damageModifiers: Record<DamageType, DamageModifiers>;
+  damageModifiers: DamageModifiers;
   drop: DropEntry[];
   tame?: { fedTime: number; tameTime: number; commandable: boolean; eats: string[] };
   pregnancy?: { time: number; chance: number };
@@ -95,18 +97,35 @@ export enum CraftingStation {
   Workbench,
   Forge,
   ArtisanTable,
+  CookingStation, // overcooked: 75431; 75432 -> 75418: 25, 75538 -> 75420: 20, 75533 -> 75504: 60, 75448 -> 75554: 60, 75489 -> 75559: 25 
+  Cauldron,
+  Fermenter,
+  Smelter, // fuel: 75431; 75512 -> 75520, 75531 -> 75553, 75399 -> 75553, 75463 -> 75434, 75419 -> 75404
+  BlastFurnace,
+  CharcoalKiln,
+  Windmill,
+  SpinningWheel,
+  Cultivator,
 }
 
 interface BaseItem {
   id: string;
   weight: number;
-  stack: number;
-  teleportable: boolean;
+  stack?: number;
+  teleportable?: false;
   recipe?: {
+    time: number;
     materials: Record<string, number>;
     materialsPerLevel: Record<string, number>;
-    source: { station: CraftingStation, level: number };
-    upgrade: { station: CraftingStation, level: number };
+    source: { station: CraftingStation, level?: number };
+    upgrade: { station: CraftingStation, level?: number };
+  } | {
+    time: number;
+    materials: Record<string, number>;
+    source: { station: CraftingStation, level?: number };
+    number: number;
+  } | {
+    value: number;
   };
 }
 
@@ -137,6 +156,11 @@ interface Resource extends BaseItem {
   type: 'item';
 }
 
+interface Valuable extends BaseItem {
+  type: 'value';
+  value: number;
+}
+
 interface Food extends BaseItem {
   type: 'food';
   health: number;
@@ -161,14 +185,15 @@ interface BowAttack extends BaseAttack {
 }
 
 type Attack =
-  | BaseAttack & { type: 'hor' | 'ver' | 'area' }
+  | BaseAttack & { type: 'melee' | 'area' }
   | BowAttack & { type: 'proj' }
 
 interface Weapon extends BaseItem {
   type: 'weap';
-  hands: 'primary' | 'both' | 'secondary' | 'bow' | 'either'
+  slot: 'primary' | 'both' | 'secondary' | 'bow' | 'either'
     | 'head' | 'shoulders' | 'body' | 'legs'
     | 'none';
+  skill: SkillType;
   toolTier?: number;
   damage: Pair<DamageProfile>;
   attacks: Attack[];
@@ -180,10 +205,19 @@ interface Weapon extends BaseItem {
   backstab: number;
   moveSpeed: number;
   durability: number | Pair<number>;
-  skill: SkillType;
 }
 
-export type Item = Resource | Food | Weapon;
+interface Armor extends BaseItem {
+  type: 'armor';
+  slot: 'head' | 'shoulders' | 'body' | 'legs' | 'none';
+  armor: Pair<number>;
+  maxLvl: number;
+  durability: number | Pair<number>;
+  moveSpeed: number;
+  damageModifiers?: Partial<DamageModifiers>;
+}
+
+export type Item = Resource | Valuable | Food | Weapon | Armor;
 
 export enum Skill {
   Clubs,

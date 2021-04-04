@@ -1,11 +1,13 @@
 import { CraftingStation, DamageType, Item } from "../types";
 import { SkillType } from "./skills";
 
+const CRAFT_TIME = 4;
+
 export const items: Item[] = [
 // PRE-CRAFT AGE
-  { type: 'weap', hands: 'primary',
+  { type: 'weap', slot: 'primary',
     id: 'Club',
-    weight: 2, stack: 1, teleportable: true,
+    weight: 2, stack: 1,
     skill: SkillType.Clubs,
     damage: [{
       [DamageType.Blunt]: 12
@@ -13,7 +15,7 @@ export const items: Item[] = [
       [DamageType.Blunt]: 6
     }],
     attacks: [{
-      type: 'hor',
+      type: 'melee',
       chain: 3,
       chainCombo: 2,
       stamina: 5,
@@ -26,16 +28,17 @@ export const items: Item[] = [
     parryBonus: 2,
     knockback: 50, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      time: CRAFT_TIME,
       materials: { Wood: 6 },
       materialsPerLevel: { BoneFragments: 5 },
       source: { station: CraftingStation.Inventory, level: 0 },
       upgrade: { station: CraftingStation.Workbench, level: 1 },
     }
   },
-  { type: 'weap', hands: 'primary',
+  { type: 'weap', slot: 'primary',
     id: 'AxeStone',
     toolTier: 0,
-    weight: 1.5, stack: 1, teleportable: true,
+    weight: 1.5, stack: 1,
     skill: SkillType.Axes,
     damage: [{
       [DamageType.Slash]: 15,
@@ -45,7 +48,7 @@ export const items: Item[] = [
       [DamageType.Chop]: 3,
     }],
     attacks: [{
-      type: 'hor',
+      type: 'melee',
       chain: 2,
       chainCombo: 2,
       stamina: 5,
@@ -58,22 +61,23 @@ export const items: Item[] = [
     parryBonus: 2,
     knockback: 50, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      time: CRAFT_TIME,
       materials: { Wood: 5, Stone: 4 },
       materialsPerLevel: { Stone: 2 },
       source: { station: CraftingStation.Inventory, level: 0 },
       upgrade: { station: CraftingStation.Workbench, level: 1 },
     }
   },
-  { type: 'weap', hands: 'either',
+  { type: 'weap', slot: 'either',
     id: 'Torch',
-    weight: 1, stack: 1, teleportable: true,
+    weight: 1, stack: 1,
     skill: SkillType.Clubs,
     damage: [{
       [DamageType.Blunt]: 4,
       [DamageType.Fire]: 15,
     }, {}],
     attacks: [{
-      type: 'hor',
+      type: 'melee',
       chain: 3,
       chainCombo: 2,
       stamina: 5,
@@ -86,6 +90,7 @@ export const items: Item[] = [
     parryBonus: 2,
     knockback: 30, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      time: CRAFT_TIME,
       materials: { Wood: 1, Resin: 1 },
       materialsPerLevel: {},
       source: { station: CraftingStation.Inventory, level: 0 },
@@ -93,10 +98,10 @@ export const items: Item[] = [
     }
   },
 // STONE AGE
-  { type: 'weap', hands: 'primary',
+  { type: 'weap', slot: 'primary',
     id: 'AxeFlint',
     toolTier: 1,
-    weight: 1.5, stack: 1, teleportable: true,
+    weight: 1.5, stack: 1,
     skill: SkillType.Axes,
     damage: [{
       [DamageType.Slash]: 20,
@@ -106,7 +111,7 @@ export const items: Item[] = [
       [DamageType.Chop]: 3,
     }],
     attacks: [{
-      type: 'hor',
+      type: 'melee',
       chain: 3,
       chainCombo: 2,
       stamina: 8,
@@ -119,15 +124,16 @@ export const items: Item[] = [
     parryBonus: 2,
     knockback: 50, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      time: CRAFT_TIME,
       materials: { Wood: 4, Flint: 6 },
       materialsPerLevel: { Flint: 3, LeatherScraps: 2 },
       source: { station: CraftingStation.Workbench, level: 1 },
       upgrade: { station: CraftingStation.Workbench, level: 2 },
     }
   },
-  { type: 'weap', hands: 'primary',
+  { type: 'weap', slot: 'primary',
     id: 'KnifeFlint',
-    weight: 0.3, stack: 1, teleportable: true,
+    weight: 0.3, stack: 1,
     skill: SkillType.Knives,
     damage: [{
       [DamageType.Slash]: 6,
@@ -137,13 +143,13 @@ export const items: Item[] = [
       [DamageType.Pierce]: 1,
     }],
     attacks: [{
-      type: 'hor',
+      type: 'melee',
       chain: 3,
       chainCombo: 2,
       stamina: 5,
       range: 1.8,
     }, {
-      type: 'hor',
+      type: 'melee',
       chain: 0,
       chainCombo: 2,
       stamina: 40,
@@ -157,15 +163,16 @@ export const items: Item[] = [
     parryBonus: 4,
     knockback: 10, backstab: 10, moveSpeed: 0,
     recipe: {
+      time: CRAFT_TIME,
       materials: { Wood: 2, Flint: 4, LeatherScraps: 2 },
       materialsPerLevel: { Flint: 2 },
       source: { station: CraftingStation.Workbench, level: 1 },
       upgrade: { station: CraftingStation.Workbench, level: 2 },
     }
   },
-  { type: 'weap', hands: 'primary',
+  { type: 'weap', slot: 'primary',
     id: 'SpearFlint',
-    weight: 1.5, stack: 1, teleportable: true,
+    weight: 1.5, stack: 1,
     skill: SkillType.Spears,
     damage: [{
       [DamageType.Pierce]: 20,
@@ -173,12 +180,11 @@ export const items: Item[] = [
       [DamageType.Pierce]: 6,
     }],
     attacks: [{
-      type: 'hor',
+      type: 'melee',
       chain: 0,
       chainCombo: 2,
       stamina: 15,
       range: 1.8,
-      
     }, {
       type: 'proj',
       projVel: [2, 20],
@@ -196,15 +202,16 @@ export const items: Item[] = [
     parryBonus: 2,
     knockback: 20, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      time: CRAFT_TIME,
       materials: { Wood: 5, Flint: 10, LeatherScraps: 2 },
       materialsPerLevel: { Wood: 3, Flint: 5, LeatherScraps: 1 },
       source: { station: CraftingStation.Workbench, level: 1 },
       upgrade: { station: CraftingStation.Workbench, level: 2 },
     }
   },
-  { type: 'weap', hands: 'both',
+  { type: 'weap', slot: 'both',
     id: 'SledgeStagbreaker',
-    weight: 4, stack: 1, teleportable: true,
+    weight: 4, stack: 1,
     skill: SkillType.Clubs,
     damage: [
       { [DamageType.Blunt]: 20, [DamageType.Pierce]: 5 },
@@ -224,15 +231,16 @@ export const items: Item[] = [
     parryBonus: 2,
     knockback: 150, backstab: 2, moveSpeed: -0.2,
     recipe: {
+      time: CRAFT_TIME,
       materials: { RoundLog: 20, DeerTrophy: 5, LeatherScraps: 2 },
       materialsPerLevel: { RoundLog: 5, DeerTrophy: 2, LeatherScraps: 1, BoneFragments: 10 },
       source: { station: CraftingStation.Workbench, level: 2 },
       upgrade: { station: CraftingStation.Workbench, level: 3 },
     }
   },
-  { type: 'weap', hands: 'bow',
+  { type: 'weap', slot: 'bow',
     id: 'Bow',
-    weight: 1.5, stack: 1, teleportable: true,
+    weight: 1.5, stack: 1,
     skill: SkillType.Bows,
     damage: [{
       [DamageType.Pierce]: 22,
@@ -257,23 +265,24 @@ export const items: Item[] = [
     // "holdDurationMin": 2.5,
     // "holdStaminaDrain": 5,
     recipe: {
+      time: CRAFT_TIME,
       materials: { Wood: 10, LeatherScraps: 8 },
       materialsPerLevel: { Wood: 5, LeatherScraps: 4, DeerHide: 1 },
       source: { station: CraftingStation.Workbench, level: 1 },
       upgrade: { station: CraftingStation.Workbench, level: 2 },
     }
   },
-  { type: 'weap', hands: 'both',
+  { type: 'weap', slot: 'both',
     id: 'PickaxeAntler',
     toolTier: 0,
-    weight: 2, stack: 1, teleportable: true,
+    weight: 2, stack: 1,
     skill: SkillType.Pickaxes,
     damage: [{
       [DamageType.Pierce]: 18,
       [DamageType.Pickaxe]: 18,
     }, {}],
     attacks: [{
-      type: 'ver',
+      type: 'melee',
       chain: 0,
       chainCombo: 2,
       stamina: 10,
@@ -286,15 +295,16 @@ export const items: Item[] = [
     parryBonus: 2,
     knockback: 50, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      time: CRAFT_TIME,
       materials: { Wood: 10, HardAntler: 1 },
       materialsPerLevel: {},
       source: { station: CraftingStation.Workbench, level: 1 },
       upgrade: { station: CraftingStation.Workbench, level: 0 },
     }
   },
-  { type: 'weap', hands: 'secondary',
+  { type: 'weap', slot: 'secondary',
     id: 'ShieldWood',
-    weight: 4, stack: 1, teleportable: true,
+    weight: 4, stack: 1,
     skill: SkillType.Blocking,
     damage: [{}, {}],
     attacks: [],
@@ -305,15 +315,16 @@ export const items: Item[] = [
     parryBonus: 1,
     knockback: 40, backstab: 4, moveSpeed: -0.2,
     recipe: {
+      time: CRAFT_TIME,
       materials: { Wood: 10, Resin: 4, LeatherScraps: 4 },
       materialsPerLevel: { Wood: 5, Resin: 2, LeatherScraps: 2 },
       source: { station: CraftingStation.Workbench, level: 1 },
       upgrade: { station: CraftingStation.Workbench, level: 2 },
     }
   },
-  { type: 'weap', hands: 'secondary',
+  { type: 'weap', slot: 'secondary',
     id: 'ShieldWoodTower',
-    weight: 4, stack: 1, teleportable: true,
+    weight: 4, stack: 1,
     skill: SkillType.Blocking,
     damage: [{}, {}],
     attacks: [],
@@ -324,6 +335,7 @@ export const items: Item[] = [
     parryBonus: 1,
     knockback: 40, backstab: 4, moveSpeed: -0.2,
     recipe: {
+      time: CRAFT_TIME,
       materials: { Wood: 10, LeatherScraps: 6 },
       materialsPerLevel: { Wood: 5, LeatherScraps: 3 },
       source: { station: CraftingStation.Workbench, level: 1 },
@@ -331,9 +343,9 @@ export const items: Item[] = [
     }
   },
 // BRONZE AGE
-  { type: 'weap', hands: 'primary',
+  { type: 'weap', slot: 'primary',
     id: 'KnifeCopper',
-    weight: 0.3, stack: 1, teleportable: true,
+    weight: 0.3, stack: 1,
     skill: SkillType.Knives,
     damage: [{
       [DamageType.Slash]: 9,
@@ -343,13 +355,13 @@ export const items: Item[] = [
       [DamageType.Pierce]: 1,
     }],
     attacks: [{
-      type: 'hor',
+      type: 'melee',
       chain: 3,
       chainCombo: 2,
       stamina: 5,
       range: 1.8,
     }, {
-      type: 'hor',
+      type: 'melee',
       chain: 0,
       chainCombo: 2,
       stamina: 40,
@@ -363,15 +375,16 @@ export const items: Item[] = [
     parryBonus: 4,
     knockback: 10, backstab: 10, moveSpeed: 0,
     recipe: {
+      time: CRAFT_TIME,
       materials: { Wood: 2, Copper: 8 },
       materialsPerLevel: { GreydwarfEye: 8, Copper: 4 },
       source: { station: CraftingStation.Forge, level: 1 },
       upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
-  { type: 'weap', hands: 'primary',
+  { type: 'weap', slot: 'primary',
     id: 'AtgeirBronze',
-    weight: 2.5, stack: 1, teleportable: true,
+    weight: 2.5, stack: 1,
     skill: SkillType.Polearms,
     damage: [{
       [DamageType.Pierce]: 45,
@@ -379,13 +392,13 @@ export const items: Item[] = [
       [DamageType.Pierce]: 6,
     }],
     attacks: [{
-      type: 'hor',
+      type: 'melee',
       chain: 3,
       chainCombo: 2,
       stamina: 20,
       range: 3.2,
     }, {
-      type: 'hor',
+      type: 'melee',
       chain: 0,
       chainCombo: 2,
       stamina: 35,
@@ -399,16 +412,17 @@ export const items: Item[] = [
     parryBonus: 3,
     knockback: 30, backstab: 3, moveSpeed: -0.1,
     recipe: {
+      time: CRAFT_TIME,
       materials: { Wood: 10, Bronze: 8, LeatherScraps: 2 },
       materialsPerLevel: { Bronze: 4 },
       source: { station: CraftingStation.Forge, level: 1 },
       upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
-  { type: 'weap', hands: 'primary',
+  { type: 'weap', slot: 'primary',
     id: 'AxeBronze',
     toolTier: 2,
-    weight: 2, stack: 1, teleportable: true,
+    weight: 2, stack: 1,
     skill: SkillType.Axes,
     damage: [{
       [DamageType.Slash]: 35,
@@ -418,7 +432,7 @@ export const items: Item[] = [
       [DamageType.Chop]: 3,
     }],
     attacks: [{
-      type: 'hor',
+      type: 'melee',
       chain: 3,
       chainCombo: 2,
       stamina: 10,
@@ -431,15 +445,16 @@ export const items: Item[] = [
     parryBonus: 2,
     knockback: 50, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      time: CRAFT_TIME,
       materials: { Wood: 4, Bronze: 8, LeatherScraps: 2 },
       materialsPerLevel: { Bronze: 4, LeatherScraps: 1 },
       source: { station: CraftingStation.Forge, level: 1 },
       upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
-  { type: 'weap', hands: 'primary',
+  { type: 'weap', slot: 'primary',
     id: 'MaceBronze',
-    weight: 2, stack: 1, teleportable: true,
+    weight: 2, stack: 1,
     skill: SkillType.Clubs,
     damage: [{
       [DamageType.Blunt]: 35,
@@ -447,13 +462,13 @@ export const items: Item[] = [
       [DamageType.Blunt]: 6,
     }],
     attacks: [{
-      type: 'hor',
+      type: 'melee',
       chain: 3,
       chainCombo: 2,
       stamina: 15,
       range: 2.4,
     }, {
-      type: 'ver',
+      type: 'melee',
       chain: 0,
       chainCombo: 2,
       stamina: 30,
@@ -467,15 +482,16 @@ export const items: Item[] = [
     parryBonus: 2,
     knockback: 80, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      time: CRAFT_TIME,
       materials: { Wood: 4, Bronze: 8, LeatherScraps: 3 },
       materialsPerLevel: { Bronze: 4 },
       source: { station: CraftingStation.Forge, level: 1 },
       upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
-  { type: 'weap', hands: 'primary',
+  { type: 'weap', slot: 'primary',
     id: 'SpearBronze',
-    weight: 1.5, stack: 1, teleportable: true,
+    weight: 1.5, stack: 1,
     skill: SkillType.Spears,
     damage: [{
       [DamageType.Pierce]: 35,
@@ -483,7 +499,7 @@ export const items: Item[] = [
       [DamageType.Pierce]: 6,
     }],
     attacks: [{
-      type: 'hor',
+      type: 'melee',
       chain: 0,
       chainCombo: 2,
       stamina: 15,
@@ -505,15 +521,16 @@ export const items: Item[] = [
     parryBonus: 2,
     knockback: 20, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      time: CRAFT_TIME,
       materials: { Wood: 5, Bronze: 6, DeerHide: 2 },
       materialsPerLevel: { Wood: 3, Bronze: 4, DeerHide: 1 },
       source: { station: CraftingStation.Forge, level: 1 },
       upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
-  { type: 'weap', hands: 'primary',
+  { type: 'weap', slot: 'primary',
     id: 'SwordBronze',
-    weight: 0.8, stack: 1, teleportable: true,
+    weight: 0.8, stack: 1,
     skill: SkillType.Swords,
     damage: [{
       [DamageType.Slash]: 35,
@@ -521,13 +538,13 @@ export const items: Item[] = [
       [DamageType.Slash]: 6,
     }],
     attacks: [{
-      type: 'hor',
+      type: 'melee',
       chain: 3,
       chainCombo: 2,
       stamina: 10,
       range: 2.4,
     }, {
-      type: 'hor',
+      type: 'melee',
       chain: 0,
       chainCombo: 2,
       stamina: 30,
@@ -541,16 +558,17 @@ export const items: Item[] = [
     parryBonus: 2,
     knockback: 40, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      time: CRAFT_TIME,
       materials: { Wood: 2, Bronze: 8, LeatherScraps: 2 },
       materialsPerLevel: { Wood: 1, Bronze: 4, LeatherScraps: 1 },
       source: { station: CraftingStation.Forge, level: 1 },
       upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
-  { type: 'weap', hands: 'both',
+  { type: 'weap', slot: 'both',
     id: 'PickaxeBronze',
     toolTier: 1,
-    weight: 2, stack: 1, teleportable: true,
+    weight: 2, stack: 1,
     skill: SkillType.Pickaxes,
     damage: [{
       [DamageType.Pierce]: 25,
@@ -560,7 +578,7 @@ export const items: Item[] = [
       [DamageType.Pickaxe]: 4,
     }],
     attacks: [{
-      type: 'ver',
+      type: 'melee',
       chain: 0,
       chainCombo: 2,
       stamina: 10,
@@ -573,15 +591,16 @@ export const items: Item[] = [
     parryBonus: 2,
     knockback: 50, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      time: CRAFT_TIME,
       materials: { RoundLog: 3, Bronze: 10 },
       materialsPerLevel: { RoundLog: 1, Bronze: 5 },
       source: { station: CraftingStation.Forge, level: 1 },
       upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
-  { type: 'weap', hands: 'bow',
+  { type: 'weap', slot: 'bow',
     id: 'BowFineWood',
-    weight: 1.5, stack: 1, teleportable: true,
+    weight: 1.5, stack: 1,
     skill: SkillType.Bows,
     damage: [{
       [DamageType.Pierce]: 32,
@@ -606,15 +625,16 @@ export const items: Item[] = [
     // "holdDurationMin": 2.5,
     // "holdStaminaDrain": 5,
     recipe: {
+      time: CRAFT_TIME,
       materials: { FineWood: 10, RoundLog: 10, DeerHide: 2 },
       materialsPerLevel: { FineWood: 5, RoundLog: 5, DeerHide: 2 },
       source: { station: CraftingStation.Workbench, level: 1 },
       upgrade: { station: CraftingStation.Workbench, level: 2 },
     }
   },
-  { type: 'weap', hands: 'secondary',
+  { type: 'weap', slot: 'secondary',
     id: 'ShieldBronzeBuckler',
-    weight: 3, stack: 1, teleportable: true,
+    weight: 3, stack: 1,
     skill: SkillType.Blocking,
     damage: [{}, {}],
     attacks: [],
@@ -625,6 +645,7 @@ export const items: Item[] = [
     parryBonus: 2,
     knockback: 40, backstab: 4, moveSpeed: -0.05,
     recipe: {
+      time: CRAFT_TIME,
       materials: { Wood: 4, Bronze: 10 },
       materialsPerLevel: { Wood: 1, Bronze: 5 },
       source: { station: CraftingStation.Forge, level: 1 },
@@ -632,10 +653,10 @@ export const items: Item[] = [
     }
   },
 // IRON AGE
-  { type: 'weap', hands: 'both',
+  { type: 'weap', slot: 'both',
     id: 'Battleaxe',
     toolTier: 3,
-    weight: 2.5, stack: 1, teleportable: true,
+    weight: 2.5, stack: 1,
     skill: SkillType.Axes,
     damage: [{
       [DamageType.Slash]: 75,
@@ -645,13 +666,13 @@ export const items: Item[] = [
       [DamageType.Chop]: 2.5,
     }],
     attacks: [{
-      type: 'hor',
+      type: 'melee',
       chain: 3,
       chainCombo: 2,
       stamina: 25,
       range: 2.5,
     }, {
-      type: 'hor',
+      type: 'melee',
       chain: 0,
       chainCombo: 2,
       stamina: 15,
@@ -665,16 +686,17 @@ export const items: Item[] = [
     parryBonus: 2,
     knockback: 70, backstab: 3, moveSpeed: -0.2,
     recipe: {
+      time: CRAFT_TIME,
       materials: { AncientBark: 30, Iron: 35, LeatherScraps: 4 },
       materialsPerLevel: { AncientBark: 5, Iron: 15 },
       source: { station: CraftingStation.Forge, level: 2 },
       upgrade: { station: CraftingStation.Forge, level: 3 },
     }
   },
-  { type: 'weap', hands: 'primary',
+  { type: 'weap', slot: 'primary',
     id: 'SwordIron',
     toolTier: 0,
-    weight: 0.8, stack: 1, teleportable: true,
+    weight: 0.8, stack: 1,
     skill: SkillType.Swords,
     damage: [{
       [DamageType.Slash]: 55,
@@ -682,13 +704,13 @@ export const items: Item[] = [
       [DamageType.Slash]: 6,
     }],
     attacks: [{
-      type: 'hor',
+      type: 'melee',
       chain: 3,
       chainCombo: 2,
       stamina: 10,
       range: 2.4,
     }, {
-      type: 'hor',
+      type: 'melee',
       chain: 0,
       chainCombo: 2,
       stamina: 30,
@@ -702,16 +724,17 @@ export const items: Item[] = [
     parryBonus: 2,
     knockback: 40, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      time: CRAFT_TIME,
       materials: { Wood: 2, Iron: 20, LeatherScraps: 3 },
       materialsPerLevel: { Wood: 1, Iron: 10, LeatherScraps: 2 },
       source: { station: CraftingStation.Forge, level: 2 },
       upgrade: { station: CraftingStation.Forge, level: 3 },
     },
   },
-  { type: 'weap', hands: 'primary',
+  { type: 'weap', slot: 'primary',
     id: 'AxeIron',
     toolTier: 3,
-    weight: 2, stack: 1, teleportable: true,
+    weight: 2, stack: 1,
     skill: SkillType.Axes,
     damage: [{
       [DamageType.Slash]: 55,
@@ -721,7 +744,7 @@ export const items: Item[] = [
       [DamageType.Chop]: 3,
     }],
     attacks: [{
-      type: 'hor',
+      type: 'melee',
       chain: 3,
       chainCombo: 2,
       stamina: 10,
@@ -734,15 +757,16 @@ export const items: Item[] = [
     parryBonus: 2,
     knockback: 50, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      time: CRAFT_TIME,
       materials: { Wood: 4, Iron: 20, LeatherScraps: 2 },
       materialsPerLevel: { Iron: 10, LeatherScraps: 1 },
       source: { station: CraftingStation.Forge, level: 2 },
       upgrade: { station: CraftingStation.Forge, level: 3 },
     },
   },
-  { type: 'weap', hands: 'both',
+  { type: 'weap', slot: 'both',
     id: 'SledgeIron',
-    weight: 4, stack: 1, teleportable: true,
+    weight: 4, stack: 1,
     skill: SkillType.Clubs,
     damage: [{
       [DamageType.Blunt]: 55,
@@ -764,15 +788,16 @@ export const items: Item[] = [
     parryBonus: 2,
     knockback: 200, backstab: 2, moveSpeed: -0.2,
     recipe: {
+      time: CRAFT_TIME,
       materials: { AncientBark: 10, Iron: 30, YmirFlesh: 4, DraugrEliteTrophy: 1 },
       materialsPerLevel: { AncientBark: 2, Iron: 15, YmirFlesh: 2 },
       source: { station: CraftingStation.Forge, level: 2 },
       upgrade: { station: CraftingStation.Forge, level: 3 },
     },
   },
-  { type: 'weap', hands: 'primary',
+  { type: 'weap', slot: 'primary',
     id: 'MaceIron',
-    weight: 2, stack: 1, teleportable: true,
+    weight: 2, stack: 1,
     skill: SkillType.Clubs,
     damage: [{
       [DamageType.Blunt]: 55,
@@ -780,13 +805,13 @@ export const items: Item[] = [
       [DamageType.Blunt]: 6,
     }],
     attacks: [{
-      type: 'hor',
+      type: 'melee',
       chain: 3,
       chainCombo: 2,
       stamina: 15,
       range: 2.4,
     }, {
-      type: 'ver',
+      type: 'melee',
       chain: 0,
       chainCombo: 2,
       stamina: 30,
@@ -800,16 +825,56 @@ export const items: Item[] = [
     parryBonus: 2,
     knockback: 90, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      time: CRAFT_TIME,
       materials: { Wood: 4, Iron: 20, LeatherScraps: 3 },
       materialsPerLevel: { Iron: 10 },
       source: { station: CraftingStation.Forge, level: 2 },
       upgrade: { station: CraftingStation.Forge, level: 3 },
     },
   },
-  { type: 'weap', hands: 'both',
+  { type: 'weap', slot: 'primary',
+    id: 'SpearElderbark',
+    weight: 1.5, stack: 1,
+    skill: SkillType.Spears,
+    damage: [{
+      [DamageType.Pierce]: 55,
+    }, {
+      [DamageType.Pierce]: 6,
+    }],
+    attacks: [{
+      type: 'melee',
+      chain: 0,
+      chainCombo: 2,
+      stamina: 15,
+      range: 1.8,
+    }, {
+      type: 'proj',
+      projVel: [2, 20],
+      projAcc: [20, 1],
+      chain: 0,
+      chainCombo: 2,
+      stamina: 15,
+      range: 1,
+      mul: { damage: 1.5, force: 1.5, stagger: 1 },
+    }],
+    maxLvl: 4,
+    durability: [100, 50],
+    block: 10,
+    parryForce: 0,
+    parryBonus: 2,
+    knockback: 20, backstab: 3, moveSpeed: -0.05,
+    recipe: {
+      time: CRAFT_TIME,
+      materials: { AncientBark: 10, Iron: 10, TrollHide: 4 },
+      materialsPerLevel: { Wood: 5, Flint: 5, LeatherScraps: 1 },
+      source: { station: CraftingStation.Forge, level: 3 },
+      upgrade: { station: CraftingStation.Forge, level: 4 },
+    }
+  },
+  { type: 'weap', slot: 'both',
     id: 'PickaxeIron',
     toolTier: 2,
-    weight: 2, stack: 1, teleportable: true,
+    weight: 2, stack: 1,
     skill: SkillType.Pickaxes,
     damage: [{
       [DamageType.Pierce]: 33,
@@ -819,7 +884,7 @@ export const items: Item[] = [
       [DamageType.Pickaxe]: 5,
     }],
     attacks: [{
-      type: 'ver',
+      type: 'melee',
       chain: 0,
       chainCombo: 2,
       stamina: 10,
@@ -832,15 +897,16 @@ export const items: Item[] = [
     parryBonus: 2,
     knockback: 50, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      time: CRAFT_TIME,
       materials: { RoundLog: 3, Iron: 20 },
       materialsPerLevel: { RoundLog: 1, Iron: 10 },
       source: { station: CraftingStation.Forge, level: 2 },
       upgrade: { station: CraftingStation.Forge, level: 3 },
     },
   },
-  { type: 'weap', hands: 'both',
+  { type: 'weap', slot: 'both',
     id: 'AtgeirIron',
-    weight: 2.5, stack: 1, teleportable: true,
+    weight: 2.5, stack: 1,
     skill: SkillType.Polearms,
     damage: [{
       [DamageType.Pierce]: 65,
@@ -848,13 +914,13 @@ export const items: Item[] = [
       [DamageType.Pierce]: 6,
     }],
     attacks: [{
-      type: 'hor',
+      type: 'melee',
       chain: 3,
       chainCombo: 2,
       stamina: 20,
       range: 3.2,
     }, {
-      type: 'hor',
+      type: 'melee',
       chain: 0,
       chainCombo: 2,
       stamina: 35,
@@ -868,15 +934,16 @@ export const items: Item[] = [
     parryBonus: 3,
     knockback: 30, backstab: 3, moveSpeed: -0.1,
     recipe: {
+      time: CRAFT_TIME,
       materials: { Wood: 10, Iron: 30, LeatherScraps: 2 },
       materialsPerLevel: { Iron: 15, LeatherScraps: 1 },
       source: { station: CraftingStation.Forge, level: 2 },
       upgrade: { station: CraftingStation.Forge, level: 3 },
     },
   },
-  { type: 'weap', hands: 'bow',
+  { type: 'weap', slot: 'bow',
     id: 'BowHuntsman',
-    weight: 1.5, stack: 1, teleportable: true,
+    weight: 1.5, stack: 1,
     skill: SkillType.Bows,
     damage: [{
       [DamageType.Pierce]: 42,
@@ -901,15 +968,16 @@ export const items: Item[] = [
     // "holdDurationMin": 2.5,
     // "holdStaminaDrain": 5,
     recipe: {
+      time: CRAFT_TIME,
       materials: { FineWood: 10, Iron: 20, Feathers: 10, DeerHide: 2 },
       materialsPerLevel: { FineWood: 5, Iron: 10, Feathers: 5, DeerHide: 2 },
       source: { station: CraftingStation.Forge, level: 1 },
       upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
-  { type: 'weap', hands: 'secondary',
+  { type: 'weap', slot: 'secondary',
     id: 'ShieldBanded',
-    weight: 5, stack: 1, teleportable: true,
+    weight: 5, stack: 1,
     skill: SkillType.Blocking,
     damage: [
       { [DamageType.Blunt]: 10 },
@@ -923,15 +991,16 @@ export const items: Item[] = [
     parryBonus: 2,
     knockback: 50, backstab: 2, moveSpeed: -0.05,
     recipe: {
+      time: CRAFT_TIME,
       materials: { FineWood: 10, Iron: 8 },
       materialsPerLevel: { FineWood: 10, Iron: 4 },
       source: { station: CraftingStation.Forge, level: 2 },
       upgrade: { station: CraftingStation.Forge, level: 3 },
     }
   },
-  { type: 'weap', hands: 'secondary',
+  { type: 'weap', slot: 'secondary',
     id: 'ShieldIronTower',
-    weight: 4, stack: 1, teleportable: true,
+    weight: 4, stack: 1,
     skill: SkillType.Blocking,
     damage: [{}, {}],
     attacks: [],
@@ -942,6 +1011,7 @@ export const items: Item[] = [
     parryBonus: 1,
     knockback: 40, backstab: 4, moveSpeed: -0.2,
     recipe: {
+      time: CRAFT_TIME,
       materials: { FineWood: 15, Iron: 10 },
       materialsPerLevel: { FineWood: 10, Iron: 5 },
       source: { station: CraftingStation.Forge, level: 2 },
@@ -949,9 +1019,9 @@ export const items: Item[] = [
     }
   },
 // SILVER AGE
-  { type: 'weap', hands: 'primary',
+  { type: 'weap', slot: 'primary',
     id: 'SwordSilver',
-    weight: 1, stack: 1, teleportable: true,
+    weight: 1, stack: 1,
     skill: SkillType.Swords,
     damage: [{
       [DamageType.Slash]: 75,
@@ -961,13 +1031,13 @@ export const items: Item[] = [
       [DamageType.Spirit]: 5,
     }],
     attacks: [{
-      type: 'hor',
+      type: 'melee',
       chain: 3,
       chainCombo: 2,
       stamina: 10,
       range: 2.4,
     }, {
-      type: 'hor',
+      type: 'melee',
       chain: 0,
       chainCombo: 2,
       stamina: 30,
@@ -981,15 +1051,16 @@ export const items: Item[] = [
     parryBonus: 2,
     knockback: 40, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      time: CRAFT_TIME,
       materials: { Wood: 2, Silver: 40, LeatherScraps: 3, Iron: 5 },
       materialsPerLevel: { Wood: 1, Silver: 20, LeatherScraps: 1, Iron: 3 },
       source: { station: CraftingStation.Forge, level: 3 },
       upgrade: { station: CraftingStation.Forge, level: 4 },
     }
   },
-  { type: 'weap', hands: 'primary',
+  { type: 'weap', slot: 'primary',
     id: 'SpearWolfFang',
-    weight: 1.5, stack: 1, teleportable: true,
+    weight: 1.5, stack: 1,
     skill: SkillType.Spears,
     damage: [{
       [DamageType.Pierce]: 70,
@@ -997,7 +1068,7 @@ export const items: Item[] = [
       [DamageType.Pierce]: 6,
     }],
     attacks: [{
-      type: 'hor',
+      type: 'melee',
       chain: 0,
       chainCombo: 2,
       stamina: 15,
@@ -1019,15 +1090,16 @@ export const items: Item[] = [
     parryBonus: 2,
     knockback: 20, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      time: CRAFT_TIME,
       materials: { AncientBark: 10, WolfFang: 4, Silver: 2, LeatherScraps: 2 },
       materialsPerLevel: { AncientBark: 5, WolfFang: 2, Silver: 1, LeatherScraps: 1 },
       source: { station: CraftingStation.Forge, level: 3 },
       upgrade: { station: CraftingStation.Forge, level: 4 },
     }
   },
-  { type: 'weap', hands: 'primary',
+  { type: 'weap', slot: 'primary',
     id: 'MaceSilver',
-    weight: 2, stack: 1, teleportable: true,
+    weight: 2, stack: 1,
     skill: SkillType.Clubs,
     damage: [{
       [DamageType.Blunt]: 35,
@@ -1037,13 +1109,13 @@ export const items: Item[] = [
       [DamageType.Frost]: 6,
     }],
     attacks: [{
-      type: 'hor',
+      type: 'melee',
       chain: 3,
       stamina: 20,
       range: 2.4,
       chainCombo: 2,
     }, {
-      type: 'hor',
+      type: 'melee',
       chain: 0,
       stamina: 30,
       range: 2.5,
@@ -1057,16 +1129,17 @@ export const items: Item[] = [
     parryBonus: 2,
     knockback: 120, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      time: CRAFT_TIME,
       materials: { AncientBark: 10, Silver: 30, YmirFlesh: 5, FreezeGlands: 5 },
       materialsPerLevel: { Silver: 15 },
       source: { station: CraftingStation.Forge, level: 3 },
       upgrade: { station: CraftingStation.Forge, level: 4 },
     }
   },
-  // TODO: harpoon
-  { type: 'weap', hands: 'primary',
+  // TODO: SpearChitin
+  { type: 'weap', slot: 'primary',
     id: 'KnifeChitin',
-    weight: 0.3, stack: 1, teleportable: true,
+    weight: 0.3, stack: 1,
     skill: SkillType.Knives,
     damage: [{
       [DamageType.Slash]: 12,
@@ -1076,13 +1149,13 @@ export const items: Item[] = [
       [DamageType.Pierce]: 1,
     }],
     attacks: [{
-      type: 'hor',
+      type: 'melee',
       chain: 3,
       chainCombo: 2,
       stamina: 5,
       range: 1.8,
     }, {
-      type: 'hor',
+      type: 'melee',
       chain: 0,
       chainCombo: 2,
       stamina: 40,
@@ -1096,15 +1169,16 @@ export const items: Item[] = [
     parryBonus: 4,
     knockback: 10, backstab: 10, moveSpeed: 0,
     recipe: {
+      time: CRAFT_TIME,
       materials: { FineWood: 4, Chitin: 20, LeatherScraps: 2 },
       materialsPerLevel: { Chitin: 10 },
       source: { station: CraftingStation.Forge, level: 2 },
       upgrade: { station: CraftingStation.Forge, level: 3 },
     }
   },
-  { type: 'weap', hands: 'bow',
+  { type: 'weap', slot: 'bow',
     id: 'BowDraugrFang',
-    weight: 1.5, stack: 1, teleportable: true,
+    weight: 1.5, stack: 1,
     skill: SkillType.Bows,
     damage: [{
       [DamageType.Pierce]: 47,
@@ -1131,15 +1205,16 @@ export const items: Item[] = [
     // "holdDurationMin": 2.5,
     // "holdStaminaDrain": 5,
     recipe: {
+      time: CRAFT_TIME,
       materials: { AncientBark: 10, Silver: 20, DeerHide: 2, Guck: 10, },
       materialsPerLevel: { AncientBark: 5, Silver: 10, DeerHide: 2, Guck: 2 },
       source: { station: CraftingStation.Forge, level: 2 },
       upgrade: { station: CraftingStation.Forge, level: 3 },
     }
   },
-  { type: 'weap', hands: 'secondary',
+  { type: 'weap', slot: 'secondary',
     id: 'ShieldSilver',
-    weight: 5, stack: 1, teleportable: true,
+    weight: 5, stack: 1,
     skill: SkillType.Blocking,
     damage: [{
       [DamageType.Blunt]: 10,
@@ -1152,15 +1227,16 @@ export const items: Item[] = [
     parryBonus: 1.5,
     knockback: 50, backstab: 4, moveSpeed: -0.05,
     recipe: {
+      time: CRAFT_TIME,
       materials: { FineWood: 10, Silver: 8 },
       materialsPerLevel: { FineWood: 10, Silver: 4 },
       source: { station: CraftingStation.Forge, level: 3 },
       upgrade: { station: CraftingStation.Forge, level: 4 },
     }
   },
-  { type: 'weap', hands: 'secondary',
+  { type: 'weap', slot: 'secondary',
     id: 'ShieldSerpentscale',
-    weight: 5, stack: 1, teleportable: true,
+    weight: 5, stack: 1,
     skill: SkillType.Blocking,
     damage: [{
       [DamageType.Blunt]: 10,
@@ -1174,6 +1250,7 @@ export const items: Item[] = [
     parryBonus: 1,
     knockback: 50, backstab: 4, moveSpeed: -0.1,
     recipe: {
+      time: CRAFT_TIME,
       materials: { FineWood: 10, Iron: 4, SerpentScale: 8 },
       materialsPerLevel: { FineWood: 10, Iron: 2, SerpentScale: 4 },
       source: { station: CraftingStation.Forge, level: 3 },
@@ -1181,9 +1258,9 @@ export const items: Item[] = [
     }
   },
 // BLACK AGE
-  { type: 'weap', hands: 'both',
+  { type: 'weap', slot: 'both',
     id: 'AtgeirBlackmetal',
-    weight: 2.5, stack: 1, teleportable: true,
+    weight: 2.5, stack: 1,
     skill: SkillType.Polearms,
     damage: [{
       [DamageType.Pierce]: 105,
@@ -1191,13 +1268,13 @@ export const items: Item[] = [
       [DamageType.Pierce]: 6,
     }],
     attacks: [{
-      type: 'hor',
+      type: 'melee',
       chain: 3,
       chainCombo: 2,
       stamina: 20,
       range: 3.2,
     }, {
-      type: 'hor',
+      type: 'melee',
       chain: 0,
       chainCombo: 2,
       stamina: 35,
@@ -1211,16 +1288,17 @@ export const items: Item[] = [
     parryBonus: 3,
     knockback: 30, backstab: 3, moveSpeed: -0.1,
     recipe: {
+      time: CRAFT_TIME,
       materials: { FineWood: 10, BlackMetal: 30, LinenThread: 5 },
       materialsPerLevel: { BlackMetal: 15, LinenThread: 5 },
       source: { station: CraftingStation.Forge, level: 4 },
       upgrade: { station: CraftingStation.Forge, level: 5 },
     },
   },
-  { type: 'weap', hands: 'both',
+  { type: 'weap', slot: 'both',
     id: 'AxeBlackMetal',
     toolTier: 4,
-    weight: 2, stack: 1, teleportable: true,
+    weight: 2, stack: 1,
     skill: SkillType.Axes,
     damage: [{
       [DamageType.Slash]: 95,
@@ -1230,7 +1308,7 @@ export const items: Item[] = [
       [DamageType.Chop]: 3,
     }],
     attacks: [{
-      type: 'hor',
+      type: 'melee',
       chain: 3,
       chainCombo: 2,
       stamina: 10,
@@ -1243,15 +1321,16 @@ export const items: Item[] = [
     parryBonus: 2,
     knockback: 60, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      time: CRAFT_TIME,
       materials: { FineWood: 6, BlackMetal: 20, LinenThread: 5 },
       materialsPerLevel: { BlackMetal: 10, LinenThread: 5 },
       source: { station: CraftingStation.Forge, level: 4 },
       upgrade: { station: CraftingStation.Forge, level: 5 },
     },
   },
-  { type: 'weap', hands: 'both',
+  { type: 'weap', slot: 'both',
     id: 'KnifeBlackMetal',
-    weight: 0.3, stack: 1, teleportable: true,
+    weight: 0.3, stack: 1,
     skill: SkillType.Knives,
     damage: [{
       [DamageType.Slash]: 18,
@@ -1261,13 +1340,13 @@ export const items: Item[] = [
       [DamageType.Pierce]: 1,
     }],
     attacks: [{
-      type: 'hor',
+      type: 'melee',
       chain: 3,
       chainCombo: 2,
       stamina: 5,
       range: 1.8,
     }, {
-      type: 'hor',
+      type: 'melee',
       chain: 0,
       chainCombo: 2,
       stamina: 40,
@@ -1281,15 +1360,16 @@ export const items: Item[] = [
     parryBonus: 4,
     knockback: 10, backstab: 10, moveSpeed: 0,
     recipe: {
+      time: CRAFT_TIME,
       materials: { FineWood: 4, BlackMetal: 10, LinenThread: 5 },
       materialsPerLevel: { BlackMetal: 4, LinenThread: 5 },
       source: { station: CraftingStation.Forge, level: 4 },
       upgrade: { station: CraftingStation.Forge, level: 5 },
     },
   },
-  { type: 'weap', hands: 'both',
+  { type: 'weap', slot: 'both',
     id: 'SwordBlackmetal',
-    weight: 0.8, stack: 1, teleportable: true,
+    weight: 0.8, stack: 1,
     skill: SkillType.Swords,
     damage: [{
       [DamageType.Slash]: 95,
@@ -1297,13 +1377,13 @@ export const items: Item[] = [
       [DamageType.Slash]: 6,
     }],
     attacks: [{
-      type: 'hor',
+      type: 'melee',
       chain: 3,
       chainCombo: 2,
       stamina: 10,
       range: 2.4,
     }, {
-      type: 'hor',
+      type: 'melee',
       chain: 0,
       chainCombo: 2,
       stamina: 30,
@@ -1317,15 +1397,16 @@ export const items: Item[] = [
     parryBonus: 2,
     knockback: 40, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      time: CRAFT_TIME,
       materials: { FineWood: 2, BlackMetal: 20, LinenThread: 5 },
       materialsPerLevel: { BlackMetal: 10, LinenThread: 5 },
       source: { station: CraftingStation.Forge, level: 4 },
       upgrade: { station: CraftingStation.Forge, level: 5 },
     },
   },
-  { type: 'weap', hands: 'both',
+  { type: 'weap', slot: 'both',
     id: 'MaceNeedle',
-    weight: 2, stack: 1, teleportable: true,
+    weight: 2, stack: 1,
     skill: SkillType.Clubs,
     damage: [{
       [DamageType.Blunt]: 50,
@@ -1334,13 +1415,13 @@ export const items: Item[] = [
       [DamageType.Pierce]: 6,
     }],
     attacks: [{
-      type: 'hor',
+      type: 'melee',
       chain: 3,
       chainCombo: 2,
       stamina: 15,
       range: 2.4,
     }, {
-      type: 'ver',
+      type: 'melee',
       chain: 0,
       chainCombo: 2,
       stamina: 30,
@@ -1354,15 +1435,16 @@ export const items: Item[] = [
     parryBonus: 2,
     knockback: 90, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      time: CRAFT_TIME,
       materials: { FineWood: 5, Iron: 20, Needle: 5, LinenThread: 10 },
       materialsPerLevel: { Iron: 2, LinenThread: 2 },
       source: { station: CraftingStation.Forge, level: 4 },
       upgrade: { station: CraftingStation.Forge, level: 5 },
     },
   },
-  { type: 'weap', hands: 'secondary',
+  { type: 'weap', slot: 'secondary',
     id: 'ShieldBlackmetal',
-    weight: 5, stack: 1, teleportable: true,
+    weight: 5, stack: 1,
     skill: SkillType.Blocking,
     damage: [{
       [DamageType.Blunt]: 10,
@@ -1375,15 +1457,16 @@ export const items: Item[] = [
     parryBonus: 1.5,
     knockback: 50, backstab: 4, moveSpeed: -0.05,
     recipe: {
+      time: CRAFT_TIME,
       materials: { FineWood: 10, BlackMetal: 8, Chain: 5 },
       materialsPerLevel: { FineWood: 10, BlackMetal: 4, Chain: 2 },
       source: { station: CraftingStation.Forge, level: 3 },
       upgrade: { station: CraftingStation.Forge, level: 4 },
     }
   },
-  { type: 'weap', hands: 'secondary',
+  { type: 'weap', slot: 'secondary',
     id: 'ShieldBlackmetalTower',
-    weight: 5, stack: 1, teleportable: true,
+    weight: 5, stack: 1,
     skill: SkillType.Blocking,
     damage: [{
       [DamageType.Blunt]: 10,
@@ -1397,6 +1480,7 @@ export const items: Item[] = [
     parryBonus: 1,
     knockback: 50, backstab: 4, moveSpeed: -0.2,
     recipe: {
+      time: CRAFT_TIME,
       materials: { FineWood: 15, BlackMetal: 10, Chain: 7 },
       materialsPerLevel: { FineWood: 15, BlackMetal: 6, Chain: 3 },  
       source: { station: CraftingStation.Forge, level: 3 },

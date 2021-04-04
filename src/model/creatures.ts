@@ -1,39 +1,39 @@
-import { Creature, DamageModifiers, DamageType, dropEntry, DropEntry, dropTrophy, Faction } from "../types";
+import { Creature, DamageModifier, DamageType, dropEntry, DropEntry, dropTrophy, Faction } from "../types";
 
 const defaultDmgModifiers = {
-  [DamageType.Damage]: DamageModifiers.Normal,
-  [DamageType.Blunt]: DamageModifiers.Normal,
-  [DamageType.Slash]: DamageModifiers.Normal,
-  [DamageType.Pierce]: DamageModifiers.Normal,
-  [DamageType.Chop]: DamageModifiers.Ignore,
-  [DamageType.Pickaxe]: DamageModifiers.Ignore,
-  [DamageType.Fire]: DamageModifiers.Normal,
-  [DamageType.Frost]: DamageModifiers.Normal,
-  [DamageType.Lightning]: DamageModifiers.Normal,
-  [DamageType.Poison]: DamageModifiers.Normal,
-  [DamageType.Spirit]: DamageModifiers.Normal,
+  [DamageType.Damage]: DamageModifier.Normal,
+  [DamageType.Blunt]: DamageModifier.Normal,
+  [DamageType.Slash]: DamageModifier.Normal,
+  [DamageType.Pierce]: DamageModifier.Normal,
+  [DamageType.Chop]: DamageModifier.Ignore,
+  [DamageType.Pickaxe]: DamageModifier.Ignore,
+  [DamageType.Fire]: DamageModifier.Normal,
+  [DamageType.Frost]: DamageModifier.Normal,
+  [DamageType.Lightning]: DamageModifier.Normal,
+  [DamageType.Poison]: DamageModifier.Normal,
+  [DamageType.Spirit]: DamageModifier.Normal,
 };
 
 const animalDmgModifiers = {
     ...defaultDmgModifiers,
-    [DamageType.Spirit]: DamageModifiers.Immune,
+    [DamageType.Spirit]: DamageModifier.Immune,
 }
 
 const grayModifiers = {
     ...animalDmgModifiers,
-    [DamageType.Fire]: DamageModifiers.VeryWeak,
-    [DamageType.Poison]: DamageModifiers.Resistant,
+    [DamageType.Fire]: DamageModifier.VeryWeak,
+    [DamageType.Poison]: DamageModifier.Resistant,
 };
 
 const blobDamageModifiers = {
   ...defaultDmgModifiers,
-  [DamageType.Blunt]: DamageModifiers.Weak,
-  [DamageType.Slash]: DamageModifiers.Resistant,
-  [DamageType.Pierce]: DamageModifiers.Resistant,
-  [DamageType.Fire]: DamageModifiers.Resistant,
-  [DamageType.Frost]: DamageModifiers.Weak,
-  [DamageType.Lightning]: DamageModifiers.Weak,
-  [DamageType.Poison]: DamageModifiers.Immune,
+  [DamageType.Blunt]: DamageModifier.Weak,
+  [DamageType.Slash]: DamageModifier.Resistant,
+  [DamageType.Pierce]: DamageModifier.Resistant,
+  [DamageType.Fire]: DamageModifier.Resistant,
+  [DamageType.Frost]: DamageModifier.Weak,
+  [DamageType.Lightning]: DamageModifier.Weak,
+  [DamageType.Poison]: DamageModifier.Immune,
 };
 
 export const creatures: Creature[] = [
@@ -134,11 +134,11 @@ export const creatures: Creature[] = [
     hp: 40,
     damageModifiers: {
       ...defaultDmgModifiers,
-      [DamageType.Blunt]: DamageModifiers.Weak,
-      [DamageType.Pierce]: DamageModifiers.Resistant,
-      [DamageType.Fire]: DamageModifiers.Weak,
-      [DamageType.Frost]: DamageModifiers.Resistant,
-      [DamageType.Poison]: DamageModifiers.Immune,
+      [DamageType.Blunt]: DamageModifier.Weak,
+      [DamageType.Pierce]: DamageModifier.Resistant,
+      [DamageType.Fire]: DamageModifier.Weak,
+      [DamageType.Frost]: DamageModifier.Resistant,
+      [DamageType.Poison]: DamageModifier.Immune,
     },
     drop: [
       dropEntry('BoneFragments'),
@@ -155,11 +155,11 @@ export const creatures: Creature[] = [
     hp: 100,
     damageModifiers: {
       ...defaultDmgModifiers,
-      [DamageType.Blunt]: DamageModifiers.Weak,
-      [DamageType.Pierce]: DamageModifiers.Resistant,
-      [DamageType.Fire]: DamageModifiers.Weak,
-      [DamageType.Frost]: DamageModifiers.Resistant,
-      [DamageType.Poison]: DamageModifiers.Immune,
+      [DamageType.Blunt]: DamageModifier.Weak,
+      [DamageType.Pierce]: DamageModifier.Resistant,
+      [DamageType.Fire]: DamageModifier.Weak,
+      [DamageType.Frost]: DamageModifier.Resistant,
+      [DamageType.Poison]: DamageModifier.Immune,
     },
     drop: [
       dropEntry('BoneFragments', { min: 3, max: 3 }),
@@ -175,11 +175,11 @@ export const creatures: Creature[] = [
     hp: 60,
     damageModifiers: {
       ...defaultDmgModifiers,
-      [DamageType.Blunt]: DamageModifiers.Resistant,
-      [DamageType.Slash]: DamageModifiers.Resistant,
-      [DamageType.Pierce]: DamageModifiers.Resistant,
-      [DamageType.Poison]: DamageModifiers.Immune,
-      [DamageType.Spirit]: DamageModifiers.Weak,
+      [DamageType.Blunt]: DamageModifier.Resistant,
+      [DamageType.Slash]: DamageModifier.Resistant,
+      [DamageType.Pierce]: DamageModifier.Resistant,
+      [DamageType.Poison]: DamageModifier.Immune,
+      [DamageType.Spirit]: DamageModifier.Weak,
     },
     drop: [],
   },
@@ -243,9 +243,9 @@ export const creatures: Creature[] = [
     hp: 600,
     damageModifiers: {
       ...animalDmgModifiers,
-      [DamageType.Blunt]: DamageModifiers.Resistant,
-      [DamageType.Pierce]: DamageModifiers.Weak,
-      [DamageType.Poison]: DamageModifiers.Immune,
+      [DamageType.Blunt]: DamageModifier.Resistant,
+      [DamageType.Pierce]: DamageModifier.Weak,
+      [DamageType.Poison]: DamageModifier.Immune,
     },
     drop: [
       dropEntry('TrollHide', { min: 5, max: 5 }),
@@ -264,9 +264,9 @@ export const creatures: Creature[] = [
     hp: 2500,
     damageModifiers: {
       ...defaultDmgModifiers,
-      [DamageType.Fire]: DamageModifiers.VeryWeak,
-      [DamageType.Poison]: DamageModifiers.Immune,
-      [DamageType.Spirit]: DamageModifiers.Immune,
+      [DamageType.Fire]: DamageModifier.VeryWeak,
+      [DamageType.Poison]: DamageModifier.Immune,
+      [DamageType.Spirit]: DamageModifier.Immune,
     },
     drop: [
       dropEntry('CryptKey', { perPlayer: true }),
@@ -309,9 +309,9 @@ export const creatures: Creature[] = [
     hp: 60,
     damageModifiers: {
       ...animalDmgModifiers,
-      [DamageType.Fire]: DamageModifiers.Immune,
-      [DamageType.Poison]: DamageModifiers.Weak,
-      [DamageType.Spirit]: DamageModifiers.Immune,
+      [DamageType.Fire]: DamageModifier.Immune,
+      [DamageType.Poison]: DamageModifier.Weak,
+      [DamageType.Spirit]: DamageModifier.Immune,
     },
     drop: [
       dropEntry('Bloodbag'),
@@ -330,10 +330,10 @@ export const creatures: Creature[] = [
     staggerFactor: 0.5,
     damageModifiers: {
       ...defaultDmgModifiers,
-      [DamageType.Fire]: DamageModifiers.Immune,
-      [DamageType.Frost]: DamageModifiers.Weak,
-      [DamageType.Poison]: DamageModifiers.Immune,
-      [DamageType.Spirit]: DamageModifiers.Immune,
+      [DamageType.Fire]: DamageModifier.Immune,
+      [DamageType.Frost]: DamageModifier.Weak,
+      [DamageType.Poison]: DamageModifier.Immune,
+      [DamageType.Spirit]: DamageModifier.Immune,
     },
     drop: [
       dropEntry('Coal', { min: 4, max: 5 }),
@@ -351,13 +351,13 @@ export const creatures: Creature[] = [
     staggerFactor: 0.5,
     damageModifiers: {
       ...defaultDmgModifiers,
-      [DamageType.Blunt]: DamageModifiers.Resistant,
-      [DamageType.Slash]: DamageModifiers.Resistant,
-      [DamageType.Pierce]: DamageModifiers.Resistant,
-      [DamageType.Fire]: DamageModifiers.Weak,
-      [DamageType.Frost]: DamageModifiers.Immune,
-      [DamageType.Poison]: DamageModifiers.Immune,
-      [DamageType.Spirit]: DamageModifiers.Weak,
+      [DamageType.Blunt]: DamageModifier.Resistant,
+      [DamageType.Slash]: DamageModifier.Resistant,
+      [DamageType.Pierce]: DamageModifier.Resistant,
+      [DamageType.Fire]: DamageModifier.Weak,
+      [DamageType.Frost]: DamageModifier.Immune,
+      [DamageType.Poison]: DamageModifier.Immune,
+      [DamageType.Spirit]: DamageModifier.Weak,
     },
     drop: [
       dropEntry('Chain'),
@@ -374,8 +374,8 @@ export const creatures: Creature[] = [
     hp: 100,
     damageModifiers: {
       ...animalDmgModifiers,
-      [DamageType.Fire]: DamageModifiers.Weak,
-      [DamageType.Poison]: DamageModifiers.Immune,
+      [DamageType.Fire]: DamageModifier.Weak,
+      [DamageType.Poison]: DamageModifier.Immune,
     },
     drop: [
       dropEntry('Entrails'),
@@ -391,8 +391,8 @@ export const creatures: Creature[] = [
     hp: 200,
     damageModifiers: {
       ...animalDmgModifiers,
-      [DamageType.Fire]: DamageModifiers.Weak,
-      [DamageType.Poison]: DamageModifiers.Immune,
+      [DamageType.Fire]: DamageModifier.Weak,
+      [DamageType.Poison]: DamageModifier.Immune,
     },
     drop: [
       dropEntry('Entrails', { min: 2, max: 3 }),
@@ -413,12 +413,12 @@ export const creatures: Creature[] = [
     hp: 5000,
     damageModifiers: {
       ...defaultDmgModifiers,
-      [DamageType.Blunt]: DamageModifiers.Weak,
-      [DamageType.Slash]: DamageModifiers.Resistant,
-      [DamageType.Pierce]: DamageModifiers.VeryResistant,
-      [DamageType.Fire]: DamageModifiers.VeryResistant,
-      [DamageType.Frost]: DamageModifiers.Weak,
-      [DamageType.Poison]: DamageModifiers.Immune,
+      [DamageType.Blunt]: DamageModifier.Weak,
+      [DamageType.Slash]: DamageModifier.Resistant,
+      [DamageType.Pierce]: DamageModifier.VeryResistant,
+      [DamageType.Fire]: DamageModifier.VeryResistant,
+      [DamageType.Frost]: DamageModifier.Weak,
+      [DamageType.Poison]: DamageModifier.Immune,
     },
     drop: [
       dropEntry('Wishbone', { perPlayer: true }),
@@ -484,15 +484,15 @@ export const creatures: Creature[] = [
     staggerFactor: 0.33,
     damageModifiers: {
       ...defaultDmgModifiers,
-      [DamageType.Slash]: DamageModifiers.Resistant,
-      [DamageType.Pickaxe]: DamageModifiers.VeryWeak,
-      [DamageType.Fire]: DamageModifiers.Immune,
-      [DamageType.Frost]: DamageModifiers.Immune,
-      [DamageType.Poison]: DamageModifiers.Immune,
-      [DamageType.Spirit]: DamageModifiers.Immune,
+      [DamageType.Slash]: DamageModifier.Resistant,
+      [DamageType.Pickaxe]: DamageModifier.VeryWeak,
+      [DamageType.Fire]: DamageModifier.Immune,
+      [DamageType.Frost]: DamageModifier.Immune,
+      [DamageType.Poison]: DamageModifier.Immune,
+      [DamageType.Spirit]: DamageModifier.Immune,
     },
     drop: [
-      dropEntry('FreezeGlands', { min: 5, max: 10 }),
+      dropEntry('Stone', { min: 5, max: 10 }),
       dropEntry('Crystal', { min: 3, max: 6 }),
       dropTrophy('TrophySGolem', 0.05),
     ],
@@ -507,8 +507,8 @@ export const creatures: Creature[] = [
     staggerFactor: 0,
     damageModifiers: {
       ...animalDmgModifiers,
-      [DamageType.Fire]: DamageModifiers.Weak,
-      [DamageType.Frost]: DamageModifiers.Immune,
+      [DamageType.Fire]: DamageModifier.Weak,
+      [DamageType.Frost]: DamageModifier.Immune,
     },
     drop: [
       dropEntry('FreezeGlands', { max: 2 }),
@@ -650,11 +650,11 @@ export const creatures: Creature[] = [
     staggerFactor: 1,
     damageModifiers: {
       ...defaultDmgModifiers,
-      [DamageType.Blunt]: DamageModifiers.Resistant,
-      [DamageType.Slash]: DamageModifiers.Resistant,
-      [DamageType.Fire]: DamageModifiers.Weak,
-      [DamageType.Frost]: DamageModifiers.Resistant,
-      [DamageType.Spirit]: DamageModifiers.Immune,
+      [DamageType.Blunt]: DamageModifier.Resistant,
+      [DamageType.Slash]: DamageModifier.Resistant,
+      [DamageType.Fire]: DamageModifier.Weak,
+      [DamageType.Frost]: DamageModifier.Resistant,
+      [DamageType.Spirit]: DamageModifier.Immune,
     },
     drop: [
       dropEntry('LoxMeat', { min: 4, max: 6 }),
@@ -688,15 +688,16 @@ export const creatures: Creature[] = [
     staggerFactor: 0.3,
     damageModifiers: {
       ...defaultDmgModifiers,
-      [DamageType.Pierce]: DamageModifiers.VeryResistant,
-      [DamageType.Fire]: DamageModifiers.Resistant,
-      [DamageType.Poison]: DamageModifiers.Immune,
+      [DamageType.Pierce]: DamageModifier.VeryResistant,
+      [DamageType.Fire]: DamageModifier.Resistant,
+      [DamageType.Poison]: DamageModifier.Immune,
     },
     drop: [
       dropEntry('YagluthDrop', { min: 3, max: 3, scale: false }),
       dropTrophy('TrophyGoblinKing', 1),
     ],
   },
+// OCEAN
   {
     id: 'Serpent',
     faction: Faction.SeaMonsters,
@@ -710,9 +711,9 @@ export const creatures: Creature[] = [
     staggerFactor: 0,
     damageModifiers: {
       ...animalDmgModifiers,
-      [DamageType.Fire]: DamageModifiers.Immune,
-      [DamageType.Frost]: DamageModifiers.Weak,
-      [DamageType.Poison]: DamageModifiers.Resistant,
+      [DamageType.Fire]: DamageModifier.Immune,
+      [DamageType.Frost]: DamageModifier.Weak,
+      [DamageType.Poison]: DamageModifier.Resistant,
     },
     drop: [
       dropEntry('SerpentScale', { min: 8, max: 10 }),
