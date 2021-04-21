@@ -70,4 +70,36 @@ drop: 20%
 - hp: 40
 - drop: 100% 15 of [1 Wood, 1 RoundLog]
 
+HeathRockPillar gives 350-400 stone
+
+silver_vein_frac:
+  children: 132
+  hp: 50
+  minToolTier: 0
+  drops: 2-3 of 1 SilverOre : 2 Stone
+
+rock4_copper_frac:
+  children: 132
+  hp: 40
+  minToolTier: 2
+  drops: 2-4 of 1 CopperOre : 2 Stone
+
+rock4_heath_frac:
+  children: 132
+  hp: 50
+  drops: 4-8 of Stone
+
+rock2_heath_frac:
+  children: 122
+  hp: 50
+  drops: 4-8 of Stone
+
+beehive:
+  hp: 50, weak to fire, immune to spirit & poison
+  idle: 4 poison, 3 radius, every second
+  on hit: 10 poison, 4 radius, every second, 5 seconds
+  drops: 1 queen bee, 1-3 honey
+
 */
+
+export default {};

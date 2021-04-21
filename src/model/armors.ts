@@ -5,6 +5,7 @@ const CRAFT_TIME = 4;
 export const items: Item[] = [
 // PRE-CRAFT AGE
   { id: 'ArmorRagsLegs',
+    tier: 0,
     type: 'armor', slot: 'legs',
     armor: [1, 1],
     weight: 2,
@@ -20,6 +21,7 @@ export const items: Item[] = [
     }
   },
   { id: 'ArmorRagsChest',
+    tier: 0,
     type: 'armor', slot: 'body',
     armor: [1, 1],
     weight: 2,
@@ -36,6 +38,7 @@ export const items: Item[] = [
   },
 // STONE AGE
   { id: 'ArmorLeatherLegs',
+    tier: 1,
     type: 'armor', slot: 'legs',
     armor: [2, 2],
     weight: 5,
@@ -51,6 +54,7 @@ export const items: Item[] = [
     }
   },
   { id: 'ArmorLeatherChest',
+    tier: 1,
     type: 'armor', slot: 'body',
     armor: [2, 2],
     weight: 1,
@@ -66,6 +70,7 @@ export const items: Item[] = [
     }
   },
   { id: 'HelmetLeather',
+    tier: 1,
     type: 'armor', slot: 'head',
     armor: [2, 2],
     weight: 1,
@@ -81,6 +86,7 @@ export const items: Item[] = [
     }
   },
   { id: 'CapeDeerHide',
+    tier: 1,
     type: 'armor', slot: 'shoulders',
     armor: [1, 1],
     weight: 4,
@@ -97,6 +103,7 @@ export const items: Item[] = [
   },
   // troll
   { id: 'ArmorTrollLeatherLegs',
+    tier: 1,
     type: 'armor', slot: 'legs',
     armor: [6, 2],
     weight: 5,
@@ -112,6 +119,7 @@ export const items: Item[] = [
     }
   },
   { id: 'ArmorTrollLeatherChest',
+    tier: 1,
     type: 'armor', slot: 'body',
     armor: [2, 2],
     weight: 5,
@@ -127,6 +135,7 @@ export const items: Item[] = [
     }
   },
   { id: 'HelmetTrollLeather',
+    tier: 1,
     type: 'armor', slot: 'head',
     armor: [2, 2],
     weight: 1,
@@ -142,6 +151,7 @@ export const items: Item[] = [
     }
   },
   { id: 'CapeTrollHide',
+    tier: 1,
     type: 'armor', slot: 'shoulders',
     armor: [1, 1],
     weight: 4,
@@ -158,6 +168,7 @@ export const items: Item[] = [
   },
 // BRONZE AGE
   { id: 'ArmorBronzeLegs',
+    tier: 2,
     type: 'armor', slot: 'legs',
     armor: [8, 2],
     weight: 5,
@@ -173,6 +184,7 @@ export const items: Item[] = [
     }
   },
   { id: 'ArmorBronzeChest',
+    tier: 2,
     type: 'armor', slot: 'body',
     armor: [8, 2],
     weight: 10,
@@ -188,6 +200,7 @@ export const items: Item[] = [
     }
   },
   { id: 'HelmetBronze',
+    tier: 2,
     type: 'armor', slot: 'head',
     armor: [8, 2],
     weight: 3,
@@ -204,6 +217,7 @@ export const items: Item[] = [
   },
 // IRON AGE
   { id: 'ArmorIronLegs',
+    tier: 3,
     type: 'armor', slot: 'legs',
     armor: [14, 2],
     weight: 15,
@@ -219,6 +233,7 @@ export const items: Item[] = [
     }
   },
   { id: 'ArmorIronChest',
+    tier: 3,
     type: 'armor', slot: 'body',
     armor: [14, 2],
     weight: 15,
@@ -234,6 +249,7 @@ export const items: Item[] = [
     }
   },
   { id: 'HelmetIron',
+    tier: 3,
     type: 'armor', slot: 'head',
     armor: [14, 2],
     weight: 3,
@@ -250,6 +266,7 @@ export const items: Item[] = [
   },
 // SILVER AGE
   { id: 'ArmorWolfLegs',
+    tier: 4,
     type: 'armor', slot: 'legs',
     armor: [20, 2],
     weight: 15,
@@ -265,6 +282,7 @@ export const items: Item[] = [
     }
   },
   { id: 'ArmorWolfChest',
+    tier: 4,
     type: 'armor', slot: 'body',
     armor: [20, 2],
     weight: 15,
@@ -281,6 +299,7 @@ export const items: Item[] = [
     }
   },
   { id: 'HelmetDrake',
+    tier: 4,
     type: 'armor', slot: 'head',
     armor: [20, 2],
     weight: 3,
@@ -296,6 +315,7 @@ export const items: Item[] = [
     }
   },
   { id: 'CapeWolf',
+    tier: 4,
     type: 'armor', slot: 'shoulders',
     armor: [1, 1],
     weight: 4,
@@ -313,6 +333,7 @@ export const items: Item[] = [
   },
 // BLACK AGE
   { id: 'ArmorPaddedGreaves',
+    tier: 5,
     type: 'armor', slot: 'legs',
     armor: [26, 2],
     weight: 10,
@@ -328,6 +349,7 @@ export const items: Item[] = [
     }
   },
   { id: 'ArmorPaddedCuirass',
+    tier: 5,
     type: 'armor', slot: 'body',
     armor: [26, 2],
     weight: 10,
@@ -343,6 +365,7 @@ export const items: Item[] = [
     }
   },
   { id: 'HelmetPadded',
+    tier: 5,
     type: 'armor', slot: 'head',
     armor: [26, 2],
     weight: 3,
@@ -358,6 +381,7 @@ export const items: Item[] = [
     }
   },
   { id: 'CapeLinen',
+    tier: 5,
     type: 'armor', slot: 'shoulders',
     armor: [1, 1],
     weight: 4,
@@ -373,6 +397,7 @@ export const items: Item[] = [
     }
   },
   { id: 'CapeLox',
+    tier: 5,
     type: 'armor', slot: 'shoulders',
     armor: [1, 1],
     weight: 4,
@@ -389,6 +414,7 @@ export const items: Item[] = [
     }
   },
   { id: 'HelmetYule',
+    tier: 0,
     type: 'armor', slot: 'head',
     armor: [2, 0],
     weight: 1,
@@ -398,6 +424,7 @@ export const items: Item[] = [
     recipe: { value: 100 }
   },
   { id: 'HelmetDverger',
+    tier: 2,
     type: 'armor', slot: 'head',
     armor: [0, 0],
     weight: 1,
@@ -406,12 +433,14 @@ export const items: Item[] = [
     moveSpeed: 0,
     recipe: { value: 620 }
   },
-  { id: 'CapeOdin',
-    type: 'armor', slot: 'shoulders',
-    armor: [2, 0],
-    weight: 4,
+  { id: 'HelmetOdin',
+    dlc: 'beta',
+    tier: 0,
+    type: 'armor', slot: 'head',
+    armor: [1, 0],
+    weight: 1,
     maxLvl: 1,
-    durability: 1500,
+    durability: 300,
     moveSpeed: 0,
     recipe: {
       time: CRAFT_TIME,
@@ -422,11 +451,13 @@ export const items: Item[] = [
     },
   },
   { id: 'CapeOdin',
+    dlc: 'beta',
+    tier: 0,
     type: 'armor', slot: 'shoulders',
-    armor: [1, 0],
+    armor: [2, 0],
     weight: 4,
     maxLvl: 1,
-    durability: 300,
+    durability: 1500,
     moveSpeed: 0,
     recipe: {
       time: CRAFT_TIME,

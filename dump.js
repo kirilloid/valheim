@@ -17,6 +17,10 @@ const SkillType = [
     'None', 'Swords', 'Knives', 'Clubs', 'Polearms', 'Spears', 'Blocking', 'Axes', 'Bows', 'FireMagic',
     'FrostMagic', 'Unarmed', 'Pickaxes', 'WoodCutting',
 ];
+const DestructibleType = [
+    'None', 'Default', 'Tree', 'Default & Tree',
+    'Character', 'Default & Character', 'Default & Tree', 'All',
+]
 const AttackType = [
     'Horizontal', 'Vertical', 'Projectile', 'None', 'Area', 'TriggerProjectile',
 ];
@@ -186,6 +190,25 @@ class AssetReader {
         const holdAnimationState = this.readString();
         // [Header("Ammo")]
         const ammoType = this.readString();
+        // [Header("AI")]
+        this.readFloat(); // aiAttackRange = 2f;
+        this.readFloat(); // aiAttackRangeMin;
+        this.readFloat(); // aiAttackInterval = 2f;
+        this.readFloat(); // aiAttackMaxAngle = 5f;
+        this.readBool(); // aiWhenFlying = true;
+        this.readBool(); // aiWhenWalking = true;
+        this.readBool(); // aiWhenSwiming = true;
+        this.readBool(); // aiPrioritized;
+        this.readInt(); // AiTarget m_aiTargetType;
+        this.readList(this.readEffect); // hitEffect
+        this.readList(this.readEffect); // hitTerrainEffect
+        this.readList(this.readEffect); // blockEffect
+        this.readList(this.readEffect); // startEffect
+        this.readList(this.readEffect); // holdStartEffect
+        this.readList(this.readEffect); // triggerEffect
+        this.readList(this.readEffect); // trailStartEffect
+        const consumeEffectId = this.readObject();
+
         const item = {
             // parentId,
             autoPickup,
@@ -237,6 +260,7 @@ class AssetReader {
             holdStaminaDrain,
             holdAnimationState,
             ammoType,
+            consumeEffectId,
         }
         console.log(weaponTemplate(item));
         return item;
@@ -276,7 +300,7 @@ class AssetReader {
         this.readInt(); // DestructibleType resetChainIfHit;
         // [Header("Melee special-skill")]
         const specialHitSkill = SkillType[this.readInt()];
-        this.readInt(); // DestructibleType specialHitType;
+        const specialHitType = DestructibleType[this.readInt()]; // DestructibleType
         // [Header("Projectile")]
         this.readObject(); // attackProjectile;
         const projectileVel = this.readFloat(); // = 10f;
@@ -323,6 +347,7 @@ class AssetReader {
             multiHit,
             lastChainDamageMultiplier,
             specialHitSkill,
+            specialHitType,
             projectileVel,
             projectileVelMin,
             projectileAccuracy,

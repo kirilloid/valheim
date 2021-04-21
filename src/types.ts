@@ -1,6 +1,6 @@
 import { SkillType } from "./model/skills";
 
-export const enum Biome {
+export enum Biome {
   Meadows,
   BlackForest,
   Swamp,
@@ -12,7 +12,7 @@ export const enum Biome {
   Ashlands,
 }
 
-export const enum Faction {
+export enum Faction {
   Players,
   AnimalsVeg,
   ForestMonsters,
@@ -23,7 +23,7 @@ export const enum Faction {
   Boss, // aggressive only to players
 };
 
-export const enum DamageType {
+export enum DamageType {
   Damage,
   Blunt,
   Slash,
@@ -37,7 +37,7 @@ export const enum DamageType {
   Spirit,
 };
 
-export const enum DamageModifier {
+export enum DamageModifier {
   Normal,    // 1x
   Resistant, // 0.5x
   Weak,      // 1.5x
@@ -49,10 +49,27 @@ export const enum DamageModifier {
 
 export type DamageModifiers = Record<DamageType, DamageModifier>;
 
-type DamageProfile = {
-  type: DamageType;
-  amount: number;
-}[] | Partial<Record<DamageType, number>>;
+export const damageModifiersValues: Record<DamageModifier, number> = {
+  [DamageModifier.Normal]: 1,
+  [DamageModifier.Resistant]: 0.5,
+  [DamageModifier.Weak]: 1.5,
+  [DamageModifier.Immune]: 0,
+  [DamageModifier.Ignore]: 0,
+  [DamageModifier.VeryResistant]: 0.25,
+  [DamageModifier.VeryWeak]: 2,
+};
+
+export type DamageProfile = Partial<Record<DamageType, number>>;
+export type AttackProfile = {
+  dmg: DamageProfile;
+  name: string;
+  // knockback
+  force?: number;
+} | {
+  spawn: string[];
+  number: number;
+  max: number;
+};
 
 export interface DropEntry {
   item: string;
@@ -81,11 +98,14 @@ export const dropTrophy = (item: string, chance: number) => {
 
 export interface Creature {
   id: string;
+  tier: number;
+  emoji: string;
   defeatKey?: string;
   faction: Faction;
   hp: number;
-  staggerFactor?: number;
-  attacks: DamageProfile[];
+  staggerFactor: number;
+  staggerBlocked: boolean;
+  attacks: AttackProfile[];
   damageModifiers: DamageModifiers;
   drop: DropEntry[];
   tame?: { fedTime: number; tameTime: number; commandable: boolean; eats: string[] };
@@ -110,6 +130,8 @@ export enum CraftingStation {
 
 interface BaseItem {
   id: string;
+  dlc?: 'beta';
+  tier: number;
   weight: number;
   stack?: number;
   teleportable?: false;
@@ -154,24 +176,28 @@ enum ItemType {
 
 interface Resource extends BaseItem {
   type: 'item';
+  emoji?: string;
 }
 
 interface Valuable extends BaseItem {
   type: 'value';
+  emoji: string;
   value: number;
 }
 
 interface Food extends BaseItem {
   type: 'food';
+  emoji: string;
   health: number;
   stamina: number;
   duration: number;
   regen: number;
+  color: string;
 }
 
 type Pair<T> = [T, T];
 
-interface BaseAttack {
+export interface BaseAttack {
   chain: number;
   chainCombo: number;
   stamina: number;
@@ -188,7 +214,13 @@ type Attack =
   | BaseAttack & { type: 'melee' | 'area' }
   | BowAttack & { type: 'proj' }
 
-interface Weapon extends BaseItem {
+export interface Arrow extends BaseItem {
+  type: 'ammo';
+  damage: DamageProfile;
+  knockback: number;
+}
+
+export interface Weapon extends BaseItem {
   type: 'weap';
   slot: 'primary' | 'both' | 'secondary' | 'bow' | 'either'
     | 'head' | 'shoulders' | 'body' | 'legs'
@@ -223,4 +255,3 @@ export enum Skill {
   Clubs,
   Swords
 }
-

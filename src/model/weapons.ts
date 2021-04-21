@@ -1,12 +1,13 @@
-import { CraftingStation, DamageType, Item } from "../types";
+import { CraftingStation, DamageType, Weapon } from "../types";
 import { SkillType } from "./skills";
 
 const CRAFT_TIME = 4;
 
-export const items: Item[] = [
+export const items: Weapon[] = [
 // PRE-CRAFT AGE
   { type: 'weap', slot: 'primary',
     id: 'Club',
+    tier: 0,
     weight: 2, stack: 1,
     skill: SkillType.Clubs,
     damage: [{
@@ -37,6 +38,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'primary',
     id: 'AxeStone',
+    tier: 0,
     toolTier: 0,
     weight: 1.5, stack: 1,
     skill: SkillType.Axes,
@@ -70,6 +72,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'either',
     id: 'Torch',
+    tier: 0,
     weight: 1, stack: 1,
     skill: SkillType.Clubs,
     damage: [{
@@ -100,6 +103,7 @@ export const items: Item[] = [
 // STONE AGE
   { type: 'weap', slot: 'primary',
     id: 'AxeFlint',
+    tier: 1,
     toolTier: 1,
     weight: 1.5, stack: 1,
     skill: SkillType.Axes,
@@ -133,6 +137,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'primary',
     id: 'KnifeFlint',
+    tier: 1,
     weight: 0.3, stack: 1,
     skill: SkillType.Knives,
     damage: [{
@@ -172,6 +177,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'primary',
     id: 'SpearFlint',
+    tier: 1,
     weight: 1.5, stack: 1,
     skill: SkillType.Spears,
     damage: [{
@@ -211,6 +217,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'both',
     id: 'SledgeStagbreaker',
+    tier: 1,
     weight: 4, stack: 1,
     skill: SkillType.Clubs,
     damage: [
@@ -240,6 +247,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'bow',
     id: 'Bow',
+    tier: 1,
     weight: 1.5, stack: 1,
     skill: SkillType.Bows,
     damage: [{
@@ -274,6 +282,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'both',
     id: 'PickaxeAntler',
+    tier: 2,
     toolTier: 0,
     weight: 2, stack: 1,
     skill: SkillType.Pickaxes,
@@ -304,15 +313,16 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'secondary',
     id: 'ShieldWood',
+    tier: 1,
     weight: 4, stack: 1,
     skill: SkillType.Blocking,
     damage: [{}, {}],
     attacks: [],
     maxLvl: 3,
     durability: [200, 50],
-    block: [35, 5],
+    block: [20, 5],
     parryForce: 0,
-    parryBonus: 1,
+    parryBonus: 1.5,
     knockback: 40, backstab: 4, moveSpeed: -0.2,
     recipe: {
       time: CRAFT_TIME,
@@ -324,6 +334,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'secondary',
     id: 'ShieldWoodTower',
+    tier: 1,
     weight: 4, stack: 1,
     skill: SkillType.Blocking,
     damage: [{}, {}],
@@ -345,6 +356,7 @@ export const items: Item[] = [
 // BRONZE AGE
   { type: 'weap', slot: 'primary',
     id: 'KnifeCopper',
+    tier: 2,
     weight: 0.3, stack: 1,
     skill: SkillType.Knives,
     damage: [{
@@ -384,6 +396,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'primary',
     id: 'AtgeirBronze',
+    tier: 2,
     weight: 2.5, stack: 1,
     skill: SkillType.Polearms,
     damage: [{
@@ -421,6 +434,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'primary',
     id: 'AxeBronze',
+    tier: 2,
     toolTier: 2,
     weight: 2, stack: 1,
     skill: SkillType.Axes,
@@ -454,6 +468,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'primary',
     id: 'MaceBronze',
+    tier: 2,
     weight: 2, stack: 1,
     skill: SkillType.Clubs,
     damage: [{
@@ -491,6 +506,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'primary',
     id: 'SpearBronze',
+    tier: 2,
     weight: 1.5, stack: 1,
     skill: SkillType.Spears,
     damage: [{
@@ -530,6 +546,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'primary',
     id: 'SwordBronze',
+    tier: 2,
     weight: 0.8, stack: 1,
     skill: SkillType.Swords,
     damage: [{
@@ -567,6 +584,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'both',
     id: 'PickaxeBronze',
+    tier: 2,
     toolTier: 1,
     weight: 2, stack: 1,
     skill: SkillType.Pickaxes,
@@ -600,6 +618,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'bow',
     id: 'BowFineWood',
+    tier: 2,
     weight: 1.5, stack: 1,
     skill: SkillType.Bows,
     damage: [{
@@ -634,6 +653,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'secondary',
     id: 'ShieldBronzeBuckler',
+    tier: 2,
     weight: 3, stack: 1,
     skill: SkillType.Blocking,
     damage: [{}, {}],
@@ -655,6 +675,7 @@ export const items: Item[] = [
 // IRON AGE
   { type: 'weap', slot: 'both',
     id: 'Battleaxe',
+    tier: 3,
     toolTier: 3,
     weight: 2.5, stack: 1,
     skill: SkillType.Axes,
@@ -695,6 +716,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'primary',
     id: 'SwordIron',
+    tier: 3,
     toolTier: 0,
     weight: 0.8, stack: 1,
     skill: SkillType.Swords,
@@ -733,6 +755,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'primary',
     id: 'AxeIron',
+    tier: 3,
     toolTier: 3,
     weight: 2, stack: 1,
     skill: SkillType.Axes,
@@ -766,6 +789,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'both',
     id: 'SledgeIron',
+    tier: 3,
     weight: 4, stack: 1,
     skill: SkillType.Clubs,
     damage: [{
@@ -797,6 +821,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'primary',
     id: 'MaceIron',
+    tier: 3,
     weight: 2, stack: 1,
     skill: SkillType.Clubs,
     damage: [{
@@ -834,6 +859,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'primary',
     id: 'SpearElderbark',
+    tier: 3,
     weight: 1.5, stack: 1,
     skill: SkillType.Spears,
     damage: [{
@@ -873,6 +899,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'both',
     id: 'PickaxeIron',
+    tier: 3,
     toolTier: 2,
     weight: 2, stack: 1,
     skill: SkillType.Pickaxes,
@@ -906,6 +933,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'both',
     id: 'AtgeirIron',
+    tier: 3,
     weight: 2.5, stack: 1,
     skill: SkillType.Polearms,
     damage: [{
@@ -943,6 +971,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'bow',
     id: 'BowHuntsman',
+    tier: 3,
     weight: 1.5, stack: 1,
     skill: SkillType.Bows,
     damage: [{
@@ -977,6 +1006,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'secondary',
     id: 'ShieldBanded',
+    tier: 3,
     weight: 5, stack: 1,
     skill: SkillType.Blocking,
     damage: [
@@ -1000,6 +1030,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'secondary',
     id: 'ShieldIronTower',
+    tier: 3,
     weight: 4, stack: 1,
     skill: SkillType.Blocking,
     damage: [{}, {}],
@@ -1021,6 +1052,7 @@ export const items: Item[] = [
 // SILVER AGE
   { type: 'weap', slot: 'primary',
     id: 'SwordSilver',
+    tier: 4,
     weight: 1, stack: 1,
     skill: SkillType.Swords,
     damage: [{
@@ -1060,6 +1092,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'primary',
     id: 'SpearWolfFang',
+    tier: 4,
     weight: 1.5, stack: 1,
     skill: SkillType.Spears,
     damage: [{
@@ -1099,6 +1132,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'primary',
     id: 'MaceSilver',
+    tier: 4,
     weight: 2, stack: 1,
     skill: SkillType.Clubs,
     damage: [{
@@ -1130,7 +1164,7 @@ export const items: Item[] = [
     knockback: 120, backstab: 3, moveSpeed: -0.05,
     recipe: {
       time: CRAFT_TIME,
-      materials: { AncientBark: 10, Silver: 30, YmirFlesh: 5, FreezeGlands: 5 },
+      materials: { AncientBark: 10, Silver: 30, YmirFlesh: 5, FreezeGland: 5 },
       materialsPerLevel: { Silver: 15 },
       source: { station: CraftingStation.Forge, level: 3 },
       upgrade: { station: CraftingStation.Forge, level: 4 },
@@ -1139,6 +1173,7 @@ export const items: Item[] = [
   // TODO: SpearChitin
   { type: 'weap', slot: 'primary',
     id: 'KnifeChitin',
+    tier: 4,
     weight: 0.3, stack: 1,
     skill: SkillType.Knives,
     damage: [{
@@ -1178,6 +1213,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'bow',
     id: 'BowDraugrFang',
+    tier: 4,
     weight: 1.5, stack: 1,
     skill: SkillType.Bows,
     damage: [{
@@ -1214,6 +1250,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'secondary',
     id: 'ShieldSilver',
+    tier: 4,
     weight: 5, stack: 1,
     skill: SkillType.Blocking,
     damage: [{
@@ -1236,6 +1273,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'secondary',
     id: 'ShieldSerpentscale',
+    tier: 4,
     weight: 5, stack: 1,
     skill: SkillType.Blocking,
     damage: [{
@@ -1260,6 +1298,7 @@ export const items: Item[] = [
 // BLACK AGE
   { type: 'weap', slot: 'both',
     id: 'AtgeirBlackmetal',
+    tier: 5,
     weight: 2.5, stack: 1,
     skill: SkillType.Polearms,
     damage: [{
@@ -1295,8 +1334,9 @@ export const items: Item[] = [
       upgrade: { station: CraftingStation.Forge, level: 5 },
     },
   },
-  { type: 'weap', slot: 'both',
+  { type: 'weap', slot: 'primary',
     id: 'AxeBlackMetal',
+    tier: 5,
     toolTier: 4,
     weight: 2, stack: 1,
     skill: SkillType.Axes,
@@ -1328,8 +1368,9 @@ export const items: Item[] = [
       upgrade: { station: CraftingStation.Forge, level: 5 },
     },
   },
-  { type: 'weap', slot: 'both',
+  { type: 'weap', slot: 'primary',
     id: 'KnifeBlackMetal',
+    tier: 5,
     weight: 0.3, stack: 1,
     skill: SkillType.Knives,
     damage: [{
@@ -1367,8 +1408,9 @@ export const items: Item[] = [
       upgrade: { station: CraftingStation.Forge, level: 5 },
     },
   },
-  { type: 'weap', slot: 'both',
+  { type: 'weap', slot: 'primary',
     id: 'SwordBlackmetal',
+    tier: 5,
     weight: 0.8, stack: 1,
     skill: SkillType.Swords,
     damage: [{
@@ -1404,8 +1446,9 @@ export const items: Item[] = [
       upgrade: { station: CraftingStation.Forge, level: 5 },
     },
   },
-  { type: 'weap', slot: 'both',
+  { type: 'weap', slot: 'primary',
     id: 'MaceNeedle',
+    tier: 5,
     weight: 2, stack: 1,
     skill: SkillType.Clubs,
     damage: [{
@@ -1444,6 +1487,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'secondary',
     id: 'ShieldBlackmetal',
+    tier: 5,
     weight: 5, stack: 1,
     skill: SkillType.Blocking,
     damage: [{
@@ -1466,6 +1510,7 @@ export const items: Item[] = [
   },
   { type: 'weap', slot: 'secondary',
     id: 'ShieldBlackmetalTower',
+    tier: 5,
     weight: 5, stack: 1,
     skill: SkillType.Blocking,
     damage: [{
@@ -1488,4 +1533,77 @@ export const items: Item[] = [
     }
   },
 // FLAME AGE
+  { type: 'weap', slot: 'primary',
+    id: 'SwordIronFire',
+    tier: 6,
+    toolTier: 0,
+    weight: 1, stack: 1,
+    skill: SkillType.Swords,
+    damage: [{
+      [DamageType.Slash]: 55,
+      [DamageType.Fire]: 30,
+    }, {
+      [DamageType.Slash]: 5,
+      [DamageType.Fire]: 6,
+    }],
+    attacks: [{
+      type: 'melee',
+      chain: 3,
+      chainCombo: 2,
+      stamina: 10,
+      range: 2.4,
+    }, {
+      type: 'melee',
+      chain: 0,
+      chainCombo: 0,
+      stamina: 30,
+      range: 2.4,
+      mul: { damage: 3, force: 1, stagger: 1 },
+    }],
+    maxLvl: 4,
+    durability: [200, 50],
+    block: 10,
+    parryForce: [20, 5],
+    parryBonus: 2,
+    knockback: 40, backstab: 3, moveSpeed: -0.05,
+    recipe: {
+      time: CRAFT_TIME,
+      materials: { FineWood: 2, Flametal: 20, SurtlingCore: 20, LeatherScraps: 3 },
+      materialsPerLevel: { Flametal: 10, SurtlingCore: 10, LeatherScraps: 2 },
+      source: { station: CraftingStation.Forge, level: 2 },
+      upgrade: { station: CraftingStation.Forge, level: 3 },
+    },
+  },
+  { type: 'weap', slot: 'primary',
+    id: 'SwordCheat',
+    tier: 999,
+    toolTier: 10,
+    weight: 1, stack: 1,
+    skill: SkillType.Swords,
+    damage: [{
+      [DamageType.Slash]: 10000,
+      [DamageType.Chop]: 10000,
+      [DamageType.Pickaxe]: 10000,
+    }, {
+    }],
+    attacks: [{
+      type: 'melee',
+      chain: 3,
+      chainCombo: 2,
+      stamina: 10,
+      range: 2.4,
+    }, {
+      type: 'melee',
+      chain: 0,
+      chainCombo: 0,
+      stamina: 30,
+      range: 2.4,
+    }],
+    maxLvl: 1,
+    durability: [100, 50],
+    block: 10,
+    parryForce: 0,
+    parryBonus: 2,
+    knockback: 40, backstab: 3, moveSpeed: -0.05,
+  },
 ];
