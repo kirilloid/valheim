@@ -1,16 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { DamageProfile, DamageType, Item } from '../types';
+import { DamageProfile, DamageType, Weapon as TWeapon } from '../types';
 import { assertNever } from '../model/utils';
 import { SkillType } from '../model/skills';
 import { Icon } from './Icon';
 import { Recipe } from './Recipe';
 import { durability } from './helpers';
+import { useTranslation } from '../translation.effect';
 
-type WeaponItem = Extract<Item, { type: 'weap' }>;
-
-function hand(slot: WeaponItem['slot']): string | undefined {
+function hand(slot: TWeapon['slot']): string | undefined {
   switch (slot) {
     case 'body':
     case 'shoulders':
@@ -75,7 +74,7 @@ function totalDamage(damage: DamageProfile): number {
     .reduce<number>((a, [_, b]) => a + b!, 0);
 }
 
-function ShieldStats(item: WeaponItem) {
+function ShieldStats(item: TWeapon) {
   return <section>
     <header>shield</header>
     <dl>
@@ -91,7 +90,7 @@ function ShieldStats(item: WeaponItem) {
   </section>;
 }
 
-function WeaponStats(item: WeaponItem) {
+function WeaponStats(item: TWeapon) {
   const baseDmg = totalDamage(item.damage[0]);
   const lvlDmg = totalDamage(item.damage[1]);
   return <section>
@@ -110,14 +109,15 @@ function WeaponStats(item: WeaponItem) {
   </section>
 }
 
-export function Weapon(item: WeaponItem) {
+export function Weapon(item: TWeapon) {
+  const translate = useTranslation();
   const { recipe } = item;
   return (
     <>
       <h2>
         <Icon type="weapon" id={item.id} />
         {' '}
-        {item.id}
+        {translate(item.id)}
       </h2>
       {item.skill === SkillType.Blocking
         ? <ShieldStats {...item} />

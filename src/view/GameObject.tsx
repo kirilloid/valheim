@@ -9,6 +9,7 @@ import { Food } from './Food';
 import { Valuable } from './Valuable';
 import { GenericItem } from './GenericItem';
 import { Creature as CreatureView } from './Creature';
+import { Arrow } from './Arrow';
 
 export function GameObject() {
   const { id } = useParams<{id: string}>();
@@ -39,6 +40,8 @@ function Item(id: string) {
       return Food(item);
     case 'value':
       return Valuable(item);
+    case 'ammo':
+      return Arrow(item);
     case 'item':
       return GenericItem(item);
     default:

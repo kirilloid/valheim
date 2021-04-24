@@ -1,5 +1,6 @@
 import { items as weapons } from './weapons';
 import { items as armors } from './armors';
+import { arrows } from './arrows';
 import { resources } from './resources';
 import { Item } from '../types';
 
@@ -17,3 +18,4 @@ function addToMap(item: Item) {
 weapons.forEach(addToMap);
 armors.forEach(addToMap);
 resources.forEach(addToMap);
+arrows.forEach(addToMap);

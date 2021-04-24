@@ -3,14 +3,16 @@ import type { Item } from '../types';
 import { timeI2S } from '../model/utils';
 import { Icon } from './Icon';
 import { Recipe } from './Recipe';
+import { useTranslation } from '../translation.effect';
 
 export function Food(item: Item & { type: 'food' }) {
+  const translate = useTranslation();
   const { recipe } = item;
   return (<>
     <h2>
       <Icon type="resources" id={item.id} />
       {' '}
-      {item.id}
+      {translate(item.id)}
     </h2>
     <section>
       <header>food</header>

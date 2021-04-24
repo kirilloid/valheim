@@ -7,13 +7,16 @@ import type { Item } from '../types';
 import { match } from '../model/search';
 import { Icon } from './Icon';
 import data from '../model/objects';
+import { useTranslation } from '../translation.effect';
 
 function typeToIcon(type?: Item['type']): string {
   switch (type) {
     case undefined: return 'creatures';
     case 'item': return 'resources';
     case 'food': return 'resources';
+    case 'value': return 'resources';
     case 'weap': return 'weapon';
+    case 'ammo': return 'arrow';
     default: return type;
   }
 }
@@ -22,6 +25,7 @@ export const Search = () => {
   const history = useHistory();
   const [items, setItems] = useState<string[]>([]);
   const [index, setIndex] = useState(0);
+  const translate = useTranslation();
   function updateSearch(e: ChangeEvent<HTMLInputElement>) {
     const str = e.target.value;
     setItems(match(str));
@@ -55,7 +59,7 @@ export const Search = () => {
       {items.length
       ? <ul className="SearchResults" aria-activedescendant={`gs_i${index}`}>
           {items.map((id, i) => {
-            const text = id;
+            const text = translate(id);
             const type = typeToIcon(data[id]?.type);
             return (
               <li id={`gs_i${i}`} key={id}

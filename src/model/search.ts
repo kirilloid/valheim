@@ -1,5 +1,6 @@
 import data from './objects';
 import { creatures } from './creatures';
+import { preloadLanguage } from '../translation.effect';
 
 type PrefixTree<T> = {
   children: Map<string, PrefixTree<T>>;
@@ -34,13 +35,16 @@ const treeNode = <T>(): PrefixTree<T> => ({
 const startTree = treeNode<string>();
 const anyTree = treeNode<string>();
 
-for (const key of Object.keys(data).concat(creatures.map(c => c.id))) {
-  const letters = key.toLowerCase();
-  addToTree(startTree, letters, key);
-  for (let i = 1; i < letters.length - 1; i++) {
-    addToTree(anyTree, letters.slice(i), key);
+preloadLanguage().then(dict => {
+  for (const key of Object.keys(data).concat(creatures.map(c => c.id))) {
+    // TODO: make it translatable
+    const letters = (dict[key] ?? key).toLowerCase();
+    addToTree(startTree, letters, key);
+    for (let i = 1; i < letters.length - 1; i++) {
+      addToTree(anyTree, letters.slice(i), key);
+    }
   }
-}
+});
 
 export function match(query: string): string[] {
   const res1 = lookupInTree(startTree, query);

@@ -7,6 +7,11 @@
   color: #61dafb;
 }
 
+.CombatCalc {
+  display: flex;
+  flex-direction: row;
+}
+
 h2 {
   margin-top: 1em;
   margin-bottom: 0.5em;

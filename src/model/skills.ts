@@ -17,18 +17,8 @@ export enum SkillType {
 }
 
 /*
-
-bows 1.5
-spears 1.5
-blocking 0.5
-jump 0.5
-sneak 0.5
-run 0.2
-swim 0.3
-
-run: stamina drain 8 * (1 - lvl / 200)
-     speed: 2 * (1 + 0.25 * lvl / 100) 
-swim: stamina drain 6 * (1 - lvl / 200)
+run: stamina drain 10 - 5 * lvl / 100
+swim: stamina drain 5 - 3 * lvl / 100
 
 melee:
 hit stamina *= (1 - 0.33 * skill / 100)
@@ -74,7 +64,12 @@ damage calculation:
 add 1.5xp
 
 
+fire: over 5s every 1s
+spirit: over 3s every 0.5s
+posion damage ttl = 1 + sqrt(5 * dmg) ???
 
-posion damage ttl = 2 + sqrt(2 * dmg) ???
+    this.m_ttl = 1 + Mathf.Pow(this.m_damageLeft * (IsPlayer() ? 5 : 1), 0.5);
+    int hits = this.m_ttl / 1;
+    this.m_damagePerHit = this.m_damageLeft / (float) hits;
 
 */

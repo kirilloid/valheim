@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from '../translation.effect';
 
 import type { Item } from '../types';
 import { durability } from './helpers';
@@ -7,13 +8,14 @@ import { Icon } from './Icon';
 import { Recipe } from './Recipe';
 
 export function Armor(item: Item & { type: 'armor' }) {
-  const { recipe } = item; 
+  const translate = useTranslation();
+  const { recipe } = item;
   return (
     <>
       <h2>
         <Icon type="armor" id={item.id} />
         {' '}
-        {item.id}
+        {translate(item.id)}
       </h2>
       <section>
         <header>armor</header>
