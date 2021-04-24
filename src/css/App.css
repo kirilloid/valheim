@@ -1,0 +1,47 @@
+.App {
+  margin: 0 1em;
+  line-height: 1.5;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+h2 {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+h2 .icon {
+  vertical-align: bottom;
+}
+
+section {
+  margin: 0.5em 0;
+}
+section > header {
+  text-transform: uppercase;
+  color: #888;
+}
+
+dl {
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  /* grid-template-columns: 1fr 3fr; */
+}
+dt {
+  white-space: nowrap;
+  flex-basis: 30%;
+  flex-grow: 1;
+}
+dd {
+  margin: 0;
+  flex-basis: 50%;
+  flex-grow: 3;
+}
+
+ul {
+  margin: 0;
+}

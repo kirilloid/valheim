@@ -149,8 +149,8 @@ export const creatures: Creature[] = [
     id: 'Skeleton_Poison', // Rancid Remains
     faction: Faction.Undead,
     attacks: [
-      [{ amount: 20, type: DamageType.Blunt },
-       { amount: 20, type: DamageType.Poison }],
+      { [DamageType.Blunt]: 20 ,
+        [DamageType.Poison]: 20 },
     ],
     hp: 100,
     damageModifiers: {
@@ -461,7 +461,7 @@ export const creatures: Creature[] = [
   },
   {
     id: 'StoneGolem',
-    faction: Faction.MountainMonsters,
+    faction: Faction.ForestMonsters,
     // spike
     attacks: [{ // attackspike F130
       [DamageType.Blunt]: 110,
@@ -556,8 +556,8 @@ export const creatures: Creature[] = [
         { [DamageType.Blunt]: 110 },
         { [DamageType.Pierce]: 110 },
         { [DamageType.Slash]: 110 },
-        [{ amount: 55, type: DamageType.Blunt },
-         { amount: 55, type: DamageType.Fire }],
+        { [DamageType.Blunt]: 55,
+          [DamageType.Fire]: 55 },
         // vs 26 arm 24.3-37.6
         // vs 52 arm 18.6-28.2
         // vs 52 arm & FR 12.5-21.4
@@ -581,8 +581,8 @@ export const creatures: Creature[] = [
     faction: Faction.PlainsMonsters,
     attacks: [
       { [DamageType.Blunt]: 100 }, // staff poke
-      [{ amount: 20, type: DamageType.Blunt },   // fireball
-       { amount: 100, type: DamageType.Fire }],
+      { [DamageType.Blunt]: 20,   // fireball
+        [DamageType.Fire]: 100 },
     ],
 
     // vs 0 arm 15.1-19.7

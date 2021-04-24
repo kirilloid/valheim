@@ -393,7 +393,7 @@ export const items: Item[] = [
     armor: [2, 0],
     weight: 1,
     maxLvl: 1,
-    durability: Infinity,
+    durability: [Infinity, 0],
     moveSpeed: 0,
     recipe: { value: 100 }
   },
@@ -402,7 +402,7 @@ export const items: Item[] = [
     armor: [0, 0],
     weight: 1,
     maxLvl: 1,
-    durability: Infinity,
+    durability: [Infinity, 0],
     moveSpeed: 0,
     recipe: { value: 620 }
   },
@@ -411,7 +411,7 @@ export const items: Item[] = [
     armor: [2, 0],
     weight: 4,
     maxLvl: 1,
-    durability: 1500,
+    durability: [1500, 0],
     moveSpeed: 0,
     recipe: {
       time: CRAFT_TIME,
@@ -426,7 +426,7 @@ export const items: Item[] = [
     armor: [1, 0],
     weight: 4,
     maxLvl: 1,
-    durability: 300,
+    durability: [300, 0],
     moveSpeed: 0,
     recipe: {
       time: CRAFT_TIME,

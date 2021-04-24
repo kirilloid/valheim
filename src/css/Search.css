@@ -1,0 +1,27 @@
+.SearchBlock {
+  position: relative;
+  font-size: 16px;
+}
+
+.SearchBlock input {
+  font-size: 1em;
+}
+
+.SearchResults {
+  list-style-type: none;
+  padding: 0.5em 0;
+  margin: 0;
+  position: absolute;
+  width: 100%;
+  background: white;
+}
+
+.SearchResults > li {
+  margin: 0.25em 0;
+}
+.SearchResults > li > * {
+  vertical-align: middle;
+}
+.SearchResults .active {
+  background: #bde4ff;
+}

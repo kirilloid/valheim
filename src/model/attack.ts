@@ -7,3 +7,5 @@
  * dmg +50%
  * hp +100%
  */
+
+export default {};

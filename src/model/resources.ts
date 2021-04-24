@@ -43,7 +43,6 @@ export const resources: Item[] = [
   { type: 'item', id: 'TrophyBoar', weight: 2, stack: 50 },
   { type: 'item', id: 'TrophyDeer', weight: 2, stack: 50 },
   { type: 'item', id: 'TrophyNeck', weight: 0.5, stack: 50 },
-  { type: 'item', id: 'TrophyGreyling', weight: 1, stack: 20 },
   { type: 'item', id: 'TrophyEikthyr', weight: 2, stack: 20 },
   { type: 'item', id: 'HardAntler', weight: 2, stack: 50 },
 // BLACK FOREST

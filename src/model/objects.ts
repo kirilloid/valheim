@@ -1,4 +1,27 @@
+import { resources } from './resources';
+import { items as weapons } from './weapons';
+import { items as armors } from './armors';
+import { Item } from '../types';
+
+const data: Record<string, Item> = {};
+resources.forEach(r => data[r.id] = r);
+weapons.forEach(w => data[w.id] = w);
+armors.forEach(a => data[a.id] = a);
+
+export default data;
+
 /*
+
+pickable respawn rate (hours):
+Raspberry 5
+YellowMushroom 4
+Dandelion 4
+Cloudberry 5
+Blueberries 5
+DragonEgg 6
+Mushroom 4
+Thistle 4
+Flint 4
 
 mudpile (beacon)
 drop: 30%

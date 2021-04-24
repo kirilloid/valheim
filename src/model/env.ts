@@ -7,7 +7,7 @@ const WET = 16;
 const DARK = 32;
 const RAIN = WET | DARK;
 
-const envStates = [
+export const envStates = [
     { id: 'Clear', wind: [0.1, 0.6], light: [1, 1.7], flags: COLD_NIGHT },
     { id: 'Twilight_Clear', wind: [0.2, 0.6], light: [0.3, 0.5], flags: COLD },
     { id: 'Misty', wind: [0.1, 0.3], light: [1, 1], flags: COLD_NIGHT },
@@ -35,8 +35,8 @@ const envStates = [
 
 type ES = typeof envStates;
 
-const envSetup: Record<Biome, Partial<Record<ES[number]['id'], number>>> = {
-    [Biome.Meadows]: { Clear: 25, Rain: 1, Misty: 1, ThunderStorm: 1, LightRain: 1 },
+export const envSetup: Record<Biome, Partial<Record<ES[number]['id'], number>>> = {
+    [Biome.Meadows]: { Clear: 25, LightRain: 1, Rain: 1, Misty: 1, ThunderStorm: 1 },
     [Biome.BlackForest]: { DeepForest_Mist: 20, Rain: 1, Misty: 1, ThunderStorm: 1 },
     [Biome.Swamp]: { SwampRain: 1 },
     [Biome.Mountain]: { SnowStorm: 1, Snow: 5 },
@@ -44,7 +44,7 @@ const envSetup: Record<Biome, Partial<Record<ES[number]['id'], number>>> = {
     [Biome.Plains]: { Heath_clear: 5, Misty: 1, LightRain: 1 },
     [Biome.Ashlands]: { Ashrain: 1 },
     [Biome.Mistlands]: { Darklands_dark: 1 },
-    [Biome.Ocean]: { Clear: 10, Rain: 1, LightRain: 1, Misty: 1, ThunderStorm: 1 },
+    [Biome.Ocean]: { Clear: 10, LightRain: 1, Rain: 1, Misty: 1, ThunderStorm: 1 },
 };
 
 const avgWind = {

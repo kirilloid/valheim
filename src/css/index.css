@@ -11,3 +11,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+img {
+  vertical-align: middle;
+}
+
+article h1,
+article h2 {
+  text-transform: capitalize;
+}
+
+article *:target,
+article *.active {
+  background: #bde4ff;
+}

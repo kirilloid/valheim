@@ -1,6 +1,6 @@
 import { SkillType } from "./model/skills";
 
-export const enum Biome {
+export enum Biome {
   Meadows,
   BlackForest,
   Swamp,
@@ -12,18 +12,18 @@ export const enum Biome {
   Ashlands,
 }
 
-export const enum Faction {
+export enum Faction {
   Players,
   AnimalsVeg,
   ForestMonsters,
   Undead, Demon, // best friends
-  MountainMonsters, // everyone
-  SeaMonsters, // everyone
-  PlainsMonsters, // everyone
+  MountainMonsters,
+  SeaMonsters,
+  PlainsMonsters,
   Boss, // aggressive only to players
 };
 
-export const enum DamageType {
+export enum DamageType {
   Damage,
   Blunt,
   Slash,
@@ -37,7 +37,7 @@ export const enum DamageType {
   Spirit,
 };
 
-export const enum DamageModifier {
+export enum DamageModifier {
   Normal,    // 1x
   Resistant, // 0.5x
   Weak,      // 1.5x
@@ -47,12 +47,9 @@ export const enum DamageModifier {
   VeryWeak,  // 2x
 };
 
-export type DamageModifiers = Record<DamageType, DamageModifier>;
+export type DamageModifiers = Record<Exclude<DamageType, DamageType.Damage>, DamageModifier>;
 
-type DamageProfile = {
-  type: DamageType;
-  amount: number;
-}[] | Partial<Record<DamageType, number>>;
+export type DamageProfile = Partial<Record<DamageType, number>>;
 
 export interface DropEntry {
   item: string;
@@ -106,6 +103,33 @@ export enum CraftingStation {
   Windmill,
   SpinningWheel,
   Cultivator,
+}
+
+interface BasePiece {
+  id: string;
+  hp: number;
+  damageModifiers: DamageModifiers;
+  recipe: {
+    materials: Record<string, number>;
+    station: CraftingStation | null;
+  }; 
+}
+
+export interface Ship extends BasePiece {
+  type: 'ship';
+  sail: {
+    forceDistance: number;
+    force: number;
+    damping: number;
+    dampingSideway: number;
+    dampingForward: number;
+    angularDamping: number;
+    sailForceOffset: number;
+    sailForceFactor: number;
+    rudderForce: number;
+    waterLevelOffset: number;
+    disableLevel: number;
+  }
 }
 
 interface BaseItem {
@@ -192,7 +216,7 @@ interface Weapon extends BaseItem {
   type: 'weap';
   slot: 'primary' | 'both' | 'secondary' | 'bow' | 'either'
     | 'head' | 'shoulders' | 'body' | 'legs'
-    | 'none';
+    | 'none' | 'util';
   skill: SkillType;
   toolTier?: number;
   damage: Pair<DamageProfile>;
@@ -204,7 +228,7 @@ interface Weapon extends BaseItem {
   knockback: number;
   backstab: number;
   moveSpeed: number;
-  durability: number | Pair<number>;
+  durability: Pair<number>;
 }
 
 interface Armor extends BaseItem {
@@ -212,7 +236,7 @@ interface Armor extends BaseItem {
   slot: 'head' | 'shoulders' | 'body' | 'legs' | 'none';
   armor: Pair<number>;
   maxLvl: number;
-  durability: number | Pair<number>;
+  durability: Pair<number>;
   moveSpeed: number;
   damageModifiers?: Partial<DamageModifiers>;
 }

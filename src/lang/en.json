@@ -97,7 +97,6 @@
     "TrophyBoar": "Boar trophy",
     "TrophyDeer": "Deer trophy",
     "TrophyNeck": "Neck trophy",
-    "TrophyGreyling": "Greyling trophy",
     "TrophyEikthyr": "Eikthyr trophy",
     "HardAntler": "Hard antlers",
     "FineWood": "Fine wood",
@@ -228,6 +227,9 @@
     "Lox": "Lox",    
     "GoblinKing": "Yagluth",
     "Serpent": "Serpent",
+    
+    "ui.search.placeholder": "Search for things...",
+    "ui.search.button": "Search",
 
     "": ""
 }

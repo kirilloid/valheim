@@ -84,7 +84,7 @@ export const items: Item[] = [
       range: 2.4,
     }],
     maxLvl: 1,
-    durability: 20,
+    durability: [20, 0],
     block: 10,
     parryForce: [10, 5],
     parryBonus: 2,

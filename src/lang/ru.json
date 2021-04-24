@@ -97,7 +97,6 @@
     "TrophyBoar": "Трофей: кабан",
     "TrophyDeer": "Трофей: олень",
     "TrophyNeck": "Трофей: никс",
-    "TrophyGreyling": "Трофей: грейлинг",
     "TrophyEikthyr": "Трофей: Эйктюр",
     "HardAntler": "Твердый рог",
     "FineWood": "Качественная древесина",
@@ -229,6 +228,9 @@
     "Lox": "Локс",    
     "GoblinKing": "Яглут",
     "Serpent": "Змей",
+    
+    "ui.search.placeholder": "Искать объекты...",
+    "ui.search.button": "Искать",
 
     "": ""
 }

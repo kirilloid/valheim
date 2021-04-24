@@ -17,8 +17,18 @@ export enum SkillType {
 }
 
 /*
-run: stamina drain 10 - lvl / 20
-swim: stamina drain 5 - 3 * lvl / 100
+
+bows 1.5
+spears 1.5
+blocking 0.5
+jump 0.5
+sneak 0.5
+run 0.2
+swim 0.3
+
+run: stamina drain 8 * (1 - lvl / 200)
+     speed: 2 * (1 + 0.25 * lvl / 100) 
+swim: stamina drain 6 * (1 - lvl / 200)
 
 melee:
 hit stamina *= (1 - 0.33 * skill / 100)
