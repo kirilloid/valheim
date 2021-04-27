@@ -7,9 +7,10 @@ import { Armor } from './Armor';
 import { Weapon } from './Weapon';
 import { Food } from './Food';
 import { Valuable } from './Valuable';
-import { GenericItem } from './GenericItem';
 import { Creature as CreatureView } from './Creature';
 import { Arrow } from './Arrow';
+import { GenericItem } from './GenericItem';
+import { Tool } from './Tool';
 
 export function GameObject() {
   const { id } = useParams<{id: string}>();
@@ -42,6 +43,8 @@ function Item(id: string) {
       return Valuable(item);
     case 'ammo':
       return Arrow(item);
+    case 'tool':
+      return Tool(item);
     case 'item':
       return GenericItem(item);
     default:

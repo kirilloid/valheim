@@ -27,6 +27,7 @@
 
     "HelmetYule": "Праздничный колпак",
     "HelmetDverger": "Венец дворфов",
+    "BeltStrength": "Мегингъёрд",
     "HelmetOdin": "Капюшон Одина",
     "CapeOdin": "Плащ Одина",
  
@@ -76,8 +77,16 @@
     "MaceNeedle": "Дикобраз",
     "ShieldBlackmetal": "Щит из черного металла",
     "ShieldBlackmetalTower": "Башенный щит из черного металла",
+    
+    "Hammer": "Молот",
+    "Hoe": "Мотыга",
+    "Cultivator": "Пропашник",
+
     "SwordIronFire": "Огнемеч",
     "SwordCheat": "Читомеч",
+    "ShieldKnight": "Щит рыцаря",
+    "ShieldIronSquare": "Квадратный железный щит",
+    "CapeTest": "Плащч",
 
     "ArrowWood": "Деревянная стрела",
     "ArrowFire": " Огненная стрела",
@@ -107,6 +116,8 @@
     "CookedMeat": "Приготовленное мясо",
     "NeckTail": "Хвост никса",
     "NeckTailGrilled": "Жареный хвост никса",
+    "FishRaw": "Сырая рыба",
+    "FishCooked": "Приготовленная рыба",
     "TrophyBoar": "Трофей: кабан",
     "TrophyDeer": "Трофей: олень",
     "TrophyNeck": "Трофей: никс",

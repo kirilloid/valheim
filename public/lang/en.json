@@ -27,6 +27,7 @@
 
     "HelmetYule": "Yule hat",
     "HelmetDverger": "Dverger circlet",
+    "BeltStrength": "Megingjord",
     "HelmetOdin": "Hood of Odin",
     "CapeOdin": "Cape of Odin",
 
@@ -76,8 +77,16 @@
     "MaceNeedle": "Porcupine",
     "ShieldBlackmetal": "Black metal shield",
     "ShieldBlackmetalTower": "Black metal tower shield",
+    
+    "Hammer": "Hammer",
+    "Hoe": "Hoe",
+    "Cultivator": "Cultivator",
+
     "SwordIronFire": "Flame sword",
     "SwordCheat": "Cheat sword",
+    "ShieldKnight": "Knight's shield",
+    "ShieldIronSquare": "Iron square shield",
+    "CapeTest": "Da cape",
 
     "ArrowWood": "Wood arrow",
     "ArrowFire": "Fire arrow",
@@ -107,6 +116,8 @@
     "CookedMeat": "Cooked meat",
     "NeckTail": "Neck tail",
     "NeckTailGrilled": "Grilled neck tail",
+    "FishRaw": "Raw fish",
+    "FishCooked": "Cooked fish",
     "TrophyBoar": "Boar trophy",
     "TrophyDeer": "Deer trophy",
     "TrophyNeck": "Neck trophy",

@@ -1,4 +1,4 @@
-import { Item, CraftingStation } from "../types";
+import { Item, CraftingStation, Biome } from "../types";
 
 const CAULDRON_TIME = 3;
 const FORGE_TIME = 2;
@@ -9,6 +9,7 @@ const SMELTER_TIME = 30;
 const FURNACE_TIME = 30;
 const SPIN_WHEEL_TIME = 30;
 const FERMENT_TIME = 2400;
+const HOUR = 3600;
 
 export const resources: Item[] = [
 // MEADOWS
@@ -19,15 +20,20 @@ export const resources: Item[] = [
   { type: 'item', id: 'Resin', tier: 1, weight: 0.3, stack: 50 },
   { type: 'item', id: 'Feathers', emoji: '🪶', tier: 1, weight: 0.1, stack: 50 },
   { type: 'item', id: 'Stone', emoji: '🪨', tier: 0, weight: 2, stack: 50 },
-  { type: 'item', id: 'Flint', tier: 1, weight: 2, stack: 30 },
+  { type: 'item', id: 'Flint', tier: 1, weight: 2, stack: 30,
+    recipe: { biomes: [Biome.Meadows, Biome.BlackForest], abundance: 1, respawn: 4 * HOUR } },
   { type: 'item', id: 'LeatherScraps', tier: 1, weight: 0.5, stack: 50 },
   { type: 'item', id: 'DeerHide', tier: 1, weight: 1, stack: 50 },
   { type: 'item', id: 'QueenBee', emoji: '🐝', tier: 1, weight: 0.2, stack: 20 },
+  { type: 'item', id: 'BeechSeeds', tier: 1, weight: 0.1, stack: 100 },
   { type: 'food', id: 'Raspberry', emoji: '🍓', tier: 1, weight: 0.1, stack: 50,
-    health: 10, stamina: 20, duration: 600, regen: 1, color: '#ff7a7aff' },
+    health: 10, stamina: 20, duration: 600, regen: 1, color: '#ff7a7aff',
+    recipe: { biomes: [Biome.Meadows], abundance: 1, respawn: 5 * HOUR } },
   { type: 'food', id: 'Mushroom', emoji: '🍄🔴', tier: 1, weight: 0.1, stack: 50,
-    health: 15, stamina: 20, duration: 600, regen: 1, color: '#ff7353ff' },
-  { type: 'item', id: 'Dandelion', tier: 0, weight: 0.1, stack: 50 },
+    health: 15, stamina: 20, duration: 600, regen: 1, color: '#ff7353ff',
+    recipe: { biomes: [Biome.Meadows], abundance: 1, respawn: 4 * HOUR } },
+  { type: 'item', id: 'Dandelion', tier: 0, weight: 0.1, stack: 50,
+    recipe: { biomes: [Biome.Meadows], abundance: 1, respawn: 4 * HOUR } },
   { type: 'food', id: 'Honey', emoji: '🍯', tier: 1, weight: 0.2, stack: 50,
     health: 20, stamina: 20, duration: 300, regen: 5, color: '#ffae00ff' },
   { type: 'item', id: 'RawMeat', emoji: '🥩', tier: 0, weight: 1, stack: 20 },
@@ -40,12 +46,19 @@ export const resources: Item[] = [
     health: 35, stamina: 20, duration: 1000, regen: 2, color: '#c59645ff',
     recipe: { time: 20, materials: { NeckTail: 1 },
               source: { station: CraftingStation.CookingStation }, number: 1 } },
+  { type: 'item', id: 'Fish', emoji: '🐟', tier: 1, weight: 1, stack: 20 },
+  { type: 'food', id: 'FishCooked', emoji: '🍣', tier: 1, weight: 1, stack: 50,
+    health: 45, stamina: 25, duration: 1200, regen: 2, color: '#ce8550ff',
+    recipe: { time: 25, materials: { FishCooked: 1 },
+              source: { station: CraftingStation.CookingStation }, number: 1 } },
   { type: 'item', id: 'TrophyBoar', emoji: '🐗', tier: 1, weight: 2, stack: 50 },
   { type: 'item', id: 'TrophyDeer', emoji: '🦌', tier: 1, weight: 2, stack: 50 },
   { type: 'item', id: 'TrophyNeck', emoji: '🦎', tier: 1, weight: 0.5, stack: 50 },
   { type: 'item', id: 'TrophyEikthyr', emoji: '🦌', tier: 2, weight: 2, stack: 20 },
   { type: 'item', id: 'HardAntler', tier: 2, weight: 2, stack: 50 },
 // BLACK FOREST
+  { type: 'item', id: 'FirCone', tier: 2, weight: 0.1, stack: 100 },
+  { type: 'item', id: 'PineCone', tier: 2, weight: 0.1, stack: 100 },
   { type: 'item', id: 'FineWood', tier: 2, weight: 2, stack: 50 },
   { type: 'item', id: 'GreydwarfEye', tier: 2, weight: 0.2, stack: 50 },
   { type: 'item', id: 'BoneFragments', emoji: '🦴', tier: 2, weight: 0.5, stack: 50 },
@@ -75,16 +88,19 @@ export const resources: Item[] = [
   { type: 'item', id: 'YmirRemains', tier: 2, weight: 0.3, stack: 50, recipe: { value: 120 } },
   { type: 'item', id: 'CarrotSeeds', tier: 2, weight: 0.1, stack: 100 },
   { type: 'food', id: 'Blueberries', emoji: '🫐', tier: 2, weight: 0.1, stack: 50,
-    health: 15, stamina: 20, duration: 600, regen: 1, color: '#568cffff' },
+    health: 15, stamina: 20, duration: 600, regen: 1, color: '#568cffff',
+    recipe: { biomes: [Biome.BlackForest], abundance: 1, respawn: 5 * HOUR } },
   { type: 'food', id: 'QueensJam', emoji: '🧁', tier: 2, weight: 0.1, stack: 50,
     health: 15, stamina: 20, duration: 600, regen: 1, color: '#ff0084ff',
     recipe: { time: CAULDRON_TIME, materials: { Raspberry: 8, Blueberries: 8 },
               source: { station: CraftingStation.Cauldron }, number: 4 } },
   { type: 'food', id: 'MushroomYellow', emoji: '🍄🟡', tier: 2, weight: 0.1, stack: 50,
-    health: 20, stamina: 20, duration: 600, regen: 1, color: '#e7c84bff' },
+    health: 20, stamina: 20, duration: 600, regen: 1, color: '#e7c84bff',
+    recipe: { biomes: [Biome.BlackForest, Biome.Swamp], abundance: 1, respawn: 4 * HOUR } },
   { type: 'food', id: 'MushroomBlue', emoji: '🍄🔵', tier: 2, weight: 0.1, stack: 50,
     health: 20, stamina: 20, duration: 600, regen: 1, color: '#4be1e7ff' },
-  { type: 'item', id: 'Thistle', emoji: '🌿', tier: 2, weight: 0.1, stack: 50 },
+  { type: 'item', id: 'Thistle', emoji: '🌿', tier: 2, weight: 0.1, stack: 50,
+    recipe: { biomes: [Biome.BlackForest, Biome.Swamp], abundance: 1, respawn: 4 * HOUR } },
   { type: 'food', id: 'Carrot', emoji: '🥕', tier: 2, weight: 0.3, stack: 50,
     health: 15, stamina: 15, duration: 600, regen: 1, color: '#ff7115ff' },
   { type: 'food', id: 'CarrotSoup', emoji: '🥣', tier: 2, weight: 1, stack: 10,
@@ -129,7 +145,6 @@ export const resources: Item[] = [
   { type: 'item', id: 'TrophyDraugr', emoji: '🧟', tier: 3, weight: 2, stack: 20 },
   { type: 'item', id: 'TrophyDraugrElite', emoji: '🧟', tier: 3, weight: 2, stack: 20 },
   { type: 'item', id: 'TrophyBonemass', emoji: '🦠', tier: 4, weight: 2, stack: 20 },
-  { type: 'item', id: 'Wishbone', tier: 4, weight: 0.1, stack: 1 },
 // OCEAN
   { type: 'item', id: 'Chitin', tier: 4, weight: 2, stack: 50 },
   { type: 'item', id: 'SerpentScale', tier: 4, weight: 2, stack: 50 },
@@ -140,7 +155,7 @@ export const resources: Item[] = [
               source: { station: CraftingStation.CookingStation }, number: 1 } },
   { type: 'food', id: 'SerpentStew', emoji: '🍜', tier: 4, weight: 1, stack: 10,
     health: 80, stamina: 80, duration: 2400, regen: 4, color: '#dd8049ff',
-    recipe: { time: CAULDRON_TIME, materials: { Mushroom: 1, CookedSerpentMeat: 1, Honey: 2 },
+    recipe: { time: CAULDRON_TIME, materials: { Mushroom: 1, SerpentMeatCooked: 1, Honey: 2 },
               source: { station: CraftingStation.Cauldron }, number: 1 } },
   { type: 'item', id: 'TrophySerpent', tier: 4, weight: 25, stack: 20 },
 // MOUNTAIN
@@ -153,7 +168,8 @@ export const resources: Item[] = [
               source: { station: CraftingStation.Smelter }, number: 1 } },
   { type: 'item', id: 'Obsidian', tier: 4, weight: 2, stack: 50 },
   { type: 'item', id: 'Crystal', emoji: '💎', tier: 4, weight: 8, stack: 50 },
-  { type: 'item', id: 'DragonEgg', emoji: '🥚', tier: 4, weight: 200, stack: 1, teleportable: false },
+  { type: 'item', id: 'DragonEgg', emoji: '🥚', tier: 4, weight: 200, stack: 1, teleportable: false,
+    recipe: { biomes: [Biome.Mountain], abundance: 1, respawn: 6 * HOUR } },
   { type: 'item', id: 'TrophyWolf', tier: 4, weight: 1.5, stack: 20 },
   { type: 'item', id: 'TrophyFenring', tier: 4, weight: 2, stack: 20 },
   { type: 'item', id: 'TrophyDrake', tier: 4, weight: 2, stack: 20 },
@@ -174,7 +190,8 @@ export const resources: Item[] = [
     recipe: { time: -1, materials: { Barley: 1 },
               source: { station: CraftingStation.Windmill }, number: 1 } },
   { type: 'food', id: 'Cloudberry', emoji: '🟠', tier: 5, weight: 0.1, stack: 50,
-    health: 15, stamina: 25, duration: 800, regen: 1, color: '#ffde87ff' },
+    health: 15, stamina: 25, duration: 800, regen: 1, color: '#ffde87ff',
+    recipe: { biomes: [Biome.Plains], abundance: 1, respawn: 5 * HOUR } },
   { type: 'item', id: 'LoxMeat', tier: 5, weight: 1, stack: 20 },
   { type: 'item', id: 'LoxPelt', tier: 5, weight: 1, stack: 50 },
   { type: 'food', id: 'CookedLoxMeat', emoji: '🍖', tier: 5, weight: 1, stack: 20,
@@ -191,7 +208,7 @@ export const resources: Item[] = [
               source: { station: CraftingStation.Cauldron }, number: 1 } },
   { type: 'food', id: 'FishWraps', emoji: '🌯', tier: 5, weight: 1, stack: 10,
     health: 60, stamina: 90, duration: 2400, regen: 4, color: '#ffe2b6ff',
-    recipe: { time: CAULDRON_TIME, materials: { CookedFish: 2, BarleyFlour: 4 },
+    recipe: { time: CAULDRON_TIME, materials: { FishCooked: 2, BarleyFlour: 4 },
               source: { station: CraftingStation.Cauldron }, number: 1 } },
   { type: 'food', id: 'LoxPie', emoji: '🥧', tier: 5, weight: 1, stack: 10,
     health: 80, stamina: 80, duration: 2400, regen: 4, color: '#ffcf33ff',
@@ -215,3 +232,12 @@ export const resources: Item[] = [
     recipe: { time: FURNACE_TIME, materials: { FlametalOre: 1, Coal: 2 },
               source: { station: CraftingStation.BlastFurnace }, number: 1 } },
 ];
+
+// Tankard, Tankard_Odin
+
+// VegvisirShard_Bonemass
+// HealthUpgrade_Bonemass
+// HealthUpgrade_GDKing
+// StaminaUpgrade_Greydwarf
+// StaminaUpgrade_Troll
+// StaminaUpgrade_Wraith

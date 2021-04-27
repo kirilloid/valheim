@@ -2,8 +2,13 @@
 
 const ItemType2Hands = [
     'none', 'none', 'none', 'primary', 'bow', 'secondary', 'none', 'head', 'body', 'none', 'none',
-    'none', 'legs', 'none',  'none', 'both', 'either', 'none', 'shoulders', 'none', 'both',
+    'none', 'legs', 'none',  'none', 'both', 'either', 'none', 'shoulders', 'util', 'both',
     'both',
+];
+const ItemType2Type = [
+    'none', 'resource', 'resource', 'weap', 'weap', 'weap', 'weap', 'armor', 'armor', 'armor', 'armor',
+    'none', 'armor', '???', 'resource', 'weap', 'either', 'none', 'armor', 'weapon', 'tool',
+    'none',
 ];
 const ItemType = [
     'None', 'Material', 'Consumable', 'OneHandedWeapon', 'Bow', 'Shield', 'Helmet', 'Chest', ,'Ammo',
@@ -45,7 +50,8 @@ function range(vals) {
 
 function weaponTemplate(i) {
     return `
-    { type: 'weap', hands: '${ItemType2Hands[i.itemType]}',
+    { type: '${ItemType2Type[i.itemType]}',
+      hands: '${ItemType2Hands[i.itemType]}',
       id: '???',
       toolTier: ${i.toolTier},
       weight: ${i.weight}, stack: ${i.maxStackSize}, teleportable: ${i.teleportable},

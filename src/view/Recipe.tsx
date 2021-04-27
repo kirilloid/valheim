@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from './Icon';
-import { CraftingStation, Item } from '../types';
+import { Biome, CraftingStation, Item } from '../types';
+import { timeI2S } from '../model/utils';
 
 export function Recipe(recipe: Item['recipe']) {
   if (recipe == null) return null;
@@ -16,6 +17,11 @@ export function Recipe(recipe: Item['recipe']) {
       <ul>
         {Object.entries(recipe.materials).map(([id, num]) => <li>{num}x <Link to={`/obj/${id}`}>{id}</Link></li>)}
       </ul>
+    </>
+  }
+  if ('biomes' in recipe) {
+    return <>
+      Grows in {recipe.biomes.map(b => Biome[b]).join(', ')}, respawns every {timeI2S(recipe.respawn)}
     </>
   }
   return <>

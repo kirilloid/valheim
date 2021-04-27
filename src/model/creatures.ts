@@ -260,7 +260,7 @@ export const creatures: Creature[] = [
     tier: 2,
     emoji: '',
     faction: Faction.ForestMonsters,
-    attacks: [{ dmg: { [DamageType.Slash]: 14 }, name: '' }],
+    attacks: [{ dmg: { [DamageType.Poison]: 25 }, name: '' }],
     hp: 60,
     staggerFactor: 0.33,
     staggerBlocked: true,

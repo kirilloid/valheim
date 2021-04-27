@@ -413,6 +413,7 @@ export const items: Item[] = [
       upgrade: { station: CraftingStation.Workbench, level: 3 },
     }
   },
+  // non-systematic
   { id: 'HelmetYule',
     tier: 0,
     type: 'armor', slot: 'head',
@@ -432,6 +433,26 @@ export const items: Item[] = [
     durability: [Infinity, 0],
     moveSpeed: 0,
     recipe: { value: 620 }
+  },
+  { id: 'BeltStrength',
+    tier: 2,
+    type: 'armor', slot: 'util',
+    armor: [0, 0],
+    weight: 2,
+    maxLvl: 1,
+    durability: [Infinity, 0],
+    moveSpeed: 0,
+    recipe: { value: 950 }
+  },
+  { id: 'Wishbone',
+    tier: 4,
+    type: 'armor', slot: 'util',
+    armor: [0, 0],
+    weight: 0.1,
+    maxLvl: 1,
+    durability: [Infinity, 0],
+    moveSpeed: 0,
+    stack: 1,
   },
   { id: 'HelmetOdin',
     dlc: 'beta',
@@ -467,5 +488,24 @@ export const items: Item[] = [
       upgrade: { station: CraftingStation.Workbench, level: 1 },
     },
   },
-// FLAME AGE
+  { id: 'CapeTest',
+    tier: -1,
+    type: 'armor', slot: 'shoulders',
+    armor: [1, 1],
+    weight: 4,
+    maxLvl: 4,
+    durability: [100, 50],
+    moveSpeed: 0,
+  },
+  /*
+  GoblinBrute_Backbones       head
+  GoblinBrute_ExecutionerCap  head
+  GoblinBrute_ArmGuard        body
+  GoblinBrute_HipCloth        legs
+  GoblinBrute_LegBones        util
+  GoblinBrute_ShoulderGuard   shoulders
+  GoblinHelmet                body
+  GoblinLegband               ???
+  GoblinLoin                  ???
+   */
 ];

@@ -59,6 +59,23 @@ export const damageModifiersValues: Record<DamageModifier, number> = {
   [DamageModifier.VeryWeak]: 2,
 };
 
+export type Effect = {
+  id: string;
+  special?: 'Tailwind';
+  time?: number;
+  cooldown?: number;
+  healthOverTime?: [change: number, interval: number],
+  damageModifiers?: Partial<DamageModifiers>;
+  attackModifier?: [skill: SkillType, modifier: number],
+  stealth?: number;
+  carryWeight?: number;
+  runStamina?: number;
+  jumpStamina?: number;
+  healthRegen?: number;
+  staminaRegen?: number;
+  xpModifier?: number;
+};
+
 export type DamageProfile = Partial<Record<DamageType, number>>;
 export type AttackProfile = {
   dmg: DamageProfile;
@@ -175,6 +192,10 @@ interface BaseItem {
     number: number;
   } | {
     value: number;
+  } | {
+    biomes: Biome[];
+    respawn: number;
+    abundance: number;
   };
 }
 
@@ -224,12 +245,15 @@ interface Food extends BaseItem {
 
 type Pair<T> = [T, T];
 
-export interface BaseAttack {
-  chain: number;
-  chainCombo: number;
+interface BaseAttack {
   stamina: number;
   mul?: { damage: number, force: number, stagger: number, };
   range: number;
+}
+
+interface MeleeAttack extends BaseAttack {
+  chain: number;
+  chainCombo: number;
 }
 
 interface BowAttack extends BaseAttack {
@@ -237,14 +261,20 @@ interface BowAttack extends BaseAttack {
   projAcc: Pair<number>;
 }
 
-type Attack =
-  | BaseAttack & { type: 'melee' | 'area' }
+export type Attack =
+  | MeleeAttack & { type: 'melee' | 'area' }
   | BowAttack & { type: 'proj' }
 
 export interface Arrow extends BaseItem {
   type: 'ammo';
   damage: DamageProfile;
   knockback: number;
+}
+
+export interface Tool extends BaseItem {
+  type: 'tool';
+  maxLvl: number;
+  durability: Pair<number>;
 }
 
 export interface Weapon extends BaseItem {
@@ -264,11 +294,12 @@ export interface Weapon extends BaseItem {
   backstab: number;
   moveSpeed: number;
   durability: Pair<number>;
+  durabilityDrain?: number;
 }
 
 interface Armor extends BaseItem {
   type: 'armor';
-  slot: 'head' | 'shoulders' | 'body' | 'legs' | 'none';
+  slot: 'head' | 'shoulders' | 'body' | 'legs' | 'util' | 'none';
   armor: Pair<number>;
   maxLvl: number;
   durability: Pair<number>;
@@ -276,7 +307,7 @@ interface Armor extends BaseItem {
   damageModifiers?: Partial<DamageModifiers>;
 }
 
-export type Item = Resource | Valuable | Food | Weapon | Armor | Arrow;
+export type Item = Resource | Valuable | Food | Weapon | Armor | Arrow | Tool;
 
 export enum Skill {
   Clubs,

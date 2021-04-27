@@ -9,7 +9,11 @@ export const resourceMap: Record<string, Item[]> = {};
 function addToMap(item: Item) {
   const { recipe } = item; 
   if (recipe == null) return;
-  const materials = 'value' in recipe ? { 'Coins': recipe.value } : recipe.materials;
+  const materials = 'value' in recipe
+    ? { 'Coins': recipe.value }
+    : 'biomes' in recipe
+    ? {}
+    : recipe.materials;
   for (const res of Object.keys(materials)) {
     (resourceMap[res] ?? (resourceMap[res] = [])).push(item);
   }

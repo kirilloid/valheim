@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { groupBy, map } from 'lodash-es';
 
-import { BaseAttack, Biome, DamageModifier, DamageModifiers, DamageProfile, DamageType, DropEntry, Weapon } from '../types';
+import { Attack, Biome, DamageModifier, DamageModifiers, DamageProfile, DamageType, DropEntry, Weapon } from '../types';
 
 import { creatures } from '../model/creatures';
 import { items } from '../model/weapons';
@@ -47,15 +47,17 @@ function showPair(first: number, second?: number): string {
   return second ? `${first}+${second}` : String(first);
 }
 
-function PlayerAttack(props: { title: string; weapon: Weapon; attack: BaseAttack }) {
+function PlayerAttack(props: { title: string; weapon: Weapon; attack: Attack }) {
   const [damageBase, damageGrowth] = props.weapon.damage;
-  const { stamina, chain, chainCombo, mul: { damage = 1, force = 1, stagger = 1 } = {} } = props.attack;
+  const { stamina, mul: { damage = 1, force = 1, stagger = 1 } = {} } = props.attack;
+  const chain = props.attack.type === 'proj' ? 0 : props.attack.chain;
+  const chainCombo = props.attack.type === 'proj' ? 1 : props.attack.chainCombo;
   return (<div>
     <h4>{props.title}</h4>
     damage: {map(damageBase, (val, type) => `${damageIcon[type as any as DamageType]}${showPair(val! * damage, (damageGrowth[type as any as DamageType] ?? 0) * damage)}`).join(' ')}<br />
     stamina: {stamina}<br />
     knockback: {props.weapon.knockback * force}<br />
-    stagger: {getPhysicalDamage(damageBase) * damage}<br />
+    stagger: {getPhysicalDamage(damageBase) * stagger}<br />
     {chain ? 'combo: ' +Array.from({ length: chain }, (_, i) => i ? 1 : chainCombo).reverse().join('+') : ''}
   </div>);
 }
