@@ -33,7 +33,7 @@ export function Creature(creature: TCreature) {
       <header>creature</header>
       <dl>
       <dt>faction</dt><dd>{faction(creature.faction)}</dd>
-      <dt>health</dt><dd>{creature.hp}</dd>
+      <dt>{translate('ui.health')}</dt><dd>{creature.hp}</dd>
       <dt>stagger</dt><dd>{creature.hp * staggerFactor}</dd>
       {creature.attacks.map(a => (
         'spawn' in a

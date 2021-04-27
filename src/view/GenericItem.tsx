@@ -5,10 +5,12 @@ import type { Item } from '../types';
 import { Icon } from './Icon';
 import { resourceMap } from '../model/resource-usage';
 import { useTranslation } from '../translation.effect';
+import { Recipe } from './Recipe';
 
 export function GenericItem(item: Item) {
   const translate = useTranslation();
   const craftables = resourceMap[item.id];
+  const { recipe } = item;
   return (
     <>
       <h2>
@@ -17,22 +19,25 @@ export function GenericItem(item: Item) {
         {item.id}
       </h2>
       <section>
-        <header>resource</header>
+        <header>{translate('ui.itemType.resource')}</header>
         <dl>
-          <dt>weight</dt><dd>{item.weight}</dd>
-          <dt>stack</dt><dd>{item.stack}</dd>
+          <dt>{translate('ui.weight')}</dt><dd>{item.weight}</dd>
+          <dt>{translate('ui.stack')}</dt><dd>{item.stack}</dd>
           {item.teleportable === false
             ? <>non-teleportable <Icon type="icon" id="noteleport" size={24} /></>
             : null}
         </dl>
       </section>
-      <section>
+      {craftables?.length ? <section>
         <header>crafting</header>
-        {craftables?.length ? <>Used to craft:
+        <>Used to craft:
         <ul>
           {craftables.map(item => <li><Link to={`/obj/${item.id}`}>{translate(item.id)}</Link></li>)}
-        </ul></> : null}
-      </section>
+        </ul></>
+      </section> : null}
+      {recipe ? (<>
+        {translate('ui.recipe')}: <Recipe {...recipe} />
+      </>) : null}
     </>
   );
 }

@@ -17,13 +17,13 @@ export function Arrow(item: TArrow) {
         {translate(item.id)}
       </h2>
       <section>
-        <header>arrow</header>
+        <header>{translate('ui.itemType.arrow')}</header>
         <dl>
-          <dt>damage</dt><dd>{JSON.stringify(item.damage)}</dd>
+          <dt>{translate('ui.damage')}</dt><dd>{JSON.stringify(item.damage)}</dd>
         </dl>
       </section>
       {recipe ? (<>
-        recipe: <Recipe {...recipe} />
+        {translate('ui.recipe')}: <Recipe {...recipe} />
         </>) : null}
     </>
   );

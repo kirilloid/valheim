@@ -51,10 +51,10 @@ export const Search = () => {
       <form>
         <input type="search"
           className="GlobalSearch"
-          placeholder={'ui.search.button'}
+          placeholder={translate('ui.search.placeholder')}
           onChange={updateSearch}
           onKeyUp={updateIndex} />
-        <input type="submit" value={'ui.search.button'} />
+        <input type="submit" value={translate('ui.search.button')} />
       </form>
       {items.length
       ? <ul className="SearchResults" aria-activedescendant={`gs_i${index}`}>

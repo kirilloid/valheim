@@ -15,16 +15,16 @@ export function Food(item: Item & { type: 'food' }) {
       {translate(item.id)}
     </h2>
     <section>
-      <header>food</header>
+      <header>{translate('ui.itemType.food')}</header>
       <dl>
-      <dt>health</dt><dd>{item.health}</dd>
-      <dt>stamina</dt><dd>{item.stamina}</dd>
-      <dt>time</dt><dd>{timeI2S(item.duration)}</dd>
-      <dt>regen</dt><dd>{item.regen}</dd>
+      <dt>{translate('ui.health')}</dt><dd>{item.health}</dd>
+      <dt>{translate('ui.stamina')}</dt><dd>{item.stamina}</dd>
+      <dt>{translate('ui.time')}</dt><dd>{timeI2S(item.duration)}</dd>
+      <dt>{translate('ui.regen')}</dt><dd>{item.regen}</dd>
       </dl>
     </section>
     {recipe ? (<>
-    recipe: <Recipe {...recipe} />
+    {translate('ui.recipe')}: <Recipe {...recipe} />
     </>) : null}
   </>);
 }

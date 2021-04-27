@@ -77,6 +77,7 @@
     "MaceNeedle": "Porcupine",
     "ShieldBlackmetal": "Black metal shield",
     "ShieldBlackmetalTower": "Black metal tower shield",
+    "BombOoze": "Ooze bomb",
     
     "Hammer": "Hammer",
     "Hoe": "Hoe",
@@ -260,6 +261,24 @@
     
     "ui.search.placeholder": "Search for things...",
     "ui.search.button": "Search",
-
+    "ui.durability": "durability",
+    "ui.damage": "damage",
+    "ui.health": "health",
+    "ui.itemType.armor": "armor",
+    "ui.itemType.arrow": "arrow",
+    "ui.itemType.food": "food",
+    "ui.itemType.resource": "resource",
+    "ui.itemType.shield": "shield",
+    "ui.itemType.tool": "tool",
+    "ui.itemType.weapon": "weapon",
+    "ui.maxQuality": "max quality",
+    "ui.recipe": "recipe",
+    "ui.regen": "regen",
+    "ui.skill": "skill",
+    "ui.stack": "stack",
+    "ui.stamina": "stamina",
+    "ui.time": "time",
+    "ui.weight": "weight",
+    
     "": ""
 }

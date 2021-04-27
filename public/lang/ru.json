@@ -77,7 +77,8 @@
     "MaceNeedle": "Дикобраз",
     "ShieldBlackmetal": "Щит из черного металла",
     "ShieldBlackmetalTower": "Башенный щит из черного металла",
-    
+    "BombOoze": "Гнилостная бомба",
+
     "Hammer": "Молот",
     "Hoe": "Мотыга",
     "Cultivator": "Пропашник",
@@ -260,6 +261,24 @@
     
     "ui.search.placeholder": "Искать объекты...",
     "ui.search.button": "Искать",
+    "ui.durability": "прочность",
+    "ui.damage": "урон",
+    "ui.health": "здоровье",
+    "ui.itemType.armor": "броня",
+    "ui.itemType.arrow": "стрела",
+    "ui.itemType.food": "еда",
+    "ui.itemType.resource": "ресурс",
+    "ui.itemType.shield": "щит",
+    "ui.itemType.tool": "инструмент",
+    "ui.itemType.weapon": "оружие",
+    "ui.maxQuality": "макс.качество",
+    "ui.recipe": "рецепт",
+    "ui.regen": "реген",
+    "ui.skill": "навык",
+    "ui.stack": "стэк",
+    "ui.stamina": "выносливость",
+    "ui.time": "time",
+    "ui.weight": "вес",
 
     "": ""
 }
