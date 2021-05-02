@@ -14,10 +14,7 @@ const langCache: Dictionary<Promise<Dictionary>> = {};
 export type Translator = (key: string) => string;
 
 export function preloadLanguage(userLang: string = getUserLanguage()): Promise<Dictionary> {
-  if (!(userLang in langCache)) {
-    langCache[userLang] = fetch(`/lang/${userLang}.json`).then(r => r.json());
-  }
-  return langCache[userLang];
+  return langCache[userLang] ?? (langCache[userLang] = fetch(`/lang/${userLang}.json`).then(r => r.json()));
 }
 
 export function useTranslation(): Translator {
@@ -30,6 +27,6 @@ export function useTranslation(): Translator {
   });
   return useCallback(dict === null
     ? (key: string) => key
-    : (key: string) => dict[key]
+    : (key: string) => dict[key] ?? key
   , [dict])
 }

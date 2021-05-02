@@ -33,9 +33,10 @@ export const envStates = [
     { id: 'SunkenCrypt', wind: [0, 0], light: [0, 0], flags: DARK },
 ] as const;
 
-type ES = typeof envStates;
+export type ES = typeof envStates;
+export type EnvId = ES[number]['id'];
 
-export const envSetup: Record<Biome, Partial<Record<ES[number]['id'], number>>> = {
+export const envSetup: Record<Biome, Partial<Record<EnvId, number>>> = {
     [Biome.Meadows]: { Clear: 25, LightRain: 1, Rain: 1, Misty: 1, ThunderStorm: 1 },
     [Biome.BlackForest]: { DeepForest_Mist: 20, Rain: 1, Misty: 1, ThunderStorm: 1 },
     [Biome.Swamp]: { SwampRain: 1 },

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { Icon } from './Icon';
@@ -42,7 +42,7 @@ function replaceWidget(
   while (match = regex.exec(text)) {
     result.push(text.slice(lastMatchIndex, match.index));
     result.push(widgetFactory(...match));
-    lastMatchIndex = match.index + match[0].length;
+    lastMatchIndex = match.index + match[0]!.length;
   }
   result.push(text.slice(lastMatchIndex));
   return result;
@@ -64,12 +64,12 @@ function replaceAllWidgets(input: string): ReactChildren {
   result = replaceWidgets(
     result,
     /!\[(\w+)\/(\w+)\]/g,
-    (...m: string[]) => <Icon type={m[1]} id={m[2]} size={16} />,
+    (_: string, type: string, id: string) => <Icon type={type} id={id} size={16} />,
   );
   result = replaceWidgets(
     result,
     /\[(.+?)\]\((.+?)\)/g,
-    (...m: string[]) => <Link to={m[1]}></Link>,
+    (_: string, path: string) => <Link to={path}></Link>,
   );
   return result;
 }

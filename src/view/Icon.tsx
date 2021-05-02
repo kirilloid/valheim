@@ -1,8 +1,10 @@
 import React from 'react';
 
+import type { EntityId } from '../types';
+
 type Props = {
   type: string;
-  id: string;
+  id: EntityId;
   size?: number;
 }
 

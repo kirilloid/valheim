@@ -5,6 +5,8 @@ import type { Item } from '../types';
 import { Icon } from './Icon';
 import { resourceMap } from '../model/resource-usage';
 import { useTranslation } from '../translation.effect';
+import { creatures } from '../model/creatures';
+import { Source } from './Source';
 
 export function GenericItem(item: Item) {
   const translate = useTranslation();
@@ -14,7 +16,7 @@ export function GenericItem(item: Item) {
       <h2>
         <Icon type="resources" id={item.id} />
         {' '}
-        {item.id}
+        {translate(item.id)}
       </h2>
       <section>
         <header>resource</header>
@@ -26,13 +28,17 @@ export function GenericItem(item: Item) {
             : null}
         </dl>
       </section>
-      <section>
-        <header>crafting</header>
-        {craftables?.length ? <>Used to craft:
-        <ul>
-          {craftables.map(item => <li><Link to={`/obj/${item.id}`}>{translate(item.id)}</Link></li>)}
-        </ul></> : null}
-      </section>
+      {craftables?.length
+        ? <section>
+            <header>crafting</header>
+            Used to craft:
+            <ul>
+              {craftables.map(item => <li><Link to={`/obj/${item.id}`}>{translate(item.id)}</Link></li>)}
+            </ul>
+          </section>
+        : null
+      }
+      {Source(item.id, translate)}
     </>
   );
 }

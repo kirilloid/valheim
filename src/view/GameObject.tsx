@@ -1,16 +1,18 @@
 import { useParams } from 'react-router-dom';
 
 import { assertNever } from '../model/utils';
-import data from '../model/objects';
+import { data } from '../model/objects';
 import { creatures } from '../model/creatures';
 import { Armor } from './Armor';
 import { Weapon } from './Weapon';
 import { Food } from './Food';
+import { Potion } from './Potion';
 import { Valuable } from './Valuable';
 import { Creature as CreatureView } from './Creature';
 import { Arrow } from './Arrow';
 import { GenericItem } from './GenericItem';
 import { Tool } from './Tool';
+import { EntityId } from '../types';
 
 export function GameObject() {
   const { id } = useParams<{id: string}>();
@@ -19,7 +21,7 @@ export function GameObject() {
       ?? <>Entity with id '{id}' not found!</>
 }
 
-function Creature(id: string) {
+function Creature(id: EntityId) {
   const creature = creatures.find(c => c.id === id);
   if (creature == null) {
     return null;
@@ -39,6 +41,8 @@ function Item(id: string) {
       return Weapon(item);
     case 'food':
       return Food(item);
+    case 'potion':
+      return Potion(item);
     case 'value':
       return Valuable(item);
     case 'ammo':

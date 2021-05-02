@@ -5,14 +5,12 @@ import { arrows } from './arrows';
 import { Item } from '../types';
 import { tools } from './tools';
 
-const data: Record<string, Item> = {};
+export const data: Record<string, Item> = {};
 resources.forEach(r => data[r.id] = r);
 weapons.forEach(w => data[w.id] = w);
 armors.forEach(a => data[a.id] = a);
 arrows.forEach(a => data[a.id] = a);
 tools.forEach(t => data[t.id] = t);
-
-export default data;
 
 /*
 

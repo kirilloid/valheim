@@ -8,6 +8,7 @@ import { items } from '../model/weapons';
 import { damage as damageIcon } from '../model/emoji';
 import { hpBonus, getPhysicalDamage } from '../model/combat';
 import { Translator, useTranslation } from '../translation.effect';
+import { Icon } from './Icon';
 
 function Damage(dmg: DamageProfile) {
   return Object.entries(dmg).map(([type, val]) => `${damageIcon[type as any as DamageType]}${val}`).join(' ');
@@ -19,7 +20,7 @@ function DropItem(drop: DropEntry, level: number, translate: Translator) {
   const min = drop.min * mul;
   const max = (drop.max - 1) * mul;
   return (<>
-    <dt><img src={`/icons/resources/${drop.item}.png`} />{translate(drop.item)}</dt>
+    <dt><Icon type="resources" id={drop.item} />{translate(drop.item)}</dt>
     <dd>{min >= max ? `${min}` : `${min}–${max}`}
         {drop.perPlayer ? ' per player' : ''} with {chance} chance</dd>
   </>);
@@ -72,7 +73,7 @@ function useStateInputEffect<Value, InputElement extends HTMLElement & { value: 
     if (targetValue != null) {
       setValue(targetValue);
     }
-  }, []);
+  }, [reader]);
   return [value, onInputChange] as const;
 }
 
@@ -80,9 +81,9 @@ export function Combat() {
   const [players, onPlayersChange] = useStateInputEffect(1, Number);
   const [armor, onArmorChange] = useStateInputEffect<number, HTMLElement & { value: string }>(0, Number);
   const [skill, onSkillChange] = useStateInputEffect(0, Number);
-  const [weapon, onWeaponChange] = useStateInputEffect(items[0], id => items.find(w => w.id === id));
+  const [weapon, onWeaponChange] = useStateInputEffect(items[0]!, id => items.find(w => w.id === id));
   
-  const [creature, onCreatureChange] = useStateInputEffect(creatures[0], id => creatures.find(c => c.id === id));
+  const [creature, onCreatureChange] = useStateInputEffect(creatures[0]!, id => creatures.find(c => c.id === id));
   const [stars, onStarsChange] = useStateInputEffect(0, Number);
   
   const translate = useTranslation();
@@ -144,7 +145,7 @@ export function Combat() {
           </select>
         </label>
         <br />
-        <img src={`/icons/weapon/${weapon.id}.png`} />
+        <Icon type="weapon" id={weapon.id} />
         <br />
         {primary && <PlayerAttack title="primary attack" weapon={weapon} attack={primary} />}
         {secondary && <PlayerAttack title="secondary attack" weapon={weapon} attack={secondary} />}

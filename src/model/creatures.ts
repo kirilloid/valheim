@@ -1,4 +1,4 @@
-import { Creature, DamageModifier, DamageType, dropEntry, DropEntry, dropTrophy, Faction } from "../types";
+import { Creature, DamageModifier, DamageType, dropEntry, dropTrophy, Faction } from "../types";
 
 const defaultDmgModifiers = {
   [DamageType.Damage]: DamageModifier.Normal,
@@ -49,6 +49,7 @@ const blobDamageModifiers = {
 export const creatures: Creature[] = [
 // MEADOWS
   {
+    type: 'creature',
     id: 'Deer',
     tier: 1,
     emoji: '🦌',
@@ -65,6 +66,7 @@ export const creatures: Creature[] = [
     ],
   },
   {
+    type: 'creature',
     id: 'Seagull', // Seagal
     tier: 1,
     emoji: '🦆',
@@ -79,6 +81,7 @@ export const creatures: Creature[] = [
     ],
   },
   {
+    type: 'creature',
     id: 'Greyling',
     tier: 1,
     emoji: '🐀',
@@ -93,6 +96,7 @@ export const creatures: Creature[] = [
     ],
   },
   {
+    type: 'creature',
     id: 'Neck',
     tier: 1,
     emoji: '🦎',
@@ -108,6 +112,7 @@ export const creatures: Creature[] = [
     ],
   },
   {
+    type: 'creature',
     id: 'Boar',
     tier: 1,
     emoji: '🐗',
@@ -128,6 +133,7 @@ export const creatures: Creature[] = [
     pregnancy: { time: 60, chance: 0.33 },
   },
   {
+    type: 'creature',
     id: 'Eikthyr',
     tier: 1,
     emoji: '🦌',
@@ -148,6 +154,7 @@ export const creatures: Creature[] = [
   },
 // FOREST
   {
+    type: 'creature',
     id: 'Crow',
     tier: 2,
     emoji: '🐦',
@@ -162,6 +169,7 @@ export const creatures: Creature[] = [
     ],
   },
   {
+    type: 'creature',
     id: 'Skeleton',
     tier: 2,
     emoji: '💀',
@@ -188,6 +196,7 @@ export const creatures: Creature[] = [
     ],
   },
   {
+    type: 'creature',
     id: 'Skeleton_Poison', // Rancid Remains
     tier: 2,
     emoji: '☠️',
@@ -214,6 +223,7 @@ export const creatures: Creature[] = [
     ],
   },
   {
+    type: 'creature',
     id: 'Ghost',
     tier: 2,
     emoji: '👻',
@@ -235,6 +245,7 @@ export const creatures: Creature[] = [
     drop: [],
   },
   {
+    type: 'creature',
     id: 'Greydwarf',
     tier: 2,
     emoji: '',
@@ -256,6 +267,7 @@ export const creatures: Creature[] = [
     ],
   },
   {
+    type: 'creature',
     id: 'GreydwarfShaman',
     tier: 2,
     emoji: '',
@@ -274,6 +286,7 @@ export const creatures: Creature[] = [
     ],
   },
   {
+    type: 'creature',
     id: 'Greydwarf_Elite',
     tier: 2,
     emoji: '',
@@ -295,6 +308,7 @@ export const creatures: Creature[] = [
     ],
   },
   {
+    type: 'creature',
     id: 'Troll',
     tier: 2,
     emoji: '',
@@ -323,6 +337,7 @@ export const creatures: Creature[] = [
     ],
   },
   {
+    type: 'creature',
     id: 'gd_king', // the elder
     tier: 2,
     emoji: '🥦',
@@ -350,6 +365,7 @@ export const creatures: Creature[] = [
     ],
   },
   {
+    type: 'creature',
     id: 'Root', // the elder
     tier: 2,
     emoji: '🥦',
@@ -370,6 +386,7 @@ export const creatures: Creature[] = [
   },
 // SWAMP
   {
+    type: 'creature',
     id: 'Blob',
     tier: 3,
     emoji: '🦠',
@@ -385,6 +402,7 @@ export const creatures: Creature[] = [
     ],
   },
   {
+    type: 'creature',
     id: 'Oozer',
     tier: 3,
     emoji: '🦠',
@@ -402,6 +420,7 @@ export const creatures: Creature[] = [
     ],
   },
   {
+    type: 'creature',
     id: 'Leech',
     tier: 3,
     emoji: '🧛',
@@ -425,6 +444,7 @@ export const creatures: Creature[] = [
     ],
   },
   {
+    type: 'creature',
     id: 'Surtling',
     tier: 3,
     emoji: '🧨',
@@ -451,6 +471,7 @@ export const creatures: Creature[] = [
     ],
   },
   {
+    type: 'creature',
     id: 'Wraith',
     tier: 3,
     emoji: '👻',
@@ -475,6 +496,7 @@ export const creatures: Creature[] = [
     ],
   },
   {
+    type: 'creature',
     id: 'Draugr',
     tier: 3,
     emoji: '🧟',
@@ -497,6 +519,7 @@ export const creatures: Creature[] = [
     ],
   },
   {
+    type: 'creature',
     id: 'DraugrElite',
     tier: 3,
     emoji: '🧟',
@@ -518,6 +541,7 @@ export const creatures: Creature[] = [
     ],
   },
   {
+    type: 'creature',
     id: 'Bonemass',
     tier: 3,
     emoji: '🦠',
@@ -550,6 +574,7 @@ export const creatures: Creature[] = [
   },
 // MOUNTAINS
   {
+    type: 'creature',
     id: 'Wolf',
     tier: 4,
     emoji: '🐺',
@@ -573,6 +598,7 @@ export const creatures: Creature[] = [
     pregnancy: { time: 60, chance: 0.33 }, // max: 4, range: 3
   },
   {
+    type: 'creature',
     id: 'Fenring',
     tier: 4,
     emoji: '🐺',
@@ -591,6 +617,7 @@ export const creatures: Creature[] = [
     ],
   },
   {
+    type: 'creature',
     id: 'StoneGolem',
     tier: 4,
     emoji: '🗿',
@@ -635,6 +662,7 @@ export const creatures: Creature[] = [
     ],
   },
   {
+    type: 'creature',
     id: 'Hatchling', // drake
     tier: 4,
     emoji: '🐉',
@@ -654,6 +682,7 @@ export const creatures: Creature[] = [
     ],
   },
   {
+    type: 'creature',
     id: 'Dragon',
     tier: 4,
     emoji: '🐲',
@@ -696,6 +725,7 @@ export const creatures: Creature[] = [
   },
 // PLAINS
   {
+    type: 'creature',
     id: 'Goblin', // Fulling
     tier: 5,
     emoji: '',
@@ -725,6 +755,7 @@ export const creatures: Creature[] = [
     // maxChase: 300,
   },
   {
+    type: 'creature',
     id: 'GoblinShaman', // Fulling
     tier: 5,
     emoji: '',
@@ -750,6 +781,7 @@ export const creatures: Creature[] = [
     ],
   },
   {
+    type: 'creature',
     id: 'GoblinBrute', // Berserk
     tier: 5,
     emoji: '',
@@ -782,6 +814,7 @@ export const creatures: Creature[] = [
     ],
   },
   {
+    type: 'creature',
     id: 'Deathsquito',
     tier: 5,
     emoji: '🦟',
@@ -797,6 +830,7 @@ export const creatures: Creature[] = [
     ],
   },
   {
+    type: 'creature',
     id: 'Lox',
     tier: 5,
     emoji: '🐂',
@@ -826,6 +860,7 @@ export const creatures: Creature[] = [
             // eatRange:4, searchRange:10, heal:10
   },
   {
+    type: 'creature',
     id: 'GoblinKing',
     tier: 5,
     emoji: '🦴',
@@ -872,6 +907,7 @@ export const creatures: Creature[] = [
   },
 // OCEAN
   {
+    type: 'creature',
     id: 'Serpent',
     tier: 4,
     emoji: '🐍',

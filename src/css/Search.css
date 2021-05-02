@@ -3,7 +3,16 @@
   font-size: 16px;
 }
 
-.SearchBlock input {
+.SearchControls {
+  display: flex;
+  flex-direction: row;
+}
+
+.SearchControls_Input {
+  flex-grow: 1;
+}
+
+.SearchControls input {
   font-size: 1em;
 }
 
@@ -19,9 +28,15 @@
 .SearchResults > li {
   margin: 0.25em 0;
 }
-.SearchResults > li > * {
-  vertical-align: middle;
-}
 .SearchResults .active {
   background: #bde4ff;
+}
+
+.SearchItem {
+  display: flex;
+  flex-direction: row;
+}
+
+.SearchItem a {
+  flex-grow: 1;
 }

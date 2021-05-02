@@ -1,5 +1,5 @@
 import { CraftingStation, DamageModifier, DamageModifiers, DamageType, Ship } from "../types";
-import { lerp, lerpStep, Vector3, mul, norm, add, clamp01, clamp, magnitude } from "./utils";
+import { lerp, lerpStep, Vector3, mul, norm, add, clamp01, clamp } from "./utils";
 
 const shipDamageModifiers: DamageModifiers = {
   [DamageType.Blunt]: DamageModifier.Normal,
