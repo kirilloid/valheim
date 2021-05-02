@@ -15,14 +15,14 @@ const defaultDmgModifiers = {
 };
 
 const animalDmgModifiers = {
-    ...defaultDmgModifiers,
-    [DamageType.Spirit]: DamageModifier.Immune,
+  ...defaultDmgModifiers,
+  [DamageType.Spirit]: DamageModifier.Immune,
 }
 
 const grayModifiers = {
-    ...animalDmgModifiers,
-    [DamageType.Fire]: DamageModifier.VeryWeak,
-    [DamageType.Poison]: DamageModifier.Resistant,
+  ...animalDmgModifiers,
+  [DamageType.Fire]: DamageModifier.VeryWeak,
+  [DamageType.Poison]: DamageModifier.Resistant,
 };
 
 const blobDamageModifiers = {
@@ -113,6 +113,19 @@ export const creatures: Creature[] = [
   },
   {
     type: 'creature',
+    id: 'Fish',
+    tier: 1,
+    emoji: '',
+    faction: Faction.ForestMonsters,
+    attacks: [],
+    hp: 1,
+    staggerFactor: 0,
+    staggerBlocked: true,
+    damageModifiers: animalDmgModifiers,
+    drop: [dropEntry('RawFIsh')],
+  },
+  {
+    type: 'creature',
     id: 'Boar',
     tier: 1,
     emoji: '🐗',
@@ -173,7 +186,6 @@ export const creatures: Creature[] = [
     id: 'Skeleton',
     tier: 2,
     emoji: '💀',
-    defeatKey: 'skeleton',
     faction: Faction.Undead,
     attacks: [
       { dmg: { [DamageType.Slash]: 25 }, name: 'sword' },
@@ -312,7 +324,6 @@ export const creatures: Creature[] = [
     id: 'Troll',
     tier: 2,
     emoji: '',
-    defeatKey: 'troll',
     faction: Faction.ForestMonsters,
     attacks: [
       { dmg: { [DamageType.Blunt]: 60, [DamageType.Chop]: 100, [DamageType.Pickaxe]: 40 }, name: '1-hand hit', force: 100 },
@@ -448,7 +459,6 @@ export const creatures: Creature[] = [
     id: 'Surtling',
     tier: 3,
     emoji: '🧨',
-    defeatKey: 'surtling', // killed_surtling
     faction: Faction.Demon,
     attacks: [{ dmg: {
       [DamageType.Blunt]: 10,
@@ -864,7 +874,6 @@ export const creatures: Creature[] = [
     id: 'GoblinKing',
     tier: 5,
     emoji: '🦴',
-    defeatKey: 'goblinKing', // boss_goblinking
     faction: Faction.Boss,
     attacks: [
       { dmg: { // 10 meteors

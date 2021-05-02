@@ -120,7 +120,8 @@ export interface Creature {
   id: EntityId;
   tier: number;
   emoji: string;
-  defeatKey?: string;
+  // maxLvl: number;
+  // upgradeDistance: number;
   faction: Faction;
   hp: number;
   staggerFactor: number;

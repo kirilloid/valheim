@@ -31,4 +31,4 @@ article *.active {
 .damage--frost { color: blue; }
 .damage--poison { color: #0c0; }
 .damage--lightning { color: lightcyan; }
-.damage--spirit { color: springgreen; }
+.damage--spirit { color: lightslategray; }
