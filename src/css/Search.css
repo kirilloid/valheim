@@ -39,4 +39,5 @@
 
 .SearchItem a {
   flex-grow: 1;
+  align-self: center;
 }

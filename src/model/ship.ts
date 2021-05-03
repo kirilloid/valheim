@@ -24,8 +24,10 @@ export const ships: Ship[] = [
   {
     type: 'ship',
     id: 'Raft',
-    hp: 300,
-    damageModifiers: shipDamageModifiers,
+    wear: {
+      hp: 300,
+      damageModifiers: shipDamageModifiers,
+    },
     sail: {
       forceDistance: 2,
       force: 0.5,
@@ -47,8 +49,10 @@ export const ships: Ship[] = [
   {
     type: 'ship',
     id: 'Karve',
-    hp: 500,
-    damageModifiers: shipDamageModifiers,
+    wear: {
+      hp: 500,
+      damageModifiers: shipDamageModifiers,
+    },
     sail: {
       forceDistance: 2,
       force: 1,
@@ -75,8 +79,10 @@ export const ships: Ship[] = [
   {
     type: 'ship',
     id: 'VikingShip',
-    hp: 1000,
-    damageModifiers: shipDamageModifiers,
+    wear: {
+      hp: 1000,
+      damageModifiers: shipDamageModifiers,
+    },
     sail: {
       forceDistance: 3,
       force: 1,

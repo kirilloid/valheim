@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import '../css/Ship.css';
 
-import { envSetup, envStates } from '../model/env';
+import { EnvId, envSetup, envStates } from '../model/env';
 import { ships, getSailSpeed, getSailSpeeds, Sail } from '../model/ship';
 import { magnitude, timeI2S } from '../model/utils';
 import { Biome, Ship as ShipPiece } from '../types';
@@ -18,12 +18,12 @@ const styles = {
   coarseMarker: '#ccc',
 };
 
-const weathers = Object.keys(envSetup[Biome.Ocean]);
+const weathers = Object.keys(envSetup[Biome.Ocean]) as EnvId[];
 
-const winds = Object.fromEntries(weathers.map(name => {
+const winds: [EnvId, number][] = weathers.map(name => {
   const { wind } = envStates.find(e => e.id === name)!;
   return [name, (wind[0] + wind[1]) / 2];
-}));
+});
 
 const Windrose = React.memo(({ dpi, ship, wind }: ChartProps) => {
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -173,7 +173,7 @@ const Acceleration = React.memo(({ dpi, ship, wind }: ChartProps) => {
     const chart = (sailState: Sail, strokeStyle: string) => {
       const speeds = getSailSpeeds(ship.sail, sailState, wind, 180, MAX_TIME);
       const gx = (i: number) => (0.5 + i * horMax / MAX_TIME) * dpi;
-      const gy = (i: number) => (HEIGHT - speeds[i] * verMax / MAX_SPEED - 0.5) * dpi;
+      const gy = (i: number) => (HEIGHT - (speeds[i] ?? 0) * verMax / MAX_SPEED - 0.5) * dpi;
       
       ctx.lineWidth = 2 * dpi;
       ctx.strokeStyle = strokeStyle;
@@ -206,12 +206,12 @@ const Acceleration = React.memo(({ dpi, ship, wind }: ChartProps) => {
   );
 });
 
-const windOptions = Object.keys(winds).sort((a, b) => winds[a] - winds[b]);
+const windOptions = winds.slice().sort((a, b) => a[1] - b[1]).map(w => w[0]);
 
 export function Ship() {
   const [dpi, setDpi] = useState(window.devicePixelRatio);
-  const [ship, setShip] = useState(ships[0]);
-  const [wind, setWind] = useState(winds['Clear']);
+  const [ship, setShip] = useState<ShipPiece>(ships[0]!);
+  const [wind, setWind] = useState(winds.find(e => e[0] === 'Clear')![1]);
 
   const updateShip = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
     const id = e.target.value;
@@ -223,7 +223,7 @@ export function Ship() {
 
   const updateWind = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
     const id = e.target.value;
-    const newWind = winds[id];
+    const newWind = winds.find(w => w[0] === id)?.[1];
     if (newWind != null && newWind !== wind) {
       setWind(newWind);
     }
@@ -249,8 +249,8 @@ export function Ship() {
         {ships.map(s => <option value={s.id} key={s.id}>{s.id}</option>)}
       </select>{' | '}
       <label htmlFor="wind">weather:</label>
-      <select id="wind" onChange={updateWind} value={windOptions.find(w => wind === winds[w])}>
-        {windOptions.map(w => <option value={w} key={w}>{w}</option>)}
+      <select id="wind" onChange={updateWind}>
+        {windOptions.map(w => <option value={w} key={w} selected={winds.find(ww => ww[0] === w)?.[1] === wind}>{w}</option>)}
       </select><br/>
       <span className="square" style={{ backgroundColor: '#f00' }}></span> full sail
       <span className="square" style={{ backgroundColor: '#f80' }}></span> half sail

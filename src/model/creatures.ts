@@ -122,7 +122,7 @@ export const creatures: Creature[] = [
     staggerFactor: 0,
     staggerBlocked: true,
     damageModifiers: animalDmgModifiers,
-    drop: [dropEntry('RawFIsh')],
+    drop: [dropEntry('FishRaw')],
   },
   {
     type: 'creature',
@@ -158,7 +158,7 @@ export const creatures: Creature[] = [
       { dmg: { [DamageType.Lightning]: 15 }, name: 'pew-pew', force: 200 },
       { dmg: { [DamageType.Lightning]: 20 }, name: 'stomp', force: 100 },
     ],
-    hp: 10,
+    hp: 500,
     damageModifiers: animalDmgModifiers,
     drop: [
       dropEntry('HardAntler', { min: 3, max: 3 }),

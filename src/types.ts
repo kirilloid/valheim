@@ -138,6 +138,7 @@ export enum CraftingStation {
   Workbench,
   Forge,
   ArtisanTable,
+  StoneCutter,
   CookingStation, // overcooked: 75431; 75432 -> 75418: 25, 75538 -> 75420: 20, 75533 -> 75504: 60, 75448 -> 75554: 60, 75489 -> 75559: 25 
   Cauldron,
   Fermenter,
@@ -149,14 +150,75 @@ export enum CraftingStation {
   Cultivator,
 }
 
-interface BasePiece {
+export enum MaterialType {
+  Wood,
+  Stone,
+  Iron,
+  HardWood,
+};
+
+export enum ComfortGroup {
+  None,
+  Fire,
+  Bed,
+  Banner,
+  Chair,
+}
+
+export interface BasePiece {
   id: EntityId;
-  hp: number;
-  damageModifiers: DamageModifiers;
+  wear: {
+    hp: number;
+    damageModifiers: DamageModifiers;
+  };
   recipe: {
-    materials: Record<string, number>;
+    materials: Record<EntityId, number>;
     station: CraftingStation | null;
   }; 
+}
+
+export interface Piece extends BasePiece {
+  type: 'piece';
+  wear: {
+    hp: number;
+    damageModifiers: DamageModifiers;
+    noRoof?: boolean;
+    noSupport?: boolean;
+    providesSupport?: boolean;
+    materialType?: MaterialType;
+  };
+  piece: {
+    target: 'primary' | 'random' | 'none';
+    water: boolean | undefined;
+    notOnWood?: boolean;
+    notOnTilted?: boolean;
+    notOnFloor?: boolean;
+    repairable?: boolean;
+    removable?: boolean;
+    allowedInDungeons?: boolean;
+  };
+  craft?: {
+    id: CraftingStation;
+    requiresRoof?: boolean;
+    requiresFire?: boolean;
+  };
+  extends?: {
+    id: CraftingStation;
+    distance: number;
+    requiresRoof?: boolean;
+    requiresFire?: boolean;
+  };
+  comfort?: {
+    value: number,
+    group: ComfortGroup;
+  };
+  fireplace?: {
+    fuel: EntityId,
+    capacity: number;
+    burnTime: number;
+    minHeightAbove: number;
+    smoke: boolean;
+  };
 }
 
 export interface Ship extends BasePiece {
@@ -229,6 +291,8 @@ enum ItemType {
 export interface Resource extends BaseItem {
   type: 'item';
   emoji?: string;
+  summon?: EntityId;
+  power?: EntityId;
 }
 
 export interface Valuable extends BaseItem {
