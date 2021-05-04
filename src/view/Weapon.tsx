@@ -32,45 +32,20 @@ function hand(slot: TWeapon['slot']): string | undefined {
   }
 }
 
-function skill(skill: SkillType): string {
-  switch (skill) {
-    case SkillType.Swords:
-      return 'Swords';
-    case SkillType.Knives:
-      return 'Knives';
-    case SkillType.Clubs:
-      return 'Clubs';
-    case SkillType.Polearms:
-      return 'Polearms';
-    case SkillType.Spears:
-      return 'Spears';
-    case SkillType.Blocking:
-      return 'Blocking';
-    case SkillType.Axes:
-      return 'Axes';
-    case SkillType.Bows:
-      return 'Bows';
-    case SkillType.Unarmed:
-      return 'Unarmed';
-    case SkillType.Pickaxes:
-      return 'Pickaxes';
-    case SkillType.WoodCutting:
-      return 'WoodCutting';
-    case SkillType.Jump:
-      return 'Jump';
-    case SkillType.Sneak:
-      return 'Sneak';
-    case SkillType.Run:
-      return 'Run';
-    case SkillType.Swim:
-      return 'Swim';
-  }
+function skill(skill: SkillType) {
+  const str = SkillType[skill];
+  return str != null
+    ? <>
+        <Icon type="skills" id={str} size={16} />
+        {' '}{str}
+      </>
+    : <em>none</em>;
 }
 
 function totalDamage(damage: DamageProfile): number {
   return Object
     .entries(damage)
-    .filter(([key]) => key != String(DamageType.Chop) && key != String(DamageType.Pickaxe))
+    .filter(([key]) => key !== String(DamageType.Chop) && key !== String(DamageType.Pickaxe))
     .reduce<number>((a, [_, b]) => a + b!, 0);
 }
 

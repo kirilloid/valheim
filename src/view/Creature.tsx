@@ -4,6 +4,7 @@ import { timeI2S } from '../model/utils';
 import { useTranslation } from '../translation.effect';
 
 import { Creature as TCreature, Faction } from '../types';
+import { shortCreatureDamage } from './helpers';
 import { Icon } from './Icon';
 
 function faction(faction: Faction): string {
@@ -38,7 +39,7 @@ export function Creature(creature: TCreature) {
       {creature.attacks.map(a => (
         'spawn' in a
           ? <><dt key='spawn-key'>spawn</dt><dd key='spawn-val'>{a.spawn.map(id => <Icon key='id' type="creatures" id={id} />)}</dd></>
-          : <><dt key={`atk-key-${a.name}`}>attack: {a.name}</dt><dd key={`atk-val-${a.name}`}>{JSON.stringify(a.dmg)}</dd></>
+          : <><dt key={`atk-key-${a.name}`}>attack: {a.name}</dt><dd key={`atk-val-${a.name}`}>{shortCreatureDamage(a.dmg)}</dd></>
       ))}
       <dt>resistances</dt><dd>{JSON.stringify(creature.damageModifiers).replace(/"\d+":0,/g, '')}</dd>
       </dl>

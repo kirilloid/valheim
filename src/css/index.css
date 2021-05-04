@@ -25,3 +25,10 @@ article *:target,
 article *.active {
   background: #bde4ff;
 }
+
+.damage--physical { }
+.damage--fire { color: red; }
+.damage--frost { color: blue; }
+.damage--poison { color: #0c0; }
+.damage--lightning { color: lightcyan; }
+.damage--spirit { color: lightslategray; }

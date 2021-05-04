@@ -1,5 +1,7 @@
 import { SkillType } from "./model/skills";
 
+export type EntityId = string;
+
 export enum Biome {
   Meadows,
   BlackForest,
@@ -83,13 +85,13 @@ export type AttackProfile = {
   // knockback
   force?: number;
 } | {
-  spawn: string[];
+  spawn: EntityId[];
   number: number;
   max: number;
 };
 
 export interface DropEntry {
-  item: string;
+  item: EntityId;
   chance: number;
   min: number;
   max: number;
@@ -97,7 +99,7 @@ export interface DropEntry {
   perPlayer: boolean;
 }
 
-export const dropEntry = (item: string, options: Partial<Omit<DropEntry, 'item'>> = {}): DropEntry => {
+export const dropEntry = (item: EntityId, options: Partial<Omit<DropEntry, 'item'>> = {}): DropEntry => {
   return {
     item,
     chance: 1,
@@ -109,15 +111,17 @@ export const dropEntry = (item: string, options: Partial<Omit<DropEntry, 'item'>
   }
 };
 
-export const dropTrophy = (item: string, chance: number) => {
+export const dropTrophy = (item: EntityId, chance: number) => {
   return dropEntry(item, { chance, scale: false });
 };
 
 export interface Creature {
-  id: string;
+  type: 'creature';
+  id: EntityId;
   tier: number;
   emoji: string;
-  defeatKey?: string;
+  // maxLvl: number;
+  // upgradeDistance: number;
   faction: Faction;
   hp: number;
   staggerFactor: number;
@@ -134,6 +138,7 @@ export enum CraftingStation {
   Workbench,
   Forge,
   ArtisanTable,
+  StoneCutter,
   CookingStation, // overcooked: 75431; 75432 -> 75418: 25, 75538 -> 75420: 20, 75533 -> 75504: 60, 75448 -> 75554: 60, 75489 -> 75559: 25 
   Cauldron,
   Fermenter,
@@ -145,14 +150,75 @@ export enum CraftingStation {
   Cultivator,
 }
 
-interface BasePiece {
-  id: string;
-  hp: number;
-  damageModifiers: DamageModifiers;
+export enum MaterialType {
+  Wood,
+  Stone,
+  Iron,
+  HardWood,
+};
+
+export enum ComfortGroup {
+  None,
+  Fire,
+  Bed,
+  Banner,
+  Chair,
+}
+
+export interface BasePiece {
+  id: EntityId;
+  wear: {
+    hp: number;
+    damageModifiers: DamageModifiers;
+  };
   recipe: {
-    materials: Record<string, number>;
+    materials: Record<EntityId, number>;
     station: CraftingStation | null;
   }; 
+}
+
+export interface Piece extends BasePiece {
+  type: 'piece';
+  wear: {
+    hp: number;
+    damageModifiers: DamageModifiers;
+    noRoof?: boolean;
+    noSupport?: boolean;
+    providesSupport?: boolean;
+    materialType?: MaterialType;
+  };
+  piece: {
+    target: 'primary' | 'random' | 'none';
+    water: boolean | undefined;
+    notOnWood?: boolean;
+    notOnTilted?: boolean;
+    notOnFloor?: boolean;
+    repairable?: boolean;
+    removable?: boolean;
+    allowedInDungeons?: boolean;
+  };
+  craft?: {
+    id: CraftingStation;
+    requiresRoof?: boolean;
+    requiresFire?: boolean;
+  };
+  extends?: {
+    id: CraftingStation;
+    distance: number;
+    requiresRoof?: boolean;
+    requiresFire?: boolean;
+  };
+  comfort?: {
+    value: number,
+    group: ComfortGroup;
+  };
+  fireplace?: {
+    fuel: EntityId,
+    capacity: number;
+    burnTime: number;
+    minHeightAbove: number;
+    smoke: boolean;
+  };
 }
 
 export interface Ship extends BasePiece {
@@ -173,7 +239,7 @@ export interface Ship extends BasePiece {
 }
 
 interface BaseItem {
-  id: string;
+  id: EntityId;
   dlc?: 'beta';
   tier: number;
   weight: number;
@@ -181,13 +247,13 @@ interface BaseItem {
   teleportable?: false;
   recipe?: {
     time: number;
-    materials: Record<string, number>;
-    materialsPerLevel: Record<string, number>;
+    materials: Record<EntityId, number>;
+    materialsPerLevel: Record<EntityId, number>;
     source: { station: CraftingStation, level?: number };
     upgrade: { station: CraftingStation, level?: number };
   } | {
     time: number;
-    materials: Record<string, number>;
+    materials: Record<EntityId, number>;
     source: { station: CraftingStation, level?: number };
     number: number;
   } | {
@@ -222,18 +288,20 @@ enum ItemType {
   Attach_Atgeir = 20,
 }
 
-interface Resource extends BaseItem {
+export interface Resource extends BaseItem {
   type: 'item';
   emoji?: string;
+  summon?: EntityId;
+  power?: EntityId;
 }
 
-interface Valuable extends BaseItem {
+export interface Valuable extends BaseItem {
   type: 'value';
   emoji: string;
   value: number;
 }
 
-interface Food extends BaseItem {
+export interface Food extends BaseItem {
   type: 'food';
   emoji: string;
   health: number;
@@ -241,6 +309,17 @@ interface Food extends BaseItem {
   duration: number;
   regen: number;
   color: string;
+}
+
+export interface Potion extends BaseItem {
+  type: 'potion';
+  emoji?: string;
+  health?: [adds: number, time: number];
+  stamina?: [adds: number, time: number];
+  healthRegen?: number;
+  staminaRegen?: number;
+  resist?: DamageType[];
+  cooldown: number;
 }
 
 type Pair<T> = [T, T];
@@ -307,7 +386,7 @@ interface Armor extends BaseItem {
   damageModifiers?: Partial<DamageModifiers>;
 }
 
-export type Item = Resource | Valuable | Food | Weapon | Armor | Arrow | Tool;
+export type Item = Resource | Valuable | Food | Potion | Weapon | Armor | Arrow | Tool;
 
 export enum Skill {
   Clubs,

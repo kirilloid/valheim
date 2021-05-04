@@ -1,11 +1,11 @@
 import React from 'react';
-import type { Item } from '../types';
+import type { Food as TFood } from '../types';
 import { timeI2S } from '../model/utils';
 import { Icon } from './Icon';
 import { Recipe } from './Recipe';
 import { useTranslation } from '../translation.effect';
 
-export function Food(item: Item & { type: 'food' }) {
+export function Food(item: TFood) {
   const translate = useTranslation();
   const { recipe } = item;
   return (<>
