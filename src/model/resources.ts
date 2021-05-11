@@ -2,6 +2,7 @@ import { Item, CraftingStation, Biome, DamageType } from "../types";
 
 const CAULDRON_TIME = 3;
 const FORGE_TIME = 2;
+const STONECUTTER_TIME = 2;
 // artisan table = 1
 // workbench = 1
 const KILN_TIME = 15;
@@ -169,9 +170,13 @@ export const resources: Item[] = [
   { type: 'item', id: 'IronNails', tier: 3, weight: 0.5, stack: 100, teleportable: false,
     recipe: { time: FORGE_TIME, materials: { Iron: 1 },
               source: { station: CraftingStation.Forge }, number: 10 } },
+  { type: 'item', id: 'SharpeningStone', tier: 3, weight: 6, stack: 20,
+    recipe: { time: STONECUTTER_TIME, materials: { Stone: 5 },
+              source: { station: CraftingStation.StoneCutter }, number: 1 } },
   { type: 'item', id: 'WitheredBone', emoji: '🦴', tier: 3, weight: 1, stack: 30, floating: true, summon: 'Bonemass' },
   { type: 'item', id: 'TrophyLeech', emoji: '🧛', tier: 3, weight: 2, stack: 20 },
   { type: 'item', id: 'TrophyBlob', tier: 3, weight: 2, stack: 20 },
+  { type: 'item', id: 'TrophySurtling', tier: 3, weight: 1, stack: 20 },
   { type: 'item', id: 'TrophyDraugr', emoji: '🧟', tier: 3, weight: 2, stack: 20 },
   { type: 'item', id: 'TrophyDraugrElite', emoji: '🧟', tier: 3, weight: 2, stack: 20 },
   { type: 'item', id: 'TrophyBonemass', emoji: '🦠', tier: 4, weight: 2, stack: 20, floating: true, power: 'Bonemass' },
@@ -212,7 +217,7 @@ export const resources: Item[] = [
               source: { station: CraftingStation.Cultivator }, number: 2 } },
   { type: 'item', id: 'LinenThread', tier: 5, weight: 2, stack: 50,
     recipe: { time: SPIN_WHEEL_TIME, materials: { Flax: 1 },
-              source: { station: CraftingStation.Windmill }, number: 1 } },
+              source: { station: CraftingStation.SpinningWheel }, number: 1 } },
   { type: 'item', id: 'Barley', emoji: '🌾', tier: 5, weight: 0.2, stack: 100,
     recipe: { time: 4500, materials: { Barley: 1 },
               source: { station: CraftingStation.Cultivator }, number: 2 } },

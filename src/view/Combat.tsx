@@ -9,6 +9,7 @@ import { damage as damageIcon } from '../model/emoji';
 import { hpBonus, getPhysicalDamage } from '../model/combat';
 import { Translator, useTranslation } from '../translation.effect';
 import { Icon } from './Icon';
+import { Resistances } from './helpers';
 
 function Damage(dmg: DamageProfile) {
   return Object.entries(dmg).map(([type, val]) => `${damageIcon[type as any as DamageType]}${val}`).join(' ');
@@ -20,28 +21,10 @@ function DropItem(drop: DropEntry, level: number, translate: Translator) {
   const min = drop.min * mul;
   const max = (drop.max - 1) * mul;
   return (<>
-    <dt><Icon type="resources" id={drop.item} />{translate(drop.item)}</dt>
+    <dt><Icon type="resource" id={drop.item} />{translate(drop.item)}</dt>
     <dd>{min >= max ? `${min}` : `${min}–${max}`}
         {drop.perPlayer ? ' per player' : ''} with {chance} chance</dd>
   </>);
-}
-
-function Resistances(mods: DamageModifiers) {
-  const res = groupBy(Object.entries(mods), ([, val]) => val);
-  const result = [];
-  const {
-    [DamageModifier.Immune]: immune,
-    [DamageModifier.VeryResistant]: veryResistant,
-    [DamageModifier.Resistant]: resistant,
-    [DamageModifier.Weak]: weak,
-    [DamageModifier.VeryWeak]: veryWeak,
-  } = res;
-  if (immune) result.push(`Immune: ${immune.map(v => damageIcon[v[0] as any as DamageType]).join(', ')}`);
-  if (veryResistant) result.push(`Very resistant: ${veryResistant.map(v => damageIcon[v[0] as any as DamageType]).join(', ')}`);
-  if (resistant) result.push(`Resistant: ${resistant.map(v => damageIcon[v[0] as any as DamageType]).join(', ')}`);
-  if (weak) result.push(`Weak: ${weak.map(v => damageIcon[v[0] as any as DamageType]).join(', ')}`);
-  if (veryWeak) result.push(`Very weak: ${veryWeak.map(v => damageIcon[v[0] as any as DamageType]).join(', ')}`);
-  return result;
 }
 
 function showPair(first: number, second?: number): string {
@@ -160,9 +143,11 @@ export function Combat() {
         <input id="star-0" type="radio" name="stars" value="0" checked={stars === 0} onChange={onStarsChange} /><label htmlFor="star-0">0⭐</label>
         <input id="star-1" type="radio" name="stars" value="1" checked={stars === 1} onChange={onStarsChange} /><label htmlFor="star-1">1⭐</label>
         <input id="star-2" type="radio" name="stars" value="2" checked={stars === 2} onChange={onStarsChange} /><label htmlFor="star-2">2⭐</label>
-        <h3>Sturd</h3>
-        hp: {hpBonus(creature.hp, { players, stars })}<br/>
-        {Resistances(creature.damageModifiers).join('\n')}
+        <h3>Sturdiness</h3>
+        <dl>
+          <dt>hp</dt><dd>{hpBonus(creature.hp, { players, stars })}</dd>
+          {Resistances(translate, creature.damageModifiers)}
+        </dl>
         <h3>Attacks</h3>
         <dl>
           {creature.attacks.map(a => {

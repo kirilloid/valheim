@@ -4,8 +4,8 @@ import { dmgBonus, hpBonus, multiplyDamage } from '../model/combat';
 import { timeI2S } from '../model/utils';
 import { useTranslation } from '../translation.effect';
 
-import { AttackProfile, Creature as TCreature, Faction, NormalAttackProfile, SpawnAttackProfile } from '../types';
-import { shortCreatureDamage } from './helpers';
+import { Creature as TCreature, Faction, NormalAttackProfile, SpawnAttackProfile } from '../types';
+import { Resistances, shortCreatureDamage } from './helpers';
 import { Icon } from './Icon';
 
 function faction(faction: Faction): string {
@@ -44,7 +44,7 @@ export function Creature(creature: TCreature, level: number = 1) {
   const dmgScale = dmgBonus(1, scale);
   return (<>
     <h2>
-      <Icon type="creatures" id={creature.id} />
+      <Icon type="creature" id={creature.id} />
       {' '}
       {translate(creature.id)}
     </h2>
@@ -54,8 +54,8 @@ export function Creature(creature: TCreature, level: number = 1) {
       <dt>faction</dt><dd>{faction(creature.faction)}</dd>
       <dt>{translate('ui.health')}</dt><dd>{hpBonus(creature.hp, scale)}</dd>
       <dt>stagger</dt><dd>{creature.hp * staggerFactor}</dd>
+      {Resistances(translate, creature.damageModifiers)}
       {creature.attacks.map(a => 'spawn' in a ? SpawnAttack(a) : NormalAttack(a, dmgScale))}
-      <dt>resistances</dt><dd>{JSON.stringify(creature.damageModifiers).replace(/"\d+":0,/g, '')}</dd>
       </dl>
     </section>
     <section>
@@ -68,7 +68,7 @@ export function Creature(creature: TCreature, level: number = 1) {
       <header>tameable</header>
       <dl>
       <dt>taming time</dt><dd>{timeI2S(tame.tameTime)}</dd>
-      <dt>eats</dt><dd>{tame.eats.map(id => <Icon key={id} type="resources" id={id} size={32} />)}</dd>
+      <dt>eats</dt><dd>{tame.eats.map(id => <Icon key={id} type="resource" id={id} size={32} />)}</dd>
       <dt>controlled</dt><dd>{tame.commandable ? '✔️' : '❌'}</dd>
       <dt>breedable</dt><dd>{pregnancy ? '✔️' : '❌'}</dd>
       </dl>

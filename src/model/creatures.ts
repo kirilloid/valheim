@@ -67,7 +67,7 @@ export const creatures: Creature[] = [
   },
   {
     type: 'creature',
-    id: 'Seagull', // Seagal
+    id: 'Seagal',
     tier: 1,
     emoji: '🦆',
     faction: Faction.ForestMonsters,

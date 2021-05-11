@@ -2,15 +2,17 @@ import { resources } from './resources';
 import { items as weapons } from './weapons';
 import { items as armors } from './armors';
 import { arrows } from './arrows';
-import { Item } from '../types';
+import { Item, Piece } from '../types';
 import { tools } from './tools';
+import { pieces } from './building';
 
-export const data: Record<string, Item> = {};
+export const data: Record<string, Item | Piece> = {};
 resources.forEach(r => data[r.id] = r);
 weapons.forEach(w => data[w.id] = w);
 armors.forEach(a => data[a.id] = a);
 arrows.forEach(a => data[a.id] = a);
 tools.forEach(t => data[t.id] = t);
+pieces.forEach(p => data[p.id] = p);
 
 /*
 

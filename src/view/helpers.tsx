@@ -1,6 +1,9 @@
 import React from 'react';
-import { DamageProfile, DamageType } from '../types';
+import { groupBy } from 'lodash-es';
+
+import { DamageModifier, DamageModifiers, DamageProfile, DamageType } from '../types';
 import { Icon } from './Icon';
+import { Translator } from '../translation.effect';
 
 export function durability(values: [number, number], level?: number): string | number {
   if (values[0] === Infinity) return 'indestructible';
@@ -43,7 +46,7 @@ export function shortWeaponDamage(damage: DamageProfile) {
   return Object.entries(obj)
     .filter(kv => kv[1])
     .map(kv => <span className={`damage--${kv[0]}`}>{kv[1]}</span>)
-    .flatMap((item, i) => i ? [' + ', item] : [item]);
+    .flatMap((item, i) => i ? ['+', item] : [item]);
 }
 
 export const weaponDamage = shortWeaponDamage;
@@ -65,5 +68,25 @@ export function shortCreatureDamage(damage: DamageProfile) {
   return Object.entries(obj)
     .filter(kv => kv[1])
     .map(kv => <span className={`damage--${kv[0]}`}>{kv[1]}</span>)
-    .flatMap((item, i) => i ? [' + ', item] : [item]);
+    .flatMap((item, i) => i ? ['+', item] : [item]);
+}
+
+function damageTypesList(list: [string, any][]): string {
+  return list.map(([v]) => DamageType[v as any]).join(', ');
+} 
+
+export function Resistances(translate: Translator, mods: DamageModifiers) {
+  const res = groupBy(Object.entries(mods), ([, val]) => val);
+  const result = [];
+  for (const [key, val] of Object.entries(res)) {
+    if (key === String(DamageModifier.Normal)
+    ||  key === String(DamageModifier.Ignore)) {
+      continue;
+    }
+    result.push(<>
+      <dt>{translate(`ui.damageModifier.${DamageModifier[+key]}`)}</dt>
+      <dd>{damageTypesList(val)}</dd>
+    </>)
+  };
+  return result;
 }

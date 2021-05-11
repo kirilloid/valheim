@@ -1,9 +1,9 @@
-import React, { ChangeEvent, KeyboardEvent, useCallback, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useCallback, useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 import '../css/Search.css';
 
-import { DamageType, EntityId } from '../types';
+import { DamageType, EntityId, Piece } from '../types';
 import { match } from '../model/search';
 import { Icon } from './Icon';
 import { data } from '../model/objects';
@@ -34,13 +34,39 @@ function resistIcon(id: DamageType) {
   }
 }
 
+function pieceExtra(item: Piece) {
+  switch (item.subtype) {
+    case 'bed':
+    case 'chair':
+    case 'decoration':
+    case 'fireplace':
+    case 'table':
+      return item.comfort?.value ? <span>
+        <Icon type="icon" id="health_icon_walknut_small" size={16} />
+        {' '}
+        {item.comfort.value}
+      </span> : null
+    case 'craft':
+    case 'craft_ext':
+      return <Icon type="icon" id="hammer" size={32} />
+    case 'chest':
+    case 'door':
+    case 'misc':
+    case 'stand':
+    case 'structure':
+      return null;
+    default:
+      return assertNever(item);
+  }
+}
+
 function renderItem(id: EntityId, text: string, onClick: React.MouseEventHandler) {
   const item = data[id] ?? creatures.find(c => c.id === id);
   if (!item) { return "Something went wrong" }
   switch (item?.type) {
     case 'creature':
       return <div className="SearchItem">
-        <Icon type="creatures" id={id} size={32} />
+        <Icon type="creature" id={id} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         <span>
           <Icon type="icon" id="health_icon" size={16} />
@@ -49,9 +75,13 @@ function renderItem(id: EntityId, text: string, onClick: React.MouseEventHandler
       </div>
     case 'item':
       return <div className="SearchItem">
-        <Icon type="resources" id={id} size={32} />
+        <Icon type="resource" id={id} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
-        {item.summon ? <Icon type="creatures" id={item.summon} size={32} /> : null}
+        {item.summon
+        ? <Icon type="creature" id={item.summon} size={32} />
+        : item.id.startsWith('Trophy')
+        ? <Icon type="icon" id="trophies_20" size={20} />
+        : null}
       </div>
     case 'tool':
       return <div className="SearchItem">
@@ -67,7 +97,7 @@ function renderItem(id: EntityId, text: string, onClick: React.MouseEventHandler
               <Icon type="skills" id="Blocking" size={16} />
               {first(item.block)}
             </span>
-          : shortWeaponDamage(item.damage[0])}
+          : <span>{shortWeaponDamage(item.damage[0])}</span>}
       </div>
     case 'armor':
       return <div className="SearchItem">
@@ -88,7 +118,7 @@ function renderItem(id: EntityId, text: string, onClick: React.MouseEventHandler
       </div>
     case 'food':
       return <div className="SearchItem">
-        <Icon type="resources" id={id} size={32} />
+        <Icon type="resource" id={id} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         <span>
           <Icon type="icon" id="health_icon" size={16} />
@@ -99,7 +129,7 @@ function renderItem(id: EntityId, text: string, onClick: React.MouseEventHandler
       </div>
     case 'potion':
       return <div className="SearchItem">
-        <Icon type="resources" id={id} size={32} />
+        <Icon type="resource" id={id} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         <span>
           {item.health
@@ -121,12 +151,23 @@ function renderItem(id: EntityId, text: string, onClick: React.MouseEventHandler
       </div>
     case 'value':
       return <div className="SearchItem">
-        <Icon type="resources" id={id} size={32} />
+        <Icon type="resource" id={id} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         <span>
           <Icon type="icon" id="coin_32" size={16} />
           {item.value}
         </span>
+      </div>
+    case 'tool':
+      return <div className="SearchItem">
+        <Icon type="weapon" id={id} size={32} />
+        <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
+      </div>
+    case 'piece':
+      return <div className="SearchItem">
+        <Icon type="piece" id={id} size={32} />
+        <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
+        {pieceExtra(item)}
       </div>
     default:
       assertNever(item);
@@ -140,7 +181,7 @@ export const Search = () => {
   const translate = useTranslation();
   const updateSearch = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const str = e.target.value;
-    setItems([...take(15, match(str))]);
+    setItems([...take(20, match(str))]);
   }, [setItems]);
   const clearSearch = useCallback(() => {
     setItems([]);
@@ -150,18 +191,26 @@ export const Search = () => {
     if (len === 0) return;
     switch (e.key) {
       case 'ArrowUp':
+        e.preventDefault();
         setIndex((index - 1 + len) % len);
         break;
       case 'ArrowDown':
+        e.preventDefault();
         setIndex((index + 1) % len);
         break;
       case 'Enter':
+        e.preventDefault();
         const path = `/obj/${items[index]}`;
         clearSearch();
         history.push(path);
         break;
     }
   }
+  
+  useEffect(() => {
+    document.getElementById(`gs_i${index}`)?.scrollIntoView(false);
+  }, [items, index]);
+
   return (
     <div className="SearchBlock">
       <div className="SearchControls">

@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
 
+import type { EntityId } from '../types';
 import { assertNever } from '../model/utils';
 import { data } from '../model/objects';
 import { creatures } from '../model/creatures';
@@ -12,7 +13,7 @@ import { Creature as CreatureView } from './Creature';
 import { Arrow } from './Arrow';
 import { GenericItem } from './GenericItem';
 import { Tool } from './Tool';
-import { EntityId } from '../types';
+import { Piece } from './Piece';
 
 function parseLevel(level: string | undefined): number | undefined {
   if (level == null) return undefined;
@@ -58,6 +59,8 @@ function Item(id: string, level?: number) {
       return Arrow(item);
     case 'tool':
       return Tool(item, level);
+    case 'piece':
+      return Piece(item);
     case 'item':
       return GenericItem(item);
     default:

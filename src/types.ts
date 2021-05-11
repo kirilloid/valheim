@@ -49,7 +49,9 @@ export enum DamageModifier {
   VeryWeak,  // 2x
 };
 
-export type DamageModifiers = Record<Exclude<DamageType, DamageType.Damage>, DamageModifier>;
+export type DamageModifiers = Record<Exclude<DamageType, DamageType.Damage>, DamageModifier>
+  | [undefined, DamageModifier, DamageModifier, DamageModifier, DamageModifier, DamageModifier,
+                DamageModifier, DamageModifier, DamageModifier, DamageModifier, DamageModifier];
 
 export const damageModifiersValues: Record<DamageModifier, number> = {
   [DamageModifier.Normal]: 1,
@@ -159,13 +161,7 @@ export enum MaterialType {
   HardWood,
 };
 
-export enum ComfortGroup {
-  None,
-  Fire,
-  Bed,
-  Banner,
-  Chair,
-}
+export type ComfortGroup = 'fire' | 'bed' | 'banner' | 'sit';
 
 export interface BasePiece {
   id: EntityId;
@@ -175,12 +171,14 @@ export interface BasePiece {
   };
   recipe: {
     materials: Record<EntityId, number>;
-    station: CraftingStation | null;
+    station: CraftingStation;
   }; 
 }
 
-export interface Piece extends BasePiece {
+export type Piece = BasePiece & {
   type: 'piece';
+  disabled?: boolean;
+  tier: number;
   wear: {
     hp: number;
     damageModifiers: DamageModifiers;
@@ -192,36 +190,62 @@ export interface Piece extends BasePiece {
   piece: {
     target: 'primary' | 'random' | 'none';
     water: boolean | undefined;
+    size?: [width: number, depth: number, height: number];
     notOnWood?: boolean;
-    notOnTilted?: boolean;
+    onlyOnFlat?: boolean;
     notOnFloor?: boolean;
+    groundOnly?: boolean;
     repairable?: boolean;
-    removable?: boolean;
+    nonRemovable?: boolean;
     allowedInDungeons?: boolean;
+    requiredSpace?: number;
   };
-  craft?: {
-    id: CraftingStation;
-    requiresRoof?: boolean;
-    requiresFire?: boolean;
-  };
-  extends?: {
-    id: CraftingStation;
-    distance: number;
-    requiresRoof?: boolean;
-    requiresFire?: boolean;
-  };
-  comfort?: {
-    value: number,
-    group: ComfortGroup;
-  };
-  fireplace?: {
+} & ({
+  subtype: 'fireplace';
+  fireplace: {
     fuel: EntityId,
     capacity: number;
     burnTime: number;
     minHeightAbove: number;
     smoke: boolean;
+    fireworks: boolean;
   };
-}
+  comfort?: {
+    value: number,
+    group: 'fire';
+  };
+} | {
+  subtype: 'craft';
+  craft: {
+    id: CraftingStation;
+    queueSize?: number;
+    buildRange?: number;
+    requiresRoof?: boolean;
+    requiresFire?: boolean;
+  };
+} | {
+  subtype: 'craft_ext'; 
+  extends: {
+    id: CraftingStation;
+    distance: number;
+    requiresRoof?: boolean;
+    requiresFire?: boolean;
+  };
+} | {
+  subtype: 'misc' | 'structure' | 'door';
+} | {
+  subtype: 'bed' | 'chair' | 'table' | 'decoration';
+  comfort: {
+    value: number,
+    group?: ComfortGroup;
+  };
+} | {
+  subtype: 'stand';
+  supportedTypes: ItemType[];
+} | {
+  subtype: 'chest';
+  space: [width: number, height: number];
+});
 
 export interface Ship extends BasePiece {
   type: 'ship';
@@ -272,7 +296,7 @@ interface BaseItem {
   };
 }
 
-enum ItemType {
+export enum ItemType {
   None = 0,
   Material = 1,
   Consumable = 2,

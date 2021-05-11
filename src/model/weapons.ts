@@ -835,8 +835,8 @@ export const items: Weapon[] = [
     knockback: 70, backstab: 3, moveSpeed: -0.2,
     recipe: {
       time: CRAFT_TIME,
-      materials: { AncientBark: 30, Iron: 35, LeatherScraps: 4 },
-      materialsPerLevel: { AncientBark: 5, Iron: 15 },
+      materials: { ElderBark: 30, Iron: 35, LeatherScraps: 4 },
+      materialsPerLevel: { ElderBark: 5, Iron: 15 },
       source: { station: CraftingStation.Forge, level: 2 },
       upgrade: { station: CraftingStation.Forge, level: 3 },
     }
@@ -944,8 +944,8 @@ export const items: Weapon[] = [
     knockback: 200, backstab: 2, moveSpeed: -0.2,
     recipe: {
       time: CRAFT_TIME,
-      materials: { AncientBark: 10, Iron: 30, YmirRemains: 4, DraugrEliteTrophy: 1 },
-      materialsPerLevel: { AncientBark: 2, Iron: 15, YmirRemains: 2 },
+      materials: { ElderBark: 10, Iron: 30, YmirRemains: 4, DraugrEliteTrophy: 1 },
+      materialsPerLevel: { ElderBark: 2, Iron: 15, YmirRemains: 2 },
       source: { station: CraftingStation.Forge, level: 2 },
       upgrade: { station: CraftingStation.Forge, level: 3 },
     },
@@ -1026,7 +1026,7 @@ export const items: Weapon[] = [
     knockback: 20, backstab: 3, moveSpeed: -0.05,
     recipe: {
       time: CRAFT_TIME,
-      materials: { AncientBark: 10, Iron: 10, TrollHide: 4 },
+      materials: { ElderBark: 10, Iron: 10, TrollHide: 4 },
       materialsPerLevel: { Wood: 5, Flint: 5, LeatherScraps: 1 },
       source: { station: CraftingStation.Forge, level: 3 },
       upgrade: { station: CraftingStation.Forge, level: 4 },
@@ -1267,8 +1267,8 @@ export const items: Weapon[] = [
     knockback: 20, backstab: 3, moveSpeed: -0.05,
     recipe: {
       time: CRAFT_TIME,
-      materials: { AncientBark: 10, WolfFang: 4, Silver: 2, LeatherScraps: 2 },
-      materialsPerLevel: { AncientBark: 5, WolfFang: 2, Silver: 1, LeatherScraps: 1 },
+      materials: { ElderBark: 10, WolfFang: 4, Silver: 2, LeatherScraps: 2 },
+      materialsPerLevel: { ElderBark: 5, WolfFang: 2, Silver: 1, LeatherScraps: 1 },
       source: { station: CraftingStation.Forge, level: 3 },
       upgrade: { station: CraftingStation.Forge, level: 4 },
     }
@@ -1309,7 +1309,7 @@ export const items: Weapon[] = [
     knockback: 120, backstab: 3, moveSpeed: -0.05,
     recipe: {
       time: CRAFT_TIME,
-      materials: { AncientBark: 10, Silver: 30, YmirRemains: 5, FreezeGland: 5 },
+      materials: { ElderBark: 10, Silver: 30, YmirRemains: 5, FreezeGland: 5 },
       materialsPerLevel: { Silver: 15 },
       source: { station: CraftingStation.Forge, level: 3 },
       upgrade: { station: CraftingStation.Forge, level: 4 },
@@ -1390,8 +1390,8 @@ export const items: Weapon[] = [
     // "holdStaminaDrain": 5,
     recipe: {
       time: CRAFT_TIME,
-      materials: { AncientBark: 10, Silver: 20, DeerHide: 2, Guck: 10, },
-      materialsPerLevel: { AncientBark: 5, Silver: 10, DeerHide: 2, Guck: 2 },
+      materials: { ElderBark: 10, Silver: 20, DeerHide: 2, Guck: 10, },
+      materialsPerLevel: { ElderBark: 5, Silver: 10, DeerHide: 2, Guck: 2 },
       source: { station: CraftingStation.Forge, level: 2 },
       upgrade: { station: CraftingStation.Forge, level: 3 },
     }

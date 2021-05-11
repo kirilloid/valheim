@@ -1,6 +1,7 @@
 import { data } from './objects';
 import { creatures } from './creatures';
 import { preloadLanguage } from '../translation.effect';
+import { EntityId } from '../types';
 
 type PrefixTree<T> = {
   children: Map<string, PrefixTree<T>>;
@@ -32,15 +33,18 @@ const treeNode = <T>(): PrefixTree<T> => ({
   results: [],
 });
 
+const fullMatch = new Map<string, EntityId>();
 const startTree = treeNode<string>();
 const anyTree = treeNode<string>();
 
 preloadLanguage().then(dict => {
-  const ids = Object.keys(data).concat(creatures.map(c => c.id));
+  const ids = creatures.map(c => c.id).concat(Object.keys(data));
   for (const key of ids) {
     const entry = dict[key];
-    if (entry == null) continue; 
-    const words = entry.toLowerCase().split(' ');
+    if (entry == null) continue;
+    const normalized = entry.toLowerCase();
+    fullMatch.set(normalized, key);
+    const words = normalized.split(' ');
     for (const word of words) {
       addToTree(startTree, word, key);
       for (let i = 1; i < word.length - 1; i++) {
@@ -57,22 +61,27 @@ preloadLanguage().then(dict => {
   }
 });
 
-export function match(query: string): IterableIterator<string> {
-  const res1 = lookupInTree(startTree, query);
-  const res2 = lookupInTree(anyTree, query);
-  const visited = new Set<string>();
+function* emptyGenerator() {}
+
+export function match(query: string): IterableIterator<EntityId> {
+  query = query.toLocaleLowerCase().trim();
+  const terms = query.match(/\S+/g);
+  if (!terms) return emptyGenerator();
+  const result = new Map<EntityId, number>();
+  const fm = fullMatch.get(query);
+  if (fm != null) result.set(fm, 100);
+  for (const term of terms) {
+    for (const item of lookupInTree(startTree, term)) {
+      result.set(item, (result.get(item) ?? 0) + 10);
+    }
+    for (const item of lookupInTree(anyTree, term)) {
+      result.set(item, (result.get(item) ?? 0) + 1);
+    }
+  }
+  
   return (function*() {
-    for (const item of res1) {
-      if (!visited.has(item)) {
-        yield item;
-        visited.add(item);
-      }
-    }
-    for (const item of res2) {
-      if (!visited.has(item)) {
-        yield item;
-        visited.add(item);
-      }
-    }
+    yield* Array.from(result.entries())
+      .sort(([, val1], [, val2]) => val2 - val1)
+      .map(([key]) => key);
   }());
 }

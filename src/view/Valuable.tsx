@@ -9,7 +9,7 @@ export function Valuable(item: Item & { type: 'value' }) {
   return (
     <>
       <h2>
-        <Icon type="resources" id={item.id} />
+        <Icon type="resource" id={item.id} />
         {' '}
         {translate(item.id)}
       </h2>
