@@ -1,13 +1,13 @@
-import React, { ChangeEvent, KeyboardEvent, useCallback, useEffect, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useCallback, useContext, useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 import '../css/Search.css';
 
-import { DamageType, EntityId, Piece } from '../types';
+import { DamageType, EntityId, ItemSpecial, Piece } from '../types';
 import { match } from '../model/search';
 import { Icon } from './Icon';
 import { data } from '../model/objects';
-import { useTranslation } from '../translation.effect';
+import { TranslationContext, useTranslation } from '../translation.effect';
 import { assertNever } from '../model/utils';
 import { creatures } from '../model/creatures';
 import { SkillType } from '../model/skills';
@@ -60,6 +60,21 @@ function pieceExtra(item: Piece) {
   }
 }
 
+function showSpecialIcon(special: ItemSpecial) {
+  switch (special) {
+    case undefined: return null;
+    case 'light': return <Icon type="icon" id="flashlight" size={16} />;
+    case 'strength': return <span><Icon type="icon" id="weight" size={16} />+150</span>;
+    case 'search': return <Icon type="icon" id="map_ping" size={16} />;
+    case 'harpoon': return <Icon type="icon" id="harpoon" size={16} />;
+    case 'build': return null;
+    case 'garden': return <Icon type="piece" id="replant" size={32} />;
+    case 'ground': return <Icon type="piece" id="raise" size={32} />;
+    case 'fishing': return <Icon type="resource" id="FisingBait" size={32} />;
+    default: return assertNever(special);
+  }
+}
+
 function renderItem(id: EntityId, text: string, onClick: React.MouseEventHandler) {
   const item = data[id] ?? creatures.find(c => c.id === id);
   if (!item) { return "Something went wrong" }
@@ -87,6 +102,7 @@ function renderItem(id: EntityId, text: string, onClick: React.MouseEventHandler
       return <div className="SearchItem">
         <Icon type="weapon" id={id} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
+        {showSpecialIcon(item.special)}
       </div>
     case 'weap':
       return <div className="SearchItem">
@@ -103,10 +119,11 @@ function renderItem(id: EntityId, text: string, onClick: React.MouseEventHandler
       return <div className="SearchItem">
         <Icon type="armor" id={id} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
-        <span>
-          <Icon type="icon" id="ac_bkg" size={16} />
-          {first(item.armor)}
-        </span>
+        <span>{
+          showSpecialIcon(item.special) ??
+          <><Icon type="icon" id="ac_bkg" size={16} />
+          {first(item.armor)}</>
+        }</span>
       </div>
     case 'ammo':
       return <div className="SearchItem">
@@ -158,11 +175,6 @@ function renderItem(id: EntityId, text: string, onClick: React.MouseEventHandler
           {item.value}
         </span>
       </div>
-    case 'tool':
-      return <div className="SearchItem">
-        <Icon type="weapon" id={id} size={32} />
-        <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
-      </div>
     case 'piece':
       return <div className="SearchItem">
         <Icon type="piece" id={id} size={32} />
@@ -178,7 +190,7 @@ export const Search = () => {
   const history = useHistory();
   const [items, setItems] = useState<string[]>([]);
   const [index, setIndex] = useState(0);
-  const translate = useTranslation();
+  const translate = useContext(TranslationContext);
   const updateSearch = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const str = e.target.value;
     setItems([...take(20, match(str))]);

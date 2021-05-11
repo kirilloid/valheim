@@ -54,7 +54,7 @@ export function Creature(creature: TCreature, level: number = 1) {
       <dt>faction</dt><dd>{faction(creature.faction)}</dd>
       <dt>{translate('ui.health')}</dt><dd>{hpBonus(creature.hp, scale)}</dd>
       <dt>stagger</dt><dd>{creature.hp * staggerFactor}</dd>
-      {Resistances(translate, creature.damageModifiers)}
+      <Resistances mods={creature.damageModifiers} />
       {creature.attacks.map(a => 'spawn' in a ? SpawnAttack(a) : NormalAttack(a, dmgScale))}
       </dl>
     </section>

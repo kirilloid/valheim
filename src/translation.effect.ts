@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, createContext } from 'react';
 
 function getUserLanguage(): string {
   const lang = navigator.language;
@@ -19,7 +19,7 @@ export function preloadLanguage(userLang: string = getUserLanguage()): Promise<D
 
 export function useTranslation(): Translator {
   const [dict, setDict] = useState<Dictionary | null>(null);
-  const [lang, setLang] = useState('');
+  const [, setLang] = useState('');
   const userLang = getUserLanguage();
   preloadLanguage(userLang).then((dict) => {
     setLang(userLang);
@@ -30,3 +30,5 @@ export function useTranslation(): Translator {
     : (key: string, ...extraArgs: (string | number)[]) => (dict[key] ?? key).replace(/\{(\d+)\}/g, (_, n: string) => String(extraArgs[+n]))
   , [dict])
 }
+
+export const TranslationContext = createContext<Translator>((key: string) => key);

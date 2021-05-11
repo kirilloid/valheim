@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { DamageType, Potion as TPotion } from '../types';
 import { timeI2S } from '../model/utils';
 import { Icon } from './Icon';
 import { RecipeSection } from './Source';
-import { useTranslation } from '../translation.effect';
+import { TranslationContext } from '../translation.effect';
 
 export function Potion(item: TPotion) {
-  const translate = useTranslation();
+  const translate = useContext(TranslationContext);
   return (<>
     <h2>
       <Icon type="resource" id={item.id} />
@@ -27,11 +27,11 @@ export function Potion(item: TPotion) {
     <section>
       <header>{translate('ui.itemType.resource')}</header>
       <dl>
-        <dt>{translate('ui.weight')}</dt><dd><Icon type="icon" id="weight_icon" size={16} />{' '}{item.weight}</dd>
+        <dt>{translate('ui.weight')}</dt><dd><Icon type="icon" id="weight" size={16} />{' '}{item.weight}</dd>
         <dt>{translate('ui.stack')}</dt><dd>{item.stack}</dd>
         <dt>{translate('ui.floats')}</dt><dd>{item.floating ? '✔️' : '❌'}</dd>
       </dl>
     </section>
-    {RecipeSection(translate, item)}
+    <RecipeSection item={item} />
   </>);
 }

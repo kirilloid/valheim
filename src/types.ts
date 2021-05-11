@@ -384,6 +384,7 @@ export interface Arrow extends BaseItem {
 
 export interface Tool extends BaseItem {
   type: 'tool';
+  special: 'build' | 'garden' | 'ground' | 'fishing';
   maxLvl: number;
   durability: Pair<number>;
 }
@@ -394,6 +395,7 @@ export interface Weapon extends BaseItem {
     | 'head' | 'shoulders' | 'body' | 'legs'
     | 'none' | 'util';
   skill: SkillType;
+  special?: 'harpoon';
   toolTier?: number;
   damage: Pair<DamageProfile>;
   attacks: Attack[];
@@ -411,6 +413,7 @@ export interface Weapon extends BaseItem {
 export interface Armor extends BaseItem {
   type: 'armor';
   slot: 'head' | 'shoulders' | 'body' | 'legs' | 'util' | 'none';
+  special?: 'light' | 'strength' | 'search';
   armor: Pair<number>;
   maxLvl: number;
   durability: Pair<number>;
@@ -419,6 +422,7 @@ export interface Armor extends BaseItem {
 }
 
 export type Item = Resource | Valuable | Food | Potion | Weapon | Armor | Arrow | Tool;
+export type ItemSpecial = Weapon['special'] | Armor['special'] | Tool['special'];
 
 export enum Skill {
   Clubs,

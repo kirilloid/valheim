@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Biome, CraftingStation, EntityId, Item, Piece } from '../types';
-import type { Translator } from '../translation.effect';
+import { TranslationContext } from '../translation.effect';
 import { data } from '../model/objects';
 import { creatures } from '../model/creatures';
 import { Icon } from './Icon';
 import { timeI2S } from '../model/utils';
 import { getCraftingStationId } from '../model/building';
+import { useGlobalState } from '../globalState.effect';
 
 const source: Record<EntityId, EntityId[]> = {};
 for (const { id, drop } of creatures) {
@@ -16,26 +17,28 @@ for (const { id, drop } of creatures) {
   }
 }
 
-function dropSource(translate: Translator, id: EntityId) {
+function DropSource({ id }: { id: EntityId }) {
+  const translate = useContext(TranslationContext);
   return (<Link to={`/obj/${id}`}>
     <Icon type="creature" id={id} />
     {translate(id)}
   </Link>);    
 }
 
-function droppedBy(translate: Translator, sources: EntityId[]) {
+function DroppedBy({ sources }: { sources: EntityId[] }) {
   return (
     sources.length === 1
-    ? dropSource(translate, sources[0]!)
-    : <ul>{sources.map(id => <li>{dropSource(translate, id)}</li>)}</ul>
+    ? <DropSource id={sources[0]!} />
+    : <ul>{sources.map(id => <li><DropSource id={id} /></li>)}</ul>
   );
 }
 
-export function DropSection(translate: Translator, sources: string[] | undefined) {
+export function DropSection({ sources }: { sources: string[] | undefined }) {
+  const translate = useContext(TranslationContext);
   return sources?.length
     ? <section>
         <header>{translate('ui.droppedBy')}</header>
-        {droppedBy(translate, sources)}
+        <DroppedBy sources={sources} />
       </section>
     : null;
 }
@@ -48,31 +51,64 @@ function Station({ station }: { station: CraftingStation }) {
   </>;
 }
 
-function Materials(
-  translate: Translator,
-  materials: Record<EntityId, number>,
-  materialsUp: Record<EntityId, number> = {},
-  maxLvl: number = 1
-) {
-  return (
-    <table className="RecipeItems">
+const MaterialHeader = ({ cols }: { cols: number }) => (
+  <thead>
+    <tr key="header">
       <th key="icon"></th>
       <th key="name">level</th>
-      {Array.from({ length: maxLvl }, (_, i: number) =>
-          <th key={`lvl${i+1}`}>{i + 1}</th>)}
+      {Array.from({ length: cols }, (_, i: number) =>
+        <th key={`lvl${i+1}`}>{i + 1}</th>)}
+    </tr>
+  </thead>
+);
+
+function Materials({
+  materials, materialsUp = {}, maxLvl = 1
+}: {
+  materials: Record<EntityId, number>,
+  materialsUp?: Record<EntityId, number>,
+  maxLvl?: number
+}) {
+  const translate = useContext(TranslationContext);
+  const [aggregateSum, setAggregateSum] = useGlobalState('aggregate');
+  return (
+    <table className="RecipeItems">
+      {maxLvl === 1
+        ? null
+        : <MaterialHeader cols={maxLvl} />
+      }
+      <tbody>
       {Object.entries(materials).map(([id, num]) =>
-        <tr>
+        <tr key={id}>
           <td key="icon"><Icon type="resource" id={id} /></td>
           <td key="name"><Link to={`/obj/${id}`}>{translate(id)}</Link></td>
           {Array.from({ length: maxLvl }, (_, i: number) =>
-            <td key={`lvl${i+1}`}>{i ? (materialsUp[id] ?? 0) * i : num}</td>)}
+            <td key={`lvl${i+1}`}>{
+              aggregateSum
+                ? num + (materialsUp[id] ?? 0) * i * (i + 1) / 2
+                : (i ? (materialsUp[id] ?? 0) * i : num)
+            }</td>)}
         </tr>
       )}
+      </tbody>
+      {maxLvl === 1
+        ? null
+        : <tfoot>
+          <tr>
+            <th colSpan={maxLvl + 2} align="right">
+              <label>
+                total resources
+                <input type="checkbox" checked={aggregateSum} onChange={e => setAggregateSum(e.target.checked)} />
+              </label>
+            </th>
+          </tr>
+        </tfoot>}
     </table>
   );
 }
 
-export function Recipe(translate: Translator, item: Item | Piece) {
+export function Recipe({ item }: { item: Item | Piece}) {
+  const translate = useContext(TranslationContext);
   const { recipe } = item;
   if (recipe == null) return null;
   if ('value' in recipe) {
@@ -83,7 +119,7 @@ export function Recipe(translate: Translator, item: Item | Piece) {
   if ('number' in recipe) {
     const { station } = recipe.source;
     return <>
-      Crafted {recipe.number}x in <Station station={station} /> using: {Materials(translate, recipe.materials)}
+      Crafted {recipe.number}x in <Station station={station} /> using: <Materials materials={recipe.materials} />
     </>
   }
   if ('biomes' in recipe) {
@@ -94,27 +130,32 @@ export function Recipe(translate: Translator, item: Item | Piece) {
   if ('source' in recipe) {
     const { station, level } = recipe.source;
     return <>
-      Crafted in <Station station={station} /> lvl {level} using: {Materials(translate, recipe.materials, recipe.materialsPerLevel, (item as any).maxLvl)}
+      Crafted in <Station station={station} /> lvl {level} using:{' '}
+      <Materials
+        materials={recipe.materials}
+        materialsUp={recipe.materialsPerLevel}
+        maxLvl={(item as any).maxLvl} />
     </>
   }
   return <>
-    Crafted with <Station station={recipe.station} /> using: {Materials(translate, recipe.materials)}
+    Crafted with <Station station={recipe.station} /> using: <Materials materials={recipe.materials} />
   </>
 }
 
 
-export function RecipeSection(translate: Translator, item: Item | Piece | undefined) {
+export function RecipeSection({ item }: { item: Item | Piece | undefined }) {
+  const translate = useContext(TranslationContext);
   return item
     ? <section>
         <header>{translate('ui.recipe')}</header>
-        {Recipe(translate, item)}
+        <Recipe item={item} />
       </section>
     : null;
 }
 
-export function Source(translate: Translator, id: EntityId) {
+export function Source({ id }: { id: EntityId }) {
   return <>
-    {DropSection(translate, source[id])}
-    {RecipeSection(translate, data[id])}
+    <DropSection sources={source[id]} />
+    <RecipeSection item={data[id]} />
   </>
 }

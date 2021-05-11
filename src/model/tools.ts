@@ -4,6 +4,7 @@ export const tools: Tool[] = [
   {
     id: 'Hammer',
     type: 'tool',
+    special: 'build',
     tier: 0,
     weight: 2,
     maxLvl: 3,
@@ -19,6 +20,7 @@ export const tools: Tool[] = [
   {
     id: 'Hoe',
     type: 'tool',
+    special: 'ground',
     tier: 1,
     weight: 2,
     maxLvl: 3,
@@ -34,6 +36,7 @@ export const tools: Tool[] = [
   {
     id: 'Cultivator',
     type: 'tool',
+    special: 'garden',
     tier: 2,
     weight: 2,
     maxLvl: 3,
@@ -49,6 +52,7 @@ export const tools: Tool[] = [
   {
     id: 'FishingRod',
     type: 'tool',
+    special: 'fishing',
     tier: 2,
     weight: 1.5,
     floating: true,

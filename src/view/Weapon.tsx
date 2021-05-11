@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import { DamageProfile, DamageType, Weapon as TWeapon } from '../types';
 import { SkillType } from '../model/skills';
 import { Icon } from './Icon';
 import { RecipeSection } from './Source';
-import { durability, showPair } from './helpers';
-import { Translator, useTranslation } from '../translation.effect';
+import { durability, ItemSpecial, showPair } from './helpers';
+import { TranslationContext, useTranslation } from '../translation.effect';
 
 function skill(skill: SkillType) {
   const str = SkillType[skill];
@@ -25,8 +25,9 @@ function totalDamage(damage: DamageProfile): number {
     .reduce<number>((a, [_, b]) => a + b!, 0);
 }
 
-function ShieldStats(props: { item: TWeapon, level?: number, translate: Translator }) {
-  const { item, level, translate } = props;
+function ShieldStats(props: { item: TWeapon, level?: number }) {
+  const translate = useContext(TranslationContext);
+  const { item, level } = props;
   return <section>
     <header>{translate('ui.itemType.shield')}</header>
     <dl>
@@ -41,8 +42,9 @@ function ShieldStats(props: { item: TWeapon, level?: number, translate: Translat
   </section>;
 }
 
-function WeaponStats(props: { item: TWeapon, level?: number, translate: Translator }) {
-  const { item, level, translate } = props;
+function WeaponStats(props: { item: TWeapon, level?: number }) {
+  const translate = useContext(TranslationContext);
+  const { item, level } = props;
   const baseDmg = totalDamage(item.damage[0]);
   const lvlDmg = totalDamage(item.damage[1]);
   return <section>
@@ -57,6 +59,7 @@ function WeaponStats(props: { item: TWeapon, level?: number, translate: Translat
       <dd>{durability(item.durability, level)}{item.durabilityDrainPerSec ? ` -1 / ${item.durabilityDrainPerSec}s of usage` : ""}</dd>
       {item.moveSpeed ? <><dt title="when equipped and drawn">move speed</dt><dd>{item.moveSpeed * 100}%</dd></> : null}
       <dt>knockback</dt><dd>{item.knockback}</dd>
+      <ItemSpecial special={item.special} />
     </dl>
   </section>
 }
@@ -71,17 +74,17 @@ export function Weapon(item: TWeapon, level?: number) {
         {translate(item.id)}
       </h2>
       {item.skill === SkillType.Blocking
-        ? <ShieldStats item={item} level={level} translate={translate} />
-        : <WeaponStats item={item} level={level} translate={translate} />
+        ? <ShieldStats item={item} level={level} />
+        : <WeaponStats item={item} level={level} />
       }
       <section>
         <header>{translate('ui.itemType.resource')}</header>
         <dl>
-          <dt>{translate('ui.weight')}</dt><dd><Icon type="icon" id="weight_icon" size={16} />{' '}{item.weight}</dd>
+          <dt>{translate('ui.weight')}</dt><dd><Icon type="icon" id="weight" size={16} />{' '}{item.weight}</dd>
           <dt>{translate('ui.floats')}</dt><dd>{item.floating ? '✔️' : '❌'}</dd>
         </dl>
       </section>
-      {RecipeSection(translate, item)}
+      <RecipeSection item={item} />
     </>
   );
 }

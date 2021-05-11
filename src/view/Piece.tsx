@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { getCraftingStationId, getStructuralIntegrity } from '../model/building';
 import { assertNever, GAME_DAY, timeI2S } from '../model/utils';
-import { Translator, useTranslation } from '../translation.effect';
+import { TranslationContext } from '../translation.effect';
 
 import { ItemType, MaterialType, Piece as TPiece } from '../types';
 import { Resistances } from './helpers';
 import { Icon } from './Icon';
 import { Recipe } from './Source';
 
-function PieceSpecific(translate: Translator, item: TPiece) {
+function PieceSpecific({ item }: { item: TPiece }) {
+  const translate = useContext(TranslationContext);
   switch (item.subtype) {
     case 'fireplace': {
       const { fuel, burnTime, capacity, minHeightAbove, smoke, fireworks } = item.fireplace;
@@ -102,7 +103,7 @@ function reqList(piece: TPiece['piece']) {
 export function Piece(item: TPiece) {
   const { target, requiredSpace, size } = item.piece;
   const { hp, damageModifiers, noRoof } = item.wear;
-  const translate = useTranslation();
+  const translate = useContext(TranslationContext);
   const specialReqs = reqList(item.piece);
   return (
     <>
@@ -115,7 +116,7 @@ export function Piece(item: TPiece) {
         <header>{translate(`ui.piece`)}</header>
         <dl>
           <dt>health</dt><dd>{hp}</dd>
-          {Resistances(translate, damageModifiers)}
+          <Resistances mods={damageModifiers} />
           <dt>target</dt><dd>{translate(`ui.pieceTarget.${target}`)}</dd>
           <dt>degrade w/o roof</dt><dd>{noRoof ? '✔️' : '❌'}</dd>
           {specialReqs.length ? <><dt>specific</dt><dd>{specialReqs.join(', ')}</dd></> : null}
@@ -125,9 +126,9 @@ export function Piece(item: TPiece) {
       </section>
       <section>
         <header>{translate(`ui.pieceType.${item.subtype}`)}</header>
-        {PieceSpecific(translate, item)}
+        <PieceSpecific item={item} />
       </section>
-      {Recipe(translate, item)}
+      <Recipe item={item} />
     </>
   );
 }

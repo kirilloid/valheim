@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from '../translation.effect';
 
 import type { Armor as TArmor } from '../types';
-import { durability, showPair } from './helpers';
+import { durability, ItemSpecial, showPair } from './helpers';
 import { Icon } from './Icon';
 import { RecipeSection } from './Source';
 
@@ -25,16 +25,17 @@ export function Armor(item: TArmor, level?: number) {
           <dt title="armor loose durability 1:1 to received damage, but only for one randomly chosen piece of armor">durability</dt><dd>{durability(item.durability, level)}</dd>
           {item.moveSpeed ? <><dt title="when equipeed">move speed</dt><dd>{item.moveSpeed * 100}%</dd></> : null}
           {item.damageModifiers ? <><dt>resistance</dt><dd>{JSON.stringify(item.damageModifiers)}</dd></> : null}
+          <ItemSpecial special={item.special} />
         </dl>
       </section>
       <section>
         <header>{translate('ui.itemType.resource')}</header>
         <dl>
-          <dt>{translate('ui.weight')}</dt><dd><Icon type="icon" id="weight_icon" size={16} />{' '}{item.weight}</dd>
+          <dt>{translate('ui.weight')}</dt><dd><Icon type="icon" id="weight" size={16} />{' '}{item.weight}</dd>
           <dt>{translate('ui.floats')}</dt><dd>{item.floating ? '✔️' : '❌'}</dd>
         </dl>
       </section>
-      {RecipeSection(translate, item)}
+      <RecipeSection item={item} />
     </>
   );
 }

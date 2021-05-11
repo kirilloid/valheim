@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { groupBy } from 'lodash-es';
 
-import { DamageModifier, DamageModifiers, DamageProfile, DamageType } from '../types';
+import {
+  DamageModifier,
+  DamageModifiers,
+  DamageProfile,
+  DamageType,
+  ItemSpecial as TItemSpecial
+} from '../types';
 import { Icon } from './Icon';
-import { Translator } from '../translation.effect';
+import { TranslationContext } from '../translation.effect';
 
 export function durability(values: [number, number], level?: number): string | number {
   if (values[0] === Infinity) return 'indestructible';
@@ -75,7 +81,17 @@ function damageTypesList(list: [string, any][]): string {
   return list.map(([v]) => DamageType[v as any]).join(', ');
 } 
 
-export function Resistances(translate: Translator, mods: DamageModifiers) {
+export function ItemSpecial({ special }: { special: TItemSpecial }) {
+  const translate = useContext(TranslationContext);
+  if (special == null) return null;
+  return (<>
+    <dt>{translate(`ui.itemSpecial`)}</dt>
+    <dd>{translate(`ui.itemSpecial.${special}`)}</dd>
+  </>);
+}
+
+export function Resistances({ mods }: { mods: DamageModifiers }) {
+  const translate = useContext(TranslationContext);
   const res = groupBy(Object.entries(mods), ([, val]) => val);
   const result = [];
   for (const [key, val] of Object.entries(res)) {
@@ -83,10 +99,10 @@ export function Resistances(translate: Translator, mods: DamageModifiers) {
     ||  key === String(DamageModifier.Ignore)) {
       continue;
     }
-    result.push(<>
-      <dt>{translate(`ui.damageModifier.${DamageModifier[+key]}`)}</dt>
-      <dd>{damageTypesList(val)}</dd>
-    </>)
+    result.push(
+      <dt>{translate(`ui.damageModifier.${DamageModifier[+key]}`)}</dt>,
+      <dd>{damageTypesList(val)}</dd>,
+    );
   };
-  return result;
+  return <>{result}</>;
 }

@@ -1,13 +1,13 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { groupBy, map } from 'lodash-es';
 
-import { Attack, Biome, DamageModifier, DamageModifiers, DamageProfile, DamageType, DropEntry, Weapon } from '../types';
+import { Attack, Biome, DamageProfile, DamageType, DropEntry, Weapon } from '../types';
 
 import { creatures } from '../model/creatures';
 import { items } from '../model/weapons';
 import { damage as damageIcon } from '../model/emoji';
 import { hpBonus, getPhysicalDamage } from '../model/combat';
-import { Translator, useTranslation } from '../translation.effect';
+import { TranslationContext } from '../translation.effect';
 import { Icon } from './Icon';
 import { Resistances } from './helpers';
 
@@ -15,7 +15,8 @@ function Damage(dmg: DamageProfile) {
   return Object.entries(dmg).map(([type, val]) => `${damageIcon[type as any as DamageType]}${val}`).join(' ');
 }
 
-function DropItem(translate: Translator, drop: DropEntry, level: number) {
+function DropItem({ drop, level }: { drop: DropEntry, level: number }) {
+  const translate = useContext(TranslationContext);
   const mul = drop.scale ? 2 ** level : 1;
   const chance = `${(Math.min(drop.chance * mul, 1) * 100)}%`;
   const min = drop.min * mul;
@@ -69,7 +70,7 @@ export function Combat() {
   const [creature, onCreatureChange] = useStateInputEffect(creatures[0]!, id => creatures.find(c => c.id === id));
   const [stars, onStarsChange] = useStateInputEffect(0, Number);
   
-  const translate = useTranslation();
+  const translate = useContext(TranslationContext);
   
   const [primary, secondary] = weapon.attacks;
 
@@ -146,7 +147,7 @@ export function Combat() {
         <h3>Sturdiness</h3>
         <dl>
           <dt>hp</dt><dd>{hpBonus(creature.hp, { players, stars })}</dd>
-          {Resistances(translate, creature.damageModifiers)}
+          <Resistances mods={creature.damageModifiers} />
         </dl>
         <h3>Attacks</h3>
         <dl>
@@ -160,7 +161,7 @@ export function Combat() {
         </dl>
         <h3>Drop</h3>
         {creature.drop.length ? <dl>
-          {creature.drop.map(e => DropItem(translate, e, stars))}
+          {creature.drop.map(e => <DropItem drop={e} level={stars} />)}
         </dl> : <em>none</em>}
       </div>
     </div>
