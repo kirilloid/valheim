@@ -63,7 +63,6 @@ function WeaponStats(props: { item: TWeapon, level?: number, translate: Translat
 
 export function Weapon(item: TWeapon, level?: number) {
   const translate = useTranslation();
-  const { recipe } = item;
   return (
     <>
       <h2>
@@ -82,7 +81,7 @@ export function Weapon(item: TWeapon, level?: number) {
           <dt>{translate('ui.floats')}</dt><dd>{item.floating ? '✔️' : '❌'}</dd>
         </dl>
       </section>
-      {RecipeSection(recipe, translate)}
+      {RecipeSection(translate, item)}
     </>
   );
 }

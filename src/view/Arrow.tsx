@@ -30,7 +30,7 @@ export function Arrow(item: TArrow) {
           <dt>{translate('ui.floats')}</dt><dd>{item.floating ? '✔️' : '❌'}</dd>
         </dl>
       </section>
-      {Source(item.id, translate)}
+      {Source(translate, item.id)}
     </>
   );
 }

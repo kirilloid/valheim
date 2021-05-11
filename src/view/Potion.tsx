@@ -32,6 +32,6 @@ export function Potion(item: TPotion) {
         <dt>{translate('ui.floats')}</dt><dd>{item.floating ? '✔️' : '❌'}</dd>
       </dl>
     </section>
-    {RecipeSection(item.recipe, translate)}
+    {RecipeSection(translate, item)}
   </>);
 }

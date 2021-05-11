@@ -8,7 +8,6 @@ import { useTranslation } from '../translation.effect';
 
 export function Tool(item: TTool, level?: number) {
   const translate = useTranslation();
-  const { recipe } = item;
   return (
     <>
       <h2>
@@ -30,7 +29,7 @@ export function Tool(item: TTool, level?: number) {
         <header>{translate('ui.usedToCraft')}</header>
         ...
       </section>
-      {RecipeSection(recipe, translate)}
+      {RecipeSection(translate, item)}
     </>
   );
 }

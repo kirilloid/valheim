@@ -30,6 +30,15 @@ article *.active {
   list-style-type: none;
 }
 
+.RecipeItems {
+  width: 100%;
+  max-width: 420px;
+}
+
+.RecipeItems th {
+  text-align: unset;
+}
+
 .damage--physical { }
 .damage--fire { color: red; }
 .damage--frost { color: blue; }

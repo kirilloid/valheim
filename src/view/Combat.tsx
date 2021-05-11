@@ -15,7 +15,7 @@ function Damage(dmg: DamageProfile) {
   return Object.entries(dmg).map(([type, val]) => `${damageIcon[type as any as DamageType]}${val}`).join(' ');
 }
 
-function DropItem(drop: DropEntry, level: number, translate: Translator) {
+function DropItem(translate: Translator, drop: DropEntry, level: number) {
   const mul = drop.scale ? 2 ** level : 1;
   const chance = `${(Math.min(drop.chance * mul, 1) * 100)}%`;
   const min = drop.min * mul;
@@ -160,7 +160,7 @@ export function Combat() {
         </dl>
         <h3>Drop</h3>
         {creature.drop.length ? <dl>
-          {creature.drop.map(e => DropItem(e, stars, translate))}
+          {creature.drop.map(e => DropItem(translate, e, stars))}
         </dl> : <em>none</em>}
       </div>
     </div>

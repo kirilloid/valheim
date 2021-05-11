@@ -16,31 +16,64 @@ for (const { id, drop } of creatures) {
   }
 }
 
-function dropSource(id: EntityId, translate: Translator) {
+function dropSource(translate: Translator, id: EntityId) {
   return (<Link to={`/obj/${id}`}>
     <Icon type="creature" id={id} />
     {translate(id)}
   </Link>);    
 }
 
-function droppedBy(sources: EntityId[], translate: Translator) {
+function droppedBy(translate: Translator, sources: EntityId[]) {
   return (
     sources.length === 1
-    ? dropSource(sources[0]!, translate)
-    : <ul>{sources.map(id => <li>{dropSource(id, translate)}</li>)}</ul>
+    ? dropSource(translate, sources[0]!)
+    : <ul>{sources.map(id => <li>{dropSource(translate, id)}</li>)}</ul>
   );
 }
 
-export function DropSection(sources: string[] | undefined, translate: Translator) {
+export function DropSection(translate: Translator, sources: string[] | undefined) {
   return sources?.length
     ? <section>
         <header>{translate('ui.droppedBy')}</header>
-        {droppedBy(sources, translate)}
+        {droppedBy(translate, sources)}
       </section>
     : null;
 }
 
-export function Recipe(recipe: Item['recipe'] | Piece['recipe'], translate: Translator) {
+function Station({ station }: { station: CraftingStation }) {
+  const id = getCraftingStationId(station);
+  return <>
+    <Icon type="piece" id={id} />{' '}
+    <Link to={`/obj/${id}`}>{CraftingStation[station]}</Link>
+  </>;
+}
+
+function Materials(
+  translate: Translator,
+  materials: Record<EntityId, number>,
+  materialsUp: Record<EntityId, number> = {},
+  maxLvl: number = 1
+) {
+  return (
+    <table className="RecipeItems">
+      <th key="icon"></th>
+      <th key="name">level</th>
+      {Array.from({ length: maxLvl }, (_, i: number) =>
+          <th key={`lvl${i+1}`}>{i + 1}</th>)}
+      {Object.entries(materials).map(([id, num]) =>
+        <tr>
+          <td key="icon"><Icon type="resource" id={id} /></td>
+          <td key="name"><Link to={`/obj/${id}`}>{translate(id)}</Link></td>
+          {Array.from({ length: maxLvl }, (_, i: number) =>
+            <td key={`lvl${i+1}`}>{i ? (materialsUp[id] ?? 0) * i : num}</td>)}
+        </tr>
+      )}
+    </table>
+  );
+}
+
+export function Recipe(translate: Translator, item: Item | Piece) {
+  const { recipe } = item;
   if (recipe == null) return null;
   if ('value' in recipe) {
     return <>
@@ -50,10 +83,7 @@ export function Recipe(recipe: Item['recipe'] | Piece['recipe'], translate: Tran
   if ('number' in recipe) {
     const { station } = recipe.source;
     return <>
-      Crafted {recipe.number} in <Link to={`/obj/${getCraftingStationId(station)}`}>{CraftingStation[station]}</Link> using:
-      <ul>
-        {Object.entries(recipe.materials).map(([id, num]) => <li>{num}x <Link to={`/obj/${id}`}>{id}</Link></li>)}
-      </ul>
+      Crafted {recipe.number}x in <Station station={station} /> using: {Materials(translate, recipe.materials)}
     </>
   }
   if ('biomes' in recipe) {
@@ -64,43 +94,27 @@ export function Recipe(recipe: Item['recipe'] | Piece['recipe'], translate: Tran
   if ('source' in recipe) {
     const { station, level } = recipe.source;
     return <>
-      Crafted in <Link to={`/obj/${getCraftingStationId(station)}`}>{CraftingStation[station]}</Link> lvl{level} using:
-      <ul className="Recipe">
-        {Object.entries(recipe.materials).map(([id, num]) =>
-          <li>
-            <Icon type="resource" id={id} />
-            <Link to={`/obj/${id}`}>{translate(id)}</Link> x {num}
-          </li>
-        )}
-      </ul>
+      Crafted in <Station station={station} /> lvl {level} using: {Materials(translate, recipe.materials, recipe.materialsPerLevel, (item as any).maxLvl)}
     </>
   }
   return <>
-    Crafted with <Link to={`/obj/${getCraftingStationId(recipe.station)}`}>{CraftingStation[recipe.station]}</Link> using:
-    <ul>
-      {Object.entries(recipe.materials).map(([id, num]) =>
-        <li>
-          <Icon type="resource" id={id} />{' '}
-          <Link to={`/obj/${id}`}>{translate(id)}</Link> x {num}
-        </li>
-      )}
-    </ul>
+    Crafted with <Station station={recipe.station} /> using: {Materials(translate, recipe.materials)}
   </>
 }
 
 
-export function RecipeSection(recipe: Item['recipe'] | Piece['recipe'] | undefined, translate: Translator) {
-  return recipe
+export function RecipeSection(translate: Translator, item: Item | Piece | undefined) {
+  return item
     ? <section>
         <header>{translate('ui.recipe')}</header>
-        {Recipe(recipe, translate)}
+        {Recipe(translate, item)}
       </section>
     : null;
 }
 
-export function Source(id: EntityId, translate: Translator) {
+export function Source(translate: Translator, id: EntityId) {
   return <>
-    {DropSection(source[id], translate)}
-    {RecipeSection(data[id]?.recipe, translate)}
+    {DropSection(translate, source[id])}
+    {RecipeSection(translate, data[id])}
   </>
 }

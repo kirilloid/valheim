@@ -38,7 +38,7 @@ export function GenericItem(item: Item) {
           </section>
         : null
       }
-      {Source(item.id, translate)}
+      {Source(translate, item.id)}
     </>
   );
 }

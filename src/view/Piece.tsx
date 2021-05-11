@@ -6,7 +6,7 @@ import { Translator, useTranslation } from '../translation.effect';
 import { ItemType, MaterialType, Piece as TPiece } from '../types';
 import { Resistances } from './helpers';
 import { Icon } from './Icon';
-import { Recipe } from './Recipe';
+import { Recipe } from './Source';
 
 function PieceSpecific(translate: Translator, item: TPiece) {
   switch (item.subtype) {
@@ -127,7 +127,7 @@ export function Piece(item: TPiece) {
         <header>{translate(`ui.pieceType.${item.subtype}`)}</header>
         {PieceSpecific(translate, item)}
       </section>
-      <Recipe {...item.recipe} />
+      {Recipe(translate, item)}
     </>
   );
 }
