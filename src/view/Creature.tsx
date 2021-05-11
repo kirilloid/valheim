@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { dmgBonus, hpBonus, multiplyDamage } from '../model/combat';
 import { timeI2S } from '../model/utils';
 import { useTranslation } from '../translation.effect';
 
-import { Creature as TCreature, Faction } from '../types';
+import { AttackProfile, Creature as TCreature, Faction, NormalAttackProfile, SpawnAttackProfile } from '../types';
 import { shortCreatureDamage } from './helpers';
 import { Icon } from './Icon';
 
@@ -21,9 +22,26 @@ function faction(faction: Faction): string {
   }
 }
 
-export function Creature(creature: TCreature) {
+function NormalAttack(a: NormalAttackProfile, dmgScale: number) {
+  const dmg = multiplyDamage(a.dmg, dmgScale);
+  return <>
+    <dt key={`atk-key-${a.name}`}>attack: {a.name}</dt>
+    <dd key={`atk-val-${a.name}`}>{shortCreatureDamage(dmg)}</dd>
+  </>
+}
+
+function SpawnAttack(a: SpawnAttackProfile) {
+  return <>
+    <dt key='spawn-key'>spawn</dt>
+    <dd key='spawn-val'>{a.spawn.map(id => <Icon key='id' type="creatures" id={id} />)}</dd>
+  </>
+}
+
+export function Creature(creature: TCreature, level: number = 1) {
   const translate = useTranslation();
   const { tame, pregnancy, staggerFactor } = creature;
+  const scale = { stars: level - 1 };
+  const dmgScale = dmgBonus(1, scale);
   return (<>
     <h2>
       <Icon type="creatures" id={creature.id} />
@@ -34,13 +52,9 @@ export function Creature(creature: TCreature) {
       <header>creature</header>
       <dl>
       <dt>faction</dt><dd>{faction(creature.faction)}</dd>
-      <dt>{translate('ui.health')}</dt><dd>{creature.hp}</dd>
+      <dt>{translate('ui.health')}</dt><dd>{hpBonus(creature.hp, scale)}</dd>
       <dt>stagger</dt><dd>{creature.hp * staggerFactor}</dd>
-      {creature.attacks.map(a => (
-        'spawn' in a
-          ? <><dt key='spawn-key'>spawn</dt><dd key='spawn-val'>{a.spawn.map(id => <Icon key='id' type="creatures" id={id} />)}</dd></>
-          : <><dt key={`atk-key-${a.name}`}>attack: {a.name}</dt><dd key={`atk-val-${a.name}`}>{shortCreatureDamage(a.dmg)}</dd></>
-      ))}
+      {creature.attacks.map(a => 'spawn' in a ? SpawnAttack(a) : NormalAttack(a, dmgScale))}
       <dt>resistances</dt><dd>{JSON.stringify(creature.damageModifiers).replace(/"\d+":0,/g, '')}</dd>
       </dl>
     </section>

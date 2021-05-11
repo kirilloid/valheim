@@ -19,11 +19,11 @@ export function getPhysicalDamage(damage: DamageProfile): number {
   return blunt + pierce + slash;
 }
 
-export function hpBonus(baseHp: number, players: number, stars: number) {
+export function hpBonus(baseHp: number, { players = 1, stars = 0 }: { players?: number, stars?: number }) {
     return baseHp * (1 + (players - 1) * 0.4) * (1 + stars);
 }
 
-export function dmgBonus(baseHp: number, players: number, stars: number) {
+export function dmgBonus(baseHp: number, { players = 1, stars = 0 }: { players?: number, stars?: number }) {
     return baseHp * (1 + (players - 1) * 0.04) * (1 + stars * 0.5);
 }
 

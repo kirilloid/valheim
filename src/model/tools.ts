@@ -46,5 +46,14 @@ export const tools: Tool[] = [
       upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
-  // TODO: add FishingRod
+  {
+    id: 'FishingRod',
+    type: 'tool',
+    tier: 2,
+    weight: 1.5,
+    floating: true,
+    maxLvl: 1,
+    durability: [Infinity, 0],
+    recipe: { value: 350 }
+  },
 ];

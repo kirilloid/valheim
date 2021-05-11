@@ -161,7 +161,7 @@ export function Combat() {
         <input id="star-1" type="radio" name="stars" value="1" checked={stars === 1} onChange={onStarsChange} /><label htmlFor="star-1">1⭐</label>
         <input id="star-2" type="radio" name="stars" value="2" checked={stars === 2} onChange={onStarsChange} /><label htmlFor="star-2">2⭐</label>
         <h3>Sturd</h3>
-        hp: {hpBonus(creature.hp, players, stars)}<br/>
+        hp: {hpBonus(creature.hp, { players, stars })}<br/>
         {Resistances(creature.damageModifiers).join('\n')}
         <h3>Attacks</h3>
         <dl>

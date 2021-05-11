@@ -35,6 +35,7 @@
 .SearchItem {
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 
 .SearchItem a {

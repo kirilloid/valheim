@@ -449,6 +449,7 @@ export const items: Item[] = [
     type: 'armor', slot: 'util',
     armor: [0, 0],
     weight: 0.1,
+    floating: true,
     maxLvl: 1,
     durability: [Infinity, 0],
     moveSpeed: 0,

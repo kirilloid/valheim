@@ -11,7 +11,7 @@ function getUserLanguage(): string {
 type Dictionary<T = string> = Record<string, T>;
 const langCache: Dictionary<Promise<Dictionary>> = {};
 
-export type Translator = (key: string) => string;
+export type Translator = (key: string, ...extraArgs: (string | number)[]) => string;
 
 export function preloadLanguage(userLang: string = getUserLanguage()): Promise<Dictionary> {
   return langCache[userLang] ?? (langCache[userLang] = fetch(`/lang/${userLang}.json`).then(r => r.json()));
@@ -27,6 +27,6 @@ export function useTranslation(): Translator {
   });
   return useCallback(dict === null
     ? (key: string) => key
-    : (key: string) => dict[key] ?? key
+    : (key: string, ...extraArgs: (string | number)[]) => (dict[key] ?? key).replace(/\{(\d+)\}/g, (_, n: string) => String(extraArgs[+n]))
   , [dict])
 }

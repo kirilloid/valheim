@@ -26,6 +26,10 @@ article *.active {
   background: #bde4ff;
 }
 
+.Recipe {
+  list-style-type: none;
+}
+
 .damage--physical { }
 .damage--fire { color: red; }
 .damage--frost { color: blue; }

@@ -14,31 +14,40 @@ import { GenericItem } from './GenericItem';
 import { Tool } from './Tool';
 import { EntityId } from '../types';
 
+function parseLevel(level: string | undefined): number | undefined {
+  if (level == null) return undefined;
+  const intValue = parseInt(level);
+  if (isNaN(intValue)) return undefined;
+  return intValue;
+}
+
 export function GameObject() {
-  const { id } = useParams<{id: string}>();
-  return Item(id)
-      ?? Creature(id)
+  const params = useParams<{id?: string, level?: string}>();
+  const { id = '404' } = params; 
+  const level = parseLevel(params.level);
+  return Item(id, level)
+      ?? Creature(id, level)
       ?? <>Entity with id '{id}' not found!</>
 }
 
-function Creature(id: EntityId) {
+function Creature(id: EntityId, level?: number) {
   const creature = creatures.find(c => c.id === id);
   if (creature == null) {
     return null;
   }
-  return CreatureView(creature);
+  return CreatureView(creature, level);
 }
 
-function Item(id: string) {
+function Item(id: string, level?: number) {
   const item = data[id];
   if (item == null) {
     return null;
   }
   switch (item.type) {
     case 'armor':
-      return Armor(item);
+      return Armor(item, level);
     case 'weap':
-      return Weapon(item);
+      return Weapon(item, level);
     case 'food':
       return Food(item);
     case 'potion':
@@ -48,7 +57,7 @@ function Item(id: string) {
     case 'ammo':
       return Arrow(item);
     case 'tool':
-      return Tool(item);
+      return Tool(item, level);
     case 'item':
       return GenericItem(item);
     default:

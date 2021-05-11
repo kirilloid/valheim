@@ -2,10 +2,15 @@ import React from 'react';
 import { DamageProfile, DamageType } from '../types';
 import { Icon } from './Icon';
 
-export function durability(values: [number, number]): string {
+export function durability(values: [number, number], level?: number): string | number {
   if (values[0] === Infinity) return 'indestructible';
-  if (values[1] === 0) return String(values[0])
-  return values.join('+');
+  if (values[1] === 0) return values[0]
+  return showPair(values, level);
+}
+
+export function showPair(values: number | [number, number], level?: number): string | number {
+  if (typeof values === 'number') return values;
+  return level == null ? values.join('+') : values[0] + values[1] * (level - 1)
 }
 
 export function shortWeaponDamage(damage: DamageProfile) {

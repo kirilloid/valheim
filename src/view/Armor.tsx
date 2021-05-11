@@ -2,14 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from '../translation.effect';
 
-import type { Item } from '../types';
-import { durability } from './helpers';
+import type { Armor as TArmor } from '../types';
+import { durability, showPair } from './helpers';
 import { Icon } from './Icon';
-import { Recipe } from './Recipe';
+import { RecipeSection } from './Source';
 
-export function Armor(item: Item & { type: 'armor' }) {
+export function Armor(item: TArmor, level?: number) {
   const translate = useTranslation();
-  const { recipe } = item;
   return (
     <>
       <h2>
@@ -20,17 +19,22 @@ export function Armor(item: Item & { type: 'armor' }) {
       <section>
         <header>{translate('ui.itemType.armor')}</header>
         <dl>
-          <dt>slot</dt><dd>{item.slot}</dd>
-          <dt><Link to="/info/combat#armor">{translate('ui.armor')}</Link></dt><dd>{item.armor.join('+')}</dd>
+          <dt>{translate('ui.slot')}</dt><dd>{translate(`ui.slot.${item.slot}`)}</dd>
+          <dt><Link to="/info/combat#armor">{translate('ui.armor')}</Link></dt><dd>{showPair(item.armor, level)}</dd>
           <dt>{translate('ui.maxQuality')}</dt><dd>{item.maxLvl}</dd>
-          <dt title="armor loose durability 1:1 to received damage, but only for one randomly chosen piece of armor">durability</dt><dd>{durability(item.durability)}</dd>
+          <dt title="armor loose durability 1:1 to received damage, but only for one randomly chosen piece of armor">durability</dt><dd>{durability(item.durability, level)}</dd>
           {item.moveSpeed ? <><dt title="when equipeed">move speed</dt><dd>{item.moveSpeed * 100}%</dd></> : null}
           {item.damageModifiers ? <><dt>resistance</dt><dd>{JSON.stringify(item.damageModifiers)}</dd></> : null}
         </dl>
       </section>
-      {recipe ? (<>
-        {translate('ui.recipe')}: <Recipe {...recipe} />
-        </>) : null}
+      <section>
+        <header>{translate('ui.itemType.resource')}</header>
+        <dl>
+          <dt>{translate('ui.weight')}</dt><dd><Icon type="icon" id="weight_icon" size={16} />{' '}{item.weight}</dd>
+          <dt>{translate('ui.floats')}</dt><dd>{item.floating ? '✔️' : '❌'}</dd>
+        </dl>
+      </section>
+      {RecipeSection(item.recipe, translate)}
     </>
   );
 }

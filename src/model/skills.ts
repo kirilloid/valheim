@@ -17,6 +17,30 @@ export enum SkillType {
 }
 
 /*
+speeds: 
+run: 7.3s @ 0 = 6.8 m/s (7) runSpeed
+run: 5.7s@100 = 8.8 m/s (8.75)
+walk: 33s     = 1.5 m/s (1.6) walkSpeed
+sneak: 26s    = 1.9 m/s (2) crouchSpeed
+swim: 25s     = 2.0 m/s (2) swimSpeed
+jog: 12.9s    = 3.9 m/s (4) speed
+
+jog
+no cart: 12.9s= 3.9 m/s (4) speed
+cart 0t: 14.4s= 3.5 m/s
+cart 1t: 18.5s= 2.7 m/s
+cart 2t: 21.4s= 2.3 m/s
+cart 4t: 28.1s= 1.8 m/s
+run
+cart 0t:  9.5s= 5.3 m/s @ 0
+cart 0t:  7.1s= 7.0 m/s @ 100
+cart 1t: 10.1s= 5.0 m/s
+cart 2t: 12.1s= 4.1 m/s
+cart 4t: 13.7s= 3.6 m/s
+
+m=409, t=25.9
+m= 89, t=25.7
+
 run: stamina drain 10 - 5 * lvl / 100
 swim: stamina drain 5 - 3 * lvl / 100
 

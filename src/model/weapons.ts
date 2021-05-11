@@ -3,6 +3,49 @@ import { SkillType } from "./skills";
 
 const CRAFT_TIME = 4;
 
+const MACE_R2 = 0.8;
+const SWORD_R2 = 0.8;
+const SWORD_R4 = 0.4;
+const AXE_SWING = 1.1333; // hit on 0.610444, 0.456002 speed 1.5x, 0.751661 speed 1x, chain 0.807992
+const BOMB_THROW = 1.1666; // hit on 0.760496, 0.513261 speed 1.5x
+const BOW_AIM_RECOIL = 0.7 // attack trigger 0.166771
+const KNIFE_SLASH0 = 0.466667; // hit on 0.255619, 0.157394 speed 1.5x, 0.339596 speed 0.5x | adjusted = 0.533
+const KNIFE_SLASH1 = 0.6; // hit on 0.215733, 0.152941 speed 2x, 0.404706 speed 1x          | adjusted = 0.474
+const KNIFE_SLASH2 = 0.866667; // hit on 0.515976, 0.208235 speed 2.5x, 0.567582 speed 1x   | adjusted = 0.584
+const SPEAR_ATTACK = 0.733333;
+const SPEAR_ATTACK1 = 0.66667; // hit on 0.469711, 
+const MELEE_ATTACK_HOR = 1.9;
+const STAGGER2 = 0.733333;
+const ATGEIR_ALT = 2.166667;
+const PLAYER_STAGGER = 0.4;
+const KNIFE_ALT = 1.1; // hit on 0.80254
+const MACE_ALT = 2.133333; // hit on 1.222870
+const BAXE_ALT = 0.856667; // hit on 0.464381, 0.216470 speed 1.5x, 0.525752 speed 1x
+const BAXE_COMBO3 = 0.8; // hit on 0.529099, 0.154506 speed 0.5x, 0.212876 speed 2, 0.533906 speed 0.5
+const AXE_COMBO3 = 1.266667; // hit on 0.846402, 0.66380 speed 1.5x 1.100705 speed 0.5x, 1.128236 chain
+const BAXE1 = 2.133333; // hit on 1.392618, 1.117689 speed 2x, 1.632466 speed 1x
+const THROW_SPEAR = 1.133333; // hit on 0.738768, 0.498597 speed 1.5x, 0.797427 speed 1x
+const KICK_STEP = 1.833334; // hit on 0.593186, 0.459372 speed 2x, 0.580932 speed 1x
+
+const animations = {
+  swing_pickaxe: {
+    time: 1.25,
+    events: [
+      { time: 0.825255, speed: 1.8 },
+      { time: 1.018798, attack: true },
+      { time: 1.054852, speed: 1.1 },
+    ]
+  },
+  throw_spear: {
+    time: 1.133333,
+    events: [
+      { time: 0.498597, speed: 1.5 },
+      { time: 0.738768, attack: true },
+      { time: 0.797427, speed: 1 },
+    ]
+  }
+};
+
 export const items: Weapon[] = [
 // PRE-CRAFT AGE
   { type: 'weap', slot: 'both',
@@ -15,12 +58,14 @@ export const items: Weapon[] = [
     }, {}],
     attacks: [{
       type: 'melee',
+      animation: 'unarmed_attack',
       chain: 2,
       chainCombo: 1,
       stamina: 5,
       range: 1.5,
     }, {
       type: 'melee',
+      animation: 'unarmed_kick',
       chain: 0,
       chainCombo: 1,
       stamina: 10,
@@ -38,6 +83,7 @@ export const items: Weapon[] = [
     id: 'Club',
     tier: 0,
     weight: 2, stack: 1,
+    floating: true,
     skill: SkillType.Clubs,
     damage: [{
       [DamageType.Blunt]: 12
@@ -46,6 +92,7 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'swing_longsword',
       chain: 3,
       chainCombo: 2,
       stamina: 5,
@@ -80,6 +127,7 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'swing_axe',
       chain: 2,
       chainCombo: 2,
       stamina: 5,
@@ -110,6 +158,7 @@ export const items: Weapon[] = [
     }, {}],
     attacks: [{
       type: 'melee',
+      animation: 'swing_longsword',
       chain: 3,
       chainCombo: 2,
       stamina: 5,
@@ -117,7 +166,7 @@ export const items: Weapon[] = [
     }],
     maxLvl: 1,
     durability: [20, 0],
-    durabilityDrain: 0.0333,
+    durabilityDrainPerSec: 30,
     block: 10,
     parryForce: [10, 5],
     parryBonus: 2,
@@ -146,6 +195,7 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'swing_axe',
       chain: 3,
       chainCombo: 2,
       stamina: 8,
@@ -179,12 +229,14 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'knife_stab',
       chain: 3,
       chainCombo: 2,
       stamina: 5,
       range: 1.8,
     }, {
       type: 'melee',
+      animation: 'knife_secondary',
       chain: 0,
       chainCombo: 2,
       stamina: 40,
@@ -209,6 +261,7 @@ export const items: Weapon[] = [
     id: 'SpearFlint',
     tier: 1,
     weight: 1.5, stack: 1,
+    floating: true,
     skill: SkillType.Spears,
     damage: [{
       [DamageType.Pierce]: 20,
@@ -217,12 +270,14 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'spear_poke',
       chain: 0,
       chainCombo: 2,
       stamina: 15,
       range: 1.8,
     }, {
       type: 'proj',
+      animation: 'spear_throw',
       projVel: [2, 20],
       projAcc: [20, 1],
       stamina: 15,
@@ -247,6 +302,7 @@ export const items: Weapon[] = [
     id: 'SledgeStagbreaker',
     tier: 1,
     weight: 4, stack: 1,
+    floating: true,
     skill: SkillType.Clubs,
     damage: [
       { [DamageType.Blunt]: 20, [DamageType.Pierce]: 5 },
@@ -254,6 +310,7 @@ export const items: Weapon[] = [
     ],
     attacks: [{
       type: 'area',
+      animation: 'swing_sledge',
       chain: 0,
       chainCombo: 2,
       stamina: 25,
@@ -277,6 +334,7 @@ export const items: Weapon[] = [
     id: 'Bow',
     tier: 1,
     weight: 1.5, stack: 1,
+    floating: true,
     skill: SkillType.Bows,
     damage: [{
       [DamageType.Pierce]: 22,
@@ -285,6 +343,7 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'proj',
+      animation: 'bow_fire',
       projVel: [2, 35],
       projAcc: [20, 1],
       stamina: 0,
@@ -318,6 +377,7 @@ export const items: Weapon[] = [
     }, {}],
     attacks: [{
       type: 'melee',
+      animation: 'swing_pickaxe',
       chain: 0,
       chainCombo: 2,
       stamina: 10,
@@ -342,6 +402,7 @@ export const items: Weapon[] = [
     }, {}],
     attacks: [{
       type: 'melee',
+      animation: 'swing_pickaxe',
       chain: 0,
       chainCombo: 2,
       stamina: 10,
@@ -365,6 +426,7 @@ export const items: Weapon[] = [
     id: 'ShieldWood',
     tier: 1,
     weight: 4, stack: 1,
+    floating: true,
     skill: SkillType.Blocking,
     damage: [{}, {}],
     attacks: [],
@@ -386,6 +448,7 @@ export const items: Weapon[] = [
     id: 'ShieldWoodTower',
     tier: 1,
     weight: 4, stack: 1,
+    floating: true,
     skill: SkillType.Blocking,
     damage: [{}, {}],
     attacks: [],
@@ -418,12 +481,14 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'knife_stab',
       chain: 3,
       chainCombo: 2,
       stamina: 5,
       range: 1.8,
     }, {
       type: 'melee',
+      animation: 'knife_secondary',
       chain: 0,
       chainCombo: 2,
       stamina: 40,
@@ -456,12 +521,14 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'atgeir_attack',
       chain: 3,
       chainCombo: 2,
       stamina: 20,
       range: 3.2,
     }, {
       type: 'melee',
+      animation: 'atgeir_secondary',
       chain: 0,
       chainCombo: 2,
       stamina: 35,
@@ -497,6 +564,7 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'swing_axe',
       chain: 3,
       chainCombo: 2,
       stamina: 10,
@@ -520,6 +588,7 @@ export const items: Weapon[] = [
     id: 'MaceBronze',
     tier: 2,
     weight: 2, stack: 1,
+    floating: true,
     skill: SkillType.Clubs,
     damage: [{
       [DamageType.Blunt]: 35,
@@ -528,12 +597,14 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'swing_longsword',
       chain: 3,
       chainCombo: 2,
       stamina: 15,
       range: 2.4,
     }, {
       type: 'melee',
+      animation: 'mace_secondary',
       chain: 0,
       chainCombo: 2,
       stamina: 30,
@@ -558,6 +629,7 @@ export const items: Weapon[] = [
     id: 'SpearBronze',
     tier: 2,
     weight: 1.5, stack: 1,
+    floating: true,
     skill: SkillType.Spears,
     damage: [{
       [DamageType.Pierce]: 35,
@@ -566,12 +638,14 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'spear_poke',
       chain: 0,
       chainCombo: 2,
       stamina: 15,
       range: 1.8,
     }, {
       type: 'proj',
+      animation: 'spear_throw',
       projVel: [2, 20],
       projAcc: [20, 1],
       stamina: 15,
@@ -604,12 +678,14 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'swing_longsword',
       chain: 3,
       chainCombo: 2,
       stamina: 10,
       range: 2.4,
     }, {
       type: 'melee',
+      animation: 'sword_secondary',
       chain: 0,
       chainCombo: 2,
       stamina: 30,
@@ -645,6 +721,7 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'swing_pickaxe',
       chain: 0,
       chainCombo: 2,
       stamina: 10,
@@ -668,6 +745,7 @@ export const items: Weapon[] = [
     id: 'BowFineWood',
     tier: 2,
     weight: 1.5, stack: 1,
+    floating: true,
     skill: SkillType.Bows,
     damage: [{
       [DamageType.Pierce]: 32,
@@ -676,6 +754,7 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'proj',
+      animation: 'bow_fire',
       projVel: [2, 50],
       projAcc: [20, 1],
       stamina: 0,
@@ -734,12 +813,14 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'battleaxe_attack',
       chain: 3,
       chainCombo: 2,
       stamina: 25,
       range: 2.5,
     }, {
       type: 'melee',
+      animation: 'battleaxe_secondary',
       chain: 0,
       chainCombo: 2,
       stamina: 15,
@@ -773,12 +854,14 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'swing_longsword',
       chain: 3,
       chainCombo: 2,
       stamina: 10,
       range: 2.4,
     }, {
       type: 'melee',
+      animation: 'sword_secondary',
       chain: 0,
       chainCombo: 2,
       stamina: 30,
@@ -814,6 +897,7 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'swing_axe',
       chain: 3,
       chainCombo: 2,
       stamina: 10,
@@ -845,6 +929,7 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'area',
+      animation: 'swing_sledge',
       chain: 0,
       chainCombo: 2,
       stamina: 25,
@@ -859,8 +944,8 @@ export const items: Weapon[] = [
     knockback: 200, backstab: 2, moveSpeed: -0.2,
     recipe: {
       time: CRAFT_TIME,
-      materials: { AncientBark: 10, Iron: 30, YmirFlesh: 4, DraugrEliteTrophy: 1 },
-      materialsPerLevel: { AncientBark: 2, Iron: 15, YmirFlesh: 2 },
+      materials: { AncientBark: 10, Iron: 30, YmirRemains: 4, DraugrEliteTrophy: 1 },
+      materialsPerLevel: { AncientBark: 2, Iron: 15, YmirRemains: 2 },
       source: { station: CraftingStation.Forge, level: 2 },
       upgrade: { station: CraftingStation.Forge, level: 3 },
     },
@@ -869,6 +954,7 @@ export const items: Weapon[] = [
     id: 'MaceIron',
     tier: 3,
     weight: 2, stack: 1,
+    floating: true,
     skill: SkillType.Clubs,
     damage: [{
       [DamageType.Blunt]: 55,
@@ -877,12 +963,14 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'swing_longsword',
       chain: 3,
       chainCombo: 2,
       stamina: 15,
       range: 2.4,
     }, {
       type: 'melee',
+      animation: 'mace_secondary',
       chain: 0,
       chainCombo: 2,
       stamina: 30,
@@ -907,6 +995,7 @@ export const items: Weapon[] = [
     id: 'SpearElderbark',
     tier: 3,
     weight: 1.5, stack: 1,
+    floating: true,
     skill: SkillType.Spears,
     damage: [{
       [DamageType.Pierce]: 55,
@@ -915,12 +1004,14 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'spear_poke',
       chain: 0,
       chainCombo: 2,
       stamina: 15,
       range: 1.8,
     }, {
       type: 'proj',
+      animation: 'spear_throw',
       projVel: [2, 20],
       projAcc: [20, 1],
       stamina: 15,
@@ -956,6 +1047,7 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'swing_pickaxe',
       chain: 0,
       chainCombo: 2,
       stamina: 10,
@@ -987,12 +1079,14 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'atgeir_attack',
       chain: 3,
       chainCombo: 2,
       stamina: 20,
       range: 3.2,
     }, {
       type: 'melee',
+      animation: 'atgeir_secondary',
       chain: 0,
       chainCombo: 2,
       stamina: 35,
@@ -1017,6 +1111,7 @@ export const items: Weapon[] = [
     id: 'BowHuntsman',
     tier: 3,
     weight: 1.5, stack: 1,
+    floating: true,
     skill: SkillType.Bows,
     damage: [{
       [DamageType.Pierce]: 42,
@@ -1025,6 +1120,7 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'proj',
+      animation: 'bow_fire',
       projVel: [2, 50],
       projAcc: [20, 0],
       stamina: 0,
@@ -1050,6 +1146,7 @@ export const items: Weapon[] = [
     id: 'ShieldBanded',
     tier: 3,
     weight: 5, stack: 1,
+    floating: true,
     skill: SkillType.Blocking,
     damage: [
       { [DamageType.Blunt]: 10 },
@@ -1072,6 +1169,7 @@ export const items: Weapon[] = [
   },
   { type: 'weap', slot: 'secondary',
     id: 'ShieldIronTower',
+    floating: true,
     tier: 3,
     weight: 4, stack: 1,
     skill: SkillType.Blocking,
@@ -1106,12 +1204,14 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'swing_longsword',
       chain: 3,
       chainCombo: 2,
       stamina: 10,
       range: 2.4,
     }, {
       type: 'melee',
+      animation: 'sword_secondary',
       chain: 0,
       chainCombo: 2,
       stamina: 30,
@@ -1136,6 +1236,7 @@ export const items: Weapon[] = [
     id: 'SpearWolfFang',
     tier: 4,
     weight: 1.5, stack: 1,
+    floating: true,
     skill: SkillType.Spears,
     damage: [{
       [DamageType.Pierce]: 70,
@@ -1144,12 +1245,14 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'spear_poke',
       chain: 0,
       chainCombo: 2,
       stamina: 15,
       range: 1.8,
     }, {
       type: 'proj',
+      animation: 'spear_throw',
       projVel: [2, 20],
       projAcc: [20, 1],
       stamina: 15,
@@ -1184,12 +1287,14 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'swing_longsword',
       chain: 3,
       stamina: 20,
       range: 2.4,
       chainCombo: 2,
     }, {
       type: 'melee',
+      animation: 'mace_secondary',
       chain: 0,
       stamina: 30,
       range: 2.5,
@@ -1204,17 +1309,18 @@ export const items: Weapon[] = [
     knockback: 120, backstab: 3, moveSpeed: -0.05,
     recipe: {
       time: CRAFT_TIME,
-      materials: { AncientBark: 10, Silver: 30, YmirFlesh: 5, FreezeGland: 5 },
+      materials: { AncientBark: 10, Silver: 30, YmirRemains: 5, FreezeGland: 5 },
       materialsPerLevel: { Silver: 15 },
       source: { station: CraftingStation.Forge, level: 3 },
       upgrade: { station: CraftingStation.Forge, level: 4 },
     }
   },
-  // TODO: SpearChitin
+  // TODO: SpearChitin, floating: true
   { type: 'weap', slot: 'primary',
     id: 'KnifeChitin',
     tier: 4,
     weight: 0.3, stack: 1,
+    floating: true,
     skill: SkillType.Knives,
     damage: [{
       [DamageType.Slash]: 12,
@@ -1225,12 +1331,14 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'knife_stab',
       chain: 3,
       chainCombo: 2,
       stamina: 5,
       range: 1.8,
     }, {
       type: 'melee',
+      animation: 'knife_secondary',
       chain: 0,
       chainCombo: 2,
       stamina: 40,
@@ -1255,6 +1363,7 @@ export const items: Weapon[] = [
     id: 'BowDraugrFang',
     tier: 4,
     weight: 1.5, stack: 1,
+    floating: true,
     skill: SkillType.Bows,
     damage: [{
       [DamageType.Pierce]: 47,
@@ -1265,6 +1374,7 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'proj',
+      animation: 'bow_fire',
       projVel: [2, 60],
       projAcc: [20, 0],
       stamina: 0,
@@ -1290,6 +1400,7 @@ export const items: Weapon[] = [
     id: 'ShieldSilver',
     tier: 4,
     weight: 5, stack: 1,
+    floating: true,
     skill: SkillType.Blocking,
     damage: [{
       [DamageType.Blunt]: 10,
@@ -1313,6 +1424,7 @@ export const items: Weapon[] = [
     id: 'ShieldSerpentscale',
     tier: 4,
     weight: 5, stack: 1,
+    floating: true,
     skill: SkillType.Blocking,
     damage: [{
       [DamageType.Blunt]: 10,
@@ -1346,12 +1458,14 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'atgeir_attack',
       chain: 3,
       chainCombo: 2,
       stamina: 20,
       range: 3.2,
     }, {
       type: 'melee',
+      animation: 'atgeir_secondary',
       chain: 0,
       chainCombo: 2,
       stamina: 35,
@@ -1387,6 +1501,7 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'swing_axe',
       chain: 3,
       chainCombo: 2,
       stamina: 10,
@@ -1420,12 +1535,14 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'knife_stab',
       chain: 3,
       chainCombo: 2,
       stamina: 5,
       range: 1.8,
     }, {
       type: 'melee',
+      animation: 'knife_secondary',
       chain: 0,
       chainCombo: 2,
       stamina: 40,
@@ -1458,12 +1575,14 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'swing_longsword',
       chain: 3,
       chainCombo: 2,
       stamina: 10,
       range: 2.4,
     }, {
       type: 'melee',
+      animation: 'sword_secondary',
       chain: 0,
       chainCombo: 2,
       stamina: 30,
@@ -1488,6 +1607,7 @@ export const items: Weapon[] = [
     id: 'MaceNeedle',
     tier: 5,
     weight: 2, stack: 1,
+    floating: true,
     skill: SkillType.Clubs,
     damage: [{
       [DamageType.Blunt]: 50,
@@ -1497,12 +1617,14 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'swing_longsword',
       chain: 3,
       chainCombo: 2,
       stamina: 15,
       range: 2.4,
     }, {
       type: 'melee',
+      animation: 'mace_secondary',
       chain: 0,
       chainCombo: 2,
       stamina: 30,
@@ -1527,6 +1649,7 @@ export const items: Weapon[] = [
     id: 'ShieldBlackmetal',
     tier: 5,
     weight: 5, stack: 1,
+    floating: true,
     skill: SkillType.Blocking,
     damage: [{
       [DamageType.Blunt]: 10,
@@ -1550,6 +1673,7 @@ export const items: Weapon[] = [
     id: 'ShieldBlackmetalTower',
     tier: 5,
     weight: 5, stack: 1,
+    floating: true,
     skill: SkillType.Blocking,
     damage: [{
       [DamageType.Blunt]: 10,
@@ -1586,12 +1710,14 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'swing_longsword',
       chain: 3,
       chainCombo: 2,
       stamina: 10,
       range: 2.4,
     }, {
       type: 'melee',
+      animation: 'sword_secondary',
       chain: 0,
       chainCombo: 0,
       stamina: 30,
@@ -1622,6 +1748,7 @@ export const items: Weapon[] = [
     }, {}],
     attacks: [{
       type: 'proj',
+      animation: 'throw_bomb',
       projVel: [2, 20],
       projAcc: [20, 5],
       stamina: 15,
@@ -1644,6 +1771,7 @@ export const items: Weapon[] = [
     id: 'ShieldKnight',
     tier: -1,
     weight: 4, stack: 1,
+    floating: true,
     skill: SkillType.Blocking,
     damage: [{}, {}],
     attacks: [],
@@ -1658,6 +1786,7 @@ export const items: Weapon[] = [
     id: 'ShieldIronSquare',
     tier: -1,
     weight: 4, stack: 1,
+    floating: true,
     skill: SkillType.Blocking,
     damage: [{}, {}],
     attacks: [],
@@ -1682,12 +1811,14 @@ export const items: Weapon[] = [
     }],
     attacks: [{
       type: 'melee',
+      animation: 'swing_longsword',
       chain: 3,
       chainCombo: 2,
       stamina: 10,
       range: 2.4,
     }, {
       type: 'melee',
+      animation: 'sword_secondary',
       chain: 0,
       chainCombo: 0,
       stamina: 30,

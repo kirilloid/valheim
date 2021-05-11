@@ -79,16 +79,18 @@ export type Effect = {
 };
 
 export type DamageProfile = Partial<Record<DamageType, number>>;
-export type AttackProfile = {
+export type NormalAttackProfile = {
   dmg: DamageProfile;
   name: string;
   // knockback
   force?: number;
-} | {
+}
+export type SpawnAttackProfile = {
   spawn: EntityId[];
   number: number;
   max: number;
-};
+}
+export type AttackProfile = NormalAttackProfile | SpawnAttackProfile;
 
 export interface DropEntry {
   item: EntityId;
@@ -244,6 +246,7 @@ interface BaseItem {
   tier: number;
   weight: number;
   stack?: number;
+  floating?: true;
   teleportable?: false;
   recipe?: {
     time: number;
@@ -258,10 +261,14 @@ interface BaseItem {
     number: number;
   } | {
     value: number;
+    number?: number;
   } | {
     biomes: Biome[];
-    respawn: number;
     abundance: number;
+    num: Pair<number>;
+    group: Pair<number>;
+    inForest?: Pair<number>;
+    respawn: number;
   };
 }
 
@@ -325,6 +332,7 @@ export interface Potion extends BaseItem {
 type Pair<T> = [T, T];
 
 interface BaseAttack {
+  animation: string;
   stamina: number;
   mul?: { damage: number, force: number, stagger: number, };
   range: number;
@@ -373,10 +381,10 @@ export interface Weapon extends BaseItem {
   backstab: number;
   moveSpeed: number;
   durability: Pair<number>;
-  durabilityDrain?: number;
+  durabilityDrainPerSec?: number;
 }
 
-interface Armor extends BaseItem {
+export interface Armor extends BaseItem {
   type: 'armor';
   slot: 'head' | 'shoulders' | 'body' | 'legs' | 'util' | 'none';
   armor: Pair<number>;

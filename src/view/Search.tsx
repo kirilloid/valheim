@@ -53,6 +53,11 @@ function renderItem(id: EntityId, text: string, onClick: React.MouseEventHandler
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         {item.summon ? <Icon type="creatures" id={item.summon} size={32} /> : null}
       </div>
+    case 'tool':
+      return <div className="SearchItem">
+        <Icon type="weapon" id={id} size={32} />
+        <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
+      </div>
     case 'weap':
       return <div className="SearchItem">
         <Icon type="weapon" id={id} size={32} />
