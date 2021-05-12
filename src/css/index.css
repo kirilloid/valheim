@@ -43,5 +43,5 @@ article *.active {
 .damage--fire { color: red; }
 .damage--frost { color: blue; }
 .damage--poison { color: #0c0; }
-.damage--lightning { color: lightcyan; }
+.damage--lightning { color: cyan; }
 .damage--spirit { color: lightslategray; }

@@ -61,7 +61,13 @@ export function Creature(creature: TCreature, level: number = 1) {
     <section>
       <header>drops</header>
       <ul>
-        {creature.drop.map(de => <li key={de.item}><Link to={`/obj/${de.item}`}>{translate(de.item)}</Link> {de.min}–{de.max} {de.chance * 100}%</li>)}
+        {creature.drop.map(de => <li key={de.item}>
+          <Icon type="resource" id={de.item} />
+          <Link to={`/obj/${de.item}`}>
+            {translate(de.item)}
+          </Link>{' '}
+          {de.min === de.max ? de.min : `${de.min}–${de.max}`} {de.chance * 100}%
+        </li>)}
       </ul>
     </section>
     {tame != null ? <section>

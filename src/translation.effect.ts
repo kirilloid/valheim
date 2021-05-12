@@ -2,9 +2,7 @@ import { useCallback, useState, createContext } from 'react';
 
 function getUserLanguage(): string {
   const lang = navigator.language;
-  if (lang === 'ru' || lang === 'uk') {
-    return 'ru';
-  }
+  if (lang === 'ru' || lang === 'uk') return 'ru';
   return 'en';  
 }
 

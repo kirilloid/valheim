@@ -24,18 +24,6 @@ export function showPair(values: number | [number, number], level?: number): str
 
 export function shortWeaponDamage(damage: DamageProfile) {
   // tools
-  if (damage[DamageType.Pickaxe]) {
-    return <>
-      <Icon type="skills" id="Pickaxes" size={16} />
-      {damage[DamageType.Pickaxe]}
-    </>
-  }
-  if (damage[DamageType.Chop]) {
-    return <>
-      <Icon type="skills" id="Woodcutting" size={16} />
-      {damage[DamageType.Chop]}
-    </>
-  }
   // physical
   const physical = (damage[DamageType.Slash] ?? 0)
                 + (damage[DamageType.Pierce] ?? 0)
@@ -49,10 +37,23 @@ export function shortWeaponDamage(damage: DamageProfile) {
     [DamageType.Spirit]: spirit,
   } = damage;
   const obj = { physical, fire, frost, poison, lightning, spirit };
-  return Object.entries(obj)
+  const result = Object.entries(obj)
     .filter(kv => kv[1])
     .map(kv => <span className={`damage--${kv[0]}`}>{kv[1]}</span>)
     .flatMap((item, i) => i ? ['+', item] : [item]);
+  if (damage[DamageType.Pickaxe]) {
+    result.push(
+      <Icon type="skills" id="Pickaxes" size={16} />,
+      String(damage[DamageType.Pickaxe]),
+    );
+  }
+  if (damage[DamageType.Chop]) {
+    result.push(
+      <Icon type="skills" id="Woodcutting" size={16} />,
+      String(damage[DamageType.Chop]),
+    );
+  }
+  return result;
 }
 
 export const weaponDamage = shortWeaponDamage;

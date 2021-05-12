@@ -203,7 +203,8 @@ export const resources: Item[] = [
               source: { station: CraftingStation.Smelter }, number: 1 } },
   { type: 'item', id: 'Obsidian', tier: 4, weight: 2, stack: 50 },
   { type: 'item', id: 'Crystal', emoji: '💎', tier: 4, weight: 8, stack: 50 },
-  { type: 'item', id: 'DragonEgg', emoji: '🥚', tier: 4, weight: 200, stack: 1, floating: true, teleportable: false,
+  { type: 'item', id: 'DragonEgg', emoji: '🥚', tier: 4, weight: 200, stack: 1,
+    floating: true, teleportable: false, summon: 'DragonQueen',
     recipe: { biomes: [Biome.Mountain], abundance: 1, num: [1, 1], group: [1, 1], respawn: 6 * HOUR } },
   { type: 'item', id: 'TrophyWolf', tier: 4, weight: 1.5, stack: 20 },
   { type: 'item', id: 'TrophyFenring', tier: 4, weight: 2, stack: 20 },
@@ -267,6 +268,7 @@ export const resources: Item[] = [
   { type: 'item', id: 'TrophyDeathsquito', tier: 5, weight: 0.5, stack: 20 },
   { type: 'item', id: 'TrophyGoblin', tier: 5, weight: 2, stack: 20 },
   { type: 'item', id: 'TrophyGoblinBrute', tier: 5, weight: 2, stack: 20 },
+  { type: 'item', id: 'TrophyGoblinShaman', tier: 5, weight: 0.5, stack: 20 },
   { type: 'item', id: 'TrophyGoblinKing', tier: 5, weight: 1, stack: 20, floating: true, power: 'GoblinKing' },
   { type: 'item', id: 'Yagluththing', tier: 5, weight: 0.1, stack: 1, floating: true },
 // FLAME

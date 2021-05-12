@@ -7,7 +7,7 @@ import { DamageType, EntityId, ItemSpecial, Piece } from '../types';
 import { match } from '../model/search';
 import { Icon } from './Icon';
 import { data } from '../model/objects';
-import { TranslationContext, useTranslation } from '../translation.effect';
+import { TranslationContext } from '../translation.effect';
 import { assertNever } from '../model/utils';
 import { creatures } from '../model/creatures';
 import { SkillType } from '../model/skills';
@@ -70,7 +70,7 @@ function showSpecialIcon(special: ItemSpecial) {
     case 'build': return null;
     case 'garden': return <Icon type="piece" id="replant" size={32} />;
     case 'ground': return <Icon type="piece" id="raise" size={32} />;
-    case 'fishing': return <Icon type="resource" id="FisingBait" size={32} />;
+    case 'fishing': return <Icon type="resource" id="FishingBait" size={32} />;
     default: return assertNever(special);
   }
 }
