@@ -48,7 +48,7 @@ const animations = {
 
 export const items: Weapon[] = [
 // PRE-CRAFT AGE
-  { type: 'weap', slot: 'both',
+  { type: 'weapon', slot: 'both',
     id: 'Hands',
     tier: 0,
     weight: 0, stack: 0,
@@ -79,7 +79,7 @@ export const items: Weapon[] = [
     parryBonus: 1.5,
     knockback: 40, backstab: 4, moveSpeed: 0,
   },
-  { type: 'weap', slot: 'primary',
+  { type: 'weapon', slot: 'primary',
     id: 'Club',
     tier: 0,
     weight: 2, stack: 1,
@@ -112,7 +112,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Workbench, level: 1 },
     }
   },
-  { type: 'weap', slot: 'primary',
+  { type: 'weapon', slot: 'primary',
     id: 'AxeStone',
     tier: 0,
     toolTier: 0,
@@ -147,7 +147,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Workbench, level: 1 },
     }
   },
-  { type: 'weap', slot: 'either',
+  { type: 'weapon', slot: 'either',
     id: 'Torch',
     tier: 0,
     weight: 1, stack: 1,
@@ -180,7 +180,7 @@ export const items: Weapon[] = [
     }
   },
 // STONE AGE
-  { type: 'weap', slot: 'primary',
+  { type: 'weapon', slot: 'primary',
     id: 'AxeFlint',
     tier: 1,
     toolTier: 1,
@@ -215,7 +215,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Workbench, level: 2 },
     }
   },
-  { type: 'weap', slot: 'primary',
+  { type: 'weapon', slot: 'primary',
     id: 'KnifeFlint',
     tier: 1,
     weight: 0.3, stack: 1,
@@ -257,7 +257,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Workbench, level: 2 },
     }
   },
-  { type: 'weap', slot: 'primary',
+  { type: 'weapon', slot: 'primary',
     id: 'SpearFlint',
     tier: 1,
     weight: 1.5, stack: 1,
@@ -298,7 +298,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Workbench, level: 2 },
     }
   },
-  { type: 'weap', slot: 'both',
+  { type: 'weapon', slot: 'both',
     id: 'SledgeStagbreaker',
     tier: 1,
     weight: 4, stack: 1,
@@ -330,7 +330,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Workbench, level: 3 },
     }
   },
-  { type: 'weap', slot: 'bow',
+  { type: 'weapon', slot: 'bow',
     id: 'Bow',
     tier: 1,
     weight: 1.5, stack: 1,
@@ -365,7 +365,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Workbench, level: 2 },
     }
   },
-  { type: 'weap', slot: 'both',
+  { type: 'weapon', slot: 'both',
     id: 'PickaxeStone',
     tier: -1,
     toolTier: 0,
@@ -390,7 +390,7 @@ export const items: Weapon[] = [
     parryBonus: 2,
     knockback: 50, backstab: 3, moveSpeed: -0.05,
   },
-  { type: 'weap', slot: 'both',
+  { type: 'weapon', slot: 'both',
     id: 'PickaxeAntler',
     tier: 2,
     toolTier: 0,
@@ -422,7 +422,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Workbench, level: 0 },
     }
   },
-  { type: 'weap', slot: 'secondary',
+  { type: 'weapon', slot: 'secondary',
     id: 'ShieldWood',
     tier: 1,
     weight: 4, stack: 1,
@@ -444,7 +444,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Workbench, level: 2 },
     }
   },
-  { type: 'weap', slot: 'secondary',
+  { type: 'weapon', slot: 'secondary',
     id: 'ShieldWoodTower',
     tier: 1,
     weight: 4, stack: 1,
@@ -467,7 +467,7 @@ export const items: Weapon[] = [
     }
   },
 // BRONZE AGE
-  { type: 'weap', slot: 'primary',
+  { type: 'weapon', slot: 'primary',
     id: 'KnifeCopper',
     tier: 2,
     weight: 0.3, stack: 1,
@@ -509,7 +509,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
-  { type: 'weap', slot: 'primary',
+  { type: 'weapon', slot: 'primary',
     id: 'AtgeirBronze',
     tier: 2,
     weight: 2.5, stack: 1,
@@ -549,7 +549,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
-  { type: 'weap', slot: 'primary',
+  { type: 'weapon', slot: 'primary',
     id: 'AxeBronze',
     tier: 2,
     toolTier: 2,
@@ -584,7 +584,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
-  { type: 'weap', slot: 'primary',
+  { type: 'weapon', slot: 'primary',
     id: 'MaceBronze',
     tier: 2,
     weight: 2, stack: 1,
@@ -625,7 +625,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
-  { type: 'weap', slot: 'primary',
+  { type: 'weapon', slot: 'primary',
     id: 'SpearBronze',
     tier: 2,
     weight: 1.5, stack: 1,
@@ -666,7 +666,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
-  { type: 'weap', slot: 'primary',
+  { type: 'weapon', slot: 'primary',
     id: 'SwordBronze',
     tier: 2,
     weight: 0.8, stack: 1,
@@ -706,7 +706,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
-  { type: 'weap', slot: 'both',
+  { type: 'weapon', slot: 'both',
     id: 'PickaxeBronze',
     tier: 2,
     toolTier: 1,
@@ -741,7 +741,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
-  { type: 'weap', slot: 'bow',
+  { type: 'weapon', slot: 'bow',
     id: 'BowFineWood',
     tier: 2,
     weight: 1.5, stack: 1,
@@ -776,7 +776,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Workbench, level: 2 },
     }
   },
-  { type: 'weap', slot: 'secondary',
+  { type: 'weapon', slot: 'secondary',
     id: 'ShieldBronzeBuckler',
     tier: 2,
     weight: 3, stack: 1,
@@ -798,7 +798,7 @@ export const items: Weapon[] = [
     }
   },
 // IRON AGE
-  { type: 'weap', slot: 'both',
+  { type: 'weapon', slot: 'both',
     id: 'Battleaxe',
     tier: 3,
     toolTier: 3,
@@ -841,7 +841,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 3 },
     }
   },
-  { type: 'weap', slot: 'primary',
+  { type: 'weapon', slot: 'primary',
     id: 'SwordIron',
     tier: 3,
     toolTier: 0,
@@ -882,7 +882,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 3 },
     },
   },
-  { type: 'weap', slot: 'primary',
+  { type: 'weapon', slot: 'primary',
     id: 'AxeIron',
     tier: 3,
     toolTier: 3,
@@ -917,7 +917,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 3 },
     },
   },
-  { type: 'weap', slot: 'both',
+  { type: 'weapon', slot: 'both',
     id: 'SledgeIron',
     tier: 3,
     weight: 4, stack: 1,
@@ -950,7 +950,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 3 },
     },
   },
-  { type: 'weap', slot: 'primary',
+  { type: 'weapon', slot: 'primary',
     id: 'MaceIron',
     tier: 3,
     weight: 2, stack: 1,
@@ -991,7 +991,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 3 },
     },
   },
-  { type: 'weap', slot: 'primary',
+  { type: 'weapon', slot: 'primary',
     id: 'SpearElderbark',
     tier: 3,
     weight: 1.5, stack: 1,
@@ -1032,7 +1032,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 4 },
     }
   },
-  { type: 'weap', slot: 'both',
+  { type: 'weapon', slot: 'both',
     id: 'PickaxeIron',
     tier: 3,
     toolTier: 2,
@@ -1067,7 +1067,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 3 },
     },
   },
-  { type: 'weap', slot: 'both',
+  { type: 'weapon', slot: 'both',
     id: 'AtgeirIron',
     tier: 3,
     weight: 2.5, stack: 1,
@@ -1107,7 +1107,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 3 },
     },
   },
-  { type: 'weap', slot: 'bow',
+  { type: 'weapon', slot: 'bow',
     id: 'BowHuntsman',
     tier: 3,
     weight: 1.5, stack: 1,
@@ -1142,7 +1142,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
-  { type: 'weap', slot: 'secondary',
+  { type: 'weapon', slot: 'secondary',
     id: 'ShieldBanded',
     tier: 3,
     weight: 5, stack: 1,
@@ -1167,7 +1167,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 3 },
     }
   },
-  { type: 'weap', slot: 'secondary',
+  { type: 'weapon', slot: 'secondary',
     id: 'ShieldIronTower',
     floating: true,
     tier: 3,
@@ -1190,7 +1190,7 @@ export const items: Weapon[] = [
     }
   },
 // SILVER AGE
-  { type: 'weap', slot: 'primary',
+  { type: 'weapon', slot: 'primary',
     id: 'SwordSilver',
     tier: 4,
     weight: 1, stack: 1,
@@ -1232,7 +1232,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 4 },
     }
   },
-  { type: 'weap', slot: 'primary',
+  { type: 'weapon', slot: 'primary',
     id: 'SpearWolfFang',
     tier: 4,
     weight: 1.5, stack: 1,
@@ -1273,7 +1273,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 4 },
     }
   },
-  { type: 'weap', slot: 'primary',
+  { type: 'weapon', slot: 'primary',
     id: 'MaceSilver',
     tier: 4,
     weight: 2, stack: 1,
@@ -1316,7 +1316,7 @@ export const items: Weapon[] = [
     }
   },
   // TODO: SpearChitin, floating: true
-  { type: 'weap', slot: 'primary',
+  { type: 'weapon', slot: 'primary',
     id: 'KnifeChitin',
     tier: 4,
     weight: 0.3, stack: 1,
@@ -1359,7 +1359,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 3 },
     }
   },
-  { type: 'weap', slot: 'bow',
+  { type: 'weapon', slot: 'bow',
     id: 'BowDraugrFang',
     tier: 4,
     weight: 1.5, stack: 1,
@@ -1396,7 +1396,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 3 },
     }
   },
-  { type: 'weap', slot: 'secondary',
+  { type: 'weapon', slot: 'secondary',
     id: 'ShieldSilver',
     tier: 4,
     weight: 5, stack: 1,
@@ -1420,7 +1420,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 4 },
     }
   },
-  { type: 'weap', slot: 'secondary',
+  { type: 'weapon', slot: 'secondary',
     id: 'ShieldSerpentscale',
     tier: 4,
     weight: 5, stack: 1,
@@ -1446,7 +1446,7 @@ export const items: Weapon[] = [
     }
   },
 // BLACK AGE
-  { type: 'weap', slot: 'both',
+  { type: 'weapon', slot: 'both',
     id: 'AtgeirBlackmetal',
     tier: 5,
     weight: 2.5, stack: 1,
@@ -1486,7 +1486,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 5 },
     },
   },
-  { type: 'weap', slot: 'primary',
+  { type: 'weapon', slot: 'primary',
     id: 'AxeBlackMetal',
     tier: 5,
     toolTier: 4,
@@ -1521,7 +1521,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 5 },
     },
   },
-  { type: 'weap', slot: 'primary',
+  { type: 'weapon', slot: 'primary',
     id: 'KnifeBlackMetal',
     tier: 5,
     weight: 0.3, stack: 1,
@@ -1563,7 +1563,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 5 },
     },
   },
-  { type: 'weap', slot: 'primary',
+  { type: 'weapon', slot: 'primary',
     id: 'SwordBlackmetal',
     tier: 5,
     weight: 0.8, stack: 1,
@@ -1603,7 +1603,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 5 },
     },
   },
-  { type: 'weap', slot: 'primary',
+  { type: 'weapon', slot: 'primary',
     id: 'MaceNeedle',
     tier: 5,
     weight: 2, stack: 1,
@@ -1645,7 +1645,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 5 },
     },
   },
-  { type: 'weap', slot: 'secondary',
+  { type: 'weapon', slot: 'secondary',
     id: 'ShieldBlackmetal',
     tier: 5,
     weight: 5, stack: 1,
@@ -1669,7 +1669,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 4 },
     }
   },
-  { type: 'weap', slot: 'secondary',
+  { type: 'weapon', slot: 'secondary',
     id: 'ShieldBlackmetalTower',
     tier: 5,
     weight: 5, stack: 1,
@@ -1695,7 +1695,7 @@ export const items: Weapon[] = [
     }
   },
 // FLAME AGE
-  { type: 'weap', slot: 'primary',
+  { type: 'weapon', slot: 'primary',
     id: 'SwordIronFire',
     tier: 6,
     toolTier: 0,
@@ -1738,7 +1738,7 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 3 },
     },
   },
-  { type: 'weap', slot: 'primary',
+  { type: 'weapon', slot: 'primary',
     id: 'BombOoze',
     tier: 3,
     weight: 0.3, stack: 50,
@@ -1767,7 +1767,7 @@ export const items: Weapon[] = [
       number: NaN, // 10?
     }
   },
-  { type: 'weap', slot: 'secondary',
+  { type: 'weapon', slot: 'secondary',
     id: 'ShieldKnight',
     tier: -1,
     weight: 4, stack: 1,
@@ -1782,7 +1782,7 @@ export const items: Weapon[] = [
     parryBonus: 1.5,
     knockback: 200, backstab: 4, moveSpeed: -0.05,
   },
-  { type: 'weap', slot: 'secondary',
+  { type: 'weapon', slot: 'secondary',
     id: 'ShieldIronSquare',
     tier: -1,
     weight: 4, stack: 1,
@@ -1797,7 +1797,7 @@ export const items: Weapon[] = [
     parryBonus: 1,
     knockback: 200, backstab: 4, moveSpeed: -0.2,
   },
-  { type: 'weap', slot: 'primary',
+  { type: 'weapon', slot: 'primary',
     id: 'SwordCheat',
     tier: -1,
     toolTier: 10,

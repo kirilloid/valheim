@@ -6,7 +6,7 @@ import { RecipeSection } from './Source';
 import { durability } from './helpers';
 import { TranslationContext } from '../translation.effect';
 
-export function Tool(item: TTool, level?: number) {
+export function Tool({ item, level }: { item: TTool, level?: number }) {
   const translate = useContext(TranslationContext);
   return (
     <>

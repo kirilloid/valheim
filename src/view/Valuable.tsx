@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import { TranslationContext } from '../translation.effect';
 
-import type { Item } from '../types';
+import type { Valuable as TValuable } from '../types';
 import { Icon } from './Icon';
 
-export function Valuable(item: Item & { type: 'value' }) {
+export function Valuable({ item }: { item: TValuable }) {
   const translate = useContext(TranslationContext);
   return (
     <>

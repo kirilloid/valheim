@@ -7,7 +7,7 @@ import { durability, ItemSpecial, showPair } from './helpers';
 import { Icon } from './Icon';
 import { RecipeSection } from './Source';
 
-export function Armor(item: TArmor, level?: number) {
+export function Armor({ item, level }: { item: TArmor, level?: number }) {
   const translate = useTranslation();
   return (
     <>

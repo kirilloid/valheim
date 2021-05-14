@@ -83,6 +83,7 @@ export type Effect = {
 export type DamageProfile = Partial<Record<DamageType, number>>;
 export type NormalAttackProfile = {
   dmg: DamageProfile;
+  burst?: number;
   name: string;
   // knockback
   force?: number;
@@ -266,6 +267,7 @@ export interface Ship extends BasePiece {
 
 interface BaseItem {
   id: EntityId;
+  tags?: string[];
   dlc?: 'beta';
   tier: number;
   weight: number;
@@ -322,7 +324,7 @@ export enum ItemType {
 export interface Resource extends BaseItem {
   type: 'item';
   emoji?: string;
-  summon?: EntityId;
+  summon?: [EntityId, number];
   power?: EntityId;
 }
 
@@ -390,7 +392,7 @@ export interface Tool extends BaseItem {
 }
 
 export interface Weapon extends BaseItem {
-  type: 'weap';
+  type: 'weapon';
   slot: 'primary' | 'both' | 'secondary' | 'bow' | 'either'
     | 'head' | 'shoulders' | 'body' | 'legs'
     | 'none' | 'util';

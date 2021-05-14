@@ -7,7 +7,7 @@ import { resourceMap } from '../model/resource-usage';
 import { useTranslation } from '../translation.effect';
 import { Source } from './Source';
 
-export function GenericItem(item: Item) {
+export function GenericItem({ item }: { item: Item }) {
   const translate = useTranslation();
   const craftables = resourceMap[item.id];
   return (

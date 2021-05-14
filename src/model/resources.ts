@@ -1,4 +1,4 @@
-import { Item, CraftingStation, Biome, DamageType } from "../types";
+import { Item, CraftingStation, Biome, DamageType, EntityId, Resource } from "../types";
 
 const CAULDRON_TIME = 3;
 const FORGE_TIME = 2;
@@ -65,7 +65,7 @@ export const resources: Item[] = [
     recipe: { time: FERMENT_TIME, materials: { Honey: 10, Blueberries: 5, Raspberry: 10 },
               source: { station: CraftingStation.Fermenter }, number: 6 } },
   { type: 'item', id: 'TrophyBoar', emoji: '🐗', tier: 1, weight: 2, stack: 50 },
-  { type: 'item', id: 'TrophyDeer', emoji: '🦌', tier: 1, weight: 2, stack: 50, summon: 'Eikthyr' },
+  { type: 'item', id: 'TrophyDeer', emoji: '🦌', tier: 1, weight: 2, stack: 50, summon: ['Eikthyr', 2] },
   { type: 'item', id: 'TrophyNeck', emoji: '🦎', tier: 1, weight: 0.5, stack: 50 },
   { type: 'item', id: 'TrophyEikthyr', emoji: '🦌', tier: 2, weight: 2, stack: 20, floating: true, power: 'Eikthyr' },
   { type: 'item', id: 'HardAntler', tier: 2, weight: 2, stack: 50, floating: true },
@@ -76,7 +76,7 @@ export const resources: Item[] = [
   { type: 'item', id: 'GreydwarfEye', tier: 2, weight: 0.2, stack: 50 },
   { type: 'item', id: 'BoneFragments', emoji: '🦴', tier: 2, weight: 0.5, stack: 50 },
   { type: 'item', id: 'SurtlingCore', emoji: '🟥', tier: 2, weight: 5, stack: 10 },
-  { type: 'item', id: 'AncientSeed', emoji: '🌰', tier: 2, weight: 1, stack: 50, summon: 'gd_king' },
+  { type: 'item', id: 'AncientSeed', emoji: '🌰', tier: 2, weight: 1, stack: 50, summon: ['gd_king', 3] },
   { type: 'item', id: 'RoundLog', tier: 2, weight: 2, stack: 50 },
   { type: 'item', id: 'TrollHide', tier: 2, weight: 2, stack: 20 },
   { type: 'item', id: 'CopperOre', tier: 2, weight: 10, stack: 30, teleportable: false },
@@ -104,7 +104,7 @@ export const resources: Item[] = [
     health: 15, stamina: 20, duration: 600, regen: 1, color: '#568cffff',
     recipe: { biomes: [Biome.BlackForest], abundance: 1, num: [1, 2], group: [2, 3], respawn: 5 * HOUR } },
   { type: 'food', id: 'QueensJam', emoji: '🧁', tier: 2, weight: 0.1, stack: 50,
-    health: 15, stamina: 20, duration: 600, regen: 1, color: '#ff0084ff',
+    health: 30, stamina: 40, duration: 1200, regen: 2, color: '#ff0084ff',
     recipe: { time: CAULDRON_TIME, materials: { Raspberry: 8, Blueberries: 8 },
               source: { station: CraftingStation.Cauldron }, number: 4 } },
   { type: 'food', id: 'MushroomYellow', emoji: '🍄🟡', tier: 2, weight: 0.1, stack: 50,
@@ -173,7 +173,7 @@ export const resources: Item[] = [
   { type: 'item', id: 'SharpeningStone', tier: 3, weight: 6, stack: 20,
     recipe: { time: STONECUTTER_TIME, materials: { Stone: 5 },
               source: { station: CraftingStation.StoneCutter }, number: 1 } },
-  { type: 'item', id: 'WitheredBone', emoji: '🦴', tier: 3, weight: 1, stack: 30, floating: true, summon: 'Bonemass' },
+  { type: 'item', id: 'WitheredBone', emoji: '🦴', tier: 3, weight: 1, stack: 30, floating: true, summon: ['Bonemass', 10] },
   { type: 'item', id: 'TrophyLeech', emoji: '🧛', tier: 3, weight: 2, stack: 20 },
   { type: 'item', id: 'TrophyBlob', tier: 3, weight: 2, stack: 20 },
   { type: 'item', id: 'TrophySurtling', tier: 3, weight: 1, stack: 20 },
@@ -204,13 +204,13 @@ export const resources: Item[] = [
   { type: 'item', id: 'Obsidian', tier: 4, weight: 2, stack: 50 },
   { type: 'item', id: 'Crystal', emoji: '💎', tier: 4, weight: 8, stack: 50 },
   { type: 'item', id: 'DragonEgg', emoji: '🥚', tier: 4, weight: 200, stack: 1,
-    floating: true, teleportable: false, summon: 'DragonQueen',
+    floating: true, teleportable: false, summon: ['Dragon', 3],
     recipe: { biomes: [Biome.Mountain], abundance: 1, num: [1, 1], group: [1, 1], respawn: 6 * HOUR } },
   { type: 'item', id: 'TrophyWolf', tier: 4, weight: 1.5, stack: 20 },
   { type: 'item', id: 'TrophyFenring', tier: 4, weight: 2, stack: 20 },
   { type: 'item', id: 'TrophyHatchling', tier: 4, weight: 2, stack: 20 },
   { type: 'item', id: 'TrophySGolem', tier: 4, weight: 2, stack: 20 },
-  { type: 'item', id: 'TrophyDragonQueen', tier: 5, weight: 2, stack: 20, floating: true, power: 'DragonQueen' },
+  { type: 'item', id: 'TrophyDragonQueen', tier: 5, weight: 2, stack: 20, floating: true, power: 'Dragon' },
   { type: 'item', id: 'DragonTear', tier: 5, weight: 1, stack: 50, floating: true },
 // PLAINS
   { type: 'item', id: 'Flax', tier: 5, weight: 0.2, stack: 100,
@@ -263,7 +263,7 @@ export const resources: Item[] = [
   { type: 'item', id: 'BlackMetal', tier: 5, weight: 12, stack: 30, teleportable: false,
     recipe: { time: FURNACE_TIME, materials: { BlackMetalScrap: 1, Coal: 2 },
               source: { station: CraftingStation.BlastFurnace }, number: 1 } },
-  { type: 'item', id: 'GoblinTotem', tier: 5, weight: 1, stack: 30, summon: 'GoblinKing' },
+  { type: 'item', id: 'GoblinTotem', tier: 5, weight: 1, stack: 30, summon: ['GoblinKing', 5] },
   { type: 'item', id: 'TrophyLox', tier: 5, weight: 2, stack: 20 },
   { type: 'item', id: 'TrophyDeathsquito', tier: 5, weight: 0.5, stack: 20 },
   { type: 'item', id: 'TrophyGoblin', tier: 5, weight: 2, stack: 20 },
@@ -277,6 +277,18 @@ export const resources: Item[] = [
     recipe: { time: FURNACE_TIME, materials: { FlametalOre: 1, Coal: 2 },
               source: { station: CraftingStation.BlastFurnace }, number: 1 } },
 ];
+
+const summonMap: Partial<Record<EntityId, Resource['summon']>> = {};
+resources.forEach(r => {
+  if (r.type === 'item' && r.summon) {
+    const [id, number] = r.summon;
+    summonMap[id] = [r.id, number];
+  }
+});
+
+export const getSummon = (id: EntityId): Resource['summon'] => {
+  return summonMap[id];
+}
 
 // Tankard, Tankard_Odin
 

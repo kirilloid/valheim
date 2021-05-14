@@ -5,11 +5,7 @@ import { Icon } from './Icon';
 import { RecipeSection } from './Source';
 import { useTranslation } from '../translation.effect';
 
-
-
-
-
-export function Food(item: TFood) {
+export function Food({ item }: { item: TFood }) {
   const translate = useTranslation();
   return (<>
     <h2>
@@ -20,8 +16,8 @@ export function Food(item: TFood) {
     <section>
       <header>{translate('ui.itemType.food')}</header>
       <dl>
-        <dt>{translate('ui.health')}</dt><dd><Icon type="icon" id="health_icon" size={16} />{' '}{item.health}</dd>
-        <dt>{translate('ui.stamina')}</dt><dd><Icon type="icon" id="health_icon_walknut_small" size={16} />{' '}{item.stamina}</dd>
+        <dt>{translate('ui.health')}</dt><dd><Icon type="icon" id="health" size={16} />{' '}{item.health}</dd>
+        <dt>{translate('ui.stamina')}</dt><dd><Icon type="icon" id="walknut_16" size={16} />{' '}{item.stamina}</dd>
         <dt>{translate('ui.time')}</dt><dd>{timeI2S(item.duration)}</dd>
         <dt>{translate('ui.regen')}</dt><dd>{item.regen}</dd>
       </dl>

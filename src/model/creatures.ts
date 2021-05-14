@@ -677,7 +677,7 @@ export const creatures: Creature[] = [
     tier: 4,
     emoji: '🐉',
     faction: Faction.MountainMonsters,
-    attacks: [{ dmg: { [DamageType.Frost]: 90 }, name: '', force: 30, }], // burst: 3 buyrst interval: 0.3
+    attacks: [{ dmg: { [DamageType.Frost]: 90 }, burst: 3, name: '', force: 30, }], // burst interval: 0.3
     hp: 100,
     staggerFactor: 0,
     staggerBlocked: true,
@@ -718,7 +718,7 @@ export const creatures: Creature[] = [
         [DamageType.Chop]: 200,
         [DamageType.Pickaxe]: 200,
         [DamageType.Frost]: 200
-      }, name: 'ice shotgun', force: 30 }, // V25 B16
+      }, burst: 16, name: 'ice shards', force: 30 }, // V25
     ],
     hp: 7500,
     staggerFactor: 0,
@@ -881,12 +881,7 @@ export const creatures: Creature[] = [
         [DamageType.Chop]: 50,
         [DamageType.Pickaxe]: 50,
         [DamageType.Fire]: 140,
-
-        [DamageType.Blunt]: 50,
-        [DamageType.Chop]: 50,
-        [DamageType.Pickaxe]: 50,
-        [DamageType.Fire]: 60,
-      }, name: 'meteors', force: 100, }, // unblockable? "projectileBursts": 20, "burstInterval": 0.1
+      }, burst: 20, name: 'meteors', force: 100, }, // unblockable? "burstInterval": 0.1
       { dmg: {
         [DamageType.Blunt]: 50,
         [DamageType.Chop]: 50,

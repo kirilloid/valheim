@@ -88,7 +88,9 @@ const woodStructureRecipe = (wood: number, type: 'Wood' | 'RoundLog' | 'FineWood
 const stoneStructureRecipe = (stone: number) =>
   ({ materials: { Stone: stone }, station: CraftingStation.StoneCutter, });
 
-const craftingStationIds = {} as Record<CraftingStation, EntityId>;
+const craftingStationIds = {
+//  [CraftingStation.Inventory]: 'Hands'
+} as Record<CraftingStation, EntityId>;
 
 export function getCraftingStationId(id: CraftingStation): EntityId {
   return craftingStationIds[id];
@@ -1076,7 +1078,7 @@ export const pieces: Piece[] = [
     piece: { target: 'primary', water: false, onlyOnFlat, size: [2, 1, 0.5] },
     comfort: { value: 1, group: 'bed' },
     wear: wearStructure(100, woodResist, MaterialType.Wood),
-    recipe: stoneStructureRecipe(8),
+    recipe: woodStructureRecipe(8),
   },
   { id: 'piece_bed02',
     type: 'piece',
@@ -1392,7 +1394,7 @@ export const pieces: Piece[] = [
     comfort: { value: 1 },
     piece: { target: 'random', water: undefined, size: [1, 1, 2] },
     wear: wearStructure(50, woodResist, MaterialType.Wood, { noRoof: false }),
-    recipe: { materials: { Wood: 10, FireCone: 1 }, station: CraftingStation.Workbench },
+    recipe: { materials: { Wood: 10, FirCone: 1 }, station: CraftingStation.Workbench },
   },
   { id: 'piece_maypole', disabled: true,
     type: 'piece',

@@ -5,7 +5,7 @@ import { Icon } from './Icon';
 import { RecipeSection } from './Source';
 import { TranslationContext } from '../translation.effect';
 
-export function Potion(item: TPotion) {
+export function Potion({ item }: { item: TPotion }) {
   const translate = useContext(TranslationContext);
   return (<>
     <h2>

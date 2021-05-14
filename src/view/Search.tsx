@@ -11,7 +11,7 @@ import { TranslationContext } from '../translation.effect';
 import { assertNever } from '../model/utils';
 import { creatures } from '../model/creatures';
 import { SkillType } from '../model/skills';
-import { shortWeaponDamage } from './helpers';
+import { averageAttacksDamage, ShortWeaponDamage } from './helpers';
 import { take } from '../model/iter';
 
 function first(val: number | [number, number]) {
@@ -42,7 +42,7 @@ function pieceExtra(item: Piece) {
     case 'fireplace':
     case 'table':
       return item.comfort?.value ? <span>
-        <Icon type="icon" id="health_icon_walknut_small" size={16} />
+        <Icon type="icon" id="walknut_16" size={16} />
         {' '}
         {item.comfort.value}
       </span> : null
@@ -79,21 +79,25 @@ function renderItem(id: EntityId, text: string, onClick: React.MouseEventHandler
   const item = data[id] ?? creatures.find(c => c.id === id);
   if (!item) { return "Something went wrong" }
   switch (item?.type) {
-    case 'creature':
+    case 'creature': {
+      const { hp } = item;
       return <div className="SearchItem">
         <Icon type="creature" id={id} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         <span>
-          <Icon type="icon" id="health_icon" size={16} />
-          {item.hp}
+          <Icon type="icon" id="health" size={16} />
+          {hp < 2000 ? hp : (hp / 1000) + 'k'}
+          <Icon type="icon" id="sword" size={16} />
+          {averageAttacksDamage(item.attacks)}
         </span>
       </div>
+    }
     case 'item':
       return <div className="SearchItem">
         <Icon type="resource" id={id} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         {item.summon
-        ? <Icon type="creature" id={item.summon} size={32} />
+        ? <><Icon type="creature" id={item.summon[0]} size={32} />{'x' + item.summon[1]}</>
         : item.id.startsWith('Trophy')
         ? <Icon type="icon" id="trophies_20" size={20} />
         : null}
@@ -104,7 +108,7 @@ function renderItem(id: EntityId, text: string, onClick: React.MouseEventHandler
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         {showSpecialIcon(item.special)}
       </div>
-    case 'weap':
+    case 'weapon':
       return <div className="SearchItem">
         <Icon type="weapon" id={id} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
@@ -113,7 +117,7 @@ function renderItem(id: EntityId, text: string, onClick: React.MouseEventHandler
               <Icon type="skills" id="Blocking" size={16} />
               {first(item.block)}
             </span>
-          : <span>{shortWeaponDamage(item.damage[0])}</span>}
+          : <span><ShortWeaponDamage damage={item.damage[0]} skill={item.skill} /></span>}
       </div>
     case 'armor':
       return <div className="SearchItem">
@@ -129,18 +133,16 @@ function renderItem(id: EntityId, text: string, onClick: React.MouseEventHandler
       return <div className="SearchItem">
         <Icon type="arrow" id={id} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
-        <span>
-          {shortWeaponDamage(item.damage)}
-        </span>
+        <span><ShortWeaponDamage damage={item.damage} skill={SkillType.Bows} /></span>
       </div>
     case 'food':
       return <div className="SearchItem">
         <Icon type="resource" id={id} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         <span>
-          <Icon type="icon" id="health_icon" size={16} />
+          <Icon type="icon" id="health" size={16} />
           {item.health}
-          <Icon type="icon" id="health_icon_walknut_small" size={16} />
+          <Icon type="icon" id="walknut_16" size={16} />
           {item.stamina}
         </span>
       </div>
@@ -151,13 +153,13 @@ function renderItem(id: EntityId, text: string, onClick: React.MouseEventHandler
         <span>
           {item.health
             ? <>
-                <Icon type="icon" id="health_icon" size={16} />
+                <Icon type="icon" id="health" size={16} />
                 {item.health[0]} / {item.health[1]}s
               </>
             : null}
           {item.stamina
             ? <>
-                <Icon type="icon" id="health_icon_walknut_small" size={16} />
+                <Icon type="icon" id="walknut_16" size={16} />
                 {item.stamina[0]} / {item.stamina[1]}s
               </>
             : null}

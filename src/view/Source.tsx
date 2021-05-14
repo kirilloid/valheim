@@ -71,6 +71,10 @@ function Materials({
 }) {
   const translate = useContext(TranslationContext);
   const [aggregateSum, setAggregateSum] = useGlobalState('aggregate');
+  const keys = Array.from(new Set([
+    ...Object.keys(materials),
+    ...Object.keys(materialsUp)
+  ]));
   return (
     <table className="RecipeItems">
       {maxLvl === 1
@@ -78,15 +82,15 @@ function Materials({
         : <MaterialHeader cols={maxLvl} />
       }
       <tbody>
-      {Object.entries(materials).map(([id, num]) =>
+      {keys.map(id =>
         <tr key={id}>
           <td key="icon"><Icon type="resource" id={id} /></td>
           <td key="name"><Link to={`/obj/${id}`}>{translate(id)}</Link></td>
           {Array.from({ length: maxLvl }, (_, i: number) =>
             <td key={`lvl${i+1}`}>{
               aggregateSum
-                ? num + (materialsUp[id] ?? 0) * i * (i + 1) / 2
-                : (i ? (materialsUp[id] ?? 0) * i : num)
+                ? (materials[id] ?? 0) + (materialsUp[id] ?? 0) * i * (i + 1) / 2
+                : (i ? (materialsUp[id] ?? 0) * i : (materials[id] ?? 0))
             }</td>)}
         </tr>
       )}
@@ -130,7 +134,9 @@ export function Recipe({ item }: { item: Item | Piece}) {
   if ('source' in recipe) {
     const { station, level } = recipe.source;
     return <>
-      Crafted in <Station station={station} /> lvl {level} using:{' '}
+      Crafted in {level
+        ? <><Station station={station} /> lvl {level}</>
+        : <Icon type="weapon" id="Hands" />} using:{' '}
       <Materials
         materials={recipe.materials}
         materialsUp={recipe.materialsPerLevel}

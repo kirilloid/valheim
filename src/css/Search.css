@@ -25,6 +25,7 @@
   background: white;
   left: -0.5em;
   outline: 1px solid;
+  font-feature-settings: "tnum" 1;
 }
 
 .SearchResults > li {

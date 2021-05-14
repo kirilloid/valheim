@@ -64,7 +64,7 @@ function WeaponStats(props: { item: TWeapon, level?: number }) {
   </section>
 }
 
-export function Weapon(item: TWeapon, level?: number) {
+export function Weapon({ item, level }: { item: TWeapon, level?: number }) {
   const translate = useTranslation();
   return (
     <>

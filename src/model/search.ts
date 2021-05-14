@@ -68,8 +68,8 @@ export function match(query: string): IterableIterator<EntityId> {
   const terms = query.match(/\S+/g);
   if (!terms) return emptyGenerator();
   const result = new Map<EntityId, number>();
-  const fm = fullMatch.get(query);
-  if (fm != null) result.set(fm, 100);
+/*  const fm = fullMatch.get(query);
+  if (fm != null) result.set(fm, 100);*/
   for (const term of terms) {
     for (const item of lookupInTree(startTree, term)) {
       result.set(item, (result.get(item) ?? 0) + 10);
@@ -78,10 +78,14 @@ export function match(query: string): IterableIterator<EntityId> {
       result.set(item, (result.get(item) ?? 0) + 1);
     }
   }
+  const max = Math.max(...result.values());
+  const maxRank = Math.floor(max / 10) * 10;
+  console.log({ maxRank });
   
   return (function*() {
     yield* Array.from(result.entries())
-      .sort(([, val1], [, val2]) => val2 - val1)
+      .filter(([, val]) => val >= maxRank)
+      .sort(([, val1], [, val2]) => val2 - val1 || val2 - val1)
       .map(([key]) => key);
   }());
 }

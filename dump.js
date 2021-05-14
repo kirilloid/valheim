@@ -6,8 +6,8 @@ const ItemType2Hands = [
     'both',
 ];
 const ItemType2Type = [
-    'none', 'resource', 'resource', 'weap', 'weap', 'weap', 'weap', 'armor', 'armor', 'armor', 'armor',
-    'none', 'armor', '???', 'resource', 'weap', 'either', 'none', 'armor', 'weapon', 'tool',
+    'none', 'resource', 'resource', 'weapon', 'weapon', 'weapon', 'weapon', 'armor', 'armor', 'armor', 'armor',
+    'none', 'armor', '???', 'resource', 'weapon', 'either', 'none', 'armor', 'weapon', 'tool',
     'none',
 ];
 const ItemType = [

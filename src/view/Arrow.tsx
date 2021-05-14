@@ -1,12 +1,13 @@
 import React from 'react';
+import { SkillType } from '../model/skills';
 import { useTranslation } from '../translation.effect';
 
 import type { Arrow as TArrow } from '../types';
-import { weaponDamage } from './helpers';
+import { ShortWeaponDamage } from './helpers';
 import { Icon } from './Icon';
 import { Source } from './Source';
 
-export function Arrow(item: TArrow) {
+export function Arrow({ item }: { item: TArrow }) {
   const translate = useTranslation();
   return (
     <>
@@ -19,7 +20,7 @@ export function Arrow(item: TArrow) {
         <header>{translate('ui.itemType.arrow')}</header>
         <dl>
           <dt>{translate('ui.damage')}</dt>
-          <dd>{weaponDamage(item.damage)}</dd>
+          <dd><ShortWeaponDamage damage={item.damage} skill={SkillType.Bows} /></dd>
         </dl>
       </section>
       <section>

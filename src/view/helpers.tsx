@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
-import { groupBy } from 'lodash-es';
 
 import {
+  AttackProfile,
   DamageModifier,
   DamageModifiers,
   DamageProfile,
@@ -10,6 +10,8 @@ import {
 } from '../types';
 import { Icon } from './Icon';
 import { TranslationContext } from '../translation.effect';
+import { applyDamageModifier, getTotalDamage, playerDamageModifiers } from '../model/combat';
+import { SkillType } from '../model/skills';
 
 export function durability(values: [number, number], level?: number): string | number {
   if (values[0] === Infinity) return 'indestructible';
@@ -22,7 +24,20 @@ export function showPair(values: number | [number, number], level?: number): str
   return level == null ? values.join('+') : values[0] + values[1] * (level - 1)
 }
 
-export function shortWeaponDamage(damage: DamageProfile) {
+export function ShortWeaponDamage({ damage, skill }: { damage: DamageProfile, skill: SkillType }) {
+  const result: (JSX.Element | string)[] = [];
+  if (damage[DamageType.Pickaxe]) {
+    result.push(
+      <Icon key="Pickaxes" type="skills" id="Pickaxes" size={16} />,
+      String(damage[DamageType.Pickaxe]),
+    );
+  }
+  if (damage[DamageType.Chop]) {
+    result.push(
+      <Icon key="Woodcutting" type="skills" id="Woodcutting" size={16} />,
+      String(damage[DamageType.Chop]),
+    );
+  }
   // tools
   // physical
   const physical = (damage[DamageType.Slash] ?? 0)
@@ -37,26 +52,27 @@ export function shortWeaponDamage(damage: DamageProfile) {
     [DamageType.Spirit]: spirit,
   } = damage;
   const obj = { physical, fire, frost, poison, lightning, spirit };
-  const result = Object.entries(obj)
-    .filter(kv => kv[1])
-    .map(kv => <span className={`damage--${kv[0]}`}>{kv[1]}</span>)
-    .flatMap((item, i) => i ? ['+', item] : [item]);
-  if (damage[DamageType.Pickaxe]) {
-    result.push(
-      <Icon type="skills" id="Pickaxes" size={16} />,
-      String(damage[DamageType.Pickaxe]),
-    );
-  }
-  if (damage[DamageType.Chop]) {
-    result.push(
-      <Icon type="skills" id="Woodcutting" size={16} />,
-      String(damage[DamageType.Chop]),
-    );
-  }
-  return result;
+  result.push(
+    <Icon type="skills" id={SkillType[skill]!} size={16} />,
+    ...Object.entries(obj)
+      .filter(kv => kv[1])
+      .map(kv => <span key={kv[0]} className={`damage--${kv[0]}`}>{kv[1]}</span>)
+      .flatMap((item, i) => i ? ['+', item] : [item])
+  );
+  return <>{result}</>
 }
 
-export const weaponDamage = shortWeaponDamage;
+export const averageAttacksDamage = (attacks: AttackProfile[]) => {
+  let nr = 0;
+  let total = 0;
+  for (const attack of attacks) {
+    if ('dmg' in attack) {
+      nr++;
+      total += getTotalDamage(applyDamageModifier(attack.dmg, playerDamageModifiers));
+    }
+  }
+  return (total / nr).toPrecision(3).replace(/\.?0+$/, '');
+};
 
 export function shortCreatureDamage(damage: DamageProfile) {
   // physical
@@ -78,8 +94,8 @@ export function shortCreatureDamage(damage: DamageProfile) {
     .flatMap((item, i) => i ? ['+', item] : [item]);
 }
 
-function damageTypesList(list: [string, any][]): string {
-  return list.map(([v]) => DamageType[v as any]).join(', ');
+function damageTypesList(list: DamageModifier[]): string {
+  return list.map(v => DamageType[v]).join(', ');
 } 
 
 export function ItemSpecial({ special }: { special: TItemSpecial }) {
@@ -93,17 +109,24 @@ export function ItemSpecial({ special }: { special: TItemSpecial }) {
 
 export function Resistances({ mods }: { mods: DamageModifiers }) {
   const translate = useContext(TranslationContext);
-  const res = groupBy(Object.entries(mods), ([, val]) => val);
-  const result = [];
-  for (const [key, val] of Object.entries(res)) {
-    if (key === String(DamageModifier.Normal)
-    ||  key === String(DamageModifier.Ignore)) {
-      continue;
-    }
-    result.push(
-      <dt>{translate(`ui.damageModifier.${DamageModifier[+key]}`)}</dt>,
-      <dd>{damageTypesList(val)}</dd>,
-    );
+  const modGroups = {
+    [DamageModifier.VeryWeak]: [] as DamageModifier[],
+    [DamageModifier.Weak]: [] as DamageModifier[],
+    [DamageModifier.Resistant]: [] as DamageModifier[],
+    [DamageModifier.VeryResistant]: [] as DamageModifier[],
+    [DamageModifier.Immune]: [] as DamageModifier[],
   };
-  return <>{result}</>;
+  for (const [key, val] of Object.entries(mods)) {
+    if (val && val in modGroups) {
+      modGroups[val as keyof typeof modGroups].push(key as unknown as DamageModifier);
+    }
+  }
+  return <>{
+    Object.entries(modGroups)
+      .filter(([, vals]) => vals.length > 0)
+      .flatMap(([key, vals]) => [
+        <dt>{translate(`ui.damageModifier.${DamageModifier[+key]}`)}</dt>,
+        <dd>{damageTypesList(vals)}</dd>,
+      ])
+  }</>;
 }

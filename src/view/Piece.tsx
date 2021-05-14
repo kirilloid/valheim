@@ -55,7 +55,7 @@ function PieceSpecific({ item }: { item: TPiece }) {
       const verticalDistance = Math.floor(Math.log(supportRate) / -Math.log(1 - verticalLoss));
       return (<dl>
         <dt>material type</dt><dd>{MaterialType[materialType]}</dd>
-        <dt>min vertical</dt><dd>{verticalDistance}m</dd>
+        <dt>max vertical</dt><dd>{verticalDistance}m</dd>
         <dt>max horizontal</dt><dd>{horizontalDistance}m</dd>
       </dl>);
     }
@@ -100,7 +100,7 @@ function reqList(piece: TPiece['piece']) {
   return result;
 }
 
-export function Piece(item: TPiece) {
+export function Piece({ item }: { item: TPiece }) {
   const { target, requiredSpace, size } = item.piece;
   const { hp, damageModifiers, noRoof } = item.wear;
   const translate = useContext(TranslationContext);
