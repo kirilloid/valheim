@@ -1,7 +1,12 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import { DamageProfile, DamageType, Weapon as TWeapon } from '../types';
+import {
+  DamageProfile,
+  DamageType,
+  Weapon as TWeapon,
+  Attack as TAttack,
+} from '../types';
 import { SkillType } from '../model/skills';
 import { Icon } from './Icon';
 import { RecipeSection } from './Source';
@@ -42,9 +47,8 @@ function ShieldStats(props: { item: TWeapon, level?: number }) {
   </section>;
 }
 
-function WeaponStats(props: { item: TWeapon, level?: number }) {
+function WeaponStats({ item, level }: { item: TWeapon, level?: number }) {
   const translate = useContext(TranslationContext);
-  const { item, level } = props;
   const baseDmg = totalDamage(item.damage[0]);
   const lvlDmg = totalDamage(item.damage[1]);
   return <section>
@@ -64,8 +68,28 @@ function WeaponStats(props: { item: TWeapon, level?: number }) {
   </section>
 }
 
+function Attack({ item, attack }: { item: TWeapon, attack: TAttack }) {
+  const translate = useTranslation();
+  const { damage = 1, force = 1, stagger = 1 } = attack.mul ?? {};
+  const projVel = attack.type === 'proj' ? attack.projVel[1] : undefined;
+  const projAcc = attack.type === 'proj' ? attack.projAcc[1] : undefined;
+  return <dl>
+    <dt>type</dt><dd>{attack.type}</dd>
+    <dt>{translate('ui.stamina')}</dt><dd>{attack.stamina}</dd>
+    {attack.type === 'proj' && <>
+      <dt>velocity</dt><dd>{attack.projVel[0]}&ndash;{attack.projVel[1]}</dd>
+      <dt>scatter</dt><dd>{attack.projAcc[0]}&ndash;{attack.projAcc[1]}&deg;</dd>
+    </>}
+    {projAcc != null && <><dt>velocity</dt><dd>{projVel}</dd></>}
+    {damage !== 1 && <><dt>{translate('ui.damage')}</dt><dd>{damage}x</dd></>}
+    {force !== 1 && <><dt>knockback</dt><dd>{item.knockback * force}</dd></>}
+    {stagger !== 1 && <><dt>stagger</dt><dd>{stagger}x</dd></>}
+  </dl>;
+}
+
 export function Weapon({ item, level }: { item: TWeapon, level?: number }) {
   const translate = useTranslation();
+  const [primaryAttack, secondaryAttack] = item.attacks;
   return (
     <>
       <h2>
@@ -77,6 +101,14 @@ export function Weapon({ item, level }: { item: TWeapon, level?: number }) {
         ? <ShieldStats item={item} level={level} />
         : <WeaponStats item={item} level={level} />
       }
+      {primaryAttack && <section>
+        <header>primary attack</header>
+        <Attack item={item} attack={primaryAttack} />
+      </section>}
+      {secondaryAttack && <section>
+        <header>secondary attack</header>
+        <Attack item={item} attack={secondaryAttack} />
+      </section>}
       <section>
         <header>{translate('ui.itemType.resource')}</header>
         <dl>

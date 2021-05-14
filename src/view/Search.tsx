@@ -97,7 +97,7 @@ function renderItem(id: EntityId, text: string, onClick: React.MouseEventHandler
         <Icon type="resource" id={id} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         {item.summon
-        ? <><Icon type="creature" id={item.summon[0]} size={32} />{'x' + item.summon[1]}</>
+        ? <Icon type="creature" id={item.summon[0]} size={32} />
         : item.id.startsWith('Trophy')
         ? <Icon type="icon" id="trophies_20" size={20} />
         : null}
