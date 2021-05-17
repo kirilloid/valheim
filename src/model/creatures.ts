@@ -659,6 +659,7 @@ export const creatures: Creature[] = [
     damageModifiers: {
       ...defaultDmgModifiers,
       [DamageType.Slash]: DamageModifier.Resistant,
+      [DamageType.Pierce]: DamageModifier.Resistant,
       [DamageType.Pickaxe]: DamageModifier.VeryWeak,
       [DamageType.Fire]: DamageModifier.Immune,
       [DamageType.Frost]: DamageModifier.Immune,

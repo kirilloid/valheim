@@ -24,7 +24,7 @@ function faction(faction: Faction): string {
   }
 }
 
-function NormalAttack(a: NormalAttackProfile, dmgScale: number) {
+function NormalAttack({ attack: a, dmgScale }: { attack: NormalAttackProfile, dmgScale: number }) {
   const dmg = multiplyDamage(a.dmg, dmgScale);
   return <>
     <dt key={`atk-key-${a.name}`}>{a.name}</dt>
@@ -32,10 +32,10 @@ function NormalAttack(a: NormalAttackProfile, dmgScale: number) {
   </>
 }
 
-function SpawnAttack(a: SpawnAttackProfile) {
+function SpawnAttack({ attack }: { attack: SpawnAttackProfile }) {
   return <>
     <dt key='spawn-key'>spawn</dt>
-    <dd key='spawn-val'>{a.spawn.map(id => <Icon key='id' type="creature" id={id} />)}</dd>
+    <dd key='spawn-val'>{attack.spawn.map(id => <Icon key={id} type="creature" id={id} />)}</dd>
   </>
 }
 
@@ -54,12 +54,19 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
     <section>
       <header>creature</header>
       <dl>
-      <dt>faction</dt><dd>{faction(creature.faction)}</dd>
-      {sid ? <><dt>summoned with</dt><dd><Icon type="resource" id={sid} size={16} /> <Link to={`/obj/${sid}`}>{translate(sid)}</Link> x{snr}</dd></> : null}
-      <dt>{translate('ui.health')}</dt><dd>{hpBonus(creature.hp, scale)}</dd>
-      <dt>stagger</dt><dd>{creature.hp * staggerFactor}</dd>
+      <dt key="faction-label">faction</dt><dd key="faction-value">{faction(creature.faction)}</dd>
+      {sid ? <>
+        <dt key="summon-label">summoned with</dt>
+        <dd key="summon-value"><Icon type="resource" id={sid} size={16} /> <Link to={`/obj/${sid}`}>{translate(sid)}</Link> x{snr}</dd>
+      </> : null}
+      <dt key="health-label">{translate('ui.health')}</dt>
+      <dd key="health-value">{hpBonus(creature.hp, scale)}</dd>
+      <dt key="stagger-label">stagger</dt>
+      <dd key="stagger-value">{creature.hp * staggerFactor}</dd>
       <Resistances mods={creature.damageModifiers} />
-      {creature.attacks.map(a => 'spawn' in a ? SpawnAttack(a) : NormalAttack(a, dmgScale))}
+      {creature.attacks.map(a => 'spawn' in a
+        ? <SpawnAttack attack={a} />
+        : <NormalAttack key={a.name} attack={a} dmgScale={dmgScale} />)}
       </dl>
     </section>
     <section>

@@ -62,6 +62,10 @@ export function ShortWeaponDamage({ damage, skill }: { damage: DamageProfile, sk
   return <>{result}</>
 }
 
+export const toPrecision = (precision: number, value: number): string => {
+  return String(Number(value.toPrecision(precision)));
+};
+
 export const averageAttacksDamage = (attacks: AttackProfile[]) => {
   let nr = 0;
   let total = 0;
@@ -71,7 +75,7 @@ export const averageAttacksDamage = (attacks: AttackProfile[]) => {
       total += getTotalDamage(applyDamageModifier(attack.dmg, playerDamageModifiers));
     }
   }
-  return (total / nr).toPrecision(3).replace(/\.?0+$/, '');
+  return toPrecision(3, total / nr);
 };
 
 export function shortCreatureDamage(damage: DamageProfile) {
@@ -90,7 +94,7 @@ export function shortCreatureDamage(damage: DamageProfile) {
   const obj = { physical, fire, frost, poison, lightning, spirit };
   return Object.entries(obj)
     .filter(kv => kv[1])
-    .map(kv => <span className={`damage--${kv[0]}`}>{kv[1]}</span>)
+    .map(([type, dmg]) => <span key={type} className={`damage--${type}`}>{dmg}</span>)
     .flatMap((item, i) => i ? ['+', item] : [item]);
 }
 
@@ -121,12 +125,19 @@ export function Resistances({ mods }: { mods: DamageModifiers }) {
       modGroups[val as keyof typeof modGroups].push(key as unknown as DamageModifier);
     }
   }
+  const keys = [
+    DamageModifier.VeryWeak,
+    DamageModifier.Weak,
+    DamageModifier.Resistant,
+    DamageModifier.VeryResistant,
+    DamageModifier.Immune,
+  ] as const;
   return <>{
-    Object.entries(modGroups)
-      .filter(([, vals]) => vals.length > 0)
-      .flatMap(([key, vals]) => [
-        <dt>{translate(`ui.damageModifier.${DamageModifier[+key]}`)}</dt>,
-        <dd>{damageTypesList(vals)}</dd>,
+    keys
+      .filter(key => modGroups[key]?.length > 0)
+      .flatMap(key => [
+        <dt key={'t'+ key}>{translate(`ui.damageModifier.${DamageModifier[+key]}`)}</dt>,
+        <dd key={'d'+ key}>{damageTypesList(modGroups[key])}</dd>,
       ])
   }</>;
 }

@@ -112,7 +112,6 @@ function Materials({
 }
 
 export function Recipe({ item }: { item: Item | Piece}) {
-  const translate = useContext(TranslationContext);
   const { recipe } = item;
   if (recipe == null) return null;
   if ('value' in recipe) {
