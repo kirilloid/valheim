@@ -61,31 +61,35 @@ preloadLanguage().then(dict => {
   }
 });
 
-function* emptyGenerator() {}
+const emptyResults: string[] = [];
 
-export function match(query: string): IterableIterator<EntityId> {
+const _cache = new Map<string, Iterable<string>>();
+
+export function match(query: string): Iterable<EntityId> {
   query = query.toLocaleLowerCase().trim();
+  const cached = _cache.get(query);
+  if (cached) return cached;
   const terms = query.match(/\S+/g);
-  if (!terms) return emptyGenerator();
-  const result = new Map<EntityId, number>();
+  if (!terms) return emptyResults;
+  const rankedResult = new Map<EntityId, number>();
 /*  const fm = fullMatch.get(query);
   if (fm != null) result.set(fm, 100);*/
   for (const term of terms) {
     for (const item of lookupInTree(startTree, term)) {
-      result.set(item, (result.get(item) ?? 0) + 10);
+      rankedResult.set(item, (rankedResult.get(item) ?? 0) + 10);
     }
     for (const item of lookupInTree(anyTree, term)) {
-      result.set(item, (result.get(item) ?? 0) + 1);
+      rankedResult.set(item, (rankedResult.get(item) ?? 0) + 1);
     }
   }
-  const max = Math.max(...result.values());
+  const max = Math.max(...rankedResult.values());
   const maxRank = Math.floor(max / 10) * 10;
-  console.log({ maxRank });
+  // console.log({ maxRank });
   
-  return (function*() {
-    yield* Array.from(result.entries())
-      .filter(([, val]) => val >= maxRank)
-      .sort(([, val1], [, val2]) => val2 - val1 || val2 - val1)
-      .map(([key]) => key);
-  }());
+  const result = Array.from(rankedResult.entries())
+    .filter(([, val]) => val >= maxRank)
+    .sort(([, val1], [, val2]) => val2 - val1 || val2 - val1)
+    .map(([key]) => key);
+  _cache.set(query, result);
+  return result;
 }

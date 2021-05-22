@@ -1,5 +1,6 @@
 import React, { ChangeEvent, KeyboardEvent, useCallback, useContext, useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import { createSelector } from 'reselect';
 
 import '../css/Search.css';
 
@@ -12,7 +13,6 @@ import { assertNever } from '../model/utils';
 import { creatures } from '../model/creatures';
 import { SkillType } from '../model/skills';
 import { averageAttacksDamage, ShortWeaponDamage } from './helpers';
-import { take } from '../model/iter';
 
 function first(val: number | [number, number]) {
   if (typeof val === 'number') return val;
@@ -188,18 +188,55 @@ function renderItem(id: EntityId, text: string, onClick: React.MouseEventHandler
   }
 }
 
+const PER_PAGE = 30;
+
+const searchSelector = createSelector((term: string) => term, (term: string) => [...match(term)]);
+const arraySliceSelector = createSelector(
+  ({ items }: { items: string[] }) => items,
+  ({ len }: { len: number }) => len,
+  (items, len) => items.slice(0, len),
+);
+
 export const Search = () => {
   const history = useHistory();
-  const [items, setItems] = useState<string[]>([]);
-  const [index, setIndex] = useState(0);
   const translate = useContext(TranslationContext);
+
+  const [len, setLen] = useState(0);
+  const [index, setIndex] = useState(0);
+  const [searchTerm, setSearchTerm] = useState('');
+  const items = searchSelector(searchTerm);
+  const itemsToDisplay = arraySliceSelector({ items, len });
+  const [lastItem, setLastItem] = useState<Element | null>(null);
+
   const updateSearch = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    const str = e.target.value;
-    setItems([...take(20, match(str))]);
-  }, [setItems]);
+    setSearchTerm(e.target.value);
+  }, [setSearchTerm]);
+
+  const loadMore = useCallback(() => {
+    const newLoaded = Math.min(len + PER_PAGE, items.length);
+    setLen(newLoaded);
+  }, [items, len]);
+
+  useEffect(() => {
+    const lastItem = document.querySelector('.SearchResults .SearchItem:last-child');
+    setLastItem(lastItem);
+    if (!lastItem) {
+      loadMore();
+      return;
+    }
+    let options = { root: null, rootMargin: '0px', threshold: 0, };
+    let observer = new IntersectionObserver(loadMore, options);
+    observer.observe(lastItem);
+    return () => {
+      observer.unobserve(lastItem);
+    }
+  }, [lastItem, items]);
+
   const clearSearch = useCallback(() => {
-    setItems([]);
-  }, [setItems]);
+    setSearchTerm('');
+    setLen(0);
+  }, [setSearchTerm, setLen]);
+
   function updateIndex(e: KeyboardEvent<HTMLInputElement>) {
     const len = items.length; 
     if (len === 0) return;
@@ -232,12 +269,13 @@ export const Search = () => {
           className="SearchControls_Input"
           placeholder={translate('ui.search.placeholder')}
           onChange={updateSearch}
-          onKeyDown={updateIndex} />
+          onKeyDown={updateIndex}
+          value={searchTerm} />
         <input type="submit" value={translate('ui.search.button')} />
       </div>
       {items.length
       ? <ul className="SearchResults" aria-activedescendant={`gs_i${index}`}>
-          {items.map((id, i) => {
+          {itemsToDisplay.map((id, i) => {
             const text = translate(id);
             return (
               <li id={`gs_i${i}`} key={id}
@@ -247,6 +285,7 @@ export const Search = () => {
               </li>
             );
           })}
+          {len < items.length ? <li key="#last-item"><Icon type="icon" id="hammer_spinner"/></li> : null}
         </ul>
       : null}
     </div>
