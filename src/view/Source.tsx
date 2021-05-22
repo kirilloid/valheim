@@ -37,7 +37,7 @@ export function DropSection({ sources }: { sources: string[] | undefined }) {
   const translate = useContext(TranslationContext);
   return sources?.length
     ? <section>
-        <header>{translate('ui.droppedBy')}</header>
+        <h2>{translate('ui.droppedBy')}</h2>
         <DroppedBy sources={sources} />
       </section>
     : null;
@@ -152,7 +152,7 @@ export function RecipeSection({ item }: { item: Item | Piece | undefined }) {
   const translate = useContext(TranslationContext);
   return item
     ? <section>
-        <header>{translate('ui.recipe')}</header>
+        <h2>{translate('ui.recipe')}</h2>
         <Recipe item={item} />
       </section>
     : null;

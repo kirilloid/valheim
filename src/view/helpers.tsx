@@ -75,7 +75,8 @@ export const averageAttacksDamage = (attacks: AttackProfile[]) => {
       total += getTotalDamage(applyDamageModifier(attack.dmg, playerDamageModifiers));
     }
   }
-  return toPrecision(3, total / nr);
+  const avg = total / nr;
+  return avg && toPrecision(3, avg);
 };
 
 export function shortCreatureDamage(damage: DamageProfile) {

@@ -8,13 +8,13 @@ import { useTranslation } from '../translation.effect';
 export function Food({ item }: { item: TFood }) {
   const translate = useTranslation();
   return (<>
-    <h2>
+    <h1>
       <Icon type="resource" id={item.id} />
       {' '}
       {translate(item.id)}
-    </h2>
+    </h1>
     <section>
-      <header>{translate('ui.itemType.food')}</header>
+      <h2>{translate('ui.itemType.food')}</h2>
       <dl>
         <dt>{translate('ui.health')}</dt><dd><Icon type="icon" id="health" size={16} />{' '}{item.health}</dd>
         <dt>{translate('ui.stamina')}</dt><dd><Icon type="icon" id="walknut_16" size={16} />{' '}{item.stamina}</dd>
@@ -23,7 +23,7 @@ export function Food({ item }: { item: TFood }) {
       </dl>
     </section>
     <section>
-      <header>{translate('ui.itemType.resource')}</header>
+      <h2>{translate('ui.itemType.resource')}</h2>
       <dl>
         <dt>{translate('ui.weight')}</dt><dd><Icon type="icon" id="weight" size={16} />{' '}{item.weight}</dd>
         <dt>{translate('ui.stack')}</dt><dd>{item.stack}</dd>

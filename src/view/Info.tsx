@@ -84,7 +84,7 @@ export function Info() {
   return <article>
     <h1>{article.header}</h1>
     {article.sections.map(s => <section>
-      <h2 id={s.header} className={s.header === hash ? 'active' : ''}>{s.header}</h2>
+      <h1 id={s.header} className={s.header === hash ? 'active' : ''}>{s.header}</h1>
       <p>{replaceAllWidgets(s.text)}</p>
     </section>)}
   </article>

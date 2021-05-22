@@ -34,7 +34,7 @@ function ShieldStats(props: { item: TWeapon, level?: number }) {
   const translate = useContext(TranslationContext);
   const { item, level } = props;
   return <section>
-    <header>{translate('ui.itemType.shield')}</header>
+    <h2>{translate('ui.itemType.shield')}</h2>
     <dl>
       <dt>block</dt><dd><Icon type="icon" id="ac_bkg" size={16} />{' '}{showPair(item.block, level)}</dd>
       <dt>{translate('ui.skill')}</dt><dd>{skill(item.skill)}</dd>
@@ -52,7 +52,7 @@ function WeaponStats({ item, level }: { item: TWeapon, level?: number }) {
   const baseDmg = totalDamage(item.damage[0]);
   const lvlDmg = totalDamage(item.damage[1]);
   return <section>
-    <header>{translate('ui.itemType.weapon')}</header>
+    <h2>{translate('ui.itemType.weapon')}</h2>
     <dl>
       <dt>{translate('ui.damage')}</dt><dd>{showPair([baseDmg, lvlDmg], level)}</dd>
       <dt>{translate('ui.skill')}</dt><dd>{skill(item.skill)}</dd>
@@ -92,25 +92,25 @@ export function Weapon({ item, level }: { item: TWeapon, level?: number }) {
   const [primaryAttack, secondaryAttack] = item.attacks;
   return (
     <>
-      <h2>
+      <h1>
         <Icon type="weapon" id={item.id} />
         {' '}
         {translate(item.id)}
-      </h2>
+      </h1>
       {item.skill === SkillType.Blocking
         ? <ShieldStats item={item} level={level} />
         : <WeaponStats item={item} level={level} />
       }
       {primaryAttack && <section>
-        <header>primary attack</header>
+        <h2>primary attack</h2>
         <Attack item={item} attack={primaryAttack} />
       </section>}
       {secondaryAttack && <section>
-        <header>secondary attack</header>
+        <h2>secondary attack</h2>
         <Attack item={item} attack={secondaryAttack} />
       </section>}
       <section>
-        <header>{translate('ui.itemType.resource')}</header>
+        <h2>{translate('ui.itemType.resource')}</h2>
         <dl>
           <dt>{translate('ui.weight')}</dt><dd><Icon type="icon" id="weight" size={16} />{' '}{item.weight}</dd>
           <dt>{translate('ui.floats')}</dt><dd>{item.floating ? '✔️' : '❌'}</dd>

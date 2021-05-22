@@ -81,14 +81,17 @@ function renderItem(id: EntityId, text: string, onClick: React.MouseEventHandler
   switch (item?.type) {
     case 'creature': {
       const { hp } = item;
+      const avgDmg = averageAttacksDamage(item.attacks);
       return <div className="SearchItem">
         <Icon type="creature" id={id} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         <span>
           <Icon type="icon" id="health" size={16} />
           {hp < 2000 ? hp : (hp / 1000) + 'k'}
-          <Icon type="icon" id="sword" size={16} />
-          {averageAttacksDamage(item.attacks)}
+          {avgDmg ? <> 
+            <Icon type="icon" id="sword" size={16} />
+            {avgDmg}
+          </> : null}
         </span>
       </div>
     }

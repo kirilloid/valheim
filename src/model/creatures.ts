@@ -216,7 +216,7 @@ export const creatures: Creature[] = [
     attacks: [{
       dmg: { [DamageType.Blunt]: 20,
              [DamageType.Poison]: 20 },
-      name: '',
+      name: 'mace',
     }],
     hp: 100,
     staggerFactor: 0.5,
@@ -241,7 +241,7 @@ export const creatures: Creature[] = [
     emoji: '👻',
     faction: Faction.Undead,
     attacks: [
-      { dmg: { [DamageType.Slash]: 25 }, name: '' }
+      { dmg: { [DamageType.Slash]: 25 }, name: 'slash' }
     ],
     hp: 60,
     staggerFactor: 0.5,
@@ -284,7 +284,7 @@ export const creatures: Creature[] = [
     tier: 2,
     emoji: '',
     faction: Faction.ForestMonsters,
-    attacks: [{ dmg: { [DamageType.Poison]: 25 }, name: '' }],
+    attacks: [{ dmg: { [DamageType.Poison]: 25 }, name: 'poison breath' }],
     hp: 60,
     staggerFactor: 0.33,
     staggerBlocked: true,
@@ -382,7 +382,7 @@ export const creatures: Creature[] = [
     emoji: '🥦',
     faction: Faction.Boss,
     attacks: [
-      { dmg: { [DamageType.Blunt]: 55, [DamageType.Chop]: 20, [DamageType.Pickaxe]: 20, }, name: '', force: 40 }
+      { dmg: { [DamageType.Blunt]: 55, [DamageType.Chop]: 20, [DamageType.Pickaxe]: 20, }, name: 'poke', force: 40 }
     ],
     hp: 20,
     staggerFactor: 0,
@@ -402,7 +402,7 @@ export const creatures: Creature[] = [
     tier: 3,
     emoji: '🦠',
     faction: Faction.Undead,
-    attacks: [{ dmg: { [DamageType.Poison]: 70 }, name: '' }], // unblockable
+    attacks: [{ dmg: { [DamageType.Poison]: 70 }, name: 'poison' }], // unblockable
     hp: 50,
     staggerFactor: 0,
     staggerBlocked: true,
@@ -418,7 +418,7 @@ export const creatures: Creature[] = [
     tier: 3,
     emoji: '🦠',
     faction: Faction.Undead,
-    attacks: [{ dmg: { [DamageType.Poison]: 90 }, name: '' }], // unblockable
+    attacks: [{ dmg: { [DamageType.Poison]: 90 }, name: 'poison' }], // unblockable
     hp: 150,
     staggerFactor: 0,
     staggerBlocked: true,
@@ -463,7 +463,7 @@ export const creatures: Creature[] = [
     attacks: [{ dmg: {
       [DamageType.Blunt]: 10,
       [DamageType.Fire]: 40,
-    }, name: '', force: 30 }],
+    }, name: 'fireball', force: 30 }],
     hp: 20,
     staggerFactor: 0.5,
     staggerBlocked: true,
@@ -486,7 +486,7 @@ export const creatures: Creature[] = [
     tier: 3,
     emoji: '👻',
     faction: Faction.Undead,
-    attacks: [{ dmg: { [DamageType.Slash]: 60, }, name: '', force: 60 }],
+    attacks: [{ dmg: { [DamageType.Slash]: 60, }, name: 'slash', force: 60 }],
     hp: 100,
     staggerFactor: 0.5,
     staggerBlocked: true,
@@ -535,7 +535,7 @@ export const creatures: Creature[] = [
     emoji: '🧟',
     faction: Faction.Undead,
     attacks: [
-      { dmg: { [DamageType.Slash]: 58, }, name: '', force: 60 }
+      { dmg: { [DamageType.Slash]: 58, }, name: 'sword', force: 60 }
     ],
     hp: 200,
     staggerFactor: 0.5,
@@ -678,7 +678,7 @@ export const creatures: Creature[] = [
     tier: 4,
     emoji: '🐉',
     faction: Faction.MountainMonsters,
-    attacks: [{ dmg: { [DamageType.Frost]: 90 }, burst: 3, name: '', force: 30, }], // burst interval: 0.3
+    attacks: [{ dmg: { [DamageType.Frost]: 90 }, burst: 3, name: 'ice shards', force: 30, }], // burst interval: 0.3
     hp: 100,
     staggerFactor: 0,
     staggerBlocked: true,

@@ -75,7 +75,7 @@ export function Combat() {
   const [primary, secondary] = weapon.attacks;
 
   return (<>
-    <h2>Combat calculator</h2>
+    <h1>Combat calculator</h1>
     <div className="CombatCalc">
       <div className="Player">
         <h2>Player</h2>

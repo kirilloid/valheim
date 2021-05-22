@@ -10,13 +10,13 @@ export function Tool({ item, level }: { item: TTool, level?: number }) {
   const translate = useContext(TranslationContext);
   return (
     <>
-      <h2>
+      <h1>
         <Icon type="crafting" id={item.id} />
         {' '}
         {translate(item.id)}
-      </h2>
+      </h1>
       <section>
-        <header>{translate('ui.itemType.tool')}</header>
+        <h2>{translate('ui.itemType.tool')}</h2>
         <dl>
           <dt>{translate('ui.hands')}</dt><dd>{translate('ui.hands.both')}</dd>
           <dt>{translate('ui.maxQuality')}</dt><dd><Icon type="icon" id="craft_icon" size={16} />{' '}{item.maxLvl}</dd>
@@ -26,7 +26,7 @@ export function Tool({ item, level }: { item: TTool, level?: number }) {
         </dl>
       </section>
       <section>
-        <header>{translate('ui.usedToCraft')}</header>
+        <h2>{translate('ui.usedToCraft')}</h2>
         ...
       </section>
       <RecipeSection item={item} />

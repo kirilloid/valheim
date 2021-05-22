@@ -8,13 +8,13 @@ export function Valuable({ item }: { item: TValuable }) {
   const translate = useContext(TranslationContext);
   return (
     <>
-      <h2>
+      <h1>
         <Icon type="resource" id={item.id} />
         {' '}
         {translate(item.id)}
-      </h2>
+      </h1>
       <section>
-        <header>{translate('ui.itemType.valuable')}</header>
+        <h2>{translate('ui.itemType.valuable')}</h2>
         <dl>
           <dt>{translate('ui.weight')}</dt><dd><Icon type="icon" id="weight" size={16} />{' '}{item.weight}</dd>
           <dt>{translate('ui.stack')}</dt><dd>{item.stack}</dd>

@@ -107,13 +107,13 @@ export function Piece({ item }: { item: TPiece }) {
   const specialReqs = reqList(item.piece);
   return (
     <>
-      <h2>
+      <h1>
         <Icon type="piece" id={item.id} />
         {' '}
         {translate(item.id)}
-      </h2>
+      </h1>
       <section>
-        <header>{translate(`ui.piece`)}</header>
+        <h2>{translate(`ui.piece`)}</h2>
         <dl>
           <dt>health</dt><dd>{hp}</dd>
           <Resistances mods={damageModifiers} />
@@ -125,7 +125,7 @@ export function Piece({ item }: { item: TPiece }) {
         </dl>
       </section>
       <section>
-        <header>{translate(`ui.pieceType.${item.subtype}`)}</header>
+        <h2>{translate(`ui.pieceType.${item.subtype}`)}</h2>
         <PieceSpecific item={item} />
       </section>
       <Recipe item={item} />

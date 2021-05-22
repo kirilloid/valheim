@@ -8,13 +8,13 @@ import { TranslationContext } from '../translation.effect';
 export function Potion({ item }: { item: TPotion }) {
   const translate = useContext(TranslationContext);
   return (<>
-    <h2>
+    <h1>
       <Icon type="resource" id={item.id} />
       {' '}
       {translate(item.id)}
-    </h2>
+    </h1>
     <section>
-      <header>{translate('ui.itemType.potion')}</header>
+      <h2>{translate('ui.itemType.potion')}</h2>
       <dl>
         {item.health ? <><dt>{translate('ui.health')}</dt><dd>+{item.health[0]} over {timeI2S(item.health[1])}</dd></> : null}
         {item.stamina ? <><dt>{translate('ui.stamina')}</dt><dd>+{item.stamina[0]} over {timeI2S(item.stamina[1])}</dd></> : null}
@@ -25,7 +25,7 @@ export function Potion({ item }: { item: TPotion }) {
       </dl>
     </section>
     <section>
-      <header>{translate('ui.itemType.resource')}</header>
+      <h2>{translate('ui.itemType.resource')}</h2>
       <dl>
         <dt>{translate('ui.weight')}</dt><dd><Icon type="icon" id="weight" size={16} />{' '}{item.weight}</dd>
         <dt>{translate('ui.stack')}</dt><dd>{item.stack}</dd>

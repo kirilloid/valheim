@@ -46,13 +46,13 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
   const dmgScale = dmgBonus(1, scale);
   const [sid, snr] = getSummon(creature.id) ?? ['', 0];
   return (<>
-    <h2>
+    <h1>
       <Icon type="creature" id={creature.id} />
       {' '}
       {translate(creature.id)}
-    </h2>
+    </h1>
     <section>
-      <header>creature</header>
+      <h2>creature</h2>
       <dl>
       <dt key="faction-label">faction</dt><dd key="faction-value">{faction(creature.faction)}</dd>
       {sid ? <>
@@ -63,14 +63,22 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
       <dd key="health-value">{hpBonus(creature.hp, scale)}</dd>
       <dt key="stagger-label">stagger</dt>
       <dd key="stagger-value">{creature.hp * staggerFactor}</dd>
-      <Resistances mods={creature.damageModifiers} />
-      {creature.attacks.map(a => 'spawn' in a
-        ? <SpawnAttack attack={a} />
-        : <NormalAttack key={a.name} attack={a} dmgScale={dmgScale} />)}
       </dl>
+      <h3>resistances</h3>
+      <dl>
+      <Resistances mods={creature.damageModifiers} />
+      </dl>
+      {creature.attacks.length ? <>
+        <h3>attacks</h3>
+        <dl>
+        {creature.attacks.map(a => 'spawn' in a
+          ? <SpawnAttack attack={a} />
+          : <NormalAttack key={a.name} attack={a} dmgScale={dmgScale} />)}
+        </dl>
+      </> : null}
     </section>
     <section>
-      <header>drops</header>
+      <h2>drops</h2>
       <ul>
         {creature.drop.map(de => <li key={de.item}>
           <Icon type={data[de.item]?.type === 'armor' ? 'armor' : 'resource'} id={de.item} />
@@ -82,7 +90,7 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
       </ul>
     </section>
     {tame != null ? <section>
-      <header>tameable</header>
+      <h2>tameable</h2>
       <dl>
       <dt>taming time</dt><dd>{timeI2S(tame.tameTime)}</dd>
       <dt>eats</dt><dd>{tame.eats.map(id => <Icon key={id} type="resource" id={id} size={32} />)}</dd>

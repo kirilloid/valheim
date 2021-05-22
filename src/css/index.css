@@ -17,7 +17,8 @@ img {
 }
 
 article h1,
-article h2 {
+article h2,
+article h3 {
   text-transform: capitalize;
 }
 

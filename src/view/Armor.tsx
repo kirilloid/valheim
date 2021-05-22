@@ -11,13 +11,13 @@ export function Armor({ item, level }: { item: TArmor, level?: number }) {
   const translate = useTranslation();
   return (
     <>
-      <h2>
+      <h1>
         <Icon type="armor" id={item.id} />
         {' '}
         {translate(item.id)}
-      </h2>
+      </h1>
       <section>
-        <header>{translate('ui.itemType.armor')}</header>
+        <h2>{translate('ui.itemType.armor')}</h2>
         <dl>
           <dt>{translate('ui.slot')}</dt><dd>{translate(`ui.slot.${item.slot}`)}</dd>
           <dt><Link to="/info/combat#armor">{translate('ui.armor')}</Link></dt><dd>{showPair(item.armor, level)}</dd>
@@ -29,7 +29,7 @@ export function Armor({ item, level }: { item: TArmor, level?: number }) {
         </dl>
       </section>
       <section>
-        <header>{translate('ui.itemType.resource')}</header>
+        <h2>{translate('ui.itemType.resource')}</h2>
         <dl>
           <dt>{translate('ui.weight')}</dt><dd><Icon type="icon" id="weight" size={16} />{' '}{item.weight}</dd>
           <dt>{translate('ui.floats')}</dt><dd>{item.floating ? '✔️' : '❌'}</dd>
