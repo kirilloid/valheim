@@ -19,7 +19,7 @@ const infos: Record<string, Article> = {
     sections: [
       {
         header: 'armor',
-        text: `Armor is added for all equipped items. Total armor is shown on the right side of inventory ![icon/ac_bkg]. If armor is less than half of the damage, then resulting damage reduction is just: (damage - armor). Otherwise it's (damage^2 / 4*armor)`,
+        text: `Armor is added for all equipped items. Total armor is shown on the right side of inventory ![ac_bkg]. If armor is less than half of the damage, then resulting damage reduction is just: (damage - armor). Otherwise it's (damage^2 / 4*armor)`,
       },
       {
         header: 'backstab',
@@ -63,8 +63,8 @@ function replaceAllWidgets(input: string): ReactChildren {
   let result: ReactChildren = [input];
   result = replaceWidgets(
     result,
-    /!\[(\w+)\/(\w+)\]/g,
-    (_: string, type: string, id: string) => <Icon type={type} id={id} size={16} />,
+    /!\[(\w+)\]/g,
+    (_: string, id: string) => <Icon id={id} size={16} />,
   );
   result = replaceWidgets(
     result,

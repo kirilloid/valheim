@@ -1,21 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { useTranslation } from '../translation.effect';
+import { TranslationContext } from '../translation.effect';
 
 import type { Armor as TArmor } from '../types';
 import { durability, ItemSpecial, showPair } from './helpers';
 import { Icon } from './Icon';
+import { ItemHeader } from './ItemHeader';
 import { RecipeSection } from './Source';
 
 export function Armor({ item, level }: { item: TArmor, level?: number }) {
-  const translate = useTranslation();
+  const translate = useContext(TranslationContext);
   return (
     <>
-      <h1>
-        <Icon type="armor" id={item.id} />
-        {' '}
-        {translate(item.id)}
-      </h1>
+      <ItemHeader item={item} />
       <section>
         <h2>{translate('ui.itemType.armor')}</h2>
         <dl>
@@ -31,7 +28,7 @@ export function Armor({ item, level }: { item: TArmor, level?: number }) {
       <section>
         <h2>{translate('ui.itemType.resource')}</h2>
         <dl>
-          <dt>{translate('ui.weight')}</dt><dd><Icon type="icon" id="weight" size={16} />{' '}{item.weight}</dd>
+          <dt>{translate('ui.weight')}</dt><dd><Icon id="weight" size={16} />{' '}{item.weight}</dd>
           <dt>{translate('ui.floats')}</dt><dd>{item.floating ? '✔️' : '❌'}</dd>
         </dl>
       </section>

@@ -8,7 +8,7 @@ import {
   DamageType,
   ItemSpecial as TItemSpecial
 } from '../types';
-import { Icon } from './Icon';
+import { Icon, SkillIcon } from './Icon';
 import { TranslationContext } from '../translation.effect';
 import { applyDamageModifier, getTotalDamage, playerDamageModifiers } from '../model/combat';
 import { SkillType } from '../model/skills';
@@ -28,13 +28,13 @@ export function ShortWeaponDamage({ damage, skill }: { damage: DamageProfile, sk
   const result: (JSX.Element | string)[] = [];
   if (damage[DamageType.Pickaxe]) {
     result.push(
-      <Icon key="Pickaxes" type="skills" id="Pickaxes" size={16} />,
+      <SkillIcon key="Pickaxes" skill={SkillType.Pickaxes} size={16} />,
       String(damage[DamageType.Pickaxe]),
     );
   }
   if (damage[DamageType.Chop]) {
     result.push(
-      <Icon key="Woodcutting" type="skills" id="Woodcutting" size={16} />,
+      <SkillIcon key="WoodCutting" skill={SkillType.WoodCutting} size={16} />,
       String(damage[DamageType.Chop]),
     );
   }
@@ -53,7 +53,7 @@ export function ShortWeaponDamage({ damage, skill }: { damage: DamageProfile, sk
   } = damage;
   const obj = { physical, fire, frost, poison, lightning, spirit };
   result.push(
-    <Icon type="skills" id={SkillType[skill]!} size={16} />,
+    <SkillIcon skill={skill} size={16} />,
     ...Object.entries(obj)
       .filter(kv => kv[1])
       .map(kv => <span key={kv[0]} className={`damage--${kv[0]}`}>{kv[1]}</span>)

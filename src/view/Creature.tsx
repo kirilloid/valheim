@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { dmgBonus, hpBonus, multiplyDamage } from '../model/combat';
 import { data } from '../model/objects';
 import { getSummon } from '../model/resources';
 import { timeI2S } from '../model/utils';
-import { useTranslation } from '../translation.effect';
+import { TranslationContext } from '../translation.effect';
 
-import { Creature as TCreature, Faction, Item, NormalAttackProfile, SpawnAttackProfile } from '../types';
+import { Creature as TCreature, Faction, NormalAttackProfile, SpawnAttackProfile } from '../types';
 import { Resistances, shortCreatureDamage } from './helpers';
-import { Icon } from './Icon';
+import { ItemIcon } from './Icon';
+import { ItemHeader } from './ItemHeader';
 
 function faction(faction: Faction): string {
   switch (faction) {
@@ -35,29 +36,25 @@ function NormalAttack({ attack: a, dmgScale }: { attack: NormalAttackProfile, dm
 function SpawnAttack({ attack }: { attack: SpawnAttackProfile }) {
   return <>
     <dt key='spawn-key'>spawn</dt>
-    <dd key='spawn-val'>{attack.spawn.map(id => <Icon key={id} type="creature" id={id} />)}</dd>
+    <dd key='spawn-val'>{attack.spawn.map(id => <ItemIcon key={id} item={data[id]} />)}</dd>
   </>
 }
 
 export function Creature({ creature, level = 1 }: { creature: TCreature, level?: number }) {
-  const translate = useTranslation();
+  const translate = useContext(TranslationContext);
   const { tame, pregnancy, staggerFactor } = creature;
   const scale = { stars: level - 1 };
   const dmgScale = dmgBonus(1, scale);
   const [sid, snr] = getSummon(creature.id) ?? ['', 0];
   return (<>
-    <h1>
-      <Icon type="creature" id={creature.id} />
-      {' '}
-      {translate(creature.id)}
-    </h1>
+    <ItemHeader item={creature} />
     <section>
       <h2>creature</h2>
       <dl>
       <dt key="faction-label">faction</dt><dd key="faction-value">{faction(creature.faction)}</dd>
       {sid ? <>
         <dt key="summon-label">summoned with</dt>
-        <dd key="summon-value"><Icon type="resource" id={sid} size={16} /> <Link to={`/obj/${sid}`}>{translate(sid)}</Link> x{snr}</dd>
+        <dd key="summon-value"><ItemIcon item={data[sid]} size={16} /> <Link to={`/obj/${sid}`}>{translate(sid)}</Link> x{snr}</dd>
       </> : null}
       <dt key="health-label">{translate('ui.health')}</dt>
       <dd key="health-value">{hpBonus(creature.hp, scale)}</dd>
@@ -81,7 +78,7 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
       <h2>drops</h2>
       <ul>
         {creature.drop.map(de => <li key={de.item}>
-          <Icon type={data[de.item]?.type === 'armor' ? 'armor' : 'resource'} id={de.item} />
+          <ItemIcon item={data[de.item]} />
           <Link to={`/obj/${de.item}`}>
             {translate(de.item)}
           </Link>{' '}
@@ -93,7 +90,7 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
       <h2>tameable</h2>
       <dl>
       <dt>taming time</dt><dd>{timeI2S(tame.tameTime)}</dd>
-      <dt>eats</dt><dd>{tame.eats.map(id => <Icon key={id} type="resource" id={id} size={32} />)}</dd>
+      <dt>eats</dt><dd>{tame.eats.map(id => <ItemIcon key={id} item={data[id]} size={32} />)}</dd>
       <dt>controlled</dt><dd>{tame.commandable ? '✔️' : '❌'}</dd>
       <dt>breedable</dt><dd>{pregnancy ? '✔️' : '❌'}</dd>
       </dl>

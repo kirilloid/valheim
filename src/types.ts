@@ -120,10 +120,8 @@ export const dropTrophy = (item: EntityId, chance: number) => {
   return dropEntry(item, { chance, scale: false });
 };
 
-export interface Creature {
+export interface Creature extends GameObjectBase {
   type: 'creature';
-  id: EntityId;
-  tier: number;
   emoji: string;
   // maxLvl: number;
   // upgradeDistance: number;
@@ -153,6 +151,7 @@ export enum CraftingStation {
   Windmill,
   SpinningWheel,
   Cultivator,
+  BeeHive,
 }
 
 export enum MaterialType {
@@ -164,8 +163,7 @@ export enum MaterialType {
 
 export type ComfortGroup = 'fire' | 'bed' | 'banner' | 'sit';
 
-export interface BasePiece {
-  id: EntityId;
+export interface BasePiece extends GameObjectBase {
   wear: {
     hp: number;
     damageModifiers: DamageModifiers;
@@ -178,8 +176,6 @@ export interface BasePiece {
 
 export type Piece = BasePiece & {
   type: 'piece';
-  disabled?: boolean;
-  tier: number;
   wear: {
     hp: number;
     damageModifiers: DamageModifiers;
@@ -265,11 +261,15 @@ export interface Ship extends BasePiece {
   }
 }
 
-interface BaseItem {
+interface GameObjectBase {
   id: EntityId;
   tags?: string[];
   dlc?: 'beta';
+  disabled?: true;
   tier: number;
+}
+
+interface BaseItem extends GameObjectBase {
   weight: number;
   stack?: number;
   floating?: true;
@@ -322,7 +322,7 @@ export enum ItemType {
 }
 
 export interface Resource extends BaseItem {
-  type: 'item';
+  type: 'item' | 'trophy';
   emoji?: string;
   summon?: [EntityId, number];
   power?: EntityId;
@@ -396,7 +396,7 @@ export interface Weapon extends BaseItem {
   slot: 'primary' | 'both' | 'secondary' | 'bow' | 'either'
     | 'head' | 'shoulders' | 'body' | 'legs'
     | 'none' | 'util';
-  skill: SkillType;
+  skill: Exclude<SkillType, SkillType.Blocking>;
   special?: 'harpoon';
   toolTier?: number;
   damage: Pair<DamageProfile>;
@@ -412,6 +412,21 @@ export interface Weapon extends BaseItem {
   durabilityDrainPerSec?: number;
 }
 
+export interface Shield extends BaseItem {
+  type: 'shield';
+  damage?: DamageProfile;
+  slot: 'secondary';
+  skill: SkillType.Blocking;
+  block: number | Pair<number>;
+  parryForce: number | Pair<number>;
+  parryBonus: number;
+  maxLvl: number;
+  knockback?: number;
+  backstab?: number;
+  moveSpeed: number;
+  durability: Pair<number>;
+}
+
 export interface Armor extends BaseItem {
   type: 'armor';
   slot: 'head' | 'shoulders' | 'body' | 'legs' | 'util' | 'none';
@@ -423,8 +438,10 @@ export interface Armor extends BaseItem {
   damageModifiers?: Partial<DamageModifiers>;
 }
 
-export type Item = Resource | Valuable | Food | Potion | Weapon | Armor | Arrow | Tool;
+export type Item = Resource | Valuable | Food | Potion | Weapon | Shield | Armor | Arrow | Tool;
 export type ItemSpecial = Weapon['special'] | Armor['special'] | Tool['special'];
+
+export type GameObject = Item | Piece | Creature;
 
 export enum Skill {
   Clubs,

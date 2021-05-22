@@ -1,43 +1,27 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
 
 import type { Item } from '../types';
 import { Icon } from './Icon';
-import { resourceMap } from '../model/resource-usage';
-import { useTranslation } from '../translation.effect';
+import { TranslationContext } from '../translation.effect';
 import { Source } from './Source';
+import { ItemHeader } from './ItemHeader';
 
 export function GenericItem({ item }: { item: Item }) {
-  const translate = useTranslation();
-  const craftables = resourceMap[item.id];
+  const translate = useContext(TranslationContext);
   return (
     <>
-      <h1>
-        <Icon type="resource" id={item.id} />
-        {' '}
-        {translate(item.id)}
-      </h1>
+      <ItemHeader item={item} />
       <section>
         <h2>{translate('ui.itemType.resource')}</h2>
         <dl>
-          <dt>{translate('ui.weight')}</dt><dd><Icon type="icon" id="weight" size={16} />{' '}{item.weight}</dd>
+          <dt>{translate('ui.weight')}</dt><dd><Icon id="weight" size={16} />{' '}{item.weight}</dd>
           <dt>{translate('ui.stack')}</dt><dd>{item.stack}</dd>
           <dt>{translate('ui.floats')}</dt><dd>{item.floating ? '✔️' : '❌'}</dd>
           {item.teleportable === false
-            ? <>{translate('ui.nonTeleportable')} <Icon type="icon" id="noteleport" size={24} /></>
+            ? <><dt>{translate('ui.nonTeleportable')}</dt><dd><Icon id="noteleport" size={24} /></dd></>
             : null}
         </dl>
       </section>
-      {craftables?.length
-        ? <section>
-            <h2>crafting</h2>
-            {translate('ui.usedToCraft')}:
-            <ul>
-              {craftables.map(item => <li><Link to={`/obj/${item.id}`}>{translate(item.id)}</Link></li>)}
-            </ul>
-          </section>
-        : null
-      }
       <Source id={item.id} />
     </>
   );

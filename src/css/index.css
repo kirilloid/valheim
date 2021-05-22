@@ -12,6 +12,13 @@ code {
     monospace;
 }
 
+.info {
+  color: teal;
+  border: 1px solid teal;
+  padding: 0.5em;
+  margin: 0.5em 0;
+}
+
 img {
   vertical-align: middle;
 }
@@ -36,8 +43,24 @@ article *.active {
   max-width: 420px;
 }
 
-.RecipeItems th {
-  text-align: unset;
+.RecipeItems__value {
+  text-align: right;
+  width: 10%;
+}
+
+.CraftList {
+  padding: 0;
+  list-style: none;
+}
+@media screen and (min-width: 400px) {
+  .CraftList {
+    column-count: 2;
+  }
+}
+@media screen and (min-width: 800px) {
+  .CraftList {
+    column-count: 3;
+  }
 }
 
 .damage--physical { }

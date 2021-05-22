@@ -5,7 +5,7 @@ import { assertNever } from '../model/utils';
 import { data } from '../model/objects';
 import { creatures } from '../model/creatures';
 import { Armor } from './Armor';
-import { Weapon } from './Weapon';
+import { Weapon, Shield } from './Weapon';
 import { Food } from './Food';
 import { Potion } from './Potion';
 import { Valuable } from './Valuable';
@@ -27,18 +27,20 @@ export function GameObject() {
   const { id = '404' } = params; 
   const level = parseLevel(params.level);
   const item = data[id];
-  if (item != null) return <Item item={item} level={level} />;
-  const creature = creatures.find(c => c.id === id);
-  if (creature != null) return <Creature creature={creature} level={level} />;
-  return <>Entity with id '{id}' not found!</>
+  if (item == null) return <>Entity with id '{id}' not found!</>
+  return <Item item={item} level={level} />;
 }
 
-function Item({ item, level }: { item: T.Item | T.Piece, level?: number }) {
+function Item({ item, level }: { item: T.GameObject, level?: number }) {
   switch (item.type) {
+    case 'creature':
+      return <Creature creature={item} level={level} />;
     case 'armor':
       return <Armor item={item} level={level} />
     case 'weapon':
       return <Weapon item={item} level={level} />
+    case 'shield':
+      return <Shield item={item} level={level} />
     case 'food':
       return <Food item={item} />
     case 'potion':
@@ -52,6 +54,7 @@ function Item({ item, level }: { item: T.Item | T.Piece, level?: number }) {
     case 'piece':
       return <Piece item={item} />
     case 'item':
+    case 'trophy':
       return <GenericItem item={item} />
     default:
       return assertNever(item);

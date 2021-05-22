@@ -1,11 +1,15 @@
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 import { getCraftingStationId, getStructuralIntegrity } from '../model/building';
+import { data } from '../model/objects';
+import { stationsMap } from '../model/resource-usage';
 import { assertNever, GAME_DAY, timeI2S } from '../model/utils';
 import { TranslationContext } from '../translation.effect';
 
 import { ItemType, MaterialType, Piece as TPiece } from '../types';
 import { Resistances } from './helpers';
-import { Icon } from './Icon';
+import { ItemIcon } from './Icon';
+import { ItemHeader } from './ItemHeader';
 import { Recipe } from './Source';
 
 function PieceSpecific({ item }: { item: TPiece }) {
@@ -15,7 +19,7 @@ function PieceSpecific({ item }: { item: TPiece }) {
       const { fuel, burnTime, capacity, minHeightAbove, smoke, fireworks } = item.fireplace;
       const totalTime = burnTime * capacity;
       return (<dl>
-        <dt>fuel type</dt><dd><Icon type="resource" id={fuel} />{' '}{translate(fuel)}</dd>
+        <dt>fuel type</dt><dd><ItemIcon item={data[fuel]} />{' '}{translate(fuel)}</dd>
         <dt>capacity</dt><dd>{capacity}</dd>
         <dt>burn time</dt><dd>{timeI2S(burnTime)}</dd>
         <dt>total burn time</dt><dd>{timeI2S(totalTime)} = {(totalTime / GAME_DAY).toPrecision(2)} days</dd>
@@ -105,20 +109,17 @@ export function Piece({ item }: { item: TPiece }) {
   const { hp, damageModifiers, noRoof } = item.wear;
   const translate = useContext(TranslationContext);
   const specialReqs = reqList(item.piece);
+  const producedItems = item.subtype === 'craft' && stationsMap.get(item.craft.id) || [];
   return (
     <>
-      <h1>
-        <Icon type="piece" id={item.id} />
-        {' '}
-        {translate(item.id)}
-      </h1>
+      <ItemHeader item={item} />
       <section>
         <h2>{translate(`ui.piece`)}</h2>
         <dl>
           <dt>health</dt><dd>{hp}</dd>
           <Resistances mods={damageModifiers} />
           <dt>target</dt><dd>{translate(`ui.pieceTarget.${target}`)}</dd>
-          <dt>degrade w/o roof</dt><dd>{noRoof ? '✔️' : '❌'}</dd>
+          <dt>degrades w/o roof</dt><dd>{noRoof ? '✔️' : '❌'}</dd>
           {specialReqs.length ? <><dt>specific</dt><dd>{specialReqs.join(', ')}</dd></> : null}
           {requiredSpace ? <><dt>required space</dt><dd>{requiredSpace}</dd></> : null}
           {size ? <><dt>size</dt><dd>{size.filter(Boolean).join('x')}</dd></> : null}
@@ -129,6 +130,15 @@ export function Piece({ item }: { item: TPiece }) {
         <PieceSpecific item={item} />
       </section>
       <Recipe item={item} />
+      {producedItems.length
+      ? <><h2>Produces</h2>
+          <ul>{producedItems.map(item => <li key={item.id}>
+            <ItemIcon item={item} />
+            {' '}
+            <Link to={`/obj/${item.id}`}>{translate(item.id)}</Link>
+          </li>)}</ul>
+        </>
+      : null}
     </>
   );
 }

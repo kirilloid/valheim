@@ -305,7 +305,7 @@ export const pieces: Piece[] = [
     },
     craft: {
       id: CraftingStation.Workbench,
-      requiresFire,
+      requiresRoof,
     },
     wear: {
       hp: 100,
@@ -669,7 +669,7 @@ export const pieces: Piece[] = [
       notOnWood,
       onlyOnFlat,
     },
-    craft: { id: CraftingStation.BlastFurnace, queueSize: 25 },
+    craft: { id: CraftingStation.CharcoalKiln, queueSize: 25 },
     wear: {
       hp: 1500,
       damageModifiers: craftStationResist,
@@ -689,7 +689,7 @@ export const pieces: Piece[] = [
       notOnWood,
       onlyOnFlat,
     },
-    craft: { id: CraftingStation.BlastFurnace, queueSize: 50 },
+    craft: { id: CraftingStation.Windmill, queueSize: 50 },
     wear: {
       hp: 1000,
       damageModifiers: craftStationResist,
@@ -1239,7 +1239,7 @@ export const pieces: Piece[] = [
       ItemType.Trophie,
       ItemType.Misc,
       ItemType.Consumable,
-    ],
+    ], // ['weapon', 'tool', 'shield', 'armor/head', 'trophy', 'resource', 'food', 'potion']
     tier: 2,
     piece: { target: 'none', water: false, onlyOnFlat, size: [0.25, 0.25, 0] },
     wear: { ...woodRoofStructureWear, hp: 50 },
@@ -1258,6 +1258,7 @@ export const pieces: Piece[] = [
       ItemType.Trophie,
       ItemType.Misc,
     ], // -MeadTasty
+    // ['weapon', 'tool', 'shield', 'armor/head', 'trophy', 'resource']
     tier: 2,
     piece: { target: 'none', water: undefined, size: [0.25, 0, 0.25] },
     wear: { ...woodRoofStructureWear, hp: 50 },
@@ -1345,8 +1346,9 @@ export const pieces: Piece[] = [
   },
   { id: 'piece_beehive',
     type: 'piece',
-    subtype: 'misc',
+    subtype: 'craft',
     tier: 1,
+    craft: { id: CraftingStation.BeeHive },
     piece: { target: 'primary', water: undefined, size: [0.5, 0.5, 0.5] },
     wear: { ...woodRoofStructureWear, hp: 100 },
     recipe: { materials: { Wood: 10, QueenBee: 1 }, station: CraftingStation.Workbench },

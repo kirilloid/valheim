@@ -1,14 +1,16 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import { Biome, CraftingStation, EntityId, Item, Piece } from '../types';
+import { Biome, CraftingStation, EntityId, GameObject, Item, Piece } from '../types';
 import { TranslationContext } from '../translation.effect';
 import { data } from '../model/objects';
 import { creatures } from '../model/creatures';
-import { Icon } from './Icon';
+import { Icon, ItemIcon, SkillIcon } from './Icon';
 import { timeI2S } from '../model/utils';
 import { getCraftingStationId } from '../model/building';
 import { useGlobalState } from '../globalState.effect';
+import { resourceMap } from '../model/resource-usage';
+import { SkillType } from '../model/skills';
 
 const source: Record<EntityId, EntityId[]> = {};
 for (const { id, drop } of creatures) {
@@ -20,12 +22,12 @@ for (const { id, drop } of creatures) {
 function DropSource({ id }: { id: EntityId }) {
   const translate = useContext(TranslationContext);
   return (<Link to={`/obj/${id}`}>
-    <Icon type="creature" id={id} />
+    <ItemIcon item={data[id]} />
     {translate(id)}
   </Link>);    
 }
 
-function DroppedBy({ sources }: { sources: EntityId[] }) {
+function DropsFrom({ sources }: { sources: EntityId[] }) {
   return (
     sources.length === 1
     ? <DropSource id={sources[0]!} />
@@ -37,17 +39,24 @@ export function DropSection({ sources }: { sources: string[] | undefined }) {
   const translate = useContext(TranslationContext);
   return sources?.length
     ? <section>
-        <h2>{translate('ui.droppedBy')}</h2>
-        <DroppedBy sources={sources} />
+        <h2>{translate('ui.dropsFrom')}</h2>
+        <DropsFrom sources={sources} />
       </section>
     : null;
 }
 
 function Station({ station }: { station: CraftingStation }) {
+  const translate = useContext(TranslationContext);
+  if (station === CraftingStation.Inventory) {
+    return <>
+      <SkillIcon skill={SkillType.Unarmed} />{' '}
+      inventory
+    </>;
+  }
   const id = getCraftingStationId(station);
   return <>
-    <Icon type="piece" id={id} />{' '}
-    <Link to={`/obj/${id}`}>{CraftingStation[station]}</Link>
+    <ItemIcon item={data[id]} />{' '}
+    <Link to={`/obj/${id}`}>{translate(id)}</Link>
   </>;
 }
 
@@ -57,7 +66,7 @@ const MaterialHeader = ({ cols }: { cols: number }) => (
       <th key="icon"></th>
       <th key="name">level</th>
       {Array.from({ length: cols }, (_, i: number) =>
-        <th key={`lvl${i+1}`}>{i + 1}</th>)}
+        <th key={`lvl${i+1}`} className="RecipeItems__value">{i + 1}</th>)}
     </tr>
   </thead>
 );
@@ -84,10 +93,10 @@ function Materials({
       <tbody>
       {keys.map(id =>
         <tr key={id}>
-          <td key="icon"><Icon type="resource" id={id} /></td>
+          <td key="icon"><ItemIcon item={data[id]} /></td>
           <td key="name"><Link to={`/obj/${id}`}>{translate(id)}</Link></td>
           {Array.from({ length: maxLvl }, (_, i: number) =>
-            <td key={`lvl${i+1}`}>{
+            <td key={`lvl${i+1}`} className="RecipeItems__value">{
               aggregateSum
                 ? (materials[id] ?? 0) + (materialsUp[id] ?? 0) * i * (i + 1) / 2
                 : (i ? (materialsUp[id] ?? 0) * i : (materials[id] ?? 0))
@@ -111,18 +120,41 @@ function Materials({
   );
 }
 
+function CraftingSection({ id }: { id: EntityId }) {
+  const translate = useContext(TranslationContext);
+  const craftables = resourceMap[id];
+  return craftables?.length
+    ? <section>
+        <h2>crafting</h2>
+        {translate('ui.usedToCraft')}:
+        <ul className="CraftList">
+          {craftables.map(item => <li>
+            <ItemIcon item={item} />
+            {' '}
+            <Link to={`/obj/${item.id}`}>{translate(item.id)}</Link>
+          </li>)}
+        </ul>
+      </section>
+    : null;
+}
+
 export function Recipe({ item }: { item: Item | Piece}) {
   const { recipe } = item;
   if (recipe == null) return null;
   if ('value' in recipe) {
     return <>
-      Bought from <Link to="/info/trader">trader</Link> for {recipe.value} <Icon type="icon" id="coin_32" size={16} />
+      Bought from <Link to="/info/trader">trader</Link> for {recipe.value} <Icon id="coin_32" size={16} />
     </>;
   }
   if ('number' in recipe) {
     const { station } = recipe.source;
+    const { number, materials } = recipe;
     return <>
-      Crafted {recipe.number}x in <Station station={station} /> using: <Materials materials={recipe.materials} />
+      Produced {number === 1 ? '' : `${number}x`} in <Station station={station} />
+      {Object.keys(materials).length
+        ? <>{' using: '}<Materials materials={materials} /></>
+        : ' for free'
+      }
     </>
   }
   if ('biomes' in recipe) {
@@ -135,22 +167,26 @@ export function Recipe({ item }: { item: Item | Piece}) {
     return <>
       Crafted in {level
         ? <><Station station={station} /> lvl {level}</>
-        : <Icon type="weapon" id="Hands" />} using:{' '}
+        : <Icon path="skills/Unarmed" />} using:{' '}
       <Materials
         materials={recipe.materials}
         materialsUp={recipe.materialsPerLevel}
         maxLvl={(item as any).maxLvl} />
     </>
   }
-  return <>
-    Crafted with <Station station={recipe.station} /> using: <Materials materials={recipe.materials} />
-  </>
+  return item.type === 'piece'
+    ? <>
+      Built near <Station station={recipe.station} /> using: <Materials materials={recipe.materials} />
+    </>
+    : <>
+      Crafted in <Station station={recipe.station} /> using: <Materials materials={recipe.materials} />
+    </>
 }
 
 
-export function RecipeSection({ item }: { item: Item | Piece | undefined }) {
+export function RecipeSection({ item }: { item: GameObject | undefined }) {
   const translate = useContext(TranslationContext);
-  return item
+  return item && item.type !== 'creature'
     ? <section>
         <h2>{translate('ui.recipe')}</h2>
         <Recipe item={item} />
@@ -160,6 +196,7 @@ export function RecipeSection({ item }: { item: Item | Piece | undefined }) {
 
 export function Source({ id }: { id: EntityId }) {
   return <>
+    <CraftingSection id={id} />
     <DropSection sources={source[id]} />
     <RecipeSection item={data[id]} />
   </>

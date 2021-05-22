@@ -494,6 +494,7 @@ export const items: Item[] = [
   },
   { id: 'CapeTest',
     tier: -1,
+    disabled: true,
     type: 'armor', slot: 'shoulders',
     armor: [1, 1],
     weight: 4,

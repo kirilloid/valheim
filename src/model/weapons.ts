@@ -1,7 +1,8 @@
-import { CraftingStation, DamageType, Weapon } from "../types";
+import { CraftingStation, DamageType, Shield, Weapon } from "../types";
 import { SkillType } from "./skills";
 
 const CRAFT_TIME = 4;
+const disabled = true;
 
 const MACE_R2 = 0.8;
 const SWORD_R2 = 0.8;
@@ -46,7 +47,7 @@ const animations = {
   }
 };
 
-export const items: Weapon[] = [
+export const items: (Weapon | Shield)[] = [
 // PRE-CRAFT AGE
   { type: 'weapon', slot: 'both',
     id: 'Hands',
@@ -150,6 +151,7 @@ export const items: Weapon[] = [
   { type: 'weapon', slot: 'either',
     id: 'Torch',
     tier: 0,
+    tags: ['fire'],
     weight: 1, stack: 1,
     skill: SkillType.Clubs,
     damage: [{
@@ -422,20 +424,18 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Workbench, level: 0 },
     }
   },
-  { type: 'weapon', slot: 'secondary',
+  { type: 'shield', slot: 'secondary',
     id: 'ShieldWood',
     tier: 1,
     weight: 4, stack: 1,
     floating: true,
     skill: SkillType.Blocking,
-    damage: [{}, {}],
-    attacks: [],
     maxLvl: 3,
     durability: [200, 50],
     block: [20, 5],
     parryForce: 0,
     parryBonus: 1.5,
-    knockback: 40, backstab: 4, moveSpeed: -0.2,
+    moveSpeed: -0.2,
     recipe: {
       time: CRAFT_TIME,
       materials: { Wood: 10, Resin: 4, LeatherScraps: 4 },
@@ -444,20 +444,18 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Workbench, level: 2 },
     }
   },
-  { type: 'weapon', slot: 'secondary',
+  { type: 'shield', slot: 'secondary',
     id: 'ShieldWoodTower',
     tier: 1,
     weight: 4, stack: 1,
     floating: true,
     skill: SkillType.Blocking,
-    damage: [{}, {}],
-    attacks: [],
     maxLvl: 3,
     durability: [200, 50],
     block: [35, 5],
     parryForce: 0,
     parryBonus: 1,
-    knockback: 40, backstab: 4, moveSpeed: -0.2,
+    moveSpeed: -0.2,
     recipe: {
       time: CRAFT_TIME,
       materials: { Wood: 10, LeatherScraps: 6 },
@@ -776,19 +774,17 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Workbench, level: 2 },
     }
   },
-  { type: 'weapon', slot: 'secondary',
+  { type: 'shield', slot: 'secondary',
     id: 'ShieldBronzeBuckler',
     tier: 2,
     weight: 3, stack: 1,
     skill: SkillType.Blocking,
-    damage: [{}, {}],
-    attacks: [],
     maxLvl: 3,
     durability: [200, 50],
     block: [45, 5],
     parryForce: 30,
     parryBonus: 2,
-    knockback: 40, backstab: 4, moveSpeed: -0.05,
+    moveSpeed: -0.05,
     recipe: {
       time: CRAFT_TIME,
       materials: { Wood: 4, Bronze: 10 },
@@ -944,7 +940,7 @@ export const items: Weapon[] = [
     knockback: 200, backstab: 2, moveSpeed: -0.2,
     recipe: {
       time: CRAFT_TIME,
-      materials: { ElderBark: 10, Iron: 30, YmirRemains: 4, DraugrEliteTrophy: 1 },
+      materials: { ElderBark: 10, Iron: 30, YmirRemains: 4, TrophyDraugrElite: 1 },
       materialsPerLevel: { ElderBark: 2, Iron: 15, YmirRemains: 2 },
       source: { station: CraftingStation.Forge, level: 2 },
       upgrade: { station: CraftingStation.Forge, level: 3 },
@@ -1142,17 +1138,13 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
-  { type: 'weapon', slot: 'secondary',
+  { type: 'shield', slot: 'secondary',
     id: 'ShieldBanded',
     tier: 3,
     weight: 5, stack: 1,
     floating: true,
     skill: SkillType.Blocking,
-    damage: [
-      { [DamageType.Blunt]: 10 },
-      {}
-    ],
-    attacks: [],
+    damage: { [DamageType.Blunt]: 10 },
     maxLvl: 3,
     durability: [200, 50],
     block: [60, 5],
@@ -1167,14 +1159,12 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 3 },
     }
   },
-  { type: 'weapon', slot: 'secondary',
+  { type: 'shield', slot: 'secondary',
     id: 'ShieldIronTower',
     floating: true,
     tier: 3,
     weight: 4, stack: 1,
     skill: SkillType.Blocking,
-    damage: [{}, {}],
-    attacks: [],
     maxLvl: 3,
     durability: [200, 50],
     block: [75, 5],
@@ -1396,16 +1386,13 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 3 },
     }
   },
-  { type: 'weapon', slot: 'secondary',
+  { type: 'shield', slot: 'secondary',
     id: 'ShieldSilver',
     tier: 4,
     weight: 5, stack: 1,
     floating: true,
     skill: SkillType.Blocking,
-    damage: [{
-      [DamageType.Blunt]: 10,
-    }, {}],
-    attacks: [],
+    damage: { [DamageType.Blunt]: 10 },
     maxLvl: 3,
     durability: [200, 50],
     block: [75, 5],
@@ -1420,17 +1407,13 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 4 },
     }
   },
-  { type: 'weapon', slot: 'secondary',
+  { type: 'shield', slot: 'secondary',
     id: 'ShieldSerpentscale',
     tier: 4,
     weight: 5, stack: 1,
     floating: true,
     skill: SkillType.Blocking,
-    damage: [{
-      [DamageType.Blunt]: 10,
-    }, {
-    }],
-    attacks: [],
+    damage: { [DamageType.Blunt]: 10 },
     maxLvl: 3,
     durability: [250, 50],
     block: [90, 5],
@@ -1645,16 +1628,13 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 5 },
     },
   },
-  { type: 'weapon', slot: 'secondary',
+  { type: 'shield', slot: 'secondary',
     id: 'ShieldBlackmetal',
     tier: 5,
     weight: 5, stack: 1,
     floating: true,
     skill: SkillType.Blocking,
-    damage: [{
-      [DamageType.Blunt]: 10,
-    }, {}],
-    attacks: [],
+    damage: { [DamageType.Blunt]: 10 },
     maxLvl: 3,
     durability: [200, 50],
     block: [90, 5],
@@ -1669,17 +1649,13 @@ export const items: Weapon[] = [
       upgrade: { station: CraftingStation.Forge, level: 4 },
     }
   },
-  { type: 'weapon', slot: 'secondary',
+  { type: 'shield', slot: 'secondary',
     id: 'ShieldBlackmetalTower',
     tier: 5,
     weight: 5, stack: 1,
     floating: true,
     skill: SkillType.Blocking,
-    damage: [{
-      [DamageType.Blunt]: 10,
-    }, {
-    }],
-    attacks: [],
+    damage: { [DamageType.Blunt]: 10 },
     maxLvl: 3,
     durability: [200, 50],
     block: [105, 5],
@@ -1697,6 +1673,7 @@ export const items: Weapon[] = [
 // FLAME AGE
   { type: 'weapon', slot: 'primary',
     id: 'SwordIronFire',
+    disabled,
     tier: 6,
     toolTier: 0,
     weight: 1, stack: 1,
@@ -1767,14 +1744,13 @@ export const items: Weapon[] = [
       number: NaN, // 10?
     }
   },
-  { type: 'weapon', slot: 'secondary',
+  { type: 'shield', slot: 'secondary',
     id: 'ShieldKnight',
+    disabled,
     tier: -1,
     weight: 4, stack: 1,
     floating: true,
     skill: SkillType.Blocking,
-    damage: [{}, {}],
-    attacks: [],
     maxLvl: 1,
     durability: [100, 50],
     block: [120, 5],
@@ -1782,14 +1758,13 @@ export const items: Weapon[] = [
     parryBonus: 1.5,
     knockback: 200, backstab: 4, moveSpeed: -0.05,
   },
-  { type: 'weapon', slot: 'secondary',
+  { type: 'shield', slot: 'secondary',
     id: 'ShieldIronSquare',
+    disabled,
     tier: -1,
     weight: 4, stack: 1,
     floating: true,
     skill: SkillType.Blocking,
-    damage: [{}, {}],
-    attacks: [],
     maxLvl: 1,
     durability: [200, 50],
     block: [35, 5],
@@ -1799,6 +1774,7 @@ export const items: Weapon[] = [
   },
   { type: 'weapon', slot: 'primary',
     id: 'SwordCheat',
+    disabled,
     tier: -1,
     toolTier: 10,
     weight: 1, stack: 1,

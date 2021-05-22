@@ -1,0 +1,18 @@
+import React, { useContext } from 'react';
+import { TranslationContext } from '../translation.effect';
+
+import { GameObject } from "../types";
+import { ItemIcon } from './Icon';
+
+export function ItemHeader({ item }: { item: GameObject }) {
+  const translate = useContext(TranslationContext);
+  return <>
+    {item.disabled && <div className="info">This item is currently disabled and could be obtained only via dev.commands, which are technically cheats.</div>}
+    {item.dlc ? <div className="info">This item is available only in DLC "{item.dlc}"</div> : null}
+    <h1>
+      <ItemIcon item={item} />
+      {' '}
+      {translate(item.id)}
+    </h1>
+  </>;
+}

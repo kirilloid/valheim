@@ -4,15 +4,12 @@ import { timeI2S } from '../model/utils';
 import { Icon } from './Icon';
 import { RecipeSection } from './Source';
 import { TranslationContext } from '../translation.effect';
+import { ItemHeader } from './ItemHeader';
 
 export function Potion({ item }: { item: TPotion }) {
   const translate = useContext(TranslationContext);
   return (<>
-    <h1>
-      <Icon type="resource" id={item.id} />
-      {' '}
-      {translate(item.id)}
-    </h1>
+    <ItemHeader item={item} />
     <section>
       <h2>{translate('ui.itemType.potion')}</h2>
       <dl>
@@ -27,7 +24,7 @@ export function Potion({ item }: { item: TPotion }) {
     <section>
       <h2>{translate('ui.itemType.resource')}</h2>
       <dl>
-        <dt>{translate('ui.weight')}</dt><dd><Icon type="icon" id="weight" size={16} />{' '}{item.weight}</dd>
+        <dt>{translate('ui.weight')}</dt><dd><Icon id="weight" size={16} />{' '}{item.weight}</dd>
         <dt>{translate('ui.stack')}</dt><dd>{item.stack}</dd>
         <dt>{translate('ui.floats')}</dt><dd>{item.floating ? '✔️' : '❌'}</dd>
       </dl>

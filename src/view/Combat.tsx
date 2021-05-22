@@ -8,8 +8,11 @@ import { items } from '../model/weapons';
 import { damage as damageIcon } from '../model/emoji';
 import { hpBonus, getPhysicalDamage } from '../model/combat';
 import { TranslationContext } from '../translation.effect';
-import { Icon } from './Icon';
+import { ItemIcon } from './Icon';
 import { Resistances } from './helpers';
+import { data } from '../model/objects';
+
+const weapons = items.filter(i => i.type === 'weapon') as Weapon[]; 
 
 function Damage(dmg: DamageProfile) {
   return Object.entries(dmg).map(([type, val]) => `${damageIcon[type as any as DamageType]}${val}`).join(' ');
@@ -22,7 +25,7 @@ function DropItem({ drop, level }: { drop: DropEntry, level: number }) {
   const min = drop.min * mul;
   const max = (drop.max - 1) * mul;
   return (<>
-    <dt><Icon type="resource" id={drop.item} />{translate(drop.item)}</dt>
+    <dt><ItemIcon item={data[drop.item]} />{translate(drop.item)}</dt>
     <dd>{min >= max ? `${min}` : `${min}–${max}`}
         {drop.perPlayer ? ' per player' : ''} with {chance} chance</dd>
   </>);
@@ -65,7 +68,7 @@ export function Combat() {
   const [players, onPlayersChange] = useStateInputEffect(1, Number);
   const [armor, onArmorChange] = useStateInputEffect<number, HTMLElement & { value: string }>(0, Number);
   const [skill, onSkillChange] = useStateInputEffect(0, Number);
-  const [weapon, onWeaponChange] = useStateInputEffect(items[0]!, id => items.find(w => w.id === id));
+  const [weapon, onWeaponChange] = useStateInputEffect(weapons[0]!, id => weapons.find(w => w.id === id));
   
   const [creature, onCreatureChange] = useStateInputEffect(creatures[0]!, id => creatures.find(c => c.id === id));
   const [stars, onStarsChange] = useStateInputEffect(0, Number);
@@ -129,7 +132,7 @@ export function Combat() {
           </select>
         </label>
         <br />
-        <Icon type="weapon" id={weapon.id} />
+        <ItemIcon item={weapon} />
         <br />
         {primary && <PlayerAttack title="primary attack" weapon={weapon} attack={primary} />}
         {secondary && <PlayerAttack title="secondary attack" weapon={weapon} attack={secondary} />}
