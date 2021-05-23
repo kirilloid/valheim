@@ -1,51 +1,30 @@
-import { CraftingStation, DamageType, Shield, Weapon } from "../types";
+import { AttackAnimation, CraftingStation, DamageType, Shield, Weapon } from "../types";
 import { SkillType } from "./skills";
 
 const CRAFT_TIME = 4;
 const disabled = true;
 
-const MACE_R2 = 0.8;
-const SWORD_R2 = 0.8;
-const SWORD_R4 = 0.4;
-const AXE_SWING = 1.1333; // hit on 0.610444, 0.456002 speed 1.5x, 0.751661 speed 1x, chain 0.807992
-const BOMB_THROW = 1.1666; // hit on 0.760496, 0.513261 speed 1.5x
-const BOW_AIM_RECOIL = 0.7 // attack trigger 0.166771
-const KNIFE_SLASH0 = 0.466667; // hit on 0.255619, 0.157394 speed 1.5x, 0.339596 speed 0.5x | adjusted = 0.533
-const KNIFE_SLASH1 = 0.6; // hit on 0.215733, 0.152941 speed 2x, 0.404706 speed 1x          | adjusted = 0.474
-const KNIFE_SLASH2 = 0.866667; // hit on 0.515976, 0.208235 speed 2.5x, 0.567582 speed 1x   | adjusted = 0.584
-const SPEAR_ATTACK = 0.733333;
-const SPEAR_ATTACK1 = 0.66667; // hit on 0.469711, 
-const MELEE_ATTACK_HOR = 1.9;
-const STAGGER2 = 0.733333;
-const ATGEIR_ALT = 2.166667;
-const PLAYER_STAGGER = 0.4;
-const KNIFE_ALT = 1.1; // hit on 0.80254
-const MACE_ALT = 2.133333; // hit on 1.222870
-const BAXE_ALT = 0.856667; // hit on 0.464381, 0.216470 speed 1.5x, 0.525752 speed 1x
-const BAXE_COMBO3 = 0.8; // hit on 0.529099, 0.154506 speed 0.5x, 0.212876 speed 2, 0.533906 speed 0.5
-const AXE_COMBO3 = 1.266667; // hit on 0.846402, 0.66380 speed 1.5x 1.100705 speed 0.5x, 1.128236 chain
-const BAXE1 = 2.133333; // hit on 1.392618, 1.117689 speed 2x, 1.632466 speed 1x
-const THROW_SPEAR = 1.133333; // hit on 0.738768, 0.498597 speed 1.5x, 0.797427 speed 1x
-const KICK_STEP = 1.833334; // hit on 0.593186, 0.459372 speed 2x, 0.580932 speed 1x
-
-const animations = {
-  swing_pickaxe: {
-    time: 1.25,
-    events: [
-      { time: 0.825255, speed: 1.8 },
-      { time: 1.018798, attack: true },
-      { time: 1.054852, speed: 1.1 },
-    ]
-  },
-  throw_spear: {
-    time: 1.133333,
-    events: [
-      { time: 0.498597, speed: 1.5 },
-      { time: 0.738768, attack: true },
-      { time: 0.797427, speed: 1 },
-    ]
-  }
+const animations: Record<AttackAnimation, number[]> = {
+  swing_pickaxe: [1.4], // verified
+  spear_throw: [1.57],
+  spear_poke: [0.67],
+  throw_bomb: [0.95],
+  knife_stab: [0.88, 0.54, 0.62], // verified sum
+  knife_secondary: [1.72], // ~1.6?
+  swing_axe: [0.73, 0.69, 1.12], // 0.56, 1.30, 2.00    4.20, 4.93, 5.46, 6.50   1.26, 2.13, 2.83, 4.00
+  unarmed_attack: [0.76, 0.76],
+  unarmed_kick: [1.51],
+  swing_sledge: [2.23],
+  swing_longsword: [1.02, 0.68, 0.76],
+  sword_secondary: [1.84],
+  mace_secondary: [1.72],
+  battleaxe_attack: [1.82, 0.92, 0.7],
+  battleaxe_secondary: [0.94],
+  atgeir_attack: [0.84, 0.86, 1.28],
+  atgeir_secondary: [1.74],
+  bow_fire: [0.83],
 };
+// bow_aim_recoil: 21
 
 export const items: (Weapon | Shield)[] = [
 // PRE-CRAFT AGE
@@ -780,6 +759,34 @@ export const items: (Weapon | Shield)[] = [
     }
   },
 // IRON AGE
+  { type: 'weapon', slot: 'primary',
+    id: 'BombOoze',
+    emoji: '💣',
+    tier: 3,
+    weight: 0.3, stack: 50,
+    skill: SkillType.Polearms,
+    damage: [{ blunt: 5 }, {}],
+    attacks: [{
+      type: 'proj',
+      animation: 'throw_bomb',
+      projVel: [2, 20],
+      projAcc: [20, 5],
+      stamina: 15,
+      range: 1.5,
+    }],
+    maxLvl: 1,
+    durability: [Infinity, 0],
+    block: 4,
+    parryForce: 0,
+    parryBonus: 1.5,
+    knockback: 40, backstab: 3, moveSpeed: 0,
+    recipe: {
+      time: CRAFT_TIME,
+      materials: { LeatherScraps: 5, Ooze: 10, Resin: 3 },
+      source: { station: CraftingStation.Workbench, level: 1 },
+      number: 5,
+    }
+  },
   { type: 'weapon', slot: 'both',
     id: 'Battleaxe',
     emoji: '🪓',
@@ -1719,34 +1726,6 @@ export const items: (Weapon | Shield)[] = [
       source: { station: CraftingStation.Forge, level: 2 },
       upgrade: { station: CraftingStation.Forge, level: 3 },
     },
-  },
-  { type: 'weapon', slot: 'primary',
-    id: 'BombOoze',
-    emoji: '💣',
-    tier: 3,
-    weight: 0.3, stack: 50,
-    skill: SkillType.Polearms,
-    damage: [{ blunt: 5 }, {}],
-    attacks: [{
-      type: 'proj',
-      animation: 'throw_bomb',
-      projVel: [2, 20],
-      projAcc: [20, 5],
-      stamina: 15,
-      range: 1.5,
-    }],
-    maxLvl: 1,
-    durability: [Infinity, 0],
-    block: 4,
-    parryForce: 0,
-    parryBonus: 1.5,
-    knockback: 40, backstab: 3, moveSpeed: 0,
-    recipe: {
-      time: CRAFT_TIME,
-      materials: { LeatherScraps: 5, Ooze: 10, Resin: 3 },
-      source: { station: CraftingStation.Forge, level: 1 },
-      number: NaN, // 10?
-    }
   },
   { type: 'shield', slot: 'secondary',
     id: 'ShieldKnight',

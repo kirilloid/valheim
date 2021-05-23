@@ -528,6 +528,13 @@
     "ui.search.button": "Search",
 
     "ui.armor": "armor",
+    "ui.attackMelee.combo": "hit combo",
+    "ui.attackRanged.velocity": "arrow velocity",
+    "ui.attackRanged.scatter": "scatter",
+    "ui.attackType": "attack type",
+    "ui.attackType.area": "area",
+    "ui.attackType.melee": "melee",
+    "ui.attackType.proj": "ranged",
     "ui.damage": "damage",
     "ui.damageModifier.immune": "Immune",
     "ui.damageModifier.veryResistant": "Very resistant",

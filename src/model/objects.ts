@@ -93,10 +93,12 @@ drop: 20%
 HeathRockPillar gives 350-400 stone
 
 silver_vein_frac:
-  children: 132
-  hp: 50
+  children: 100
+  hp: 40
   minToolTier: 0
   drops: 2-3 of 1 SilverOre : 2 Stone
+
+  expirements: 407 silver, 845 stone
 
 rock4_copper_frac:
   children: 132

@@ -1,5 +1,8 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+
+import '../css/Creature.css';
+
 import { dmgBonus, hpBonus, multiplyDamage } from '../model/combat';
 import { data } from '../model/objects';
 import { getSummon } from '../model/resources';
@@ -47,12 +50,21 @@ function SpawnAttack({ attack }: { attack: SpawnAttackProfile }) {
 
 export function Creature({ creature, level = 1 }: { creature: TCreature, level?: number }) {
   const translate = useContext(TranslationContext);
-  const { tame, pregnancy, staggerFactor } = creature;
+  const { id, tame, pregnancy, staggerFactor } = creature;
   const scale = { stars: level - 1 };
   const dmgScale = dmgBonus(scale);
-  const [sid, snr] = getSummon(creature.id) ?? ['', 0];
+  const dropScale = 2 ** (level - 1);
+  const [sid, snr] = getSummon(id) ?? ['', 0];
   return (<>
-    <ItemHeader item={creature} />
+    <ItemHeader item={creature} >
+      <div className="Creature_Stars">
+        {[1, 2, 3].map((lvl, stars) => 
+          level === lvl
+            ? <span className="Creature_Star Creature_Star--selected">{stars}⭐</span>
+            : <Link className="Creature_Star" to={`/obj/${id}/${lvl}`} replace={true}>{stars}⭐</Link>
+        )}
+      </div>
+    </ItemHeader>
     <section>
       <h2>creature</h2>
       <dl>
@@ -85,12 +97,16 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
     <section>
       <h2>drops</h2>
       <ul>
-        {creature.drop.map(de => <li key={de.item}>
-          <ItemIcon item={data[de.item]} />
-          <Link to={`/obj/${de.item}`}>
-            {translate(de.item)}
+        {creature.drop.map(({ item, min, max, chance }) => <li key={item}>
+          <ItemIcon item={data[item]} />
+          <Link to={`/obj/${item}`}>
+            {translate(item)}
           </Link>{' '}
-          {de.min === de.max ? de.min : `${de.min}–${de.max}`} {de.chance * 100}%
+          {min >= max - 1
+            ? `${min * dropScale}`
+            : `${min * dropScale}–${(max - 1) * dropScale}`}
+          {' '}
+          {Math.min(chance * dropScale, 1) * 100}%
         </li>)}
       </ul>
     </section>

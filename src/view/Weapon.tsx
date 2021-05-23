@@ -73,18 +73,23 @@ function WeaponStats({ item, level }: { item: TWeapon, level?: number }) {
 function Attack({ item, attack }: { item: TWeapon, attack: TAttack }) {
   const translate = useContext(TranslationContext);
   const { damage = 1, force = 1, stagger = 1 } = attack.mul ?? {};
-  const projVel = attack.type === 'proj' ? attack.projVel[1] : undefined;
-  const projAcc = attack.type === 'proj' ? attack.projAcc[1] : undefined;
   return <dl>
-    <dt>type</dt><dd>{attack.type}</dd>
-    <dt>{translate('ui.stamina')}</dt><dd>{attack.stamina}</dd>
-    {attack.type === 'proj' && <>
-      <dt>velocity</dt><dd>{attack.projVel[0]}&ndash;{attack.projVel[1]}</dd>
-      <dt>scatter</dt><dd>{attack.projAcc[0]}&ndash;{attack.projAcc[1]}&deg;</dd>
+    <dt>{translate('ui.attackType')}</dt>
+    <dd>{translate(`ui.attackType.${attack.type}`)}</dd>
+    <dt>{translate('ui.stamina')}</dt>
+    <dd>{attack.stamina}</dd>
+    {attack.type === 'melee' && <>
+      <dt>{translate('ui.attackMelee.combo')}</dt>
+      <dd>{attack.chain}</dd>
     </>}
-    {projAcc != null && <><dt>velocity</dt><dd>{projVel}</dd></>}
+    {attack.type === 'proj' && <>
+      <dt>{translate('ui.attackRanged.velocity')}</dt>
+      <dd>{attack.projVel[1]}</dd>
+      <dt>{translate('ui.attackRanged.scatter')}</dt>
+      <dd>{attack.projAcc[1]}&deg;</dd>
+    </>}
     {damage !== 1 && <><dt>{translate('ui.damage')}</dt><dd>{damage}×</dd></>}
-    {force !== 1 && <><dt>knockback</dt><dd>{item.knockback * force}</dd></>}
+    {force !== 1 && <><dt>knockback</dt><dd>{force}×</dd></>}
     {stagger !== 1 && <><dt>stagger</dt><dd>{stagger}×</dd></>}
   </dl>;
 }

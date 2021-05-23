@@ -367,8 +367,29 @@ export interface Potion extends BaseItem {
 
 export type Pair<T> = [T, T];
 
+export type AttackAnimation =
+| 'unarmed_attack'
+| 'unarmed_kick'
+| 'swing_longsword'
+| 'swing_axe'
+| 'knife_stab'
+| 'knife_secondary'
+| 'spear_poke'
+| 'spear_throw'
+| 'swing_sledge'
+| 'bow_fire'
+| 'swing_pickaxe'
+| 'atgeir_attack'
+| 'atgeir_secondary'
+| 'mace_secondary'
+| 'sword_secondary'
+| 'battleaxe_attack'
+| 'battleaxe_secondary'
+| 'throw_bomb'
+;
+
 interface BaseAttack {
-  animation: string;
+  animation: AttackAnimation;
   stamina: number;
   mul?: { damage: number, force: number, stagger: number, };
   range: number;

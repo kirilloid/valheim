@@ -1,0 +1,17 @@
+.Creature_Stars {
+  display: inline-flex;
+  float: right;
+  font-size: 1rem;
+}
+
+.Creature_Star {
+  padding: 4px 6px;
+}
+a.Creature_Star {
+  text-decoration: none;
+}
+
+.Creature_Star--selected {
+  font-weight: bold;
+  border-bottom: 2px solid silver;
+}

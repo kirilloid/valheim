@@ -183,7 +183,7 @@ export const resources: Item[] = [
   { type: 'trophy', id: 'TrophyDraugrElite', emoji: '🧟', tier: 3, weight: 2, stack: 20 },
   { type: 'trophy', id: 'TrophyBonemass', emoji: '🦠', tier: 4, weight: 2, stack: 20, floating: true, power: 'Bonemass' },
 // OCEAN
-  { type: 'item', id: 'Chitin', tier: 4, weight: 2, stack: 50 },
+  { type: 'item', id: 'Chitin', tier: 3, weight: 2, stack: 50 },
   { type: 'item', id: 'SerpentScale', tier: 4, weight: 2, stack: 50 },
   { type: 'item', id: 'SerpentMeat', tier: 4, weight: 10, stack: 50, floating: true },
   { type: 'food', id: 'SerpentMeatCooked', emoji: '🍣', tier: 4, weight: 1, stack: 10,
