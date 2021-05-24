@@ -372,17 +372,17 @@ class AssetReader {
     readDamageTypes() {
         /** @type {Object} obj */
         const obj = {
-            Damage: this.readFloat(),
-            Blunt: this.readFloat(),
-            Slash: this.readFloat(),
-            Pierce: this.readFloat(),
-            Chop: this.readFloat(),
-            Pickaxe: this.readFloat(),
-            Fire: this.readFloat(),
-            Frost: this.readFloat(),
-            Lightning: this.readFloat(),
-            Poison: this.readFloat(),
-            Spirit: this.readFloat(),
+            damage: this.readFloat(),
+            blunt: this.readFloat(),
+            slash: this.readFloat(),
+            pierce: this.readFloat(),
+            chop: this.readFloat(),
+            pickaxe: this.readFloat(),
+            fire: this.readFloat(),
+            frost: this.readFloat(),
+            lightning: this.readFloat(),
+            poison: this.readFloat(),
+            spirit: this.readFloat(),
         };
         return Object.fromEntries(Object.entries(obj).filter(p => p[1]));
     }
@@ -396,7 +396,7 @@ class AssetReader {
     }
 
     readDamageModifier() {
-        const types = ['Blunt', 'Slash', 'Pierce', 'Chop', 'Pickaxe', 'Fire', 'Frost', 'Lightning', 'Poison', 'Spirit'];
+        const types = ['blunt', 'slash', 'pierce', 'chop', 'pickaxe', 'Fire', 'Frost', 'Lightning', 'Poison', 'Spirit'];
         const mods = ['Normal', 'Resistant', 'Weak', 'Immune', 'Ignore', 'VeryResistant', 'VeryWeak'];
         const res = {};
         const typeMask = this.readInt();

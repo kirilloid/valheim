@@ -2,16 +2,16 @@ import { CraftingStation, DamageModifier, DamageModifiers, DamageType, Ship } fr
 import { lerp, lerpStep, Vector3, mul, norm, add, clamp01, clamp } from "./utils";
 
 const shipDamageModifiers: DamageModifiers = {
-  [DamageType.Blunt]: DamageModifier.Normal,
-  [DamageType.Slash]: DamageModifier.Normal,
-  [DamageType.Pierce]: DamageModifier.Resistant,
-  [DamageType.Chop]: DamageModifier.Immune,
-  [DamageType.Pickaxe]: DamageModifier.Immune,
-  [DamageType.Fire]: DamageModifier.Weak,
-  [DamageType.Frost]: DamageModifier.Resistant,
-  [DamageType.Lightning]: DamageModifier.Normal,
-  [DamageType.Poison]: DamageModifier.Immune,
-  [DamageType.Spirit]: DamageModifier.Immune,
+  blunt: 'normal',
+  slash: 'normal',
+  pierce: 'resistant',
+  chop: 'immune',
+  pickaxe: 'immune',
+  fire: 'weak',
+  frost: 'resistant',
+  lightning: 'normal',
+  poison: 'immune',
+  spirit: 'immune',
 };
 
 export enum Sail {

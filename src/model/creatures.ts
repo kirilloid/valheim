@@ -1,50 +1,56 @@
-import { Creature, DamageModifier, DamageType, dropEntry, dropTrophy, Faction } from "../types";
+import { AttackProfile, AttackVariety, Creature, DamageModifiers, dropEntry, dropTrophy, Faction } from "../types";
 
-const defaultDmgModifiers = {
-  [DamageType.Damage]: DamageModifier.Normal,
-  [DamageType.Blunt]: DamageModifier.Normal,
-  [DamageType.Slash]: DamageModifier.Normal,
-  [DamageType.Pierce]: DamageModifier.Normal,
-  [DamageType.Chop]: DamageModifier.Ignore,
-  [DamageType.Pickaxe]: DamageModifier.Ignore,
-  [DamageType.Fire]: DamageModifier.Normal,
-  [DamageType.Frost]: DamageModifier.Normal,
-  [DamageType.Lightning]: DamageModifier.Normal,
-  [DamageType.Poison]: DamageModifier.Normal,
-  [DamageType.Spirit]: DamageModifier.Normal,
+const defaultDmgModifiers: DamageModifiers = {
+  blunt: 'normal',
+  slash: 'normal',
+  pierce: 'normal',
+  chop: 'ignore',
+  pickaxe: 'ignore',
+  fire: 'normal',
+  frost: 'normal',
+  lightning: 'normal',
+  poison: 'normal',
+  spirit: 'normal',
 };
 
-const animalDmgModifiers = {
+const animalDmgModifiers: DamageModifiers = {
   ...defaultDmgModifiers,
-  [DamageType.Spirit]: DamageModifier.Immune,
+  spirit: 'immune',
 }
 
-const grayModifiers = {
+const grayModifiers: DamageModifiers = {
   ...animalDmgModifiers,
-  [DamageType.Fire]: DamageModifier.VeryWeak,
-  [DamageType.Poison]: DamageModifier.Resistant,
+  fire: 'veryWeak',
+  poison: 'resistant',
 };
 
-const blobDamageModifiers = {
+const blobDamageModifiers: DamageModifiers = {
   ...defaultDmgModifiers,
-  [DamageType.Blunt]: DamageModifier.Weak,
-  [DamageType.Slash]: DamageModifier.Resistant,
-  [DamageType.Pierce]: DamageModifier.Resistant,
-  [DamageType.Fire]: DamageModifier.Resistant,
-  [DamageType.Frost]: DamageModifier.Weak,
-  [DamageType.Lightning]: DamageModifier.Weak,
-  [DamageType.Poison]: DamageModifier.Immune,
+  blunt: 'weak',
+  slash: 'resistant',
+  pierce: 'resistant',
+  fire: 'resistant',
+  frost: 'weak',
+  lightning: 'weak',
+  poison: 'immune',
 };
 
-/**
- * numer of players (in range 200) scale
- * dmg +4%
- * hp +40%
- * 
- * stars scale
- * dmg +50%
- * hp +100%
- */
+const skeletonDamageModifiers: DamageModifiers = {
+  ...defaultDmgModifiers,
+  blunt: 'weak',
+  pierce: 'resistant',
+  fire: 'weak',
+  frost: 'resistant',
+  poison: 'immune',
+};
+
+const nightOnly = true;
+const unblockable = true;
+const undodgeable = true;
+
+const single = (attacks: AttackProfile[]): [AttackVariety] => {
+  return [{ variety: '', attacks }]; 
+};
 
 export const creatures: Creature[] = [
 // MEADOWS
@@ -52,6 +58,7 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Deer',
     tier: 1,
+    maxLvl: 3,
     emoji: '🦌',
     faction: Faction.ForestMonsters,
     attacks: [],
@@ -69,6 +76,7 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Seagal',
     tier: 1,
+    maxLvl: 1,
     emoji: '🦆',
     faction: Faction.ForestMonsters,
     attacks: [],
@@ -84,9 +92,10 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Greyling',
     tier: 1,
+    maxLvl: 1,
     emoji: '🐀',
     faction: Faction.ForestMonsters,
-    attacks: [{ dmg: { [DamageType.Slash]: 5 }, name: 'bite' }],
+    attacks: single([{ dmg: { slash: 5 }, name: 'bite' }]),
     hp: 20,
     staggerFactor: 0.3,
     staggerBlocked: true,
@@ -99,9 +108,11 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Neck',
     tier: 1,
+    maxLvl: 3,
+    upgradeDistance: 800,
     emoji: '🦎',
     faction: Faction.ForestMonsters,
-    attacks: [{ dmg: { [DamageType.Slash]: 6 }, name: 'bite' }],
+    attacks: single([{ dmg: { slash: 6 }, name: 'bite' }]),
     hp: 5,
     staggerFactor: 0.5,
     staggerBlocked: true,
@@ -115,6 +126,7 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Fish',
     tier: 1,
+    maxLvl: 1,
     emoji: '',
     faction: Faction.ForestMonsters,
     attacks: [],
@@ -128,9 +140,11 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Boar',
     tier: 1,
+    maxLvl: 3,
+    upgradeDistance: 800,
     emoji: '🐗',
     faction: Faction.ForestMonsters,
-    attacks: [{ dmg: { [DamageType.Blunt]: 10 }, name: 'tusks' }],
+    attacks: single([{ dmg: { blunt: 10 }, name: 'tusks' }]),
     hp: 10,
     staggerFactor: 0.5,
     staggerBlocked: true,
@@ -149,15 +163,16 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Eikthyr',
     tier: 1,
+    maxLvl: 1,
     emoji: '🦌',
     faction: Faction.Boss,
     staggerFactor: 0,
     staggerBlocked: true,
-    attacks: [
-      { dmg: { [DamageType.Pierce]: 20, [DamageType.Chop]: 1000, [DamageType.Pickaxe]: 1000 }, name: 'antlers', force: 100 },
-      { dmg: { [DamageType.Lightning]: 15 }, name: 'pew-pew', force: 200 },
-      { dmg: { [DamageType.Lightning]: 20 }, name: 'stomp', force: 100 },
-    ],
+    attacks: single([
+      { dmg: { pierce: 20, chop: 1000, pickaxe: 1000 }, name: 'antlers', force: 100 },
+      { dmg: { lightning: 15 }, name: 'pew-pew', force: 200 },
+      { dmg: { lightning: 20 }, name: 'stomp', force: 100 },
+    ]),
     hp: 500,
     damageModifiers: animalDmgModifiers,
     drop: [
@@ -170,6 +185,7 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Crow',
     tier: 2,
+    maxLvl: 1,
     emoji: '🐦',
     faction: Faction.ForestMonsters,
     attacks: [],
@@ -185,23 +201,18 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Skeleton',
     tier: 2,
+    maxLvl: 3,
     emoji: '💀',
     faction: Faction.Undead,
     attacks: [
-      { dmg: { [DamageType.Slash]: 25 }, name: 'sword' },
-      { dmg: { [DamageType.Pierce]: 20 }, name: 'bow' },
+      { variety: 'sword', attacks: [{ dmg: { slash: 25 }, name: 'sword' }] },
+      { variety: 'mace', attacks: [{ dmg: { blunt: 25 }, name: 'mace' }] },
+      { variety: 'bow', attacks: [{ dmg: { pierce: 20 }, name: 'bow' }] },
     ],
     hp: 40,
     staggerFactor: 0.5,
     staggerBlocked: true,
-    damageModifiers: {
-      ...defaultDmgModifiers,
-      [DamageType.Blunt]: DamageModifier.Weak,
-      [DamageType.Pierce]: DamageModifier.Resistant,
-      [DamageType.Fire]: DamageModifier.Weak,
-      [DamageType.Frost]: DamageModifier.Resistant,
-      [DamageType.Poison]: DamageModifier.Immune,
-    },
+    damageModifiers: skeletonDamageModifiers,
     drop: [
       dropEntry('BoneFragments'),
       dropTrophy('TrophySkeleton', 0.1),
@@ -211,24 +222,18 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Skeleton_Poison', // Rancid Remains
     tier: 2,
+    maxLvl: 3,
     emoji: '☠️',
     faction: Faction.Undead,
-    attacks: [{
-      dmg: { [DamageType.Blunt]: 20,
-             [DamageType.Poison]: 20 },
+    attacks: single([{
+      dmg: { blunt: 20,
+             poison: 20 },
       name: 'mace',
-    }],
+    }]),
     hp: 100,
     staggerFactor: 0.5,
     staggerBlocked: true,
-    damageModifiers: {
-      ...defaultDmgModifiers,
-      [DamageType.Blunt]: DamageModifier.Weak,
-      [DamageType.Pierce]: DamageModifier.Resistant,
-      [DamageType.Fire]: DamageModifier.Weak,
-      [DamageType.Frost]: DamageModifier.Resistant,
-      [DamageType.Poison]: DamageModifier.Immune,
-    },
+    damageModifiers: skeletonDamageModifiers,
     drop: [
       dropEntry('BoneFragments', { min: 3, max: 3 }),
       dropTrophy('TrophySkeletonPoison', 0.1),
@@ -238,21 +243,20 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Ghost',
     tier: 2,
+    maxLvl: 3,
     emoji: '👻',
     faction: Faction.Undead,
-    attacks: [
-      { dmg: { [DamageType.Slash]: 25 }, name: 'slash' }
-    ],
+    attacks: single([ { dmg: { slash: 25 }, name: 'slash' } ]),
     hp: 60,
     staggerFactor: 0.5,
     staggerBlocked: true,
     damageModifiers: {
       ...defaultDmgModifiers,
-      [DamageType.Blunt]: DamageModifier.Resistant,
-      [DamageType.Slash]: DamageModifier.Resistant,
-      [DamageType.Pierce]: DamageModifier.Resistant,
-      [DamageType.Poison]: DamageModifier.Immune,
-      [DamageType.Spirit]: DamageModifier.Weak,
+      blunt: 'resistant',
+      slash: 'resistant',
+      pierce: 'resistant',
+      poison: 'immune',
+      spirit: 'weak',
     },
     drop: [],
   },
@@ -260,12 +264,13 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Greydwarf',
     tier: 2,
+    maxLvl: 3,
     emoji: '',
     faction: Faction.ForestMonsters,
-    attacks: [
-      { dmg: { [DamageType.Slash]: 14 }, name: 'hit' },
-      { dmg: { [DamageType.Blunt]: 10 }, name: 'stone' },
-    ],
+    attacks: single([
+      { dmg: { slash: 14 }, name: 'hit' },
+      { dmg: { blunt: 10 }, name: 'stone' },
+    ]),
     hp: 40,
     staggerFactor: 0.3,
     staggerBlocked: true,
@@ -282,9 +287,14 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'GreydwarfShaman',
     tier: 2,
+    maxLvl: 3,
+    nightOnly,
     emoji: '',
     faction: Faction.ForestMonsters,
-    attacks: [{ dmg: { [DamageType.Poison]: 25 }, name: 'poison breath' }],
+    attacks: single([
+      { dmg: { poison: 25 }, name: 'poison breath' },
+      { dmg: { slash: 14 }, name: 'slash' },
+    ]),
     hp: 60,
     staggerFactor: 0.33,
     staggerBlocked: true,
@@ -301,11 +311,13 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Greydwarf_Elite',
     tier: 2,
+    maxLvl: 3,
+    upgradeDistance: 2000,
     emoji: '',
     faction: Faction.ForestMonsters,
-    attacks: [
-      { dmg: { [DamageType.Slash]: 30 }, name: 'bite' },
-    ],
+    attacks: single([
+      { dmg: { slash: 30 }, name: 'bite' },
+    ]),
     hp: 150,
     staggerFactor: 0.5,
     staggerBlocked: true,
@@ -323,23 +335,33 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Troll',
     tier: 2,
+    maxLvl: 3,
     emoji: '',
     faction: Faction.ForestMonsters,
     attacks: [
-      { dmg: { [DamageType.Blunt]: 60, [DamageType.Chop]: 100, [DamageType.Pickaxe]: 40 }, name: '1-hand hit', force: 100 },
-      { dmg: { [DamageType.Blunt]: 70, [DamageType.Chop]: 100, [DamageType.Pickaxe]: 40 }, name: '2-hand smash', force: 100 }, // unblockable
-      { dmg: { [DamageType.Blunt]: 50, [DamageType.Chop]: 60, [DamageType.Pickaxe]: 40 }, name: 'throw' },
-      { dmg: { [DamageType.Blunt]: 60, [DamageType.Chop]: 100, [DamageType.Pickaxe]: 40 }, name: 'h-swing', force: 80 },
-      { dmg: { [DamageType.Blunt]: 70, [DamageType.Chop]: 100, [DamageType.Pickaxe]: 40 }, name: 'v-swing', force: 80 },
+      {
+        variety: 'unarmed',
+        attacks: [
+          { dmg: { blunt: 60, chop: 100, pickaxe: 40 }, name: '1-hand hit', force: 100 },
+          { dmg: { blunt: 70, chop: 100, pickaxe: 40 }, name: '2-hand smash', force: 100, unblockable },
+          { dmg: { blunt: 50, chop: 60, pickaxe: 40 }, name: 'throw' },
+        ],
+      }, {
+        variety: 'log',
+        attacks: [
+          { dmg: { blunt: 60, chop: 100, pickaxe: 40 }, name: 'h-swing', force: 80 },
+          { dmg: { blunt: 70, chop: 100, pickaxe: 40 }, name: 'v-swing', force: 80 },
+        ],
+      },
     ],
     hp: 600,
     staggerFactor: 0.3,
     staggerBlocked: true,
     damageModifiers: {
       ...animalDmgModifiers,
-      [DamageType.Blunt]: DamageModifier.Resistant,
-      [DamageType.Pierce]: DamageModifier.Weak,
-      [DamageType.Poison]: DamageModifier.Immune,
+      blunt: 'resistant',
+      pierce: 'weak',
+      poison: 'immune',
     },
     drop: [
       dropEntry('TrollHide', { min: 5, max: 5 }),
@@ -351,24 +373,25 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'gd_king', // the elder
     tier: 2,
+    maxLvl: 1,
     emoji: '🥦',
     faction: Faction.Boss,
-    attacks: [
-      // used? { dmg: { [DamageType.Blunt]: 50 }, name: 'Punch', force: 30 }, 
-      { dmg: { [DamageType.Pierce]: 35, [DamageType.Chop]: 20, [DamageType.Pickaxe]: 20 }, name: 'Vine Shoot', force: 40 },
-      { dmg: { [DamageType.Blunt]: 60, [DamageType.Chop]: 1000, [DamageType.Pickaxe]: 1000 }, name: 'Stomp', force: 30 },
+    attacks: single([
+      // used? { dmg: { blunt: 50 }, name: 'Punch', force: 30 }, 
+      { dmg: { pierce: 35, chop: 20, pickaxe: 20 }, name: 'Vine Shoot', force: 40 },
+      { dmg: { blunt: 60, chop: 1000, pickaxe: 1000 }, name: 'Stomp', force: 30 },
       { spawn: ['Root'], number: 15, max: 30 },
       // number: 15, max: 30, staggerFactor: 0, staggerBlocked: true,
       // hp: 20, weak to fire,
-    ],
+    ]),
     hp: 2500,
     staggerFactor: 0,
     staggerBlocked: false,
     damageModifiers: {
       ...defaultDmgModifiers,
-      [DamageType.Fire]: DamageModifier.VeryWeak,
-      [DamageType.Poison]: DamageModifier.Immune,
-      [DamageType.Spirit]: DamageModifier.Immune,
+      fire: 'veryWeak',
+      poison: 'immune',
+      spirit: 'immune',
     },
     drop: [
       dropEntry('CryptKey', { perPlayer: true }),
@@ -379,19 +402,20 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Root', // the elder
     tier: 2,
+    maxLvl: 1,
     emoji: '🥦',
     faction: Faction.Boss,
-    attacks: [
-      { dmg: { [DamageType.Blunt]: 55, [DamageType.Chop]: 20, [DamageType.Pickaxe]: 20, }, name: 'poke', force: 40 }
-    ],
+    attacks: single([
+      { dmg: { blunt: 55, chop: 20, pickaxe: 20, }, name: 'poke', force: 40 }
+    ]),
     hp: 20,
     staggerFactor: 0,
     staggerBlocked: true,
     damageModifiers: {
       ...defaultDmgModifiers,
-      [DamageType.Fire]: DamageModifier.Weak,
-      [DamageType.Frost]: DamageModifier.Resistant,
-      [DamageType.Poison]: DamageModifier.Immune,
+      fire: 'weak',
+      frost: 'resistant',
+      poison: 'immune',
     },
     drop: [],
   },
@@ -400,9 +424,10 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Blob',
     tier: 3,
+    maxLvl: 1,
     emoji: '🦠',
     faction: Faction.Undead,
-    attacks: [{ dmg: { [DamageType.Poison]: 70 }, name: 'poison' }], // unblockable
+    attacks: single([{ dmg: { poison: 70 }, name: 'poison', unblockable }]),
     hp: 50,
     staggerFactor: 0,
     staggerBlocked: true,
@@ -414,11 +439,13 @@ export const creatures: Creature[] = [
   },
   {
     type: 'creature',
-    id: 'Oozer',
+    id: 'BlobElite',
     tier: 3,
+    maxLvl: 1,
+    nightOnly,
     emoji: '🦠',
     faction: Faction.Undead,
-    attacks: [{ dmg: { [DamageType.Poison]: 90 }, name: 'poison' }], // unblockable
+    attacks: single([{ dmg: { poison: 90 }, name: 'poison', unblockable }]),
     hp: 150,
     staggerFactor: 0,
     staggerBlocked: true,
@@ -434,20 +461,21 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Leech',
     tier: 3,
+    maxLvl: 3,
     emoji: '🧛',
     faction: Faction.Undead,
-    attacks: [{ dmg: {
-      [DamageType.Pierce]: 20,
-      [DamageType.Poison]: 60,
-    }, name: 'bite', force: 30 }],
+    attacks: single([{ dmg: {
+      pierce: 20,
+      poison: 60,
+    }, name: 'bite', force: 30 }]),
     hp: 60,
     staggerFactor: 0,
     staggerBlocked: false,
     damageModifiers: {
       ...animalDmgModifiers,
-      [DamageType.Fire]: DamageModifier.Immune,
-      [DamageType.Poison]: DamageModifier.Weak,
-      [DamageType.Spirit]: DamageModifier.Immune,
+      fire: 'immune',
+      poison: 'weak',
+      spirit: 'immune',
     },
     drop: [
       dropEntry('Bloodbag'),
@@ -458,21 +486,22 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Surtling',
     tier: 3,
+    maxLvl: 1,
     emoji: '🧨',
     faction: Faction.Demon,
-    attacks: [{ dmg: {
-      [DamageType.Blunt]: 10,
-      [DamageType.Fire]: 40,
-    }, name: 'fireball', force: 30 }],
+    attacks: single([{ dmg: {
+      blunt: 10,
+      fire: 40,
+    }, name: 'fireball', force: 30 }]),
     hp: 20,
     staggerFactor: 0.5,
     staggerBlocked: true,
     damageModifiers: {
       ...defaultDmgModifiers,
-      [DamageType.Fire]: DamageModifier.Immune,
-      [DamageType.Frost]: DamageModifier.Weak,
-      [DamageType.Poison]: DamageModifier.Immune,
-      [DamageType.Spirit]: DamageModifier.Immune,
+      fire: 'immune',
+      frost: 'weak',
+      poison: 'immune',
+      spirit: 'immune',
     },
     drop: [
       dropEntry('Coal', { min: 4, max: 5 }),
@@ -484,21 +513,23 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Wraith',
     tier: 3,
+    maxLvl: 1,
+    nightOnly,
     emoji: '👻',
     faction: Faction.Undead,
-    attacks: [{ dmg: { [DamageType.Slash]: 60, }, name: 'slash', force: 60 }],
+    attacks: single([{ dmg: { slash: 60, }, name: 'slash', force: 60 }]),
     hp: 100,
     staggerFactor: 0.5,
     staggerBlocked: true,
     damageModifiers: {
       ...defaultDmgModifiers,
-      [DamageType.Blunt]: DamageModifier.Resistant,
-      [DamageType.Slash]: DamageModifier.Resistant,
-      [DamageType.Pierce]: DamageModifier.Resistant,
-      [DamageType.Fire]: DamageModifier.Weak,
-      [DamageType.Frost]: DamageModifier.Immune,
-      [DamageType.Poison]: DamageModifier.Immune,
-      [DamageType.Spirit]: DamageModifier.Weak,
+      blunt: 'resistant',
+      slash: 'resistant',
+      pierce: 'resistant',
+      fire: 'weak',
+      frost: 'immune',
+      poison: 'immune',
+      spirit: 'weak',
     },
     drop: [
       dropEntry('Chain'),
@@ -509,19 +540,24 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Draugr',
     tier: 3,
+    maxLvl: 3,
     emoji: '🧟',
     faction: Faction.Undead,
     attacks: [
-      { dmg: { [DamageType.Slash]: 48, [DamageType.Chop]: 15 }, name: 'axe', force: 60 },
-      { dmg: { [DamageType.Pierce]: 48 }, name: 'bow', force: 18 },
+      { variety: 'axe',
+        attacks: [{ dmg: { slash: 48, chop: 15 }, name: 'axe', force: 60 }],
+      },
+      { variety: 'bow',
+        attacks: [{ dmg: { pierce: 48 }, name: 'bow', force: 18 }],
+      },
     ],
     hp: 100,
     staggerFactor: 0.5,
     staggerBlocked: true,
     damageModifiers: {
       ...animalDmgModifiers,
-      [DamageType.Fire]: DamageModifier.Weak,
-      [DamageType.Poison]: DamageModifier.Immune,
+      fire: 'weak',
+      poison: 'immune',
     },
     drop: [
       dropEntry('Entrails'),
@@ -532,18 +568,18 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'DraugrElite',
     tier: 3,
+    maxLvl: 1,
+    nightOnly,
     emoji: '🧟',
     faction: Faction.Undead,
-    attacks: [
-      { dmg: { [DamageType.Slash]: 58, }, name: 'sword', force: 60 }
-    ],
+    attacks: single([ { dmg: { slash: 58, }, name: 'sword', force: 60 } ]),
     hp: 200,
     staggerFactor: 0.5,
     staggerBlocked: true,
     damageModifiers: {
       ...animalDmgModifiers,
-      [DamageType.Fire]: DamageModifier.Weak,
-      [DamageType.Poison]: DamageModifier.Immune,
+      fire: 'weak',
+      poison: 'immune',
     },
     drop: [
       dropEntry('Entrails', { min: 2, max: 3 }),
@@ -554,28 +590,29 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Bonemass',
     tier: 3,
+    maxLvl: 1,
     emoji: '🦠',
     faction: Faction.Boss,
-    attacks: [
-      { dmg: { [DamageType.Poison]: 100 }, name: 'poison', force: 0 }, // undodgeable, unblockable
-      { dmg: { [DamageType.Blunt]: 80, // punch
-        [DamageType.Chop]: 1000,
-        [DamageType.Pickaxe]: 1000,
-        [DamageType.Poison]: 30,
+    attacks: single([
+      { dmg: { poison: 100 }, name: 'poison', force: 0, unblockable, undodgeable },
+      { dmg: { blunt: 80, // punch
+        chop: 1000,
+        pickaxe: 1000,
+        poison: 30,
       }, name: 'hit', force: 0 },
       { spawn: ['Skeleton', 'Blob'], number: 4, max: 8, }
-    ],
+    ]),
     hp: 5000,
     staggerFactor: 0,
     staggerBlocked: false,
     damageModifiers: {
       ...defaultDmgModifiers,
-      [DamageType.Blunt]: DamageModifier.Weak,
-      [DamageType.Slash]: DamageModifier.Resistant,
-      [DamageType.Pierce]: DamageModifier.VeryResistant,
-      [DamageType.Fire]: DamageModifier.VeryResistant,
-      [DamageType.Frost]: DamageModifier.Weak,
-      [DamageType.Poison]: DamageModifier.Immune,
+      blunt: 'weak',
+      slash: 'resistant',
+      pierce: 'veryResistant',
+      fire: 'veryResistant',
+      frost: 'weak',
+      poison: 'immune',
     },
     drop: [
       dropEntry('Wishbone', { perPlayer: true }),
@@ -587,11 +624,12 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Wolf',
     tier: 4,
+    maxLvl: 3,
     emoji: '🐺',
     faction: Faction.MountainMonsters,
-    attacks: [
-      { dmg: { [DamageType.Slash]: 70 }, name: 'bite', force: 30 }, // 3 different animations, same stats
-    ],
+    attacks: single([
+      { dmg: { slash: 70 }, name: 'bite', force: 30 }, // 3 different animations, same stats
+    ]),
     hp: 80,
     damageModifiers: animalDmgModifiers,
     staggerFactor: 0.5,
@@ -611,12 +649,14 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Fenring',
     tier: 4,
+    maxLvl: 1,
+    nightOnly,
     emoji: '🐺',
     faction: Faction.MountainMonsters,
-    attacks: [
-      { dmg: { [DamageType.Slash]: 85 }, name: 'hit', force: 60 },
-      { dmg: { [DamageType.Slash]: 95 }, name: 'jump', force: 100 },
-    ],
+    attacks: single([
+      { dmg: { slash: 85 }, name: 'hit', force: 60 },
+      { dmg: { slash: 95 }, name: 'jump', force: 100 },
+    ]),
     hp: 150,
     staggerFactor: 0.5,
     staggerBlocked: true,
@@ -630,41 +670,51 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'StoneGolem',
     tier: 4,
+    maxLvl: 1,
     emoji: '🗿',
     faction: Faction.ForestMonsters,
-    attacks: [{ dmg: {
-      [DamageType.Blunt]: 110,
-      [DamageType.Chop]: 100,
-      [DamageType.Pickaxe]: 100,
-    }, name: 'spike', force: 130, },
-    { dmg: {
-      [DamageType.Pierce]: 110,
-      [DamageType.Chop]: 100,
-      [DamageType.Pickaxe]: 100,
-    }, name: 'spikesweep', force: 8 },
-    { dmg: {
-      [DamageType.Blunt]: 110,
-      [DamageType.Chop]: 100,
-      [DamageType.Pickaxe]: 100,
-    }, name: 'slam', force: 130, }, // R8
-    { dmg: {
-      [DamageType.Blunt]: 110,
-      [DamageType.Chop]: 100,
-      [DamageType.Pickaxe]: 100,
-    }, name: 'double smash', force: 120, }, // R8.66
+    attacks: [
+      { variety: 'spike',
+        attacks: [
+          { dmg: {
+            blunt: 110,
+            chop: 100,
+            pickaxe: 100,
+          }, name: 'spike', force: 130, },
+          { dmg: {
+            pierce: 110,
+            chop: 100,
+            pickaxe: 100,
+          }, name: 'spikesweep', force: 8 },
+        ],
+      },
+      { variety: 'sledge',
+        attacks: [
+          { dmg: {
+            blunt: 110,
+            chop: 100,
+            pickaxe: 100,
+          }, name: 'slam', force: 130, }, // R8
+          { dmg: {
+            blunt: 110,
+            chop: 100,
+            pickaxe: 100,
+          }, name: 'double smash', force: 120, }, // R8.66
+        ],
+      },
     ], 
     hp: 800,
     staggerFactor: 0.33,
     staggerBlocked: true,
     damageModifiers: {
       ...defaultDmgModifiers,
-      [DamageType.Slash]: DamageModifier.Resistant,
-      [DamageType.Pierce]: DamageModifier.Resistant,
-      [DamageType.Pickaxe]: DamageModifier.VeryWeak,
-      [DamageType.Fire]: DamageModifier.Immune,
-      [DamageType.Frost]: DamageModifier.Immune,
-      [DamageType.Poison]: DamageModifier.Immune,
-      [DamageType.Spirit]: DamageModifier.Immune,
+      slash: 'resistant',
+      pierce: 'resistant',
+      pickaxe: 'veryWeak',
+      fire: 'immune',
+      frost: 'immune',
+      poison: 'immune',
+      spirit: 'immune',
     },
     drop: [
       dropEntry('Stone', { min: 5, max: 10 }),
@@ -676,16 +726,17 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Hatchling', // drake
     tier: 4,
+    maxLvl: 1,
     emoji: '🐉',
     faction: Faction.MountainMonsters,
-    attacks: [{ dmg: { [DamageType.Frost]: 90 }, burst: 3, name: 'ice shards', force: 30, }], // burst interval: 0.3
+    attacks: single([{ dmg: { frost: 90 }, burst: 3, name: 'ice shards', force: 30, }]), // burst interval: 0.3
     hp: 100,
     staggerFactor: 0,
     staggerBlocked: true,
     damageModifiers: {
       ...animalDmgModifiers,
-      [DamageType.Fire]: DamageModifier.Weak,
-      [DamageType.Frost]: DamageModifier.Immune,
+      fire: 'weak',
+      frost: 'immune',
     },
     drop: [
       dropEntry('FreezeGland', { max: 2 }),
@@ -696,38 +747,39 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Dragon',
     tier: 4,
+    maxLvl: 1,
     emoji: '🐲',
     faction: Faction.Boss,
-    attacks: [
+    attacks: single([
       { dmg: {
-        [DamageType.Slash]: 120,
-        [DamageType.Chop]: 1000,
-        [DamageType.Pickaxe]: 1000
+        slash: 120,
+        chop: 1000,
+        pickaxe: 1000
       }, name: 'bite', force: 120 }, // R8
       { dmg: {
-        [DamageType.Slash]: 110,
-        [DamageType.Chop]: 1000,
-        [DamageType.Pickaxe]: 1000
+        slash: 110,
+        chop: 1000,
+        pickaxe: 1000
       }, name: 'claw', force: 120 }, // R4
       { dmg: {
-        [DamageType.Chop]: 200,
-        [DamageType.Pickaxe]: 200,
-        [DamageType.Frost]: 200,
+        chop: 200,
+        pickaxe: 200,
+        frost: 200,
       }, name: 'breath', force: 40 },
       { dmg: {
-        [DamageType.Pierce]: 30,
-        [DamageType.Chop]: 200,
-        [DamageType.Pickaxe]: 200,
-        [DamageType.Frost]: 200
+        pierce: 30,
+        chop: 200,
+        pickaxe: 200,
+        frost: 200
       }, burst: 16, name: 'ice shards', force: 30 }, // V25
-    ],
+    ]),
     hp: 7500,
     staggerFactor: 0,
     staggerBlocked: false,
     damageModifiers: {
       ...animalDmgModifiers,
-      [DamageType.Fire]: DamageModifier.Weak,
-      [DamageType.Frost]: DamageModifier.Immune,
+      fire: 'weak',
+      frost: 'immune',
     },
     drop: [
       dropEntry('DragonTear', { min: 10, max: 10, scale: false }),
@@ -739,13 +791,14 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Goblin', // Fulling
     tier: 5,
+    maxLvl: 3,
     emoji: '',
     faction: Faction.PlainsMonsters,
     attacks: [
-      { dmg: { [DamageType.Blunt]: 110 }, name: 'club' },
-      { dmg: { [DamageType.Pierce]: 110 }, name: 'spear' },
-      { dmg: { [DamageType.Slash]: 110 }, name: 'sword' },
-      { dmg: { [DamageType.Blunt]: 55, [DamageType.Fire]: 55 }, name: 'torch' },
+      { variety: 'club', attacks: [{ dmg: { blunt: 110 }, name: 'club' }] },
+      { variety: 'spear', attacks: [{ dmg: { pierce: 110 }, name: 'spear' }] },
+      { variety: 'sword', attacks: [{ dmg: { slash: 110 }, name: 'sword' }] },
+      { variety: 'torch', attacks: [{ dmg: { blunt: 55, fire: 55 }, name: 'torch' }] },
       // vs 26 arm 24.3-37.6
       // vs 52 arm 18.6-28.2
       // vs 52 arm & FR 12.5-21.4
@@ -769,12 +822,13 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'GoblinShaman', // Fulling
     tier: 5,
+    maxLvl: 1,
     emoji: '',
     faction: Faction.PlainsMonsters,
-    attacks: [
-      { dmg: { [DamageType.Blunt]: 100 }, name: 'staff' },
-      { dmg: { [DamageType.Blunt]: 20, [DamageType.Fire]: 100 }, name: 'fireball' },
-    ],
+    attacks: single([
+      { dmg: { blunt: 100 }, name: 'staff' },
+      { dmg: { blunt: 20, fire: 100 }, name: 'fireball' },
+    ]),
 
     // vs 0 arm 15.1-19.7
     // vs 0 arm & wet 15.1-18.2
@@ -795,24 +849,25 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'GoblinBrute', // Berserk
     tier: 5,
+    maxLvl: 1,
     emoji: '',
     faction: Faction.PlainsMonsters,
-    attacks: [
+    attacks: single([
       { dmg: {
-        [DamageType.Blunt]: 130,
-        [DamageType.Chop]: 100,
-        [DamageType.Pickaxe]: 40,
+        blunt: 130,
+        chop: 100,
+        pickaxe: 40,
       }, name: '???', force: 50, }, // attack
       { dmg: {
-        [DamageType.Blunt]: 130,
-        [DamageType.Chop]: 100,
-        [DamageType.Pickaxe]: 40,
+        blunt: 130,
+        chop: 100,
+        pickaxe: 40,
       }, name: '???', force: 70 }, // rage attack toolTier: 2
       { dmg: {
-        [DamageType.Slash]: 80,
-        [DamageType.Chop]: 10,
+        slash: 80,
+        chop: 10,
       }, name: '???', force: 50 }, // taunt toolTier: 0
-    ],
+    ]),
     hp: 800,
     staggerFactor: 0.3,
     staggerBlocked: true,
@@ -828,9 +883,10 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Deathsquito',
     tier: 5,
+    maxLvl: 1,
     emoji: '🦟',
     faction: Faction.PlainsMonsters,
-    attacks: [{ dmg: { [DamageType.Pierce]: 90 }, name: 'bite' }],
+    attacks: single([{ dmg: { pierce: 90 }, name: 'bite' }]),
     hp: 10,
     staggerFactor: 0.5,
     staggerBlocked: true,
@@ -844,22 +900,23 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Lox',
     tier: 5,
+    maxLvl: 1,
     emoji: '🐂',
     faction: Faction.PlainsMonsters,
-    attacks: [
-      { dmg: { [DamageType.Slash]: 130 }, name: 'bite', force: 150 },
-      { dmg: { [DamageType.Blunt]: 120, [DamageType.Chop]: 100, [DamageType.Pickaxe]: 100, }, name: 'stomp', force: 100 }, // toolTier: 0
-    ],
+    attacks: single([
+      { dmg: { slash: 130 }, name: 'bite', force: 150 },
+      { dmg: { blunt: 120, chop: 100, pickaxe: 100, }, name: 'stomp', force: 100 }, // toolTier: 0
+    ]),
     hp: 1000,
     staggerFactor: 1,
     staggerBlocked: true,
     damageModifiers: {
       ...defaultDmgModifiers,
-      [DamageType.Blunt]: DamageModifier.Resistant,
-      [DamageType.Slash]: DamageModifier.Resistant,
-      [DamageType.Fire]: DamageModifier.Weak,
-      [DamageType.Frost]: DamageModifier.Resistant,
-      [DamageType.Spirit]: DamageModifier.Immune,
+      blunt: 'resistant',
+      slash: 'resistant',
+      fire: 'weak',
+      frost: 'resistant',
+      spirit: 'immune',
     },
     drop: [
       dropEntry('LoxMeat', { min: 4, max: 6 }),
@@ -874,36 +931,37 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'GoblinKing',
     tier: 5,
+    maxLvl: 1,
     emoji: '🦴',
     faction: Faction.Boss,
-    attacks: [
+    attacks: single([
       { dmg: { // 10 meteors
-        [DamageType.Blunt]: 40,
-        [DamageType.Chop]: 50,
-        [DamageType.Pickaxe]: 50,
-        [DamageType.Fire]: 140,
-      }, burst: 20, name: 'meteors', force: 100, }, // unblockable? "burstInterval": 0.1
+        blunt: 40,
+        chop: 50,
+        pickaxe: 50,
+        fire: 140,
+      }, burst: 20, name: 'meteors', force: 100, unblockable }, // "burstInterval": 0.1
       { dmg: {
-        [DamageType.Blunt]: 50,
-        [DamageType.Chop]: 50,
-        [DamageType.Pickaxe]: 50,
-        [DamageType.Fire]: 60,
-      }, name: 'Fire Breath' },
+        blunt: 50,
+        chop: 50,
+        pickaxe: 50,
+        fire: 60,
+      }, name: 'fire Breath' },
       { dmg: {
-        [DamageType.Blunt]: 130,
-        [DamageType.Chop]: 100,
-        [DamageType.Pickaxe]: 100,
-      }, name: 'nova', force: 100 }, // unblockable
+        blunt: 130,
+        chop: 100,
+        pickaxe: 100,
+      }, name: 'nova', force: 100, unblockable },
       // Taunt
-    ],
+    ]),
     hp: 10000,
     staggerFactor: 0,
     staggerBlocked: false,
     damageModifiers: {
       ...defaultDmgModifiers,
-      [DamageType.Pierce]: DamageModifier.VeryResistant,
-      [DamageType.Fire]: DamageModifier.Resistant,
-      [DamageType.Poison]: DamageModifier.Immune,
+      pierce: 'veryResistant',
+      fire: 'resistant',
+      poison: 'immune',
     },
     drop: [
       dropEntry('Yagluththing', { min: 3, max: 3, scale: false }),
@@ -915,26 +973,27 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Serpent',
     tier: 4,
+    maxLvl: 1,
     emoji: '🐍',
     faction: Faction.SeaMonsters,
-    attacks: [
-      { dmg: { [DamageType.Slash]: 70, },
+    attacks: single([
+      { dmg: { slash: 70, },
         name: 'attack', force: 100,
       },
       { dmg: {
-        [DamageType.Slash]: 40,
-        [DamageType.Poison]: 5,
+        slash: 40,
+        poison: 5,
       }, name: 'taunt', force: 30
       }
-    ],
+    ]),
     hp: 400,
     staggerFactor: 0,
     staggerBlocked: true,
     damageModifiers: {
       ...animalDmgModifiers,
-      [DamageType.Fire]: DamageModifier.Immune,
-      [DamageType.Frost]: DamageModifier.Weak,
-      [DamageType.Poison]: DamageModifier.Resistant,
+      fire: 'immune',
+      frost: 'weak',
+      poison: 'resistant',
     },
     drop: [
       dropEntry('SerpentScale', { min: 8, max: 10 }),

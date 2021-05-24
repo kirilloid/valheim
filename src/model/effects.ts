@@ -1,4 +1,4 @@
-import { DamageModifier, DamageType, Effect } from "../types";
+import { Effect } from "../types";
 import { SkillType } from "./skills";
 
 export const effects: Effect[] = [
@@ -21,9 +21,7 @@ export const effects: Effect[] = [
     healthOverTime: [-1, 1],
     healthRegen: 0,
     staminaRegen: 0.4,
-    damageModifiers: {
-      [DamageType.Fire]: DamageModifier.Resistant,
-    }
+    damageModifiers: { fire: 'resistant' }
   },
   {
     id: 'GP_Eikthyr',
@@ -43,9 +41,9 @@ export const effects: Effect[] = [
     time: 300,
     cooldown: 1200,
     damageModifiers: {
-      [DamageType.Blunt]: DamageModifier.Resistant,
-      [DamageType.Pierce]: DamageModifier.Resistant,
-      [DamageType.Slash]: DamageModifier.Resistant,
+      blunt: 'resistant',
+      pierce: 'resistant',
+      slash: 'resistant',
     }
   },
   {
@@ -59,9 +57,9 @@ export const effects: Effect[] = [
     time: 300,
     cooldown: 1200,
     damageModifiers: {
-      [DamageType.Fire]: DamageModifier.Resistant,
-      [DamageType.Frost]: DamageModifier.Resistant,
-      [DamageType.Lightning]: DamageModifier.Resistant,
+      fire: 'resistant',
+      frost: 'resistant',
+      lightning: 'resistant',
     }
   },
   {
@@ -97,9 +95,9 @@ export const effects: Effect[] = [
     healthRegen: 0.75,
     staminaRegen: 0.85,
     damageModifiers: {
-      [DamageType.Fire]: DamageModifier.Resistant,
-      [DamageType.Frost]: DamageModifier.Weak,
-      [DamageType.Lightning]: DamageModifier.Weak,
+      fire: 'resistant',
+      frost: 'weak',
+      lightning: 'weak',
     }
   },
 ];

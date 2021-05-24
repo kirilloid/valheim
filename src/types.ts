@@ -25,42 +25,44 @@ export enum Faction {
   Boss, // aggressive only to players
 };
 
-export enum DamageType {
-  Damage,
-  Blunt,
-  Slash,
-  Pierce,
-  Chop,
-  Pickaxe,
-  Fire,
-  Frost,
-  Lightning,
-  Poison,
-  Spirit,
-};
+export type DamageType = 
+| 'blunt'
+| 'slash'
+| 'pierce'
+| 'chop'
+| 'pickaxe'
+| 'fire'
+| 'frost'
+| 'lightning'
+| 'poison'
+| 'spirit';
 
-export enum DamageModifier {
-  Normal,    // 1x
-  Resistant, // 0.5x
-  Weak,      // 1.5x
-  Immune,    // 0x
-  Ignore,    // 0x
-  VeryResistant, // 0.25x
-  VeryWeak,  // 2x
-};
+export type DamageModifier =
+| 'normal'
+| 'resistant'
+| 'weak'
+| 'immune'
+| 'ignore'
+| 'veryResistant'
+| 'veryWeak'
+;
 
-export type DamageModifiers = Record<Exclude<DamageType, DamageType.Damage>, DamageModifier>
-  | [undefined, DamageModifier, DamageModifier, DamageModifier, DamageModifier, DamageModifier,
-                DamageModifier, DamageModifier, DamageModifier, DamageModifier, DamageModifier];
+export type DamageModifiers = Record<DamageType, DamageModifier>;
+
+const idxToMod: DamageModifier[] = ['normal', 'resistant', 'weak', 'immune', 'ignore', 'veryResistant', 'veryWeak'];
+export function mods(values: [number, number, number, number, number, number, number, number, number, number]): DamageModifiers {
+  const [blunt, slash, pierce, chop, pickaxe, fire, frost, lightning, poison, spirit] = values.map(v => idxToMod[v]!);
+  return { blunt, slash, pierce, chop, pickaxe, fire, frost, lightning, poison, spirit } as DamageModifiers;
+}
 
 export const damageModifiersValues: Record<DamageModifier, number> = {
-  [DamageModifier.Normal]: 1,
-  [DamageModifier.Resistant]: 0.5,
-  [DamageModifier.Weak]: 1.5,
-  [DamageModifier.Immune]: 0,
-  [DamageModifier.Ignore]: 0,
-  [DamageModifier.VeryResistant]: 0.25,
-  [DamageModifier.VeryWeak]: 2,
+  normal: 1,
+  resistant: 0.5,
+  weak: 1.5,
+  immune: 0,
+  ignore: 0,
+  veryResistant: 0.25,
+  veryWeak: 2,
 };
 
 export type Effect = {
@@ -85,6 +87,8 @@ export type NormalAttackProfile = {
   dmg: DamageProfile;
   burst?: number;
   name: string;
+  unblockable?: true;
+  undodgeable?: true;
   // knockback
   force?: number;
 }
@@ -94,6 +98,10 @@ export type SpawnAttackProfile = {
   max: number;
 }
 export type AttackProfile = NormalAttackProfile | SpawnAttackProfile;
+export type AttackVariety = {
+  variety: string;
+  attacks: AttackProfile[];
+};
 
 export interface DropEntry {
   item: EntityId;
@@ -123,13 +131,14 @@ export const dropTrophy = (item: EntityId, chance: number) => {
 export interface Creature extends GameObjectBase {
   type: 'creature';
   emoji: string;
-  // maxLvl: number;
-  // upgradeDistance: number;
+  maxLvl: number;
+  upgradeDistance?: number;
+  nightOnly?: true;
   faction: Faction;
   hp: number;
   staggerFactor: number;
   staggerBlocked: boolean;
-  attacks: AttackProfile[];
+  attacks: AttackVariety[];
   damageModifiers: DamageModifiers;
   drop: DropEntry[];
   tame?: { fedTime: number; tameTime: number; commandable: boolean; eats: string[] };
@@ -329,7 +338,7 @@ export interface Resource extends BaseItem {
 }
 
 export interface Valuable extends BaseItem {
-  type: 'value';
+  type: 'valuable';
   emoji: string;
   value: number;
 }
@@ -351,11 +360,11 @@ export interface Potion extends BaseItem {
   stamina?: [adds: number, time: number];
   healthRegen?: number;
   staminaRegen?: number;
-  resist?: DamageType[];
+  resist?: Partial<DamageModifiers>;
   cooldown: number;
 }
 
-type Pair<T> = [T, T];
+export type Pair<T> = [T, T];
 
 interface BaseAttack {
   animation: string;
@@ -393,6 +402,7 @@ export interface Tool extends BaseItem {
 
 export interface Weapon extends BaseItem {
   type: 'weapon';
+  emoji: string;
   slot: 'primary' | 'both' | 'secondary' | 'bow' | 'either'
     | 'head' | 'shoulders' | 'body' | 'legs'
     | 'none' | 'util';
@@ -414,6 +424,7 @@ export interface Weapon extends BaseItem {
 
 export interface Shield extends BaseItem {
   type: 'shield';
+  emoji: string,
   damage?: DamageProfile;
   slot: 'secondary';
   skill: SkillType.Blocking;

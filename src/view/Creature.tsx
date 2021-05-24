@@ -29,7 +29,12 @@ function NormalAttack({ attack: a, dmgScale }: { attack: NormalAttackProfile, dm
   const dmg = multiplyDamage(a.dmg, dmgScale);
   return <>
     <dt key={`atk-key-${a.name}`}>{a.name}</dt>
-    <dd key={`atk-val-${a.name}`}>{shortCreatureDamage(dmg)}{a.burst ? ` x${a.burst}` : ''}</dd>
+    <dd key={`atk-val-${a.name}`}>
+      {shortCreatureDamage(dmg)}
+      {a.burst ? ` x${a.burst}` : ''}
+      {a.unblockable ? ', unblockable' : ''}
+      {a.undodgeable ? ', undodgeable' : ''}
+    </dd>
   </>
 }
 
@@ -44,7 +49,7 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
   const translate = useContext(TranslationContext);
   const { tame, pregnancy, staggerFactor } = creature;
   const scale = { stars: level - 1 };
-  const dmgScale = dmgBonus(1, scale);
+  const dmgScale = dmgBonus(scale);
   const [sid, snr] = getSummon(creature.id) ?? ['', 0];
   return (<>
     <ItemHeader item={creature} />
@@ -57,7 +62,7 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
         <dd key="summon-value"><ItemIcon item={data[sid]} size={16} /> <Link to={`/obj/${sid}`}>{translate(sid)}</Link> x{snr}</dd>
       </> : null}
       <dt key="health-label">{translate('ui.health')}</dt>
-      <dd key="health-value">{hpBonus(creature.hp, scale)}</dd>
+      <dd key="health-value">{creature.hp * hpBonus(scale)}</dd>
       <dt key="stagger-label">stagger</dt>
       <dd key="stagger-value">{creature.hp * staggerFactor}</dd>
       </dl>
@@ -67,11 +72,14 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
       </dl>
       {creature.attacks.length ? <>
         <h3>attacks</h3>
-        <dl>
-        {creature.attacks.map(a => 'spawn' in a
-          ? <SpawnAttack attack={a} />
-          : <NormalAttack key={a.name} attack={a} dmgScale={dmgScale} />)}
-        </dl>
+        {creature.attacks.map(a => <>
+          {creature.attacks.length ? <h4 key={a.variety}>{a.variety}</h4> : null}
+          <dl>
+          {a.attacks.map(a => 'spawn' in a
+            ? <SpawnAttack attack={a} />
+            : <NormalAttack key={a.name} attack={a} dmgScale={dmgScale} />)}
+          </dl>
+        </>)}
       </> : null}
     </section>
     <section>

@@ -109,7 +109,7 @@ export function Piece({ item }: { item: TPiece }) {
   const { hp, damageModifiers, noRoof } = item.wear;
   const translate = useContext(TranslationContext);
   const specialReqs = reqList(item.piece);
-  const producedItems = item.subtype === 'craft' && stationsMap.get(item.craft.id) || [];
+  const producedItems = (item.subtype === 'craft' && stationsMap.get(item.craft.id)) || [];
   return (
     <>
       <ItemHeader item={item} />

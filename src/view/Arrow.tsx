@@ -23,7 +23,7 @@ export function Arrow({ item }: { item: TArrow }) {
       <section>
         <h2>{translate('ui.itemType.resource')}</h2>
         <dl>
-          <dt>{translate('ui.weight')}</dt><dd><Icon id="weight" size={16} />{' '}{item.weight}</dd>
+          <dt>{translate('ui.weight')}</dt><dd><Icon id="weight" alt="" size={16} />{' '}{item.weight}</dd>
           <dt>{translate('ui.stack')}</dt><dd>{item.stack}</dd>
           <dt>{translate('ui.floats')}</dt><dd>{item.floating ? '✔️' : '❌'}</dd>
         </dl>

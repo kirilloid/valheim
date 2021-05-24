@@ -64,7 +64,7 @@ function replaceAllWidgets(input: string): ReactChildren {
   result = replaceWidgets(
     result,
     /!\[(\w+)\]/g,
-    (_: string, id: string) => <Icon id={id} size={16} />,
+    (_: string, id: string) => <Icon id={id} alt="" size={16} />,
   );
   result = replaceWidgets(
     result,

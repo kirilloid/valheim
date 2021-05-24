@@ -8,9 +8,8 @@ import { DamageType, EntityId, ItemSpecial, Piece } from '../types';
 import { match } from '../model/search';
 import { Icon, ItemIcon, SkillIcon } from './Icon';
 import { data } from '../model/objects';
-import { TranslationContext } from '../translation.effect';
+import { TranslationContext, Translator } from '../translation.effect';
 import { assertNever } from '../model/utils';
-import { creatures } from '../model/creatures';
 import { SkillType } from '../model/skills';
 import { averageAttacksDamage, ShortWeaponDamage } from './helpers';
 import { getCraftingStationId } from '../model/building';
@@ -20,16 +19,16 @@ function first(val: number | [number, number]) {
   return val[0];
 }
 
-function resistIcon(id: DamageType) {
-  switch (id) {
-    case DamageType.Fire:
-      return <Icon id="fire" size={16} />
-    case DamageType.Frost:
-      return <Icon id="frost" size={16} />
-    case DamageType.Poison:
-      return <Icon id="poison" size={16} />
-    case DamageType.Lightning:
-      return <Icon id="lightning" size={16} />
+function resistIcon(translate: Translator, type: DamageType) {
+  switch (type) {
+    case 'fire':
+      return <Icon id={type} alt={translate(`ui.damageType.${type}`)} size={16} />
+    case 'frost':
+      return <Icon id="frost" alt="frost" size={16} />
+    case 'poison':
+      return <Icon id="poison" alt="poison" size={16} />
+    case 'lightning':
+      return <Icon id="lightning" alt="lightning" size={16} />
     default:
       return null;
   }
@@ -43,15 +42,15 @@ function pieceExtra(item: Piece) {
     case 'fireplace':
     case 'table':
       return item.comfort?.value ? <span>
-        <Icon id="walknut_16" size={16} />
+        <Icon id="walknut_16" alt="comfort" size={16} />
         {' '}
         {item.comfort.value}
       </span> : null
     case 'craft':
-      return <Icon id="hammer" size={32} />
+      return <Icon id="hammer" alt="crafting" size={32} />
     case 'craft_ext':
       const id = getCraftingStationId(item.extends.id);
-      return <ItemIcon item={data[id]} size={32} />
+      return <ItemIcon useAlt item={data[id]} size={32} />
     case 'chest':
     case 'door':
     case 'misc':
@@ -63,36 +62,36 @@ function pieceExtra(item: Piece) {
   }
 }
 
-function showSpecialIcon(special: ItemSpecial) {
+function showSpecialIcon(special: ItemSpecial, translate: Translator) {
   switch (special) {
     case undefined: return null;
-    case 'light': return <Icon id="flashlight" size={16} />;
-    case 'strength': return <span><Icon id="weight" size={16} />+150</span>;
-    case 'search': return <Icon id="map_ping" size={16} />;
-    case 'harpoon': return <Icon id="harpoon" size={16} />;
+    case 'light': return <Icon id="flashlight" alt="flashlight" size={16} />;
+    case 'strength': return <span><Icon id="weight" alt={translate('ui.weight')} size={16} />+150</span>;
+    case 'search': return <Icon id="map_ping" alt="search" size={16} />;
+    case 'harpoon': return <Icon id="harpoon" alt="harpoon" size={16} />;
     case 'build': return null;
-    case 'garden': return <Icon path="piece/replant" size={32} />;
-    case 'ground': return <Icon path="piece/raise" size={32} />;
+    case 'garden': return <Icon path="piece/replant" alt="gardening" size={32} />;
+    case 'ground': return <Icon path="piece/raise" alt="terraforming" size={32} />;
     case 'fishing': return <ItemIcon item={data.FishingBait} size={32} />;
     default: return assertNever(special);
   }
 }
 
-function renderItem(id: EntityId, text: string, onClick: React.MouseEventHandler) {
+function renderItem(id: EntityId, text: string, translate: Translator, onClick: React.MouseEventHandler) {
   const item = data[id];
   if (!item) { return "Something went wrong" }
   switch (item?.type) {
     case 'creature': {
       const { hp } = item;
-      const avgDmg = averageAttacksDamage(item.attacks);
+      const avgDmg = averageAttacksDamage(item.attacks.flatMap(a => a.attacks));
       return <div className="SearchItem">
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         <span>
-          <Icon id="health" size={16} />
+          <Icon id="health" alt={translate('ui.health')} size={16} />
           {hp < 2000 ? hp : (hp / 1000) + 'k'}
           {avgDmg ? <> 
-            <Icon id="sword" size={16} />
+            <Icon id="sword" alt={translate('ui.damage')} size={16} />
             {avgDmg}
           </> : null}
         </span>
@@ -103,7 +102,7 @@ function renderItem(id: EntityId, text: string, onClick: React.MouseEventHandler
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         {item.summon
-        ? <ItemIcon item={data[item.summon[0]]} size={32} />
+        ? <ItemIcon item={data[item.summon[0]]} useAlt size={32} />
         : null}
       </div>
     case 'trophy':
@@ -111,14 +110,14 @@ function renderItem(id: EntityId, text: string, onClick: React.MouseEventHandler
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         {item.summon
-        ? <ItemIcon item={data[item.summon[0]]} size={32} />
-        : <Icon id="trophies_20" size={20} />}
+        ? <ItemIcon item={data[item.summon[0]]} useAlt size={32} />
+        : <Icon id="trophies_20" size={20} alt="" />}
       </div>
     case 'tool':
       return <div className="SearchItem">
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
-        {showSpecialIcon(item.special)}
+        {showSpecialIcon(item.special, translate)}
       </div>
     case 'weapon':
       return <div className="SearchItem">
@@ -131,7 +130,7 @@ function renderItem(id: EntityId, text: string, onClick: React.MouseEventHandler
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         <span>
-          <SkillIcon skill={SkillType.Blocking} size={16} />
+          <SkillIcon skill={SkillType.Blocking} useAlt size={16} />
           {first(item.block)}
         </span>
       </div>
@@ -140,9 +139,11 @@ function renderItem(id: EntityId, text: string, onClick: React.MouseEventHandler
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         <span>{
-          showSpecialIcon(item.special) ??
-          <><Icon id="ac_bkg" size={16} />
-          {first(item.armor)}</>
+          showSpecialIcon(item.special, translate) ??
+          <>
+            <Icon id="ac_bkg" alt={translate('ui.armor')} size={16} />
+            {first(item.armor)}
+          </>
         }</span>
       </div>
     case 'ammo':
@@ -156,9 +157,9 @@ function renderItem(id: EntityId, text: string, onClick: React.MouseEventHandler
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         <span>
-          <Icon id="health" size={16} />
+          <Icon id="health" alt={translate('ui.health')} size={16} />
           {item.health}
-          <Icon id="walknut_16" size={16} />
+          <Icon id="walknut_16" alt={translate('ui.stamina')} size={16} />
           {item.stamina}
         </span>
       </div>
@@ -169,27 +170,27 @@ function renderItem(id: EntityId, text: string, onClick: React.MouseEventHandler
         <span>
           {item.health
             ? <>
-                <Icon id="health" size={16} />
+                <Icon id="health" alt={translate('ui.health')} size={16} />
                 {item.health[0]} / {item.health[1]}s
               </>
             : null}
           {item.stamina
             ? <>
-                <Icon id="walknut_16" size={16} />
+                <Icon id="walknut_16" alt={translate('ui.stamina')} size={16} />
                 {item.stamina[0]} / {item.stamina[1]}s
               </>
             : null}
           {item.resist
-            ? item.resist.map(resistIcon)
+            ? (Object.keys(item.resist) as DamageType[]).map(type => resistIcon(translate, type))
             : null}
         </span>
       </div>
-    case 'value':
+    case 'valuable':
       return <div className="SearchItem">
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         <span>
-          <Icon id="coin_32" size={16} />
+          <Icon id="coin_32" alt={translate('Coins')} size={16} />
           {item.value}
         </span>
       </div>
@@ -246,7 +247,7 @@ export const Search = () => {
     return () => {
       observer.unobserve(lastItem);
     }
-  }, [lastItem, items]);
+  }, [lastItem, items, loadMore]);
 
   const clearSearch = useCallback(() => {
     setSearchTerm('');
@@ -297,11 +298,11 @@ export const Search = () => {
               <li id={`gs_i${i}`} key={id}
                 className={i === index ? 'active' : ''}
                 tabIndex={0}>
-                {renderItem(id, text, clearSearch)}
+                {renderItem(id, text, translate, clearSearch)}
               </li>
             );
           })}
-          {len < items.length ? <li key="#last-item"><Icon id="hammer_spinner"/></li> : null}
+          {len < items.length ? <li key="#last-item"><Icon id="hammer_spinner" alt="loading"/></li> : null}
         </ul>
       : null}
     </div>

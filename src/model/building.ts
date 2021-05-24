@@ -1,50 +1,51 @@
 import {
   Piece,
-  DamageType,
-  DamageModifier,
   DamageModifiers,
   MaterialType,
   CraftingStation,
   ItemType,
   EntityId,
+  mods,
 } from '../types';
 
 const damageModifiersElementalPart = {
-  [DamageType.Fire]: DamageModifier.Immune,
-  [DamageType.Frost]: DamageModifier.Immune,
-  [DamageType.Lightning]: DamageModifier.Normal,
-  [DamageType.Poison]: DamageModifier.Immune,
-  [DamageType.Spirit]: DamageModifier.Immune,
-}
+  fire: 'immune',
+  frost: 'immune',
+  lightning: 'normal',
+  poison: 'immune',
+  spirit: 'immune',
+} as const;
 
 const damageModifiersFireplace: DamageModifiers = {
-  [DamageType.Blunt]: DamageModifier.Normal,
-  [DamageType.Slash]: DamageModifier.Normal,
-  [DamageType.Pierce]: DamageModifier.Normal,
-  [DamageType.Chop]: DamageModifier.Normal,
-  [DamageType.Pickaxe]: DamageModifier.Normal,
+  blunt: 'normal',
+  slash: 'normal',
+  pierce: 'normal',
+  chop: 'normal',
+  pickaxe: 'normal',
   ...damageModifiersElementalPart,
 };
 
+const damageModifieresExtensions: DamageModifiers = mods([0, 0, 1, 2, 0, 0, 1, 0, 3, 3])
+
 const damageModifiersWood: DamageModifiers = {
-  [DamageType.Blunt]: DamageModifier.Normal,
-  [DamageType.Slash]: DamageModifier.Normal,
-  [DamageType.Pierce]: DamageModifier.Resistant,
-  [DamageType.Chop]: DamageModifier.Weak,
-  [DamageType.Pickaxe]: DamageModifier.Normal,
-  [DamageType.Fire]: DamageModifier.Normal,
-  [DamageType.Frost]: DamageModifier.Normal,
-  [DamageType.Lightning]: DamageModifier.Normal,
-  [DamageType.Poison]: DamageModifier.Immune,
-  [DamageType.Spirit]: DamageModifier.Immune,
+  blunt: 'normal',
+  slash: 'normal',
+  pierce: 'resistant',
+  chop: 'weak',
+  pickaxe: 'normal',
+  fire: 'normal',
+  frost: 'normal',
+  lightning: 'normal',
+  poison: 'immune',
+  spirit: 'immune',
 };
 
 const damageModifiersStone: DamageModifiers = {
-  [DamageType.Blunt]: DamageModifier.Normal,
-  [DamageType.Slash]: DamageModifier.Normal,
-  [DamageType.Pierce]: DamageModifier.Normal,
-  [DamageType.Chop]: DamageModifier.Normal,
-  [DamageType.Pickaxe]: DamageModifier.Weak,
+  blunt: 'normal',
+  slash: 'normal',
+  pierce: 'normal',
+  chop: 'normal',
+  pickaxe: 'weak',
   ...damageModifiersElementalPart,
 };
 
@@ -74,10 +75,10 @@ const wearStructure = (
   materialType,
 });
 
-const woodResist: DamageModifiers = [, 0, 0, 1, 2, 0, 0, 0, 0, 3, 3];
-const stoneResist: DamageModifiers = [, 0, 0, 0, 0, 2, 1, 1, 0, 3, 3];
-const chestResist: DamageModifiers = [, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3];
-const craftStationResist: DamageModifiers = [, 1, 1, 1, 1, 0, 3, 3, 0, 3, 3];
+const woodResist: DamageModifiers = mods([0, 0, 1, 2, 0, 0, 0, 0, 3, 3]);
+const stoneResist: DamageModifiers = mods([0, 0, 0, 0, 2, 1, 1, 0, 3, 3]);
+const chestResist: DamageModifiers = mods([1, 1, 1, 1, 1, 1, 1, 0, 3, 3]);
+const craftStationResist: DamageModifiers = mods([1, 1, 1, 1, 0, 3, 3, 0, 3, 3]);
 const woodStructureWear = wearStructure(400, woodResist, MaterialType.Wood);
 const woodRoofStructureWear = { ...woodStructureWear, noRoof: false };
 const stoneStructureWear = wearStructure(1500, stoneResist, MaterialType.Stone, { noRoof: false });
@@ -245,7 +246,7 @@ export const pieces: Piece[] = [
     },
     wear: {
       hp: 50,
-      damageModifiers: [, 0, 0, 0, 0, 2, 1, 1, 0, 3, 3],
+      damageModifiers: mods([0, 0, 0, 0, 2, 1, 1, 0, 3, 3]),
       noRoof: false,
       noSupport: true,
       materialType: MaterialType.Wood,
@@ -267,7 +268,7 @@ export const pieces: Piece[] = [
     },
     wear: {
       hp: 20,
-      damageModifiers: [, 0, 0, 0, 0, 2, 1, 1, 0, 3, 3], // check
+      damageModifiers: mods([0, 0, 0, 0, 2, 1, 1, 0, 3, 3]), // TODO: check
       noRoof: false,
       noSupport: true,
       materialType: MaterialType.Wood,
@@ -288,7 +289,7 @@ export const pieces: Piece[] = [
     },
     wear: {
       hp: 100,
-      damageModifiers: [, 0, 0, 1, 0, 0, 1, 0, 0, 3, 3],
+      damageModifiers: mods([0, 0, 1, 0, 0, 1, 0, 0, 3, 3]),
       noRoof: false,
       noSupport: true,
       materialType: MaterialType.Wood,
@@ -309,7 +310,7 @@ export const pieces: Piece[] = [
     },
     wear: {
       hp: 100,
-      damageModifiers: [, 0, 0, 1, 0, 0, 1, 0, 0, 3, 3],
+      damageModifiers: mods([0, 0, 1, 0, 0, 1, 0, 0, 3, 3]),
       noRoof: false,
       noSupport: true,
       materialType: MaterialType.Wood,
@@ -332,7 +333,7 @@ export const pieces: Piece[] = [
     },
     wear: {
       hp: 100,
-      damageModifiers: [, 0, 0, 1, 2, 0, 0, 1, 0, 3, 3],
+      damageModifiers: damageModifieresExtensions,
       noRoof: true,
       noSupport: true,
       materialType: MaterialType.Wood,
@@ -355,7 +356,7 @@ export const pieces: Piece[] = [
     },
     wear: {
       hp: 100,
-      damageModifiers: [, 0, 0, 1, 2, 0, 0, 1, 0, 3, 3],
+      damageModifiers: damageModifieresExtensions,
       noRoof: true,
       noSupport: true,
       materialType: MaterialType.Wood,
@@ -378,7 +379,7 @@ export const pieces: Piece[] = [
     },
     wear: {
       hp: 100,
-      damageModifiers: [, 0, 0, 1, 2, 0, 0, 1, 0, 3, 3],
+      damageModifiers: damageModifieresExtensions,
       noRoof: true,
       noSupport: true,
       materialType: MaterialType.Wood,
@@ -401,7 +402,7 @@ export const pieces: Piece[] = [
     },
     wear: {
       hp: 100,
-      damageModifiers: [, 0, 0, 1, 2, 0, 0, 1, 0, 3, 3],
+      damageModifiers: damageModifieresExtensions,
       noRoof: true,
       noSupport: true,
       materialType: MaterialType.Wood,
@@ -425,7 +426,7 @@ export const pieces: Piece[] = [
     },
     wear: {
       hp: 200,
-      damageModifiers: [, 0, 0, 1, 2, 0, 0, 0, 0, 3, 3],
+      damageModifiers: mods([0, 0, 1, 2, 0, 0, 0, 0, 3, 3]),
       noRoof: true,
       noSupport: true,
       materialType: MaterialType.Wood,
@@ -448,7 +449,7 @@ export const pieces: Piece[] = [
     },
     wear: {
       hp: 200,
-      damageModifiers: [, 0, 0, 1, 2, 0, 0, 0, 0, 3, 3],
+      damageModifiers: mods([0, 0, 1, 2, 0, 0, 0, 0, 3, 3]),
       noRoof: true,
       noSupport: true,
       materialType: MaterialType.Wood,
@@ -471,7 +472,7 @@ export const pieces: Piece[] = [
     },
     wear: {
       hp: 200,
-      damageModifiers: [, 0, 0, 1, 2, 0, 0, 0, 0, 3, 3],
+      damageModifiers: mods([0, 0, 1, 2, 0, 0, 0, 0, 3, 3]),
       noRoof: true,
       noSupport: true,
       materialType: MaterialType.Wood,
@@ -494,7 +495,7 @@ export const pieces: Piece[] = [
     },
     wear: {
       hp: 100,
-      damageModifiers: [, 0, 0, 1, 2, 0, 0, 1, 0, 3, 3],
+      damageModifiers: damageModifieresExtensions,
       noRoof: true,
       noSupport: true,
       materialType: MaterialType.Wood,
@@ -517,7 +518,7 @@ export const pieces: Piece[] = [
     },
     wear: {
       hp: 100,
-      damageModifiers: [, 0, 0, 1, 2, 0, 0, 1, 0, 3, 3],
+      damageModifiers: damageModifieresExtensions,
       noRoof: true,
       noSupport: true,
       materialType: MaterialType.Wood,
@@ -540,7 +541,7 @@ export const pieces: Piece[] = [
     },
     wear: {
       hp: 100,
-      damageModifiers: [, 0, 0, 1, 2, 0, 0, 1, 0, 3, 3],
+      damageModifiers: damageModifieresExtensions,
       noRoof: true,
       noSupport: true,
       materialType: MaterialType.Wood,
@@ -563,7 +564,7 @@ export const pieces: Piece[] = [
     },
     wear: {
       hp: 1000,
-      damageModifiers: [, 0, 0, 1, 2, 0, 0, 1, 0, 3, 3],
+      damageModifiers: damageModifieresExtensions,
       noRoof: true,
       noSupport: true,
       materialType: MaterialType.Wood,
@@ -586,7 +587,7 @@ export const pieces: Piece[] = [
     },
     wear: {
       hp: 100,
-      damageModifiers: [, 0, 0, 1, 2, 0, 0, 1, 0, 3, 3],
+      damageModifiers: damageModifieresExtensions,
       noRoof: true,
       noSupport: true,
       materialType: MaterialType.Wood,
@@ -609,7 +610,7 @@ export const pieces: Piece[] = [
     },
     wear: {
       hp: 100,
-      damageModifiers: [, 0, 0, 1, 2, 0, 0, 1, 0, 3, 3],
+      damageModifiers: damageModifieresExtensions,
       noRoof: true,
       noSupport: true,
       materialType: MaterialType.Wood,
@@ -1060,7 +1061,7 @@ export const pieces: Piece[] = [
     subtype: 'structure',
     tier: 3,
     piece: { target: 'random', water: undefined, size: [2, 0, 3] },
-    wear: wearStructure(2000, [, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3], MaterialType.Iron),
+    wear: wearStructure(2000, mods([0, 0, 0, 0, 0, 0, 0, 0, 3, 3]), MaterialType.Iron),
     recipe: { materials: { Iron: 4 }, station: CraftingStation.Forge },
   },
   { id: 'stone_stair',
@@ -1170,7 +1171,7 @@ export const pieces: Piece[] = [
     tier: 3,
     fireplace: { fuel: 'Resin', capacity: 6, burnTime: 20000, minHeightAbove: 0.68, smoke: false, fireworks: false },
     piece: { target: 'primary', water: undefined, onlyOnFlat, size: [0, 0, 1.5] },
-    wear: wearStructure(100, [, 2, 0, 0, 0, 0, 0, 0, 0, 3, 3], undefined, { noRoof: false }),
+    wear: wearStructure(100, mods([2, 0, 0, 0, 0, 0, 0, 0, 3, 3]), undefined, { noRoof: false }),
     recipe: { materials: { Wood: 2, Copper: 2, Resin: 2 }, station: CraftingStation.Forge },
   },
   { id: 'piece_groundtorch',
@@ -1179,7 +1180,7 @@ export const pieces: Piece[] = [
     tier: 3,
     fireplace: { fuel: 'Resin', capacity: 6, burnTime: 20000, minHeightAbove: 0.76, smoke: false, fireworks: false },
     piece: { target: 'primary', water: undefined, onlyOnFlat, size: [0, 0, 1.5] },
-    wear: wearStructure(200, [, 0, 0, 1, 0, 0, 3, 3, 0, 3, 3], undefined, { noRoof: false }),
+    wear: wearStructure(200, mods([0, 0, 1, 0, 0, 3, 3, 0, 3, 3]), undefined, { noRoof: false }),
     recipe: { materials: { Iron: 2, Resin: 2 }, station: CraftingStation.Workbench },
   },
   { id: 'piece_groundtorch_wood',
@@ -1188,7 +1189,7 @@ export const pieces: Piece[] = [
     tier: 1,
     fireplace: { fuel: 'Resin', capacity: 4, burnTime: 10000, minHeightAbove: 0.76, smoke: false, fireworks: false },
     piece: { target: 'primary', water: undefined, onlyOnFlat, size: [0, 0, 1.5] },
-    wear: wearStructure(100, [, 0, 2, 1, 2, 0, 0, 0, 0, 3, 3], undefined, { noRoof: false }),
+    wear: wearStructure(100, mods([0, 2, 1, 2, 0, 0, 0, 0, 3, 3]), undefined, { noRoof: false }),
     recipe: { materials: { Iron: 2, Resin: 2 }, station: CraftingStation.Workbench },
   },
   { id: 'piece_groundtorch_green',
@@ -1197,7 +1198,7 @@ export const pieces: Piece[] = [
     tier: 3,
     fireplace: { fuel: 'Guck', capacity: 6, burnTime: 20000, minHeightAbove: 0.76, smoke: false, fireworks: false },
     piece: { target: 'primary', water: undefined, onlyOnFlat, size: [0, 0, 1.5] },
-    wear: wearStructure(200, [, 0, 0, 1, 0, 0, 3, 3, 0, 3, 3], undefined, { noRoof: false }),
+    wear: wearStructure(200, mods([0, 0, 1, 0, 0, 3, 3, 0, 3, 3]), undefined, { noRoof: false }),
     recipe: { materials: { Iron: 2, Resin: 2 }, station: CraftingStation.Workbench },
   },
   { id: 'piece_brazierceiling01',
@@ -1207,7 +1208,7 @@ export const pieces: Piece[] = [
     fireplace: { fuel: 'Coal', capacity: 5, burnTime: 20000, minHeightAbove: 0.28, smoke: false, fireworks: false },
     comfort: { value: 1, group: 'fire' },
     piece: { target: 'random', water: false, onlyOnFlat, size: [0, 0, 1.5] },
-    wear: wearStructure(100, [, 0, 0, 0, 0, 0, 3, 3, 0, 3, 3], MaterialType.Wood, { noRoof: false }),
+    wear: wearStructure(100, mods([0, 0, 0, 0, 0, 3, 3, 0, 3, 3]), MaterialType.Wood, { noRoof: false }),
     recipe: { materials: { Bronze: 5, Coal: 2, Chain: 1 }, station: CraftingStation.Forge },
   },
   { id: 'portal_wood',
@@ -1215,7 +1216,7 @@ export const pieces: Piece[] = [
     subtype: 'misc',
     tier: 2,
     piece: { target: 'primary', water: false, onlyOnFlat, size: [3, 3, 0] },
-    wear: wearStructure(400, [, 1, 0, 1, 2, 1, 0, 0, 0, 3, 3], MaterialType.Wood, { noRoof: false }),
+    wear: wearStructure(400, mods([1, 0, 1, 2, 1, 0, 0, 0, 3, 3]), MaterialType.Wood, { noRoof: false }),
     recipe: { materials: { GreydwarfEye: 10, FineWood: 20, SurtlingCore: 2 }, station: CraftingStation.Workbench },
   },
   { id: 'guard_stone',
@@ -1223,7 +1224,7 @@ export const pieces: Piece[] = [
     subtype: 'misc',
     tier: 2,
     piece: { target: 'primary', water: false, onlyOnFlat, size: [0.5, 0.5, 1] },
-    wear: wearStructure(1000, [, 0, 0, 1, 4, 4, 0, 1, 0, 3, 3], undefined, { noRoof: false }),
+    wear: wearStructure(1000, mods([0, 0, 1, 4, 4, 0, 1, 0, 3, 3]), undefined, { noRoof: false }),
     recipe: { materials: { FineWood: 5, GreydwarfEye: 5, SurtlingCore: 1 }, station: CraftingStation.Workbench },
   },
   { id: 'itemstand',
@@ -1368,7 +1369,7 @@ export const pieces: Piece[] = [
     tier: 1,
     space: [1, 1],
     piece: { target: 'none', water: false, onlyOnFlat, size: [0.5, 0.5, 0.5] },
-    wear: wearStructure(10, [, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3], MaterialType.Wood, { noRoof: false }),
+    wear: wearStructure(10, mods([1, 1, 1, 1, 1, 1, 1, 0, 3, 3]), MaterialType.Wood, { noRoof: false }),
     recipe: { materials: { FineWood: 2, BoneFragments: 1 }, station: CraftingStation.Workbench },
   },
   { id: 'piece_gift2', disabled: true,
@@ -1377,7 +1378,7 @@ export const pieces: Piece[] = [
     tier: 1,
     space: [1, 1],
     piece: { target: 'none', water: false, onlyOnFlat, size: [0.5, 0.5, 0.5] },
-    wear: wearStructure(10, [, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3], MaterialType.Wood, { noRoof: false }),
+    wear: wearStructure(10, mods([1, 1, 1, 1, 1, 1, 1, 0, 3, 3]), MaterialType.Wood, { noRoof: false }),
     recipe: { materials: { FineWood: 2, BoneFragments: 1 }, station: CraftingStation.Workbench },
   },
   { id: 'piece_gift3', disabled: true,
@@ -1386,7 +1387,7 @@ export const pieces: Piece[] = [
     tier: 1,
     space: [1, 1],
     piece: { target: 'none', water: false, onlyOnFlat, size: [0.5, 0.5, 0.5] },
-    wear: wearStructure(10, [, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3], MaterialType.Wood, { noRoof: false }),
+    wear: wearStructure(10, mods([1, 1, 1, 1, 1, 1, 1, 0, 3, 3]), MaterialType.Wood, { noRoof: false }),
     recipe: { materials: { FineWood: 2, BoneFragments: 1 }, station: CraftingStation.Workbench },
   },
   { id: 'piece_xmastree', disabled: true,
@@ -1413,7 +1414,7 @@ export const pieces: Piece[] = [
     tier: 1,
     fireplace: { fuel: 'Resin', capacity: 6, burnTime: 20000, minHeightAbove: 0.76, smoke: false, fireworks: false },
     piece: { target: 'primary', water: undefined, size: [0.5, 0.5, 0.5] },
-    wear: wearStructure(200, [, 0, 0, 1, 0, 0, 3, 3, 0, 3, 3], undefined, { noRoof: false }),
+    wear: wearStructure(200, mods([0, 0, 1, 0, 0, 3, 3, 0, 3, 3]), undefined, { noRoof: false }),
     recipe: { materials: { Turnip: 4, Resin: 2 }, station: CraftingStation.Workbench },
   },
 ];

@@ -9,7 +9,7 @@ import { Icon, ItemIcon, SkillIcon } from './Icon';
 import { timeI2S } from '../model/utils';
 import { getCraftingStationId } from '../model/building';
 import { useGlobalState } from '../globalState.effect';
-import { resourceMap } from '../model/resource-usage';
+import { resourceBuildMap, resourceCraftMap } from '../model/resource-usage';
 import { SkillType } from '../model/skills';
 
 const source: Record<EntityId, EntityId[]> = {};
@@ -49,7 +49,7 @@ function Station({ station }: { station: CraftingStation }) {
   const translate = useContext(TranslationContext);
   if (station === CraftingStation.Inventory) {
     return <>
-      <SkillIcon skill={SkillType.Unarmed} />{' '}
+      <SkillIcon skill={SkillType.Unarmed} useAlt={false} />{' '}
       inventory
     </>;
   }
@@ -122,40 +122,60 @@ function Materials({
 
 function CraftingSection({ id }: { id: EntityId }) {
   const translate = useContext(TranslationContext);
-  const craftables = resourceMap[id];
-  return craftables?.length
-    ? <section>
-        <h2>crafting</h2>
-        {translate('ui.usedToCraft')}:
-        <ul className="CraftList">
-          {craftables.map(item => <li>
-            <ItemIcon item={item} />
-            {' '}
-            <Link to={`/obj/${item.id}`}>{translate(item.id)}</Link>
-          </li>)}
-        </ul>
-      </section>
-    : null;
+  const crafts = resourceCraftMap[id];
+  const builds = resourceBuildMap[id];
+  return <>
+    {crafts?.length
+      ? <section>
+          <h2>crafting</h2>
+          {translate('ui.usedToCraft')}:
+          <ul className="CraftList">
+            {crafts.map(item => <li>
+              <ItemIcon item={item} />
+              {' '}
+              <Link to={`/obj/${item.id}`}>{translate(item.id)}</Link>
+            </li>)}
+          </ul>
+        </section>
+      : null}
+    {builds?.length
+      ? <section>
+          <h2>building</h2>
+          {translate('ui.usedToBuild')}:
+          <ul className="CraftList">
+            {builds.map(item => <li>
+              <ItemIcon item={item} />
+              {' '}
+              <Link to={`/obj/${item.id}`}>{translate(item.id)}</Link>
+            </li>)}
+          </ul>
+        </section>
+      : null}
+  </>
 }
 
 export function Recipe({ item }: { item: Item | Piece}) {
+  const translate = useContext(TranslationContext);
   const { recipe } = item;
   if (recipe == null) return null;
   if ('value' in recipe) {
     return <>
-      Bought from <Link to="/info/trader">trader</Link> for {recipe.value} <Icon id="coin_32" size={16} />
+      Bought from <Link to="/info/trader">trader</Link> for {recipe.value} <Icon id="coin_32" alt={translate('Coins')} size={16} />
     </>;
   }
   if ('number' in recipe) {
     const { station } = recipe.source;
-    const { number, materials } = recipe;
-    return <>
-      Produced {number === 1 ? '' : `${number}x`} in <Station station={station} />
-      {Object.keys(materials).length
-        ? <>{' using: '}<Materials materials={materials} /></>
-        : ' for free'
-      }
-    </>
+    const { number, materials, time } = recipe;
+    return <dl>
+      <dt>station</dt><dd><Station station={station} /></dd>
+      <dt>{translate('ui.time')}</dt><dd>{timeI2S(time)}</dd>
+      <dt>resources</dt><dd>{
+      Object.keys(materials).length
+        ? <Materials materials={materials} />
+        : 'for free'
+      }</dd>
+      {number === 1 ? null : <><dt>quantity</dt><dd>{number}</dd></>} 
+    </dl>
   }
   if ('biomes' in recipe) {
     return <>
@@ -167,7 +187,7 @@ export function Recipe({ item }: { item: Item | Piece}) {
     return <>
       Crafted in {level
         ? <><Station station={station} /> lvl {level}</>
-        : <Icon path="skills/Unarmed" />} using:{' '}
+        : <Icon path="skills/Unarmed" alt="" />} using:{' '}
       <Materials
         materials={recipe.materials}
         materialsUp={recipe.materialsPerLevel}

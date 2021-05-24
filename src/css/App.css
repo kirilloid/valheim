@@ -9,7 +9,23 @@
 
 .CombatCalc {
   display: flex;
+  flex-direction: column;
+}
+
+.InputBlock {
+  display: flex;
   flex-direction: row;
+  margin-top: 0.5em;
+}
+
+.InputBlock__Gap {
+  flex-grow: 1;
+}
+
+.BigInput {
+  min-width: 200px;
+  width: 50%;
+  max-width: 400px;
 }
 
 h1 {
@@ -34,7 +50,12 @@ h3 {
   margin-bottom: 0;
 }
 
-h2, h3 {
+h4 {
+  font-size: 1em;
+  margin: 0;
+}
+
+h2, h3, h4 {
   text-transform: uppercase;
   color: #888;
   font-weight: normal;

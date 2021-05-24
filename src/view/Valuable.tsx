@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { resourceMap } from '../model/resource-usage';
+import { resourceCraftMap } from '../model/resource-usage';
 import { TranslationContext } from '../translation.effect';
 
 import type { Valuable as TValuable } from '../types';
@@ -15,9 +15,9 @@ export function Valuable({ item }: { item: TValuable }) {
       <section>
         <h2>{translate('ui.itemType.valuable')}</h2>
         <dl>
-          <dt>{translate('ui.weight')}</dt><dd><Icon id="weight" size={16} />{' '}{item.weight}</dd>
+          <dt>{translate('ui.weight')}</dt><dd><Icon id="weight" alt="" size={16} />{' '}{item.weight}</dd>
           <dt>{translate('ui.stack')}</dt><dd>{item.stack}</dd>
-          <dt>{translate('ui.value')}</dt><dd><Icon id="coin_32" size={16} />{' '}{item.value}</dd>
+          <dt>{translate('ui.value')}</dt><dd><Icon id="coin_32" alt="" size={16} />{' '}{item.value}</dd>
           <dt>{translate('ui.floats')}</dt><dd>{item.floating ? '✔️' : '❌'}</dd>
         </dl>
         {item.id === 'Coins'
@@ -25,7 +25,7 @@ export function Valuable({ item }: { item: TValuable }) {
               <h2>crafting</h2>
               {translate('ui.usedToCraft')}:
               <ul className="CraftList">
-                {resourceMap.Coins?.map(item => <li>
+                {resourceCraftMap.Coins?.map(item => <li>
                   <ItemIcon item={item} />
                   {' '}
                   <Link to={`/obj/${item.id}`}>{translate(item.id)}</Link>

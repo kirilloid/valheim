@@ -2,17 +2,16 @@ import { Biome, DamageType } from "../types"
 import { SkillType } from "./skills";
 
 export const damage: Record<DamageType, string> = {
-  [DamageType.Damage]: '',
-  [DamageType.Blunt]: '🧱',
-  [DamageType.Slash]: '✂️',
-  [DamageType.Pierce]: '💉',
-  [DamageType.Chop]: '🪓',
-  [DamageType.Pickaxe]: '⛏️',
-  [DamageType.Fire]: '🔥',
-  [DamageType.Frost]: '❄️',
-  [DamageType.Lightning]: '⚡',
-  [DamageType.Poison]: '🧪',
-  [DamageType.Spirit]: '☄️',
+  blunt: '🧱',
+  slash: '✂️',
+  pierce: '💉',
+  chop: '🪓',
+  pickaxe: '⛏️',
+  fire: '🔥',
+  frost: '❄️',
+  lightning: '⚡',
+  poison: '🧪',
+  spirit: '☄️',
 };
 
 export const skill: Record<SkillType, string> = {

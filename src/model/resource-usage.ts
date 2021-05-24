@@ -2,12 +2,14 @@ import { items as weapons } from './weapons';
 import { items as armors } from './armors';
 import { arrows } from './arrows';
 import { resources } from './resources';
-import { CraftingStation, EntityId, Item } from '../types';
+import { CraftingStation, EntityId, GameObject, Item, Piece } from '../types';
+import { pieces } from './building';
 
-export const resourceMap: Record<EntityId, Item[]> = {};
-export const stationsMap = new Map<CraftingStation, Item[]>();
+export const resourceCraftMap: Record<EntityId, Item[]> = {};
+export const resourceBuildMap: Record<EntityId, Piece[]> = {};
+export const stationsMap = new Map<CraftingStation, (Item | Piece)[]>();
 
-function addToMap(item: Item) {
+function addToMap<T extends Item | Piece>(map: Record<EntityId, T[]>, item: T) {
   const { recipe } = item;
   if (item.disabled) return;
   if (recipe == null) return;
@@ -18,7 +20,7 @@ function addToMap(item: Item) {
     : recipe.materials;
   const station = 'source' in recipe ? recipe.source.station : null;
   for (const res of Object.keys(materials)) {
-    (resourceMap[res] ?? (resourceMap[res] = [])).push(item);
+    (map[res] ?? (map[res] = [])).push(item);
   }
   if (station) {
     const stationList = stationsMap.get(station) ?? [];
@@ -27,7 +29,10 @@ function addToMap(item: Item) {
   }
 }
 
-weapons.forEach(addToMap);
-armors.forEach(addToMap);
-resources.forEach(addToMap);
-arrows.forEach(addToMap);
+const addToCraftMap = (item: Item) => addToMap(resourceCraftMap, item);
+weapons.forEach(addToCraftMap);
+armors.forEach(addToCraftMap);
+resources.forEach(addToCraftMap);
+arrows.forEach(addToCraftMap);
+
+pieces.forEach(p => addToMap(resourceBuildMap, p));

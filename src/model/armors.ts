@@ -289,7 +289,7 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [1000, 200],
     moveSpeed: -0.05,
-    damageModifiers: { [DamageType.Frost]: DamageModifier.Resistant },
+    damageModifiers: { frost: 'resistant' },
     recipe: {
       time: CRAFT_TIME,
       materials: { Silver: 20, WolfPelt: 5, Chain: 1 },
@@ -322,7 +322,7 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [1000, 200],
     moveSpeed: 0,
-    damageModifiers: { [DamageType.Frost]: DamageModifier.Resistant },
+    damageModifiers: { frost: 'resistant' },
     recipe: {
       time: CRAFT_TIME,
       materials: { Silver: 4, WolfPelt: 6, WolfTrophy: 1 },
@@ -404,7 +404,7 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [1200, 50],
     moveSpeed: 0,
-    damageModifiers: { [DamageType.Frost]: DamageModifier.Resistant },
+    damageModifiers: { frost: 'resistant' },
     recipe: {
       time: CRAFT_TIME,
       materials: { LoxPelt: 6, Silver: 2 },

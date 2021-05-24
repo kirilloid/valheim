@@ -14,11 +14,11 @@ export function GenericItem({ item }: { item: Item }) {
       <section>
         <h2>{translate('ui.itemType.resource')}</h2>
         <dl>
-          <dt>{translate('ui.weight')}</dt><dd><Icon id="weight" size={16} />{' '}{item.weight}</dd>
+          <dt>{translate('ui.weight')}</dt><dd><Icon id="weight" alt="" size={16} />{' '}{item.weight}</dd>
           <dt>{translate('ui.stack')}</dt><dd>{item.stack}</dd>
           <dt>{translate('ui.floats')}</dt><dd>{item.floating ? '✔️' : '❌'}</dd>
           {item.teleportable === false
-            ? <><dt>{translate('ui.nonTeleportable')}</dt><dd><Icon id="noteleport" size={24} /></dd></>
+            ? <><dt>{translate('ui.nonTeleportable')}</dt><dd><Icon id="noteleport" alt="" size={24} /></dd></>
             : null}
         </dl>
       </section>

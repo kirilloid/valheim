@@ -13,8 +13,8 @@ export function Food({ item }: { item: TFood }) {
     <section>
       <h2>{translate('ui.itemType.food')}</h2>
       <dl>
-        <dt>{translate('ui.health')}</dt><dd><Icon id="health" size={16} />{' '}{item.health}</dd>
-        <dt>{translate('ui.stamina')}</dt><dd><Icon id="walknut_16" size={16} />{' '}{item.stamina}</dd>
+        <dt>{translate('ui.health')}</dt><dd><Icon id="health" alt="" size={16} />{' '}{item.health}</dd>
+        <dt>{translate('ui.stamina')}</dt><dd><Icon id="walknut_16" alt="" size={16} />{' '}{item.stamina}</dd>
         <dt>{translate('ui.time')}</dt><dd>{timeI2S(item.duration)}</dd>
         <dt>{translate('ui.regen')}</dt><dd>{item.regen}</dd>
       </dl>
@@ -22,7 +22,7 @@ export function Food({ item }: { item: TFood }) {
     <section>
       <h2>{translate('ui.itemType.resource')}</h2>
       <dl>
-        <dt>{translate('ui.weight')}</dt><dd><Icon id="weight" size={16} />{' '}{item.weight}</dd>
+        <dt>{translate('ui.weight')}</dt><dd><Icon id="weight" alt="" size={16} />{' '}{item.weight}</dd>
         <dt>{translate('ui.stack')}</dt><dd>{item.stack}</dd>
         <dt>{translate('ui.floats')}</dt><dd>{item.floating ? '✔️' : '❌'}</dd>
       </dl>

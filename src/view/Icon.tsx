@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { SkillType } from '../model/skills';
 import { assertNever } from '../model/utils';
+import { TranslationContext } from '../translation.effect';
 
-import type { Item, Creature, EntityId, Piece, GameObject } from '../types';
+import type { GameObject } from '../types';
 
 type IconType = 'armor' | 'arrow' | 'creature' | 'weapon' | 'piece' | 'skills' | 'resource' | 'icon';
 
@@ -19,7 +20,7 @@ const iconType = (type: GameObject['type']): IconType => {
     case 'ammo':
       return 'arrow';
     case 'item':
-    case 'value':
+    case 'valuable':
     case 'food':
     case 'trophy':
     case 'potion':
@@ -31,14 +32,18 @@ const iconType = (type: GameObject['type']): IconType => {
 
 type SkillIconProps = {
   skill: SkillType;
+  useAlt: boolean;
   size?: number;
 }
 
 export function SkillIcon(props: SkillIconProps) {
-  const { skill, size = 32 } = props;
+  const translate = useContext(TranslationContext);
+  const { skill, useAlt, size = 32 } = props;
+  const skillStr = SkillType[skill];
   return <img
     className="icon"
-    src={`/icons/skills/${SkillType[skill]}.png`}
+    src={`/icons/skills/${skillStr}.png`}
+    alt={useAlt ? translate(`ui.skillType.${skillStr}`) : ''}
     width={size}
     height={size}
   />;
@@ -46,11 +51,13 @@ export function SkillIcon(props: SkillIconProps) {
 
 type ItemIconProps = {
   item?: GameObject;
+  useAlt?: boolean;
   size?: number;
 }
 
 export function ItemIcon(props: ItemIconProps) {
-  const { item, size = 32 } = props;
+  const translate = useContext(TranslationContext);
+  const { item, useAlt, size = 32 } = props;
   if (item === undefined) {
     return <img
       className="icon"
@@ -64,7 +71,7 @@ export function ItemIcon(props: ItemIconProps) {
     key={id}
     className="icon"
     src={`/icons/${iconType(type)}/${id}.png`}
-    alt={id}
+    alt={useAlt ? translate(id) : ''}
     width={size}
     height={size}
   />;
@@ -72,14 +79,14 @@ export function ItemIcon(props: ItemIconProps) {
 
 type IconProps =
 ( { id: string; } | { path: string } )
-& { size?: number; }
+& { alt: string; size?: number; }
 
 export function Icon(props: IconProps) {
-  const { size = 32 } = props;
+  const { alt = "", size = 32 } = props;
   if ('id' in props) {
     const { id } = props;
-    return <img key={id} className="icon" src={`/icons/icon/${id}.png`} alt={id} width={size} height={size} />;
+    return <img key={id} className="icon" src={`/icons/icon/${id}.png`} alt={alt} width={size} height={size} />;
   }
   const { path } = props;
-  return <img key={path} className="icon" src={`/icons/${path}.png`} alt={path} width={size} height={size} />;
+  return <img key={path} className="icon" src={`/icons/${path}.png`} alt={alt} width={size} height={size} />;
 }

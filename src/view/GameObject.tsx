@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import type * as T from '../types';
 import { assertNever } from '../model/utils';
 import { data } from '../model/objects';
-import { creatures } from '../model/creatures';
 import { Armor } from './Armor';
 import { Weapon, Shield } from './Weapon';
 import { Food } from './Food';
@@ -45,7 +44,7 @@ function Item({ item, level }: { item: T.GameObject, level?: number }) {
       return <Food item={item} />
     case 'potion':
       return <Potion item={item} />
-    case 'value':
+    case 'valuable':
       return <Valuable item={item} />
     case 'ammo':
       return <Arrow item={item} />
