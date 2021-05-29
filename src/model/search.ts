@@ -1,5 +1,4 @@
 import { data } from './objects';
-import { creatures } from './creatures';
 import { preloadLanguage } from '../translation.effect';
 import { EntityId } from '../types';
 import { getCraftingStationId } from './building';
@@ -56,35 +55,37 @@ preloadLanguage().then(dict => {
     const addTag = (tags: string) => {
       for (const tag of tags.split(' ')) {
         for (const t of (dict[tag] ?? '').split(' ')) {
-          addToTree(startTree, t, key);
+          addToTree(startTree, t.toLowerCase(), key);
         }
       }
     }
     for (const tag of obj.tags ?? []) {
       addTag(`ui.tags.${tag}`);
     }
+    switch (obj.type) {
+      case 'weapon':
+        if (obj.slot === 'both') addTag('ui.tags.2hand');
+        break;
+      case 'piece':
+        addTag(`ui.pieceType.${obj.subtype}`);
+        if (obj.subtype === 'chair') addTag('ui.tags.sit');
+        switch (obj.subtype) {
+          case 'chair':
+          case 'bed':
+          case 'table':
+            addTag('ui.tags.furniture');
+            break;
+          case 'craft_ext':
+            addTag(getCraftingStationId(obj.extends.id));
+            break;
+          case 'fireplace':
+            addTag('ui.tags.fire');
+            break;
+        }
+    }
+    if ('summon' in obj) addTag('ui.tags.summon');
     const typeTags = dict[`ui.itemType.${obj.type}`];
-    if (typeTags != null) {
-      switch (obj.type) {
-        case 'weapon':
-          if (obj.slot === 'both') addTag('ui.tags.2hand');
-          break;
-        case 'piece':
-          if (obj.subtype === 'chair') addTag('ui.tags.sit');
-          switch (obj.subtype) {
-            case 'chair':
-            case 'bed':
-            case 'table':
-              addTag('ui.tags.furniture');
-              break;
-            case 'craft_ext':
-              addTag(getCraftingStationId(obj.extends.id));
-              break;
-            case 'fireplace':
-              addTag('ui.tags.fire');
-          }
-      }
-      if ('summon' in obj) addTag('ui.tags.summon');
+    if (typeTags != null) {  
       for (const tag of typeTags.split(' ')) {
         addToTree(startTree, tag, key);
       }
@@ -110,13 +111,13 @@ export function match(query: string): Iterable<EntityId> {
   if (!terms) return emptyResults;
   const rankedResult = new Map<EntityId, number>();
   const fm = fullMatch.get(query);
-  // if (fm != null) result.set(fm, 100);
   for (const term of terms) {
-    for (const item of lookupInTree(startTree, term)) {
-      rankedResult.set(item, (rankedResult.get(item) ?? 0) + 10);
-    }
-    for (const item of lookupInTree(anyTree, term)) {
-      rankedResult.set(item, (rankedResult.get(item) ?? 0) + 1);
+    const termRankedResult = new Map<EntityId, number>();
+    for (const item of lookupInTree(anyTree, term)) termRankedResult.set(item, 1);
+    for (const item of lookupInTree(startTree, term)) termRankedResult.set(item, 10);
+    for (const [key, value] of termRankedResult.entries()) {
+      const current = rankedResult.get(key);
+      rankedResult.set(key, current == null ? value : current + value);
     }
   }
   const max = Math.max(...rankedResult.values());
