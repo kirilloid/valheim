@@ -38,11 +38,11 @@ function ShieldStats(props: { item: TShield, level?: number }) {
   return <section>
     <h2>{translate('ui.itemType.shield')}</h2>
     <dl>
-      <dt>block</dt><dd><Icon id="ac_bkg" alt={translate('ui.armor')} size={16} />{' '}{showPair(item.block, level)}</dd>
+      <dt>block</dt><dd><Icon id="armor" alt="" size={16} />{' '}{showPair(item.block, level)}</dd>
       <dt>{translate('ui.skill')}</dt><dd>{skill(item.skill)}</dd>
       <dt>parry</dt><dd>{item.parryBonus}x</dd>
       <dt>{translate('ui.hands')}</dt><dd>{translate(`ui.slot.${item.slot}`)}</dd>
-      <dt>{translate('ui.maxQuality')}</dt><dd><Icon id="craft_icon" alt="crafting" size={16} />{' '}{item.maxLvl}</dd>
+      <dt>{translate('ui.maxQuality')}</dt><dd><Icon id="star" alt="crafting" size={16} />{' '}{item.maxLvl}</dd>
       <dt title="weapons loose 1 durability point per hit">{translate('ui.durability')}</dt><dd>{durability(item.durability, level)}</dd>
       {item.moveSpeed ? <><dt title="when equipped and drawn">move speed</dt><dd>{item.moveSpeed * 100}%</dd></> : null}
     </dl>
@@ -58,9 +58,9 @@ function WeaponStats({ item, level }: { item: TWeapon, level?: number }) {
     <dl>
       <dt>{translate('ui.damage')}</dt><dd>{showPair([baseDmg, lvlDmg], level)}</dd>
       <dt>{translate('ui.skill')}</dt><dd>{skill(item.skill)}</dd>
-      <dt><Link to="/info/combat#backstab">backstab</Link></dt><dd>{item.backstab}x</dd>
+      <dt><Link to="/info/combat#backstab">backstab</Link></dt><dd>{item.backstab}×</dd>
       <dt>{translate('ui.hands')}</dt><dd>{translate(`ui.slot.${item.slot}`)}</dd>
-      <dt>{translate('ui.maxQuality')}</dt><dd><Icon id="craft_icon" alt="" size={16} />{' '}{item.maxLvl}</dd>
+      <dt>{translate('ui.maxQuality')}</dt><dd><Icon id="star" alt="" size={16} />{' '}{item.maxLvl}</dd>
       <dt title="weapons loose 1 durability point per hit">{translate('ui.durability')}</dt>
       <dd>{durability(item.durability, level)}{item.durabilityDrainPerSec ? ` -1 / ${item.durabilityDrainPerSec}s of usage` : ""}</dd>
       {item.moveSpeed ? <><dt title="when equipped and drawn">move speed</dt><dd>{item.moveSpeed * 100}%</dd></> : null}
@@ -83,9 +83,9 @@ function Attack({ item, attack }: { item: TWeapon, attack: TAttack }) {
       <dt>scatter</dt><dd>{attack.projAcc[0]}&ndash;{attack.projAcc[1]}&deg;</dd>
     </>}
     {projAcc != null && <><dt>velocity</dt><dd>{projVel}</dd></>}
-    {damage !== 1 && <><dt>{translate('ui.damage')}</dt><dd>{damage}x</dd></>}
+    {damage !== 1 && <><dt>{translate('ui.damage')}</dt><dd>{damage}×</dd></>}
     {force !== 1 && <><dt>knockback</dt><dd>{item.knockback * force}</dd></>}
-    {stagger !== 1 && <><dt>stagger</dt><dd>{stagger}x</dd></>}
+    {stagger !== 1 && <><dt>stagger</dt><dd>{stagger}×</dd></>}
   </dl>;
 }
 

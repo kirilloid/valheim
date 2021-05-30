@@ -22,13 +22,10 @@ function first(val: number | [number, number]) {
 function resistIcon(translate: Translator, type: DamageType) {
   switch (type) {
     case 'fire':
-      return <Icon id={type} alt={translate(`ui.damageType.${type}`)} size={16} />
     case 'frost':
-      return <Icon id="frost" alt="frost" size={16} />
     case 'poison':
-      return <Icon id="poison" alt="poison" size={16} />
     case 'lightning':
-      return <Icon id="lightning" alt="lightning" size={16} />
+      return <Icon id={type} alt={translate(`ui.damageType.${type}`)} size={16} />
     default:
       return null;
   }
@@ -42,7 +39,7 @@ function pieceExtra(item: Piece) {
     case 'fireplace':
     case 'table':
       return item.comfort?.value ? <span>
-        <Icon id="walknut_16" alt="comfort" size={16} />
+        <Icon id="walknut" alt="comfort" size={16} />
         {' '}
         {item.comfort.value}
       </span> : null
@@ -111,7 +108,7 @@ function renderItem(id: EntityId, text: string, translate: Translator, onClick: 
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         {item.summon
         ? <ItemIcon item={data[item.summon[0]]} useAlt size={32} />
-        : <Icon id="trophies_20" size={20} alt="" />}
+        : <Icon id="trophies" size={20} alt="" />}
       </div>
     case 'tool':
       return <div className="SearchItem">
@@ -141,7 +138,7 @@ function renderItem(id: EntityId, text: string, translate: Translator, onClick: 
         <span>{
           showSpecialIcon(item.special, translate) ??
           <>
-            <Icon id="ac_bkg" alt={translate('ui.armor')} size={16} />
+            <Icon id="armor" alt={translate('ui.armor')} size={16} />
             {first(item.armor)}
           </>
         }</span>
@@ -159,7 +156,7 @@ function renderItem(id: EntityId, text: string, translate: Translator, onClick: 
         <span>
           <Icon id="health" alt={translate('ui.health')} size={16} />
           {item.health}
-          <Icon id="walknut_16" alt={translate('ui.stamina')} size={16} />
+          <Icon id="walknut" alt={translate('ui.stamina')} size={16} />
           {item.stamina}
         </span>
       </div>
@@ -176,7 +173,7 @@ function renderItem(id: EntityId, text: string, translate: Translator, onClick: 
             : null}
           {item.stamina
             ? <>
-                <Icon id="walknut_16" alt={translate('ui.stamina')} size={16} />
+                <Icon id="walknut" alt={translate('ui.stamina')} size={16} />
                 {item.stamina[0]} / {item.stamina[1]}s
               </>
             : null}
@@ -190,7 +187,7 @@ function renderItem(id: EntityId, text: string, translate: Translator, onClick: 
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         <span>
-          <Icon id="coin_32" alt={translate('Coins')} size={16} />
+          <Icon id="coin" alt={translate('Coins')} size={32} />
           {item.value}
         </span>
       </div>

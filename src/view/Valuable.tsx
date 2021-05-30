@@ -17,7 +17,7 @@ export function Valuable({ item }: { item: TValuable }) {
         <dl>
           <dt>{translate('ui.weight')}</dt><dd><Icon id="weight" alt="" size={16} />{' '}{item.weight}</dd>
           <dt>{translate('ui.stack')}</dt><dd>{item.stack}</dd>
-          <dt>{translate('ui.value')}</dt><dd><Icon id="coin_32" alt="" size={16} />{' '}{item.value}</dd>
+          <dt>{translate('ui.value')}</dt><dd><Icon id="coin" alt="" size={16} />{' '}{item.value}</dd>
           <dt>{translate('ui.floats')}</dt><dd>{item.floating ? '✔️' : '❌'}</dd>
         </dl>
         {item.id === 'Coins'

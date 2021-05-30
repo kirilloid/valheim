@@ -146,7 +146,7 @@ export function Combat() {
         <label className="InputBlock">
           players
           <span className="InputBlock__Gap" />
-          <Icon id="player_32" alt="" size={24} />
+          <Icon id="player" alt="" size={24} />
           <input type="number" pattern="[0-9]+" min="1" max="10" onChange={onPlayersChange} value={players} style={{ width: '3em' }} />
           <input type="range" min="1" max="10" onChange={onPlayersChange} value={players} className="BigInput" />
         </label>

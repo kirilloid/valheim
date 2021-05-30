@@ -14,7 +14,7 @@ export function Food({ item }: { item: TFood }) {
       <h2>{translate('ui.itemType.food')}</h2>
       <dl>
         <dt>{translate('ui.health')}</dt><dd><Icon id="health" alt="" size={16} />{' '}{item.health}</dd>
-        <dt>{translate('ui.stamina')}</dt><dd><Icon id="walknut_16" alt="" size={16} />{' '}{item.stamina}</dd>
+        <dt>{translate('ui.stamina')}</dt><dd><Icon id="walknut" alt="" size={16} />{' '}{item.stamina}</dd>
         <dt>{translate('ui.time')}</dt><dd>{timeI2S(item.duration)}</dd>
         <dt>{translate('ui.regen')}</dt><dd>{item.regen}</dd>
       </dl>

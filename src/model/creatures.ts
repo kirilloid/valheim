@@ -127,7 +127,7 @@ export const creatures: Creature[] = [
     id: 'Fish',
     tier: 1,
     maxLvl: 1,
-    emoji: '',
+    emoji: '🐟',
     faction: Faction.ForestMonsters,
     attacks: [],
     hp: 1,

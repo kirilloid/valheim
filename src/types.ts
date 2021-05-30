@@ -276,6 +276,7 @@ interface GameObjectBase {
   dlc?: 'beta';
   disabled?: true;
   tier: number;
+  emoji?: string;
 }
 
 interface BaseItem extends GameObjectBase {

@@ -25,6 +25,7 @@ export const ships: Ship[] = [
     type: 'ship',
     id: 'Raft',
     tier: 1,
+    emoji: '',
     wear: {
       hp: 300,
       damageModifiers: shipDamageModifiers,
@@ -51,6 +52,7 @@ export const ships: Ship[] = [
     type: 'ship',
     id: 'Karve',
     tier: 2,
+    emoji: '⛵',
     wear: {
       hp: 500,
       damageModifiers: shipDamageModifiers,
@@ -82,6 +84,7 @@ export const ships: Ship[] = [
     type: 'ship',
     id: 'VikingShip',
     tier: 3,
+    emoji: '🚢',
     wear: {
       hp: 1000,
       damageModifiers: shipDamageModifiers,

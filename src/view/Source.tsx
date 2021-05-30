@@ -160,7 +160,7 @@ export function Recipe({ item }: { item: Item | Piece}) {
   if (recipe == null) return null;
   if ('value' in recipe) {
     return <>
-      Bought from <Link to="/info/trader">trader</Link> for {recipe.value} <Icon id="coin_32" alt={translate('Coins')} size={16} />
+      Bought from <Link to="/info/trader">trader</Link> for {recipe.value} <Icon id="coin" alt={translate('Coins')} size={16} />
     </>;
   }
   if ('number' in recipe) {
@@ -206,7 +206,7 @@ export function Recipe({ item }: { item: Item | Piece}) {
 
 export function RecipeSection({ item }: { item: GameObject | undefined }) {
   const translate = useContext(TranslationContext);
-  return item && item.type !== 'creature'
+  return item != null && item.type !== 'creature'
     ? <section>
         <h2>{translate('ui.recipe')}</h2>
         <Recipe item={item} />

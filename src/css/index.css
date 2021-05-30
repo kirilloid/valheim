@@ -57,7 +57,7 @@ article *.active {
     column-count: 2;
   }
 }
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 700px) {
   .CraftList {
     column-count: 3;
   }

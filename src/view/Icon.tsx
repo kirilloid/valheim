@@ -85,8 +85,19 @@ export function Icon(props: IconProps) {
   const { alt = "", size = 32 } = props;
   if ('id' in props) {
     const { id } = props;
-    return <img key={id} className="icon" src={`/icons/icon/${id}.png`} alt={alt} width={size} height={size} />;
+    return (
+      <picture key={id}>
+        <source srcSet={`/icons/icon/${id}_${size}.png, /icons/icon/${id}_${size*2}.png 2x`} />
+        <img className="icon" src={`/icons/icon/${id}_${size}.png`} alt={alt} width={size} height={size} />
+      </picture>
+    );
   }
   const { path } = props;
-  return <img key={path} className="icon" src={`/icons/${path}.png`} alt={alt} width={size} height={size} />;
+  return <img
+    key={path}
+    className="icon"
+    src={`/icons/${path}.png`}
+    alt={alt}
+    width={size}
+    height={size} />;
 }
