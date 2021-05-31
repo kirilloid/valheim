@@ -1,4 +1,4 @@
-import { CraftingStation, DamageType, Item, DamageModifier } from "../types";
+import { CraftingStation, Item } from "../types";
 
 const CRAFT_TIME = 4;
 

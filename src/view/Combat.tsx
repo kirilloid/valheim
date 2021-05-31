@@ -1,18 +1,20 @@
 import React, { useCallback, useContext, useState } from 'react';
-import { groupBy, map, mapValues } from 'lodash-es';
+import { groupBy, map } from 'lodash-es';
 
-import { Arrow, Attack, Biome, Creature, DamageProfile, DamageType, EntityId, GameObject, Shield, Weapon } from '../types';
+import { Attack, Biome, DamageProfile, DamageType, GameObject, Weapon } from '../types';
 
 import { creatures } from '../model/creatures';
 import { items } from '../model/weapons';
 import { arrows } from '../model/arrows';
 import { damage as damageIcon } from '../model/emoji';
-import { hpBonus, getPhysicalDamage, dmgBonus, multiplyDamage, addDamage, applyDamageModifier, attack, getTotalDamage } from '../model/combat';
+import { getPhysicalDamage, attackCreature } from '../model/combat';
 import { TranslationContext } from '../translation.effect';
 import { Icon, ItemIcon, SkillIcon } from './Icon';
-import { Resistances, showNumber } from './helpers';
+import { showNumber } from './helpers';
+import { Link } from 'react-router-dom';
 
 const weapons = items.filter(i => !i.disabled && i.type === 'weapon') as Weapon[]; 
+const weaponGroups = groupBy(weapons, w => w.tier);
 // const shields = items.filter(i => !i.disabled && i.type === 'shield') as Shield[]; 
 
 function Damage(dmg: DamageProfile) {
@@ -39,52 +41,52 @@ function PlayerAttack(props: { title: string; weapon: Weapon; attack: Attack }) 
   </div>);
 }
 
-function useStateInputEffect<Value, InputElement extends HTMLElement & { value: string }>(
+function useStateInputEffect<Value, InputElement extends HTMLSelectElement | HTMLInputElement>(
   initialValue: Value,
-  reader: (value: string) => Value | undefined,
+  reader: (el: InputElement) => Value | undefined,
 ) {
   const [value, setValue] = useState<Value>(initialValue);
   const onInputChange = useCallback((e: React.ChangeEvent<InputElement>) => {
-    const targetValue = reader(e.target.value);
+    const targetValue = reader(e.target);
     if (targetValue != null) {
       setValue(targetValue);
     }
   }, [reader]);
-  return [value, onInputChange] as const;
+  return [value, onInputChange, setValue] as const;
+}
+
+function numberReader(element: HTMLSelectElement | HTMLInputElement): number {
+  return Number(element.value);
 }
 
 function useStateSelectEffect<T extends GameObject>(items: T[]) {
-  return useStateInputEffect(items[0]!, id => items.find(i => i.id === id));
+  return useStateInputEffect(items[0]!, el => items.find(i => i.id === el.value));
 }
 
-function attackCreature(weapon: Weapon, level: number, arrow: Arrow, creature: Creature) {
-  const weaponDamage = addDamage(weapon.damage[0], multiplyDamage(weapon.damage[1], level - 1));
-  const totalDamage = weapon.slot === 'bow'
-    ? addDamage(weaponDamage, arrow.damage)
-    : weaponDamage;
-  const { damage, overTime } = attack(totalDamage, creature.damageModifiers, 0, false);
-  const singleHit = getTotalDamage(addDamage(damage, mapValues(overTime, d => d?.[0])));
-  const stagger = getPhysicalDamage(damage);
-  return { singleHit, stagger };
+function useStateCheckboxEffect(initialValue: boolean) {
+  return useStateInputEffect<boolean, HTMLInputElement>(initialValue, el => el.checked);
 }
 
 export function Combat() {
   const [weapon, onWeaponChange] = useStateSelectEffect(weapons);
   const [arrow, onArrowChange] = useStateSelectEffect(arrows);
   // const [shield, onShieldChange] = useStateSelectEffect(shields);
-  const [armor, onArmorChange] = useStateInputEffect<number, HTMLElement & { value: string }>(0, Number);
-  const [skill, onSkillChange] = useStateInputEffect(0, Number);
-  const [players, onPlayersChange] = useStateInputEffect(1, Number);
+  const [armor, onArmorChange] = useStateInputEffect(0, numberReader);
+  const [skill, onSkillChange] = useStateInputEffect(0, numberReader);
+  const [players, onPlayersChange] = useStateInputEffect(1, numberReader);
   
-  const [creature, onCreatureChange] = useStateInputEffect(creatures[0]!, id => creatures.find(c => c.id === id));
-  const [stars, onStarsChange] = useStateInputEffect(0, Number);
+  const [creature, onCreatureChange] = useStateSelectEffect(creatures);
+  const [backstab, onChangeBackstab] = useStateCheckboxEffect(false);
+  const [isWet, onChangeIsWet] = useStateCheckboxEffect(false);
+  const forcedIsWet = creature.id === 'Bonemass'
+    ? true : creature.tier === 4 ? false : undefined;
+  const [stars, onStarsChange] = useStateInputEffect(0, numberReader);
   
   const translate = useContext(TranslationContext);
   
-  const [primary, secondary] = weapon.attacks;
   const scale = { players, stars: Math.min(stars, creature.maxLvl - 1) };
 
-  const attack = attackCreature(weapon, 1, arrow, creature);
+  const attackStats = weapon.attacks.map(a => attackCreature(weapon, 1, skill, a, arrow, creature, forcedIsWet ?? isWet, backstab));
 
   return (<>
     <h1>Combat calculator</h1>
@@ -96,8 +98,8 @@ export function Combat() {
           <span className="InputBlock__Gap" />
           <ItemIcon item={weapon} size={24} />
           <select className="BigInput" onChange={onWeaponChange}>
-            {map(groupBy(weapons, w => w.tier), (group, tier) => (<optgroup label={`tier ${tier}`}>
-              {group.map(w => <option key={w.id} value={w.id}>{w.emoji} {translate(w.id)}</option>)}
+            {map(weaponGroups, (group, tier) => (<optgroup label={`tier ${tier}`}>
+              {group.map(w => <option key={w.id} value={w.id}>{translate(w.id)}</option>)}
             </optgroup>))}
           </select>
         </label>
@@ -157,7 +159,7 @@ export function Combat() {
           {map(
             groupBy(creatures, c => c.tier),
             (group, tier) => (
-              <optgroup label={Biome[Number(tier) - 1]}>
+              <optgroup key={Biome[Number(tier) - 1]} label={Biome[Number(tier) - 1]}>
                 {group.map(c => <option value={c.id}>{c.emoji}{translate(c.id)}</option>)}
               </optgroup>
             )
@@ -170,11 +172,38 @@ export function Combat() {
             <input id="star-1" type="radio" name="stars" value="1" checked={stars === 1} onChange={onStarsChange} /><label htmlFor="star-1">1⭐</label>
             <input id="star-2" type="radio" name="stars" value="2" checked={stars === 2} onChange={onStarsChange} /><label htmlFor="star-2">2⭐</label>
           </> : null}
+        <br />
+        <label htmlFor="wet">
+          <input id="wet" type="checkbox" checked={forcedIsWet ?? isWet} disabled={forcedIsWet !== undefined} onChange={onChangeIsWet} />
+          {' '}
+          wet
+        </label>
+        {' '}
+        <span style={{ color: 'gray' }}>
+          (in water, not in rain)
+        </span>
+        <br />
+        <label htmlFor="backstab">
+          <input id="backstab" type="checkbox" checked={backstab} onChange={onChangeBackstab} />
+          {' '}
+          backstab
+        </label>
+        {' '}
+        <Link to="/info/combat#backatb">(?)</Link>
       </div>
     </div>
-    <div>
-      <h2>{translate('ui.damage')}</h2>
-      {attack.singleHit}
-    </div>
+    {attackStats.map(stats => (
+      <div>
+        <h2>{translate('ui.attack')}</h2>
+        <dl>
+          <dt>single hit</dt><dd>{stats.singleHit.map(showNumber).join('–')}</dd>
+          <dt>dmg/second</dt><dd>{showNumber(stats.dpSec)}</dd>
+          <dt>dmg/stamina</dt><dd>{showNumber(stats.dpSta)}</dd>
+          {stats.wasteRatio
+            ? <><dt>elemental damage waste</dt><dd>{`${Math.round(stats.wasteRatio * 100)}%`}</dd></>
+            : null}
+        </dl>
+      </div>
+    ))}
   </>);
 }

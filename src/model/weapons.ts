@@ -1,10 +1,10 @@
-import { AttackAnimation, CraftingStation, DamageType, Shield, Weapon } from "../types";
+import { AttackAnimation, CraftingStation, Shield, Weapon } from "../types";
 import { SkillType } from "./skills";
 
 const CRAFT_TIME = 4;
 const disabled = true;
 
-const animations: Record<AttackAnimation, number[]> = {
+export const animations: Record<AttackAnimation, number[]> = {
   swing_pickaxe: [1.4], // verified
   spear_throw: [1.57],
   spear_poke: [0.67],
@@ -328,8 +328,8 @@ export const items: (Weapon | Shield)[] = [
     parryForce: 0,
     parryBonus: 1.5,
     knockback: 0, backstab: 3, moveSpeed: -0.05,
-    // "holdDurationMin": 2.5,
-    // "holdStaminaDrain": 5,
+    holdDurationMin: 2.5,
+    holdStaminaDrain: 5,
     recipe: {
       time: CRAFT_TIME,
       materials: { Wood: 10, LeatherScraps: 8 },
@@ -728,8 +728,8 @@ export const items: (Weapon | Shield)[] = [
     parryForce: 0,
     parryBonus: 1.5,
     knockback: 5, backstab: 3, moveSpeed: -0.05,
-    // "holdDurationMin": 2.5,
-    // "holdStaminaDrain": 5,
+    holdDurationMin: 2.5,
+    holdStaminaDrain: 5,
     recipe: {
       time: CRAFT_TIME,
       materials: { FineWood: 10, RoundLog: 10, DeerHide: 2 },
@@ -1106,8 +1106,8 @@ export const items: (Weapon | Shield)[] = [
     parryForce: 0,
     parryBonus: 1.5,
     knockback: 10, backstab: 3, moveSpeed: -0.05,
-    // "holdDurationMin": 2.5,
-    // "holdStaminaDrain": 5,
+    holdDurationMin: 2.5,
+    holdStaminaDrain: 5,
     recipe: {
       time: CRAFT_TIME,
       materials: { FineWood: 10, Iron: 20, Feathers: 10, DeerHide: 2 },
@@ -1386,8 +1386,8 @@ export const items: (Weapon | Shield)[] = [
     parryForce: 0,
     parryBonus: 1.5,
     knockback: 10, backstab: 3, moveSpeed: -0.05,
-    // "holdDurationMin": 2.5,
-    // "holdStaminaDrain": 5,
+    holdDurationMin: 2.5,
+    holdStaminaDrain: 5,
     recipe: {
       time: CRAFT_TIME,
       materials: { ElderBark: 10, Silver: 20, DeerHide: 2, Guck: 10, },

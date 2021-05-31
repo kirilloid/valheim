@@ -14,20 +14,6 @@ import { Resistances, shortCreatureDamage } from './helpers';
 import { ItemIcon } from './Icon';
 import { ItemHeader } from './ItemHeader';
 
-function faction(faction: Faction): string {
-  switch (faction) {
-    case Faction.Players: return 'player';
-    case Faction.AnimalsVeg: return 'potato';
-    case Faction.ForestMonsters: return 'Meadows/Forest';
-    case Faction.Undead:
-    case Faction.Demon: return 'Cursed';
-    case Faction.MountainMonsters: return 'Mountain';
-    case Faction.SeaMonsters: return 'Sea';
-    case Faction.PlainsMonsters: return 'Plains';
-    case Faction.Boss: return 'Boss';
-  }
-}
-
 function NormalAttack({ attack: a, dmgScale }: { attack: NormalAttackProfile, dmgScale: number }) {
   const dmg = multiplyDamage(a.dmg, dmgScale);
   return <>
@@ -57,20 +43,23 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
   const [sid, snr] = getSummon(id) ?? ['', 0];
   return (<>
     <ItemHeader item={creature} >
-      <div className="Creature_Stars">
-        {[1, 2, 3].map((lvl, stars) => 
-          level === lvl
-            ? <span className="Creature_Star Creature_Star--selected">{stars}⭐</span>
-            : <Link className="Creature_Star" to={`/obj/${id}/${lvl}`} replace={true}>{stars}⭐</Link>
-        )}
-      </div>
+      {creature.maxLvl > 1
+      ? <div className="Creature_Stars">
+          {Array.from({ length: creature.maxLvl }).map((_, stars) => 
+            level === stars + 1
+              ? <span className="Creature_Star Creature_Star--selected">{stars}⭐</span>
+              : <Link className="Creature_Star" to={`/obj/${id}/${stars + 1}`} replace={true}>{stars}⭐</Link>
+          )}
+        </div>
+      : null}
     </ItemHeader>
     <section>
       <h2>creature</h2>
       <dl>
-      <dt key="faction-label">faction</dt><dd key="faction-value">{faction(creature.faction)}</dd>
+        <dt key="faction-label">{translate('ui.faction')}</dt>
+        <dd key="faction-value">{translate(`ui.faction.${Faction[creature.faction]}`)}</dd>
       {sid ? <>
-        <dt key="summon-label">summoned with</dt>
+        <dt key="summon-label">{translate('ui.summonedWith')}</dt>
         <dd key="summon-value"><ItemIcon item={data[sid]} size={16} /> <Link to={`/obj/${sid}`}>{translate(sid)}</Link> x{snr}</dd>
       </> : null}
       <dt key="health-label">{translate('ui.health')}</dt>
@@ -95,7 +84,7 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
       </> : null}
     </section>
     <section>
-      <h2>drops</h2>
+      <h2>{translate('ui.drops')}</h2>
       <ul>
         {creature.drop.map(({ item, min, max, chance }) => <li key={item}>
           <ItemIcon item={data[item]} />
@@ -111,12 +100,16 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
       </ul>
     </section>
     {tame != null ? <section>
-      <h2>tameable</h2>
+      <h2>{translate('ui.tameable')}</h2>
       <dl>
-      <dt>taming time</dt><dd>{timeI2S(tame.tameTime)}</dd>
-      <dt>eats</dt><dd>{tame.eats.map(id => <ItemIcon key={id} item={data[id]} size={32} />)}</dd>
-      <dt>controlled</dt><dd>{tame.commandable ? '✔️' : '❌'}</dd>
-      <dt>breedable</dt><dd>{pregnancy ? '✔️' : '❌'}</dd>
+        <dt>{translate('ui.tamingTime')}</dt>
+        <dd>{timeI2S(tame.tameTime)}</dd>
+        <dt>{translate('ui.tamed.eat')}</dt>
+        <dd>{tame.eats.map(id => <ItemIcon key={id} item={data[id]} size={32} />)}</dd>
+        <dt>{translate('ui.tamed.controlled')}</dt>
+        <dd>{tame.commandable ? '✔️' : '❌'}</dd>
+        <dt>{translate('ui.tamed.breeds')}</dt>
+        <dd>{pregnancy ? '✔️' : '❌'}</dd>
       </dl>
     </section> : null}
   </>);

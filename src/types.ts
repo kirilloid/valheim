@@ -440,6 +440,8 @@ export interface Weapon extends BaseItem {
   knockback: number;
   backstab: number;
   moveSpeed: number;
+  holdDurationMin?: number;
+  holdStaminaDrain?: number;
   durability: Pair<number>;
   durabilityDrainPerSec?: number;
 }

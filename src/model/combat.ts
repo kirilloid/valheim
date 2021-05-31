@@ -1,5 +1,7 @@
 import { mapValues } from 'lodash-es';
-import { DamageModifiers, damageModifiersValues, DamageProfile, DamageType } from "../types";
+import { Arrow, Attack, Creature, DamageModifier, DamageModifiers, damageModifiersValues, DamageProfile, DamageType, Pair, Weapon } from "../types";
+import { effects } from './effects';
+import { animations } from './weapons';
 
 function applyArmor(damage: number, armor: number): number {
   return armor < damage / 2
@@ -54,11 +56,11 @@ function getBlockableDamage(damage: DamageProfile): DamageProfile {
   return other;
 }
 
-export function getWeaponSkillFactor(skill: number): number {
-  return (
-    (0.25 + 0.006 * skill) +
+export function getWeaponSkillFactor(skill: number): Pair<number> {
+  return [
+    (0.25 + 0.006 * skill),
     Math.min(0.55 + 0.006 * skill, 1)
-  ) / 2;
+   ];
 }
 
 export function getCreatureDamageRandomFactor(): number {
@@ -69,7 +71,9 @@ export function getTotalDamage(damage: DamageProfile): number {
   return Object.values(damage).reduce<number>((a, b) => a + (b ?? 0), 0);
 }
 
-export function attack(
+type DamageOverTime = [total: number, time: number, period: number];
+
+export function doAttack(
   damage: DamageProfile,
   modifiers: DamageModifiers,
   armor: number,
@@ -79,7 +83,7 @@ export function attack(
   const blockableDamage = getTotalDamage(getBlockableDamage(derivedDamage));
   const resDamage = armor ? applyArmor(blockableDamage, armor) : blockableDamage;
   const { fire, spirit, ...rest } = multiplyDamage(derivedDamage, resDamage / blockableDamage);
-  let overTime: Partial<Record<DamageType, [total: number, time: number, period: number]>> = {};
+  let overTime: Partial<Record<'fire' | 'spirit' | 'poison', DamageOverTime>> = {};
   if (fire) overTime.fire = [fire, 5, 1];
   if (spirit) overTime.spirit = [spirit, 3, 0.5];
   if (poison) {
@@ -87,4 +91,120 @@ export function attack(
     overTime.poison = [poison, ttl, 1];
   }
   return { damage: rest, overTime };
+}
+
+function getAttackStats(weapon: Weapon, attack: Attack, skillLvl: number) {
+  const animationTimes = animations[attack.animation];
+  const drawTime = (weapon.holdDurationMin ?? 0) * (1 - skillLvl / 100);
+  const times = weapon.slot === 'bow'
+    ? animationTimes.map(t => t + drawTime)
+    : animationTimes;
+  const totalTime = times.reduce((a, b) => a + b, 0);
+
+  const drawStamina = weapon.holdDurationMin != null ? drawTime * 5 + 3 * FRAME : 0;
+  const attackStamina = attack.stamina * (1 - 0.33 * skillLvl / 100) * times.length;
+  const totalStamina = drawStamina + attackStamina;
+
+  const comboTotal = attack.type !== 'proj' && times.length > 1
+    ? times.length + (attack.chainCombo - 1)
+    : 1;
+
+  return {
+    times,
+    totalStamina,
+    totalTime,
+    comboTotal,
+  }
+}
+
+const FRAME = 1 / 50;
+
+const wetEffect = effects.find(e => e.id === 'Wet');
+const wetModifiers = wetEffect?.damageModifiers;
+
+const overrideResistance = (original: DamageModifier, override: DamageModifier | undefined): DamageModifier => {
+  if (original === 'ignore') return original;
+  if (original === 'veryResistant' && override === 'resistant') return original;
+  if (original === 'veryWeak' && override === 'weak') return original;
+  return override ?? original;
+};
+
+const modifyResistances = (
+  original: DamageModifiers,
+  override: Partial<DamageModifiers>
+) => {
+  return mapValues<DamageModifiers, DamageModifier>(
+    original,
+    (val: DamageModifier, key) => key in override
+      ? overrideResistance(val, override[key as DamageType])
+      : val
+  );
+};
+
+const wetModifyResistances = wetModifiers
+  ? (damageModifiers: DamageModifiers): DamageModifiers => modifyResistances(damageModifiers, wetModifiers)
+  : (damageModifiers: DamageModifiers): DamageModifiers => damageModifiers;
+
+export function attackCreature(
+  weapon: Weapon,
+  level: number,
+  skillLvl: number,
+  attack: Attack,
+  arrow: Arrow,
+  creature: Creature,
+  isWet: boolean,
+  backstab: boolean,
+) {
+  const weaponDamage = addDamage(weapon.damage[0], multiplyDamage(weapon.damage[1], level - 1));
+  const totalDamage = weapon.slot === 'bow'
+    ? addDamage(weaponDamage, arrow.damage)
+    : weaponDamage;
+  const damageModifiers = isWet
+    ? wetModifyResistances(creature.damageModifiers)
+    : creature.damageModifiers;
+  const skillRange = getWeaponSkillFactor(skillLvl);
+  const weaponAvg = (skillRange[0] + skillRange[1]) / 2;
+  const { damage, overTime } = doAttack(totalDamage, damageModifiers, 0, false);
+  const singleHit = getTotalDamage(addDamage(damage, mapValues(overTime, d => d?.[0])));
+
+  const damageFixed = getTotalDamage(damage);
+
+  const { times, totalStamina, totalTime, comboTotal } = getAttackStats(weapon, attack, skillLvl);
+
+  let wastedDamage = 0;
+  let overTimeTotal = 0;
+  function updateDamage(ot: DamageOverTime | undefined, isWet: boolean) {
+    if (ot == null) return;
+    for (const t of times) {
+      const [total, time, period] = ot;
+      const ticks = isWet
+        ? Math.round(1 / period)
+        : Math.ceil(t / period);
+      const maxTicks = Math.ceil(time / period);
+      const inflicted = total / maxTicks * Math.min(ticks, maxTicks);
+      overTimeTotal += inflicted;
+      wastedDamage += total - inflicted;
+    }
+  }
+
+  const { fire, spirit, poison } = overTime;
+  updateDamage(fire, isWet);
+  updateDamage(spirit, isWet);
+  updateDamage(poison, false);
+
+  const multiplier = attack.mul?.damage ?? 1;
+  const backstabBonus = backstab ? weapon.backstab : 1;
+  const totalDamageNum = (damageFixed * comboTotal + overTimeTotal) * multiplier * weaponAvg;
+  const dpSec = totalDamageNum / totalTime;
+  const dpSta = totalDamageNum / totalStamina;
+  
+  return {
+    singleHit: [
+      skillRange[0] * singleHit * multiplier * backstabBonus,
+      skillRange[1] * singleHit * multiplier * backstabBonus,
+    ] as Pair<number>,
+    wasteRatio: wastedDamage / (wastedDamage + overTimeTotal),
+    dpSec,
+    dpSta,
+  };
 }

@@ -106,23 +106,23 @@ export function ItemSpecial({ special }: { special: TItemSpecial }) {
 export function Resistances({ mods }: { mods: DamageModifiers }) {
   const translate = useContext(TranslationContext);
   const modGroups = {
-    VeryWeak: [] as DamageModifier[],
-    Weak: [] as DamageModifier[],
-    Resistant: [] as DamageModifier[],
-    VeryResistant: [] as DamageModifier[],
-    Immune: [] as DamageModifier[],
+    veryWeak: [] as DamageModifier[],
+    weak: [] as DamageModifier[],
+    resistant: [] as DamageModifier[],
+    veryResistant: [] as DamageModifier[],
+    immune: [] as DamageModifier[],
   };
   for (const [key, val] of Object.entries(mods)) {
-    if (val && val in modGroups) {
-      modGroups[val as keyof typeof modGroups].push(key as unknown as DamageModifier);
+    if (val && val !== 'normal' && val !== 'ignore') {
+      modGroups[val].push(key as unknown as DamageModifier);
     }
   }
   const keys = [
-    'VeryWeak',
-    'Weak',
-    'Resistant',
-    'VeryResistant',
-    'Immune',
+    'veryWeak',
+    'weak',
+    'resistant',
+    'veryResistant',
+    'immune',
   ] as const;
   return <>{
     keys

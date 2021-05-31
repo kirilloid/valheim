@@ -1,4 +1,4 @@
-import { Item, CraftingStation, Biome, DamageType, EntityId, Resource } from "../types";
+import { Item, CraftingStation, Biome, EntityId, Resource } from "../types";
 import { GAME_DAY } from "./utils";
 
 const CAULDRON_TIME = 3;

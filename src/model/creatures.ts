@@ -336,6 +336,7 @@ export const creatures: Creature[] = [
     id: 'Troll',
     tier: 2,
     maxLvl: 3,
+    upgradeDistance: 2000,
     emoji: '',
     faction: Faction.ForestMonsters,
     attacks: [
