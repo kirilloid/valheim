@@ -285,7 +285,6 @@ export const Search = () => {
           onChange={updateSearch}
           onKeyDown={updateIndex}
           value={searchTerm} />
-        <input type="submit" value={translate('ui.search.button')} />
       </div>
       {items.length
       ? <ul className="SearchResults" aria-activedescendant={`gs_i${index}`}>

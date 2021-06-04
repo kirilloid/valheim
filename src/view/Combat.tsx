@@ -129,7 +129,7 @@ export function Combat() {
         <label className="InputBlock">
           {translate('ui.armor')}
           <span className="InputBlock__Gap" />
-          <Icon id="ac_bkg" alt="" size={24} />
+          <Icon id="armor" alt="" size={24} />
           <input type="number" pattern="[0-9]+" min="0" max="100" onChange={onArmorChange} value={armor} style={{ width: '3em' }} />
           <input type="range" min="0" max="100" onChange={onArmorChange} value={armor} className="BigInput" list="armor" />
           <datalist id="armor">

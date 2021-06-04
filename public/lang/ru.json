@@ -501,8 +501,8 @@
     
     "ui.search.placeholder": "Искать объекты...",
     "ui.search.button": "Искать",
-    "ui.armor": "броня",
 
+    "ui.armor": "броня",
     "ui.attackMelee.combo": "комбо",
     "ui.attackRanged.velocity": "скорость стрелы",
     "ui.attackRanged.scatter": "разброс",
