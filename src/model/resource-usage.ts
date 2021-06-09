@@ -2,7 +2,7 @@ import { items as weapons } from './weapons';
 import { items as armors } from './armors';
 import { arrows } from './arrows';
 import { resources } from './resources';
-import { CraftingStation, EntityId, GameObject, Item, Piece } from '../types';
+import { CraftingStation, EntityId, Item, Piece } from '../types';
 import { pieces } from './building';
 
 export const resourceCraftMap: Record<EntityId, Item[]> = {};
@@ -15,7 +15,7 @@ function addToMap<T extends Item | Piece>(map: Record<EntityId, T[]>, item: T) {
   if (recipe == null) return;
   const materials = 'value' in recipe
     ? { 'Coins': recipe.value }
-    : 'biomes' in recipe
+    : 'locations' in recipe
     ? {}
     : recipe.materials;
   const station = 'source' in recipe ? recipe.source.station : null;

@@ -1,6 +1,6 @@
 import { data } from './objects';
 import { preloadLanguage } from '../translation.effect';
-import { EntityId } from '../types';
+import { EntityId, Faction } from '../types';
 import { getCraftingStationId } from './building';
 
 type PrefixTree<T> = {
@@ -82,6 +82,12 @@ preloadLanguage().then(dict => {
             addTag('ui.tags.fire');
             break;
         }
+        break;
+      case 'creature':
+        if ('tame' in obj) addTag('ui.tameable');
+        if ('pregnancy' in obj) addTag('ui.tamed.breeds');
+        if (obj.faction === 'Undead') addTag('ui.faction.Undead');
+        break;
     }
     if ('summon' in obj) addTag('ui.tags.summon');
     const typeTags = dict[`ui.itemType.${obj.type}`];

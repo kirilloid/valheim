@@ -1,5 +1,3 @@
-import { Biome } from "../types";
-
 export const plants = [
   {
     id: "Beech",
@@ -7,7 +5,7 @@ export const plants = [
     cultivatedGround: false,
     destroyUnhealthy: true,
     freeSpaceRadius: 2,
-    biomes: [Biome.Meadows, Biome.BlackForest, Biome.Plains],
+    biomes: ['Meadows', 'BlackForest', 'Plains'],
   },
   {
     id: "PineTree",
@@ -15,7 +13,7 @@ export const plants = [
     cultivatedGround: false,
     destroyUnhealthy: true,
     freeSpaceRadius: 2,
-    biomes: [Biome.Meadows, Biome.BlackForest, Biome.Plains],
+    biomes: ['Meadows', 'BlackForest', 'Plains'],
   },
   {
     id: "FirTree",
@@ -23,7 +21,7 @@ export const plants = [
     cultivatedGround: false,
     destroyUnhealthy: true,
     freeSpaceRadius: 2,
-    biomes: [Biome.Meadows, Biome.BlackForest, Biome.Mountain, Biome.Plains],
+    biomes: ['Meadows', 'BlackForest', 'Mountain', 'Plains'],
   },
   {
     id: "Turnip",
@@ -31,7 +29,7 @@ export const plants = [
     cultivatedGround: true,
     destroyUnhealthy: true,
     freeSpaceRadius: 0.5,
-    biomes: [Biome.Meadows, Biome.BlackForest, Biome.Swamp, Biome.Plains],
+    biomes: ['Meadows', 'BlackForest', 'Swamp', 'Plains'],
   },
   {
     id: "Barley",
@@ -39,7 +37,7 @@ export const plants = [
     cultivatedGround: true,
     destroyUnhealthy: true,
     freeSpaceRadius: 0.5,
-    biomes: [Biome.Plains],
+    biomes: ['Plains'],
   },
   {
     id: "Carrot",
@@ -47,7 +45,7 @@ export const plants = [
     cultivatedGround: true,
     destroyUnhealthy: true,
     freeSpaceRadius: 0.5,
-    biomes: [Biome.Meadows, Biome.BlackForest, Biome.Plains],
+    biomes: ['Meadows', 'BlackForest', 'Plains'],
   },
   {
     id: "SeedCarrot",
@@ -55,7 +53,7 @@ export const plants = [
     cultivatedGround: true,
     destroyUnhealthy: true,
     freeSpaceRadius: 0.5,
-    biomes: [Biome.Meadows, Biome.BlackForest, Biome.Plains],
+    biomes: ['Meadows', 'BlackForest', 'Plains'],
   },
   {
     id: "Flax",
@@ -63,7 +61,7 @@ export const plants = [
     cultivatedGround: true,
     destroyUnhealthy: true,
     freeSpaceRadius: 0.5,
-    biomes: [Biome.Plains],
+    biomes: ['Plains'],
   },
   {
     id: "SeedTurnip",
@@ -71,6 +69,6 @@ export const plants = [
     cultivatedGround: true,
     destroyUnhealthy: true,
     freeSpaceRadius: 0.5,
-    biomes: [Biome.Meadows, Biome.BlackForest, Biome.Swamp, Biome.Plains],
+    biomes: ['Meadows', 'BlackForest', 'Swamp', 'Plains'],
   },
 ] as const;

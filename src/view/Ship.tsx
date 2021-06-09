@@ -5,7 +5,7 @@ import '../css/Ship.css';
 import { EnvId, envSetup, envStates } from '../model/env';
 import { ships, getSailSpeed, getSailSpeeds, Sail } from '../model/ship';
 import { magnitude, timeI2S } from '../model/utils';
-import { Biome, Ship as ShipPiece } from '../types';
+import { Ship as ShipPiece } from '../types';
 
 type ChartProps = {
   dpi: number;
@@ -18,7 +18,7 @@ const styles = {
   coarseMarker: '#ccc',
 };
 
-const weathers = Object.keys(envSetup[Biome.Ocean]) as EnvId[];
+const weathers = Object.keys(envSetup.Ocean) as EnvId[];
 
 const winds: [EnvId, number][] = weathers.map(name => {
   const { wind } = envStates.find(e => e.id === name)!;

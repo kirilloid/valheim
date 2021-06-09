@@ -9,8 +9,8 @@ import { getSummon } from '../model/resources';
 import { timeI2S } from '../model/utils';
 import { TranslationContext } from '../translation.effect';
 
-import { Creature as TCreature, Faction, NormalAttackProfile, SpawnAttackProfile } from '../types';
-import { Resistances, shortCreatureDamage } from './helpers';
+import { Creature as TCreature, NormalAttackProfile, SpawnAttackProfile } from '../types';
+import { Area, Resistances, shortCreatureDamage } from './helpers';
 import { ItemIcon } from './Icon';
 import { ItemHeader } from './ItemHeader';
 
@@ -56,16 +56,22 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
     <section>
       <h2>creature</h2>
       <dl>
-        <dt key="faction-label">{translate('ui.faction')}</dt>
-        <dd key="faction-value">{translate(`ui.faction.${Faction[creature.faction]}`)}</dd>
+        <dt>areal</dt>
+        <dd>
+          <ul style={{ padding: 0 }}>
+            {creature.locations.map(loc => <li><Area area={loc} /></li>)}
+          </ul>
+        </dd>
+        <dt>{translate('ui.faction')}</dt>
+        <dd>{translate(`ui.faction.${creature.faction}`)}</dd>
       {sid ? <>
-        <dt key="summon-label">{translate('ui.summonedWith')}</dt>
-        <dd key="summon-value"><ItemIcon item={data[sid]} size={16} /> <Link to={`/obj/${sid}`}>{translate(sid)}</Link> x{snr}</dd>
+        <dt>{translate('ui.summonedWith')}</dt>
+        <dd><ItemIcon item={data[sid]} size={16} /> <Link to={`/obj/${sid}`}>{translate(sid)}</Link> x{snr}</dd>
       </> : null}
-      <dt key="health-label">{translate('ui.health')}</dt>
-      <dd key="health-value">{creature.hp * hpBonus(scale)}</dd>
-      <dt key="stagger-label">stagger</dt>
-      <dd key="stagger-value">{creature.hp * staggerFactor}</dd>
+      <dt>{translate('ui.health')}</dt>
+      <dd>{creature.hp * hpBonus(scale)}</dd>
+      <dt>{translate('ui.stagger')}</dt>
+      <dd>{creature.hp * hpBonus(scale) * staggerFactor}</dd>
       </dl>
       <h3>resistances</h3>
       <dl>
@@ -74,8 +80,8 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
       {creature.attacks.length ? <>
         <h3>attacks</h3>
         {creature.attacks.map(a => <>
-          {creature.attacks.length ? <h4 key={a.variety}>{a.variety}</h4> : null}
-          <dl>
+          {creature.attacks.length > 1 ? <h4 key={a.variety}>{a.variety}</h4> : null}
+          <dl key={a.variety}>
           {a.attacks.map(a => 'spawn' in a
             ? <SpawnAttack attack={a} />
             : <NormalAttack key={a.name} attack={a} dmgScale={dmgScale} />)}

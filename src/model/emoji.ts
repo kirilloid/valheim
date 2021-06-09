@@ -33,15 +33,15 @@ export const skill: Record<SkillType, string> = {
 };
 
 export const biome: Record<Biome, string> = {
-  [Biome.Meadows]: '🌿',
-  [Biome.BlackForest]: '🌳',
-  [Biome.Swamp]: '🐸',
-  [Biome.Mountain]: '🏔️',
-  [Biome.Plains]: '🌺',
-  [Biome.Ocean]: '🌊',
-  [Biome.Mistlands]: '🌫️',
-  [Biome.DeepNorth]: '❄️',
-  [Biome.Ashlands]: '⚱️',
+  Meadows: '🌿',
+  BlackForest: '🌳',
+  Swamp: '🐸',
+  Mountain: '🏔️',
+  Plains: '🌺',
+  Ocean: '🌊',
+  Mistlands: '🌫️',
+  DeepNorth: '❄️',
+  Ashlands: '⚱️',
 };
 
 

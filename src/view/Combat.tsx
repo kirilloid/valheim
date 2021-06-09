@@ -1,11 +1,12 @@
 import React, { useCallback, useContext, useState } from 'react';
 import { groupBy, map } from 'lodash-es';
 
-import { Attack, Biome, DamageProfile, DamageType, GameObject, Weapon } from '../types';
+import { Attack, Biome, Creature, DamageProfile, DamageType, GameObject, Weapon } from '../types';
 
 import { creatures } from '../model/creatures';
 import { items } from '../model/weapons';
 import { arrows } from '../model/arrows';
+import { locationToBiome } from '../model/location';
 import { damage as damageIcon } from '../model/emoji';
 import { getPhysicalDamage, attackCreature } from '../model/combat';
 import { TranslationContext } from '../translation.effect';
@@ -67,6 +68,25 @@ function useStateCheckboxEffect(initialValue: boolean) {
   return useStateInputEffect<boolean, HTMLInputElement>(initialValue, el => el.checked);
 }
 
+const groupedCreatures: Record<Biome, Creature[]> = {
+  Meadows: [],
+  BlackForest: [],
+  Swamp: [],
+  Ocean: [],
+  Mountain: [],
+  Plains: [],
+  Mistlands: [],
+  DeepNorth: [],
+  Ashlands: [],
+};
+
+for (const creature of creatures) {
+  if (creature.hp === 1) continue;
+  for (const loc of creature.locations) {
+    groupedCreatures[locationToBiome(loc)].push(creature);
+  }
+}
+
 export function Combat() {
   const [weapon, onWeaponChange] = useStateSelectEffect(weapons);
   const [arrow, onArrowChange] = useStateSelectEffect(arrows);
@@ -76,6 +96,7 @@ export function Combat() {
   const [players, onPlayersChange] = useStateInputEffect(1, numberReader);
   
   const [creature, onCreatureChange] = useStateSelectEffect(creatures);
+  const [biome, setBiome] = useState<Biome>('Meadows');
   const [backstab, onChangeBackstab] = useStateCheckboxEffect(false);
   const [isWet, onChangeIsWet] = useStateCheckboxEffect(false);
   const forcedIsWet = creature.id === 'Bonemass'
@@ -155,14 +176,18 @@ export function Combat() {
       </div>
       <div>
         <h2>Creature</h2>
-        <select onChange={onCreatureChange}>
+        <select onChange={e => {
+          const label = (e.target.selectedOptions.item(0)?.parentElement as HTMLOptGroupElement).label;
+          if (label) setBiome(label as Biome);
+          onCreatureChange(e);
+        }}>
           {map(
-            groupBy(creatures, c => c.tier),
-            (group, tier) => (
-              <optgroup key={Biome[Number(tier) - 1]} label={Biome[Number(tier) - 1]}>
-                {group.map(c => <option value={c.id}>{c.emoji}{translate(c.id)}</option>)}
+            groupedCreatures,
+            (group, gBiome: Biome) => group.length ? (
+              <optgroup key={gBiome} label={gBiome}>
+                {group.map(c => <option value={c.id} selected={creature === c && biome === gBiome}>{translate(c.id)}</option>)}
               </optgroup>
-            )
+            ) : null
           )}
         </select>
         {creature.maxLvl > 1 ?

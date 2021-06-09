@@ -2,50 +2,59 @@ import { SkillType } from "./model/skills";
 
 export type EntityId = string;
 
-export enum Biome {
-  Meadows,
-  BlackForest,
-  Swamp,
-  Mountain,
-  Plains,
-  Ocean,
-  Mistlands,
-  DeepNorth,
-  Ashlands,
-}
+export type Biome =
+  | 'Meadows'
+  | 'BlackForest'
+  | 'Swamp'
+  | 'Mountain'
+  | 'Plains'
+  | 'Ocean'
+  | 'Mistlands'
+  | 'DeepNorth'
+  | 'Ashlands';
 
-export enum Faction {
-  Players,
-  AnimalsVeg,
-  ForestMonsters,
-  Undead, Demon, // best friends
-  MountainMonsters,
-  SeaMonsters,
-  PlainsMonsters,
-  Boss, // aggressive only to players
-};
+export type GameLocation = 
+  | 'DraugrVillage' | 'EikthyrAltar'
+  | 'ForestTower' | 'BurialChamber' | 'TrollCave' | 'ElderAltar'
+  | 'SunkenCrypt' | 'FireGeyser' | 'SwampStoneCircle' | 'BonemassAltar'
+  | 'MountainTower' | 'MountainCastle' | 'EggNest' | 'ModerAltar'
+  | 'GoblinVillage' | 'StoneHedge' | 'YagluthAltar'
+  ;
+
+export type Faction =
+  | 'Players'
+  | 'AnimalsVeg'
+  | 'ForestMonsters'
+  | 'Undead'
+  | 'Demon' // best friends
+  | 'MountainMonsters'
+  | 'SeaMonsters'
+  | 'PlainsMonsters'
+  | 'Boss' // aggressive only to players
+  ;
 
 export type DamageType = 
-| 'blunt'
-| 'slash'
-| 'pierce'
-| 'chop'
-| 'pickaxe'
-| 'fire'
-| 'frost'
-| 'lightning'
-| 'poison'
-| 'spirit';
+  | 'blunt'
+  | 'slash'
+  | 'pierce'
+  | 'chop'
+  | 'pickaxe'
+  | 'fire'
+  | 'frost'
+  | 'lightning'
+  | 'poison'
+  | 'spirit'
+  ;
 
 export type DamageModifier =
-| 'normal'
-| 'resistant'
-| 'weak'
-| 'immune'
-| 'ignore'
-| 'veryResistant'
-| 'veryWeak'
-;
+  | 'normal'
+  | 'resistant'
+  | 'weak'
+  | 'immune'
+  | 'ignore'
+  | 'veryResistant'
+  | 'veryWeak'
+  ;
 
 export type DamageModifiers = Record<DamageType, DamageModifier>;
 
@@ -53,6 +62,21 @@ const idxToMod: DamageModifier[] = ['normal', 'resistant', 'weak', 'immune', 'ig
 export function mods(values: [number, number, number, number, number, number, number, number, number, number]): DamageModifiers {
   const [blunt, slash, pierce, chop, pickaxe, fire, frost, lightning, poison, spirit] = values.map(v => idxToMod[v]!);
   return { blunt, slash, pierce, chop, pickaxe, fire, frost, lightning, poison, spirit } as DamageModifiers;
+}
+
+export type BiomeConfig = {
+  id: Biome;
+  active: boolean;
+  locations: GameLocation[];
+  creatures: Creature[];
+  resources: EntityId[];
+}
+
+export type LocationConfig = {
+  id: GameLocation;
+  isDungeon: boolean;
+  creatures: Creature[];
+  resources: EntityId[];
 }
 
 export const damageModifiersValues: Record<DamageModifier, number> = {
@@ -135,6 +159,7 @@ export interface Creature extends GameObjectBase {
   upgradeDistance?: number;
   nightOnly?: true;
   faction: Faction;
+  locations: (Biome | GameLocation)[];
   hp: number;
   staggerFactor: number;
   staggerBlocked: boolean;
@@ -299,7 +324,7 @@ interface BaseItem extends GameObjectBase {
     value: number;
     number?: number;
   } | {
-    biomes: Biome[];
+    locations: (Biome | GameLocation)[];
     abundance: number;
     num: Pair<number>;
     group: Pair<number>;

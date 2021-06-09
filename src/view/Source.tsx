@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import { Biome, CraftingStation, EntityId, GameObject, Item, Piece } from '../types';
+import { CraftingStation, EntityId, GameObject, Item, Piece } from '../types';
 import { TranslationContext } from '../translation.effect';
 import { data } from '../model/objects';
 import { creatures } from '../model/creatures';
@@ -177,9 +177,9 @@ export function Recipe({ item }: { item: Item | Piece}) {
       {number === 1 ? null : <><dt>quantity</dt><dd>{number}</dd></>} 
     </dl>
   }
-  if ('biomes' in recipe) {
+  if ('locations' in recipe) {
     return <>
-      Grows in {recipe.biomes.map(b => Biome[b]).join(', ')}, {recipe.respawn ? `respawns every ${timeI2S(recipe.respawn)}` : 'does not respawn'}
+      Grows in {recipe.locations.join(', ')}, {recipe.respawn ? `respawns every ${timeI2S(recipe.respawn)}` : 'does not respawn'}
     </>
   }
   if ('source' in recipe) {

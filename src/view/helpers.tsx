@@ -2,15 +2,19 @@ import React, { useContext } from 'react';
 
 import {
   AttackProfile,
+  Biome,
   DamageModifier,
   DamageModifiers,
   DamageProfile,
+  GameLocation,
   ItemSpecial as TItemSpecial
 } from '../types';
 import { SkillIcon } from './Icon';
 import { TranslationContext } from '../translation.effect';
 import { applyDamageModifier, getTotalDamage, playerDamageModifiers } from '../model/combat';
 import { SkillType } from '../model/skills';
+import { locationBiomes } from '../model/location';
+import { Link } from 'react-router-dom';
 
 export function durability(values: [number, number], level?: number): string | number {
   if (values[0] === Infinity) return 'indestructible';
@@ -132,4 +136,16 @@ export function Resistances({ mods }: { mods: DamageModifiers }) {
         <dd key={'d'+ key}>{damageTypesList(modGroups[key])}</dd>,
       ])
   }</>;
+}
+
+export function Area({ area }: { area: Biome | GameLocation }) {
+  const translate = useContext(TranslationContext);
+  if (area in locationBiomes) {
+    return <>
+      <Link to={`/loc/${area}`}>{translate(`ui.location.${area}`)}</Link>
+      (<Link to={`/loc/${area}`}>{translate(`ui.biome.${locationBiomes[area as GameLocation]}`)}</Link>)
+    </>;
+  } else {
+    return <Link to={`/loc/${area}`}>{translate(`ui.biome.${area}`)}</Link>;
+  }
 }

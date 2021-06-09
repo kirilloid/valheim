@@ -1,4 +1,4 @@
-import { Biome } from "../types";
+import type { Biome } from "../types";
 
 const COLD_NIGHT = 2;
 const COLD = 3;
@@ -37,25 +37,25 @@ export type ES = typeof envStates;
 export type EnvId = ES[number]['id'];
 
 export const envSetup: Record<Biome, Partial<Record<EnvId, number>>> = {
-    [Biome.Meadows]: { Clear: 25, LightRain: 1, Rain: 1, Misty: 1, ThunderStorm: 1 },
-    [Biome.BlackForest]: { DeepForest_Mist: 20, Rain: 1, Misty: 1, ThunderStorm: 1 },
-    [Biome.Swamp]: { SwampRain: 1 },
-    [Biome.Mountain]: { SnowStorm: 1, Snow: 5 },
-    [Biome.DeepNorth]: { Twilight_SnowStorm: 1, Twilight_Snow: 2, Twilight_Clear: 1 },
-    [Biome.Plains]: { Heath_clear: 5, Misty: 1, LightRain: 1 },
-    [Biome.Ashlands]: { Ashrain: 1 },
-    [Biome.Mistlands]: { Darklands_dark: 1 },
-    [Biome.Ocean]: { Clear: 10, LightRain: 1, Rain: 1, Misty: 1, ThunderStorm: 1 },
+    Meadows: { Clear: 25, LightRain: 1, Rain: 1, Misty: 1, ThunderStorm: 1 },
+    BlackForest: { DeepForest_Mist: 20, Rain: 1, Misty: 1, ThunderStorm: 1 },
+    Swamp: { SwampRain: 1 },
+    Mountain: { SnowStorm: 1, Snow: 5 },
+    DeepNorth: { Twilight_SnowStorm: 1, Twilight_Snow: 2, Twilight_Clear: 1 },
+    Plains: { Heath_clear: 5, Misty: 1, LightRain: 1 },
+    Ashlands: { Ashrain: 1 },
+    Mistlands: { Darklands_dark: 1 },
+    Ocean: { Clear: 10, LightRain: 1, Rain: 1, Misty: 1, ThunderStorm: 1 },
 };
 
 const avgWind = {
-    [Biome.Meadows]: 0.378,
-    [Biome.BlackForest]: 0.385,
-    [Biome.Swamp]: 0.2,
-    [Biome.Mountain]: 0.442,
-    [Biome.DeepNorth]: 0.538,
-    [Biome.Plains]: 0.507,
-    [Biome.Ashlands]: 0.3,
-    [Biome.Mistlands]: 0.35,
-    [Biome.Ocean]: 0.407,
+    Meadows: 0.378,
+    BlackForest: 0.385,
+    Swamp: 0.2,
+    Mountain: 0.442,
+    DeepNorth: 0.538,
+    Plains: 0.507,
+    Ashlands: 0.3,
+    Mistlands: 0.35,
+    Ocean: 0.407,
 };
