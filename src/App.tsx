@@ -23,7 +23,8 @@ function App() {
         <Router>
           <Search />
           <Switch>
-            <Route exact path="/combat" children={<Combat />} />
+            <Route path="/combat/:params" children={<Combat />} />
+            <Route path="/combat" children={<Combat />} />
             <Route exact path="/ships" children={<Ship />} />
             <Route path="/obj/:id/:level" children={<GameObject />} />
             <Route path="/obj/:id" children={<GameObject />} />

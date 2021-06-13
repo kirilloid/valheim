@@ -189,7 +189,7 @@ export function attackCreature(
     for (const t of times) {
       const total = dot.total * skillMul * (stack ? comboTotal : 1);
       const { time, period } = dot;
-      const ticks = Math.ceil((extinguished ? 1 : t) / period);
+      const ticks = (extinguished ? 1 : t) / period;
       const maxTicks = Math.ceil(time / period);
       const inflicted = total / maxTicks * Math.min(ticks, maxTicks);
       overTimeTotal += inflicted;

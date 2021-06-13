@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams, useHistory } from 'react-router-dom';
 import { groupBy, map } from 'lodash-es';
 
 import { Attack, Biome, Creature, DamageProfile, DamageType, GameObject, Weapon } from '../types';
@@ -84,14 +84,16 @@ const groupedCreatures: Record<Biome, Creature[]> = {
 for (const creature of creatures) {
   if (creature.hp === 1) continue;
   for (const loc of creature.locations) {
-    groupedCreatures[locationToBiome(loc)].push(creature);
+    const biome = locationToBiome(loc);
+    const group = groupedCreatures[biome];
+    if (!group.includes(creature)) {
+      group.push(creature);
+    }
   }
 }
 
 interface CombatState {
   weapon: WeaponConfig;
-  armor: number;
-  players: number;
   creature: Creature;
   biome: Biome;
   backstab: boolean;
@@ -100,21 +102,37 @@ interface CombatState {
 
 type UseCombatState = [CombatState, React.Dispatch<CombatState>];
 
-const initialState: CombatState = {
-  weapon: {
-    item: weapons[0]!,
-    level: weapons[0]!.maxLvl,
-    skill: 0,
-    arrow: arrows[0]!,
-  },
-  // shield: shields[0]!
-  armor: 2,
-  players: 1,
-  creature: creatures[0]!,
-  biome: 'Meadows',
-  backstab: false,
-  isWet: false,
-};
+function getInitialWeapon(
+  id?: string,
+  level?: string,
+  skill?: string,
+  arrow?: string,
+): WeaponConfig {
+  const weapon = id && weapons.find(w => w.id === id) || weapons[0]!;
+  return {
+    item: weapon,
+    level: Number(level) || weapon.maxLvl,
+    skill: Number(skill) || 0,
+    arrow: arrow && arrows.find(a => a.id === arrow) || arrows[0]!,
+  };
+}
+
+const paramsRegex = /(\w+)-vs-(\w+)-(\d+)-(\d+)(?:-(\w+))?/;
+
+function getInitialState(params: string): CombatState {
+  const match = params.match(paramsRegex);
+  const [, creature, weapon, level, skill, arrow ] = match ?? [];
+  return {
+    weapon: getInitialWeapon(weapon, level, skill, arrow),
+    // shield: shields[0]!
+    // armor: 2,
+    // players: 1,
+    creature: creatures.find(c => c.id === creature) ?? creatures[0]!,
+    biome: 'Meadows',
+    backstab: false,
+    isWet: false,
+  };
+}
 
 const updateWeapon = ([state, setState]: UseCombatState) =>
   (item: Weapon) =>
@@ -122,11 +140,11 @@ const updateWeapon = ([state, setState]: UseCombatState) =>
 
 const creatureReader = (e: HTMLSelectElement) => {
   const parent = e.selectedOptions.item(0)?.parentElement;
-  const label = parent instanceof HTMLOptGroupElement
+  const biome = parent instanceof HTMLOptGroupElement
     ? parent.label as Biome
     : undefined;
   const creature = creatures.find(c => c.id === e.value);
-  return creature ? { creature, label } : undefined;
+  return creature ? { creature, biome } : undefined;
 };
 
 const updateCreature = ([state, setState]: UseCombatState) =>
@@ -148,83 +166,103 @@ const updateInWeapon = <K extends keyof WeaponConfig>([state, setState]: UseComb
 
 export function Combat() {
   const translate = useContext(TranslationContext);
-  const statePair = useState(initialState);
+  const history = useHistory();
+  const { params } = useParams<{ params: string }>();
+  const statePair = useState(getInitialState(params));
   const [state] = statePair;
   const {
     weapon,
-    armor, players,
+    // armor, players,
     creature, biome, backstab, isWet,
   } = state;
+  const { item, level, skill, arrow } = weapon;
+  const path = `/combat/${creature.id}-vs-${item.id}-${level}-${skill}`
+    + (item.slot === 'bow' ? `-${arrow.id}` : '');
+  if (history.location.pathname !== path) {
+    history.replace(path);
+  }
   const onWeaponChange = useStateSelectUpdate(weapons, updateWeapon(statePair));
-  const onweaponLvlChange = useStateNumberUpdate(updateInWeapon(statePair, 'level'));
+  const onWeaponLvlChange = useStateNumberUpdate(updateInWeapon(statePair, 'level'));
   const onSkillChange = useStateNumberUpdate(updateInWeapon(statePair, 'skill'));
   const onArrowChange = useStateSelectUpdate(arrows, updateInWeapon(statePair, 'arrow'));
   // const [shield, onShieldChange] = useStateSelectUpdate(shields, updateGeneric(statePair, 'shield'));
-  const onArmorChange = useStateNumberUpdate(updateGeneric(statePair, 'armor'));
-  const onPlayersChange = useStateNumberUpdate(updateGeneric(statePair, 'players'));
+  // const onArmorChange = useStateNumberUpdate(updateGeneric(statePair, 'armor'));
+  // const onPlayersChange = useStateNumberUpdate(updateGeneric(statePair, 'players'));
   
-  const onCreatureChange = useStateInputUpdate(
-    creatureReader,
-    updateCreature(statePair),
-  );
+  const onCreatureChange = useStateInputUpdate(creatureReader, updateCreature(statePair));
   const onChangeBackstab = useStateCheckboxUpdate(updateGeneric(statePair, 'backstab'));
   const onChangeIsWet = useStateCheckboxUpdate(updateGeneric(statePair, 'isWet'));
   // const [stars, onStarsChange] = useStateInputEffect(0, numberReader);  
   // const scale = { players, stars: Math.min(stars, creature.maxLvl - 1) };
 
-  const attackStats = weapon.item.attacks.map(a => attackCreature(weapon, a, creature, isWet, backstab));
+  const attackStats = item.attacks.map(a => attackCreature(weapon, a, creature, isWet, backstab));
 
   return (<>
     <h1>Combat calculator</h1>
     <div className="CombatCalc">
       <div className="Player">
-        <h2>Player</h2>
+        <h2>{translate('ui.player')}</h2>
         <label className="InputBlock">
           {translate('ui.itemType.weapon')}
           <span className="InputBlock__Gap" />
-          <Icon id="star" alt="level" size={16} />
-          <input type="number" min="1" max={weapon.item.maxLvl} value={weapon.level} onChange={onweaponLvlChange} />
-          <ItemIcon item={weapon.item} size={24} />
-          <select className="BigInput" onChange={onWeaponChange}>
+          <ItemIcon item={item} size={24} />
+          <select className="BigInput" onChange={onWeaponChange} value={item.id}>
             {map(weaponGroups, (group, tier) => (<optgroup label={`tier ${tier}`}>
               {group.map(w => <option key={w.id} value={w.id}>{translate(w.id)}</option>)}
             </optgroup>))}
           </select>
+          {item.maxLvl > 1 && <>
+            <Icon id="star" alt="level" size={16} />
+            <input type="number" min="1" max={item.maxLvl} value={level} onChange={onWeaponLvlChange} style={{ width: '3em' }} />
+          </>}
         </label>
-        {weapon.item.slot === 'bow' && <label className="InputBlock">
+        {item.slot === 'bow' && <label className="InputBlock">
           {translate('ui.itemType.arrow')}
           <span className="InputBlock__Gap" />
-          <ItemIcon item={weapon.arrow} size={24} />
-          <select className="BigInput" onChange={onArrowChange}>
+          <ItemIcon item={arrow} size={24} />
+          <select className="BigInput" onChange={onArrowChange} value={arrow.id}>
             {arrows.map(a => <option key={a.id} value={a.id}>{translate(a.id)}</option>)}
           </select>
         </label>}
-        <label className="InputBlock">
+        {item.skill && <label className="InputBlock">
           <span className="col-xs-6 col-sm-3">{translate('ui.skill')}</span>
           <span className="InputBlock__Gap" />
-          <SkillIcon skill={weapon.item.skill} useAlt size={24} />
-          <input type="number" pattern="[0-9]+" min="0" max="100" onChange={onSkillChange} value={weapon.skill} style={{ width: '3em' }} />
-          <input type="range" min="0" max="100" onChange={onSkillChange} value={weapon.skill} className="BigInput" />
-        </label>
-        {/*weapon.slot === 'primary' && <label className="InputBlock">
+          <SkillIcon skill={item.skill} useAlt size={24} />
+          <datalist id="skill">
+            <option value="0" />
+            <option value="10" />
+            <option value="20" />
+            <option value="30" />
+            <option value="40" />
+            <option value="50" />
+            <option value="60" />
+            <option value="70" />
+            <option value="80" />
+            <option value="90" />
+            <option value="100"/>
+          </datalist>
+          <input type="range" min="0" max="100" onChange={onSkillChange} value={skill} className="BigInput" list="skill" />
+          <input type="number" pattern="[0-9]+" min="0" max="100" onChange={onSkillChange} value={skill} style={{ width: '3em' }} />
+        </label>}
+        {/*item.slot === 'primary' && <label className="InputBlock">
           {translate('ui.itemType.shield')}
           <span className="InputBlock__Gap" />
           <ItemIcon item={shield} size={24} />
-          <select className="BigInput" onChange={onShieldChange}>
+          <select className="BigInput" onChange={onShieldChange} value={shield.id}>
             {shields.map(s => <option key={s.id} value={s.id}>{translate(s.id)}</option>)}
           </select>
         </label>*/}
-        <label className="InputBlock">
+        {/*<label className="InputBlock">
           {translate('ui.armor')}
           <span className="InputBlock__Gap" />
           <Icon id="armor" alt="" size={24} />
           <input type="number" pattern="[0-9]+" min="0" max="100" onChange={onArmorChange} value={armor} style={{ width: '3em' }} />
           <input type="range" min="0" max="100" onChange={onArmorChange} value={armor} className="BigInput" list="armor" />
           <datalist id="armor">
-            <option value="2" />{/* Rag */}
-            <option value="7" />{/* Leather 1 */}
-            <option value="14" />{/* Leather 2 */}
-            <option value="21" />{/* Leather 3 */}
+            <option value="2" label="Rag" />
+            <option value="7" label="Leather 1" />
+            <option value="14" label="Leather 2" />
+            <option value="21" label="Leather 3"/>
             <option value="28" label="Leather" />
             <option value="33" label="Troll" />
             <option value="46" label="Bronze" />
@@ -232,18 +270,18 @@ export function Combat() {
             <option value="82" label="Silver" />
             <option value="100" label="Padded" />
           </datalist>
-        </label>
-        <label className="InputBlock">
+        </label>*/}
+        {/*<label className="InputBlock">
           players
           <span className="InputBlock__Gap" />
           <Icon id="player" alt="" size={24} />
           <input type="number" pattern="[0-9]+" min="1" max="10" onChange={onPlayersChange} value={players} style={{ width: '3em' }} />
           <input type="range" min="1" max="10" onChange={onPlayersChange} value={players} className="BigInput" />
-        </label>
+        </label>*/}
       </div>
       <div>
         <h2>Creature</h2>
-        <select onChange={onCreatureChange}>
+        <select onChange={onCreatureChange} value={creature.id}>
           {map(
             groupedCreatures,
             (group, gBiome: Biome) => group.length ? (
@@ -253,13 +291,14 @@ export function Combat() {
             ) : null
           )}
         </select>
-        {/*creature.maxLvl > 1 ?
+        <ItemIcon item={creature} size={24} />
+        {/*creature.maxLvl &&
           <>
             <br />
             <input id="star-0" type="radio" name="stars" value="0" checked={stars === 0} onChange={onStarsChange} /><label htmlFor="star-0">0⭐</label>
             <input id="star-1" type="radio" name="stars" value="1" checked={stars === 1} onChange={onStarsChange} /><label htmlFor="star-1">1⭐</label>
             <input id="star-2" type="radio" name="stars" value="2" checked={stars === 2} onChange={onStarsChange} /><label htmlFor="star-2">2⭐</label>
-        </> : null*/}
+        </>*/}
         <br />
         <label htmlFor="wet">
           <input id="wet" type="checkbox" checked={isWet} onChange={onChangeIsWet} />
@@ -287,9 +326,10 @@ export function Combat() {
           <dt>single hit</dt><dd>{stats.singleHit.map(showNumber).join('–')}</dd>
           <dt>dmg/second</dt><dd>{showNumber(stats.dpSec)}</dd>
           <dt>dmg/stamina</dt><dd>{showNumber(stats.dpSta)}</dd>
-          {stats.wasteRatio
-            ? <><dt>elemental damage waste</dt><dd>{`${Math.round(stats.wasteRatio * 100)}%`}</dd></>
-            : null}
+          {!!stats.wasteRatio && <>
+            <dt>elemental damage waste</dt>
+            <dd>{`${Math.round(stats.wasteRatio * 100)}%`}</dd>
+          </>}
         </dl>
       </div>
     ))}
