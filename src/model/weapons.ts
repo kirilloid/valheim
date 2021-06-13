@@ -764,7 +764,7 @@ export const items: (Weapon | Shield)[] = [
     emoji: '💣',
     tier: 3,
     weight: 0.3, stack: 50,
-    skill: SkillType.Polearms,
+    skill: null,
     damage: [{ blunt: 5 }, {}],
     attacks: [{
       type: 'proj',

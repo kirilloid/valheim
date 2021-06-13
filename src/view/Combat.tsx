@@ -1,4 +1,5 @@
 import React, { useCallback, useContext, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { groupBy, map } from 'lodash-es';
 
 import { Attack, Biome, Creature, DamageProfile, DamageType, GameObject, Weapon } from '../types';
@@ -8,11 +9,10 @@ import { items } from '../model/weapons';
 import { arrows } from '../model/arrows';
 import { locationToBiome } from '../model/location';
 import { damage as damageIcon } from '../model/emoji';
-import { getPhysicalDamage, attackCreature } from '../model/combat';
+import { getPhysicalDamage, attackCreature, WeaponConfig } from '../model/combat';
 import { TranslationContext } from '../translation.effect';
 import { Icon, ItemIcon, SkillIcon } from './Icon';
 import { showNumber } from './helpers';
-import { Link } from 'react-router-dom';
 
 const weapons = items.filter(i => !i.disabled && i.type === 'weapon') as Weapon[]; 
 const weaponGroups = groupBy(weapons, w => w.tier);
@@ -42,30 +42,31 @@ function PlayerAttack(props: { title: string; weapon: Weapon; attack: Attack }) 
   </div>);
 }
 
-function useStateInputEffect<Value, InputElement extends HTMLSelectElement | HTMLInputElement>(
-  initialValue: Value,
+function useStateInputUpdate<Value, InputElement extends HTMLSelectElement | HTMLInputElement>(
   reader: (el: InputElement) => Value | undefined,
+  setValue: (value: Value) => void, 
 ) {
-  const [value, setValue] = useState<Value>(initialValue);
   const onInputChange = useCallback((e: React.ChangeEvent<InputElement>) => {
     const targetValue = reader(e.target);
-    if (targetValue != null) {
-      setValue(targetValue);
-    }
-  }, [reader]);
-  return [value, onInputChange, setValue] as const;
+    if (targetValue != null) setValue(targetValue);
+  }, [reader, setValue]);
+  return onInputChange;
 }
 
 function numberReader(element: HTMLSelectElement | HTMLInputElement): number {
   return Number(element.value);
 }
 
-function useStateSelectEffect<T extends GameObject>(items: T[]) {
-  return useStateInputEffect(items[0]!, el => items.find(i => i.id === el.value));
+function useStateSelectUpdate<T extends GameObject>(items: T[], setValue: (value: T) => void) {
+  return useStateInputUpdate(el => items.find(i => i.id === el.value), setValue);
 }
 
-function useStateCheckboxEffect(initialValue: boolean) {
-  return useStateInputEffect<boolean, HTMLInputElement>(initialValue, el => el.checked);
+function useStateNumberUpdate(setValue: (value: number) => void) {
+  return useStateInputUpdate<number, HTMLInputElement>(numberReader, setValue);
+}
+
+function useStateCheckboxUpdate(setValue: (value: boolean) => void) {
+  return useStateInputUpdate<boolean, HTMLInputElement>(el => el.checked, setValue);
 }
 
 const groupedCreatures: Record<Biome, Creature[]> = {
@@ -87,27 +88,91 @@ for (const creature of creatures) {
   }
 }
 
-export function Combat() {
-  const [weapon, onWeaponChange] = useStateSelectEffect(weapons);
-  const [arrow, onArrowChange] = useStateSelectEffect(arrows);
-  // const [shield, onShieldChange] = useStateSelectEffect(shields);
-  const [armor, onArmorChange] = useStateInputEffect(0, numberReader);
-  const [skill, onSkillChange] = useStateInputEffect(0, numberReader);
-  const [players, onPlayersChange] = useStateInputEffect(1, numberReader);
-  
-  const [creature, onCreatureChange] = useStateSelectEffect(creatures);
-  const [biome, setBiome] = useState<Biome>('Meadows');
-  const [backstab, onChangeBackstab] = useStateCheckboxEffect(false);
-  const [isWet, onChangeIsWet] = useStateCheckboxEffect(false);
-  const forcedIsWet = creature.id === 'Bonemass'
-    ? true : creature.tier === 4 ? false : undefined;
-  const [stars, onStarsChange] = useStateInputEffect(0, numberReader);
-  
-  const translate = useContext(TranslationContext);
-  
-  const scale = { players, stars: Math.min(stars, creature.maxLvl - 1) };
+interface CombatState {
+  weapon: WeaponConfig;
+  armor: number;
+  players: number;
+  creature: Creature;
+  biome: Biome;
+  backstab: boolean;
+  isWet: boolean;
+}
 
-  const attackStats = weapon.attacks.map(a => attackCreature(weapon, 1, skill, a, arrow, creature, forcedIsWet ?? isWet, backstab));
+type UseCombatState = [CombatState, React.Dispatch<CombatState>];
+
+const initialState: CombatState = {
+  weapon: {
+    item: weapons[0]!,
+    level: weapons[0]!.maxLvl,
+    skill: 0,
+    arrow: arrows[0]!,
+  },
+  // shield: shields[0]!
+  armor: 2,
+  players: 1,
+  creature: creatures[0]!,
+  biome: 'Meadows',
+  backstab: false,
+  isWet: false,
+};
+
+const updateWeapon = ([state, setState]: UseCombatState) =>
+  (item: Weapon) =>
+  setState({ ...state, weapon: { ...state.weapon, item, level: item.maxLvl } });
+
+const creatureReader = (e: HTMLSelectElement) => {
+  const parent = e.selectedOptions.item(0)?.parentElement;
+  const label = parent instanceof HTMLOptGroupElement
+    ? parent.label as Biome
+    : undefined;
+  const creature = creatures.find(c => c.id === e.value);
+  return creature ? { creature, label } : undefined;
+};
+
+const updateCreature = ([state, setState]: UseCombatState) =>
+  (props : { creature: Creature, biome?: Biome }) => {
+    const { creature, biome = locationToBiome(creature.locations[0]!) } = props;
+    if (creature.faction === 'SeaMonsters') setState({ ...state, creature, biome, isWet: true });
+    // mountain
+    else if (creature.tier === 4) setState({ ...state, creature, biome, isWet: false });
+    else setState({ ...state, creature, biome });
+  };
+
+const updateGeneric = <K extends keyof CombatState>([state, setState]: UseCombatState, key: K) =>
+  (value: CombatState[K]): void =>
+  setState({ ...state, [key]: value });
+
+const updateInWeapon = <K extends keyof WeaponConfig>([state, setState]: UseCombatState, key: K) =>
+  (value: WeaponConfig[K]): void =>
+  setState({ ...state, weapon: { ...state.weapon, [key]: value } });
+
+export function Combat() {
+  const translate = useContext(TranslationContext);
+  const statePair = useState(initialState);
+  const [state] = statePair;
+  const {
+    weapon,
+    armor, players,
+    creature, biome, backstab, isWet,
+  } = state;
+  const onWeaponChange = useStateSelectUpdate(weapons, updateWeapon(statePair));
+  const onweaponLvlChange = useStateNumberUpdate(updateInWeapon(statePair, 'level'));
+  const onSkillChange = useStateNumberUpdate(updateInWeapon(statePair, 'skill'));
+  const onArrowChange = useStateSelectUpdate(arrows, updateInWeapon(statePair, 'arrow'));
+  // const [shield, onShieldChange] = useStateSelectUpdate(shields, updateGeneric(statePair, 'shield'));
+  const onArmorChange = useStateNumberUpdate(updateGeneric(statePair, 'armor'));
+  const onPlayersChange = useStateNumberUpdate(updateGeneric(statePair, 'players'));
+  
+  const onCreatureChange = useStateInputUpdate(
+    creatureReader,
+    updateCreature(statePair),
+  );
+  const onChangeBackstab = useStateCheckboxUpdate(updateGeneric(statePair, 'backstab'));
+  const onChangeIsWet = useStateCheckboxUpdate(updateGeneric(statePair, 'isWet'));
+  // const [stars, onStarsChange] = useStateInputEffect(0, numberReader);  
+  // const scale = { players, stars: Math.min(stars, creature.maxLvl - 1) };
+
+  const attackStats = weapon.item.attacks.map(a => attackCreature(weapon, a, creature, isWet, backstab));
 
   return (<>
     <h1>Combat calculator</h1>
@@ -117,17 +182,19 @@ export function Combat() {
         <label className="InputBlock">
           {translate('ui.itemType.weapon')}
           <span className="InputBlock__Gap" />
-          <ItemIcon item={weapon} size={24} />
+          <Icon id="star" alt="level" size={16} />
+          <input type="number" min="1" max={weapon.item.maxLvl} value={weapon.level} onChange={onweaponLvlChange} />
+          <ItemIcon item={weapon.item} size={24} />
           <select className="BigInput" onChange={onWeaponChange}>
             {map(weaponGroups, (group, tier) => (<optgroup label={`tier ${tier}`}>
               {group.map(w => <option key={w.id} value={w.id}>{translate(w.id)}</option>)}
             </optgroup>))}
           </select>
         </label>
-        {weapon.slot === 'bow' && <label className="InputBlock">
+        {weapon.item.slot === 'bow' && <label className="InputBlock">
           {translate('ui.itemType.arrow')}
           <span className="InputBlock__Gap" />
-          <ItemIcon item={arrow} size={24} />
+          <ItemIcon item={weapon.arrow} size={24} />
           <select className="BigInput" onChange={onArrowChange}>
             {arrows.map(a => <option key={a.id} value={a.id}>{translate(a.id)}</option>)}
           </select>
@@ -135,9 +202,9 @@ export function Combat() {
         <label className="InputBlock">
           <span className="col-xs-6 col-sm-3">{translate('ui.skill')}</span>
           <span className="InputBlock__Gap" />
-          <SkillIcon skill={weapon.skill} useAlt size={24} />
-          <input type="number" pattern="[0-9]+" min="0" max="100" onChange={onSkillChange} value={skill} style={{ width: '3em' }} />
-          <input type="range" min="0" max="100" onChange={onSkillChange} value={skill} className="BigInput" />
+          <SkillIcon skill={weapon.item.skill} useAlt size={24} />
+          <input type="number" pattern="[0-9]+" min="0" max="100" onChange={onSkillChange} value={weapon.skill} style={{ width: '3em' }} />
+          <input type="range" min="0" max="100" onChange={onSkillChange} value={weapon.skill} className="BigInput" />
         </label>
         {/*weapon.slot === 'primary' && <label className="InputBlock">
           {translate('ui.itemType.shield')}
@@ -176,11 +243,7 @@ export function Combat() {
       </div>
       <div>
         <h2>Creature</h2>
-        <select onChange={e => {
-          const label = (e.target.selectedOptions.item(0)?.parentElement as HTMLOptGroupElement).label;
-          if (label) setBiome(label as Biome);
-          onCreatureChange(e);
-        }}>
+        <select onChange={onCreatureChange}>
           {map(
             groupedCreatures,
             (group, gBiome: Biome) => group.length ? (
@@ -190,16 +253,16 @@ export function Combat() {
             ) : null
           )}
         </select>
-        {creature.maxLvl > 1 ?
+        {/*creature.maxLvl > 1 ?
           <>
             <br />
             <input id="star-0" type="radio" name="stars" value="0" checked={stars === 0} onChange={onStarsChange} /><label htmlFor="star-0">0⭐</label>
             <input id="star-1" type="radio" name="stars" value="1" checked={stars === 1} onChange={onStarsChange} /><label htmlFor="star-1">1⭐</label>
             <input id="star-2" type="radio" name="stars" value="2" checked={stars === 2} onChange={onStarsChange} /><label htmlFor="star-2">2⭐</label>
-          </> : null}
+        </> : null*/}
         <br />
         <label htmlFor="wet">
-          <input id="wet" type="checkbox" checked={forcedIsWet ?? isWet} disabled={forcedIsWet !== undefined} onChange={onChangeIsWet} />
+          <input id="wet" type="checkbox" checked={isWet} onChange={onChangeIsWet} />
           {' '}
           wet
         </label>

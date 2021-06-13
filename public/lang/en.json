@@ -485,7 +485,7 @@
     "gd_king": "The elder",
     "gd_king.tags": "ancient tree boss",
     "Blob": "Blob",
-    "Oozer": "Oozer",
+    "BlobElite": "Oozer",
     "Leech": "Leech",
     "Surtling": "Surtling",
     "Surtling.tags": "daemon demon",
@@ -522,7 +522,6 @@
     "Leviathan.tags": "kraken",
     
     "ui.search.placeholder": "Search for things...",
-    "ui.search.button": "Search",
 
     "ui.armor": "armor",
     "ui.attackMelee.combo": "hit combo",
@@ -626,6 +625,7 @@
     "ui.pieceType.stand": "stand",
     "ui.pieceType.structure": "structure",
     "ui.pieceType.table": "table",
+    "ui.player": "player",
     "ui.recipe": "recipe",
     "ui.regen": "regen",
     "ui.skill": "skill",
@@ -644,6 +644,7 @@
     "ui.skillType.Sneak": "Sneak",
     "ui.skillType.Run": "Run",
     "ui.skillType.Swim": "Swim",
+    "ui.skillType.None": "None",
     "ui.slot": "slot",
     "ui.slot.body": "body",
     "ui.slot.both": "2-hand",

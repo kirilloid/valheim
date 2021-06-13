@@ -453,7 +453,7 @@ export interface Weapon extends BaseItem {
   slot: 'primary' | 'both' | 'secondary' | 'bow' | 'either'
     | 'head' | 'shoulders' | 'body' | 'legs'
     | 'none' | 'util';
-  skill: Exclude<SkillType, SkillType.Blocking>;
+  skill: Exclude<SkillType, SkillType.Blocking> | null;
   special?: 'harpoon';
   toolTier?: number;
   damage: Pair<DamageProfile>;

@@ -140,6 +140,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'fireplace',
     tier: 0,
+    emoji: '🔥',
     piece: { target: 'random', water: false, notOnWood, onlyOnFlat, allowedInDungeons },
     comfort: { value: 1, group: 'fire', },
     fireplace: {
@@ -167,6 +168,8 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'fireplace',
     tier: 2,
+    emoji: '🔥',
+    piece: { target: 'random', water: false, notOnWood, onlyOnFlat, },
     wear: {
       hp: 300,
       damageModifiers: damageModifiersFireplace,
@@ -174,7 +177,6 @@ export const pieces: Piece[] = [
       noSupport: true,
       materialType: MaterialType.Wood,
     },
-    piece: { target: 'random', water: false, notOnWood, onlyOnFlat, },
     comfort: { value: 1, group: 'fire' },
     fireplace: {
       fuel: 'Wood',
@@ -198,6 +200,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'fireplace',
     tier: 3,
+    emoji: '🔥',
     piece: { target: 'primary', water: false, },
     comfort: { value: 2, group: 'fire' },
     fireplace: {
@@ -221,6 +224,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'misc',
     tier: 0,
+    emoji: '🪵',
     wear: {
       hp: 50,
       damageModifiers: damageModifiersWood,
@@ -239,6 +243,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'misc',
     tier: 0,
+    emoji: '🪨',
     piece: {
       target: 'random',
       water: undefined,
@@ -257,6 +262,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'craft',
     tier: 1,
+    emoji: '🍳',
     craft: {
       id: CraftingStation.CookingStation,
       requiresFire,
@@ -279,6 +285,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'craft',
     tier: 2,
+    emoji: '🍳',
     piece: {
       target: 'primary',
       water: false,
@@ -300,6 +307,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'craft',
     tier: 1,
+    emoji: '🧰',
     piece: {
       target: 'primary',
       water: false,
@@ -321,6 +329,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'craft_ext',
     tier: 1,
+    emoji: '🧰',
     piece: {
       target: 'primary',
       water: false,
@@ -344,6 +353,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'craft_ext',
     tier: 1,
+    emoji: '🧰',
     piece: {
       target: 'primary',
       water: false,
@@ -367,6 +377,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'craft_ext',
     tier: 2,
+    emoji: '🧰',
     piece: {
       target: 'primary',
       water: false,
@@ -390,6 +401,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'craft_ext',
     tier: 4,
+    emoji: '🧰',
     piece: {
       target: 'primary',
       water: false,
@@ -413,6 +425,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'craft',
     tier: 3,
+    emoji: '⚒️',
     piece: {
       target: 'primary',
       water: false,
@@ -437,6 +450,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'craft',
     tier: 5,
+    emoji: '🔬',
     piece: {
       target: 'primary',
       water: false,
@@ -460,6 +474,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'craft',
     tier: 2,
+    emoji: '🛠️',
     piece: {
       target: 'primary',
       water: false,
@@ -483,6 +498,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'craft_ext',
     tier: 2,
+    emoji: '🛠️',
     piece: {
       target: 'primary',
       water: false,
@@ -506,6 +522,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'craft_ext',
     tier: 2,
+    emoji: '🛠️',
     piece: {
       target: 'primary',
       water: false,
@@ -529,6 +546,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'craft_ext',
     tier: 2,
+    emoji: '🛠️',
     piece: {
       target: 'primary',
       water: false,
@@ -552,6 +570,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'craft_ext',
     tier: 3,
+    emoji: '🛠️',
     piece: {
       target: 'primary',
       water: false,
@@ -575,6 +594,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'craft_ext',
     tier: 3,
+    emoji: '🛠️',
     piece: {
       target: 'primary',
       water: false,
@@ -598,6 +618,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'craft_ext',
     tier: 4,
+    emoji: '🛠️',
     piece: {
       target: 'primary',
       water: false,
@@ -621,6 +642,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'craft',
     tier: 4,
+    emoji: '🔥',
     piece: {
       target: 'primary',
       water: false,
@@ -641,6 +663,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'craft',
     tier: 5,
+    emoji: '🔥',
     piece: {
       target: 'primary',
       water: false,
@@ -664,6 +687,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'craft',
     tier: 4,
+    emoji: '🔥',
     piece: {
       target: 'primary',
       water: false,
@@ -684,6 +708,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'craft',
     tier: 5,
+    emoji: '🔥',
     piece: {
       target: 'primary',
       water: false,
@@ -756,6 +781,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'structure',
     tier: 1,
+    emoji: '🚪',
     piece: { target: 'random', water: undefined, size: [2, 0, 2] },
     wear: woodStructureWear,
     recipe: woodStructureRecipe(4),
@@ -764,6 +790,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'structure',
     tier: 1,
+    emoji: '🚪',
     piece: { target: 'random', water: undefined, size: [2, 0, 3] },
     wear: woodStructureWear,
     recipe: woodStructureRecipe(12),
@@ -772,6 +799,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'structure',
     tier: 1,
+    emoji: '🪜',
     piece: { target: 'none', water: undefined, size: [2, 3, 1] },
     wear: woodStructureWear,
     recipe: woodStructureRecipe(2),
@@ -780,6 +808,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'structure',
     tier: 1,
+    emoji: '🪜',
     piece: { target: 'none', water: undefined, size: [2, 3, 1] },
     wear: woodStructureWear,
     recipe: woodStructureRecipe(2),
@@ -1076,6 +1105,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'bed',
     tier: 1,
+    emoji: '🛏️',
     piece: { target: 'primary', water: false, onlyOnFlat, size: [2, 1, 0.5] },
     comfort: { value: 1, group: 'bed' },
     wear: wearStructure(100, woodResist, MaterialType.Wood),
@@ -1085,6 +1115,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'bed',
     tier: 4,
+    emoji: '🛏️',
     piece: { target: 'primary', water: false, onlyOnFlat, size: [2, 2, 2] },
     comfort: { value: 2, group: 'bed' },
     wear: wearStructure(300, woodResist, MaterialType.Wood),
@@ -1123,6 +1154,7 @@ export const pieces: Piece[] = [
   { id: 'piece_chair',
     type: 'piece',
     subtype: 'chair',
+    emoji: '🪑',
     tier: 2,
     comfort: { value: 1, group: 'sit' },
     piece: { target: 'random', water: false, onlyOnFlat, size: [0.5, 0.5, 0.5] },
@@ -1133,6 +1165,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'chair',
     tier: 2,
+    emoji: '🪑',
     comfort: { value: 2, group: 'sit' },
     piece: { target: 'random', water: false, onlyOnFlat, size: [0.5, 0.5, 1] },
     wear: wearStructure(100, woodResist, MaterialType.Wood),
@@ -1142,6 +1175,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'chair',
     tier: 2,
+    emoji: '🛋️',
     comfort: { value: 1, group: 'sit' },
     piece: { target: 'random', water: false, onlyOnFlat, size: [2, 0.5, 0.5] },
     wear: wearStructure(100, woodResist, MaterialType.Wood),
@@ -1151,6 +1185,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'chair',
     tier: 3,
+    emoji: '🪑',
     comfort: { value: 3, group: 'sit' },
     piece: { target: 'random', water: false, onlyOnFlat, size: [1, 1, 1.5] },
     wear: wearStructure(250, woodResist, MaterialType.Wood),
@@ -1349,6 +1384,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'craft',
     tier: 1,
+    emoji: '🐝🏠',
     craft: { id: CraftingStation.BeeHive },
     piece: { target: 'primary', water: undefined, size: [0.5, 0.5, 0.5] },
     wear: { ...woodRoofStructureWear, hp: 100 },
@@ -1367,6 +1403,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'chest',
     tier: 1,
+    emoji: '🎁',
     space: [1, 1],
     piece: { target: 'none', water: false, onlyOnFlat, size: [0.5, 0.5, 0.5] },
     wear: wearStructure(10, mods([1, 1, 1, 1, 1, 1, 1, 0, 3, 3]), MaterialType.Wood, { noRoof: false }),
@@ -1376,6 +1413,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'chest',
     tier: 1,
+    emoji: '🎁',
     space: [1, 1],
     piece: { target: 'none', water: false, onlyOnFlat, size: [0.5, 0.5, 0.5] },
     wear: wearStructure(10, mods([1, 1, 1, 1, 1, 1, 1, 0, 3, 3]), MaterialType.Wood, { noRoof: false }),
@@ -1385,6 +1423,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'chest',
     tier: 1,
+    emoji: '🎁',
     space: [1, 1],
     piece: { target: 'none', water: false, onlyOnFlat, size: [0.5, 0.5, 0.5] },
     wear: wearStructure(10, mods([1, 1, 1, 1, 1, 1, 1, 0, 3, 3]), MaterialType.Wood, { noRoof: false }),
@@ -1393,6 +1432,7 @@ export const pieces: Piece[] = [
   { id: 'piece_xmastree', disabled: true,
     type: 'piece',
     tier: 1,
+    emoji: '🎄',
     subtype: 'decoration',
     comfort: { value: 1 },
     piece: { target: 'random', water: undefined, size: [1, 1, 2] },
@@ -1411,6 +1451,7 @@ export const pieces: Piece[] = [
   { id: 'piece_jackoturnip', disabled: true,
     type: 'piece',
     subtype: 'fireplace',
+    emoji: '🎃',
     tier: 1,
     fireplace: { fuel: 'Resin', capacity: 6, burnTime: 20000, minHeightAbove: 0.76, smoke: false, fireworks: false },
     piece: { target: 'primary', water: undefined, size: [0.5, 0.5, 0.5] },
@@ -1424,4 +1465,3 @@ pieces.forEach(p => {
     craftingStationIds[p.craft.id] = p.id;
   }
 });
-

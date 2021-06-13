@@ -14,15 +14,15 @@ import { durability, ItemSpecial, showPair } from './helpers';
 import { TranslationContext } from '../translation.effect';
 import { ItemHeader } from './ItemHeader';
 
-function skill(skill: SkillType) {
-  const str = SkillType[skill];
-  return str != null
+function skill(skill: SkillType | null) {
+  const str = skill && SkillType[skill];
+  return skill != null && str != null
     ? <>
         <SkillIcon skill={skill} useAlt={false} size={16} />
         {' '}
         {str}
       </>
-    : <em>none</em>;
+    : null;
 }
 
 function totalDamage(damage: DamageProfile): number {
@@ -39,7 +39,7 @@ function ShieldStats(props: { item: TShield, level?: number }) {
     <h2>{translate('ui.itemType.shield')}</h2>
     <dl>
       <dt>block</dt><dd><Icon id="armor" alt="" size={16} />{' '}{showPair(item.block, level)}</dd>
-      <dt>{translate('ui.skill')}</dt><dd>{skill(item.skill)}</dd>
+      <dt>{translate('ui.skill')}</dt><dd>{skill(item.skill) ?? <em>{translate('ui.skillType.None')}</em>}</dd>
       <dt>parry</dt><dd>{item.parryBonus}x</dd>
       <dt>{translate('ui.hands')}</dt><dd>{translate(`ui.slot.${item.slot}`)}</dd>
       <dt>{translate('ui.maxQuality')}</dt><dd><Icon id="star" alt="crafting" size={16} />{' '}{item.maxLvl}</dd>
@@ -57,7 +57,7 @@ function WeaponStats({ item, level }: { item: TWeapon, level?: number }) {
     <h2>{translate('ui.itemType.weapon')}</h2>
     <dl>
       <dt>{translate('ui.damage')}</dt><dd>{showPair([baseDmg, lvlDmg], level)}</dd>
-      <dt>{translate('ui.skill')}</dt><dd>{skill(item.skill)}</dd>
+      <dt>{translate('ui.skill')}</dt><dd>{skill(item.skill) ?? <em>{translate('ui.skillType.None')}</em>}</dd>
       <dt><Link to="/info/combat#backstab">backstab</Link></dt><dd>{item.backstab}×</dd>
       <dt>{translate('ui.hands')}</dt><dd>{translate(`ui.slot.${item.slot}`)}</dd>
       <dt>{translate('ui.maxQuality')}</dt><dd><Icon id="star" alt="" size={16} />{' '}{item.maxLvl}</dd>

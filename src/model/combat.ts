@@ -71,7 +71,11 @@ export function getTotalDamage(damage: DamageProfile): number {
   return Object.values(damage).reduce<number>((a, b) => a + (b ?? 0), 0);
 }
 
-type DamageOverTime = [total: number, time: number, period: number];
+type DamageOverTime = {
+  total: number;
+  time: number;
+  period: number;
+};
 
 export function doAttack(
   damage: DamageProfile,
@@ -84,11 +88,11 @@ export function doAttack(
   const resDamage = armor ? applyArmor(blockableDamage, armor) : blockableDamage;
   const { fire, spirit, ...rest } = multiplyDamage(derivedDamage, resDamage / blockableDamage);
   let overTime: Partial<Record<'fire' | 'spirit' | 'poison', DamageOverTime>> = {};
-  if (fire) overTime.fire = [fire, 5, 1];
-  if (spirit) overTime.spirit = [spirit, 3, 0.5];
+  if (fire) overTime.fire = { total: fire, time: 5, period: 1 };
+  if (spirit) overTime.spirit = { total: spirit, time: 3, period: 0.5 };
   if (poison) {
     const ttl = 1 + Math.floor(Math.sqrt((isPlayer ? 5 : 1) * poison));
-    overTime.poison = [poison, ttl, 1];
+    overTime.poison = { total: poison, time: ttl, period: 1 };
   }
   return { damage: rest, overTime };
 }
@@ -145,41 +149,47 @@ const wetModifyResistances = wetModifiers
   ? (damageModifiers: DamageModifiers): DamageModifiers => modifyResistances(damageModifiers, wetModifiers)
   : (damageModifiers: DamageModifiers): DamageModifiers => damageModifiers;
 
+export interface WeaponConfig {
+  item: Weapon;
+  level: number;
+  skill: number;
+  arrow: Arrow;
+}
+
 export function attackCreature(
-  weapon: Weapon,
-  level: number,
-  skillLvl: number,
+  { item, level, skill, arrow }: WeaponConfig,
   attack: Attack,
-  arrow: Arrow,
   creature: Creature,
   isWet: boolean,
   backstab: boolean,
 ) {
-  const weaponDamage = addDamage(weapon.damage[0], multiplyDamage(weapon.damage[1], level - 1));
-  const totalDamage = weapon.slot === 'bow'
+  const weaponDamage = addDamage(item.damage[0], multiplyDamage(item.damage[1], level - 1));
+  const totalDamage = item.slot === 'bow'
     ? addDamage(weaponDamage, arrow.damage)
     : weaponDamage;
   const damageModifiers = isWet
     ? wetModifyResistances(creature.damageModifiers)
     : creature.damageModifiers;
-  const skillRange = getWeaponSkillFactor(skillLvl);
-  const weaponAvg = (skillRange[0] + skillRange[1]) / 2;
+  const [skillMin, skillMax] = getWeaponSkillFactor(skill);
+  const skillAvg = (skillMin + skillMax) / 2;
   const { damage, overTime } = doAttack(totalDamage, damageModifiers, 0, false);
-  const singleHit = getTotalDamage(addDamage(damage, mapValues(overTime, d => d?.[0])));
+  const singleHit = getTotalDamage(addDamage(damage, mapValues(overTime, d => d?.total)));
 
-  const damageFixed = getTotalDamage(damage);
+  const damageFixed = getTotalDamage(damage) * skillAvg;
 
-  const { times, totalStamina, totalTime, comboTotal } = getAttackStats(weapon, attack, skillLvl);
+  const { times, totalStamina, totalTime, comboTotal } = getAttackStats(item, attack, skill);
+
+  const multiplier = attack.mul?.damage ?? 1;
+  const backstabBonus = backstab ? item.backstab : 1;
 
   let wastedDamage = 0;
   let overTimeTotal = 0;
-  function updateDamage(ot: DamageOverTime | undefined, isWet: boolean) {
-    if (ot == null) return;
+  function updateDamage(dot: DamageOverTime | undefined, skillMul: number, stack: boolean, extinguished: boolean) {
+    if (dot == null) return;
     for (const t of times) {
-      const [total, time, period] = ot;
-      const ticks = isWet
-        ? Math.round(1 / period)
-        : Math.ceil(t / period);
+      const total = dot.total * skillMul * (stack ? comboTotal : 1);
+      const { time, period } = dot;
+      const ticks = Math.ceil((extinguished ? 1 : t) / period);
       const maxTicks = Math.ceil(time / period);
       const inflicted = total / maxTicks * Math.min(ticks, maxTicks);
       overTimeTotal += inflicted;
@@ -188,20 +198,18 @@ export function attackCreature(
   }
 
   const { fire, spirit, poison } = overTime;
-  updateDamage(fire, isWet);
-  updateDamage(spirit, isWet);
-  updateDamage(poison, false);
+  updateDamage(fire, skillMax, true, isWet);
+  updateDamage(spirit, skillMax, true, isWet);
+  updateDamage(poison, skillAvg, false, false);
 
-  const multiplier = attack.mul?.damage ?? 1;
-  const backstabBonus = backstab ? weapon.backstab : 1;
-  const totalDamageNum = (damageFixed * comboTotal + overTimeTotal) * multiplier * weaponAvg;
+  const totalDamageNum = (damageFixed * comboTotal + overTimeTotal) * multiplier;
   const dpSec = totalDamageNum / totalTime;
   const dpSta = totalDamageNum / totalStamina;
   
   return {
     singleHit: [
-      skillRange[0] * singleHit * multiplier * backstabBonus,
-      skillRange[1] * singleHit * multiplier * backstabBonus,
+      skillMin * singleHit * multiplier * backstabBonus,
+      skillMax * singleHit * multiplier * backstabBonus,
     ] as Pair<number>,
     wasteRatio: wastedDamage / (wastedDamage + overTimeTotal),
     dpSec,

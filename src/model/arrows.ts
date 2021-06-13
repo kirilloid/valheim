@@ -81,7 +81,7 @@ export const arrows: Arrow[] = [
       number: 20,
     }
   },
-  { type: 'ammo', id: 'draugr_arrow', tier: -1, weight: 1, stack: 20,
+  /*{ type: 'ammo', id: 'draugr_arrow', tier: -1, weight: 1, stack: 20,
     damage: { pierce: 15 }, knockback: 35,
-  },
+  },*/
 ];  

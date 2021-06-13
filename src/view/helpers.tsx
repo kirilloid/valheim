@@ -31,7 +31,7 @@ export function showNumber(value: number): string {
   return value.toFixed(1).replace(/\.0$/, '');
 }
 
-export function ShortWeaponDamage({ damage, skill }: { damage: DamageProfile, skill: SkillType }) {
+export function ShortWeaponDamage({ damage, skill }: { damage: DamageProfile, skill: SkillType | null }) {
   const result: (JSX.Element | string)[] = [];
   if (damage.pickaxe) {
     result.push(
@@ -53,8 +53,8 @@ export function ShortWeaponDamage({ damage, skill }: { damage: DamageProfile, sk
   // elemental
   const { fire, frost, poison, lightning, spirit } = damage;
   const obj = { physical, fire, frost, poison, lightning, spirit };
+  if (skill) result.push(<SkillIcon skill={skill} useAlt size={16} />);
   result.push(
-    <SkillIcon skill={skill} useAlt size={16} />,
     ...Object.entries(obj)
       .filter(kv => kv[1])
       .map(kv => <span key={kv[0]} className={`damage--${kv[0]}`}>{kv[1]}</span>)
