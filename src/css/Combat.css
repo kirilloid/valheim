@@ -1,0 +1,77 @@
+.CombatCalc {
+  display: flex;
+  flex-direction: column;
+}
+
+.CompareBlock {
+  display: flex;
+  flex-direction: column;
+}
+.Weapon, .Attack {
+  flex: auto 0 1;
+  padding: 0.25em;
+}
+.Attack {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+@media screen and (min-width: 640px) {
+  .CompareBlock {
+    flex-direction: row;
+  }
+  .Weapon, .Attack {
+    flex: 480px 0 1;
+  }
+}
+
+
+.StatBar {
+  font-size: 1.5em;
+  border: 1px solid red;
+  background: #f88;
+  color: black;
+  padding: 0 0.25em;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+.StatBar--hits {
+  border-color: gray;
+  background: silver;
+}
+.StatBar--dpsta {
+  border-color: #cc8;
+  background: #ffc;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.5em;
+}
+
+.row__label,
+.row__input-primary,
+.row__input-secondary {
+  width: 100%;
+}
+.row__label .icon {
+  margin-left: 0.5em;
+}
+
+.BigInput {
+  min-width: 200px;
+}
+
+@media screen and (min-width: 480px) {
+  .row {
+    flex-direction: row;
+  }
+
+  .row__label { width: 25%; }
+  .row__label .icon { float: right; }
+  .row__input-primary { width: 50%; }
+  .row__input-secondary { width: 25%; }
+}

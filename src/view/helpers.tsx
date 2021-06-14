@@ -28,7 +28,9 @@ export function showPair(values: number | [number, number], level?: number): str
 }
 
 export function showNumber(value: number): string {
-  return value.toFixed(1).replace(/\.0$/, '');
+  return value < 100
+    ? value.toFixed(1).replace(/\.0$/, '')
+    : String(Math.round(value));
 }
 
 export function ShortWeaponDamage({ damage, skill }: { damage: DamageProfile, skill: SkillType | null }) {

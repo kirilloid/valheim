@@ -156,13 +156,19 @@ export interface WeaponConfig {
   arrow: Arrow;
 }
 
+export interface AttackStats {
+  singleHit: Pair<number>,
+  dpSec: number,
+  dpSta: number,
+}
+
 export function attackCreature(
   { item, level, skill, arrow }: WeaponConfig,
   attack: Attack,
   creature: Creature,
   isWet: boolean,
   backstab: boolean,
-) {
+): AttackStats {
   const weaponDamage = addDamage(item.damage[0], multiplyDamage(item.damage[1], level - 1));
   const totalDamage = item.slot === 'bow'
     ? addDamage(weaponDamage, arrow.damage)
@@ -210,8 +216,7 @@ export function attackCreature(
     singleHit: [
       skillMin * singleHit * multiplier * backstabBonus,
       skillMax * singleHit * multiplier * backstabBonus,
-    ] as Pair<number>,
-    wasteRatio: wastedDamage / (wastedDamage + overTimeTotal),
+    ],
     dpSec,
     dpSta,
   };
