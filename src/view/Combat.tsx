@@ -62,8 +62,12 @@ function serializeWeapon(weapon: WeaponConfig): string {
 }
 
 function getInitialState(params: string): CombatState {
-  const [creature, stat, weaponsStr] = params.split('-', 3);
-  const weapons = weaponsStr?.split('-or-').map(parseWeapon) ?? [];
+  const [creature, stat] = params.split('-', 2);
+  const weaponsStr = params.slice(
+    (creature?.length ?? 0) +
+    (stat?.length ?? 0) + 2
+  );
+  const weapons = weaponsStr.split('-or-').map(parseWeapon) ?? [];
   if (weapons.length === 0) {
     weapons.push(defaultWeapon);
   }

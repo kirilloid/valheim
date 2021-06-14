@@ -119,7 +119,7 @@ export function reducer(state: CombatState, action: Action): CombatState {
       return { ...state, weapons };
     }
     case REMOVE_WEAPON: {
-      const weapons = state.weapons.filter((_, i) => i === action.index);
+      const weapons = state.weapons.filter((_, i) => i !== action.index);
       return { ...state, weapons };
     }
     case CHANGE_SKILL: {
