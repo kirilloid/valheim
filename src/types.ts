@@ -13,13 +13,14 @@ export type Biome =
   | 'DeepNorth'
   | 'Ashlands';
 
-export type GameLocation = 
-  | 'DraugrVillage' | 'EikthyrAltar'
-  | 'ForestTower' | 'BurialChamber' | 'TrollCave' | 'ElderAltar'
+export type GameLocation = string;
+/*  | 'StoneCircle' | 'StartTemple'
+  | 'VikingVillage' | 'DraugrVillage' | 'EikthyrAltar'
+  | 'ForestTower' | 'BurialChamber' | 'TrollCave' | 'Trader' | 'ElderAltar'
   | 'SunkenCrypt' | 'FireGeyser' | 'SwampStoneCircle' | 'BonemassAltar'
   | 'MountainTower' | 'MountainCastle' | 'EggNest' | 'ModerAltar'
-  | 'GoblinVillage' | 'StoneHedge' | 'YagluthAltar'
-  ;
+  | 'GoblinVillage' | 'PlainsTower' | 'PlainsOutpost' | 'StoneHedge' | 'YagluthAltar'
+  ;*/
 
 export type Faction =
   | 'Players'
@@ -74,7 +75,15 @@ export type BiomeConfig = {
 
 export type LocationConfig = {
   id: GameLocation;
+  biome: Biome;
+  quantity: number;
+  isAltar: boolean;
   isDungeon: boolean;
+  isRuneStone: boolean;
+  canHaveVegvisir: boolean;
+  minApart: number;
+  altitude: [number, number];
+  distance: [number, number];
   creatures: Creature[];
   resources: EntityId[];
 }
@@ -293,6 +302,24 @@ export interface Ship extends BasePiece {
     waterLevelOffset: number;
     disableLevel: number;
   }
+}
+
+interface GameEventSpawn {
+  id: EntityId;
+  max: number;
+  group?: Pair<number>;
+  interval: number;
+  chance?: number;
+}
+
+export interface GameEvent {
+  id: EntityId;
+  biomes: Biome[];
+  killed: EntityId[];
+  notKilled: EntityId[];
+  duration: number;
+  spawns: GameEventSpawn[];
+  base: boolean;
 }
 
 interface GameObjectBase {
