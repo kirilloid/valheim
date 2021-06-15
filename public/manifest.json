@@ -1,25 +1,29 @@
 {
-  "short_name": "Valheim calculators",
+  "short_name": "Valheim calcs",
   "name": "Valheim calculators",
   "icons": [
     {
       "src": "favicon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
+    }
+  ],
+  "shortcuts": [
+    {
+      "short_name": "combat",
+      "name": "Combat calculator",
+      "description": "Calculate fight with any monster",
+      "url": "/combat"
     },
     {
-      "src": "logo192.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "logo512.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "short_name": "food",
+      "name": "food table",
+      "description": "Calculate fight with any monster",
+      "url": "/food"
     }
   ],
   "start_url": ".",
-  "display": "standalone",
+  "display": "minimal-ui",
   "theme_color": "#000000",
   "background_color": "#ffffff"
 }

@@ -1,0 +1,24 @@
+.FoodTable {
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.FoodTable input[type='radio'] {
+  vertical-align: middle;
+  margin-top: -1px;
+}
+
+.FoodTable__value {
+  text-align: center;
+}
+
+.FoodTable__extra {
+  display: none;
+}
+
+@media screen and (min-width: 640px) {
+  .FoodTable__extra {
+    display: inline;
+  }    
+}

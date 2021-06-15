@@ -116,8 +116,8 @@ export const resources: Item[] = [
       // TODO check the numbers
       num: [1, 2], group: [2, 3],
       respawn: 4 * HOUR } },
-  { type: 'food', id: 'MushroomBlue', emoji: '🍄🔵', tier: 2, weight: 0.1, stack: 50,
-    health: 20, stamina: 20, duration: 600, regen: 1, color: '#4be1e7ff' },
+/*  { type: 'food', id: 'MushroomBlue', emoji: '🍄🔵', tier: 2, weight: 0.1, stack: 50,
+    health: 20, stamina: 20, duration: 600, regen: 1, color: '#4be1e7ff' },*/
   { type: 'potion', id: 'MeadHealthMedium', emoji: '\u{1F9EA}', tier: 1, weight: 1, stack: 10,
     health: [75, 10], cooldown: 120,
     recipe: { time: FERMENT_TIME, materials: { Honey: 10, Bloodbag: 4, Raspberry: 10, Dandelion: 1 },
