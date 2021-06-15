@@ -67,17 +67,14 @@ export type Action = ReturnType<ActionCreators[keyof ActionCreators]>;
 
 const skills = new Map<SkillType | null, number>();
 
-function updateWeapon(state: WeaponConfig, item: Weapon): WeaponConfig {
-  const skill = skills.get(item.skill) ?? state.skill;
-  return { item, level: item.maxLvl, skill, arrow: state.arrow };
-}
-
 export const defaultWeapon: WeaponConfig = {
-  item: enabledItems[0]!,
+  item: enabledItems.find(w => w.id === 'Bow')!,
   level: 1,
   skill: 0,
-  arrow: arrows[0]!,
+  arrow: arrows[1]!,
 };
+
+export const defaultCreature = creatures.find(c => c.id === 'Greyling')!;
 
 export function reducer(state: CombatState, action: Action): CombatState {
   switch (action.type) {

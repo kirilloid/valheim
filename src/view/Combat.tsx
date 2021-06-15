@@ -12,7 +12,7 @@ import { locationToBiome } from '../model/location';
 import { attackCreature, AttackStats, WeaponConfig } from '../model/combat';
 import { TranslationContext } from '../translation.effect';
 import { Icon, ItemIcon, SkillIcon } from './Icon';
-import { Action, actionCreators, ActionCreators, CombatState, defaultWeapon, reducer, enabledItems, CombatStat } from '../model/combat.reducer';
+import { Action, actionCreators, ActionCreators, CombatState, defaultWeapon, reducer, enabledItems, CombatStat, defaultCreature } from '../model/combat.reducer';
 import { showNumber } from './helpers';
 
 const weaponGroups = groupBy(enabledItems, w => w.tier);
@@ -35,7 +35,7 @@ for (const creature of creatures) {
   for (const loc of creature.locations) {
     const biome = locationToBiome(loc);
     const group = groupedCreatures[biome];
-    if (!group.includes(creature)) {
+    if (group && !group.includes(creature)) {
       group.push(creature);
     }
   }
@@ -61,7 +61,17 @@ function serializeWeapon(weapon: WeaponConfig): string {
          + (weapon.item.slot === 'bow' ? `-${weapon.arrow.id}` : '')
 }
 
-function getInitialState(params: string): CombatState {
+function getInitialState(params: string | undefined): CombatState {
+  if (params == null) {
+    return {
+      weapons: [defaultWeapon],
+      creature: defaultCreature,
+      biome: 'Meadows',
+      backstab: false,
+      isWet: false,
+      stat: 'dps',
+    };
+  }
   const [creature, stat] = params.split('-', 2);
   const weaponsStr = params.slice(
     (creature?.length ?? 0) +
@@ -73,10 +83,7 @@ function getInitialState(params: string): CombatState {
   }
   return {
     weapons,
-    // shield: shields[0]!
-    // armor: 2,
-    // players: 1,
-    creature: creatures.find(c => c.id === creature) ?? creatures[0]!,
+    creature: creatures.find(c => c.id === creature) ?? defaultCreature,
     biome: 'Meadows',
     backstab: false,
     isWet: false,
@@ -217,7 +224,7 @@ function StatBar(props: {
 export function Combat() {
   const translate = useContext(TranslationContext);
   const history = useHistory();
-  const { params } = useParams<{ params: string }>();
+  const { params } = useParams<{ params?: string }>();
   const [state, dispatch] = useReducer(reducer, getInitialState(params));
   const {
     weapons,
