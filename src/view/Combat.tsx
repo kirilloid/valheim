@@ -1,4 +1,4 @@
-import React, { useContext, useReducer } from 'react';
+import React, { useContext, useReducer, useState } from 'react';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import { groupBy, map } from 'lodash-es';
 
@@ -41,8 +41,6 @@ for (const creature of creatures) {
   }
 }
 
-type UseCombatState = [CombatState, React.Dispatch<CombatState>];
-
 const weaponRegex = /(\w+)-(\d+)-(\d+)(?:-(\w+))?/;
 
 function parseWeapon(str: string): WeaponConfig {
@@ -62,7 +60,8 @@ function serializeWeapon(weapon: WeaponConfig): string {
 }
 
 function getInitialState(params: string | undefined): CombatState {
-  if (params == null) {
+  const match = params?.match(/^(wet-)?(unaware-)?(\w+)-(\w+)-/);
+  if (params == null || match == null) {
     return {
       weapons: [defaultWeapon],
       creature: defaultCreature,
@@ -72,11 +71,11 @@ function getInitialState(params: string | undefined): CombatState {
       stat: 'dps',
     };
   }
-  const [creature, stat] = params.split('-', 2);
-  const weaponsStr = params.slice(
-    (creature?.length ?? 0) +
-    (stat?.length ?? 0) + 2
-  );
+  
+  const isWet = match[1] != null;
+  const backstab = match[2] != null;
+  const [,,, creature, stat] = match;
+  const weaponsStr = params.slice(match[0]!.length);
   const weapons = weaponsStr.split('-or-').map(parseWeapon) ?? [];
   if (weapons.length === 0) {
     weapons.push(defaultWeapon);
@@ -85,43 +84,59 @@ function getInitialState(params: string | undefined): CombatState {
     weapons,
     creature: creatures.find(c => c.id === creature) ?? defaultCreature,
     biome: 'Meadows',
-    backstab: false,
-    isWet: false,
+    backstab,
+    isWet,
     stat: stat as CombatStat,
   };
 }
 
+interface SameWeaponConfig {
+  item: boolean;
+  level: boolean;
+  skillType: boolean;
+  skillLevel: boolean;
+  arrow: boolean;
+}
+
+function sameClass(isSame: boolean) {
+  return isSame ? 'weapon__item weapon__item--same' : 'weapon__item';
+}
+
 function WeaponBlock(props: {
-  weapon: WeaponConfig
-  index: number,
-  actionCreators: ActionCreators,
-  dispatch: React.Dispatch<Action>,
+  weapon: WeaponConfig;
+  index: number;
+  maxTier: number;
+  smart: boolean;
+  same: SameWeaponConfig;
+  actionCreators: ActionCreators;
+  dispatch: React.Dispatch<Action>;
   canDelete: boolean;
 }) {
-  const { weapon, index, actionCreators, dispatch, canDelete } = props;
+  const { weapon, index, maxTier, smart, same, actionCreators, dispatch, canDelete } = props;
   const { item, level, skill, arrow } = weapon;
   const { changeWeapon, changeLevel, changeSkill, changeArrow, removeWeapon } = actionCreators;
   const translate = useContext(TranslationContext);
   return <div className="Weapon">
-    <div className="row">
-      <div className="row__label">
+    <div className="row weapon">
+
+      <div className={`weapon__label ${sameClass(same.item && same.level)}`}>
         <label htmlFor={`weapon${index}`}>
           {translate('ui.itemType.weapon')}
         </label>
         <ItemIcon item={item} size={24} />
       </div>
-      <div className="row__input-primary">
+      <div className={`weapon__input-primary ${sameClass(same.item)}`}>
         <select id={`weapon${index}`}
           className="BigInput"
-          onChange={e => dispatch(changeWeapon(index, e.target.value))}
+          onChange={e => dispatch(changeWeapon(index, e.target.value, smart))}
           value={item.id}>
-          {map(weaponGroups, (group, tier) => (<optgroup label={`tier ${tier}`}>
+          {map(weaponGroups, (group, tier) => (<optgroup label={`tier ${tier}`} className={Number(tier) > maxTier ? 'disabled' : ''}>
             {group.map(w => <option key={w.id} value={w.id}>{translate(w.id)}</option>)}
           </optgroup>))}
         </select>
       </div>
-      {item.maxLvl > 1 && <div className="row__input-secondary">
-        <input type="number"
+      {item.maxLvl > 1 && <div className={`weapon__input-secondary ${sameClass(same.level)}`}>
+        <input type="number" inputMode="numeric" pattern="[0-9]*"
           min="1" max={item.maxLvl} value={level}
           onChange={e => dispatch(changeLevel(index, Number(e.target.value)))}
           style={{ width: '3em' }} />
@@ -129,27 +144,27 @@ function WeaponBlock(props: {
       </div>}
     </div>
     {item.slot === 'bow' &&
-    <div className="row">
-      <div className="row__label">
+    <div className="row weapon">
+      <div className={`weapon__label ${sameClass(same.arrow)}`}>
         <label htmlFor={`arrow${index}`}>
           {translate('ui.itemType.arrow')}
         </label>
         <ItemIcon item={arrow} size={24} />
       </div>
-      <div className="row__input-primary">
+      <div className={`weapon__input-primary ${sameClass(same.arrow)}`}>
         <select id={`arrow${index}`}
           className="BigInput"
           onChange={e => dispatch(changeArrow(index, e.target.value))} value={arrow.id}>
-          {arrows.map(a => <option key={a.id} value={a.id}>{translate(a.id)}</option>)}
+          {arrows.map(a => <option key={a.id} value={a.id} className={a.tier > maxTier ? 'disabled' : ''}>{translate(a.id)}</option>)}
         </select>
       </div>
     </div>}
-    {item.skill && <div className="row">
-      <div className="row__label">
+    {item.skill && <div className="row weapon">
+      <div className={`weapon__label ${sameClass(same.skillType)}`}>
         <label htmlFor={`skill${index}`}>{translate('ui.skill')}</label>
         <SkillIcon skill={item.skill} useAlt size={24} />
       </div>
-      <div className="row__input-primary">
+      <div className={`weapon__input-primary ${sameClass(same.skillLevel)}`}>
         <datalist id="skill">
           <option value="0" />
           <option value="10" />
@@ -166,19 +181,20 @@ function WeaponBlock(props: {
         <input type="range" id={`skill${index}`}
           className="BigInput"
           min="0" max="100" value={skill}
-          onChange={e => dispatch(changeSkill(item.skill!, Number(e.target.value)))}
+          onChange={e => dispatch(changeSkill(index, Number(e.target.value), smart))}
           list="skill" />
       </div>
-      <div className="row__input-secondary">
-        <input type="number" pattern="[0-9]+"
+      <div className={`weapon__input-secondary ${sameClass(same.skillLevel)}`}>
+        <input type="number" inputMode="numeric" pattern="[0-9]*"
           min="0" max="100" value={skill}
-          onChange={e => dispatch(changeSkill(item.skill!, Number(e.target.value)))}
+          onChange={e => dispatch(changeSkill(index, Number(e.target.value), smart))}
           style={{ width: '3em' }} />
       </div>
     </div>}
-    {canDelete && <div className="row">
-      <input type="button" value="delete" onClick={() => dispatch(removeWeapon(index))} />
-    </div>}
+    <input type="button" value="×" title="remove weapon"
+      className="weapon-btn weapon-btn--delete btn btn--lg btn--danger"
+      disabled={!canDelete}
+      onClick={() => dispatch(removeWeapon(index))} />
   </div>
 }
 
@@ -187,7 +203,7 @@ function pickStat(stats: AttackStats, stat: CombatStat, creature: Creature): num
     case 'single':
       return stats.singleHit[1];
     case 'hits':
-      return Math.ceil(creature.hp / stats.singleHit[0]);
+      return Math.ceil(creature.hp / stats.averageHit[0]);
     case 'dps':
       return stats.dpSec;
     case 'dpsta':
@@ -200,7 +216,11 @@ function showStat(stats: AttackStats, stat: CombatStat, creature: Creature): str
     case 'single':
       return stats.singleHit.map(showNumber).join(' – ');
     case 'hits':
-      return showNumber(Math.ceil(creature.hp / stats.singleHit[0]));
+      return [
+        creature.hp / stats.averageHit[1],
+        creature.hp / stats.averageHit[0],
+      ].map(x => showNumber(Math.ceil(x)))
+        .join(' – ');
     case 'dps':
       return showNumber(stats.dpSec);
     case 'dpsta':
@@ -226,13 +246,14 @@ export function Combat() {
   const history = useHistory();
   const { params } = useParams<{ params?: string }>();
   const [state, dispatch] = useReducer(reducer, getInitialState(params));
+  const [smart, setSmart] = useState(true);
   const {
     weapons,
     // armor, players,
     creature, biome, backstab, isWet,
     stat,
   } = state;
-  const path = `/combat/${creature.id}-${stat}-${weapons.map(serializeWeapon).join('-or-')}`;
+  const path = `/combat/${isWet ? 'wet-' : ''}${backstab ? 'unaware-' : ''}${creature.id}-${stat}-${weapons.map(serializeWeapon).join('-or-')}`;
   if (history.location.pathname !== path) {
     history.replace(path);
   }
@@ -255,73 +276,97 @@ export function Combat() {
   const attackStats = weapons.map(w => w.item.attacks.map(a => attackCreature(w, a, creature, isWet, backstab)));
   const maxStat = Math.max(...attackStats.flatMap(ws => ws.map(s => pickStat(s, stat, creature))));
 
+  const same = {
+    item: weapons.every(w => w.item === weapons[0]?.item),
+    level: weapons.every(w => w.level === weapons[0]?.level),
+    skillLevel: weapons.every(w => w.skill === weapons[0]?.skill),
+    skillType: weapons.every(w => w.item.skill === weapons[0]?.item.skill),
+    arrow: weapons.every(w => w.arrow === weapons[0]?.arrow),
+  };
+
   return (<>
-    <h1>Combat calculator</h1>
+    <h1>{translate('ui.page.combat')}</h1>
     <div className="CombatCalc">
-    <div>
+      <div className="CombatCalc__Creature">
         <h2>Creature</h2>
-        <select onChange={onCreatureChange} value={creature.id}>
-          {map(
-            groupedCreatures,
-            (group, gBiome: Biome) => group.length ? (
-              <optgroup key={gBiome} label={gBiome}>
-                {group.map(c => <option value={c.id} selected={creature === c && biome === gBiome}>{translate(c.id)}</option>)}
-              </optgroup>
-            ) : null
-          )}
-        </select>
-        <ItemIcon item={creature} size={24} />
-        {/*creature.maxLvl &&
-          <>
-            <br />
-            <input id="star-0" type="radio" name="stars" value="0" checked={stars === 0} onChange={onStarsChange} /><label htmlFor="star-0">0⭐</label>
-            <input id="star-1" type="radio" name="stars" value="1" checked={stars === 1} onChange={onStarsChange} /><label htmlFor="star-1">1⭐</label>
-            <input id="star-2" type="radio" name="stars" value="2" checked={stars === 2} onChange={onStarsChange} /><label htmlFor="star-2">2⭐</label>
-        </>*/}
-        <br />
-        <label htmlFor="wet">
-          <input id="wet" type="checkbox" checked={isWet} onChange={onChangeIsWet} />
-          {' '}
-          wet
-        </label>
-        {' '}
-        <span style={{ color: 'gray' }}>
-          (in water, not in rain)
-        </span>
-        <br />
-        <label htmlFor="backstab">
-          <input id="backstab" type="checkbox" checked={backstab} onChange={onChangeBackstab} />
-          {' '}
-          backstab
-        </label>
-        {' '}
-        <Link to="/info/combat#backatb">(?)</Link>
-      </div>
-      <div className="Player">
-        <h2>
-          {translate('ui.player')}
-          <select style={{ float: 'right' }} value={stat} onChange={onChangeStat}>
-            <option value="single">single hit</option>
-            <option value="hits">hits to kill</option>
-            <option value="dps">dmg/second</option>
-            <option value="dpsta">dmg/stamina</option>
+        <div className="row">
+          <select onChange={onCreatureChange} value={creature.id}>
+            {map(
+              groupedCreatures,
+              (group, gBiome: Biome) => group.length ? (
+                <optgroup key={gBiome} label={gBiome}>
+                  {group.map(c => <option value={c.id} selected={creature === c && biome === gBiome}>{translate(c.id)}</option>)}
+                </optgroup>
+              ) : null
+            )}
           </select>
-        </h2>
-        {weapons.map((w, i) => {
-          return <div className="CompareBlock">
-            <WeaponBlock weapon={w} key={i} index={i}
-              canDelete={weapons.length > 1}
-              actionCreators={actionCreators}
-              dispatch={dispatch} />
-            <div className="Attack">
-              {attackStats[i]!.map((stats, i) =>
-                <StatBar key={i} stats={stats} stat={stat} max={maxStat} creature={creature} />
-              )}
-            </div>
-          </div>;
-        })}
-        {<input type="button" value="add another"
-          onClick={() => dispatch(actionCreators.addWeapon())} />}
+          <ItemIcon item={creature} size={24} />
+          {/*creature.maxLvl &&
+            <>
+              <br />
+              <input id="star-0" type="radio" name="stars" value="0" checked={stars === 0} onChange={onStarsChange} /><label htmlFor="star-0">0⭐</label>
+              <input id="star-1" type="radio" name="stars" value="1" checked={stars === 1} onChange={onStarsChange} /><label htmlFor="star-1">1⭐</label>
+              <input id="star-2" type="radio" name="stars" value="2" checked={stars === 2} onChange={onStarsChange} /><label htmlFor="star-2">2⭐</label>
+          </>*/}
+        </div>
+        <div className="row">
+          <input id="wet" type="checkbox" checked={isWet} onChange={onChangeIsWet} />
+          <label htmlFor="wet">
+            {' '}
+            wet
+          </label>
+          {' '}
+          <span style={{ color: 'gray' }}>
+            (in water, not in rain)
+          </span>
+        </div>
+        <div className="row">
+          <input id="backstab" type="checkbox" checked={backstab} onChange={onChangeBackstab} />
+          <label htmlFor="backstab">
+            {' '}
+            backstab
+          </label>
+          {' '}
+          <Link to="/info/combat#backatb">(?)</Link>
+        </div>
+      </div>
+      <div className="CombatCalc__Player">
+        <div className="row PlayerHeader">
+          <h2 className="PlayerHeader__text">
+            {translate('ui.player')}
+          </h2>
+          <div className="PlayerHeader__stat">
+            <select value={stat} onChange={onChangeStat}>
+              <option value="single">single hit</option>
+              <option value="hits">hits to kill</option>
+              <option value="dps">dmg/second</option>
+              <option value="dpsta">dmg/stamina</option>
+            </select>
+          </div>
+        </div>
+        <div role="list">
+          {weapons.map((w, i) => {
+            return <div className="CompareBlock" role="listitem">
+              <WeaponBlock weapon={w} key={i} index={i}
+                smart={smart}
+                same={same}
+                maxTier={creature.tier}
+                canDelete={weapons.length > 1}
+                actionCreators={actionCreators}
+                dispatch={dispatch} />
+              <div className="Attack">
+                {attackStats[i]!.map((stats, i) =>
+                  <StatBar key={i} stats={stats} stat={stat} max={maxStat} creature={creature} />
+                )}
+              </div>
+            </div>;
+          })}
+        </div>
+        <div style={{ position: 'relative' }}>
+          <input type="button" value="+" title="add another weapon"
+            className="weapon-btn weapon-btn--add btn btn--lg btn--info"
+            onClick={() => dispatch(actionCreators.addWeapon())} />
+        </div>
         {/*item.slot === 'primary' && <label className="InputBlock">
           {translate('ui.itemType.shield')}
           <span className="InputBlock__Gap" />
@@ -334,7 +379,7 @@ export function Combat() {
           {translate('ui.armor')}
           <span className="InputBlock__Gap" />
           <Icon id="armor" alt="" size={24} />
-          <input type="number" pattern="[0-9]+" min="0" max="100" onChange={onArmorChange} value={armor} style={{ width: '3em' }} />
+          <input type="number" inputMode="numeric" pattern="[0-9]*" min="0" max="100" onChange={onArmorChange} value={armor} style={{ width: '3em' }} />
           <input type="range" min="0" max="100" onChange={onArmorChange} value={armor} className="BigInput" list="armor" />
           <datalist id="armor">
             <option value="2" label="Rag" />

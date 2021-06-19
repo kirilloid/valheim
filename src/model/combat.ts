@@ -158,6 +158,7 @@ export interface WeaponConfig {
 
 export interface AttackStats {
   singleHit: Pair<number>,
+  averageHit: Pair<number>,
   dpSec: number,
   dpSta: number,
 }
@@ -176,24 +177,27 @@ export function attackCreature(
   const damageModifiers = isWet
     ? wetModifyResistances(creature.damageModifiers)
     : creature.damageModifiers;
-  const [skillMin, skillMax] = getWeaponSkillFactor(skill);
+  const [skillMin, skillMax] = item.skill == null
+    ? [1, 2] // ooze bomb
+    : getWeaponSkillFactor(skill);
   const skillAvg = (skillMin + skillMax) / 2;
   const { damage, overTime } = doAttack(totalDamage, damageModifiers, 0, false);
   const singleHit = getTotalDamage(addDamage(damage, mapValues(overTime, d => d?.total)));
 
-  const damageFixed = getTotalDamage(damage) * skillAvg;
+  const damageFixed = getTotalDamage(damage);
 
   const { times, totalStamina, totalTime, comboTotal } = getAttackStats(item, attack, skill);
 
   const multiplier = attack.mul?.damage ?? 1;
-  const backstabBonus = backstab ? item.backstab : 1;
+  const backstabBonus = backstab && item.skill !== null ? item.backstab : 1;
 
   let wastedDamage = 0;
   let overTimeTotal = 0;
   function updateDamage(dot: DamageOverTime | undefined, skillMul: number, stack: boolean, extinguished: boolean) {
     if (dot == null) return;
+    const maxHit = comboTotal - times.length + 1;
     for (const t of times) {
-      const total = dot.total * skillMul * (stack ? comboTotal : 1);
+      const total = dot.total * skillMul * (stack && !extinguished ? maxHit : 1);
       const { time, period } = dot;
       const ticks = (extinguished ? 1 : t) / period;
       const maxTicks = Math.ceil(time / period);
@@ -208,14 +212,18 @@ export function attackCreature(
   updateDamage(spirit, skillMax, true, isWet);
   updateDamage(poison, skillAvg, false, false);
 
-  const totalDamageNum = (damageFixed * comboTotal + overTimeTotal) * multiplier;
+  const totalDamageNum = (damageFixed * skillAvg * comboTotal + overTimeTotal) * multiplier;
   const dpSec = totalDamageNum / totalTime;
   const dpSta = totalDamageNum / totalStamina;
   
   return {
     singleHit: [
-      skillMin * singleHit * multiplier * backstabBonus,
-      skillMax * singleHit * multiplier * backstabBonus,
+      singleHit * skillMin * multiplier * backstabBonus,
+      singleHit * skillMax * multiplier * backstabBonus,
+    ],
+    averageHit: [
+      (damageFixed * skillMin * comboTotal + overTimeTotal) * multiplier,
+      (damageFixed * skillMax * comboTotal + overTimeTotal) * multiplier,
     ],
     dpSec,
     dpSta,

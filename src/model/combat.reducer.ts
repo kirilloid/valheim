@@ -23,7 +23,7 @@ const CHANGE_CREATURE = 'CHANGE_CREATURE' as const;
 const changeCreature = (id: EntityId, biome: Biome) => ({ type: CHANGE_CREATURE, id, biome });
 
 const CHANGE_WEAPON = 'CHANGE_WEAPON' as const;
-const changeWeapon = (index: number, id: EntityId) => ({ type: CHANGE_WEAPON, index, id });
+const changeWeapon = (index: number, id: EntityId, smart: boolean) => ({ type: CHANGE_WEAPON, index, id, smart });
 
 const ADD_WEAPON = 'ADD_WEAPON' as const;
 const addWeapon = () => ({ type: ADD_WEAPON });
@@ -32,7 +32,7 @@ const REMOVE_WEAPON = 'REMOVE_WEAPON' as const;
 const removeWeapon = (index: number) => ({ type: REMOVE_WEAPON, index });
 
 const CHANGE_SKILL = 'CHANGE_SKILL' as const;
-const changeSkill = (skill: SkillType, level: number) => ({ type: CHANGE_SKILL, skill, level });
+const changeSkill = (index: number, level: number, smart: boolean) => ({ type: CHANGE_SKILL, index, level, smart });
 
 const CHANGE_LEVEL = 'CHANGE_LEVEL' as const;
 const changeLevel = (index: number, level: number) => ({ type: CHANGE_LEVEL, index, level });
@@ -120,10 +120,16 @@ export function reducer(state: CombatState, action: Action): CombatState {
       return { ...state, weapons };
     }
     case CHANGE_SKILL: {
-      const { skill, level } = action;
+      const { index, level, smart } = action;
+      const { skill } = state.weapons[index]!.item;
       skills.set(skill, level);
-      const weapons = state.weapons.map(w => w.item.skill === skill ? ({ ...w, skill: level }) : w);
-      return { ...state, weapons };
+      if (smart) {
+        const weapons = state.weapons.map(w => w.item.skill === skill ? ({ ...w, skill: level }) : w);
+        return { ...state, weapons };
+      } else {
+        const weapons = state.weapons.map((w, i) => i === index ? ({ ...w, skill: level }) : w);
+        return { ...state, weapons };
+      }
     }
     case CHANGE_LEVEL: {
       const { index, level } = action;

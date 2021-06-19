@@ -5,6 +5,13 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* background-image: url('../img/debug_grid_16.png'); */
+
+  --color-primary: #007bff;
+  --color-secondary: #6c757d;
+  --color-warning: #ffc107;
+  --color-danger: #dc3545;
 }
 
 #root {
@@ -15,6 +22,52 @@ body {
 select,
 input {
   font-size: 1em;
+  height: 1.5em;
+  box-sizing: border-box;
+}
+
+input[type='checkbox'] {
+  height: auto;
+}
+
+label {
+  font-weight: bold;
+}
+
+.btn {
+  cursor: pointer;
+  border: 0 solid black;
+  background-color: var(--color-secondary);
+  border-radius: 0.25em;
+}
+
+.btn--info {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.btn--danger {
+  background-color: var(--color-danger);
+  color: white;
+}
+
+.btn--sm {
+  height: 1.5rem;
+  font-size: 0.8em;
+  padding-inline: 0.75em;
+}
+
+.btn--lg {
+  height: 2.5rem;
+  font-size: 1.333rem;
+  padding-inline: 1rem;
+}
+
+.btn:disabled {
+  background-color: silver;
+  color: gray;
+  border-color: gray;
+  cursor: default;
 }
 
 code {
