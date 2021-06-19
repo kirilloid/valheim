@@ -13,6 +13,8 @@ import { GameObject } from './view/GameObject';
 import { Info } from './view/Info';
 import { Combat } from './view/Combat';
 import { FoodTable } from './view/FoodTable';
+import { Location } from './view/Location';
+import { Biome } from './view/Biome';
 import { TranslationContext, useTranslation } from './translation.effect';
 
 function App() {
@@ -30,6 +32,8 @@ function App() {
             <Route exact path="/ships" children={<Ship />} />
             <Route path="/obj/:id/:level" children={<GameObject />} />
             <Route path="/obj/:id" children={<GameObject />} />
+            <Route path="/loc/:id" children={<Location />} />
+            <Route path="/biome/:id" children={<Biome />} />
             <Route path="/info/:id" children={<Info />} />
           </Switch>
         </Router>

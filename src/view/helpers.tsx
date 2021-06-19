@@ -3,10 +3,11 @@ import React, { useContext } from 'react';
 import {
   AttackProfile,
   Biome,
+  Creature,
   DamageModifier,
   DamageModifiers,
   DamageProfile,
-  GameLocation,
+  GameLocationId,
   ItemSpecial as TItemSpecial
 } from '../types';
 import { SkillIcon } from './Icon';
@@ -69,7 +70,8 @@ export const toPrecision = (precision: number, value: number): string => {
   return String(Number(value.toPrecision(precision)));
 };
 
-export const averageAttacksDamage = (attacks: AttackProfile[]) => {
+export const averageAttacksDamage = (creature: Creature) => {
+  const attacks = creature.attacks.flatMap(a => a.attacks);
   let nr = 0;
   let total = 0;
   for (const attack of attacks) {
@@ -144,12 +146,13 @@ export function yesNo(arg?: boolean) {
   return arg ? '✔️' : '❌';
 }
 
-export function Area({ area }: { area: Biome | GameLocation }) {
+export function Area({ area }: { area: Biome | GameLocationId }) {
   const translate = useContext(TranslationContext);
   if (area in locationBiomes) {
     return <>
       <Link to={`/loc/${area}`}>{translate(`ui.location.${area}`)}</Link>
-      (<Link to={`/loc/${area}`}>{translate(`ui.biome.${locationBiomes[area as GameLocation]}`)}</Link>)
+      {' '}
+      (<Link to={`/loc/${area}`}>{translate(`ui.biome.${locationBiomes[area as GameLocationId]}`)}</Link>)
     </>;
   } else {
     return <Link to={`/loc/${area}`}>{translate(`ui.biome.${area}`)}</Link>;

@@ -13,7 +13,7 @@ export type Biome =
   | 'DeepNorth'
   | 'Ashlands';
 
-export type GameLocation = string;
+export type GameLocationId = string;
 /*  | 'StoneCircle' | 'StartTemple'
   | 'VikingVillage' | 'DraugrVillage' | 'EikthyrAltar'
   | 'ForestTower' | 'BurialChamber' | 'TrollCave' | 'Trader' | 'ElderAltar'
@@ -69,18 +69,16 @@ export type BiomeConfig = {
   id: Biome;
   active: boolean;
   tier: number;
-  locations: GameLocation[];
+  locations: GameLocationId[];
   creatures: Creature[];
   resources: EntityId[];
 }
 
 export type LocationConfig = {
-  id: GameLocation;
+  id: GameLocationId;
   biome: Biome;
   quantity: number;
-  isAltar: boolean;
-  isDungeon: boolean;
-  isRuneStone: boolean;
+  type: 'altar' | 'dungeon' | 'runestone' | 'misc';
   canHaveVegvisir: boolean;
   minApart: number;
   altitude: [number, number];
@@ -174,7 +172,7 @@ export interface Creature extends GameObjectBase {
   upgradeDistance?: number;
   nightOnly?: true;
   faction: Faction;
-  locations: (Biome | GameLocation)[];
+  locations: (Biome | GameLocationId)[];
   hp: number;
   staggerFactor: number;
   staggerBlocked: boolean;
@@ -362,7 +360,7 @@ interface BaseItem extends GameObjectBase {
     number?: number;
   } | {
     type: 'grow';
-    locations: (Biome | GameLocation)[];
+    locations: (Biome | GameLocationId)[];
     abundance: number;
     num: Pair<number>;
     group: Pair<number>;

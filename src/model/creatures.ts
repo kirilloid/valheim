@@ -212,7 +212,7 @@ export const creatures: Creature[] = [
     maxLvl: 3,
     emoji: '💀',
     faction: 'Undead',
-    locations: ['Crypt', 'StoneTowerRuinsBF', 'StoneTowerRuinsM', 'Swamp'],
+    locations: ['Crypt', 'Swamp', 'StoneTowerRuins'],
     attacks: [
       { variety: 'sword', attacks: [{ dmg: { slash: 25 }, name: 'sword' }] },
       { variety: 'mace', attacks: [{ dmg: { blunt: 25 }, name: 'mace' }] },
@@ -278,7 +278,7 @@ export const creatures: Creature[] = [
     maxLvl: 3,
     emoji: '',
     faction: 'ForestMonsters',
-    locations: ['BlackForest', 'StoneTowerRuinsBF', 'Greydwarf_camp'],
+    locations: ['BlackForest', 'StoneTowerRuins', 'Greydwarf_camp'],
     attacks: single([
       { dmg: { slash: 14 }, name: 'hit' },
       { dmg: { blunt: 10 }, name: 'stone' },
@@ -303,7 +303,7 @@ export const creatures: Creature[] = [
     nightOnly,
     emoji: '',
     faction: 'ForestMonsters',
-    locations: ['BlackForest', 'StoneTowerRuinsBF', 'Greydwarf_camp'],
+    locations: ['BlackForest', 'StoneTowerRuins', 'Greydwarf_camp'],
     attacks: single([
       { dmg: { poison: 25 }, name: 'poison breath' },
       { dmg: { slash: 14 }, name: 'slash' },
@@ -328,7 +328,7 @@ export const creatures: Creature[] = [
     upgradeDistance: 2000,
     emoji: '',
     faction: 'ForestMonsters',
-    locations: ['BlackForest', 'StoneTowerRuinsBF', 'Greydwarf_camp'],
+    locations: ['BlackForest', 'StoneTowerRuins', 'Greydwarf_camp'],
     attacks: single([
       { dmg: { slash: 30 }, name: 'bite' },
     ]),
@@ -567,7 +567,7 @@ export const creatures: Creature[] = [
     maxLvl: 3,
     emoji: '🧟',
     faction: 'Undead',
-    locations: ['Swamp', 'SwampRuin', 'SunkenCrypt', 'StoneTowerRuinsM'],
+    locations: ['Swamp', 'SwampRuin', 'SunkenCrypt', 'StoneTowerRuins'],
     attacks: [
       { variety: 'axe',
         attacks: [{ dmg: { slash: 48, chop: 15 }, name: 'axe', force: 60 }],

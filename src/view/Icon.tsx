@@ -50,7 +50,7 @@ export function SkillIcon(props: SkillIconProps) {
 }
 
 type ItemIconProps = {
-  item?: GameObject;
+  item: GameObject | undefined;
   useAlt?: boolean;
   size?: number;
 }

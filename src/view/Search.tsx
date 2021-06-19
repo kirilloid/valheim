@@ -5,7 +5,7 @@ import { createSelector } from 'reselect';
 import '../css/Search.css';
 
 import { DamageType, EntityId, ItemSpecial, Piece } from '../types';
-import { match } from '../model/search';
+import { match, SearchEntry } from '../model/search';
 import { Icon, ItemIcon, SkillIcon } from './Icon';
 import { data } from '../model/objects';
 import { TranslationContext, Translator } from '../translation.effect';
@@ -74,13 +74,30 @@ function showSpecialIcon(special: ItemSpecial, translate: Translator) {
   }
 }
 
-function renderItem(id: EntityId, text: string, translate: Translator, onClick: React.MouseEventHandler) {
+function renderItem(entry: SearchEntry, text: string, translate: Translator, onClick: React.MouseEventHandler) {
+  switch (entry.type) {
+    case 'obj': return renderObject(entry.id, text, translate, onClick);
+    case 'page': return renderLink('/', entry, text, onClick);
+    case 'loc': return renderLink('/loc/', entry, text, onClick);
+    case 'biome': return renderLink('/biome/', entry, text, onClick);
+    default: return assertNever(entry.type);
+  }
+}
+
+function renderLink(path: string, entry: SearchEntry, text: string, onClick: React.MouseEventHandler) {
+  const { id } = entry;
+  return <Link to={`${path}${id}`} onClick={onClick}>{text}</Link>
+}
+
+function renderObject(id: EntityId, text: string, translate: Translator, onClick: React.MouseEventHandler) {
   const item = data[id];
-  if (!item) { return "Something went wrong" }
-  switch (item?.type) {
+  if (!item) {
+    return <span className="danger">Item "{id}" appears in search index, but missing from the main DB</span>
+  }
+  switch (item.type) {
     case 'creature': {
       const { hp } = item;
-      const avgDmg = averageAttacksDamage(item.attacks.flatMap(a => a.attacks));
+      const avgDmg = averageAttacksDamage(item);
       return <div className="SearchItem">
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
@@ -206,7 +223,7 @@ const PER_PAGE = 30;
 
 const searchSelector = createSelector((term: string) => term, (term: string) => [...match(term)]);
 const arraySliceSelector = createSelector(
-  ({ items }: { items: string[] }) => items,
+  ({ items }: { items: SearchEntry[] }) => items,
   ({ len }: { len: number }) => len,
   (items, len) => items.slice(0, len),
 );
@@ -265,9 +282,11 @@ export const Search = () => {
         break;
       case 'Enter':
         e.preventDefault();
-        const path = `/obj/${items[index]}`;
+        const item = items[index];
+        if (!item) break;
+        const { id, path } = item;
         clearSearch();
-        history.push(path);
+        history.push(path + id);
         break;
     }
   }
@@ -288,13 +307,13 @@ export const Search = () => {
       </div>
       {items.length
       ? <ul className="SearchResults" aria-activedescendant={`gs_i${index}`}>
-          {itemsToDisplay.map((id, i) => {
-            const text = translate(id);
+          {itemsToDisplay.map((entry, i) => {
+            const text = translate(entry.i18nKey);
             return (
-              <li id={`gs_i${i}`} key={id}
+              <li id={`gs_i${i}`} key={`${entry.type}_${entry.id}`}
                 className={i === index ? 'active' : ''}
                 tabIndex={0}>
-                {renderItem(id, text, translate, clearSearch)}
+                {renderItem(entry, text, translate, clearSearch)}
               </li>
             );
           })}

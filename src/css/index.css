@@ -131,3 +131,7 @@ article *.active {
 .damage--poison { color: #0c0; }
 .damage--lightning { color: cyan; }
 .damage--spirit { color: lightslategray; }
+
+table .value {
+  text-align: right;
+}

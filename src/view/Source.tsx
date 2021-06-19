@@ -11,6 +11,7 @@ import { getCraftingStationId } from '../model/building';
 import { useGlobalState } from '../globalState.effect';
 import { resourceBuildMap, resourceCraftMap } from '../model/resource-usage';
 import { SkillType } from '../model/skills';
+import { Area } from './helpers';
 
 const source: Record<EntityId, EntityId[]> = {};
 for (const { id, drop } of creatures) {
@@ -178,7 +179,7 @@ export function Recipe({ item }: { item: Item | Piece}) {
       </dl>;
     case 'grow':
       return <>
-        Grows in {recipe.locations.join(', ')}, {recipe.respawn ? `respawns every ${timeI2S(recipe.respawn)}` : 'does not respawn'}
+        Grows in {recipe.locations.map(loc => <Area area={loc} />)}, {recipe.respawn ? `respawns every ${timeI2S(recipe.respawn)}` : 'does not respawn'}
       </>;
     case 'craft_upg': {
       const { station, level } = recipe.source;
