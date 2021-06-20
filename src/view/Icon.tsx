@@ -67,14 +67,17 @@ export function ItemIcon(props: ItemIconProps) {
     />;
   }
   const { type, id } = item;
-  return <img
-    key={id}
-    className="icon"
-    src={`/icons/${iconType(type)}/${id}.png`}
-    alt={useAlt ? translate(id) : ''}
-    width={size}
-    height={size}
-  />;
+  const path = `/icons/${iconType(type)}/${id}`;
+  return <picture key={id}>
+    <source srcSet={`${path}.webp`} type="image/webp" />
+    <img
+      className="icon"
+      src={`${path}.png`}
+      alt={useAlt ? translate(id) : ''}
+      width={size}
+      height={size}
+    />
+  </picture>;
 }
 
 type IconProps =
