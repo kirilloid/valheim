@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import { Tool as TTool } from '../types';
 import { Icon } from './Icon';
 import { RecipeSection } from './Source';
-import { durability } from './helpers';
+import { durability, yesNo } from './helpers';
 import { TranslationContext } from '../translation.effect';
 import { ItemHeader } from './ItemHeader';
 
@@ -19,7 +19,7 @@ export function Tool({ item, level }: { item: TTool, level?: number }) {
           <dt>{translate('ui.maxQuality')}</dt><dd><Icon id="star" size={16} alt="" />{' '}{item.maxLvl}</dd>
           <dt title="tools loose 1 durability point per use">durability</dt><dd>{durability(item.durability, level)}</dd>
           <dt>{translate('ui.weight')}</dt><dd><Icon id="weight" size={16} alt="" />{' '}{item.weight}</dd>
-          <dt>{translate('ui.floats')}</dt><dd>{item.floating ? '✔️' : '❌'}</dd>
+          <dt>{translate('ui.floats')}</dt><dd>{yesNo(item.floating)}</dd>
         </dl>
       </section>
       <section>

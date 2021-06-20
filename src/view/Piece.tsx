@@ -7,7 +7,7 @@ import { assertNever, GAME_DAY, timeI2S } from '../model/utils';
 import { TranslationContext } from '../translation.effect';
 
 import { ItemType, MaterialType, Piece as TPiece } from '../types';
-import { Resistances } from './helpers';
+import { Resistances, yesNo } from './helpers';
 import { ItemIcon } from './Icon';
 import { ItemHeader } from './ItemHeader';
 import { Recipe } from './Source';
@@ -24,15 +24,15 @@ function PieceSpecific({ item }: { item: TPiece }) {
         <dt>burn time</dt><dd>{timeI2S(burnTime)}</dd>
         <dt>total burn time</dt><dd>{timeI2S(totalTime)} = {(totalTime / GAME_DAY).toPrecision(2)} days</dd>
         <dt>min height to cover</dt><dd>{minHeightAbove}m</dd>
-        <dt>smoke</dt><dd>{smoke ? '✔️' : '❌'}</dd>
-        <dt>fireworks</dt><dd>{fireworks ? '✔️' : '❌'}</dd>
+        <dt>smoke</dt><dd>{yesNo(smoke)}</dd>
+        <dt>fireworks</dt><dd>{yesNo(fireworks)}</dd>
       </dl>);
     }
     case 'craft': {
       const { requiresFire, requiresRoof, buildRange, queueSize } = item.craft;
       return (<dl>
-        <dt>requires fire</dt><dd>{requiresFire ? '✔️' : '❌'}</dd>
-        <dt>requires roof</dt><dd>{requiresRoof ? '✔️' : '❌'}</dd>
+        <dt>requires fire</dt><dd>{yesNo(requiresFire)}</dd>
+        <dt>requires roof</dt><dd>{yesNo(requiresRoof)}</dd>
         {buildRange ? <><dt>building radius</dt><dd>{buildRange}m</dd></> : null}
         {queueSize ? <><dt>queued</dt><dd>{queueSize}</dd></> : null}
       </dl>);
@@ -41,8 +41,8 @@ function PieceSpecific({ item }: { item: TPiece }) {
       const { id, distance, requiresFire, requiresRoof } = item.extends;
       return (<dl>
         <dt>extends</dt><dd>{translate(getCraftingStationId(id))}</dd>
-        <dt>requires fire</dt><dd>{requiresFire ? '✔️' : '❌'}</dd>
-        <dt>requires roof</dt><dd>{requiresRoof ? '✔️' : '❌'}</dd>
+        <dt>requires fire</dt><dd>{yesNo(requiresFire)}</dd>
+        <dt>requires roof</dt><dd>{yesNo(requiresRoof)}</dd>
         <dt>max distance</dt><dd>{distance}m</dd>
       </dl>);
     }
@@ -119,7 +119,7 @@ export function Piece({ item }: { item: TPiece }) {
           <dt>health</dt><dd>{hp}</dd>
           <Resistances mods={damageModifiers} />
           <dt>target</dt><dd>{translate(`ui.pieceTarget.${target}`)}</dd>
-          <dt>degrades w/o roof</dt><dd>{noRoof ? '✔️' : '❌'}</dd>
+          <dt>degrades w/o roof</dt><dd>{yesNo(noRoof)}</dd>
           {specialReqs.length ? <><dt>specific</dt><dd>{specialReqs.join(', ')}</dd></> : null}
           {requiredSpace ? <><dt>required space</dt><dd>{requiredSpace}</dd></> : null}
           {size ? <><dt>size</dt><dd>{size.filter(Boolean).join('x')}</dd></> : null}

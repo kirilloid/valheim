@@ -1,4 +1,6 @@
-export const chestDrops = {
+import type { GeneralDrop } from '../types';
+
+export const chestDrops: Record<string, GeneralDrop> = {
   blackforest: {
     num: [2, 4],
     options: [

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { TranslationContext } from '../translation.effect';
 
 import type { Armor as TArmor } from '../types';
-import { durability, ItemSpecial, showPair } from './helpers';
+import { durability, ItemSpecial, showPair, yesNo } from './helpers';
 import { Icon } from './Icon';
 import { ItemHeader } from './ItemHeader';
 import { RecipeSection } from './Source';
@@ -29,7 +29,7 @@ export function Armor({ item, level }: { item: TArmor, level?: number }) {
         <h2>{translate('ui.itemType.resource')}</h2>
         <dl>
           <dt>{translate('ui.weight')}</dt><dd><Icon id="weight" alt="" size={16} />{' '}{item.weight}</dd>
-          <dt>{translate('ui.floats')}</dt><dd>{item.floating ? '✔️' : '❌'}</dd>
+          <dt>{translate('ui.floats')}</dt><dd>{yesNo(item.floating)}</dd>
         </dl>
       </section>
       <RecipeSection item={item} />

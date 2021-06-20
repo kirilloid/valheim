@@ -6,7 +6,7 @@ import { TranslationContext } from '../translation.effect';
 import { data } from '../model/objects';
 import { creatures } from '../model/creatures';
 import { Icon, ItemIcon, SkillIcon } from './Icon';
-import { timeI2S } from '../model/utils';
+import { assertNever, timeI2S } from '../model/utils';
 import { getCraftingStationId } from '../model/building';
 import { useGlobalState } from '../globalState.effect';
 import { resourceBuildMap, resourceCraftMap } from '../model/resource-usage';
@@ -158,49 +158,45 @@ export function Recipe({ item }: { item: Item | Piece}) {
   const translate = useContext(TranslationContext);
   const { recipe } = item;
   if (recipe == null) return null;
-  if ('value' in recipe) {
-    return <>
-      Bought from <Link to="/info/trader">trader</Link> for {recipe.value} <Icon id="coin" alt={translate('Coins')} size={16} />
-    </>;
+  switch (recipe.type) {
+    case 'trader':
+      return <>
+        Bought from <Link to="/info/trader">trader</Link> for {recipe.value} <Icon id="coin" alt={translate('Coins')} size={16} />
+      </>;
+    case 'craft_one':
+      const { station } = recipe.source;
+      const { number, materials, time } = recipe;
+      return <dl>
+        <dt>station</dt><dd><Station station={station} /></dd>
+        <dt>{translate('ui.time')}</dt><dd>{timeI2S(time)}</dd>
+        <dt>resources</dt><dd>{
+        Object.keys(materials).length
+          ? <Materials materials={materials} />
+          : 'for free'
+        }</dd>
+        {number === 1 ? null : <><dt>quantity</dt><dd>{number}</dd></>} 
+      </dl>;
+    case 'grow':
+      return <>
+        Grows in {recipe.locations.join(', ')}, {recipe.respawn ? `respawns every ${timeI2S(recipe.respawn)}` : 'does not respawn'}
+      </>;
+    case 'craft_upg': {
+      const { station, level } = recipe.source;
+      return <>
+        Crafted in <Station station={station} /> {level ? `lvl ${level}` : ''} using:{' '}
+        <Materials
+          materials={recipe.materials}
+          materialsUp={recipe.materialsPerLevel}
+          maxLvl={(item as any).maxLvl} />
+      </>;
+    }
+    case 'craft_piece':
+      return <>
+        Built near <Station station={recipe.station} /> using: <Materials materials={recipe.materials} />
+      </>
+    default:
+      return assertNever(recipe);
   }
-  if ('number' in recipe) {
-    const { station } = recipe.source;
-    const { number, materials, time } = recipe;
-    return <dl>
-      <dt>station</dt><dd><Station station={station} /></dd>
-      <dt>{translate('ui.time')}</dt><dd>{timeI2S(time)}</dd>
-      <dt>resources</dt><dd>{
-      Object.keys(materials).length
-        ? <Materials materials={materials} />
-        : 'for free'
-      }</dd>
-      {number === 1 ? null : <><dt>quantity</dt><dd>{number}</dd></>} 
-    </dl>
-  }
-  if ('locations' in recipe) {
-    return <>
-      Grows in {recipe.locations.join(', ')}, {recipe.respawn ? `respawns every ${timeI2S(recipe.respawn)}` : 'does not respawn'}
-    </>
-  }
-  if ('source' in recipe) {
-    const { station, level } = recipe.source;
-    return <>
-      Crafted in {level
-        ? <><Station station={station} /> lvl {level}</>
-        : <Icon path="skills/Unarmed" alt="" />} using:{' '}
-      <Materials
-        materials={recipe.materials}
-        materialsUp={recipe.materialsPerLevel}
-        maxLvl={(item as any).maxLvl} />
-    </>
-  }
-  return item.type === 'piece'
-    ? <>
-      Built near <Station station={recipe.station} /> using: <Materials materials={recipe.materials} />
-    </>
-    : <>
-      Crafted in <Station station={recipe.station} /> using: <Materials materials={recipe.materials} />
-    </>
 }
 
 

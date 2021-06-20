@@ -10,6 +10,7 @@ export const tools: Tool[] = [
     maxLvl: 3,
     durability: [100, 100],
     recipe: {
+      type: 'craft_upg',
       time: 4,
       materials: { Wood: 3, Stone: 2 },
       materialsPerLevel: { Wood: 1, Stone: 1 },
@@ -26,6 +27,7 @@ export const tools: Tool[] = [
     maxLvl: 3,
     durability: [200, 200],
     recipe: {
+      type: 'craft_upg',
       time: 4,
       materials: { Wood: 5, Stone: 2 },
       materialsPerLevel: { Wood: 1, Stone: 1 },
@@ -42,6 +44,7 @@ export const tools: Tool[] = [
     maxLvl: 3,
     durability: [200, 200],
     recipe: {
+      type: 'craft_upg',
       time: 4,
       materials: { RoundLog: 5, Bronze: 5 },
       materialsPerLevel: { RoundLog: 1, Bronze: 1 },
@@ -58,6 +61,6 @@ export const tools: Tool[] = [
     floating: true,
     maxLvl: 1,
     durability: [Infinity, 0],
-    recipe: { value: 350 }
+    recipe: { type: 'trader', value: 350 }
   },
 ];

@@ -4,6 +4,7 @@ import { resourceCraftMap } from '../model/resource-usage';
 import { TranslationContext } from '../translation.effect';
 
 import type { Valuable as TValuable } from '../types';
+import { yesNo } from './helpers';
 import { Icon, ItemIcon } from './Icon';
 import { ItemHeader } from './ItemHeader';
 
@@ -18,7 +19,7 @@ export function Valuable({ item }: { item: TValuable }) {
           <dt>{translate('ui.weight')}</dt><dd><Icon id="weight" alt="" size={16} />{' '}{item.weight}</dd>
           <dt>{translate('ui.stack')}</dt><dd>{item.stack}</dd>
           <dt>{translate('ui.value')}</dt><dd><Icon id="coin" alt="" size={16} />{' '}{item.value}</dd>
-          <dt>{translate('ui.floats')}</dt><dd>{item.floating ? '✔️' : '❌'}</dd>
+          <dt>{translate('ui.floats')}</dt><dd>{yesNo(item.floating)}</dd>
         </dl>
         {item.id === 'Coins'
           ? <section>

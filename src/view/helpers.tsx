@@ -140,6 +140,10 @@ export function Resistances({ mods }: { mods: DamageModifiers }) {
   }</>;
 }
 
+export function yesNo(arg?: boolean) {
+  return arg ? '✔️' : '❌';
+}
+
 export function Area({ area }: { area: Biome | GameLocation }) {
   const translate = useContext(TranslationContext);
   if (area in locationBiomes) {

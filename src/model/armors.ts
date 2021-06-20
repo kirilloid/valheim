@@ -13,6 +13,7 @@ export const items: Item[] = [
     durability: [200, 50],
     moveSpeed: 0,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { LeatherScraps: 5 },
       materialsPerLevel: { LeatherScraps: 5 },
@@ -29,6 +30,7 @@ export const items: Item[] = [
     durability: [200, 50],
     moveSpeed: 0,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { LeatherScraps: 5 },
       materialsPerLevel: { LeatherScraps: 5 },
@@ -46,6 +48,7 @@ export const items: Item[] = [
     durability: [400, 50],
     moveSpeed: 0,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { DeerHide: 6 },
       materialsPerLevel: { DeerHide: 6, BoneFragments: 5 },
@@ -62,6 +65,7 @@ export const items: Item[] = [
     durability: [400, 50],
     moveSpeed: 0,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { DeerHide: 6 },
       materialsPerLevel: { DeerHide: 6, BoneFragments: 5 },
@@ -78,6 +82,7 @@ export const items: Item[] = [
     durability: [400, 50],
     moveSpeed: 0,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { DeerHide: 6 },
       materialsPerLevel: { DeerHide: 6, BoneFragments: 5 },
@@ -94,6 +99,7 @@ export const items: Item[] = [
     durability: [400, 50],
     moveSpeed: 0,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { DeerHide: 4, BoneFragments: 5 },
       materialsPerLevel: { DeerHide: 4, BoneFragments: 5 },
@@ -111,6 +117,7 @@ export const items: Item[] = [
     durability: [500, 200],
     moveSpeed: 0,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { TrollHide: 5 },
       materialsPerLevel: { TrollHide: 2 },
@@ -127,6 +134,7 @@ export const items: Item[] = [
     durability: [400, 50],
     moveSpeed: 0,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { TrollHide: 5 },
       materialsPerLevel: { TrollHide: 2 },
@@ -143,6 +151,7 @@ export const items: Item[] = [
     durability: [400, 50],
     moveSpeed: 0,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { TrollHide: 5, BoneFragments: 3 },
       materialsPerLevel: { TrollHide: 2, BoneFragments: 1 },
@@ -159,6 +168,7 @@ export const items: Item[] = [
     durability: [400, 50],
     moveSpeed: 0,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { TrollHide: 10, BoneFragments: 10 },
       materialsPerLevel: { TrollHide: 5, BoneFragments: 5 },
@@ -176,6 +186,7 @@ export const items: Item[] = [
     durability: [1000, 200],
     moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Bronze: 5, DeerHide: 2 },
       materialsPerLevel: { Bronze: 3 },
@@ -192,6 +203,7 @@ export const items: Item[] = [
     durability: [1000, 200],
     moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Bronze: 5, DeerHide: 2 },
       materialsPerLevel: { Bronze: 3 },
@@ -208,6 +220,7 @@ export const items: Item[] = [
     durability: [1000, 200],
     moveSpeed: 0,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Bronze: 5, DeerHide: 2 },
       materialsPerLevel: { Bronze: 3 },
@@ -225,6 +238,7 @@ export const items: Item[] = [
     durability: [1000, 200],
     moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Iron: 20, DeerHide: 2 },
       materialsPerLevel: { Iron: 5 },
@@ -241,6 +255,7 @@ export const items: Item[] = [
     durability: [1000, 200],
     moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Iron: 20, DeerHide: 2 },
       materialsPerLevel: { Iron: 5 },
@@ -257,6 +272,7 @@ export const items: Item[] = [
     durability: [1000, 200],
     moveSpeed: 0,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Iron: 20, DeerHide: 2 },
       materialsPerLevel: { Iron: 5 },
@@ -274,6 +290,7 @@ export const items: Item[] = [
     durability: [1000, 200],
     moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Silver: 20, WolfPelt: 5, WolfFang: 4 },
       materialsPerLevel: { Silver: 5, WolfPelt: 2, WolfFang: 1 },
@@ -291,6 +308,7 @@ export const items: Item[] = [
     moveSpeed: -0.05,
     damageModifiers: { frost: 'resistant' },
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Silver: 20, WolfPelt: 5, Chain: 1 },
       materialsPerLevel: { Silver: 5, WolfPelt: 2 },
@@ -307,6 +325,7 @@ export const items: Item[] = [
     durability: [1000, 200],
     moveSpeed: 0,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Silver: 20, WolfPelt: 2, DrakeTrophy: 2 },
       materialsPerLevel: { Silver: 5 },
@@ -324,6 +343,7 @@ export const items: Item[] = [
     moveSpeed: 0,
     damageModifiers: { frost: 'resistant' },
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Silver: 4, WolfPelt: 6, WolfTrophy: 1 },
       materialsPerLevel: { Silver: 2, WolfPelt: 4 },
@@ -341,6 +361,7 @@ export const items: Item[] = [
     durability: [1000, 200],
     moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Iron: 10, LinenThread: 20 },
       materialsPerLevel: { Iron: 3 },
@@ -357,6 +378,7 @@ export const items: Item[] = [
     durability: [1000, 200],
     moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Iron: 10, LinenThread: 20 },
       materialsPerLevel: { Iron: 3 },
@@ -373,6 +395,7 @@ export const items: Item[] = [
     durability: [1000, 200],
     moveSpeed: 0,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Iron: 10, LinenThread: 15 },
       materialsPerLevel: { Iron: 5 },
@@ -389,6 +412,7 @@ export const items: Item[] = [
     durability: [1500, 50],
     moveSpeed: 0,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { LinenThread: 20, Silver: 1 },
       materialsPerLevel: { LinenThread: 4 },
@@ -406,6 +430,7 @@ export const items: Item[] = [
     moveSpeed: 0,
     damageModifiers: { frost: 'resistant' },
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { LoxPelt: 6, Silver: 2 },
       materialsPerLevel: { LoxPelt: 2 },
@@ -422,7 +447,7 @@ export const items: Item[] = [
     maxLvl: 1,
     durability: [Infinity, 0],
     moveSpeed: 0,
-    recipe: { value: 100 }
+    recipe: { type: 'trader', value: 100 }
   },
   { id: 'HelmetDverger',
     tier: 2,
@@ -433,7 +458,7 @@ export const items: Item[] = [
     maxLvl: 1,
     durability: [Infinity, 0],
     moveSpeed: 0,
-    recipe: { value: 620 }
+    recipe: { type: 'trader', value: 620 }
   },
   { id: 'BeltStrength',
     tier: 2,
@@ -444,7 +469,7 @@ export const items: Item[] = [
     maxLvl: 1,
     durability: [Infinity, 0],
     moveSpeed: 0,
-    recipe: { value: 950 }
+    recipe: { type: 'trader', value: 950 }
   },
   { id: 'Wishbone',
     tier: 4,
@@ -468,6 +493,7 @@ export const items: Item[] = [
     durability: [300, 0],
     moveSpeed: 0,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { LeatherScraps: 10, Coal: 4 },
       materialsPerLevel: {},
@@ -485,6 +511,7 @@ export const items: Item[] = [
     durability: [1500, 0],
     moveSpeed: 0,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { LeatherScraps: 10, Coal: 4 },
       materialsPerLevel: {},

@@ -68,6 +68,7 @@ export function mods(values: [number, number, number, number, number, number, nu
 export type BiomeConfig = {
   id: Biome;
   active: boolean;
+  tier: number;
   locations: GameLocation[];
   creatures: Creature[];
   resources: EntityId[];
@@ -161,6 +162,11 @@ export const dropTrophy = (item: EntityId, chance: number) => {
   return dropEntry(item, { chance, scale: false });
 };
 
+export interface GeneralDrop {
+  num: Pair<number>,
+  options: { item: EntityId, num: Pair<number>, weight?: number }[];
+}
+
 export interface Creature extends GameObjectBase {
   type: 'creature';
   emoji: string;
@@ -212,6 +218,7 @@ export interface BasePiece extends GameObjectBase {
     damageModifiers: DamageModifiers;
   };
   recipe: {
+    type: 'craft_piece',
     materials: Record<EntityId, number>;
     station: CraftingStation;
   }; 
@@ -337,20 +344,24 @@ interface BaseItem extends GameObjectBase {
   floating?: true;
   teleportable?: false;
   recipe?: {
+    type: 'craft_upg';
     time: number;
     materials: Record<EntityId, number>;
     materialsPerLevel: Record<EntityId, number>;
     source: { station: CraftingStation, level?: number };
     upgrade: { station: CraftingStation, level?: number };
   } | {
+    type: 'craft_one';
     time: number;
     materials: Record<EntityId, number>;
     source: { station: CraftingStation, level?: number };
     number: number;
   } | {
+    type: 'trader';
     value: number;
     number?: number;
   } | {
+    type: 'grow';
     locations: (Biome | GameLocation)[];
     abundance: number;
     num: Pair<number>;

@@ -5,6 +5,7 @@ import { Icon } from './Icon';
 import { RecipeSection } from './Source';
 import { TranslationContext } from '../translation.effect';
 import { ItemHeader } from './ItemHeader';
+import { yesNo } from './helpers';
 
 export function Food({ item }: { item: TFood }) {
   const translate = useContext(TranslationContext);
@@ -24,7 +25,7 @@ export function Food({ item }: { item: TFood }) {
       <dl>
         <dt>{translate('ui.weight')}</dt><dd><Icon id="weight" alt="" size={16} />{' '}{item.weight}</dd>
         <dt>{translate('ui.stack')}</dt><dd>{item.stack}</dd>
-        <dt>{translate('ui.floats')}</dt><dd>{item.floating ? '✔️' : '❌'}</dd>
+        <dt>{translate('ui.floats')}</dt><dd>{yesNo(item.floating)}</dd>
       </dl>
     </section>
     <RecipeSection item={item} />

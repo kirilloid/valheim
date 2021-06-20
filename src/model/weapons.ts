@@ -81,6 +81,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     knockback: 50, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Wood: 6 },
       materialsPerLevel: { BoneFragments: 5 },
@@ -117,6 +118,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     knockback: 50, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Wood: 5, Stone: 4 },
       materialsPerLevel: { Stone: 2 },
@@ -148,6 +150,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     knockback: 30, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Wood: 1, Resin: 1 },
       materialsPerLevel: {},
@@ -185,6 +188,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     knockback: 50, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Wood: 4, Flint: 6 },
       materialsPerLevel: { Flint: 3, LeatherScraps: 2 },
@@ -228,6 +232,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 4,
     knockback: 10, backstab: 10, moveSpeed: 0,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Wood: 2, Flint: 4, LeatherScraps: 2 },
       materialsPerLevel: { Flint: 2 },
@@ -266,6 +271,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     knockback: 20, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Wood: 5, Flint: 10, LeatherScraps: 2 },
       materialsPerLevel: { Wood: 3, Flint: 5, LeatherScraps: 1 },
@@ -299,6 +305,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     knockback: 150, backstab: 2, moveSpeed: -0.2,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { RoundLog: 20, DeerTrophy: 5, LeatherScraps: 2 },
       materialsPerLevel: { RoundLog: 5, DeerTrophy: 2, LeatherScraps: 1, BoneFragments: 10 },
@@ -331,6 +338,7 @@ export const items: (Weapon | Shield)[] = [
     holdDurationMin: 2.5,
     holdStaminaDrain: 5,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Wood: 10, LeatherScraps: 8 },
       materialsPerLevel: { Wood: 5, LeatherScraps: 4, DeerHide: 1 },
@@ -391,6 +399,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     knockback: 50, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Wood: 10, HardAntler: 1 },
       materialsPerLevel: {},
@@ -412,6 +421,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 1.5,
     moveSpeed: -0.2,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Wood: 10, Resin: 4, LeatherScraps: 4 },
       materialsPerLevel: { Wood: 5, Resin: 2, LeatherScraps: 2 },
@@ -433,6 +443,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 1,
     moveSpeed: -0.2,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Wood: 10, LeatherScraps: 6 },
       materialsPerLevel: { Wood: 5, LeatherScraps: 3 },
@@ -477,6 +488,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 4,
     knockback: 10, backstab: 10, moveSpeed: 0,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Wood: 2, Copper: 8 },
       materialsPerLevel: { GreydwarfEye: 8, Copper: 4 },
@@ -514,6 +526,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 3,
     knockback: 30, backstab: 3, moveSpeed: -0.1,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Wood: 10, Bronze: 8, LeatherScraps: 2 },
       materialsPerLevel: { Bronze: 4 },
@@ -550,6 +563,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     knockback: 50, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Wood: 4, Bronze: 8, LeatherScraps: 2 },
       materialsPerLevel: { Bronze: 4, LeatherScraps: 1 },
@@ -588,6 +602,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     knockback: 80, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Wood: 4, Bronze: 8, LeatherScraps: 3 },
       materialsPerLevel: { Bronze: 4 },
@@ -626,6 +641,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     knockback: 20, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Wood: 5, Bronze: 6, DeerHide: 2 },
       materialsPerLevel: { Wood: 3, Bronze: 4, DeerHide: 1 },
@@ -663,6 +679,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     knockback: 40, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Wood: 2, Bronze: 8, LeatherScraps: 2 },
       materialsPerLevel: { Wood: 1, Bronze: 4, LeatherScraps: 1 },
@@ -699,6 +716,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     knockback: 50, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { RoundLog: 3, Bronze: 10 },
       materialsPerLevel: { RoundLog: 1, Bronze: 5 },
@@ -731,6 +749,7 @@ export const items: (Weapon | Shield)[] = [
     holdDurationMin: 2.5,
     holdStaminaDrain: 5,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { FineWood: 10, RoundLog: 10, DeerHide: 2 },
       materialsPerLevel: { FineWood: 5, RoundLog: 5, DeerHide: 2 },
@@ -751,6 +770,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Wood: 4, Bronze: 10 },
       materialsPerLevel: { Wood: 1, Bronze: 5 },
@@ -781,6 +801,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 1.5,
     knockback: 40, backstab: 3, moveSpeed: 0,
     recipe: {
+      type: 'craft_one',
       time: CRAFT_TIME,
       materials: { LeatherScraps: 5, Ooze: 10, Resin: 3 },
       source: { station: CraftingStation.Workbench, level: 1 },
@@ -824,6 +845,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     knockback: 70, backstab: 3, moveSpeed: -0.2,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { ElderBark: 30, Iron: 35, LeatherScraps: 4 },
       materialsPerLevel: { ElderBark: 5, Iron: 15 },
@@ -862,6 +884,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     knockback: 40, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Wood: 2, Iron: 20, LeatherScraps: 3 },
       materialsPerLevel: { Wood: 1, Iron: 10, LeatherScraps: 2 },
@@ -898,6 +921,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     knockback: 50, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Wood: 4, Iron: 20, LeatherScraps: 2 },
       materialsPerLevel: { Iron: 10, LeatherScraps: 1 },
@@ -928,6 +952,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     knockback: 200, backstab: 2, moveSpeed: -0.2,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { ElderBark: 10, Iron: 30, YmirRemains: 4, TrophyDraugrElite: 1 },
       materialsPerLevel: { ElderBark: 2, Iron: 15, YmirRemains: 2 },
@@ -966,6 +991,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     knockback: 90, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Wood: 4, Iron: 20, LeatherScraps: 3 },
       materialsPerLevel: { Iron: 10 },
@@ -1004,6 +1030,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     knockback: 20, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { ElderBark: 10, Iron: 10, TrollHide: 4 },
       materialsPerLevel: { Wood: 5, Flint: 5, LeatherScraps: 1 },
@@ -1040,6 +1067,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     knockback: 50, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { RoundLog: 3, Iron: 20 },
       materialsPerLevel: { RoundLog: 1, Iron: 10 },
@@ -1077,6 +1105,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 3,
     knockback: 30, backstab: 3, moveSpeed: -0.1,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Wood: 10, Iron: 30, LeatherScraps: 2 },
       materialsPerLevel: { Iron: 15, LeatherScraps: 1 },
@@ -1109,6 +1138,7 @@ export const items: (Weapon | Shield)[] = [
     holdDurationMin: 2.5,
     holdStaminaDrain: 5,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { FineWood: 10, Iron: 20, Feathers: 10, DeerHide: 2 },
       materialsPerLevel: { FineWood: 5, Iron: 10, Feathers: 5, DeerHide: 2 },
@@ -1131,6 +1161,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     knockback: 50, backstab: 2, moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { FineWood: 10, Iron: 8 },
       materialsPerLevel: { FineWood: 10, Iron: 4 },
@@ -1152,6 +1183,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 1,
     knockback: 40, backstab: 4, moveSpeed: -0.2,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { FineWood: 15, Iron: 10 },
       materialsPerLevel: { FineWood: 10, Iron: 5 },
@@ -1196,6 +1228,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     knockback: 40, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Wood: 2, Silver: 40, LeatherScraps: 3, Iron: 5 },
       materialsPerLevel: { Wood: 1, Silver: 20, LeatherScraps: 1, Iron: 3 },
@@ -1234,6 +1267,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     knockback: 20, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { ElderBark: 10, WolfFang: 4, Silver: 2, LeatherScraps: 2 },
       materialsPerLevel: { ElderBark: 5, WolfFang: 2, Silver: 1, LeatherScraps: 1 },
@@ -1277,6 +1311,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     knockback: 120, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { ElderBark: 10, Silver: 30, YmirRemains: 5, FreezeGland: 5 },
       materialsPerLevel: { Silver: 15 },
@@ -1308,6 +1343,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     knockback: 20, backstab: 1, moveSpeed: -0.05,
     recipe: {
+      type: 'craft_one',
       time: CRAFT_TIME,
       materials: { FineWood: 8, Chitin: 30, LeatherScraps: 3 },
       source: { station: CraftingStation.Forge, level: 2 },
@@ -1351,6 +1387,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 4,
     knockback: 10, backstab: 10, moveSpeed: 0,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { FineWood: 4, Chitin: 20, LeatherScraps: 2 },
       materialsPerLevel: { Chitin: 10 },
@@ -1389,6 +1426,7 @@ export const items: (Weapon | Shield)[] = [
     holdDurationMin: 2.5,
     holdStaminaDrain: 5,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { ElderBark: 10, Silver: 20, DeerHide: 2, Guck: 10, },
       materialsPerLevel: { ElderBark: 5, Silver: 10, DeerHide: 2, Guck: 2 },
@@ -1411,6 +1449,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 1.5,
     knockback: 50, backstab: 4, moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { FineWood: 10, Silver: 8 },
       materialsPerLevel: { FineWood: 10, Silver: 4 },
@@ -1433,6 +1472,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 1,
     knockback: 50, backstab: 4, moveSpeed: -0.1,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { FineWood: 10, Iron: 4, SerpentScale: 8 },
       materialsPerLevel: { FineWood: 10, Iron: 2, SerpentScale: 4 },
@@ -1471,6 +1511,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 3,
     knockback: 30, backstab: 3, moveSpeed: -0.1,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { FineWood: 10, BlackMetal: 30, LinenThread: 5 },
       materialsPerLevel: { BlackMetal: 15, LinenThread: 5 },
@@ -1507,6 +1548,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     knockback: 60, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { FineWood: 6, BlackMetal: 20, LinenThread: 5 },
       materialsPerLevel: { BlackMetal: 10, LinenThread: 5 },
@@ -1550,6 +1592,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 4,
     knockback: 10, backstab: 10, moveSpeed: 0,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { FineWood: 4, BlackMetal: 10, LinenThread: 5 },
       materialsPerLevel: { BlackMetal: 4, LinenThread: 5 },
@@ -1587,6 +1630,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     knockback: 40, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { FineWood: 2, BlackMetal: 20, LinenThread: 5 },
       materialsPerLevel: { BlackMetal: 10, LinenThread: 5 },
@@ -1630,6 +1674,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     knockback: 90, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { FineWood: 5, Iron: 20, Needle: 5, LinenThread: 10 },
       materialsPerLevel: { Iron: 2, LinenThread: 2 },
@@ -1652,6 +1697,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 1.5,
     knockback: 50, backstab: 4, moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { FineWood: 10, BlackMetal: 8, Chain: 5 },
       materialsPerLevel: { FineWood: 10, BlackMetal: 4, Chain: 2 },
@@ -1674,6 +1720,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 1,
     knockback: 50, backstab: 4, moveSpeed: -0.2,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { FineWood: 15, BlackMetal: 10, Chain: 7 },
       materialsPerLevel: { FineWood: 15, BlackMetal: 6, Chain: 3 },  
@@ -1720,6 +1767,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     knockback: 40, backstab: 3, moveSpeed: -0.05,
     recipe: {
+      type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { FineWood: 2, Flametal: 20, SurtlingCore: 20, LeatherScraps: 3 },
       materialsPerLevel: { Flametal: 10, SurtlingCore: 10, LeatherScraps: 2 },

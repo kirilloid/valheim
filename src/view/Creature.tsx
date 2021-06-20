@@ -10,7 +10,7 @@ import { timeI2S } from '../model/utils';
 import { TranslationContext } from '../translation.effect';
 
 import { Creature as TCreature, NormalAttackProfile, SpawnAttackProfile } from '../types';
-import { Area, Resistances, shortCreatureDamage } from './helpers';
+import { Area, Resistances, shortCreatureDamage, yesNo } from './helpers';
 import { ItemIcon } from './Icon';
 import { ItemHeader } from './ItemHeader';
 
@@ -113,9 +113,9 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
         <dt>{translate('ui.tamed.eat')}</dt>
         <dd>{tame.eats.map(id => <ItemIcon key={id} item={data[id]} size={32} />)}</dd>
         <dt>{translate('ui.tamed.controlled')}</dt>
-        <dd>{tame.commandable ? '✔️' : '❌'}</dd>
+        <dd>{yesNo(tame.commandable)}</dd>
         <dt>{translate('ui.tamed.breeds')}</dt>
-        <dd>{pregnancy ? '✔️' : '❌'}</dd>
+        <dd>{yesNo(!!pregnancy)}</dd>
       </dl>
     </section> : null}
   </>);

@@ -44,6 +44,7 @@ export const ships: Ship[] = [
       disableLevel: -0.5,
     },
     recipe: {
+      type: 'craft_piece',
       materials: { Wood: 20, Resin: 6, LeatherScraps: 6 },
       station: CraftingStation.Workbench,
     },
@@ -71,6 +72,7 @@ export const ships: Ship[] = [
       disableLevel: -0.5,
     },
     recipe: {
+      type: 'craft_piece',
       materials: {
         FineWood: 30,
         DeerHide: 10,
@@ -103,6 +105,7 @@ export const ships: Ship[] = [
       disableLevel: -0.5,
     },
     recipe: {
+      type: 'craft_piece',
       materials: {
         IronNails: 100,
         DeerHide: 10,

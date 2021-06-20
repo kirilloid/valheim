@@ -10,7 +10,7 @@ import {
 import { SkillType } from '../model/skills';
 import { Icon, SkillIcon } from './Icon';
 import { RecipeSection } from './Source';
-import { durability, ItemSpecial, showPair } from './helpers';
+import { durability, ItemSpecial, showPair, yesNo } from './helpers';
 import { TranslationContext } from '../translation.effect';
 import { ItemHeader } from './ItemHeader';
 
@@ -114,7 +114,7 @@ export function Weapon({ item, level }: { item: TWeapon, level?: number }) {
         <h2>{translate('ui.itemType.resource')}</h2>
         <dl>
           <dt>{translate('ui.weight')}</dt><dd><Icon id="weight" alt="" size={16} />{' '}{item.weight}</dd>
-          <dt>{translate('ui.floats')}</dt><dd>{item.floating ? '✔️' : '❌'}</dd>
+          <dt>{translate('ui.floats')}</dt><dd>{yesNo(item.floating)}</dd>
         </dl>
       </section>
       <RecipeSection item={item} />
@@ -132,7 +132,7 @@ export function Shield({ item, level }: { item: TShield, level?: number }) {
         <h2>{translate('ui.itemType.resource')}</h2>
         <dl>
           <dt>{translate('ui.weight')}</dt><dd><Icon id="weight" alt="" size={16} />{' '}{item.weight}</dd>
-          <dt>{translate('ui.floats')}</dt><dd>{item.floating ? '✔️' : '❌'}</dd>
+          <dt>{translate('ui.floats')}</dt><dd>{yesNo(item.floating)}</dd>
         </dl>
       </section>
       <RecipeSection item={item} />
