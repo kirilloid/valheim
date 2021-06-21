@@ -121,6 +121,7 @@ export type NormalAttackProfile = {
   name: string;
   unblockable?: true;
   undodgeable?: true;
+  stagger?: number;
   // knockback
   force?: number;
 }
@@ -174,8 +175,10 @@ export interface Creature extends GameObjectBase {
   faction: Faction;
   locations: (Biome | GameLocationId)[];
   hp: number;
-  staggerFactor: number;
-  staggerBlocked: boolean;
+  stagger?: {
+    factor: number;
+    time: number;
+  };
   attacks: AttackVariety[];
   damageModifiers: DamageModifiers;
   drop: DropEntry[];

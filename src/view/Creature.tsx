@@ -36,7 +36,7 @@ function SpawnAttack({ attack }: { attack: SpawnAttackProfile }) {
 
 export function Creature({ creature, level = 1 }: { creature: TCreature, level?: number }) {
   const translate = useContext(TranslationContext);
-  const { id, tame, pregnancy, staggerFactor } = creature;
+  const { id, tame, pregnancy, stagger } = creature;
   const scale = { stars: level - 1 };
   const dmgScale = dmgBonus(scale);
   const dropScale = 2 ** (level - 1);
@@ -71,7 +71,9 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
       <dt>{translate('ui.health')}</dt>
       <dd>{creature.hp * hpBonus(scale)}</dd>
       <dt>{translate('ui.stagger')}</dt>
-      <dd>{creature.hp * hpBonus(scale) * staggerFactor}</dd>
+      <dd>{stagger
+        ? creature.hp * hpBonus(scale) * stagger.factor
+        : translate('ui.damageModifier.immune')}</dd>
       </dl>
       <h3>resistances</h3>
       <dl>

@@ -64,8 +64,6 @@ export const creatures: Creature[] = [
     locations: ['Meadows', 'BlackForest'],
     attacks: [],
     hp: 10,
-    staggerFactor: 0,
-    staggerBlocked: false,
     damageModifiers: animalDmgModifiers,
     drop: [
       dropEntry('RawMeat', { min: 2, max: 2 }),
@@ -83,8 +81,6 @@ export const creatures: Creature[] = [
     locations: ['Meadows', 'BlackForest', 'Plains', 'Ocean'],
     attacks: [],
     hp: 1,
-    staggerFactor: 0,
-    staggerBlocked: false,
     damageModifiers: animalDmgModifiers,
     drop: [
       dropEntry('Feathers', { min: 3, max: 3 }),
@@ -98,10 +94,12 @@ export const creatures: Creature[] = [
     emoji: '🐀',
     faction: 'ForestMonsters',
     locations: ['Meadows'],
-    attacks: single([{ dmg: { slash: 5 }, name: 'bite' }]),
+    attacks: single([{ dmg: { slash: 5 }, stagger: 1.94, name: 'bite' }]),
     hp: 20,
-    staggerFactor: 0.3,
-    staggerBlocked: true,
+    stagger: {
+      factor: 0.3,
+      time: 1.94,
+    },
     damageModifiers: grayModifiers,
     drop: [
       dropEntry('Resin'),
@@ -116,10 +114,12 @@ export const creatures: Creature[] = [
     emoji: '🦎',
     faction: 'ForestMonsters',
     locations: ['Meadows'],
-    attacks: single([{ dmg: { slash: 6 }, name: 'bite' }]),
+    attacks: single([{ dmg: { slash: 6 }, stagger: 1.66, name: 'bite' }]),
     hp: 5,
-    staggerFactor: 0.5,
-    staggerBlocked: true,
+    stagger: {
+      factor: 0.5,
+      time: 1.54,
+    },
     damageModifiers: animalDmgModifiers,
     drop: [
       dropEntry('NeckTail', { chance: 0.75 }),
@@ -136,8 +136,6 @@ export const creatures: Creature[] = [
     locations: ['Meadows', 'BlackForest', 'Plains', 'Ocean'],
     attacks: [],
     hp: 1,
-    staggerFactor: 0,
-    staggerBlocked: true,
     damageModifiers: animalDmgModifiers,
     drop: [dropEntry('FishRaw')],
   },
@@ -150,10 +148,12 @@ export const creatures: Creature[] = [
     emoji: '🐗',
     faction: 'ForestMonsters',
     locations: ['Meadows'],
-    attacks: single([{ dmg: { blunt: 10 }, name: 'tusks' }]),
+    attacks: single([{ dmg: { blunt: 10 }, stagger: 1.24, name: 'tusks' }]),
     hp: 10,
-    staggerFactor: 0.5,
-    staggerBlocked: true,
+    stagger: {
+      factor: 0.5,
+      time: 1.24,
+    },
     damageModifiers: animalDmgModifiers,
     drop: [
       dropEntry('RawMeat', { chance: 0.5 }),
@@ -173,8 +173,6 @@ export const creatures: Creature[] = [
     emoji: '🦌',
     faction: 'Boss',
     locations: ['Eikthyrnir'],
-    staggerFactor: 0,
-    staggerBlocked: true,
     attacks: single([
       { dmg: { pierce: 20, chop: 1000, pickaxe: 1000 }, name: 'antlers', force: 100 },
       { dmg: { lightning: 15 }, name: 'pew-pew', force: 200 },
@@ -198,8 +196,6 @@ export const creatures: Creature[] = [
     locations: ['BlackForest'],
     attacks: [],
     hp: 1,
-    staggerFactor: 0,
-    staggerBlocked: false,
     damageModifiers: animalDmgModifiers,
     drop: [
       dropEntry('Feathers', { min: 3, max: 3 }),
@@ -214,13 +210,15 @@ export const creatures: Creature[] = [
     faction: 'Undead',
     locations: ['Crypt', 'Swamp', 'StoneTowerRuins'],
     attacks: [
-      { variety: 'sword', attacks: [{ dmg: { slash: 25 }, name: 'sword' }] },
-      { variety: 'mace', attacks: [{ dmg: { blunt: 25 }, name: 'mace' }] },
-      { variety: 'bow', attacks: [{ dmg: { pierce: 20 }, name: 'bow' }] },
+      { variety: 'sword', attacks: [{ dmg: { slash: 25 }, stagger: 2.48, name: 'sword' }] },
+      { variety: 'mace', attacks: [{ dmg: { blunt: 25 }, stagger: 2.48, name: 'mace' }] },
+      { variety: 'bow', attacks: [{ dmg: { pierce: 20 }, stagger: 2.48, name: 'bow' }] },
     ],
     hp: 40,
-    staggerFactor: 0.5,
-    staggerBlocked: true,
+    stagger: {
+      factor: 0.5,
+      time: 2.48,
+    },
     damageModifiers: skeletonDamageModifiers,
     drop: [
       dropEntry('BoneFragments'),
@@ -238,11 +236,14 @@ export const creatures: Creature[] = [
     attacks: single([{
       dmg: { blunt: 20,
              poison: 20 },
+      stagger: 3.96, 
       name: 'mace',
     }]),
     hp: 100,
-    staggerFactor: 0.5,
-    staggerBlocked: true,
+    stagger: {
+      factor: 0.5,
+      time: 3.44,
+    },
     damageModifiers: skeletonDamageModifiers,
     drop: [
       dropEntry('BoneFragments', { min: 3, max: 3 }),
@@ -257,10 +258,12 @@ export const creatures: Creature[] = [
     emoji: '👻',
     faction: 'Undead',
     locations: ['Crypt'],
-    attacks: single([ { dmg: { slash: 25 }, name: 'slash' } ]),
+    attacks: single([ { dmg: { slash: 25 }, stagger: 1.64, name: 'slash' } ]),
     hp: 60,
-    staggerFactor: 0.5,
-    staggerBlocked: true,
+    stagger: {
+      factor: 0.5,
+      time: 1.64,
+    },
     damageModifiers: {
       ...defaultDmgModifiers,
       blunt: 'resistant',
@@ -280,12 +283,14 @@ export const creatures: Creature[] = [
     faction: 'ForestMonsters',
     locations: ['BlackForest', 'StoneTowerRuins', 'Greydwarf_camp'],
     attacks: single([
-      { dmg: { slash: 14 }, name: 'hit' },
-      { dmg: { blunt: 10 }, name: 'stone' },
+      { dmg: { slash: 14 }, stagger: 1.94, name: 'hit' },
+      { dmg: { blunt: 10 }, stagger: 1.94, name: 'stone' },
     ]),
     hp: 40,
-    staggerFactor: 0.3,
-    staggerBlocked: true,
+    stagger: {
+      factor: 0.3,
+      time: 1.94,
+    },
     damageModifiers: grayModifiers,
     drop: [
       dropEntry('GreydwarfEye', { chance: 0.5 }),
@@ -305,12 +310,14 @@ export const creatures: Creature[] = [
     faction: 'ForestMonsters',
     locations: ['BlackForest', 'StoneTowerRuins', 'Greydwarf_camp'],
     attacks: single([
-      { dmg: { poison: 25 }, name: 'poison breath' },
-      { dmg: { slash: 14 }, name: 'slash' },
+      { dmg: { poison: 25 }, stagger: 1.12, name: 'poison breath' },
+      { dmg: { slash: 14 }, stagger: 1.12, name: 'slash' },
     ]),
     hp: 60,
-    staggerFactor: 0.33,
-    staggerBlocked: true,
+    stagger: {
+      factor: 0.33,
+      time: 1.12,
+    },
     // heals for 2.5hp/s for 4s in 4.3m radius
     damageModifiers: grayModifiers,
     drop: [
@@ -330,11 +337,13 @@ export const creatures: Creature[] = [
     faction: 'ForestMonsters',
     locations: ['BlackForest', 'StoneTowerRuins', 'Greydwarf_camp'],
     attacks: single([
-      { dmg: { slash: 30 }, name: 'bite' },
+      { dmg: { slash: 30 }, stagger: 1.34, name: 'bite' },
     ]),
     hp: 150,
-    staggerFactor: 0.5,
-    staggerBlocked: true,
+    stagger: {
+      factor: 0.5,
+      time: 1.34,
+    },
     damageModifiers: grayModifiers,
     drop: [
       dropEntry('GreydwarfEye', { chance: 0.5, min: 2, max: 2 }),
@@ -358,21 +367,23 @@ export const creatures: Creature[] = [
       {
         variety: 'unarmed',
         attacks: [
-          { dmg: { blunt: 60, chop: 100, pickaxe: 40 }, name: '1-hand hit', force: 100 },
-          { dmg: { blunt: 70, chop: 100, pickaxe: 40 }, name: '2-hand smash', force: 100 },
-          { dmg: { blunt: 50, chop: 60, pickaxe: 40 }, name: 'throw' },
+          { dmg: { blunt: 60, chop: 100, pickaxe: 40 }, name: '1-hand hit', stagger: 4.4, force: 100 },
+          { dmg: { blunt: 70, chop: 100, pickaxe: 40 }, name: '2-hand smash', stagger: 1.98, force: 100 },
+          { dmg: { blunt: 50, chop: 60, pickaxe: 40 }, name: 'throw', stagger: 2.16 },
         ],
       }, {
         variety: 'log',
         attacks: [
-          { dmg: { blunt: 60, chop: 100, pickaxe: 40 }, name: 'h-swing', force: 80 },
-          { dmg: { blunt: 70, chop: 100, pickaxe: 40 }, name: 'v-swing', force: 80 },
+          { dmg: { blunt: 60, chop: 100, pickaxe: 40 }, name: 'h-swing', stagger: 2.74, force: 80 },
+          { dmg: { blunt: 70, chop: 100, pickaxe: 40 }, name: 'v-swing', stagger: 2.74, force: 80 },
         ],
       },
     ],
     hp: 600,
-    staggerFactor: 0.3,
-    staggerBlocked: true,
+    stagger: {
+      factor: 0.3,
+      time: 2.74,
+    },
     damageModifiers: {
       ...animalDmgModifiers,
       blunt: 'resistant',
@@ -402,8 +413,6 @@ export const creatures: Creature[] = [
       // hp: 20, weak to fire,
     ]),
     hp: 2500,
-    staggerFactor: 0,
-    staggerBlocked: false,
     damageModifiers: {
       ...defaultDmgModifiers,
       fire: 'veryWeak',
@@ -428,8 +437,6 @@ export const creatures: Creature[] = [
       { dmg: { blunt: 55, chop: 20, pickaxe: 20, }, name: 'poke', force: 40 }
     ]),
     hp: 20,
-    staggerFactor: 0,
-    staggerBlocked: true,
     damageModifiers: {
       ...defaultDmgModifiers,
       fire: 'weak',
@@ -449,8 +456,6 @@ export const creatures: Creature[] = [
     locations: ['Swamp', 'SunkenCrypt'],
     attacks: single([{ dmg: { poison: 70 }, name: 'poison', unblockable }]),
     hp: 50,
-    staggerFactor: 0,
-    staggerBlocked: true,
     damageModifiers: blobDamageModifiers,
     drop: [
       dropEntry('Ooze', { min: 1, max: 2 }),
@@ -468,8 +473,6 @@ export const creatures: Creature[] = [
     locations: ['Swamp'],
     attacks: single([{ dmg: { poison: 90 }, name: 'poison', unblockable }]),
     hp: 150,
-    staggerFactor: 0,
-    staggerBlocked: true,
     damageModifiers: blobDamageModifiers,
     drop: [
       dropEntry('Ooze', { min: 2, max: 3 }),
@@ -491,8 +494,6 @@ export const creatures: Creature[] = [
       poison: 60,
     }, name: 'bite', force: 30 }]),
     hp: 60,
-    staggerFactor: 0,
-    staggerBlocked: false,
     damageModifiers: {
       ...animalDmgModifiers,
       fire: 'immune',
@@ -512,13 +513,15 @@ export const creatures: Creature[] = [
     emoji: '🧨',
     faction: 'Demon',
     locations: ['FireHole', 'Ashlands', 'Meteorite'],
-    attacks: single([{ dmg: {
-      blunt: 10,
-      fire: 40,
-    }, name: 'fireball', force: 30 }]),
+    attacks: single([{
+      dmg: { blunt: 10, fire: 40 },
+      name: 'fireball', stagger: 1.14, force: 30,
+    }]),
     hp: 20,
-    staggerFactor: 0.5,
-    staggerBlocked: true,
+    stagger: {
+      factor: 0.5,
+      time: 1.14,
+    },
     damageModifiers: {
       ...defaultDmgModifiers,
       fire: 'immune',
@@ -541,10 +544,12 @@ export const creatures: Creature[] = [
     emoji: '👻',
     faction: 'Undead',
     locations: ['Swamp', 'SwampHut'],
-    attacks: single([{ dmg: { slash: 60, }, name: 'slash', force: 60 }]),
+    attacks: single([{ dmg: { slash: 60, }, name: 'slash', stagger: 2.04, force: 60 }]),
     hp: 100,
-    staggerFactor: 0.5,
-    staggerBlocked: true,
+    stagger: {
+      factor: 0.5,
+      time: 2.04,
+    },
     damageModifiers: {
       ...defaultDmgModifiers,
       blunt: 'resistant',
@@ -570,15 +575,17 @@ export const creatures: Creature[] = [
     locations: ['Swamp', 'SwampRuin', 'SunkenCrypt', 'StoneTowerRuins'],
     attacks: [
       { variety: 'axe',
-        attacks: [{ dmg: { slash: 48, chop: 15 }, name: 'axe', force: 60 }],
+        attacks: [{ dmg: { slash: 48, chop: 15 }, name: 'axe', stagger: 2.8, force: 60 }],
       },
       { variety: 'bow',
-        attacks: [{ dmg: { pierce: 48 }, name: 'bow', force: 18 }],
+        attacks: [{ dmg: { pierce: 48 }, name: 'bow', stagger: 2.8, force: 18 }],
       },
     ],
     hp: 100,
-    staggerFactor: 0.5,
-    staggerBlocked: true,
+    stagger: {
+      factor: 0.5,
+      time: 2.8,
+    },
     damageModifiers: {
       ...animalDmgModifiers,
       fire: 'weak',
@@ -598,10 +605,12 @@ export const creatures: Creature[] = [
     emoji: '🧟',
     faction: 'Undead',
     locations: ['Swamp', 'SwampRuin', 'SunkenCrypt'],
-    attacks: single([ { dmg: { slash: 58, }, name: 'sword', force: 60 } ]),
+    attacks: single([ { dmg: { slash: 58, }, name: 'sword', stagger: 2.8, force: 60 } ]),
     hp: 200,
-    staggerFactor: 0.5,
-    staggerBlocked: true,
+    stagger: {
+      factor: 0.5,
+      time: 2.8,
+    },
     damageModifiers: {
       ...animalDmgModifiers,
       fire: 'weak',
@@ -630,8 +639,7 @@ export const creatures: Creature[] = [
       { spawn: ['Skeleton', 'Blob'], number: 4, max: 8, }
     ]),
     hp: 5000,
-    staggerFactor: 0,
-    staggerBlocked: false,
+
     damageModifiers: {
       ...defaultDmgModifiers,
       blunt: 'weak',
@@ -656,12 +664,14 @@ export const creatures: Creature[] = [
     faction: 'MountainMonsters',
     locations: ['Mountain'],
     attacks: single([
-      { dmg: { slash: 70 }, name: 'bite', force: 30 }, // 3 different animations, same stats
+      { dmg: { slash: 70 }, name: 'bite', stagger: 4.8, force: 30 }, // 3 different animations, same stats
     ]),
     hp: 80,
     damageModifiers: animalDmgModifiers,
-    staggerFactor: 0.5,
-    staggerBlocked: true,
+    stagger: {
+      factor: 0.5,
+      time: 4.8,
+    },
     drop: [
       dropEntry('WolfFang', { chance: 0.4 }),
       dropEntry('RawMeat', { chance: 0.4 }),
@@ -683,12 +693,14 @@ export const creatures: Creature[] = [
     faction: 'MountainMonsters',
     locations: ['Mountain'],
     attacks: single([
-      { dmg: { slash: 85 }, name: 'hit', force: 60 },
-      { dmg: { slash: 95 }, name: 'jump', force: 100 },
+      { dmg: { slash: 85 }, name: 'hit', stagger: 1.12, force: 60 },
+      { dmg: { slash: 95 }, name: 'jump', stagger: 1.32, force: 100 },
     ]),
     hp: 150,
-    staggerFactor: 0.5,
-    staggerBlocked: true,
+    stagger: {
+      factor: 0.5,
+      time: 1.12,
+    },
     damageModifiers: animalDmgModifiers,
     drop: [
       dropEntry('WolfFang'),
@@ -710,12 +722,12 @@ export const creatures: Creature[] = [
             blunt: 110,
             chop: 100,
             pickaxe: 100,
-          }, name: 'spike', force: 130, },
+          }, name: 'spike', stagger: 2.94, force: 130, },
           { dmg: {
             pierce: 110,
             chop: 100,
             pickaxe: 100,
-          }, name: 'spikesweep', force: 8 },
+          }, name: 'spikesweep', stagger: 0.98, force: 8 },
         ],
       },
       { variety: 'sledge',
@@ -724,18 +736,20 @@ export const creatures: Creature[] = [
             blunt: 110,
             chop: 100,
             pickaxe: 100,
-          }, name: 'slam', force: 130, }, // R8
+          }, name: 'slam', stagger: 2.94, force: 130, }, // R8
           { dmg: {
             blunt: 110,
             chop: 100,
             pickaxe: 100,
-          }, name: 'double smash', force: 120, }, // R8.66
+          }, name: 'double smash', stagger: 0.98, force: 120, }, // R8.66
         ],
       },
     ], 
     hp: 800,
-    staggerFactor: 0.33,
-    staggerBlocked: true,
+    stagger: {
+      factor: 0.33,
+      time: 0.98,
+    },
     damageModifiers: {
       ...defaultDmgModifiers,
       slash: 'resistant',
@@ -762,8 +776,6 @@ export const creatures: Creature[] = [
     locations: ['Mountain', 'DrakeNest'],
     attacks: single([{ dmg: { frost: 90 }, burst: 3, name: 'ice shards', force: 30, }]), // burst interval: 0.3
     hp: 100,
-    staggerFactor: 0,
-    staggerBlocked: true,
     damageModifiers: {
       ...animalDmgModifiers,
       fire: 'weak',
@@ -806,8 +818,7 @@ export const creatures: Creature[] = [
       }, burst: 16, name: 'ice shards', force: 30 }, // V25
     ]),
     hp: 7500,
-    staggerFactor: 0,
-    staggerBlocked: false,
+
     damageModifiers: {
       ...animalDmgModifiers,
       fire: 'weak',
@@ -828,17 +839,19 @@ export const creatures: Creature[] = [
     faction: 'PlainsMonsters',
     locations: ['Plains', 'GoblinCamp', 'StoneTower', 'StoneHengeS'],
     attacks: [
-      { variety: 'club', attacks: [{ dmg: { blunt: 110 }, name: 'club' }] },
-      { variety: 'spear', attacks: [{ dmg: { pierce: 110 }, name: 'spear' }] },
-      { variety: 'sword', attacks: [{ dmg: { slash: 110 }, name: 'sword' }] },
-      { variety: 'torch', attacks: [{ dmg: { blunt: 55, fire: 55 }, name: 'torch' }] },
+      { variety: 'club', attacks: [{ dmg: { blunt: 110 }, name: 'club', stagger: 2.08 }] },
+      { variety: 'spear', attacks: [{ dmg: { pierce: 110 }, name: 'spear', stagger: 3.38 }] },
+      { variety: 'sword', attacks: [{ dmg: { slash: 110 }, name: 'sword', stagger: 2.08 }] },
+      { variety: 'torch', attacks: [{ dmg: { blunt: 55, fire: 55 }, name: 'torch', stagger: 2.08 }] },
       // vs 26 arm 24.3-37.6
       // vs 52 arm 18.6-28.2
       // vs 52 arm & FR 12.5-21.4
     ],
     hp: 200,
-    staggerFactor: 0.4,
-    staggerBlocked: true,
+    stagger: {
+      factor: 0.4,
+      time: 2.08,
+    },
     damageModifiers: animalDmgModifiers,
     drop: [
       dropEntry('Coins', { chance: 0.25, min: 5, max: 10 }),
@@ -860,8 +873,8 @@ export const creatures: Creature[] = [
     faction: 'PlainsMonsters',
     locations: ['GoblinCamp'],
     attacks: single([
-      { dmg: { blunt: 100 }, name: 'staff' },
-      { dmg: { blunt: 20, fire: 100 }, name: 'fireball' },
+      { dmg: { blunt: 100 }, name: 'staff', stagger: 3.2 },
+      { dmg: { blunt: 20, fire: 100 }, name: 'fireball', stagger: 3.2 },
     ]),
 
     // vs 0 arm 15.1-19.7
@@ -870,8 +883,10 @@ export const creatures: Creature[] = [
     // vs 52 arm 6.5-11.1
     // vs 52 arm + FR 3.8-6.7 (instantly + 5x over time halved due to FR)
     hp: 150,
-    staggerFactor: 0.3,
-    staggerBlocked: true,
+    stagger: {
+      factor: 0.3,
+      time: 3.2,
+    },
     damageModifiers: animalDmgModifiers,
     drop: [
       dropEntry('Coins', { chance: 0.25, min: 20, max: 40 }),
@@ -892,20 +907,22 @@ export const creatures: Creature[] = [
         blunt: 130,
         chop: 100,
         pickaxe: 40,
-      }, name: '???', force: 50, }, // attack
+      }, name: '???', stagger: 2.88, force: 50, }, // attack
       { dmg: {
         blunt: 130,
         chop: 100,
         pickaxe: 40,
-      }, name: '???', force: 70 }, // rage attack toolTier: 2
+      }, name: '???', stagger: 2.88, force: 70 }, // rage attack toolTier: 2
       { dmg: {
         slash: 80,
         chop: 10,
       }, name: '???', force: 50 }, // taunt toolTier: 0
     ]),
     hp: 800,
-    staggerFactor: 0.3,
-    staggerBlocked: true,
+    stagger: {
+      factor: 0.3,
+      time: 2.88,
+    },
     damageModifiers: animalDmgModifiers,
     drop: [
       dropEntry('Coins', { min: 5, max: 20 }),
@@ -924,8 +941,6 @@ export const creatures: Creature[] = [
     locations: ['Plains'],
     attacks: single([{ dmg: { pierce: 90 }, name: 'bite' }]),
     hp: 10,
-    staggerFactor: 0.5,
-    staggerBlocked: true,
     damageModifiers: animalDmgModifiers,
     drop: [
       dropEntry('Needle', { scale: false }),
@@ -945,8 +960,10 @@ export const creatures: Creature[] = [
       { dmg: { blunt: 120, chop: 100, pickaxe: 100, }, name: 'stomp', force: 100 }, // toolTier: 0
     ]),
     hp: 1000,
-    staggerFactor: 1,
-    staggerBlocked: true,
+    stagger: {
+      factor: 1,
+      time: NaN,
+    },
     damageModifiers: {
       ...defaultDmgModifiers,
       blunt: 'resistant',
@@ -993,8 +1010,7 @@ export const creatures: Creature[] = [
       // Taunt
     ]),
     hp: 10000,
-    staggerFactor: 0,
-    staggerBlocked: false,
+
     damageModifiers: {
       ...defaultDmgModifiers,
       pierce: 'veryResistant',
@@ -1026,8 +1042,6 @@ export const creatures: Creature[] = [
       }
     ]),
     hp: 400,
-    staggerFactor: 0,
-    staggerBlocked: true,
     damageModifiers: {
       ...animalDmgModifiers,
       fire: 'immune',
