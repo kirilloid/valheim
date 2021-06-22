@@ -335,6 +335,7 @@ interface GameObjectBase {
   tags?: string[];
   dlc?: 'beta';
   disabled?: true;
+  season?: 'midsummer' | 'christmas' | 'helloween';
   tier: number;
   emoji?: string;
 }

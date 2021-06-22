@@ -644,6 +644,12 @@
 
     "ui.maxQuality": "max quality",
     "ui.nonTeleportable": "non-teleportable",
+    "ui.onlyInDlc": "This item is available only in DLC",
+    "ui.onlyInSeason": "This item can be made only during {0}",
+    "ui.onlyInSeason.christmas": "Christmas",
+    "ui.onlyInSeason.helloween": "Helloween",
+    "ui.onlyInSeason.midsummer": "Midsummer",
+    "ui.onlyWithCheats": "This item is currently disabled and could be obtained only via dev.commands, which are technically cheats",
     "ui.page.combat": "Combat calculator",
     "ui.page.food": "Food table",
     "ui.piece": "structure",

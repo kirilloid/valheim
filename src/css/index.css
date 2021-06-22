@@ -12,6 +12,7 @@ body {
   --color-secondary: #6c757d;
   --color-warning: #ffc107;
   --color-danger: #dc3545;
+  --color-info: #17a2b8;
 }
 
 #root {
@@ -75,8 +76,8 @@ code {
 }
 
 .info {
-  color: teal;
-  border: 1px solid teal;
+  color: var(--color-info);
+  border: 1px solid var(--color-info);
   padding: 0.5em;
   margin: 0.5em 0;
 }
