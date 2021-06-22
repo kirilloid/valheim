@@ -11,7 +11,7 @@ import {
   ItemSpecial as TItemSpecial
 } from '../types';
 import { SkillIcon } from './Icon';
-import { TranslationContext } from '../translation.effect';
+import { TranslationContext } from '../effects';
 import { applyDamageModifier, getTotalDamage, playerDamageModifiers } from '../model/combat';
 import { SkillType } from '../model/skills';
 import { locationBiomes } from '../model/location';

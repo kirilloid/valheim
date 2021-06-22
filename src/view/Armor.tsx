@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { TranslationContext } from '../translation.effect';
+import { TranslationContext } from '../effects';
 
 import type { Armor as TArmor } from '../types';
 import { durability, ItemSpecial, showPair, yesNo } from './helpers';

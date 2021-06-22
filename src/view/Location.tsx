@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
-import { TranslationContext } from '../translation.effect';
+import { TranslationContext } from '../effects';
 import { locations } from '../model/location';
 import { ItemIcon } from './Icon';
 import { data } from '../model/objects';

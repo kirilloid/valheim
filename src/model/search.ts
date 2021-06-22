@@ -1,6 +1,6 @@
 import { data } from './objects';
 import { locations, biomes } from './location';
-import { preloadLanguage } from '../translation.effect';
+import { preloadLanguage } from '../effects';
 import { EntityId } from '../types';
 import { getCraftingStationId } from './building';
 

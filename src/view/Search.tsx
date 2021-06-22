@@ -8,7 +8,7 @@ import { DamageType, EntityId, ItemSpecial, Piece } from '../types';
 import { match, SearchEntry } from '../model/search';
 import { Icon, ItemIcon, SkillIcon } from './Icon';
 import { data } from '../model/objects';
-import { TranslationContext, Translator } from '../translation.effect';
+import { TranslationContext, Translator } from '../effects';
 import { assertNever } from '../model/utils';
 import { SkillType } from '../model/skills';
 import { averageAttacksDamage, ShortWeaponDamage } from './helpers';

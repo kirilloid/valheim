@@ -115,6 +115,37 @@ export const ships: Ship[] = [
       station: CraftingStation.Workbench,
     },
   },
+/*  {
+    type: 'ship',
+    id: 'TrailerShip',
+    tier: 4,
+    wear: {
+      hp: 1000,
+      damageModifiers: shipDamageModifiers,
+    },
+    sail: {
+      forceDistance: 2,
+      force: 0.5,
+      damping: 0.1,
+      dampingSideway: 0.05,
+      dampingForward: 0.005,
+      angularDamping: 0.1,
+      sailForceOffset: 0,
+      sailForceFactor: 0,
+      rudderForce: 1.5,
+      waterLevelOffset: 1.7,
+      disableLevel: -0.5,
+    },
+    recipe: {
+      materials: {
+        IronNails: 100,
+        DeerHide: 10,
+        FineWood: 40,
+        ElderBark: 40,
+      },
+      station: CraftingStation.Workbench,
+    },
+  },*/
 ];
 
 const getWindAngleFactor = (angleCos: number) => {

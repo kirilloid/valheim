@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 
 import type { Item } from '../types';
 import { Icon } from './Icon';
-import { TranslationContext } from '../translation.effect';
+import { TranslationContext } from '../effects';
 import { Source } from './Source';
 import { ItemHeader } from './ItemHeader';
 import { yesNo } from './helpers';

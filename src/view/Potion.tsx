@@ -3,7 +3,7 @@ import { Potion as TPotion } from '../types';
 import { timeI2S } from '../model/utils';
 import { Icon } from './Icon';
 import { RecipeSection } from './Source';
-import { TranslationContext } from '../translation.effect';
+import { TranslationContext } from '../effects';
 import { ItemHeader } from './ItemHeader';
 import { yesNo } from './helpers';
 

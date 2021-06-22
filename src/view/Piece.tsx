@@ -4,7 +4,7 @@ import { getCraftingStationId, getStructuralIntegrity } from '../model/building'
 import { data } from '../model/objects';
 import { stationsMap } from '../model/resource-usage';
 import { assertNever, GAME_DAY, timeI2S } from '../model/utils';
-import { TranslationContext } from '../translation.effect';
+import { TranslationContext } from '../effects';
 
 import { ItemType, MaterialType, Piece as TPiece } from '../types';
 import { Resistances, yesNo } from './helpers';

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { SkillType } from '../model/skills';
-import { TranslationContext } from '../translation.effect';
+import { TranslationContext } from '../effects';
 
 import type { Arrow as TArrow } from '../types';
 import { ShortWeaponDamage, yesNo } from './helpers';

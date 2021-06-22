@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { SkillType } from '../model/skills';
 import { assertNever } from '../model/utils';
-import { TranslationContext } from '../translation.effect';
+import { TranslationContext } from '../effects';
 
 import type { GameObject } from '../types';
 

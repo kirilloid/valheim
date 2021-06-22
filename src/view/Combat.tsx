@@ -10,7 +10,8 @@ import { creatures } from '../model/creatures';
 import { arrows } from '../model/arrows';
 import { locationToBiome } from '../model/location';
 import { attackCreature, AttackStats, WeaponConfig } from '../model/combat';
-import { TranslationContext } from '../translation.effect';
+import { TranslationContext } from '../effects/translation.effect';
+import { useDebounceEffect } from '../effects/debounce.effect';
 import { Icon, ItemIcon, SkillIcon } from './Icon';
 import { Action, actionCreators, ActionCreators, CombatState, defaultWeapon, reducer, enabledItems, CombatStat, defaultCreature } from '../model/combat.reducer';
 import { showNumber } from './helpers';
@@ -83,7 +84,7 @@ function getInitialState(params: string | undefined): CombatState {
   return {
     weapons,
     creature: creatures.find(c => c.id === creature) ?? defaultCreature,
-    biome: 'Meadows',
+    biome: locationToBiome(defaultCreature.locations[0]!),
     backstab,
     isWet,
     stat: stat as CombatStat,
@@ -253,10 +254,12 @@ export function Combat() {
     creature, biome, backstab, isWet,
     stat,
   } = state;
-  const path = `/combat/${isWet ? 'wet-' : ''}${backstab ? 'unaware-' : ''}${creature.id}-${stat}-${weapons.map(serializeWeapon).join('-or-')}`;
-  if (history.location.pathname !== path) {
-    history.replace(path);
-  }
+  useDebounceEffect(state, (state) => {
+    const path = `/combat/${isWet ? 'wet-' : ''}${backstab ? 'unaware-' : ''}${creature.id}-${stat}-${weapons.map(serializeWeapon).join('-or-')}`;
+    if (history.location.pathname !== path) {
+      history.replace(path);
+    }
+  }, 200);
   // const [shield, onShieldChange] = useStateSelectUpdate(shields, updateGeneric(statePair, 'shield'));
   // const onArmorChange = useStateNumberUpdate(updateGeneric(statePair, 'armor'));
   // const onPlayersChange = useStateNumberUpdate(updateGeneric(statePair, 'players'));

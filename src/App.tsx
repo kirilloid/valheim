@@ -15,7 +15,7 @@ import { Combat } from './view/Combat';
 import { FoodTable } from './view/FoodTable';
 import { Location } from './view/Location';
 import { Biome } from './view/Biome';
-import { TranslationContext, useTranslation } from './translation.effect';
+import { TranslationContext, useTranslation } from './effects';
 
 function App() {
   const translate = useTranslation();

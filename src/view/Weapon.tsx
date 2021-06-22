@@ -11,7 +11,7 @@ import { SkillType } from '../model/skills';
 import { Icon, SkillIcon } from './Icon';
 import { RecipeSection } from './Source';
 import { durability, ItemSpecial, showPair, yesNo } from './helpers';
-import { TranslationContext } from '../translation.effect';
+import { TranslationContext } from '../effects';
 import { ItemHeader } from './ItemHeader';
 
 function skill(skill: SkillType | null) {

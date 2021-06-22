@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { resourceCraftMap } from '../model/resource-usage';
-import { TranslationContext } from '../translation.effect';
+import { TranslationContext } from '../effects';
 
 import type { Valuable as TValuable } from '../types';
 import { yesNo } from './helpers';

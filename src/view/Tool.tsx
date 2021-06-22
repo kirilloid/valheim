@@ -4,7 +4,7 @@ import { Tool as TTool } from '../types';
 import { Icon } from './Icon';
 import { RecipeSection } from './Source';
 import { durability, yesNo } from './helpers';
-import { TranslationContext } from '../translation.effect';
+import { TranslationContext } from '../effects';
 import { ItemHeader } from './ItemHeader';
 
 export function Tool({ item, level }: { item: TTool, level?: number }) {

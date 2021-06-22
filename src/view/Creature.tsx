@@ -7,7 +7,7 @@ import { dmgBonus, hpBonus, multiplyDamage } from '../model/combat';
 import { data } from '../model/objects';
 import { getSummon } from '../model/resources';
 import { timeI2S } from '../model/utils';
-import { TranslationContext } from '../translation.effect';
+import { TranslationContext } from '../effects';
 
 import { Creature as TCreature, NormalAttackProfile, SpawnAttackProfile } from '../types';
 import { Area, Resistances, shortCreatureDamage, yesNo } from './helpers';

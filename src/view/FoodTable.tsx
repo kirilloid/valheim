@@ -6,7 +6,7 @@ import '../css/FoodTable.css';
 import type { Food, Item } from '../types';
 import { timeI2S } from '../model/utils';
 import { Icon, ItemIcon } from './Icon';
-import { TranslationContext } from '../translation.effect';
+import { TranslationContext } from '../effects';
 import { resources } from '../model/resources';
 
 function isFood(item: Item): item is Food {

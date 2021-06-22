@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import '../css/Biome.css';
 
 import type { Item } from '../types';
-import { TranslationContext } from '../translation.effect';
+import { TranslationContext } from '../effects';
 import { biomes } from '../model/location';
 import { ItemIcon } from './Icon';
 import { data } from '../model/objects';

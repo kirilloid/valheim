@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import { TranslationContext } from '../translation.effect';
 
+import { TranslationContext } from '../effects';
 import { GameObject } from "../types";
 import { ItemIcon } from './Icon';
 

@@ -2,13 +2,12 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import { CraftingStation, EntityId, GameObject, Item, Piece } from '../types';
-import { TranslationContext } from '../translation.effect';
+import { TranslationContext, useGlobalState } from '../effects';
 import { data } from '../model/objects';
 import { creatures } from '../model/creatures';
 import { Icon, ItemIcon, SkillIcon } from './Icon';
 import { assertNever, timeI2S } from '../model/utils';
 import { getCraftingStationId } from '../model/building';
-import { useGlobalState } from '../globalState.effect';
 import { resourceBuildMap, resourceCraftMap } from '../model/resource-usage';
 import { SkillType } from '../model/skills';
 import { Area } from './helpers';
