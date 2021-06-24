@@ -49,7 +49,7 @@ const unblockable = true;
 const undodgeable = true;
 
 const single = (attacks: AttackProfile[]): [AttackVariety] => {
-  return [{ variety: '', attacks }]; 
+  return [{ rate: 1, variety: '', attacks }]; 
 };
 
 export const creatures: Creature[] = [
@@ -174,7 +174,7 @@ export const creatures: Creature[] = [
     faction: 'Boss',
     locations: ['Eikthyrnir'],
     attacks: single([
-      { dmg: { pierce: 20, chop: 1000, pickaxe: 1000 }, name: 'antlers', force: 100 },
+      { dmg: { pierce: 20, chop: 1000, pickaxe: 1000 }, name: 'antlers', force: 100, toolTier: 0 },
       { dmg: { lightning: 15 }, name: 'pew-pew', force: 200 },
       { dmg: { lightning: 20 }, name: 'stomp', force: 100 },
     ]),
@@ -210,9 +210,9 @@ export const creatures: Creature[] = [
     faction: 'Undead',
     locations: ['Crypt', 'Swamp', 'StoneTowerRuins'],
     attacks: [
-      { variety: 'sword', attacks: [{ dmg: { slash: 25 }, stagger: 2.48, name: 'sword' }] },
-      { variety: 'mace', attacks: [{ dmg: { blunt: 25 }, stagger: 2.48, name: 'mace' }] },
-      { variety: 'bow', attacks: [{ dmg: { pierce: 20 }, stagger: 2.48, name: 'bow' }] },
+      { rate: 4, variety: 'sword', attacks: [{ dmg: { slash: 25 }, stagger: 2.48, name: 'sword' }] },
+      // { variety: 'mace', attacks: [{ dmg: { blunt: 25 }, stagger: 2.48, name: 'mace' }] },
+      { rate: 1, variety: 'bow', attacks: [{ dmg: { pierce: 20 }, stagger: 2.48, name: 'bow' }] },
     ],
     hp: 40,
     stagger: {
@@ -365,17 +365,19 @@ export const creatures: Creature[] = [
     locations: ['BlackForest', 'TrollCave'],
     attacks: [
       {
+        rate: 1,
         variety: 'unarmed',
         attacks: [
-          { dmg: { blunt: 60, chop: 100, pickaxe: 40 }, name: '1-hand hit', stagger: 4.4, force: 100 },
-          { dmg: { blunt: 70, chop: 100, pickaxe: 40 }, name: '2-hand smash', stagger: 1.98, force: 100 },
-          { dmg: { blunt: 50, chop: 60, pickaxe: 40 }, name: 'throw', stagger: 2.16 },
+          { dmg: { blunt: 60, chop: 100, pickaxe: 40 }, name: '1-hand hit', stagger: 4.4, force: 100, toolTier: 2 },
+          { dmg: { blunt: 70, chop: 100, pickaxe: 40 }, name: '2-hand smash', stagger: 1.98, force: 100, toolTier: 2 },
+          { dmg: { blunt: 50, chop: 60, pickaxe: 40 }, name: 'throw', stagger: 2.16, toolTier: 0 },
         ],
       }, {
+        rate: 1,
         variety: 'log',
         attacks: [
-          { dmg: { blunt: 60, chop: 100, pickaxe: 40 }, name: 'h-swing', stagger: 2.74, force: 80 },
-          { dmg: { blunt: 70, chop: 100, pickaxe: 40 }, name: 'v-swing', stagger: 2.74, force: 80 },
+          { dmg: { blunt: 70, chop: 100, pickaxe: 40 }, name: 'v-swing', stagger: 2.74, force: 80, toolTier: 2 },
+          { dmg: { blunt: 60, chop: 100, pickaxe: 40 }, name: 'h-swing', stagger: 2.74, force: 80, toolTier: 2 },
         ],
       },
     ],
@@ -405,12 +407,10 @@ export const creatures: Creature[] = [
     faction: 'Boss',
     locations: ['GDKing'],
     attacks: single([
-      // used? { dmg: { blunt: 50 }, name: 'Punch', force: 30 }, 
-      { dmg: { pierce: 35, chop: 20, pickaxe: 20 }, name: 'Vine Shoot', force: 40 },
-      { dmg: { blunt: 60, chop: 1000, pickaxe: 1000 }, name: 'Stomp', force: 30 },
+      // SCREAM
       { spawn: ['Root'], number: 15, max: 30 },
-      // number: 15, max: 30, staggerFactor: 0, staggerBlocked: true,
-      // hp: 20, weak to fire,
+      { dmg: { pierce: 35, chop: 20, pickaxe: 20 }, name: 'Vine Shoot', burst: 25, toolTier: 0 },
+      { dmg: { blunt: 60, chop: 1000, pickaxe: 1000 }, name: 'Stomp', force: 30, toolTier: 0 }, // area
     ]),
     hp: 2500,
     damageModifiers: {
@@ -427,14 +427,14 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     disabled: true,
-    id: 'Root', // the elder
+    id: 'Root', // from the elder
     tier: 2,
     maxLvl: 1,
     emoji: '🥦',
     faction: 'Boss',
     locations: ['GDKing'],
     attacks: single([
-      { dmg: { blunt: 55, chop: 20, pickaxe: 20, }, name: 'poke', force: 40 }
+      { dmg: { blunt: 55, chop: 20, pickaxe: 20 }, name: 'poke', force: 40, toolTier: 0 }
     ]),
     hp: 20,
     damageModifiers: {
@@ -575,9 +575,11 @@ export const creatures: Creature[] = [
     locations: ['Swamp', 'SwampRuin', 'SunkenCrypt', 'StoneTowerRuins'],
     attacks: [
       { variety: 'axe',
-        attacks: [{ dmg: { slash: 48, chop: 15 }, name: 'axe', stagger: 2.8, force: 60 }],
+        rate: 3,
+        attacks: [{ dmg: { slash: 48, chop: 15 }, name: 'axe', stagger: 2.8, force: 60, toolTier: 0 }],
       },
       { variety: 'bow',
+        rate: 1,
         attacks: [{ dmg: { pierce: 48 }, name: 'bow', stagger: 2.8, force: 18 }],
       },
     ],
@@ -631,11 +633,12 @@ export const creatures: Creature[] = [
     locations: ['Bonemass'],
     attacks: single([
       { dmg: { poison: 100 }, name: 'poison', force: 0, unblockable, undodgeable },
-      { dmg: { blunt: 80, // punch
+      { dmg: {
+        blunt: 80,
         chop: 1000,
         pickaxe: 1000,
         poison: 30,
-      }, name: 'hit', force: 0 },
+      }, name: 'punch', force: 100, toolTier: 0 },
       { spawn: ['Skeleton', 'Blob'], number: 4, max: 8, }
     ]),
     hp: 5000,
@@ -716,32 +719,35 @@ export const creatures: Creature[] = [
     faction: 'ForestMonsters',
     locations: ['Mountain'],
     attacks: [
-      { variety: 'spike',
+      { rate: 1,
+        variety: 'spike',
         attacks: [
           { dmg: {
             blunt: 110,
             chop: 100,
             pickaxe: 100,
-          }, name: 'spike', stagger: 2.94, force: 130, },
+          }, name: 'spike', stagger: 2.94, force: 130, toolTier: 0 },
           { dmg: {
-            pierce: 110,
+            blunt: 110,
             chop: 100,
             pickaxe: 100,
-          }, name: 'spikesweep', stagger: 0.98, force: 8 },
+          }, name: 'spike sweep', stagger: 0.98, force: 130, toolTier: 0 },
+          // spikes, no dmg, no animation
         ],
       },
-      { variety: 'sledge',
+      { rate: 1,
+        variety: 'sledge',
         attacks: [
           { dmg: {
             blunt: 110,
             chop: 100,
             pickaxe: 100,
-          }, name: 'slam', stagger: 2.94, force: 130, }, // R8
+          }, name: 'slam', stagger: 2.94, force: 130, toolTier: 0 }, // R8
           { dmg: {
             blunt: 110,
             chop: 100,
             pickaxe: 100,
-          }, name: 'double smash', stagger: 0.98, force: 120, }, // R8.66
+          }, name: 'double smash', stagger: 0.98, force: 120, toolTier: 0 }, // R8.66
         ],
       },
     ], 
@@ -795,27 +801,28 @@ export const creatures: Creature[] = [
     faction: 'Boss',
     locations: ['DragonQueen'],
     attacks: single([
+      // taunt,
       { dmg: {
-        slash: 120,
+        pierce: 120,
         chop: 1000,
         pickaxe: 1000
-      }, name: 'bite', force: 120 }, // R8
+      }, name: 'bite', force: 120, toolTier: 3 }, // R8
       { dmg: {
         slash: 110,
         chop: 1000,
         pickaxe: 1000
-      }, name: 'claw', force: 120 }, // R4
-      { dmg: {
-        chop: 200,
-        pickaxe: 200,
-        frost: 200,
-      }, name: 'breath', force: 40 },
+      }, name: 'claw', force: 120, toolTier: 3 }, // R4 two: left & right
       { dmg: {
         pierce: 30,
         chop: 200,
         pickaxe: 200,
         frost: 200
-      }, burst: 16, name: 'ice shards', force: 30 }, // V25
+      }, burst: 16, name: 'ice shards', force: 30, toolTier: 3 }, // velocity=2/25 burstInterval=0.05, spread=20/13
+      { dmg: {
+        chop: 200,
+        pickaxe: 200,
+        frost: 200,
+      }, name: 'breath', force: 40, toolTier: 3 },
     ]),
     hp: 7500,
 
@@ -839,10 +846,10 @@ export const creatures: Creature[] = [
     faction: 'PlainsMonsters',
     locations: ['Plains', 'GoblinCamp', 'StoneTower', 'StoneHengeS'],
     attacks: [
-      { variety: 'club', attacks: [{ dmg: { blunt: 110 }, name: 'club', stagger: 2.08 }] },
-      { variety: 'spear', attacks: [{ dmg: { pierce: 110 }, name: 'spear', stagger: 3.38 }] },
-      { variety: 'sword', attacks: [{ dmg: { slash: 110 }, name: 'sword', stagger: 2.08 }] },
-      { variety: 'torch', attacks: [{ dmg: { blunt: 55, fire: 55 }, name: 'torch', stagger: 2.08 }] },
+      { rate: 2, variety: 'club', attacks: [{ dmg: { blunt: 110 }, name: 'club', stagger: 2.08 }] },
+      { rate: 1, variety: 'spear', attacks: [{ dmg: { pierce: 110 }, name: 'spear', stagger: 3.38 }] },
+      { rate: 2, variety: 'sword', attacks: [{ dmg: { slash: 110 }, name: 'sword', stagger: 2.08 }] },
+      { rate: 1, variety: 'torch', attacks: [{ dmg: { blunt: 55, fire: 55 }, name: 'torch', stagger: 2.08 }] },
       // vs 26 arm 24.3-37.6
       // vs 52 arm 18.6-28.2
       // vs 52 arm & FR 12.5-21.4
@@ -907,16 +914,13 @@ export const creatures: Creature[] = [
         blunt: 130,
         chop: 100,
         pickaxe: 40,
-      }, name: '???', stagger: 2.88, force: 50, }, // attack
+      }, name: 'attack', stagger: 2.88, force: 50, toolTier: 2 }, // random: 2
       { dmg: {
         blunt: 130,
         chop: 100,
         pickaxe: 40,
-      }, name: '???', stagger: 2.88, force: 70 }, // rage attack toolTier: 2
-      { dmg: {
-        slash: 80,
-        chop: 10,
-      }, name: '???', force: 50 }, // taunt toolTier: 0
+      }, name: 'rageattack', stagger: 2.88, force: 70, toolTier: 2 },
+      // taunt
     ]),
     hp: 800,
     stagger: {
@@ -957,7 +961,7 @@ export const creatures: Creature[] = [
     locations: ['Plains'],
     attacks: single([
       { dmg: { slash: 130 }, name: 'bite', force: 150 },
-      { dmg: { blunt: 120, chop: 100, pickaxe: 100, }, name: 'stomp', force: 100 }, // toolTier: 0
+      { dmg: { blunt: 120, chop: 100, pickaxe: 100, }, name: 'stomp', force: 100, toolTier: 0 },
     ]),
     hp: 1000,
     stagger: {
@@ -995,18 +999,18 @@ export const creatures: Creature[] = [
         chop: 50,
         pickaxe: 50,
         fire: 140,
-      }, burst: 20, name: 'meteors', force: 100, unblockable }, // "burstInterval": 0.1
+      }, burst: 20, name: 'meteors', force: 100, unblockable }, // no toolTier
       { dmg: {
         blunt: 50,
         chop: 50,
         pickaxe: 50,
         fire: 60,
-      }, name: 'fire Breath' },
+      }, name: 'fire Breath' }, // aka beam burst: 20*0.1 V=30/40 spread=1/1
       { dmg: {
         blunt: 130,
         chop: 100,
         pickaxe: 100,
-      }, name: 'nova', force: 100, unblockable },
+      }, name: 'nova', force: 100, toolTier: 2, unblockable },
       // Taunt
     ]),
     hp: 10000,
@@ -1035,11 +1039,7 @@ export const creatures: Creature[] = [
       { dmg: { slash: 70, },
         name: 'attack', force: 100,
       },
-      { dmg: {
-        slash: 40,
-        poison: 5,
-      }, name: 'taunt', force: 30
-      }
+      // taunt
     ]),
     hp: 400,
     damageModifiers: {

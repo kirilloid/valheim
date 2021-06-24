@@ -339,7 +339,7 @@ export const items: Item[] = [
     armor: [1, 1],
     weight: 4,
     maxLvl: 4,
-    durability: [1000, 200],
+    durability: [1000, 50],
     moveSpeed: 0,
     damageModifiers: { frost: 'resistant' },
     recipe: {

@@ -99,6 +99,26 @@ export const events: GameEvent[] = [
     base: true,
   },
   {
+    id: 'blobs',
+    biomes: ['Meadows', 'BlackForest', 'Swamp', 'Plains'],
+    killed: ['Bonemass'],
+    notKilled: [],
+    duration: 120,
+    spawns: [
+      {
+        id: 'Blob',
+        max: 5,
+        interval: 2,
+      },
+      {
+        id: 'BlobElite',
+        max: 2,
+        interval: 2,
+      }
+    ],
+    base: true,
+  },
+  {
     id: 'army_bonemass',
     biomes: ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains'],
     killed: ['gd_king'],
@@ -120,7 +140,7 @@ export const events: GameEvent[] = [
   },
   {
     id: 'army_moder',
-    biomes: ['Meadows', 'BlackForest', 'Swamp', 'Plains'],
+    biomes: ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains'],
     killed: ['Bonemass'],
     notKilled: ['Dragon'],
     duration: 150,
@@ -136,7 +156,7 @@ export const events: GameEvent[] = [
   {
     id: 'wolves',
     biomes: ['Mountain', 'Plains'],
-    killed: [],
+    killed: ['Bonemass'],
     notKilled: [],
     duration: 120,
     spawns: [

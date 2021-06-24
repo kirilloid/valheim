@@ -41,6 +41,7 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
   const dmgScale = dmgBonus(scale);
   const dropScale = 2 ** (level - 1);
   const [sid, snr] = getSummon(id) ?? ['', 0];
+  const totalVarietyRates = creature.attacks.reduce((t, a) => t + a.rate, 0);
   return (<>
     <ItemHeader item={creature} >
       {creature.maxLvl > 1
@@ -82,7 +83,7 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
       {creature.attacks.length ? <>
         <h3>attacks</h3>
         {creature.attacks.map(a => <>
-          {creature.attacks.length > 1 ? <h4 key={a.variety}>{a.variety}</h4> : null}
+          {creature.attacks.length > 1 ? <h4 key={a.variety}>{a.variety} ({Math.round(100 * a.rate / totalVarietyRates)}%)</h4> : null}
           <dl key={a.variety}>
           {a.attacks.map(a => 'spawn' in a
             ? <SpawnAttack attack={a} />

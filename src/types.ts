@@ -124,6 +124,7 @@ export type NormalAttackProfile = {
   stagger?: number;
   // knockback
   force?: number;
+  toolTier?: number;
 }
 export type SpawnAttackProfile = {
   spawn: EntityId[];
@@ -132,6 +133,7 @@ export type SpawnAttackProfile = {
 }
 export type AttackProfile = NormalAttackProfile | SpawnAttackProfile;
 export type AttackVariety = {
+  rate: number;
   variety: string;
   attacks: AttackProfile[];
 };
