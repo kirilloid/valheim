@@ -10,7 +10,7 @@ export const enabledItems = items.filter(i => !i.disabled && i.type === 'weapon'
 
 export type CombatStat = 'single' | 'hits' | 'dps' | 'dpsta';
 
-export interface CombatState {
+export interface State {
   weapons: WeaponConfig[];
   creature: Creature;
   biome: Biome;
@@ -76,7 +76,7 @@ export const defaultWeapon: WeaponConfig = {
 
 export const defaultCreature = creatures.find(c => c.id === 'Greyling')!;
 
-export function reducer(state: CombatState, action: Action): CombatState {
+export function reducer(state: State, action: Action): State {
   switch (action.type) {
     case CHANGE_CREATURE: {
       const { id, biome } = action;

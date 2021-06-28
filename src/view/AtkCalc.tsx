@@ -6,90 +6,17 @@ import '../css/Combat.css';
 
 import type { Biome, Creature } from '../types';
 
-import { creatures } from '../model/creatures';
 import { arrows } from '../model/arrows';
-import { locationToBiome } from '../model/location';
 import { attackCreature, AttackStats, WeaponConfig } from '../model/combat';
 import { TranslationContext } from '../effects/translation.effect';
 import { useDebounceEffect } from '../effects/debounce.effect';
 import { Icon, ItemIcon, SkillIcon } from './Icon';
-import { Action, actionCreators, ActionCreators, CombatState, defaultWeapon, reducer, enabledItems, CombatStat, defaultCreature } from '../model/combat.reducer';
+import { Action, actionCreators, ActionCreators, reducer, enabledItems, CombatStat } from '../model/off_calc.reducer';
 import { showNumber } from './helpers';
+import { getInitialState, serializeWeapon } from '../model/off.calc.url';
+import { groupedCreatures } from '../model/combat_creatures';
 
 const weaponGroups = groupBy(enabledItems, w => w.tier);
-// const shields = items.filter(i => !i.disabled && i.type === 'shield') as Shield[]; 
-
-const groupedCreatures: Record<Biome, Creature[]> = {
-  Meadows: [],
-  BlackForest: [],
-  Swamp: [],
-  Ocean: [],
-  Mountain: [],
-  Plains: [],
-  Mistlands: [],
-  DeepNorth: [],
-  Ashlands: [],
-};
-
-for (const creature of creatures) {
-  if (creature.hp === 1) continue;
-  for (const loc of creature.locations) {
-    const biome = locationToBiome(loc);
-    const group = groupedCreatures[biome];
-    if (group && !group.includes(creature)) {
-      group.push(creature);
-    }
-  }
-}
-
-const weaponRegex = /(\w+)-(\d+)-(\d+)(?:-(\w+))?/;
-
-function parseWeapon(str: string): WeaponConfig {
-  const [, id, level, skill, arrow] = str.match(weaponRegex) ?? [];
-  const weapon = id && enabledItems.find(w => w.id === id) || enabledItems[0]!;
-  return {
-    item: weapon,
-    level: Number(level) || weapon.maxLvl,
-    skill: Number(skill) || 0,
-    arrow: arrow && arrows.find(a => a.id === arrow) || arrows[0]!,
-  };
-}
-
-function serializeWeapon(weapon: WeaponConfig): string {
-  return `${weapon.item.id}-${weapon.level}-${weapon.skill}`
-         + (weapon.item.slot === 'bow' ? `-${weapon.arrow.id}` : '')
-}
-
-function getInitialState(params: string | undefined): CombatState {
-  const match = params?.match(/^(wet-)?(unaware-)?(\w+)-(\w+)-/);
-  if (params == null || match == null) {
-    return {
-      weapons: [defaultWeapon],
-      creature: defaultCreature,
-      biome: 'Meadows',
-      backstab: false,
-      isWet: false,
-      stat: 'dps',
-    };
-  }
-  
-  const isWet = match[1] != null;
-  const backstab = match[2] != null;
-  const [,,, creature, stat] = match;
-  const weaponsStr = params.slice(match[0]!.length);
-  const weapons = weaponsStr.split('-or-').map(parseWeapon) ?? [];
-  if (weapons.length === 0) {
-    weapons.push(defaultWeapon);
-  }
-  return {
-    weapons,
-    creature: creatures.find(c => c.id === creature) ?? defaultCreature,
-    biome: locationToBiome(defaultCreature.locations[0]!),
-    backstab,
-    isWet,
-    stat: stat as CombatStat,
-  };
-}
 
 interface SameWeaponConfig {
   item: boolean;
@@ -242,7 +169,7 @@ function StatBar(props: {
   </div>
 }
 
-export function Combat() {
+export function AttackCalc() {
   const translate = useContext(TranslationContext);
   const history = useHistory();
   const { params } = useParams<{ params?: string }>();

@@ -11,7 +11,8 @@ import { Search } from './view/Search';
 import { Ship } from './view/Ship';
 import { GameObject } from './view/GameObject';
 import { Info } from './view/Info';
-import { Combat } from './view/Combat';
+import { AttackCalc } from './view/AtkCalc';
+import { DefenseCalc } from './view/DefCalc';
 import { FoodTable } from './view/FoodTable';
 import { Location } from './view/Location';
 import { Biome } from './view/Biome';
@@ -25,8 +26,10 @@ function App() {
         <Router>
           <Search />
           <Switch>
-            <Route path="/combat/:params" children={<Combat />} />
-            <Route path="/combat" children={<Combat />} />
+            <Route path="/attack/:params" children={<AttackCalc />} />
+            <Route path="/attack" children={<AttackCalc />} />
+            <Route path="/defense/:params" children={<DefenseCalc />} />
+            <Route path="/defense" children={<DefenseCalc />} />
             <Route path="/food/:sort" children={<FoodTable />} />
             <Route path="/food" children={<FoodTable />} />
             <Route exact path="/ships" children={<Ship />} />
