@@ -54,8 +54,12 @@ function addArray<T extends { id: string }>(
   dict: Record<string, string>,
   dictKeyMap: (arg: string) => string,
 ) {
+  const visited = new Set<string>();
   for (const obj of data) {
     const { id } = obj;
+    // avoid duplicating locations via different parent biomes
+    if (visited.has(id)) continue
+    visited.add(id);
     const i18nKey = dictKeyMap(id);
     const entry = dict[i18nKey];
     if (entry == null) continue;

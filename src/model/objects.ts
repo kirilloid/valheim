@@ -15,15 +15,15 @@ function addCollection(coll: GameObject[]) {
 }
 
 for (const coll of [
-  resources,
+  creatures,
   weapons,
   armors,
   arrows,
   tools,
   pieces,
-  creatures,
   ships,
   carts,
+  resources,
 ]) {
   addCollection(coll);
 }
