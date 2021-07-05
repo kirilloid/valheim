@@ -6,31 +6,68 @@ import { GameObject } from '../types';
 import { tools } from './tools';
 import { pieces } from './building';
 import { creatures } from './creatures';
+import { ships, carts } from './transport';
 
 export const data: Record<string, GameObject> = {};
-resources.forEach(r => data[r.id] = r);
-weapons.forEach(w => data[w.id] = w);
-armors.forEach(a => data[a.id] = a);
-arrows.forEach(a => data[a.id] = a);
-tools.forEach(t => data[t.id] = t);
-pieces.forEach(p => data[p.id] = p);
-creatures.forEach(c => data[c.id] = c);
+
+function addCollection(coll: GameObject[]) {
+  coll.forEach(e => data[e.id] = e);
+}
+
+for (const coll of [
+  resources,
+  weapons,
+  armors,
+  arrows,
+  tools,
+  pieces,
+  creatures,
+  ships,
+  carts,
+]) {
+  addCollection(coll);
+}
 
 /*
 
 skeletal remains (buried): 50% silver necklace
 
 mudpile (beacon)
-drop: 30%
-- 100 IronScrap
-- 1 WitheredBone
-beaconRange: 25
+- hp: 1
+mudpile_frac:
+- hp: 5
+- drop: 30%
+  - 100 IronScrap
+  - 1 WitheredBone
+- beaconRange: 25
 
 mudpile
-drop: 20%
-- 5 IronScrap
-- 1 WitheredBone
-- 1 LeatherScrap
+- hp: 1
+- mudpile_frac x2
+
+mudpile_frac:
+- hp: 5
+- drop: 20%
+  - 5 IronScrap
+  - 1 WitheredBone
+  - 1 LeatherScrap
+
+rock4_copper:
+- hp: 1
+- rock4_copper_frac: x132
+
+rock4_copper_frac:
+- hp: 50
+- drop: 100%, 2-4 of
+  - 5 IronScrap
+  - 1 WitheredBone
+  - 1 LeatherScrap
+
+rock4_copper_frac:
+  children: 132
+  hp: 50
+  minToolTier: 0
+  drops: 2-4 of 1 CopperOre : 2 Stone
 
 # any tree stubs
 - hp: 80
@@ -99,12 +136,6 @@ silver_vein_frac:
   drops: 2-3 of 1 SilverOre : 2 Stone
 
   expirements: 407 silver, 845 stone
-
-rock4_copper_frac:
-  children: 132
-  hp: 40
-  minToolTier: 2
-  drops: 2-4 of 1 CopperOre : 2 Stone
 
 rock4_heath_frac:
   children: 132

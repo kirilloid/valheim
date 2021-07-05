@@ -60,7 +60,7 @@ export type DamageModifier =
 export type DamageModifiers = Record<DamageType, DamageModifier>;
 
 const idxToMod: DamageModifier[] = ['normal', 'resistant', 'weak', 'immune', 'ignore', 'veryResistant', 'veryWeak'];
-export function mods(values: [number, number, number, number, number, number, number, number, number, number]): DamageModifiers {
+export function mods(values: [blunt: number, slash: number, pierce: number, chop: number, pickaxe: number, fire: number, frost: number, lightning: number, poison: number, spirit: number]): DamageModifiers {
   const [blunt, slash, pierce, chop, pickaxe, fire, frost, lightning, poison, spirit] = values.map(v => idxToMod[v]!);
   return { blunt, slash, pierce, chop, pickaxe, fire, frost, lightning, poison, spirit } as DamageModifiers;
 }
@@ -220,6 +220,19 @@ export interface BasePiece extends GameObjectBase {
     hp: number;
     damageModifiers: DamageModifiers;
   };
+  piece: {
+    target: 'primary' | 'random' | 'none';
+    water: boolean | undefined;
+    size?: [width: number, depth: number, height: number];
+    notOnWood?: boolean;
+    onlyOnFlat?: boolean;
+    notOnFloor?: boolean;
+    groundOnly?: boolean;
+    repairable?: boolean;
+    nonRemovable?: boolean;
+    allowedInDungeons?: boolean;
+    requiredSpace?: number;
+  };
   recipe: {
     type: 'craft_piece',
     materials: Record<EntityId, number>;
@@ -236,19 +249,6 @@ export type Piece = BasePiece & {
     noSupport?: boolean;
     providesSupport?: boolean;
     materialType?: MaterialType;
-  };
-  piece: {
-    target: 'primary' | 'random' | 'none';
-    water: boolean | undefined;
-    size?: [width: number, depth: number, height: number];
-    notOnWood?: boolean;
-    onlyOnFlat?: boolean;
-    notOnFloor?: boolean;
-    groundOnly?: boolean;
-    repairable?: boolean;
-    nonRemovable?: boolean;
-    allowedInDungeons?: boolean;
-    requiredSpace?: number;
   };
 } & ({
   subtype: 'fireplace';
@@ -297,7 +297,12 @@ export type Piece = BasePiece & {
   space: [width: number, height: number];
 });
 
-export interface Ship extends BasePiece {
+export interface Transport extends BasePiece {
+  type: 'ship' | 'cart';
+  storage: [columns: number, rows: number];
+}
+
+export interface Ship extends Transport {
   type: 'ship';
   sail: {
     forceDistance: number;
@@ -311,7 +316,16 @@ export interface Ship extends BasePiece {
     rudderForce: number;
     waterLevelOffset: number;
     disableLevel: number;
-  }
+  };
+  speed: {
+    rudder: number;
+    half: number[];
+    full: number[];
+  };
+}
+
+export interface Cart extends Transport {
+  type: 'cart';
 }
 
 interface GameEventSpawn {
@@ -543,7 +557,7 @@ export interface Armor extends BaseItem {
 export type Item = Resource | Valuable | Food | Potion | Weapon | Shield | Armor | Arrow | Tool;
 export type ItemSpecial = Weapon['special'] | Armor['special'] | Tool['special'];
 
-export type GameObject = Item | Piece | Creature;
+export type GameObject = Item | Piece | Ship | Cart | Creature;
 
 export enum Skill {
   Clubs,

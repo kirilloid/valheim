@@ -214,6 +214,16 @@ function renderObject(id: EntityId, text: string, translate: Translator, onClick
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         {pieceExtra(item)}
       </div>
+    case 'ship':
+    case 'cart':
+      return <div className="SearchItem">
+        <ItemIcon item={item} size={32} />
+        <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
+        <span>
+          <Icon id="weight" alt={translate('ui.weight')} size={16} />
+          {item.storage[0] * item.storage[1]}
+        </span>
+      </div>
     default:
       assertNever(item);
   }

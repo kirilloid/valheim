@@ -25,7 +25,7 @@ const damageModifiersFireplace: DamageModifiers = {
   ...damageModifiersElementalPart,
 };
 
-const damageModifieresExtensions: DamageModifiers = mods([0, 0, 1, 2, 0, 0, 1, 0, 3, 3])
+const damageModifieresExtensions: DamageModifiers = mods([0, 0, 1, 2, 0, 0, 1, 0, 3, 3]);
 
 const damageModifiersWood: DamageModifiers = {
   blunt: 'normal',
@@ -40,14 +40,7 @@ const damageModifiersWood: DamageModifiers = {
   spirit: 'immune',
 };
 
-const damageModifiersStone: DamageModifiers = {
-  blunt: 'normal',
-  slash: 'normal',
-  pierce: 'normal',
-  chop: 'normal',
-  pickaxe: 'weak',
-  ...damageModifiersElementalPart,
-};
+const damageModifiersCooking: DamageModifiers = mods([0, 0, 1, 0, 0, 1, 0, 0, 3, 3]);
 
 const notOnWood = true;
 const onlyOnFlat = true;
@@ -239,7 +232,7 @@ export const pieces: Piece[] = [
       water: undefined,
       allowedInDungeons,
     },
-    recipe: { type: 'craft_piece', materials: { Wood: 15, }, station: CraftingStation.Workbench, }
+    recipe: { type: 'craft_piece', materials: { Wood: 50, }, station: CraftingStation.Workbench, }
   },
   { id: 'stone_pile',
     type: 'piece',
@@ -276,7 +269,7 @@ export const pieces: Piece[] = [
     },
     wear: {
       hp: 20,
-      damageModifiers: mods([0, 0, 0, 0, 2, 1, 1, 0, 3, 3]), // TODO: check
+      damageModifiers: damageModifiersCooking,
       noRoof: false,
       noSupport: true,
       materialType: MaterialType.Wood,
@@ -298,7 +291,7 @@ export const pieces: Piece[] = [
     },
     wear: {
       hp: 100,
-      damageModifiers: mods([0, 0, 1, 0, 0, 1, 0, 0, 3, 3]),
+      damageModifiers: damageModifiersCooking,
       noRoof: false,
       noSupport: true,
       materialType: MaterialType.Wood,
@@ -320,7 +313,7 @@ export const pieces: Piece[] = [
     },
     wear: {
       hp: 100,
-      damageModifiers: mods([0, 0, 1, 0, 0, 1, 0, 0, 3, 3]),
+      damageModifiers: mods([0, 0, 1, 2, 0, 0, 0, 0, 3, 3]),
       noRoof: false,
       noSupport: true,
       materialType: MaterialType.Wood,
@@ -940,7 +933,7 @@ export const pieces: Piece[] = [
     subtype: 'structure',
     tier: 1,
     piece: { target: 'random', water: undefined, size: [2, 0, 0] },
-    wear: woodStructureWear,
+    wear: { ...woodStructureWear, damageModifiers: stoneResist },
     recipe: woodStructureRecipe(2),
   },
   { id: 'wood_beam_26',
@@ -948,7 +941,7 @@ export const pieces: Piece[] = [
     subtype: 'structure',
     tier: 1,
     piece: { target: 'random', water: undefined, size: [2, 0, 1] },
-    wear: woodStructureWear,
+    wear: { ...woodStructureWear, damageModifiers: stoneResist },
     recipe: woodStructureRecipe(2),
   },
   { id: 'wood_beam_45',
@@ -956,7 +949,7 @@ export const pieces: Piece[] = [
     subtype: 'structure',
     tier: 1,
     piece: { target: 'random', water: undefined, size: [2, 0, 1] },
-    wear: woodStructureWear,
+    wear: { ...woodStructureWear, damageModifiers: stoneResist },
     recipe: woodStructureRecipe(2),
   },
   { id: 'woodiron_pole',

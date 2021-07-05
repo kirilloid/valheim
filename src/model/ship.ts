@@ -1,152 +1,11 @@
-import { CraftingStation, DamageModifier, DamageModifiers, DamageType, Ship } from "../types";
-import { lerp, lerpStep, Vector3, mul, norm, add, clamp01, clamp } from "./utils";
-
-const shipDamageModifiers: DamageModifiers = {
-  blunt: 'normal',
-  slash: 'normal',
-  pierce: 'resistant',
-  chop: 'immune',
-  pickaxe: 'immune',
-  fire: 'weak',
-  frost: 'resistant',
-  lightning: 'normal',
-  poison: 'immune',
-  spirit: 'immune',
-};
+import type { Ship } from '../types';
+import { lerp, lerpStep, Vector3, mul, norm, add, clamp01, clamp } from './utils';
 
 export enum Sail {
   Slow,
   Half,
   Full,
 };
-
-export const ships: Ship[] = [
-  {
-    type: 'ship',
-    id: 'Raft',
-    tier: 1,
-    emoji: '',
-    wear: {
-      hp: 300,
-      damageModifiers: shipDamageModifiers,
-    },
-    sail: {
-      forceDistance: 2,
-      force: 0.5,
-      damping: 0.05,
-      dampingSideway: 0.1,
-      dampingForward: 0.005,
-      angularDamping: 0.05,
-      sailForceOffset: 0.5,
-      sailForceFactor: 0.05,
-      rudderForce: 0.5,
-      waterLevelOffset: 1.5,
-      disableLevel: -0.5,
-    },
-    recipe: {
-      type: 'craft_piece',
-      materials: { Wood: 20, Resin: 6, LeatherScraps: 6 },
-      station: CraftingStation.Workbench,
-    },
-  },
-  {
-    type: 'ship',
-    id: 'Karve',
-    tier: 2,
-    emoji: '⛵',
-    wear: {
-      hp: 500,
-      damageModifiers: shipDamageModifiers,
-    },
-    sail: {
-      forceDistance: 2,
-      force: 1,
-      damping: 0.05,
-      dampingSideway: 0.15,
-      dampingForward: 0.001,
-      angularDamping: 0.05,
-      sailForceOffset: 1,
-      sailForceFactor: 0.03,
-      rudderForce: 0.2,
-      waterLevelOffset: 1.5,
-      disableLevel: -0.5,
-    },
-    recipe: {
-      type: 'craft_piece',
-      materials: {
-        FineWood: 30,
-        DeerHide: 10,
-        Resin: 20,
-        BronzeNails: 80,
-      },
-      station: CraftingStation.Workbench,
-    },
-  },
-  {
-    type: 'ship',
-    id: 'VikingShip',
-    tier: 3,
-    emoji: '🚢',
-    wear: {
-      hp: 1000,
-      damageModifiers: shipDamageModifiers,
-    },
-    sail: {
-      forceDistance: 3,
-      force: 1,
-      damping: 0.05,
-      dampingSideway: 0.15,
-      dampingForward: 0.001,
-      angularDamping: 0.3,
-      sailForceOffset: 2,
-      sailForceFactor: 0.05,
-      rudderForce: 0.2,
-      waterLevelOffset: 1.5,
-      disableLevel: -0.5,
-    },
-    recipe: {
-      type: 'craft_piece',
-      materials: {
-        IronNails: 100,
-        DeerHide: 10,
-        FineWood: 40,
-        ElderBark: 40,
-      },
-      station: CraftingStation.Workbench,
-    },
-  },
-/*  {
-    type: 'ship',
-    id: 'TrailerShip',
-    tier: 4,
-    wear: {
-      hp: 1000,
-      damageModifiers: shipDamageModifiers,
-    },
-    sail: {
-      forceDistance: 2,
-      force: 0.5,
-      damping: 0.1,
-      dampingSideway: 0.05,
-      dampingForward: 0.005,
-      angularDamping: 0.1,
-      sailForceOffset: 0,
-      sailForceFactor: 0,
-      rudderForce: 1.5,
-      waterLevelOffset: 1.7,
-      disableLevel: -0.5,
-    },
-    recipe: {
-      materials: {
-        IronNails: 100,
-        DeerHide: 10,
-        FineWood: 40,
-        ElderBark: 40,
-      },
-      station: CraftingStation.Workbench,
-    },
-  },*/
-];
 
 const getWindAngleFactor = (angleCos: number) => {
   return lerp(0.7, 1, 1 - Math.abs(angleCos)) * (1 - lerpStep(0.75, 0.8, angleCos));
@@ -169,7 +28,7 @@ const fixedDeltaTime = 1 / 50;
 export const getSailSpeed = (sail: Ship['sail'], sailState: Sail, windIntensity: number, windAngle: number): Vector3 => {
   let velocity: Vector3 = { x: 0, y: 0, z: 0 };
   // let angularVelocity = 0;
-  const floatLevel = -1;
+  const floatLevel = -1.5;
   const dampFactor: number = clamp01(Math.abs(floatLevel) / sail.forceDistance);
   if (floatLevel > sail.disableLevel) return velocity;
   const sailForce = sailState === Sail.Slow

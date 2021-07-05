@@ -29,3 +29,42 @@ Karve
 0 deg (front wind)
 0 wind, 2nd gear: 20 / min
 
+
+## Karve
+
+### rudder
+     3.139 m/s
+
+### half-sail
+ 0%  2.744 m/s
+25%  3.39  m/s
+50%  4.05  m/s
+75%  4.65  m/s
+99%  4.8   m/s
+
+### full-sail
+ 0%  3.88  m/s
+25%  4.78  m/s
+50%  5.75  m/s
+75%  6.5   m/s
+99%  7.0   m/s
+
+
+## Longship
+
+### rudder
+3.16 m/s
+
+### half-sail
+ 0%  3.555 m/s
+25%  4.42  m/s
+50%  5.25  m/s
+75%  6.0   m/s
+99%  6.7   m/s
+
+### full-sail
+ 0%  5.03  m/s
+25%  6.21  m/s
+50%  7.45  m/s
+75%  8.5   m/s
+99%  9.4   m/s

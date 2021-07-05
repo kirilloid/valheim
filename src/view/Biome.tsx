@@ -49,6 +49,8 @@ export function Biome() {
     if (item.type === 'piece' || item.type === 'creature') continue;
     if (item.type === 'trophy') {
       resources.trophies.push(item);
+    } else if (item.type === 'ship' || item.type === 'cart') {
+      // skip them
     } else if (item.type === 'food' || resourceCraftMap[item.id]?.some(v => v.type === 'food')) {
       resources.food.push(item);
     } else {

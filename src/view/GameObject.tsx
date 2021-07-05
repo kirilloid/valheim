@@ -13,6 +13,8 @@ import { Arrow } from './Arrow';
 import { GenericItem } from './GenericItem';
 import { Tool } from './Tool';
 import { Piece } from './Piece';
+import { Ship } from './Ship';
+import { Cart } from './Cart';
 
 function parseLevel(level: string | undefined): number | undefined {
   if (level == null) return undefined;
@@ -52,6 +54,10 @@ function Item({ item, level }: { item: T.GameObject, level?: number }) {
       return <Tool item={item} level={level} />
     case 'piece':
       return <Piece item={item} />
+    case 'ship':
+      return <Ship item={item} />
+    case 'cart':
+      return <Cart item={item} />
     case 'item':
     case 'trophy':
       return <GenericItem item={item} />

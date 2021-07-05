@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import { CraftingStation, EntityId, GameObject, Item, Piece } from '../types';
+import { Cart, CraftingStation, EntityId, GameObject, Item, Piece, Ship } from '../types';
 import { TranslationContext, useGlobalState } from '../effects';
 import { data } from '../model/objects';
 import { creatures } from '../model/creatures';
@@ -154,7 +154,7 @@ function CraftingSection({ id }: { id: EntityId }) {
   </>
 }
 
-export function Recipe({ item }: { item: Item | Piece}) {
+export function Recipe({ item }: { item: Item | Piece | Ship | Cart }) {
   const translate = useContext(TranslationContext);
   const { recipe } = item;
   if (recipe == null) return null;

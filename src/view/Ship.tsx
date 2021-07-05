@@ -1,11 +1,13 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 
 import '../css/Ship.css';
+import { TranslationContext } from '../effects';
 
-import { EnvId, envSetup, envStates } from '../model/env';
-import { ships, getSailSpeed, getSailSpeeds, Sail } from '../model/ship';
+import { getSailSpeed, getSailSpeeds, Sail } from '../model/ship';
 import { magnitude, timeI2S } from '../model/utils';
 import { Ship as ShipPiece } from '../types';
+import { Resistances } from './helpers';
+import { ItemHeader } from './ItemHeader';
 
 type ChartProps = {
   dpi: number;
@@ -17,13 +19,6 @@ const styles = {
   fineMarker: '#eee',
   coarseMarker: '#ccc',
 };
-
-const weathers = Object.keys(envSetup.Ocean) as EnvId[];
-
-const winds: [EnvId, number][] = weathers.map(name => {
-  const { wind } = envStates.find(e => e.id === name)!;
-  return [name, (wind[0] + wind[1]) / 2];
-});
 
 const Windrose = React.memo(({ dpi, ship, wind }: ChartProps) => {
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -206,29 +201,11 @@ const Acceleration = React.memo(({ dpi, ship, wind }: ChartProps) => {
   );
 });
 
-const windOptions = winds.slice().sort((a, b) => a[1] - b[1]).map(w => w[0]);
-
-export function Ship() {
+export function Ship(props: { item: ShipPiece }) {
+  const translate = useContext(TranslationContext);
+  const { item } = props;
   const [dpi, setDpi] = useState(window.devicePixelRatio);
-  const [ship, setShip] = useState<ShipPiece>(ships[0]!);
-  const [wind, setWind] = useState(winds.find(e => e[0] === 'Clear')![1]);
 
-  const updateShip = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-    const id = e.target.value;
-    const newShip = ships.find(s => s.id === id);
-    if (newShip != null && newShip !== ship) {
-      setShip(newShip);
-    }
-  }, [ship, setShip]);
-
-  const updateWind = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-    const id = e.target.value;
-    const newWind = winds.find(w => w[0] === id)?.[1];
-    if (newWind != null && newWind !== wind) {
-      setWind(newWind);
-    }
-  }, [wind, setWind]);
-  
   const updateDpi = useCallback(() => {
     if (dpi !== window.devicePixelRatio) {
       setDpi(window.devicePixelRatio);
@@ -242,21 +219,36 @@ export function Ship() {
     }
   }, [dpi, updateDpi]);
 
-  return (
-    <div>
-      <label htmlFor="ship">ship:</label>
-      <select id="ship" onChange={updateShip} value={ship.id} autoFocus>
-        {ships.map(s => <option value={s.id} key={s.id}>{s.id}</option>)}
-      </select>{' | '}
-      <label htmlFor="wind">weather:</label>
-      <select id="wind" onChange={updateWind}>
-        {windOptions.map(w => <option value={w} key={w} selected={winds.find(ww => ww[0] === w)?.[1] === wind}>{w}</option>)}
-      </select><br/>
+  const { target, size } = item.piece;
+  const { hp, damageModifiers } = item.wear;
+  const [ cols, rows ] = item.storage;
+  const storage = cols * rows;
+
+  return (<>
+    <ItemHeader item={item} />
+    <section>
+      <h2>{translate(`ui.piece`)}</h2>
+      <dl>
+        <dt>{translate('ui.healthStructure')}</dt><dd>{hp}</dd>
+        <Resistances mods={damageModifiers} />
+        <dt>target</dt><dd>{translate(`ui.pieceTarget.${target}`)}</dd>
+        {size ? <><dt>size</dt><dd>{size.filter(Boolean).join('x')}</dd></> : null}
+      </dl>
+    </section>
+    <section>
+      <h2>{translate('ui.ship')}</h2>
+      <dl>
+        <dt>{translate('ui.shipMove.oar')}</dt><dd>{translate('ui.speed.ms', item.speed.rudder)}</dd>
+        <dt>{translate('ui.shipMove.sail')}</dt><dd>{translate('ui.speedRange.ms', item.speed.full[0]!, item.speed.full[4]!)}</dd>
+        <dt>capacity</dt><dd>{storage}</dd>
+      </dl>
+      <Windrose dpi={dpi} ship={item} wind={0.5} />
+    </section>
+  </>);
+}
+
+/*
       <span className="square" style={{ backgroundColor: '#f00' }}></span> full sail
       <span className="square" style={{ backgroundColor: '#f80' }}></span> half sail
       <span className="square" style={{ backgroundColor: '#cc0' }}></span> rudder
-      <Windrose dpi={dpi} ship={ship} wind={wind} />
-      <Acceleration dpi={dpi} ship={ship} wind={wind} />
-    </div>
-  );
-}
+*/

@@ -108,6 +108,13 @@ preloadLanguage().then(dict => {
       case 'weapon':
         if (gobj.slot === 'both') addTag('ui.tags.2hand');
         break;
+      case 'ship':
+        addTag('ui.tags.sail');
+        addTag('ui.tags.transport');
+        break;
+      case 'cart':
+        addTag('ui.tags.transport');
+        break;
       case 'piece':
         addTag(`ui.pieceType.${gobj.subtype}`);
         if (gobj.subtype === 'chair') addTag('ui.tags.sit');

@@ -8,7 +8,6 @@ import {
 import './css/App.css';
 
 import { Search } from './view/Search';
-import { Ship } from './view/Ship';
 import { GameObject } from './view/GameObject';
 import { Info } from './view/Info';
 import { AttackCalc } from './view/AtkCalc';
@@ -32,7 +31,6 @@ function App() {
             <Route path="/defense" children={<DefenseCalc />} />
             <Route path="/food/:sort" children={<FoodTable />} />
             <Route path="/food" children={<FoodTable />} />
-            <Route exact path="/ships" children={<Ship />} />
             <Route path="/obj/:id/:level" children={<GameObject />} />
             <Route path="/obj/:id" children={<GameObject />} />
             <Route path="/loc/:id" children={<Location />} />

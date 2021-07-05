@@ -5,7 +5,7 @@ import { TranslationContext } from '../effects';
 
 import type { GameObject } from '../types';
 
-type IconType = 'armor' | 'arrow' | 'creature' | 'weapon' | 'piece' | 'skills' | 'resource' | 'icon';
+type IconType = 'armor' | 'arrow' | 'creature' | 'weapon' | 'piece' | 'skills' | 'resource' | 'icon' | 'transport';
 
 const iconType = (type: GameObject['type']): IconType => {
   switch (type) {
@@ -25,6 +25,9 @@ const iconType = (type: GameObject['type']): IconType => {
     case 'trophy':
     case 'potion':
       return 'resource';
+    case 'ship':
+    case 'cart':
+      return 'transport';
     default: return assertNever(type);
   }
 };

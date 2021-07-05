@@ -114,11 +114,11 @@ export function Piece({ item }: { item: TPiece }) {
     <>
       <ItemHeader item={item} />
       <section>
-        <h2>{translate(`ui.piece`)}</h2>
+        <h2>{translate('ui.piece')}</h2>
         <dl>
-          <dt>health</dt><dd>{hp}</dd>
+          <dt>{translate('ui.healthStructure')}</dt><dd>{hp}</dd>
           <Resistances mods={damageModifiers} />
-          <dt>target</dt><dd>{translate(`ui.pieceTarget.${target}`)}</dd>
+          <dt>{translate('ui.pieceTarget')}</dt><dd>{translate(`ui.pieceTarget.${target}`)}</dd>
           <dt>degrades w/o roof</dt><dd>{yesNo(noRoof)}</dd>
           {specialReqs.length ? <><dt>specific</dt><dd>{specialReqs.join(', ')}</dd></> : null}
           {requiredSpace ? <><dt>required space</dt><dd>{requiredSpace}</dd></> : null}
