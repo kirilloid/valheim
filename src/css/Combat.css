@@ -51,9 +51,6 @@
   .Attack, .PlayerHeader__stat {
     flex: 4 0;
   }
-  .Weapon, .Attack {
-    flex: 0 1 480px;
-  }
 }
 
 .weapon-btn {

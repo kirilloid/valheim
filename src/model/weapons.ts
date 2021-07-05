@@ -1,5 +1,5 @@
-import { AttackAnimation, CraftingStation, Shield, Weapon } from "../types";
-import { SkillType } from "./skills";
+import { AttackAnimation, CraftingStation, Shield, Weapon } from '../types';
+import { SkillType } from './skills';
 
 const CRAFT_TIME = 4;
 const disabled = true;

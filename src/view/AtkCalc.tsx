@@ -206,12 +206,25 @@ export function AttackCalc() {
   const attackStats = weapons.map(w => w.item.attacks.map(a => attackCreature(w, a, creature, isWet, backstab)));
   const maxStat = Math.max(...attackStats.flatMap(ws => ws.map(s => pickStat(s, stat, creature))));
 
+  function areTheSame<T>(weapons: WeaponConfig[], reader: (w: WeaponConfig) => T): boolean {
+    if (weapons.length < 2) return false;
+    const firstValue = reader(weapons[0]!);
+    return weapons.every(w => reader(w) === firstValue);
+  }
+
+  const sameItem = areTheSame(weapons, w => w.item);
+  const sameLevel = areTheSame(weapons, w => w.level);
+  const sameSkillLevel = areTheSame(weapons, w => w.skill);
+  const sameSkillType = areTheSame(weapons, w => w.item.skill);
+  const bows = weapons.filter(w => w.item.slot === 'bow');
+  const sameArrow = areTheSame(bows, w => w.arrow);
+
   const same = {
-    item: weapons.every(w => w.item === weapons[0]?.item),
-    level: weapons.every(w => w.level === weapons[0]?.level),
-    skillLevel: weapons.every(w => w.skill === weapons[0]?.skill),
-    skillType: weapons.every(w => w.item.skill === weapons[0]?.item.skill),
-    arrow: weapons.every(w => w.arrow === weapons[0]?.arrow),
+    item: sameItem,
+    level: sameItem && sameLevel,
+    skillLevel: sameSkillType && sameSkillLevel,
+    skillType: sameSkillType,
+    arrow: sameArrow,
   };
 
   return (<>
