@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 
 import '../css/Biome.css';
 
-import type { Item } from '../types';
+import type { Destructible, GameObject, Item, Plant } from '../types';
 import { TranslationContext } from '../effects';
 import { biomes } from '../model/location';
 import { ItemIcon } from './Icon';
@@ -11,7 +11,7 @@ import { data } from '../model/objects';
 import { averageAttacksDamage, yesNo } from './helpers';
 import { resourceCraftMap } from '../model/resource-usage';
 
-function ResourceList(props: { list: Item[] }) {
+function ResourceList(props: { list: GameObject[] }) {
   const translate = useContext(TranslationContext);
   const { list } = props;
   return <ul className="plainList">
@@ -38,6 +38,7 @@ export function Biome() {
   const resources = {
     trophies: [] as Item[],
     food: [] as Item[],
+    mining: [] as Destructible[],
     others: [] as Item[],
   };
   for (const res of biome.resources) {
@@ -46,8 +47,10 @@ export function Biome() {
       console.error(`Resource '${res}' from biome '${id}' not found`);
       continue;
     }
-    if (item.type === 'piece' || item.type === 'creature') continue;
-    if (item.type === 'trophy') {
+    if (item.type === 'piece' || item.type === 'creature' || item.type === 'plant') continue;
+    if (item.type === 'destructible') {
+      resources.mining.push(item);
+    } else if (item.type === 'trophy') {
       resources.trophies.push(item);
     } else if (item.type === 'ship' || item.type === 'cart') {
       // skip them
@@ -73,6 +76,8 @@ export function Biome() {
       </section>
       <section>
         <h2>resources</h2>
+        <h3>mining</h3>
+        <ResourceList list={resources.mining} />
         <div className="multiList">
           <div>
             <h3>food</h3>

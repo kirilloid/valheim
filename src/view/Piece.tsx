@@ -132,7 +132,7 @@ export function Piece({ item }: { item: TPiece }) {
       <Recipe item={item} />
       {producedItems.length
       ? <><h2>Produces</h2>
-          <ul>{producedItems.map(item => <li key={item.id}>
+          <ul className="CraftList">{producedItems.map(item => <li key={item.id}>
             <ItemIcon item={item} />
             {' '}
             <Link to={`/obj/${item.id}`}>{translate(item.id)}</Link>

@@ -307,8 +307,8 @@ export const items: (Weapon | Shield)[] = [
     recipe: {
       type: 'craft_upg',
       time: CRAFT_TIME,
-      materials: { RoundLog: 20, DeerTrophy: 5, LeatherScraps: 2 },
-      materialsPerLevel: { RoundLog: 5, DeerTrophy: 2, LeatherScraps: 1, BoneFragments: 10 },
+      materials: { RoundLog: 20, TrophyDeer: 5, LeatherScraps: 2 },
+      materialsPerLevel: { RoundLog: 5, TrophyDeer: 2, LeatherScraps: 1, BoneFragments: 10 },
       source: { station: CraftingStation.Workbench, level: 2 },
       upgrade: { station: CraftingStation.Workbench, level: 3 },
     }

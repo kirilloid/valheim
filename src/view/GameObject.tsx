@@ -15,6 +15,8 @@ import { Tool } from './Tool';
 import { Piece } from './Piece';
 import { Ship } from './Ship';
 import { Cart } from './Cart';
+import { Destructible } from './Destructible';
+import { Plant } from './Plant';
 
 function parseLevel(level: string | undefined): number | undefined {
   if (level == null) return undefined;
@@ -52,6 +54,10 @@ function Item({ item, level }: { item: T.GameObject, level?: number }) {
       return <Arrow item={item} />
     case 'tool':
       return <Tool item={item} level={level} />
+    case 'destructible':
+      return <Destructible item={item} />
+    case 'plant':
+      return <Plant item={item} />
     case 'piece':
       return <Piece item={item} />
     case 'ship':

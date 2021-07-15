@@ -39,8 +39,27 @@
 .SearchItem {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.25em;
+}
+
+.SearchItem__recipe {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 4px;
+  margin-top: -4px;
+}
+
+@media screen and (min-width: 480px) {
+  .SearchItem__recipe {
+    width: auto;
+    border-left: 1px solid gray;
+    padding-left: 8px;
+    margin: 0 0 0 4px;
+  }
 }
 
 .SearchItem a {

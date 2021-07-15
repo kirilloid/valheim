@@ -141,6 +141,14 @@ preloadLanguage().then(dict => {
         if ('pregnancy' in gobj) addTag('ui.tamed.breeds');
         if (gobj.faction === 'Undead') addTag('ui.faction.Undead');
         break;
+      case 'plant':
+        addTag('ui.tags.plant');
+        switch (gobj.subtype) {
+          case 'tree': addTag('ui.tags.tree'); break;
+          case 'vegetable': addTag('ui.tags.vegetable'); break;
+          case 'crop': addTag('ui.tags.crop'); break;
+        }
+        break;
     }
     if ('summon' in gobj) addTag('ui.tags.summon');
     const typeTags = dict[`ui.itemType.${gobj.type}`];

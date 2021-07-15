@@ -115,14 +115,19 @@ article *.active {
   padding: 0;
   list-style: none;
 }
-@media screen and (min-width: 400px) {
+@media screen and (min-width: 480px) {
   .CraftList {
     column-count: 2;
   }
 }
-@media screen and (min-width: 700px) {
+@media screen and (min-width: 720px) {
   .CraftList {
     column-count: 3;
+  }
+}
+@media screen and (min-width: 960px) {
+  .CraftList {
+    column-count: 4;
   }
 }
 

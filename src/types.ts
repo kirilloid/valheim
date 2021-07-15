@@ -165,6 +165,7 @@ export const dropTrophy = (item: EntityId, chance: number) => {
 };
 
 export interface GeneralDrop {
+  chance?: number,
   num: Pair<number>,
   options: { item: EntityId, num: Pair<number>, weight?: number }[];
 }
@@ -188,6 +189,17 @@ export interface Creature extends GameObjectBase {
   tame?: { fedTime: number; tameTime: number; commandable: boolean; eats: string[] };
   pregnancy?: { time: number; chance: number };
 }
+
+export interface Plant extends GameObjectBase {
+  type: 'plant';
+  subtype: 'tree' | 'vegetable' | 'crop';
+  growTime: Pair<number>;
+  growsInto: EntityId;
+  cultivatedGround: boolean;
+  destroyUnhealthy: boolean;
+  freeSpaceRadius: number;
+  biomes: Biome[];
+};
 
 export enum CraftingStation {
   Inventory,
@@ -327,6 +339,19 @@ export interface Ship extends Transport {
 
 export interface Cart extends Transport {
   type: 'cart';
+}
+
+export interface Destructible extends GameObjectBase {
+  type: 'destructible';
+  hp: number;
+  locations: (Biome | GameLocationId)[],
+  damageModifiers: DamageModifiers;
+  minToolTier: number;
+  parts: {
+    id: EntityId,
+    num: number,
+  }[],
+  drop: GeneralDrop;
 }
 
 interface GameEventSpawn {
@@ -558,7 +583,7 @@ export interface Armor extends BaseItem {
 export type Item = Resource | Valuable | Food | Potion | Weapon | Shield | Armor | Arrow | Tool;
 export type ItemSpecial = Weapon['special'] | Armor['special'] | Tool['special'];
 
-export type GameObject = Item | Piece | Ship | Cart | Creature;
+export type GameObject = Item | Piece | Destructible | Ship | Cart | Creature | Plant;
 
 export enum Skill {
   Clubs,
