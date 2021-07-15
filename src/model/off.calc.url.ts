@@ -4,27 +4,32 @@ import { State, CombatStat, defaultCreature, defaultWeapon, enabledItems } from 
 import { creatures } from "./creatures";
 import { locationToBiome } from "./location";
 
-const weaponRegex = /(\w+)(?:-(\d+))?-(\d+)(?:-(\w+))?/;
-
-function parseWeapon(str: string): WeaponConfig {
-  const [, id, level, skill, arrow] = str.match(weaponRegex) ?? [];
-  const weapon = id && enabledItems.find(w => w.id === id) || enabledItems[0]!;
-  return {
-    item: weapon,
-    level: Number(level) || weapon.maxLvl,
-    skill: Number(skill) || 0,
-    arrow: arrow && arrows.find(a => a.id === arrow) || arrows[0]!,
-  };
-}
-
-export function serializeWeapon(weapon: WeaponConfig): string {
+function serializeWeapon(weapon: WeaponConfig): string {
   const levelPart = weapon.level === weapon.item.maxLvl ? '' : `-${weapon.level}`;
   return `${weapon.item.id}${levelPart}-${weapon.skill}`
          + (weapon.item.slot === 'bow' ? `-${weapon.arrow.id}` : '')
 }
 
+export function serializeState(state: State): string {
+  const { isWet, backstab, creature, stat, weapons } = state;
+  return `${isWet ? 'wet-' : ''}${backstab ? 'unaware-' : ''}${creature.id}-${stat}-${weapons.map(serializeWeapon).join('-or-')}`;
+}
+
+const weaponRegex = /(\w+)(?:-(\d+))?-(\d+)(?:-(\w+))?/;
+
+function parseWeapon(str: string): WeaponConfig {
+  const [, id, level, skill, arrow] = str.match(weaponRegex) ?? [];
+  const weapon = (id && enabledItems.find(w => w.id === id)) || enabledItems[0]!;
+  return {
+    item: weapon,
+    level: Number(level) || weapon.maxLvl,
+    skill: Number(skill) || 0,
+    arrow: (arrow && arrows.find(a => a.id === arrow)) || arrows[0]!,
+  };
+}
+
 export function getInitialState(params: string | undefined): State {
-  const match = params?.match(/(\d+)/);
+  const match = params?.match(/(wet-)?(unaware-)?(\w+)-(\w+)-/);
   if (params == null || match == null) {
     return {
       weapons: [defaultWeapon],

@@ -1,4 +1,4 @@
-import { Arrow, CraftingStation, DamageType } from "../types";
+import { Arrow, CraftingStation } from '../types';
 
 export const arrows: Arrow[] = [
   { type: 'ammo', id: 'ArrowWood', tier: 1, weight: 0.1, stack: 100,

@@ -45,11 +45,11 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
   return (<>
     <ItemHeader item={creature} >
       {creature.maxLvl > 1
-      ? <div className="Creature_Stars">
+      ? <div className="Creature__Stars">
           {Array.from({ length: creature.maxLvl }).map((_, stars) => 
             level === stars + 1
-              ? <span className="Creature_Star Creature_Star--selected">{stars}⭐</span>
-              : <Link className="Creature_Star" to={`/obj/${id}/${stars + 1}`} replace={true}>{stars}⭐</Link>
+              ? <span className="Creature__Star Creature__Star--selected">{stars}⭐</span>
+              : <Link className="Creature__Star" to={`/obj/${id}/${stars + 1}`} replace={true}>{stars}⭐</Link>
           )}
         </div>
       : null}
@@ -80,17 +80,17 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
       <dl>
       <Resistances mods={creature.damageModifiers} />
       </dl>
-      {creature.attacks.length ? <>
+      {creature.attacks.length ? <div className="Creature__Attacks">
         <h3>attacks</h3>
-        {creature.attacks.map(a => <>
-          {creature.attacks.length > 1 ? <h4 key={a.variety}>{a.variety} ({Math.round(100 * a.rate / totalVarietyRates)}%)</h4> : null}
+        {creature.attacks.map(a => <div className="Creature__Attack">
+          {creature.attacks.length > 1 ? <h4 key={`${id}_${a.variety}`}>{a.variety} ({Math.round(100 * a.rate / totalVarietyRates)}%)</h4> : null}
           <dl key={a.variety}>
           {a.attacks.map(a => 'spawn' in a
             ? <SpawnAttack attack={a} />
             : <NormalAttack key={a.name} attack={a} dmgScale={dmgScale} />)}
           </dl>
-        </>)}
-      </> : null}
+        </div>)}
+      </div> : null}
     </section>
     <section>
       <h2>{translate('ui.drops')}</h2>

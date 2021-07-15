@@ -149,10 +149,11 @@ export function yesNo(arg?: boolean) {
 export function Area({ area }: { area: Biome | GameLocationId }) {
   const translate = useContext(TranslationContext);
   if (area in locationBiomes) {
+    const biome = locationBiomes[area as GameLocationId];
     return <>
       <Link to={`/loc/${area}`}>{translate(`ui.location.${area}`)}</Link>
       {' '}
-      (<Link to={`/loc/${area}`}>{translate(`ui.biome.${locationBiomes[area as GameLocationId]}`)}</Link>)
+      (<Link to={`/biome/${biome}`}>{translate(`ui.biome.${biome}`)}</Link>)
     </>;
   } else {
     return <Link to={`/loc/${area}`}>{translate(`ui.biome.${area}`)}</Link>;

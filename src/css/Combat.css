@@ -19,6 +19,7 @@
 }
 
 .CompareBlock {
+  margin-top: -1px;
   border-bottom: 1px solid gray;
   position: relative;
 }
@@ -113,13 +114,15 @@
   margin-bottom: 0.5em;
 }
 .weapon__input-primary {
-  width: 75%;
+  width: auto;
   height: 1.5em;
+  flex-grow: 1;
 }
 .weapon__input-secondary {
-  width: 25%;
+  width: auto;
   height: 1.5em;
   white-space: nowrap; /* star icon shouldn't jump to next line */
+  flex-grow: 5;
 }
 .weapon__label .icon {
   margin-left: 0.5em;
@@ -136,7 +139,15 @@
   min-width: 200px;
 }
 
+input[type='range'] {
+  margin: 0;
+}
+
 @media screen and (min-width: 480px) {
+  .row {
+    height: 1.5em;
+  }
+
   .weapon {
     flex-wrap: nowrap;
   }

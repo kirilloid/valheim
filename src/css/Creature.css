@@ -1,17 +1,36 @@
-.Creature_Stars {
+.Creature__Stars {
   display: inline-flex;
   float: right;
   font-size: 1rem;
 }
 
-.Creature_Star {
+.Creature__Star {
   padding: 4px 6px;
 }
-a.Creature_Star {
+a.Creature__Star {
   text-decoration: none;
 }
 
-.Creature_Star--selected {
+.Creature__Star--selected {
   font-weight: bold;
   border-bottom: 2px solid silver;
 }
+
+.Creature__Attacks {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.Creature__Attack {
+  flex: 50%;
+  max-width: 50%;
+}
+
+@media screen and (min-width: 640px) {
+  .Creature__Attack {
+    flex: 25%;
+  }
+}
+
+.Creature__Attack dt { flex: 60% 1 1; }
+.Creature__Attack dd { flex: 20% 1 1; }

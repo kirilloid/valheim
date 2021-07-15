@@ -83,6 +83,7 @@ export type LocationConfig = {
   minApart: number;
   altitude: [number, number];
   distance: [number, number];
+  chest?: GeneralDrop;
   creatures: Creature[];
   resources: EntityId[];
 }

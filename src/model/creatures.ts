@@ -1,4 +1,4 @@
-import { AttackProfile, AttackVariety, Creature, DamageModifiers, dropEntry, dropTrophy, Faction } from "../types";
+import { AttackProfile, AttackVariety, Creature, DamageModifiers, dropEntry, dropTrophy } from '../types';
 
 const defaultDmgModifiers: DamageModifiers = {
   blunt: 'normal',

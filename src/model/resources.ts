@@ -213,7 +213,7 @@ export const resources: Item[] = [
   { type: 'item', id: 'Crystal', emoji: '💎', tier: 4, weight: 8, stack: 50 },
   { type: 'item', id: 'DragonEgg', emoji: '🥚', tier: 4, weight: 200, stack: 1,
     floating: true, teleportable: false, summon: ['Dragon', 3],
-    recipe: { type: 'grow', locations: ['Mountain'], abundance: 1, num: [1, 1], group: [1, 1], respawn: 6 * HOUR } },
+    recipe: { type: 'grow', locations: ['DrakeNest'], abundance: 1, num: [1, 1], group: [1, 1], respawn: 0 /*6 * HOUR*/ } },
   { type: 'trophy', id: 'TrophyWolf', tier: 4, weight: 1.5, stack: 20 },
   { type: 'trophy', id: 'TrophyFenring', tier: 4, weight: 2, stack: 20 },
   { type: 'trophy', id: 'TrophyHatchling', tier: 4, weight: 2, stack: 20 },

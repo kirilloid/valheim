@@ -13,7 +13,7 @@ import { useDebounceEffect } from '../effects/debounce.effect';
 import { Icon, ItemIcon, SkillIcon } from './Icon';
 import { Action, actionCreators, ActionCreators, reducer, enabledItems, CombatStat } from '../model/off_calc.reducer';
 import { showNumber } from './helpers';
-import { getInitialState, serializeWeapon } from '../model/off.calc.url';
+import { getInitialState, serializeState } from '../model/off.calc.url';
 import { groupedCreatures } from '../model/combat_creatures';
 
 const weaponGroups = groupBy(enabledItems, w => w.tier);
@@ -174,7 +174,7 @@ export function AttackCalc() {
   const history = useHistory();
   const { params } = useParams<{ params?: string }>();
   const [state, dispatch] = useReducer(reducer, getInitialState(params));
-  const [smart, setSmart] = useState(true);
+  const [smart] = useState(true);
   const {
     weapons,
     // armor, players,
@@ -182,7 +182,7 @@ export function AttackCalc() {
     stat,
   } = state;
   useDebounceEffect(state, (state) => {
-    const path = `/combat/${isWet ? 'wet-' : ''}${backstab ? 'unaware-' : ''}${creature.id}-${stat}-${weapons.map(serializeWeapon).join('-or-')}`;
+    const path = `/attack/${serializeState(state)}`;
     if (history.location.pathname !== path) {
       history.replace(path);
     }
