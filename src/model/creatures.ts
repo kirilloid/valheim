@@ -163,7 +163,7 @@ export const creatures: Creature[] = [
     tame: { tameTime: 1800, fedTime: 600, commandable: true,
             eats: ['Carrot', 'Turnip', 'Blueberries', 'Mushroom', 'Raspberry'] },
             // eatRange:1.0, searchRange:10, heal:5
-    pregnancy: { time: 60, chance: 0.33 },
+    pregnancy: { time: 60, chance: 0.33, grow: 3000 },
   },
   {
     type: 'creature',
@@ -684,7 +684,7 @@ export const creatures: Creature[] = [
     tame: { tameTime: 1800, fedTime: 600, commandable: true,
             eats: ['NeckTail', 'RawMeat', 'LoxMeat', 'Sausages', 'FishRaw'] },
             // eatRange:1.4, searchRange:10, heal:20
-    pregnancy: { time: 60, chance: 0.33 }, // max: 4, range: 3
+    pregnancy: { time: 60, chance: 0.33, grow: 3000 }, // max: 4, range: 3
   },
   {
     type: 'creature',

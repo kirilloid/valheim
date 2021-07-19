@@ -122,6 +122,10 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
         <dd>{yesNo(tame.commandable)}</dd>
         <dt>{translate('ui.tamed.breeds')}</dt>
         <dd>{yesNo(!!pregnancy)}</dd>
+        {pregnancy ? <>
+          <dt>{translate('ui.growTime.animal')}</dt>
+          <dd>{timeI2S(pregnancy.grow)}</dd>
+        </> : null}
       </dl>
     </section> : null}
   </>);

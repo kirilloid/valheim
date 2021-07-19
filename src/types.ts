@@ -192,7 +192,7 @@ export interface Creature extends GameObjectBase {
   damageModifiers: DamageModifiers;
   drop: DropEntry[];
   tame?: { fedTime: number; tameTime: number; commandable: boolean; eats: string[] };
-  pregnancy?: { time: number; chance: number };
+  pregnancy?: { time: number; chance: number; grow: number; };
 }
 
 export interface Plant extends GameObjectBase {

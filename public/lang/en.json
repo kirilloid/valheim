@@ -639,6 +639,8 @@
     "ui.faction.PlainsMonsters": "Plains",
     "ui.faction.Boss": "Boss",
     "ui.floats": "floats",
+    "ui.growTime.animal": "grow",
+    "ui.growTime.plant": "grow",
     "ui.hands": "hands",
     "ui.health": "health",
     "ui.healthStructure": "durability",

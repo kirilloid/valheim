@@ -607,6 +607,8 @@
     "ui.faction.PlainsMonsters": "Равнины",
     "ui.faction.Boss": "Босс",
     "ui.floats": "не тонет",
+    "ui.growTime.animal": "вырастает за",
+    "ui.growTime.plant": "вырастает за",
     "ui.health": "здоровье",
     "ui.healthStructure": "прочность",
     "ui.itemSpecial": "особенность",
