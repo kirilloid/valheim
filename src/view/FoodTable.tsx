@@ -41,7 +41,7 @@ export function FoodTable() {
   const [sort, setSort] = useState<SortField | undefined>(parseSort(params.sort));
 
   const Radio = useCallback((value: SortField) => {
-    return <input type="radio" name="sort" checked={sort === value} value={value} onClick={() => {
+    return <input type="radio" name="sort" id={`sort_${value}`} checked={sort === value} value={value} onClick={() => {
       const path = `/food/${value}`;
       if (history.location.pathname !== path) {
         history.replace(path);
@@ -55,7 +55,7 @@ export function FoodTable() {
     if (sort === 'total') {
       sortBy(items, f => f.health + f.stamina, false);
     } else {
-      items.sort((a, b) => b[sort] - a[sort]);
+      sortBy(items, f => f[sort], false);
     }
   }
 
@@ -68,29 +68,39 @@ export function FoodTable() {
           <th><span className="FoodTable__extra">name</span></th>
           <th>
             {Radio('health')}
-            <Icon id="health" alt="" size={16} />
-            <span className="FoodTable__extra">{translate('ui.health')}</span>
+            <label htmlFor="sort_health">
+              <Icon id="health" alt="" size={16} />
+              <span className="FoodTable__extra">{translate('ui.health')}</span>
+            </label>
           </th>
           <th>
             {Radio('stamina')}
-            <Icon id="walknut" alt="" size={16} />
-            <span className="FoodTable__extra">{translate('ui.stamina')}</span>
+            <label htmlFor="sort_stamina">
+              <Icon id="walknut" alt="" size={16} />
+              <span className="FoodTable__extra">{translate('ui.stamina')}</span>
+            </label>
           </th>
           <th>
             {Radio('total')}
-            <Icon id="health" alt="" size={16} />
-            <Icon id="walknut" alt="" size={16} />
-            <span className="FoodTable__extra">total</span>
+            <label htmlFor="sort_total">
+              <Icon id="health" alt="" size={16} />
+              <Icon id="walknut" alt="" size={16} />
+              <span className="FoodTable__extra">total</span>
+            </label>
           </th>
           <th>
             {Radio('duration')}
-            <Icon id="time" alt="" size={16} />
-            <span className="FoodTable__extra">{translate('ui.time')}</span>
+            <label htmlFor="sort_duration">
+              <Icon id="time" alt="" size={16} />
+              <span className="FoodTable__extra">{translate('ui.time')}</span>
+            </label>
           </th>
           <th>
             {Radio('regen')}
-            <Icon id="regen" alt="" size={16} />
-            <span className="FoodTable__extra">{translate('ui.regen')}</span>
+            <label htmlFor="sort_regen">
+              <Icon id="regen" alt="" size={16} />
+              <span className="FoodTable__extra">{translate('ui.regen')}</span>
+            </label>
           </th>
         </tr>
       </thead>

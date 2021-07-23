@@ -57,10 +57,4 @@ rock2_heath_frac:
   hp: 50
   drops: 4-8 of Stone
 
-beehive:
-  hp: 50, weak to fire, immune to spirit & poison
-  idle: 4 poison, 3 radius, every second
-  on hit: 10 poison, 4 radius, every second, 5 seconds
-  drops: 1 queen bee, 1-3 honey
-
 */

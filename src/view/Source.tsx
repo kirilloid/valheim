@@ -181,7 +181,8 @@ export function Recipe({ item }: { item: Item | Piece | Destructible | Plant | S
       </dl>;
     case 'grow':
       return <>
-        Grows in {recipe.locations.map(loc => <Area area={loc} />)}, {recipe.respawn ? `respawns every ${timeI2S(recipe.respawn)}` : 'does not respawn'}
+        Grows in {recipe.locations.flatMap(loc => [<Area area={loc} />, ', '])}
+        {recipe.respawn ? `respawns every ${timeI2S(recipe.respawn)}` : 'does not respawn'}
       </>;
     case 'craft_upg': {
       const { station, level } = recipe.source;

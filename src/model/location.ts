@@ -1,6 +1,7 @@
-import type { Biome, BiomeConfig, Creature, EntityId, GameLocationId, GeneralDrop, LocationConfig } from '../types';
+import type { Biome, BiomeConfig, Creature, Destructible, EntityId, GameLocationId, GeneralDrop, LocationConfig } from '../types';
 import { chestDrops } from './chests';
 import { creatures } from './creatures';
+import { destructibles } from './destructibles';
 import { data } from './objects';
 import { resources } from './resources';
 
@@ -13,6 +14,7 @@ function biome(id: Biome, tier: number, active: boolean) {
     id,
     tier,
     active,
+    destructibles: [],
     creatures: [],
     locations: [],
     resources: [],
@@ -66,6 +68,7 @@ function loc(
     minApart,
     altitude: [minAlt, maxAlt],
     distance: [minDistance, maxDistance],
+    destructibles: [],
     creatures: [],
     resources: [],
     chest,
@@ -108,6 +111,8 @@ export const locations: LocationConfig[] = [
   ...loc('Runestone_Swamps', [], ['Swamp'], 100, { type: 'runestone', minApart: 128 }),
   ...loc('Bonemass', [], ['Swamp'], 5, { minDistance: 2000, minApart: 3000 }),
   // mountain
+  ...loc('Leviathan', [''], ['Ocean'], 200, { minApart: 100, minAlt: 100 }), // 21 barnacles
+  // mountain
   ...loc('DrakeNest', ['01'], ['Mountain'], 200, { minApart: 100, minAlt: 100 }),
   ...loc('Waymarker', ['01', '02'], ['Mountain'], 50, { minAlt: 100 }),
   ...loc('AbandonedLogCabin', ['02', '03', '04'], ['Mountain'], 33 /* 50 for 04 */, { minAlt: 100, minApart: 128 }),
@@ -143,12 +148,18 @@ for (const [loc, biome] of Object.entries(locationBiomes)) {
   biomes.find(b => b.id === biome)?.locations.push(loc as GameLocationId);
 }
 
-function addToLocation(loc: string, items: EntityId[], creatures: Creature[]) {
+function addToLocation(
+  loc: string,
+  items: EntityId[],
+  creatures: Creature[],
+  destructibles: Destructible[],
+) {
   if (loc in locationBiomes) {
     const gameLocation = locations.find(l => l.id === loc);
     if (gameLocation != null) {
       gameLocation.resources.push(...items);
       gameLocation.creatures.push(...creatures);
+      gameLocation.destructibles.push(...destructibles);
     }
   }
   const biomeId = locationToBiome(loc);
@@ -156,21 +167,32 @@ function addToLocation(loc: string, items: EntityId[], creatures: Creature[]) {
   if (biome != null) {
     biome.resources.push(...items);
     biome.creatures.push(...creatures);
+    biome.destructibles.push(...destructibles);
+  }
+}
+
+for (const destr of destructibles) {
+  for (const loc of destr.locations) {
+    addToLocation(loc, [], [], [destr]);
   }
 }
 
 for (const { id, recipe } of resources) {
   if (recipe?.type !== 'grow') continue;
   for (const loc of recipe.locations) {
-    addToLocation(loc, [id], []);
+    addToLocation(loc, [id], [], []);
   }
 }
 
 for (const creature of creatures) {
   for (const loc of creature.locations) {
     const items = creature.drop.map(d => d.item);
-    addToLocation(loc, items, [creature]);
+    addToLocation(loc, items, [creature], []);
   }
+}
+
+for (const loc of locations) {
+  loc.resources = [...new Set(loc.resources)];
 }
 
 for (const biome of biomes) {

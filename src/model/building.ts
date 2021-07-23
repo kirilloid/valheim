@@ -489,10 +489,10 @@ export const pieces: Piece[] = [
     },
     recipe: { type: 'craft_piece', materials: { Stone: 4, Coal: 4, Wood: 10, Copper: 6 }, station: CraftingStation.Workbench, }
   },
-  { id: 'forge_ext1',
+  { id: 'forge_ext5',
     type: 'piece',
     subtype: 'craft_ext',
-    tier: 2,
+    tier: 3,
     emoji: '🛠️',
     piece: {
       target: 'primary',
@@ -502,7 +502,7 @@ export const pieces: Piece[] = [
     },
     extends: {
       id: CraftingStation.Forge,
-      distance: 2,
+      distance: 5,
     },
     wear: {
       hp: 100,
@@ -511,7 +511,7 @@ export const pieces: Piece[] = [
       noSupport: true,
       materialType: MaterialType.Wood,
     },
-    recipe: { type: 'craft_piece', materials: { Wood: 5, DeerHide: 5, Chain: 4 }, station: CraftingStation.Workbench, }
+    recipe: { type: 'craft_piece', materials: { FineWood: 25, Copper: 10, }, station: CraftingStation.Workbench, }
   },
   { id: 'forge_ext2',
     type: 'piece',
@@ -537,30 +537,6 @@ export const pieces: Piece[] = [
     },
     recipe: { type: 'craft_piece', materials: { Wood: 5, Bronze: 2, }, station: CraftingStation.Workbench, }
   },
-  { id: 'forge_ext3',
-    type: 'piece',
-    subtype: 'craft_ext',
-    tier: 2,
-    emoji: '🛠️',
-    piece: {
-      target: 'primary',
-      water: false,
-      onlyOnFlat,
-      requiredSpace: 2,
-    },
-    extends: {
-      id: CraftingStation.Forge,
-      distance: 5,
-    },
-    wear: {
-      hp: 100,
-      damageModifiers: damageModifieresExtensions,
-      noRoof: true,
-      noSupport: true,
-      materialType: MaterialType.Wood,
-    },
-    recipe: { type: 'craft_piece', materials: { Wood: 25, SharpeningStone: 1, }, station: CraftingStation.Workbench, }
-  },
   { id: 'forge_ext4',
     type: 'piece',
     subtype: 'craft_ext',
@@ -585,30 +561,6 @@ export const pieces: Piece[] = [
     },
     recipe: { type: 'craft_piece', materials: { Iron: 20, Wood: 5, }, station: CraftingStation.Workbench, }
   },
-  { id: 'forge_ext5',
-    type: 'piece',
-    subtype: 'craft_ext',
-    tier: 3,
-    emoji: '🛠️',
-    piece: {
-      target: 'primary',
-      water: false,
-      onlyOnFlat,
-      requiredSpace: 2,
-    },
-    extends: {
-      id: CraftingStation.Forge,
-      distance: 5,
-    },
-    wear: {
-      hp: 100,
-      damageModifiers: damageModifieresExtensions,
-      noRoof: true,
-      noSupport: true,
-      materialType: MaterialType.Wood,
-    },
-    recipe: { type: 'craft_piece', materials: { FineWood: 25, Copper: 10, }, station: CraftingStation.Workbench, }
-  },
   { id: 'forge_ext6',
     type: 'piece',
     subtype: 'craft_ext',
@@ -632,6 +584,54 @@ export const pieces: Piece[] = [
       materialType: MaterialType.Wood,
     },
     recipe: { type: 'craft_piece', materials: { Iron: 15, Wood: 10, }, station: CraftingStation.Workbench, }
+  },
+  { id: 'forge_ext1',
+    type: 'piece',
+    subtype: 'craft_ext',
+    tier: 2,
+    emoji: '🛠️',
+    piece: {
+      target: 'primary',
+      water: false,
+      onlyOnFlat,
+      requiredSpace: 2,
+    },
+    extends: {
+      id: CraftingStation.Forge,
+      distance: 2,
+    },
+    wear: {
+      hp: 100,
+      damageModifiers: damageModifieresExtensions,
+      noRoof: true,
+      noSupport: true,
+      materialType: MaterialType.Wood,
+    },
+    recipe: { type: 'craft_piece', materials: { Wood: 5, DeerHide: 5, Chain: 4 }, station: CraftingStation.Workbench, }
+  },
+  { id: 'forge_ext3',
+    type: 'piece',
+    subtype: 'craft_ext',
+    tier: 2,
+    emoji: '🛠️',
+    piece: {
+      target: 'primary',
+      water: false,
+      onlyOnFlat,
+      requiredSpace: 2,
+    },
+    extends: {
+      id: CraftingStation.Forge,
+      distance: 5,
+    },
+    wear: {
+      hp: 100,
+      damageModifiers: damageModifieresExtensions,
+      noRoof: true,
+      noSupport: true,
+      materialType: MaterialType.Wood,
+    },
+    recipe: { type: 'craft_piece', materials: { Wood: 25, SharpeningStone: 1, }, station: CraftingStation.Workbench, }
   },
   { id: 'smelter',
     type: 'piece',
@@ -1302,7 +1302,7 @@ export const pieces: Piece[] = [
     tier: 2,
     piece: { target: 'none', water: undefined, size: [0.25, 0.1, 0] },
     wear: { ...woodRoofStructureWear, hp: 100 },
-    recipe: { type: 'craft_piece', materials: { FineWood: 4, BronzeNails: 1 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { Wood: 2, Coal: 1 }, station: CraftingStation.Workbench },
   },
   { id: 'rug_fur', // lox
     type: 'piece',
@@ -1329,7 +1329,7 @@ export const pieces: Piece[] = [
     comfort: { value: 1 },
     piece: { target: 'none', water: undefined, onlyOnFlat, size: [2, 1.5, 0] },
     wear: { ...woodRoofStructureWear, hp: 50 },
-    recipe: { type: 'craft_piece', materials: { WolfPelt: 4 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { DeerHide: 4 }, station: CraftingStation.Workbench },
   },
   { id: 'piece_banner01',
     type: 'piece',

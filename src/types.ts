@@ -70,6 +70,7 @@ export type BiomeConfig = {
   active: boolean;
   tier: number;
   locations: GameLocationId[];
+  destructibles: Destructible[];
   creatures: Creature[];
   resources: EntityId[];
 }
@@ -84,6 +85,7 @@ export type LocationConfig = {
   altitude: [number, number];
   distance: [number, number];
   chest?: GeneralDrop;
+  destructibles: Destructible[];
   creatures: Creature[];
   resources: EntityId[];
 }
@@ -166,9 +168,12 @@ export const dropTrophy = (item: EntityId, chance: number) => {
 
 export interface GeneralDrop {
   chance?: number,
+  oneOfEach?: boolean,
   num: Pair<number>,
-  options: { item: EntityId, num: Pair<number>, weight?: number }[];
+  options: { item: EntityId, num?: Pair<number>, weight?: number }[];
 }
+
+export type SimpleDrop = Record<EntityId, number>;
 
 export interface Creature extends GameObjectBase {
   type: 'creature';
@@ -351,7 +356,7 @@ export interface Destructible extends GameObjectBase {
     id: EntityId,
     num: number,
   }[],
-  drop: GeneralDrop;
+  drop: GeneralDrop[];
 }
 
 interface GameEventSpawn {
@@ -382,6 +387,16 @@ interface GameObjectBase {
   emoji?: string;
 }
 
+export interface RecipeGrow {
+  type: 'grow';
+  locations: (Biome | GameLocationId)[];
+  abundance: number;
+  num: Pair<number>;
+  group: Pair<number>;
+  inForest?: Pair<number>;
+  respawn: number;
+}
+
 interface BaseItem extends GameObjectBase {
   weight: number;
   stack?: number;
@@ -404,15 +419,7 @@ interface BaseItem extends GameObjectBase {
     type: 'trader';
     value: number;
     number?: number;
-  } | {
-    type: 'grow';
-    locations: (Biome | GameLocationId)[];
-    abundance: number;
-    num: Pair<number>;
-    group: Pair<number>;
-    inForest?: Pair<number>;
-    respawn: number;
-  };
+  } | RecipeGrow;
 }
 
 export enum ItemType {
@@ -527,6 +534,7 @@ export interface Tool extends BaseItem {
   special: 'build' | 'garden' | 'ground' | 'fishing';
   maxLvl: number;
   durability: Pair<number>;
+  produces: EntityId[];
 }
 
 export interface Weapon extends BaseItem {

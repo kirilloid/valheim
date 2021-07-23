@@ -77,7 +77,7 @@ export function Biome() {
       <section>
         <h2>resources</h2>
         <h3>mining</h3>
-        <ResourceList list={resources.mining} />
+        <ResourceList list={biome.destructibles} />
         <div className="multiList">
           <div>
             <h3>food</h3>

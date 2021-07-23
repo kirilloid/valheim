@@ -1,11 +1,13 @@
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 
 import { Tool as TTool } from '../types';
-import { Icon } from './Icon';
+import { Icon, ItemIcon } from './Icon';
 import { RecipeSection } from './Source';
 import { durability, yesNo } from './helpers';
 import { TranslationContext } from '../effects';
 import { ItemHeader } from './ItemHeader';
+import { data } from '../model/objects';
 
 export function Tool({ item, level }: { item: TTool, level?: number }) {
   const translate = useContext(TranslationContext);
@@ -22,10 +24,18 @@ export function Tool({ item, level }: { item: TTool, level?: number }) {
           <dt>{translate('ui.floats')}</dt><dd>{yesNo(item.floating)}</dd>
         </dl>
       </section>
-      <section>
+      {item.produces.length ? <section>
         <h2>{translate('ui.usedToCraft')}</h2>
-        ...
-      </section>
+        <ul className="CraftList">
+          {item.produces.map(id => <li>
+            <ItemIcon item={data[id]} />
+            {' '}
+            <Link to={`/obj/${id}`}>
+              {translate(id)} 
+            </Link>
+          </li>)}
+        </ul>
+      </section> : null}
       <RecipeSection item={item} />
     </>
   );

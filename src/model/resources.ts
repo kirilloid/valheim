@@ -1,4 +1,4 @@
-import { Item, CraftingStation, Biome, EntityId, Resource } from "../types";
+import { Item, CraftingStation, Biome, EntityId, Resource, RecipeGrow } from "../types";
 import { GAME_DAY } from "./utils";
 
 const CAULDRON_TIME = 3;
@@ -12,6 +12,15 @@ const FURNACE_TIME = 30;
 const SPIN_WHEEL_TIME = 30;
 const FERMENT_TIME = 2400;
 const HOUR = 3600;
+
+const fromDungeons: RecipeGrow = {
+  type: 'grow',
+  locations: ['TrollCave', 'Crypt', 'SunkenCrypt'],
+  abundance: 1,
+  num: [1, 1],
+  group: [1, 1],
+  respawn: 0,
+};
 
 export const resources: Item[] = [
 // MEADOWS
@@ -82,7 +91,7 @@ export const resources: Item[] = [
   { type: 'item', id: 'GreydwarfEye', tier: 2, weight: 0.2, stack: 50 },
   { type: 'item', id: 'BoneFragments', emoji: '🦴', tier: 2, weight: 0.5, stack: 50 },
   { type: 'item', id: 'SurtlingCore', emoji: '🟥', tier: 2, weight: 5, stack: 10,
-    recipe: { type: 'grow', locations: ['BurialChamber'], abundance: 1, num: [2, 5], group: [2, 3], respawn: 0 } },
+    recipe: { type: 'grow', locations: ['Crypt'], abundance: 1, num: [2, 5], group: [2, 3], respawn: 0 } },
   { type: 'item', id: 'AncientSeed', emoji: '🌰', tier: 2, weight: 1, stack: 50, summon: ['gd_king', 3] },
   { type: 'item', id: 'RoundLog', tier: 2, weight: 2, stack: 50 },
   { type: 'item', id: 'TrollHide', tier: 2, weight: 2, stack: 20 },
@@ -100,10 +109,10 @@ export const resources: Item[] = [
   { type: 'item', id: 'BronzeNails', tier: 2, weight: 0.5, stack: 100, teleportable: false,
     recipe: { type: 'craft_one', time: FORGE_TIME, materials: { Bronze: 1 },
               source: { station: CraftingStation.Forge }, number: 20 } },
-  { type: 'valuable', id: 'Coins', emoji: '🪙', tier: 2, weight: 0.1, stack: 999, value: 1 },
-  { type: 'valuable', id: 'Ruby', emoji: '♦️', tier: 2, weight: 0.1, stack: 20, value: 20 },
-  { type: 'valuable', id: 'Amber', emoji: '🍕', tier: 2, weight: 0.1, stack: 20, value: 5 },
-  { type: 'valuable', id: 'AmberPearl', emoji: '🟡', tier: 2, weight: 0.1, stack: 50, value: 10 },
+  { type: 'valuable', id: 'Coins', emoji: '🪙', tier: 2, weight: 0.1, stack: 999, value: 1, recipe: fromDungeons },
+  { type: 'valuable', id: 'Ruby', emoji: '♦️', tier: 2, weight: 0.1, stack: 20, value: 20, recipe: fromDungeons },
+  { type: 'valuable', id: 'Amber', emoji: '🍕', tier: 2, weight: 0.1, stack: 20, value: 5, recipe: fromDungeons },
+  { type: 'valuable', id: 'AmberPearl', emoji: '🟡', tier: 2, weight: 0.1, stack: 50, value: 10, recipe: fromDungeons },
   { type: 'valuable', id: 'SilverNecklace', emoji: '💍', tier: 2, weight: 0.1, stack: 50, value: 30 },
   { type: 'item', id: 'YmirRemains', tier: 2, weight: 0.3, stack: 50, recipe: { type: 'trader', value: 120 } },
   { type: 'item', id: 'FishingBait', tier: 2, weight: 0.1, stack: 100, recipe: { type: 'trader', value: 10, number: 50 } },
@@ -116,7 +125,7 @@ export const resources: Item[] = [
               source: { station: CraftingStation.Cauldron }, number: 4 } },
   { type: 'food', id: 'MushroomYellow', emoji: '🍄🟡', tier: 2, weight: 0.1, stack: 50,
     health: 20, stamina: 20, duration: 600, regen: 1, color: '#e7c84bff',
-    recipe: { type: 'grow', locations: ['BlackForest', 'Swamp'], abundance: 1,
+    recipe: { type: 'grow', locations: ['TrollCave', 'Crypt', 'SunkenCrypt'], abundance: 1,
       // TODO check the numbers
       num: [1, 2], group: [2, 3],
       respawn: 4 * HOUR } },

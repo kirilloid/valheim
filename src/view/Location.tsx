@@ -1,38 +1,11 @@
 import React, { useContext } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
-import type { GeneralDrop } from '../types';
 import { TranslationContext } from '../effects';
 import { locations } from '../model/location';
 import { ItemIcon } from './Icon';
 import { data } from '../model/objects';
-import { showNumber } from './helpers';
-
-function Chest({ chest }: { chest: GeneralDrop | undefined }) {
-  const translate = useContext(TranslationContext);
-  if (chest == null) {
-    return null;
-  }
-
-  const totalWeight = chest.options.reduce((a, { weight = 1 }) => a + weight, 0);
-  const total = (chest.num[0] + chest.num[1]) / 2;
-
-  return (
-    <>
-      <h2>chest</h2>
-      <ul>
-      {chest.options.map(({ item: id, num, weight = 1 }) =>
-        <li>
-          <ItemIcon item={data[id]} size={32} />
-          <Link to={`/obj/${id}`}>{translate(id)}</Link>
-          {' x'}
-          {showNumber(total * (num[0] + num[1]) / 2 * weight / totalWeight)}
-        </li>
-      )}
-      </ul>
-    </>
-  );
-}
+import { DropTable } from './DropTable';
 
 export function Location() {
   const { id } = useParams<{ id: string }>();
@@ -54,6 +27,8 @@ export function Location() {
           <dd><Link to={`/biome/${loc.biome}`}>{translate(`ui.biome.${loc.biome}`)}</Link></dd>
           <dt>{translate('ui.locationType')}</dt>
           <dd>{translate(`ui.locationType.${loc.type}`)}</dd>
+          <dt>number in world</dt>
+          <dd>{loc.quantity}</dd>
         </dl>
         {loc.creatures.length
         ? <>
@@ -65,7 +40,7 @@ export function Location() {
               </li>)}
             </ul>
           </>
-        : <em>none</em>}
+        : null}
         {loc.resources.length
         ? <>
             <h2>resources</h2>
@@ -77,8 +52,11 @@ export function Location() {
             )}
             </ul>
           </>
-        : <em>none</em>}
-        <Chest chest={loc.chest} />
+        : null}
+        {loc.chest && <>
+          <h2>chest</h2>
+          <DropTable drops={[loc.chest]} />
+        </>}
       </section>
     </>
   );

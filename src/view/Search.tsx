@@ -4,12 +4,12 @@ import { createSelector } from 'reselect';
 
 import '../css/Search.css';
 
-import { DamageType, EntityId, ItemSpecial, Piece } from '../types';
+import { DamageType, EntityId, GameObject, ItemSpecial, Piece } from '../types';
 import { match, SearchEntry } from '../model/search';
 import { Icon, ItemIcon, SkillIcon } from './Icon';
 import { data } from '../model/objects';
 import { TranslationContext, Translator } from '../effects';
-import { assertNever } from '../model/utils';
+import { assertNever, days } from '../model/utils';
 import { SkillType } from '../model/skills';
 import { averageAttacksDamage, ShortWeaponDamage } from './helpers';
 import { getCraftingStationId } from '../model/building';
@@ -69,7 +69,7 @@ function showSpecialIcon(special: ItemSpecial, translate: Translator) {
     case 'build': return null;
     case 'garden': return <Icon path="piece/replant" alt="gardening" size={32} />;
     case 'ground': return <Icon path="piece/raise" alt="terraforming" size={32} />;
-    case 'fishing': return <ItemIcon item={data.FishingBait} size={32} />;
+    case 'fishing': return null;
     default: return assertNever(special);
   }
 }
@@ -87,6 +87,63 @@ function renderItem(entry: SearchEntry, text: string, translate: Translator, onC
 function renderLink(path: string, entry: SearchEntry, text: string, onClick: React.MouseEventHandler) {
   const { id } = entry;
   return <Link to={`${path}${id}`} onClick={onClick}>{text}</Link>
+}
+
+function Materials(props: { materials: Record<EntityId, number> }) {
+  const { materials } = props;
+  const maxTier = Object.keys(materials).reduce((a, id) => Math.max(a, data[id]?.tier ?? 0), 0);
+  return <span className="SearchItem__recipe">
+    {Object
+      .entries(materials)
+      .filter(([key]) => (data[key]?.tier ?? 0) >= maxTier - 2)
+      .flatMap(([key, val]) => [
+        ' ',
+        <ItemIcon key={key} item={data[key]} size={16} />,
+        String(val),
+      ])}
+  </span>
+}
+
+function ShortRecipe(props: { item: GameObject }) {
+  const { item } = props;
+  switch (item.type) {
+    case 'creature':
+    case 'destructible':
+    case 'plant':
+    case 'item':
+    case 'trophy':
+    case 'valuable':
+      return null;
+    case 'piece':
+    case 'ship':
+    case 'cart':
+    case 'food':
+    case 'shield':
+    case 'tool':
+    case 'armor':
+    case 'ammo':
+    case 'potion':
+    case 'weapon': {
+      const { recipe } = item;
+      if (recipe == null) return null;
+      switch (recipe.type) {
+        case 'craft_one':
+        case 'craft_piece':
+        case 'craft_upg':
+          // disabled for now
+          return <Materials materials={recipe.materials} />
+        case 'grow':
+          return null;
+        case 'trader':
+          // disabled for now
+          return null && <span><Icon id="coin" alt="" size={16} /> {recipe.value}</span>
+        default:
+          return assertNever(recipe);
+      }
+    }
+    default:
+      return assertNever(item);
+  }
 }
 
 function renderObject(id: EntityId, text: string, translate: Translator, onClick: React.MouseEventHandler) {
@@ -117,6 +174,8 @@ function renderObject(id: EntityId, text: string, translate: Translator, onClick
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         {item.summon
         ? <ItemIcon item={data[item.summon[0]]} useAlt size={32} />
+        : item.recipe?.type === 'grow' && item.recipe.respawn !== 0
+        ? <span>{days(item.recipe.respawn)} <Icon id="time" alt={translate('ui.time')} size={16} /></span>
         : null}
       </div>
     case 'trophy':
@@ -132,12 +191,14 @@ function renderObject(id: EntityId, text: string, translate: Translator, onClick
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         {showSpecialIcon(item.special, translate)}
+        <ShortRecipe item={item} />
       </div>
     case 'weapon':
       return <div className="SearchItem">
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
-        <span><ShortWeaponDamage damage={item.damage[0]} skill={item.skill} /></span>
+        {showSpecialIcon(item.special, translate) ?? <ShortWeaponDamage damage={item.damage[0]} skill={item.skill} />}
+        <ShortRecipe item={item} />
       </div>
     case 'shield':
       return <div className="SearchItem">
@@ -147,6 +208,7 @@ function renderObject(id: EntityId, text: string, translate: Translator, onClick
           <SkillIcon skill={SkillType.Blocking} useAlt size={16} />
           {first(item.block)}
         </span>
+        <ShortRecipe item={item} />
       </div>
     case 'armor':
       return <div className="SearchItem">
@@ -159,12 +221,14 @@ function renderObject(id: EntityId, text: string, translate: Translator, onClick
             {first(item.armor)}
           </>
         }</span>
+        <ShortRecipe item={item} />
       </div>
     case 'ammo':
       return <div className="SearchItem">
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         <span><ShortWeaponDamage damage={item.damage} skill={SkillType.Bows} /></span>
+        <ShortRecipe item={item} />
       </div>
     case 'food':
       return <div className="SearchItem">
@@ -198,6 +262,7 @@ function renderObject(id: EntityId, text: string, translate: Translator, onClick
             ? (Object.keys(item.resist) as DamageType[]).map(type => resistIcon(translate, type))
             : null}
         </span>
+        <ShortRecipe item={item} />
       </div>
     case 'valuable':
       return <div className="SearchItem">
@@ -208,11 +273,29 @@ function renderObject(id: EntityId, text: string, translate: Translator, onClick
           {item.value}
         </span>
       </div>
+    case 'plant':
+      return <div className="SearchItem">
+        <ItemIcon item={item} size={32} />
+        <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
+        <span>
+          {days(item.growTime[0]).toFixed(1)}
+          –
+          {days(item.growTime[1]).toFixed(1)}
+          {' '}
+          <Icon id="time" alt={translate('ui.time')} size={16} />
+        </span>
+      </div>
+    case 'destructible':
+      return <div className="SearchItem">
+        <ItemIcon item={item} size={32} />
+        <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
+      </div>
     case 'piece':
       return <div className="SearchItem">
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         {pieceExtra(item)}
+        <ShortRecipe item={item} />
       </div>
     case 'ship':
     case 'cart':

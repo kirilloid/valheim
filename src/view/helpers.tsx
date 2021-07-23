@@ -1,14 +1,15 @@
 import React, { useContext } from 'react';
 
 import {
-  AttackProfile,
   Biome,
   Creature,
-  DamageModifier,
   DamageModifiers,
   DamageProfile,
+  DamageType,
   GameLocationId,
-  ItemSpecial as TItemSpecial
+  GeneralDrop,
+  ItemSpecial as TItemSpecial,
+  SimpleDrop
 } from '../types';
 import { SkillIcon } from './Icon';
 import { TranslationContext } from '../effects';
@@ -56,7 +57,7 @@ export function ShortWeaponDamage({ damage, skill }: { damage: DamageProfile, sk
   // elemental
   const { fire, frost, poison, lightning, spirit } = damage;
   const obj = { physical, fire, frost, poison, lightning, spirit };
-  if (skill) result.push(<SkillIcon skill={skill} useAlt size={16} />);
+  if (skill) result.push(<SkillIcon key={skill} skill={skill} useAlt size={16} />);
   result.push(
     ...Object.entries(obj)
       .filter(kv => kv[1])
@@ -84,6 +85,40 @@ export const averageAttacksDamage = (creature: Creature) => {
   return avg && toPrecision(3, avg);
 };
 
+export function materializeDrop(drop: GeneralDrop): SimpleDrop {
+  const {
+    chance = 1,
+    oneOfEach = false,
+    num: [min, max],
+    options,
+  } = drop;
+  
+  if (oneOfEach) {
+    return Object.fromEntries(options.map(opt => {
+      const { item, num = [1, 1] } = opt;  
+      const avg = chance * (num[0] + num[1]) / 2;
+      return [item, avg];
+    }));
+  }
+  
+  const mul = chance * (min + max) / 2 / options.length;
+  const totalWeight = options.reduce((w, { weight = 1 }) => w + weight, 0); 
+  return Object.fromEntries(options.map(opt => {
+    const { item, num = [1, 1], weight = 1 } = opt;
+    const avg = (num[0] + num[1]) / 2 * (weight / totalWeight);
+    return [item, avg * mul];
+  }));
+}
+
+export function addDrop(dropBase: SimpleDrop, dropAdd: SimpleDrop, numAdd: number = 1): SimpleDrop {
+  const copy: SimpleDrop = { ...dropBase };
+  for (const [key, val] of Object.entries(dropAdd)) {
+    if (!(key in copy)) copy[key] = 0;
+    copy[key] += val * numAdd;
+  }
+  return copy;
+}
+
 export function shortCreatureDamage(damage: DamageProfile) {
   // physical
   const physical = (damage.slash ?? 0)
@@ -98,7 +133,14 @@ export function shortCreatureDamage(damage: DamageProfile) {
     .flatMap((item, i) => i ? ['+', item] : [item]);
 }
 
-function damageTypesList(list: DamageModifier[]): string {
+const allDamageTypes: DamageType[] = ['blunt', 'slash', 'pierce', 'chop', 'pickaxe', 'fire', 'frost', 'lightning', 'poison', 'spirit'];
+
+function damageTypesList(list: DamageType[]): string {
+  if (list.length >= 8) {
+    const set = new Set(allDamageTypes);
+    for (const dm of list) set.delete(dm);
+    return `All but ${[...set].join(', ')}`;
+  }
   return list.join(', ');
 } 
 
@@ -114,15 +156,15 @@ export function ItemSpecial({ special }: { special: TItemSpecial }) {
 export function Resistances({ mods }: { mods: DamageModifiers }) {
   const translate = useContext(TranslationContext);
   const modGroups = {
-    veryWeak: [] as DamageModifier[],
-    weak: [] as DamageModifier[],
-    resistant: [] as DamageModifier[],
-    veryResistant: [] as DamageModifier[],
-    immune: [] as DamageModifier[],
+    veryWeak: [] as DamageType[],
+    weak: [] as DamageType[],
+    resistant: [] as DamageType[],
+    veryResistant: [] as DamageType[],
+    immune: [] as DamageType[],
   };
   for (const [key, val] of Object.entries(mods)) {
     if (val && val !== 'normal' && val !== 'ignore') {
-      modGroups[val].push(key as unknown as DamageModifier);
+      modGroups[val].push(key as unknown as DamageType);
     }
   }
   const keys = [

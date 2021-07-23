@@ -26,6 +26,8 @@ export const timeI2S = (seconds: number) => {
 
 export const GAME_DAY = 1800;
 
+export const days = (seconds: number) => seconds / GAME_DAY;
+
 export const assertNever = (x: never): never => {
   console.error('unexpected value: %s', x);
   return undefined as never;

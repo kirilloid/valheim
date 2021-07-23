@@ -1,40 +1,36 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
 import { TranslationContext } from '../effects';
+import { fullDestructible } from '../model/destructibles';
 
-import type { Destructible as TDestructible, GeneralDrop } from '../types';
-import { Resistances, showNumber } from './helpers';
-import { ItemIcon } from './Icon';
+import type { DamageModifier, Destructible as TDestructible, Weapon } from '../types';
+import { DropTable } from './DropTable';
+import { Resistances } from './helpers';
+import { items as weapons } from '../model/weapons';
 import { ItemHeader } from './ItemHeader';
-import { data } from '../model/objects';
+import { SkillType } from '../model/skills';
+import { ItemIcon } from './Icon';
 
-function DropTable({ drop }: { drop: GeneralDrop }) {
-  const translate = useContext(TranslationContext);
-  const {
-    chance = 1,
-    num: [min, max],
-    options,
-  } = drop;
-  const mul = chance * (min + max) / 2 / options.length;
-  const totalWeight = options.reduce((w, { weight = 1 }) => w + weight, 0); 
-  return <ul>
-    {options.map(opt => {
-      const { item, num, weight = 1 } = opt;
-      const avg = (num[0] + num[1]) / 2 * (weight / totalWeight);
-      return <li key={item}>
-        {showNumber(avg * mul)}
-        {' '}
-        <ItemIcon item={data[item]} />
-        {' '}
-        <Link to={`/obj/${item}`}>{translate(item)}</Link>
-      </li>
-    })}
-  </ul>;
-}
+const axes = weapons.filter(w => w.skill === SkillType.Axes && !w.disabled) as Weapon[];
+const pickaxes = weapons.filter(w => w.skill === SkillType.Pickaxes && !w.disabled) as Weapon[];
+
+const nonImmune = (mod: DamageModifier): boolean => {
+  return mod !== 'ignore' && mod !== 'immune'; 
+};
 
 export function Destructible({ item }: { item: TDestructible }) {
-  const { hp, damageModifiers, drop } = item;
+  const full = fullDestructible(item);
+  const { hp, damageModifiers, drop } = full;
   const translate = useContext(TranslationContext);
+
+  const onlyDamagers: Weapon[] = [
+    ...(nonImmune(damageModifiers.chop)
+      ? axes.filter(w => (w?.toolTier ?? 0) >= item.minToolTier)
+      : []),
+    ...(nonImmune(damageModifiers.pickaxe)
+      ? pickaxes.filter(w => (w?.toolTier ?? 0) >= item.minToolTier)
+      : []),
+  ];
+
   return (
     <>
       <ItemHeader item={item} />
@@ -43,10 +39,14 @@ export function Destructible({ item }: { item: TDestructible }) {
         <dl>
           <dt>health</dt><dd>{hp}</dd>
           <Resistances mods={damageModifiers} />
+          {item.minToolTier >= 0 ?  <>
+            <dt>can be damaged by</dt>
+            <dd>
+              {onlyDamagers.map(w => <ItemIcon key={w.id} item={w} />)}
+            </dd>
+          </> : null}
           <dt>drop</dt>
-          <dd>
-            <DropTable drop={drop} />
-          </dd>
+          <dd><DropTable drops={drop} /></dd>
         </dl>
       </section>
     </>

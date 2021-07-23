@@ -1,4 +1,6 @@
 import { CraftingStation, Tool } from "../types";
+import { pieces } from "./building";
+import { plants } from "./plants";
 
 export const tools: Tool[] = [
   {
@@ -9,6 +11,7 @@ export const tools: Tool[] = [
     weight: 2,
     maxLvl: 3,
     durability: [100, 100],
+    produces: pieces.map(p => p.id),
     recipe: {
       type: 'craft_upg',
       time: 4,
@@ -26,6 +29,7 @@ export const tools: Tool[] = [
     weight: 2,
     maxLvl: 3,
     durability: [200, 200],
+    produces: [],
     recipe: {
       type: 'craft_upg',
       time: 4,
@@ -43,6 +47,7 @@ export const tools: Tool[] = [
     weight: 2,
     maxLvl: 3,
     durability: [200, 200],
+    produces: plants.map(p => p.id),
     recipe: {
       type: 'craft_upg',
       time: 4,
@@ -61,6 +66,7 @@ export const tools: Tool[] = [
     floating: true,
     maxLvl: 1,
     durability: [Infinity, 0],
+    produces: ['Fish'],
     recipe: { type: 'trader', value: 350 }
   },
 ];
