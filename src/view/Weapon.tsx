@@ -78,7 +78,7 @@ function Attack({ item, attack }: { item: TWeapon, attack: TAttack }) {
     <dd>{translate(`ui.attackType.${attack.type}`)}</dd>
     <dt>{translate('ui.stamina')}</dt>
     <dd>{attack.stamina}</dd>
-    {attack.type === 'melee' && <>
+    {attack.type === 'melee' && attack.chain > 0 && <>
       <dt>{translate('ui.attackMelee.combo')}</dt>
       <dd>{attack.chain}</dd>
     </>}

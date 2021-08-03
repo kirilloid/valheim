@@ -110,7 +110,7 @@ export const locations: LocationConfig[] = [
   ...loc('SunkenCrypt', ['4'], ['Swamp'], 400, { type: 'dungeon', minApart: 64, minAlt: 0, maxAlt: 2, canHaveVegvisir, chest: chestDrops.sunkenCrypt }),
   ...loc('Runestone_Swamps', [], ['Swamp'], 100, { type: 'runestone', minApart: 128 }),
   ...loc('Bonemass', [], ['Swamp'], 5, { minDistance: 2000, minApart: 3000 }),
-  // mountain
+  // ocean
   ...loc('Leviathan', [''], ['Ocean'], 200, { minApart: 100, minAlt: 100 }), // 21 barnacles
   // mountain
   ...loc('DrakeNest', ['01'], ['Mountain'], 200, { minApart: 100, minAlt: 100 }),
@@ -123,7 +123,7 @@ export const locations: LocationConfig[] = [
   ...loc('Runestone_Mountains', [], ['Mountain'], 100, { minApart: 128, type: 'runestone' }),
   ...loc('DragonQueen', [], ['Mountain'], 3, { type: 'altar', minApart: 3000, maxDistance: 8000, minAlt: 150, maxAlt: 500 }),
   // plains
-  ...loc('GoblinCamp', ['2'], ['Plains'], 200, { minApart: 250 }),
+  ...loc('GoblinCamp', ['2'], ['Plains'], 200, { minApart: 250, chest: chestDrops.heath }),
   ...loc('StoneTower', ['1', '3'], ['Plains'], 50, { canHaveVegvisir, minApart: 512 }),
   ...loc('Ruin', ['3'], ['Plains'], 50, { canHaveVegvisir, minApart: 512 }),
   ...loc('StoneHengeS', ['1', '2', '3', '4'], ['Plains'], 5, { canHaveVegvisir, minApart: 1000, minAlt: 5 }),
@@ -177,9 +177,9 @@ for (const destr of destructibles) {
   }
 }
 
-for (const { id, recipe } of resources) {
-  if (recipe?.type !== 'grow') continue;
-  for (const loc of recipe.locations) {
+for (const { id, grow } of resources) {
+  if (!grow) continue;
+  for (const loc of grow.locations) {
     addToLocation(loc, [id], [], []);
   }
 }

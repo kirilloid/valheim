@@ -27,6 +27,8 @@ export function Location() {
           <dd><Link to={`/biome/${loc.biome}`}>{translate(`ui.biome.${loc.biome}`)}</Link></dd>
           <dt>{translate('ui.locationType')}</dt>
           <dd>{translate(`ui.locationType.${loc.type}`)}</dd>
+          <dt>altitude range</dt>
+          <dd>{`${loc.altitude[0]}-${loc.altitude[1]}`}</dd>
           <dt>number in world</dt>
           <dd>{loc.quantity}</dd>
         </dl>

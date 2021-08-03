@@ -2,6 +2,7 @@ import type {
   Biome,
   DamageModifiers,
   Destructible,
+  EntityId,
   GameLocationId,
   GeneralDrop,
 } from '../types';
@@ -359,7 +360,7 @@ export const destructibles: Destructible[] = [
   ...tree({
     id: ['Oak1', 'OakStub', 'Oak_log', 'Oak_log_half'],
     tiers: [2, 2],
-    locations: ['Meadows', 'Plains'],
+    locations: ['Meadows'],
     hp: [200, 160, 140],
     drop: [emptyDrop, {
       num: [25, 25],

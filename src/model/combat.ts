@@ -1,4 +1,4 @@
-import { mapValues } from 'lodash-es';
+import mapValues from 'lodash-es/mapValues';
 import { Arrow, Attack, Creature, DamageModifier, DamageModifiers, damageModifiersValues, DamageProfile, DamageType, Pair, Weapon } from "../types";
 import { effects } from './effects';
 import { animations } from './weapons';
@@ -222,8 +222,8 @@ export function attackCreature(
       singleHit * skillMax * multiplier * backstabBonus,
     ],
     averageHit: [
-      (damageFixed * skillMin * comboTotal + overTimeTotal) * multiplier,
-      (damageFixed * skillMax * comboTotal + overTimeTotal) * multiplier,
+      (damageFixed * skillMin + overTimeTotal) * multiplier / comboTotal,
+      (damageFixed * skillMax + overTimeTotal) * multiplier / comboTotal,
     ],
     dpSec,
     dpSta,

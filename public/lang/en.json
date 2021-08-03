@@ -520,8 +520,6 @@
     "GoblinKing": "Yagluth",
     "GoblinKing.tags": "goblin skull boss",
     "Serpent": "Serpent",
-    "Leviathan": "Leviathan",
-    "Leviathan.tags": "kraken",
 
     "beehive": "beehive (wild)",
     "beech_small": "Beech (small)",
@@ -586,6 +584,7 @@
     "ui.damageType.lightning": "lightning",
     "ui.damageType.poison": "poison",
     "ui.damageType.spirit": "spirit",
+    "ui.destructible": "destructible",
     "ui.drops": "drops",
     "ui.dropsFrom": "drops from",
     "ui.durability": "durability",
@@ -639,6 +638,8 @@
     "ui.location.Meteorite": "Meteorite",
     "ui.location.MountainGrave": "Mountain Grave",
     "ui.location.MountainWell": "Mountain Well",
+    "ui.location.Leviathan": "Leviathan",
+    "ui.location.Leviathan.tags": "kraken",
     "ui.location.Ruin": "Ruin",
     "ui.location.Runestone_Boars": "Runestone (boars)",
     "ui.location.Runestone_Draugr": "Runestone (draugr)",
@@ -673,6 +674,7 @@
     "ui.locationType.runestone": "runestone",
 
     "ui.maxQuality": "max quality",
+    "ui.minedFrom": "extracted from",
     "ui.nonTeleportable": "non-teleportable",
     "ui.onlyInDlc": "This item is available only in DLC",
     "ui.onlyInSeason": "This item can be made only during {0}",

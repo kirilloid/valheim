@@ -387,8 +387,7 @@ interface GameObjectBase {
   emoji?: string;
 }
 
-export interface RecipeGrow {
-  type: 'grow';
+export interface ItemGrow {
   locations: (Biome | GameLocationId)[];
   abundance: number;
   num: Pair<number>;
@@ -419,7 +418,8 @@ interface BaseItem extends GameObjectBase {
     type: 'trader';
     value: number;
     number?: number;
-  } | RecipeGrow;
+  };
+  grow?: ItemGrow;
 }
 
 export enum ItemType {

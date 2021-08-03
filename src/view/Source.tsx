@@ -6,9 +6,9 @@ import { TranslationContext, useGlobalState } from '../effects';
 import { data } from '../model/objects';
 import { creatures } from '../model/creatures';
 import { Icon, ItemIcon, SkillIcon } from './Icon';
-import { assertNever, timeI2S } from '../model/utils';
+import { assertNever, days, timeI2S } from '../model/utils';
 import { getCraftingStationId } from '../model/building';
-import { resourceBuildMap, resourceCraftMap } from '../model/resource-usage';
+import { miningMap, resourceBuildMap, resourceCraftMap } from '../model/resource-usage';
 import { SkillType } from '../model/skills';
 import { Area } from './helpers';
 
@@ -179,11 +179,6 @@ export function Recipe({ item }: { item: Item | Piece | Destructible | Plant | S
         }</dd>
         {number === 1 ? null : <><dt>quantity</dt><dd>{number}</dd></>} 
       </dl>;
-    case 'grow':
-      return <>
-        Grows in {recipe.locations.flatMap(loc => [<Area area={loc} />, ', '])}
-        {recipe.respawn ? `respawns every ${timeI2S(recipe.respawn)}` : 'does not respawn'}
-      </>;
     case 'craft_upg': {
       const { station, level } = recipe.source;
       return <>
@@ -214,10 +209,47 @@ export function RecipeSection({ item }: { item: GameObject | undefined }) {
     : null;
 }
 
+function GrowSection({ item }: { item: GameObject | undefined }) {
+  if (!item) return null;
+  switch (item.type) {
+    case 'destructible':
+    case 'creature':
+    case 'piece':
+    case 'plant':
+    case 'ship':
+    case 'cart':
+      return null;
+  }
+  const { grow } = item;
+  return grow ? <>
+    Grows in {grow.locations.flatMap(loc => [<Area area={loc} />, ', '])}
+    {grow.respawn ? `respawns every ${days(grow.respawn)} game days` : 'does not respawn'}
+  </> : null;
+}
+
+function MiningSection({ id }: { id: EntityId }) {
+  const translate = useContext(TranslationContext);
+  const sources = miningMap.get(id);
+  return sources
+    ? <section>
+        <h2>{translate('ui.minedFrom')}</h2>
+        <ul>
+          {[...new Set(sources)].map(s => <li>
+            <Link to={`/obj/${s.id}`}>
+              {translate(s.id)}
+            </Link>
+          </li>)}
+        </ul>
+      </section>
+    : null;
+}
+
 export function Source({ id }: { id: EntityId }) {
   return <>
     <CraftingSection id={id} />
     <DropSection sources={source[id]} />
     <RecipeSection item={data[id]} />
+    <GrowSection item={data[id]} />
+    <MiningSection id={id} />
   </>
 }

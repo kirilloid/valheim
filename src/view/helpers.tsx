@@ -85,40 +85,6 @@ export const averageAttacksDamage = (creature: Creature) => {
   return avg && toPrecision(3, avg);
 };
 
-export function materializeDrop(drop: GeneralDrop): SimpleDrop {
-  const {
-    chance = 1,
-    oneOfEach = false,
-    num: [min, max],
-    options,
-  } = drop;
-  
-  if (oneOfEach) {
-    return Object.fromEntries(options.map(opt => {
-      const { item, num = [1, 1] } = opt;  
-      const avg = chance * (num[0] + num[1]) / 2;
-      return [item, avg];
-    }));
-  }
-  
-  const mul = chance * (min + max) / 2 / options.length;
-  const totalWeight = options.reduce((w, { weight = 1 }) => w + weight, 0); 
-  return Object.fromEntries(options.map(opt => {
-    const { item, num = [1, 1], weight = 1 } = opt;
-    const avg = (num[0] + num[1]) / 2 * (weight / totalWeight);
-    return [item, avg * mul];
-  }));
-}
-
-export function addDrop(dropBase: SimpleDrop, dropAdd: SimpleDrop, numAdd: number = 1): SimpleDrop {
-  const copy: SimpleDrop = { ...dropBase };
-  for (const [key, val] of Object.entries(dropAdd)) {
-    if (!(key in copy)) copy[key] = 0;
-    copy[key] += val * numAdd;
-  }
-  return copy;
-}
-
 export function shortCreatureDamage(damage: DamageProfile) {
   // physical
   const physical = (damage.slash ?? 0)

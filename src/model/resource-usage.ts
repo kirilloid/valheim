@@ -2,12 +2,14 @@ import { items as weapons } from './weapons';
 import { items as armors } from './armors';
 import { arrows } from './arrows';
 import { resources } from './resources';
-import { CraftingStation, EntityId, Item, Piece } from '../types';
+import { CraftingStation, Destructible, EntityId, Item, Piece } from '../types';
 import { pieces } from './building';
+import { destructibles } from './destructibles';
 
 export const resourceCraftMap: Record<EntityId, Item[]> = {};
 export const resourceBuildMap: Record<EntityId, Piece[]> = {};
 export const stationsMap = new Map<CraftingStation, (Item | Piece)[]>();
+export const miningMap = new Map<EntityId, Destructible[]>();
 
 function addToMap<T extends Item | Piece>(map: Record<EntityId, T[]>, item: T) {
   const { recipe } = item;
@@ -36,3 +38,24 @@ resources.forEach(addToCraftMap);
 arrows.forEach(addToCraftMap);
 
 pieces.forEach(p => addToMap(resourceBuildMap, p));
+
+const parents: Record<EntityId, Destructible> = {};
+
+for (const d of destructibles) {
+  for (const c of d.parts) {
+    parents[c.id] = d;
+  }
+}
+
+for (const d of destructibles) {
+  for (const gd of d.drop) {
+    for (const { item } of gd.options) {
+      if (!miningMap.has(item)) {
+        miningMap.set(item, []);
+      }
+      let p = d;
+      while (parents[p.id]) { p = parents[p.id]!; }
+      miningMap.get(item)!.push(p);
+    }
+  }
+}

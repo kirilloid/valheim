@@ -36,7 +36,7 @@ export const chestDrops: Record<string, GeneralDrop> = {
       { item: 'BlackMetalScrap', num: [2, 5], },
       { item: 'Needle', num: [2, 5], },
       { item: 'Coins', num: [10, 40], },
-      { item: 'SharpenningStone', num: [1, 1], weight: 0.1, },
+      { item: 'SharpeningStone', num: [1, 1], weight: 0.1, },
     ],
   },
   meadows: {

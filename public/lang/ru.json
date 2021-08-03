@@ -498,8 +498,6 @@
     "GoblinKing": "Яглут",
     "GoblinKing.tags": "гоблин череп босс",
     "Serpent": "Змей",
-    "Leviathan": "Левиафан",
-    "Leviathan.tags": "кракен",
     
     "beehive": "улей (дикий)",
     "beech_small": "Бук (маленький)",
@@ -555,6 +553,7 @@
     "ui.damageType.lightning": "молния",
     "ui.damageType.poison": "яд",
     "ui.damageType.spirit": "дух",
+    "ui.destructible": "разрушаемый объект",
     "ui.drops": "дроп",
     "ui.dropsFrom": "выпадает из",
     "ui.durability": "прочность",
@@ -607,6 +606,8 @@
     "ui.location.Meteorite": "Метеорит",
     "ui.location.MountainGrave": "Погребение в горах",
     "ui.location.MountainWell": "Колодец",
+    "ui.location.Leviathan": "Левиафан",
+    "ui.location.Leviathan.tags": "кракен",
     "ui.location.Ruin": "Руины",
     "ui.location.Runestone_Boars": "Рунный камень (кабаны)",
     "ui.location.Runestone_Draugr": "Рунный камень (драугры)",
@@ -641,6 +642,7 @@
     "ui.locationType.runestone": "рунный камень",
 
     "ui.maxQuality": "макс.качество",
+    "ui.minedFrom": "добывается из",
     "ui.nonTeleportable": "нельзя телепортировать",
     "ui.onlyInDlc": "Этот элемент доступен толлько в DLC {0}",
     "ui.onlyInSeason": "{0} — единственное время когда этот элемент доступен для изготовления",

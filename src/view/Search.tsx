@@ -132,8 +132,6 @@ function ShortRecipe(props: { item: GameObject }) {
         case 'craft_upg':
           // disabled for now
           return <Materials materials={recipe.materials} />
-        case 'grow':
-          return null;
         case 'trader':
           // disabled for now
           return null && <span><Icon id="coin" alt="" size={16} /> {recipe.value}</span>
@@ -174,8 +172,8 @@ function renderObject(id: EntityId, text: string, translate: Translator, onClick
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         {item.summon
         ? <ItemIcon item={data[item.summon[0]]} useAlt size={32} />
-        : item.recipe?.type === 'grow' && item.recipe.respawn !== 0
-        ? <span>{days(item.recipe.respawn)} <Icon id="time" alt={translate('ui.time')} size={16} /></span>
+        : item.grow?.respawn
+        ? <span>{days(item.grow.respawn)} <Icon id="time" alt={translate('ui.time')} size={16} /></span>
         : null}
       </div>
     case 'trophy':

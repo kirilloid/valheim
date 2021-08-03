@@ -190,7 +190,7 @@ const cartDamageModifiers: DamageModifiers = {
 export const carts: Cart[] = [
   {
     type: 'cart',
-    id: 'Raft',
+    id: 'Cart',
     tier: 1,
     emoji: '',
     wear: {

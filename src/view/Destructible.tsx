@@ -1,14 +1,17 @@
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
+
 import { TranslationContext } from '../effects';
 import { fullDestructible } from '../model/destructibles';
 
-import type { DamageModifier, Destructible as TDestructible, Weapon } from '../types';
+import type { BiomeConfig, DamageModifier, Destructible as TDestructible, LocationConfig, Weapon } from '../types';
 import { DropTable } from './DropTable';
-import { Resistances } from './helpers';
+import { Area, Resistances } from './helpers';
 import { items as weapons } from '../model/weapons';
 import { ItemHeader } from './ItemHeader';
 import { SkillType } from '../model/skills';
 import { ItemIcon } from './Icon';
+import { biomes, locations } from '../model/location';
 
 const axes = weapons.filter(w => w.skill === SkillType.Axes && !w.disabled) as Weapon[];
 const pickaxes = weapons.filter(w => w.skill === SkillType.Pickaxes && !w.disabled) as Weapon[];
@@ -35,17 +38,28 @@ export function Destructible({ item }: { item: TDestructible }) {
     <>
       <ItemHeader item={item} />
       <section>
-        <h2>{translate(`ui.piece`)}</h2>
+        <h2>{translate('ui.destructible')}</h2>
         <dl>
-          <dt>health</dt><dd>{hp}</dd>
+          <dt>could be found in</dt>
+          <dd>{
+            ([] as (LocationConfig | BiomeConfig)[]).concat(locations, biomes)
+              .filter(loc => loc.destructibles.includes(item))
+              .flatMap(loc => [<Area area={loc.id} />, ', '])
+          }</dd>
+          <dt>{translate('ui.durability')}</dt><dd>{hp}</dd>
           <Resistances mods={damageModifiers} />
           {item.minToolTier >= 0 ?  <>
-            <dt>can be damaged by</dt>
+            <dt>can be damaged only by</dt>
             <dd>
-              {onlyDamagers.map(w => <ItemIcon key={w.id} item={w} />)}
+              <ul>
+                {onlyDamagers.map(w => <li>
+                  <ItemIcon key={w.id} item={w} />
+                  <Link to={`/obj/${w.id}`}>{translate(w.id)}</Link>
+                </li>)}
+              </ul>
             </dd>
           </> : null}
-          <dt>drop</dt>
+          <dt>{translate('ui.drops')}</dt>
           <dd><DropTable drops={drop} /></dd>
         </dl>
       </section>

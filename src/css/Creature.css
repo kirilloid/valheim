@@ -21,6 +21,10 @@ a.Creature__Star {
   flex-wrap: wrap;
 }
 
+.Creature__Attacks h3 {
+  width: 100%;
+}
+
 .Creature__Attack {
   flex: 50%;
   max-width: 50%;

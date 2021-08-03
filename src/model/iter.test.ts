@@ -1,4 +1,5 @@
-import { take } from "./iter";
+import { take } from './iter';
+
 describe('take', () => {
   const data = [1, 2];
   test('less than', () => {
