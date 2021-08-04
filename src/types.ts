@@ -369,6 +369,7 @@ interface GameEventSpawn {
 
 export interface GameEvent {
   id: EntityId;
+  icon: EntityId;
   biomes: Biome[];
   killed: EntityId[];
   notKilled: EntityId[];

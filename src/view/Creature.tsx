@@ -10,7 +10,7 @@ import { timeI2S } from '../model/utils';
 import { TranslationContext } from '../effects';
 
 import { Creature as TCreature, NormalAttackProfile, SpawnAttackProfile } from '../types';
-import { Area, Resistances, shortCreatureDamage, yesNo } from './helpers';
+import { Area, rangeBy, Resistances, shortCreatureDamage, yesNo } from './helpers';
 import { ItemIcon } from './Icon';
 import { ItemHeader } from './ItemHeader';
 
@@ -39,7 +39,7 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
   const { id, tame, pregnancy, stagger } = creature;
   const scale = { stars: level - 1 };
   const dmgScale = dmgBonus(scale);
-  const dropScale = 2 ** (level - 1);
+  const dropGlobalScale = 2 ** (level - 1);
   const [sid, snr] = getSummon(id) ?? ['', 0];
   const totalVarietyRates = creature.attacks.reduce((t, a) => t + a.rate, 0);
   return (<>
@@ -95,17 +95,20 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
     <section>
       <h2>{translate('ui.drops')}</h2>
       <ul>
-        {creature.drop.map(({ item, min, max, chance }) => <li key={item}>
-          <ItemIcon item={data[item]} />
-          <Link to={`/obj/${item}`}>
-            {translate(item)}
-          </Link>{' '}
-          {min >= max - 1
-            ? `${min * dropScale}`
-            : `${min * dropScale}–${(max - 1) * dropScale}`}
-          {' '}
-          {Math.min(chance * dropScale, 1) * 100}%
-        </li>)}
+        {creature.drop.map(({ item, min, max, scale, chance }) => {
+          const dropScale = scale ? dropGlobalScale : 1;
+          return <li key={item}>
+            <ItemIcon item={data[item]} />
+            <Link to={`/obj/${item}`}>
+              {translate(item)}
+            </Link>{' '}
+            {min >= max - 1
+              ? `${min * dropScale}`
+              : `${rangeBy([min * dropScale, (max - 1) * dropScale], String)}`}
+            {' '}
+            {Math.min(chance * dropScale, 1) * 100}%
+          </li>
+        })}
       </ul>
     </section>
     {tame != null ? <section>

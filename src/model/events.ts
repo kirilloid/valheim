@@ -3,6 +3,7 @@ import type { GameEvent } from '../types';
 export const events: GameEvent[] = [
   {
     id: 'army_eikthyr',
+    icon: 'Eikthyr',
     biomes: ['Meadows', 'BlackForest'],
     killed: [],
     notKilled: ['Eikthyr'],
@@ -23,9 +24,10 @@ export const events: GameEvent[] = [
   },
   {
     id: 'army_theelder',
+    icon: 'gd_king',
     biomes: ['Meadows', 'BlackForest', 'Swamp', 'Plains'],
     killed: ['Eikthyr'],
-    notKilled: ['GoblinKing'],
+    notKilled: ['gd_king'],
     duration: 120,
     spawns: [
       {
@@ -34,7 +36,7 @@ export const events: GameEvent[] = [
         interval: 5,
       },
       {
-        id: 'Greydwarf_Shaman',
+        id: 'GreydwarfShaman',
         max: 1,
         interval: 5,
       },
@@ -47,7 +49,45 @@ export const events: GameEvent[] = [
     base: true,
   },
   {
+    id: 'foresttrolls',
+    icon: 'Troll',
+    biomes: ['Meadows', 'BlackForest', 'Swamp', 'Plains'],
+    killed: ['gd_king', 'Troll'],
+    notKilled: [],
+    duration: 80,
+    spawns: [
+      {
+        id: 'Troll',
+        max: 2,
+        interval: 20,
+      }
+    ],
+    base: true,
+  },
+  {
+    id: 'army_bonemass',
+    icon: 'Bonemass',
+    biomes: ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains'],
+    killed: ['gd_king'],
+    notKilled: ['Bonemass'],
+    duration: 150,
+    spawns: [
+      {
+        id: 'Draugr',
+        max: 3,
+        interval: 5,
+      },
+      {
+        id: 'Skeleton',
+        max: 3,
+        interval: 5,
+      },
+    ],
+    base: true,
+  },
+  {
     id: 'skeletons',
+    icon: 'Skeleton',
     biomes: ['Meadows', 'BlackForest', 'Swamp', 'Plains', 'Mistlands'],
     killed: ['Bonemass'],
     notKilled: [],
@@ -69,22 +109,8 @@ export const events: GameEvent[] = [
     base: true,
   },
   {
-    id: 'foresttrolls',
-    biomes: ['Meadows', 'BlackForest', 'Swamp', 'Plains'],
-    killed: ['gd_king', 'Troll'],
-    notKilled: [],
-    duration: 80,
-    spawns: [
-      {
-        id: 'Troll',
-        max: 2,
-        interval: 20,
-      }
-    ],
-    base: true,
-  },
-  {
     id: 'surtlings',
+    icon: 'Surtling',
     biomes: ['Meadows', 'BlackForest', 'Swamp', 'Plains'],
     killed: ['Bonemass', 'Surtling'],
     notKilled: [],
@@ -100,6 +126,7 @@ export const events: GameEvent[] = [
   },
   {
     id: 'blobs',
+    icon: 'Blob',
     biomes: ['Meadows', 'BlackForest', 'Swamp', 'Plains'],
     killed: ['Bonemass'],
     notKilled: [],
@@ -119,27 +146,8 @@ export const events: GameEvent[] = [
     base: true,
   },
   {
-    id: 'army_bonemass',
-    biomes: ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains'],
-    killed: ['gd_king'],
-    notKilled: ['Bonemass'],
-    duration: 150,
-    spawns: [
-      {
-        id: 'Draugr',
-        max: 3,
-        interval: 5,
-      },
-      {
-        id: 'Skeleton',
-        max: 3,
-        interval: 5,
-      },
-    ],
-    base: true,
-  },
-  {
     id: 'army_moder',
+    icon: 'Dragon',
     biomes: ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains'],
     killed: ['Bonemass'],
     notKilled: ['Dragon'],
@@ -155,6 +163,7 @@ export const events: GameEvent[] = [
   },
   {
     id: 'wolves',
+    icon: 'Wolf',
     biomes: ['Mountain', 'Plains'],
     killed: ['Bonemass'],
     notKilled: [],
@@ -170,6 +179,7 @@ export const events: GameEvent[] = [
   },
   {
     id: 'army_goblin',
+    icon: 'GoblinKing',
     biomes: ['Meadows', 'BlackForest', 'Plains'],
     killed: ['Dragon'],
     notKilled: ['GoblinKing'],

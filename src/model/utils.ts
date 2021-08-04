@@ -17,6 +17,12 @@ export const mul = (a: Vector3, m: number) => {
 export const timeI2S = (seconds: number) => {
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);
+  if (hours === 0) {
+    return [
+      String(minutes % 60).padStart(2, '0'),
+      String(seconds % 60).padStart(2, '0'),
+    ].join(':');  
+  }
   return [
     String(hours),
     String(minutes % 60).padStart(2, '0'),

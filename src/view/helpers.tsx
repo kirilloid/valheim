@@ -6,17 +6,19 @@ import {
   DamageModifiers,
   DamageProfile,
   DamageType,
+  EntityId,
   GameLocationId,
   GeneralDrop,
   ItemSpecial as TItemSpecial,
   SimpleDrop
 } from '../types';
-import { SkillIcon } from './Icon';
+import { ItemIcon, SkillIcon } from './Icon';
 import { TranslationContext } from '../effects';
 import { applyDamageModifier, getTotalDamage, playerDamageModifiers } from '../model/combat';
 import { SkillType } from '../model/skills';
 import { locationBiomes } from '../model/location';
 import { Link } from 'react-router-dom';
+import { data } from '../model/objects';
 
 export function durability(values: [number, number], level?: number): string | number {
   if (values[0] === Infinity) return 'indestructible';
@@ -27,6 +29,10 @@ export function durability(values: [number, number], level?: number): string | n
 export function showPair(values: number | [number, number], level?: number): string | number {
   if (typeof values === 'number') return values;
   return level == null ? values.join('+') : values[0] + values[1] * (level - 1)
+}
+
+export function rangeBy<T>(value: [T, T], fn: (arg: T) => string): string {
+  return `${fn(value[0])}–${fn(value[1])}`;
 }
 
 export function showNumber(value: number): string {
@@ -93,10 +99,11 @@ export function shortCreatureDamage(damage: DamageProfile) {
   // elemental
   const { fire, frost, poison, lightning, spirit } = damage;
   const obj = { physical, fire, frost, poison, lightning, spirit };
-  return Object.entries(obj)
-    .filter(kv => kv[1])
-    .map(([type, dmg]) => <span key={type} className={`damage--${type}`}>{dmg}</span>)
-    .flatMap((item, i) => i ? ['+', item] : [item]);
+  return <List separator="+">{
+    Object.entries(obj)
+      .filter(kv => kv[1])
+      .map(([type, dmg]) => <span key={type} className={`damage--${type}`}>{dmg}</span>)
+  }</List>
 }
 
 const allDamageTypes: DamageType[] = ['blunt', 'slash', 'pierce', 'chop', 'pickaxe', 'fire', 'frost', 'lightning', 'poison', 'spirit'];
@@ -110,6 +117,10 @@ function damageTypesList(list: DamageType[]): string {
   return list.join(', ');
 } 
 
+export function yesNo(arg?: boolean) {
+  return arg ? '✔️' : '❌';
+}
+
 export function ItemSpecial({ special }: { special: TItemSpecial }) {
   const translate = useContext(TranslationContext);
   if (special == null) return null;
@@ -117,6 +128,23 @@ export function ItemSpecial({ special }: { special: TItemSpecial }) {
     <dt>{translate(`ui.itemSpecial`)}</dt>
     <dd>{translate(`ui.itemSpecial.${special}`)}</dd>
   </>);
+}
+
+export function List({ children, separator = ', ' }: { children: JSX.Element[], separator?: string }) {
+  return <>{children.flatMap((item, i) => i ? [separator, item] : [item])}</>;
+}
+
+export function InlineObject({ id }: { id: EntityId }) {
+  const translate = useContext(TranslationContext);
+  return <Link to={`/obj/${id}`}>{translate(id)}</Link>
+}
+
+export function InlineObjectWithIcon({ id }: { id: EntityId }) {
+  return <>
+    <ItemIcon item={data[id]} />
+    {' '}
+    <InlineObject id={id} />
+  </>
 }
 
 export function Resistances({ mods }: { mods: DamageModifiers }) {
@@ -150,10 +178,6 @@ export function Resistances({ mods }: { mods: DamageModifiers }) {
   }</>;
 }
 
-export function yesNo(arg?: boolean) {
-  return arg ? '✔️' : '❌';
-}
-
 export function Area({ area }: { area: Biome | GameLocationId }) {
   const translate = useContext(TranslationContext);
   if (area in locationBiomes) {
@@ -164,6 +188,6 @@ export function Area({ area }: { area: Biome | GameLocationId }) {
       (<Link to={`/biome/${biome}`}>{translate(`ui.biome.${biome}`)}</Link>)
     </>;
   } else {
-    return <Link to={`/loc/${area}`}>{translate(`ui.biome.${area}`)}</Link>;
+    return <Link to={`/biome/${area}`}>{translate(`ui.biome.${area}`)}</Link>;
   }
 }

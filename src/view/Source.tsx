@@ -10,7 +10,7 @@ import { assertNever, days, timeI2S } from '../model/utils';
 import { getCraftingStationId } from '../model/building';
 import { miningMap, resourceBuildMap, resourceCraftMap } from '../model/resource-usage';
 import { SkillType } from '../model/skills';
-import { Area } from './helpers';
+import { Area, InlineObject, InlineObjectWithIcon } from './helpers';
 
 const source: Record<EntityId, EntityId[]> = {};
 for (const { id, drop } of creatures) {
@@ -19,19 +19,11 @@ for (const { id, drop } of creatures) {
   }
 }
 
-function DropSource({ id }: { id: EntityId }) {
-  const translate = useContext(TranslationContext);
-  return (<Link to={`/obj/${id}`}>
-    <ItemIcon item={data[id]} />
-    {translate(id)}
-  </Link>);    
-}
-
 function DropsFrom({ sources }: { sources: EntityId[] }) {
   return (
     sources.length === 1
-    ? <DropSource id={sources[0]!} />
-    : <ul>{sources.map(id => <li><DropSource id={id} /></li>)}</ul>
+    ? <InlineObjectWithIcon id={sources[0]!} />
+    : <ul>{sources.map(id => <li><InlineObjectWithIcon id={id} /></li>)}</ul>
   );
 }
 
@@ -54,10 +46,7 @@ function Station({ station }: { station: CraftingStation }) {
     </>;
   }
   const id = getCraftingStationId(station);
-  return <>
-    <ItemIcon item={data[id]} />{' '}
-    <Link to={`/obj/${id}`}>{translate(id)}</Link>
-  </>;
+  return <InlineObjectWithIcon id={id} />;
 }
 
 const MaterialHeader = ({ cols }: { cols: number }) => (
@@ -94,7 +83,7 @@ function Materials({
       {keys.map(id =>
         <tr key={id}>
           <td key="icon"><ItemIcon item={data[id]} /></td>
-          <td key="name"><Link to={`/obj/${id}`}>{translate(id)}</Link></td>
+          <td key="name"><InlineObject id={id} /></td>
           {Array.from({ length: maxLvl }, (_, i: number) =>
             <td key={`lvl${i+1}`} className="RecipeItems__value">{
               aggregateSum

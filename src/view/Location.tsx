@@ -4,8 +4,8 @@ import { Link, useParams } from 'react-router-dom';
 import { TranslationContext } from '../effects';
 import { locations } from '../model/location';
 import { ItemIcon } from './Icon';
-import { data } from '../model/objects';
 import { DropTable } from './DropTable';
+import { InlineObjectWithIcon } from './helpers';
 
 export function Location() {
   const { id } = useParams<{ id: string }>();
@@ -48,8 +48,7 @@ export function Location() {
             <h2>resources</h2>
             <ul>{loc.resources.map(id =>
               <li>
-                <ItemIcon item={data[id]} size={32} />
-                <Link to={`/obj/${id}`}>{translate(id)}</Link>
+                <InlineObjectWithIcon id={id} />
               </li>
             )}
             </ul>

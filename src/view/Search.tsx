@@ -9,10 +9,11 @@ import { match, SearchEntry } from '../model/search';
 import { Icon, ItemIcon, SkillIcon } from './Icon';
 import { data } from '../model/objects';
 import { TranslationContext, Translator } from '../effects';
-import { assertNever, days } from '../model/utils';
+import { assertNever, days, timeI2S } from '../model/utils';
 import { SkillType } from '../model/skills';
 import { averageAttacksDamage, ShortWeaponDamage } from './helpers';
 import { getCraftingStationId } from '../model/building';
+import { events } from '../model/events';
 
 function first(val: number | [number, number]) {
   if (typeof val === 'number') return val;
@@ -80,6 +81,7 @@ function renderItem(entry: SearchEntry, text: string, translate: Translator, onC
     case 'page': return renderLink('/', entry, text, onClick);
     case 'loc': return renderLink('/loc/', entry, text, onClick);
     case 'biome': return renderLink('/biome/', entry, text, onClick);
+    case 'event': return renderEvent(entry.id, text, translate, onClick);
     default: return assertNever(entry.type);
   }
 }
@@ -142,6 +144,21 @@ function ShortRecipe(props: { item: GameObject }) {
     default:
       return assertNever(item);
   }
+}
+
+function renderEvent(id: EntityId, text: string, translate: Translator, onClick: React.MouseEventHandler) {
+  const event = events.find(e => e.id === id)!;
+  return <div className="SearchItem">
+    <ItemIcon item={data[event.icon]} size={32} />
+    <Link to={`/event/${id}`} onClick={onClick}>{text}</Link>
+    <span>
+      {event.spawns.map(s => <ItemIcon item={data[s.id]} useAlt />)}
+      {' '}
+      <Icon id="time" alt={translate('ui.time')} size={16} />
+      {' '}
+      {timeI2S(event.duration)} 
+    </span>
+  </div>  
 }
 
 function renderObject(id: EntityId, text: string, translate: Translator, onClick: React.MouseEventHandler) {

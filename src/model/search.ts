@@ -3,6 +3,7 @@ import { locations, biomes } from './location';
 import { preloadLanguage } from '../effects';
 import { EntityId } from '../types';
 import { getCraftingStationId } from './building';
+import { events } from './events';
 
 type PrefixTree<T> = {
   children: Map<string, PrefixTree<T>>;
@@ -35,11 +36,11 @@ const treeNode = <T>(): PrefixTree<T> => ({
 });
 
 export type SearchEntry = {
-  type: 'obj' | 'loc' | 'biome' | 'page';
+  type: 'obj' | 'loc' | 'biome' | 'page' | 'event';
   path: string;
   id: string;
   i18nKey: string;
-}
+};
 
 const obj = (id: string): SearchEntry => ({ type: 'obj', path: '/obj/', id, i18nKey: id });
 
@@ -53,6 +54,7 @@ function addArray<T extends { id: string }>(
   path: string,
   dict: Record<string, string>,
   dictKeyMap: (arg: string) => string,
+  customTags?: string,
 ) {
   const visited = new Set<string>();
   for (const obj of data) {
@@ -73,15 +75,28 @@ function addArray<T extends { id: string }>(
         addToTree(anyTree, word.slice(i), item);
       }
     }
+    const addTag = (tags: string | undefined) => {
+      if (!tags) return;
+      for (const tag of tags.split(' ')) {
+        addToTree(startTree, tag.toLowerCase(), item);
+      }
+    }
+    addTag(dict[`${i18nKey}.tags`]);
+    if (customTags) {
+      for (const customTag of customTags.split(' ')) {
+        addTag(dict[customTag]);
+      }
+    }
   }
 }
 
-const pages = [{ id: 'combat' }, { id: 'food' }];
+const pages = [{ id: 'combat' }, { id: 'food' }, { id: 'events' }];
 
 preloadLanguage().then(dict => {
   addArray(pages, 'page', '/', dict, id => `ui.page.${id}`);
   addArray(locations, 'loc', '/loc/', dict, id => `ui.location.${id}`);
   addArray(biomes, 'biome', '/biome/', dict, id => `ui.biome.${id}`);
+  addArray(events, 'event', '/event/', dict, id => id, 'ui.event ui.page.events.tags');
 
   for (const gobj of Object.values(data)) {
     if (gobj.disabled) continue;

@@ -16,6 +16,7 @@ import { FoodTable } from './view/FoodTable';
 import { Location } from './view/Location';
 import { Biome } from './view/Biome';
 import { TranslationContext, useTranslation } from './effects';
+import { GameEvent, GameEventTable } from './view/Event';
 
 function App() {
   const translate = useTranslation();
@@ -36,6 +37,8 @@ function App() {
             <Route path="/loc/:id" children={<Location />} />
             <Route path="/biome/:id" children={<Biome />} />
             <Route path="/info/:id" children={<Info />} />
+            <Route path="/event/:id" children={<GameEvent />} />
+            <Route path="/events" children={<GameEventTable />} />
           </Switch>
         </Router>
       </TranslationContext.Provider>

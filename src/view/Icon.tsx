@@ -49,6 +49,7 @@ export function SkillIcon(props: SkillIconProps) {
     className="icon"
     src={`/icons/skills/${skillStr}.png`}
     alt={useAlt ? translate(`ui.skillType.${skillStr}`) : ''}
+    title={useAlt ? translate(`ui.skillType.${skillStr}`) : ''}
     width={size}
     height={size}
   />;
@@ -67,6 +68,8 @@ export function ItemIcon(props: ItemIconProps) {
     return <img
       className="icon"
       src={`/icons/nostroke.png`}
+      alt="not found"
+      title="not found"
       width={size}
       height={size}
     />;
@@ -79,6 +82,7 @@ export function ItemIcon(props: ItemIconProps) {
       className="icon"
       src={`${path}.png`}
       alt={useAlt ? translate(id) : ''}
+      title={useAlt ? translate(id) : ''}
       width={size}
       height={size}
     />

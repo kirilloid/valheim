@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Tool as TTool } from '../types';
 import { Icon, ItemIcon } from './Icon';
 import { RecipeSection } from './Source';
-import { durability, yesNo } from './helpers';
+import { durability, InlineObjectWithIcon, yesNo } from './helpers';
 import { TranslationContext } from '../effects';
 import { ItemHeader } from './ItemHeader';
 import { data } from '../model/objects';
@@ -28,11 +28,7 @@ export function Tool({ item, level }: { item: TTool, level?: number }) {
         <h2>{translate('ui.usedToCraft')}</h2>
         <ul className="CraftList">
           {item.produces.map(id => <li>
-            <ItemIcon item={data[id]} />
-            {' '}
-            <Link to={`/obj/${id}`}>
-              {translate(id)} 
-            </Link>
+            <InlineObjectWithIcon id={id} />
           </li>)}
         </ul>
       </section> : null}
