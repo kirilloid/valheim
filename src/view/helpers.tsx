@@ -31,8 +31,8 @@ export function showPair(values: number | [number, number], level?: number): str
   return level == null ? values.join('+') : values[0] + values[1] * (level - 1)
 }
 
-export function rangeBy<T>(value: [T, T], fn: (arg: T) => string): string {
-  return `${fn(value[0])}–${fn(value[1])}`;
+export function rangeBy<T>(values: [T, T], fn: (arg: T) => string, separator = '–'): string {
+  return `${fn(values[0])}${separator}${fn(values[1])}`;
 }
 
 export function showNumber(value: number): string {

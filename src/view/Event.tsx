@@ -7,6 +7,11 @@ import { timeI2S } from '../model/utils';
 import { ItemIcon } from './Icon';
 import { Area, InlineObject, InlineObjectWithIcon, List, yesNo } from './helpers';
 import { events } from '../model/events';
+import { EntityId } from '../types';
+
+function creature(id: EntityId) {
+  return <Link to={`/obj/${id}`}><ItemIcon item={data[id]} useAlt /></Link>
+}
 
 export function GameEvent() {
   const { id } = useParams<{ id: string }>();
@@ -38,11 +43,11 @@ export function GameEvent() {
           <dd>"{translate(`${id}.end`)}"</dd>
           {killed.length ? <>
             <dt>requires killed</dt>
-            <dd><List>{killed.map(kid => <InlineObjectWithIcon id={kid} />)}</List></dd>
+            <dd><List>{killed.map(id => <InlineObjectWithIcon id={id} />)}</List></dd>
           </> : null}
           {notKilled.length ? <>
             <dt>requires not killed</dt>
-            <dd><List>{notKilled.map(nkid => <InlineObjectWithIcon id={nkid} />)}</List></dd>
+            <dd><List>{notKilled.map(id => <InlineObjectWithIcon id={id} />)}</List></dd>
           </> : null}
           <dt>biomes</dt>
           <dd><List>{event.biomes.map(bid => <Area area={bid} />)}</List></dd>
@@ -66,10 +71,10 @@ export function GameEvent() {
           </thead>
           <tbody>
             {spawns.map(s => <tr key={s.id}>
-              <td>{<ItemIcon item={data[s.id]} />}</td>
+              <td>{creature(s.id)}</td>
               <td>{<InlineObject id={s.id} />}</td>
               <td>{`${((s.chance ?? 1) * 100).toFixed(2).replace(/0+$/, '').replace(/\.$/, '')}%`}</td>
-              <td>{`${s.interval}s`}</td>
+              <td>{timeI2S(s.interval)}</td>
               <td>{s.max}</td>
             </tr>)}
           </tbody>
@@ -102,11 +107,11 @@ export function GameEventTable() {
           <tbody>
             {events.map(e => <tr key={e.id}>
               <td><Link to={`/event/${e.id}`}>{translate(e.id)}</Link></td>
-              <td><List>{e.killed.map(k => <ItemIcon item={data[k]} />)}</List></td>
-              <td><List>{e.notKilled.map(k => <ItemIcon item={data[k]} />)}</List></td>
+              <td><List>{e.killed.map(creature)}</List></td>
+              <td><List>{e.notKilled.map(creature)}</List></td>
               <td>{timeI2S(e.duration)}</td>
               <td><List>{e.spawns.map(s => <>
-                <ItemIcon item={data[s.id]} />
+                {creature(s.id)}
                 x{s.max}
               </>)}</List></td>
               <td>{yesNo(e.base)}</td>

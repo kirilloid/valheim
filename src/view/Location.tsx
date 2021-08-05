@@ -5,7 +5,7 @@ import { TranslationContext } from '../effects';
 import { locations } from '../model/location';
 import { ItemIcon } from './Icon';
 import { DropTable } from './DropTable';
-import { InlineObjectWithIcon } from './helpers';
+import { InlineObjectWithIcon, rangeBy } from './helpers';
 
 export function Location() {
   const { id } = useParams<{ id: string }>();
@@ -28,7 +28,7 @@ export function Location() {
           <dt>{translate('ui.locationType')}</dt>
           <dd>{translate(`ui.locationType.${loc.type}`)}</dd>
           <dt>altitude range</dt>
-          <dd>{`${loc.altitude[0]}-${loc.altitude[1]}`}</dd>
+          <dd>{rangeBy(loc.altitude, String, '..')}</dd>
           <dt>number in world</dt>
           <dd>{loc.quantity}</dd>
         </dl>

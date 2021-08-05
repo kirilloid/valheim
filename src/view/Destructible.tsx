@@ -6,7 +6,7 @@ import { fullDestructible } from '../model/destructibles';
 
 import type { BiomeConfig, DamageModifier, Destructible as TDestructible, LocationConfig, Weapon } from '../types';
 import { DropTable } from './DropTable';
-import { Area, Resistances } from './helpers';
+import { Area, List, Resistances } from './helpers';
 import { items as weapons } from '../model/weapons';
 import { ItemHeader } from './ItemHeader';
 import { SkillType } from '../model/skills';
@@ -17,7 +17,7 @@ const axes = weapons.filter(w => w.skill === SkillType.Axes && !w.disabled) as W
 const pickaxes = weapons.filter(w => w.skill === SkillType.Pickaxes && !w.disabled) as Weapon[];
 
 const nonImmune = (mod: DamageModifier): boolean => {
-  return mod !== 'ignore' && mod !== 'immune'; 
+  return mod !== 'ignore' && mod !== 'immune';
 };
 
 export function Destructible({ item }: { item: TDestructible }) {
@@ -41,14 +41,14 @@ export function Destructible({ item }: { item: TDestructible }) {
         <h2>{translate('ui.destructible')}</h2>
         <dl>
           <dt>could be found in</dt>
-          <dd>{
+          <dd><List>{
             ([] as (LocationConfig | BiomeConfig)[]).concat(locations, biomes)
               .filter(loc => loc.destructibles.includes(item))
-              .flatMap(loc => [<Area area={loc.id} />, ', '])
-          }</dd>
+              .map(loc => <Area area={loc.id} />)
+          }</List></dd>
           <dt>{translate('ui.durability')}</dt><dd>{hp}</dd>
           <Resistances mods={damageModifiers} />
-          {item.minToolTier >= 0 ?  <>
+          {item.minToolTier >= 0 ? <>
             <dt>can be damaged only by</dt>
             <dd>
               <ul>
@@ -59,9 +59,11 @@ export function Destructible({ item }: { item: TDestructible }) {
               </ul>
             </dd>
           </> : null}
-          <dt>{translate('ui.drops')}</dt>
-          <dd><DropTable drops={drop} /></dd>
         </dl>
+      </section>
+      <section>
+        <h2>{translate('ui.drops')}</h2>
+        <DropTable drops={drop} />
       </section>
     </>
   );

@@ -228,7 +228,7 @@ export function AttackCalc() {
   };
 
   return (<>
-    <h1>{translate('ui.page.combat')}</h1>
+    <h1>{translate('ui.page.attack')}</h1>
     <div className="CombatCalc">
       <div className="CombatCalc__Creature">
         <h2>Creature</h2>

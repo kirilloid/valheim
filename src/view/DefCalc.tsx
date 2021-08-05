@@ -69,7 +69,7 @@ export function DefenseCalc() {
   const scale = { players, stars: Math.min(stars, creature.maxLvl - 1) };
 
 return (<>
-    <h1>{translate('ui.page.combat')}</h1>
+    <h1>{translate('ui.page.defense')}</h1>
     <div className="CombatCalc">
       <div className="CombatCalc__Creature">
         <h2>Creature</h2>

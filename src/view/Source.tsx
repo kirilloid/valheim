@@ -117,9 +117,9 @@ function CraftingSection({ id }: { id: EntityId }) {
     {crafts?.length
       ? <section>
           <h2>crafting</h2>
-          {translate('ui.usedToCraft')}:
+          <div>{translate('ui.usedToCraft')}:</div>
           <ul className="CraftList">
-            {crafts.map(item => <li>
+            {crafts.sort((a, b) => a.tier - b.tier).map(item => <li>
               <ItemIcon item={item} />
               {' '}
               <Link to={`/obj/${item.id}`}>{translate(item.id)}</Link>
@@ -130,7 +130,7 @@ function CraftingSection({ id }: { id: EntityId }) {
     {builds?.length
       ? <section>
           <h2>building</h2>
-          {translate('ui.usedToBuild')}:
+          <div>{translate('ui.usedToBuild')}:</div>
           <ul className="CraftList">
             {builds.map(item => <li>
               <ItemIcon item={item} />
@@ -160,7 +160,7 @@ export function Recipe({ item }: { item: Item | Piece | Destructible | Plant | S
       const { number, materials, time } = recipe;
       return <dl>
         <dt>station</dt><dd><Station station={station} /></dd>
-        <dt>{translate('ui.time')}</dt><dd>{timeI2S(time)}</dd>
+        <dt>{translate('ui.time')}</dt><dd><Icon id="time" alt="" size={16} />{timeI2S(time)}</dd>
         <dt>resources</dt><dd>{
         Object.keys(materials).length
           ? <Materials materials={materials} />
