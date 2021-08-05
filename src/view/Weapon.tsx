@@ -40,7 +40,7 @@ function ShieldStats(props: { item: TShield, level?: number }) {
     <dl>
       <dt>block</dt><dd><Icon id="armor" alt="" size={16} />{' '}{showPair(item.block, level)}</dd>
       <dt>{translate('ui.skill')}</dt><dd>{skill(item.skill) ?? <em>{translate('ui.skillType.None')}</em>}</dd>
-      <dt>parry</dt><dd>{item.parryBonus}x</dd>
+      <dt>parry</dt><dd>{item.parryBonus}×</dd>
       <dt>{translate('ui.hands')}</dt><dd>{translate(`ui.slot.${item.slot}`)}</dd>
       <dt>{translate('ui.maxQuality')}</dt><dd><Icon id="star" alt="crafting" size={16} />{' '}{item.maxLvl}</dd>
       <dt title="weapons loose 1 durability point per hit">{translate('ui.durability')}</dt><dd>{durability(item.durability, level)}</dd>

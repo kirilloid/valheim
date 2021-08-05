@@ -25,7 +25,7 @@ export function Cart(props: { item: CartPiece }) {
         <Resistances mods={damageModifiers} />
         <dt>{translate('ui.pieceTarget')}</dt><dd>{translate(`ui.pieceTarget.${target}`)}</dd>
         <dt>storage</dt><dd>{storage}</dd>
-        {size ? <><dt>size</dt><dd>{size.filter(Boolean).join('x')}</dd></> : null}
+        {size ? <><dt>size</dt><dd>{size.filter(Boolean).join('×')}</dd></> : null}
       </dl>
     </section>
   </>);

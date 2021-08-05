@@ -83,7 +83,7 @@ function PieceSpecific({ item }: { item: TPiece }) {
     case 'chest': {
       const { space: [width, height] } = item;
       return (<dl>
-        <dt>space</dt><dd>{width}x{height} = {width * height}</dd>
+        <dt>space</dt><dd>{width}×{height} = {width * height}</dd>
       </dl>);
     }
     default:
@@ -122,7 +122,7 @@ export function Piece({ item }: { item: TPiece }) {
           <dt>degrades w/o roof</dt><dd>{yesNo(noRoof)}</dd>
           {specialReqs.length ? <><dt>specific</dt><dd>{specialReqs.join(', ')}</dd></> : null}
           {requiredSpace ? <><dt>required space</dt><dd>{requiredSpace}</dd></> : null}
-          {size ? <><dt>size</dt><dd>{size.filter(Boolean).join('x')}</dd></> : null}
+          {size ? <><dt>size</dt><dd>{size.filter(Boolean).join('×')}</dd></> : null}
         </dl>
       </section>
       <section>

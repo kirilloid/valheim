@@ -232,7 +232,7 @@ export function Ship(props: { item: ShipPiece }) {
         <dt>{translate('ui.healthStructure')}</dt><dd>{hp}</dd>
         <Resistances mods={damageModifiers} />
         <dt>target</dt><dd>{translate(`ui.pieceTarget.${target}`)}</dd>
-        {size ? <><dt>size</dt><dd>{size.filter(Boolean).join('x')}</dd></> : null}
+        {size ? <><dt>size</dt><dd>{size.filter(Boolean).join('×')}</dd></> : null}
       </dl>
     </section>
     <section>

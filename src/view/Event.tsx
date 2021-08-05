@@ -111,8 +111,7 @@ export function GameEventTable() {
               <td><List>{e.notKilled.map(creature)}</List></td>
               <td>{timeI2S(e.duration)}</td>
               <td><List>{e.spawns.map(s => <>
-                {creature(s.id)}
-                x{s.max}
+                {creature(s.id)}×{s.max}
               </>)}</List></td>
               <td>{yesNo(e.base)}</td>
               <td><List>{e.biomes.map(b => <Area area={b} />)}</List></td>

@@ -20,7 +20,7 @@ function NormalAttack({ attack: a, dmgScale }: { attack: NormalAttackProfile, dm
     <dt key={`atk-key-${a.name}`}>{a.name}</dt>
     <dd key={`atk-val-${a.name}`}>
       {shortCreatureDamage(dmg)}
-      {a.burst ? ` x${a.burst}` : ''}
+      {a.burst ? ` ×${a.burst}` : ''}
       {a.unblockable ? ', unblockable' : ''}
       {a.undodgeable ? ', undodgeable' : ''}
     </dd>
@@ -67,7 +67,7 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
         <dd>{translate(`ui.faction.${creature.faction}`)}</dd>
       {sid ? <>
         <dt>{translate('ui.summonedWith')}</dt>
-        <dd><ItemIcon item={data[sid]} size={16} /> <Link to={`/obj/${sid}`}>{translate(sid)}</Link> x{snr}</dd>
+        <dd><ItemIcon item={data[sid]} size={16} /> <Link to={`/obj/${sid}`}>{translate(sid)}</Link> ×{snr}</dd>
       </> : null}
       <dt>{translate('ui.health')}</dt>
       <dd>{creature.hp * hpBonus(scale)}</dd>
