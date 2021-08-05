@@ -100,7 +100,7 @@ export function Icon(props: IconProps) {
     return (
       <picture key={id}>
         <source srcSet={`/icons/icon/${id}_${size}.png, /icons/icon/${id}_${size*2}.png 2x`} />
-        <img className="icon" src={`/icons/icon/${id}_${size}.png`} alt={alt} width={size} height={size} />
+        <img className="icon" src={`/icons/icon/${id}_${size}.png`} alt={alt} title={alt} width={size} height={size} />
       </picture>
     );
   }

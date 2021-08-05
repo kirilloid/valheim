@@ -19,6 +19,7 @@ import { SkillType } from '../model/skills';
 import { locationBiomes } from '../model/location';
 import { Link } from 'react-router-dom';
 import { data } from '../model/objects';
+import { creatures } from '../model/creatures';
 
 export function durability(values: [number, number], level?: number): string | number {
   if (values[0] === Infinity) return 'indestructible';
@@ -76,6 +77,17 @@ export function ShortWeaponDamage({ damage, skill }: { damage: DamageProfile, sk
 export const toPrecision = (precision: number, value: number): string => {
   return String(Number(value.toPrecision(precision)));
 };
+
+export function findDropChanceFromCreature(id: EntityId) {
+  for (const creature of creatures) {
+    for (const drop of creature.drop) {
+      if (drop.item === id) {
+        return drop.chance;
+      }
+    }
+  }
+  return 0;
+}
 
 export const averageAttacksDamage = (creature: Creature) => {
   const attacks = creature.attacks.flatMap(a => a.attacks);
@@ -140,8 +152,9 @@ export function InlineObject({ id }: { id: EntityId }) {
 }
 
 export function InlineObjectWithIcon({ id }: { id: EntityId }) {
+  const item = data[id];
   return <>
-    <ItemIcon item={data[id]} />
+    <ItemIcon item={item} />
     {' '}
     <InlineObject id={id} />
   </>

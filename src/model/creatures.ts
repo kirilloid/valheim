@@ -147,7 +147,7 @@ export const creatures: Creature[] = [
     upgradeDistance: 800,
     emoji: '🐗',
     faction: 'ForestMonsters',
-    locations: ['Meadows'],
+    locations: ['Meadows', 'Runestone_Boars'],
     attacks: single([{ dmg: { blunt: 10 }, stagger: 1.24, name: 'tusks' }]),
     hp: 10,
     stagger: {
@@ -208,7 +208,7 @@ export const creatures: Creature[] = [
     maxLvl: 3,
     emoji: '💀',
     faction: 'Undead',
-    locations: ['Crypt', 'Swamp', 'StoneTowerRuins'],
+    locations: ['Crypt', 'Swamp', 'StoneTowerRuinsM'],
     attacks: [
       { rate: 4, variety: 'sword', attacks: [{ dmg: { slash: 25 }, stagger: 2.48, name: 'sword' }] },
       // { variety: 'mace', attacks: [{ dmg: { blunt: 25 }, stagger: 2.48, name: 'mace' }] },
@@ -281,7 +281,7 @@ export const creatures: Creature[] = [
     maxLvl: 3,
     emoji: '',
     faction: 'ForestMonsters',
-    locations: ['BlackForest', 'StoneTowerRuins', 'Greydwarf_camp'],
+    locations: ['BlackForest', 'StoneTowerRuinsF', 'Greydwarf_camp'],
     attacks: single([
       { dmg: { slash: 14 }, stagger: 1.94, name: 'hit' },
       { dmg: { blunt: 10 }, stagger: 1.94, name: 'stone' },
@@ -308,7 +308,7 @@ export const creatures: Creature[] = [
     nightOnly,
     emoji: '',
     faction: 'ForestMonsters',
-    locations: ['BlackForest', 'StoneTowerRuins', 'Greydwarf_camp'],
+    locations: ['BlackForest'/*, 'StoneTowerRuinsF'*/, 'Greydwarf_camp'],
     attacks: single([
       { dmg: { poison: 25 }, stagger: 1.12, name: 'poison breath' },
       { dmg: { slash: 14 }, stagger: 1.12, name: 'slash' },
@@ -335,7 +335,7 @@ export const creatures: Creature[] = [
     upgradeDistance: 2000,
     emoji: '',
     faction: 'ForestMonsters',
-    locations: ['BlackForest', 'StoneTowerRuins', 'Greydwarf_camp'],
+    locations: ['BlackForest', 'StoneTowerRuinsF', 'Greydwarf_camp'],
     attacks: single([
       { dmg: { slash: 30 }, stagger: 1.34, name: 'bite' },
     ]),
@@ -572,7 +572,7 @@ export const creatures: Creature[] = [
     maxLvl: 3,
     emoji: '🧟',
     faction: 'Undead',
-    locations: ['Swamp', 'SwampRuin', 'SunkenCrypt', 'StoneTowerRuins'],
+    locations: ['Swamp', 'SwampRuin', 'SunkenCrypt', 'StoneTowerRuinsM'],
     attacks: [
       { variety: 'axe',
         rate: 3,

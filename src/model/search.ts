@@ -48,7 +48,7 @@ const fullMatch = new Map<string, EntityId>();
 const startTree = treeNode<SearchEntry>();
 const anyTree = treeNode<SearchEntry>();
 
-function addArray<T extends { id: string }>(
+function addArray<T extends { id: string; tags?: string[] }>(
   data: T[],
   type: SearchEntry['type'],
   path: string,
@@ -86,6 +86,9 @@ function addArray<T extends { id: string }>(
       for (const customTag of customTags.split(' ')) {
         addTag(dict[customTag]);
       }
+    }
+    if (obj.tags) {
+      obj.tags.forEach(addTag);
     }
   }
 }

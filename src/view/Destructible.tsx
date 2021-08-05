@@ -6,7 +6,7 @@ import { fullDestructible } from '../model/destructibles';
 
 import type { BiomeConfig, DamageModifier, Destructible as TDestructible, LocationConfig, Weapon } from '../types';
 import { DropTable } from './DropTable';
-import { Area, List, Resistances } from './helpers';
+import { Area, InlineObjectWithIcon, List, Resistances } from './helpers';
 import { items as weapons } from '../model/weapons';
 import { ItemHeader } from './ItemHeader';
 import { SkillType } from '../model/skills';
@@ -44,7 +44,7 @@ export function Destructible({ item }: { item: TDestructible }) {
           <dd><List>{
             ([] as (LocationConfig | BiomeConfig)[]).concat(locations, biomes)
               .filter(loc => loc.destructibles.includes(item))
-              .map(loc => <Area area={loc.id} />)
+              .map(loc => <Area key={loc.id} area={loc.id} />)
           }</List></dd>
           <dt>{translate('ui.durability')}</dt><dd>{hp}</dd>
           <Resistances mods={damageModifiers} />
@@ -52,9 +52,8 @@ export function Destructible({ item }: { item: TDestructible }) {
             <dt>can be damaged only by</dt>
             <dd>
               <ul>
-                {onlyDamagers.map(w => <li>
-                  <ItemIcon key={w.id} item={w} />
-                  <Link to={`/obj/${w.id}`}>{translate(w.id)}</Link>
+                {onlyDamagers.map(w => <li key={w.id}>
+                  <InlineObjectWithIcon id={w.id} />
                 </li>)}
               </ul>
             </dd>

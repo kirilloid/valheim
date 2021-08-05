@@ -10,7 +10,7 @@ const KILN_TIME = 15;
 const SMELTER_TIME = 30;
 const FURNACE_TIME = 30;
 const SPIN_WHEEL_TIME = 30;
-const FERMENT_TIME = 2400;
+const FERMENT_TIME = 3600;
 const HOUR = 3600;
 
 const fromDungeons: ItemGrow = {
@@ -228,20 +228,20 @@ export const resources: Item[] = [
   { type: 'item', id: 'DragonTear', tier: 5, weight: 1, stack: 50, floating: true },
 // PLAINS
   { type: 'item', id: 'Flax', tier: 5, weight: 0.2, stack: 100,
-    recipe: { type: 'craft_one', time: 4500, materials: { Flax: 1 },
-              source: { station: CraftingStation.Cultivator }, number: 2 },
+/*    recipe: { type: 'craft_one', time: 4500, materials: { Flax: 1 },
+              source: { station: CraftingStation.Cultivator }, number: 2 },*/
     grow: { locations: ['GoblinCamp'], respawn: 0, num: [4, 20], group: [1, 2], abundance: 1 },
   },
   { type: 'item', id: 'LinenThread', tier: 5, weight: 2, stack: 50,
     recipe: { type: 'craft_one', time: SPIN_WHEEL_TIME, materials: { Flax: 1 },
               source: { station: CraftingStation.SpinningWheel }, number: 1 } },
   { type: 'item', id: 'Barley', emoji: '🌾', tier: 5, weight: 0.2, stack: 100,
-    recipe: { type: 'craft_one', time: 4500, materials: { Barley: 1 },
-              source: { station: CraftingStation.Cultivator }, number: 2 },
+/*    recipe: { type: 'craft_one', time: 4500, materials: { Barley: 1 },
+              source: { station: CraftingStation.Cultivator }, number: 2 },*/
     grow: { locations: ['GoblinCamp'], respawn: 0, num: [4, 20], group: [1, 2], abundance: 1 },
   },
   { type: 'item', id: 'BarleyFlour', tier: 5, weight: 0.2, stack: 20,
-    recipe: { type: 'craft_one', time: -1, materials: { Barley: 1 },
+    recipe: { type: 'craft_one', time: 10, materials: { Barley: 1 },
               source: { station: CraftingStation.Windmill }, number: 1 } },
   { type: 'food', id: 'Cloudberry', emoji: '🟠', tier: 5, weight: 0.1, stack: 50, tags: ['plant'],
     health: 15, stamina: 25, duration: 800, regen: 1, color: '#ffde87ff',
@@ -281,7 +281,9 @@ export const resources: Item[] = [
   { type: 'item', id: 'BlackMetal', tier: 5, weight: 12, stack: 30, teleportable: false,
     recipe: { type: 'craft_one', time: FURNACE_TIME, materials: { BlackMetalScrap: 1, Coal: 2 },
               source: { station: CraftingStation.BlastFurnace }, number: 1 } },
-  { type: 'item', id: 'GoblinTotem', tier: 5, weight: 1, stack: 30, summon: ['GoblinKing', 5] },
+  { type: 'item', id: 'GoblinTotem', tier: 5, weight: 1, stack: 30, summon: ['GoblinKing', 5],
+    grow: { locations: ['GoblinCamp'], abundance: 1, num: [1, 3], group: [1, 1], respawn: 0 },
+  },
   { type: 'trophy', id: 'TrophyLox', tier: 5, weight: 2, stack: 20 },
   { type: 'trophy', id: 'TrophyDeathsquito', tier: 5, weight: 0.5, stack: 20 },
   { type: 'trophy', id: 'TrophyGoblin', tier: 5, weight: 2, stack: 20 },

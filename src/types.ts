@@ -77,10 +77,11 @@ export type BiomeConfig = {
 
 export type LocationConfig = {
   id: GameLocationId;
+  tags?: string[];
   biome: Biome;
   quantity: number;
   type: 'altar' | 'dungeon' | 'runestone' | 'misc';
-  canHaveVegvisir: boolean;
+  vegvisir?: { chance: number; boss: EntityId };
   minApart: number;
   altitude: [number, number];
   distance: [number, number];

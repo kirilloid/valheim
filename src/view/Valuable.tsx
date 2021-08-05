@@ -7,6 +7,7 @@ import type { Valuable as TValuable } from '../types';
 import { yesNo } from './helpers';
 import { Icon, ItemIcon } from './Icon';
 import { ItemHeader } from './ItemHeader';
+import { Source, SOURCE_DROP, SOURCE_GROW } from './Source';
 
 export function Valuable({ item }: { item: TValuable }) {
   const translate = useContext(TranslationContext);
@@ -35,6 +36,7 @@ export function Valuable({ item }: { item: TValuable }) {
             </section>
           : <>Have no other use rather than to be sold to trader</>}
       </section>
+      <Source id={item.id} types={SOURCE_DROP | SOURCE_GROW} />
     </>
   );
 }

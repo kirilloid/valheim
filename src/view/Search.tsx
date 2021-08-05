@@ -11,9 +11,10 @@ import { data } from '../model/objects';
 import { TranslationContext, Translator } from '../effects';
 import { assertNever, days, timeI2S } from '../model/utils';
 import { SkillType } from '../model/skills';
-import { averageAttacksDamage, ShortWeaponDamage } from './helpers';
+import { averageAttacksDamage, findDropChanceFromCreature, List, ShortWeaponDamage } from './helpers';
 import { getCraftingStationId } from '../model/building';
 import { events } from '../model/events';
+import { locations } from '../model/location';
 
 function first(val: number | [number, number]) {
   if (typeof val === 'number') return val;
@@ -26,7 +27,7 @@ function resistIcon(translate: Translator, type: DamageType) {
     case 'frost':
     case 'poison':
     case 'lightning':
-      return <Icon id={type} alt={translate(`ui.damageType.${type}`)} size={16} />
+      return <Icon key={type} id={type} alt={translate(`ui.damageType.${type}`)} size={16} />
     default:
       return null;
   }
@@ -79,11 +80,23 @@ function renderItem(entry: SearchEntry, text: string, translate: Translator, onC
   switch (entry.type) {
     case 'obj': return renderObject(entry.id, text, translate, onClick);
     case 'page': return renderLink('/', entry, text, onClick);
-    case 'loc': return renderLink('/loc/', entry, text, onClick);
+    case 'loc': return renderLocation(entry, text, onClick);
     case 'biome': return renderLink('/biome/', entry, text, onClick);
     case 'event': return renderEvent(entry.id, text, translate, onClick);
     default: return assertNever(entry.type);
   }
+}
+
+function renderLocation(entry: SearchEntry, text: string, onClick: React.MouseEventHandler) {
+  const { id } = entry;
+  const boss = locations.find(l => l.id === id)?.vegvisir?.boss;
+  return  <div className="SearchItem">
+    <Link to={`/loc/${id}`} onClick={onClick}>{text}</Link>
+    {boss ? <span>
+      <ItemIcon item={data[boss]} useAlt />
+    </span> : null}
+  </div>;
+  // <Link to={`${path}${id}`} onClick={onClick}>{text}</Link> 
 }
 
 function renderLink(path: string, entry: SearchEntry, text: string, onClick: React.MouseEventHandler) {
@@ -95,14 +108,13 @@ function Materials(props: { materials: Record<EntityId, number> }) {
   const { materials } = props;
   const maxTier = Object.keys(materials).reduce((a, id) => Math.max(a, data[id]?.tier ?? 0), 0);
   return <span className="SearchItem__recipe">
-    {Object
+    <List separator=''>{Object
       .entries(materials)
       .filter(([key]) => (data[key]?.tier ?? 0) >= maxTier - 2)
-      .flatMap(([key, val]) => [
-        ' ',
-        <ItemIcon key={key} item={data[key]} size={16} />,
-        String(val),
-      ])}
+      .flatMap(([key, val]) => <>
+        <ItemIcon key={`${key}_icon`} item={data[key]} size={16} />
+        <span key={`${key}_value`}>{val}</span>
+      </>)}</List>
   </span>
 }
 
@@ -132,7 +144,6 @@ function ShortRecipe(props: { item: GameObject }) {
         case 'craft_one':
         case 'craft_piece':
         case 'craft_upg':
-          // disabled for now
           return <Materials materials={recipe.materials} />
         case 'trader':
           // disabled for now
@@ -152,13 +163,13 @@ function renderEvent(id: EntityId, text: string, translate: Translator, onClick:
     <ItemIcon item={data[event.icon]} size={32} />
     <Link to={`/event/${id}`} onClick={onClick}>{text}</Link>
     <span>
-      {event.spawns.map(s => <ItemIcon item={data[s.id]} useAlt />)}
+      {event.spawns.map(s => <ItemIcon key={s.id} item={data[s.id]} useAlt />)}
       {' '}
       <Icon id="time" alt={translate('ui.time')} size={16} />
       {' '}
       {timeI2S(event.duration)} 
     </span>
-  </div>  
+  </div>
 }
 
 function renderObject(id: EntityId, text: string, translate: Translator, onClick: React.MouseEventHandler) {
@@ -197,9 +208,12 @@ function renderObject(id: EntityId, text: string, translate: Translator, onClick
       return <div className="SearchItem">
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
+        <span>
         {item.summon
-        ? <ItemIcon item={data[item.summon[0]]} useAlt size={32} />
-        : <Icon id="trophies" size={20} alt="" />}
+        ? <ItemIcon item={data[item.summon[0]]} useAlt size={32} /> : null}
+          {`${findDropChanceFromCreature(item.id) * 100}% `}
+          <Icon id="trophies" size={20} alt="" />
+        </span>
       </div>
     case 'tool':
       return <div className="SearchItem">

@@ -5,7 +5,7 @@ import { TranslationContext } from '../effects';
 import { locations } from '../model/location';
 import { ItemIcon } from './Icon';
 import { DropTable } from './DropTable';
-import { InlineObjectWithIcon, rangeBy } from './helpers';
+import { Area, InlineObjectWithIcon, rangeBy } from './helpers';
 
 export function Location() {
   const { id } = useParams<{ id: string }>();
@@ -18,19 +18,25 @@ export function Location() {
     </span>
   }
 
+  const { biome, vegvisir } = loc;
+
   return (
     <>
       <h1>{translate(`ui.location.${loc.id}`)}</h1>
       <section>
         <dl>
           <dt>{translate('ui.biome')}</dt>
-          <dd><Link to={`/biome/${loc.biome}`}>{translate(`ui.biome.${loc.biome}`)}</Link></dd>
+          <dd><Area area={biome} /></dd>
           <dt>{translate('ui.locationType')}</dt>
           <dd>{translate(`ui.locationType.${loc.type}`)}</dd>
           <dt>altitude range</dt>
           <dd>{rangeBy(loc.altitude, String, '..')}</dd>
           <dt>number in world</dt>
           <dd>{loc.quantity}</dd>
+          {vegvisir ? <>
+            <dt>{translate('vegvisir')}</dt>
+            <dd><InlineObjectWithIcon id={vegvisir.boss} />, {vegvisir.chance * 100}% chance</dd>
+          </> : null}
         </dl>
         {loc.creatures.length
         ? <>

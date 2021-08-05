@@ -10,7 +10,14 @@ import { assertNever, days, timeI2S } from '../model/utils';
 import { getCraftingStationId } from '../model/building';
 import { miningMap, resourceBuildMap, resourceCraftMap } from '../model/resource-usage';
 import { SkillType } from '../model/skills';
-import { Area, InlineObject, InlineObjectWithIcon } from './helpers';
+import { Area, InlineObject, InlineObjectWithIcon, List } from './helpers';
+
+export const SOURCE_CRAFT = 1;
+export const SOURCE_DROP = 2;
+export const SOURCE_RECIPE = 4;
+export const SOURCE_GROW = 8;
+export const SOURCE_MINING = 16;
+export const SOURCE_ALL = SOURCE_CRAFT | SOURCE_DROP | SOURCE_RECIPE | SOURCE_GROW | SOURCE_MINING;
 
 const source: Record<EntityId, EntityId[]> = {};
 for (const { id, drop } of creatures) {
@@ -23,7 +30,7 @@ function DropsFrom({ sources }: { sources: EntityId[] }) {
   return (
     sources.length === 1
     ? <InlineObjectWithIcon id={sources[0]!} />
-    : <ul>{sources.map(id => <li><InlineObjectWithIcon id={id} /></li>)}</ul>
+    : <ul>{sources.map(id => <li key={id}><InlineObjectWithIcon id={id} /></li>)}</ul>
   );
 }
 
@@ -67,7 +74,6 @@ function Materials({
   materialsUp?: Record<EntityId, number>,
   maxLvl?: number
 }) {
-  const translate = useContext(TranslationContext);
   const [aggregateSum, setAggregateSum] = useGlobalState('aggregate');
   const keys = Array.from(new Set([
     ...Object.keys(materials),
@@ -119,10 +125,8 @@ function CraftingSection({ id }: { id: EntityId }) {
           <h2>crafting</h2>
           <div>{translate('ui.usedToCraft')}:</div>
           <ul className="CraftList">
-            {crafts.sort((a, b) => a.tier - b.tier).map(item => <li>
-              <ItemIcon item={item} />
-              {' '}
-              <Link to={`/obj/${item.id}`}>{translate(item.id)}</Link>
+            {crafts.sort((a, b) => a.tier - b.tier).map(item => <li key={item.id}>
+              <InlineObjectWithIcon id={item.id} />
             </li>)}
           </ul>
         </section>
@@ -132,10 +136,8 @@ function CraftingSection({ id }: { id: EntityId }) {
           <h2>building</h2>
           <div>{translate('ui.usedToBuild')}:</div>
           <ul className="CraftList">
-            {builds.map(item => <li>
-              <ItemIcon item={item} />
-              {' '}
-              <Link to={`/obj/${item.id}`}>{translate(item.id)}</Link>
+            {builds.sort((a, b) => a.tier - b.tier).map(item => <li key={item.id}>
+              <InlineObjectWithIcon id={item.id} />
             </li>)}
           </ul>
         </section>
@@ -211,7 +213,8 @@ function GrowSection({ item }: { item: GameObject | undefined }) {
   }
   const { grow } = item;
   return grow ? <>
-    Grows in {grow.locations.flatMap(loc => [<Area area={loc} />, ', '])}
+    Sourced from <List>{grow.locations.map(loc => <Area area={loc} />)}</List>
+    {'; '}
     {grow.respawn ? `respawns every ${days(grow.respawn)} game days` : 'does not respawn'}
   </> : null;
 }
@@ -223,22 +226,20 @@ function MiningSection({ id }: { id: EntityId }) {
     ? <section>
         <h2>{translate('ui.minedFrom')}</h2>
         <ul>
-          {[...new Set(sources)].map(s => <li>
-            <Link to={`/obj/${s.id}`}>
-              {translate(s.id)}
-            </Link>
+          {[...new Set(sources)].map(s => <li key={s.id}>
+            <InlineObject id={s.id} />
           </li>)}
         </ul>
       </section>
     : null;
 }
 
-export function Source({ id }: { id: EntityId }) {
+export function Source({ id, types = SOURCE_ALL }: { id: EntityId, types?: number }) {
   return <>
-    <CraftingSection id={id} />
-    <DropSection sources={source[id]} />
-    <RecipeSection item={data[id]} />
-    <GrowSection item={data[id]} />
-    <MiningSection id={id} />
+    {(types & SOURCE_CRAFT) !== 0 && <CraftingSection id={id} />}
+    {(types & SOURCE_DROP) !== 0 && <DropSection sources={source[id]} />}
+    {(types & SOURCE_RECIPE) !== 0 && <RecipeSection item={data[id]} />}
+    {(types & SOURCE_GROW) !== 0 && <GrowSection item={data[id]} />}
+    {(types & SOURCE_MINING) !== 0 && <MiningSection id={id} />}
   </>
 }

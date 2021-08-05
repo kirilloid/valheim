@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import type { Food as TFood } from '../types';
 import { timeI2S } from '../model/utils';
 import { Icon } from './Icon';
-import { RecipeSection } from './Source';
+import { Source } from './Source';
 import { TranslationContext } from '../effects';
 import { ItemHeader } from './ItemHeader';
 import { yesNo } from './helpers';
@@ -28,6 +28,6 @@ export function Food({ item }: { item: TFood }) {
         <dt>{translate('ui.floats')}</dt><dd>{yesNo(item.floating)}</dd>
       </dl>
     </section>
-    <RecipeSection item={item} />
+    <Source id={item.id} />
   </>);
 }

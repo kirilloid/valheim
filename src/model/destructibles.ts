@@ -490,6 +490,20 @@ export const destructibles: Destructible[] = [
       options: [{ item: 'Guck' }],
     }],
   },
+  {
+    id: 'MineRock_Obsidian',
+    type: 'destructible',
+    tier: 4,
+    locations: ['Mountain'],
+    hp: 30,
+    damageModifiers: pickOnly,
+    minToolTier: 0,
+    parts: [],
+    drop: [{
+      num: [5, 8],
+      options: [{ item: 'Obsidian' }],
+    }],
+  },
   ...rock({
     id: ['silvervein', 'silvervein_frac'],
     tiers: [4, 2],

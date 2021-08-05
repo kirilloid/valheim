@@ -21,8 +21,8 @@ h1 .icon {
 h2 {
   font-size: 1.75rem;
   line-height: 2.5rem;
-  margin-top: 0.5rem;
-  margin-bottom: 0rem;
+  margin-top: 1.25rem;
+  margin-bottom: 0.25rem;
   color: #444;
 }
 
@@ -71,4 +71,5 @@ dd {
 ul {
   margin: 0;
   padding: 0;
+  list-style-type: none;
 }
