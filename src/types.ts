@@ -281,7 +281,7 @@ export type Piece = BasePiece & {
   };
   comfort?: {
     value: number,
-    group: 'fire';
+    group?: 'fire';
   };
 } | {
   subtype: 'craft';

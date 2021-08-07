@@ -93,7 +93,13 @@ function addArray<T extends { id: string; tags?: string[] }>(
   }
 }
 
-const pages = [{ id: 'attack' }, { id: 'defense' }, { id: 'food' }, { id: 'events' }];
+const pages = [
+  { id: 'attack' },
+  { id: 'comfort' },
+  { id: 'defense' },
+  { id: 'food' },
+  { id: 'events' },
+];
 
 preloadLanguage().then(dict => {
   addArray(pages, 'page', '/', dict, id => `ui.page.${id}`);

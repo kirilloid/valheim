@@ -8,6 +8,7 @@ import { timeI2S } from '../model/utils';
 import { Icon, ItemIcon } from './Icon';
 import { TranslationContext } from '../effects';
 import { resources } from '../model/resources';
+import { InlineObject } from './helpers';
 
 function isFood(item: Item): item is Food {
   return item.type === 'food';
@@ -108,7 +109,7 @@ export function FoodTable() {
       {items.map(food => {
         return <tr key={food.id}>
           <td><ItemIcon item={food} size={32} /></td>
-          <td><Link to={`/obj/${food.id}`} className="FoodTable__extra">{translate(food.id)}</Link></td>
+          <td><InlineObject id={food.id} className="FoodTable__extra" /></td>
           <td className="FoodTable__value">{food.health}</td>
           <td className="FoodTable__value">{food.stamina}</td>
           <td className="FoodTable__value">{food.health + food.stamina}</td>

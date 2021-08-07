@@ -1237,7 +1237,7 @@ export const pieces: Piece[] = [
     subtype: 'fireplace',
     tier: 3,
     fireplace: { fuel: 'Coal', capacity: 5, burnTime: 20000, minHeightAbove: 0.28, smoke: false, fireworks: false },
-    comfort: { value: 1, group: 'fire' },
+    comfort: { value: 1 },
     piece: { target: 'random', water: false, onlyOnFlat, size: [0, 0, 1.5] },
     wear: wearStructure(100, mods([0, 0, 0, 0, 0, 3, 3, 0, 3, 3]), MaterialType.Wood, { noRoof: false }),
     recipe: { type: 'craft_piece', materials: { Bronze: 5, Coal: 2, Chain: 1 }, station: CraftingStation.Forge },

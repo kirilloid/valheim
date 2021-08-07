@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 
+import type { GameObject } from '../types';
 import { TranslationContext } from '../effects';
-import { GameObject } from "../types";
 import { ItemIcon } from './Icon';
 
 export function ItemHeader({ item, children }: { item: GameObject, children?: React.ReactNode }) {

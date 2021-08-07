@@ -17,6 +17,7 @@ import { Location } from './view/Location';
 import { Biome } from './view/Biome';
 import { TranslationContext, useTranslation } from './effects';
 import { GameEvent, GameEventTable } from './view/Event';
+import { ComfortTable } from './view/ComfortTable';
 
 function App() {
   const translate = useTranslation();
@@ -26,15 +27,16 @@ function App() {
         <Router>
           <Search />
           <Switch>
+            <Route path="/obj/:id/:level" children={<GameObject />} />
+            <Route path="/obj/:id" children={<GameObject />} />
+            <Route path="/loc/:id" children={<Location />} />
             <Route path="/attack/:params" children={<AttackCalc />} />
             <Route path="/attack" children={<AttackCalc />} />
+            <Route path="/comfort" children={<ComfortTable />} />
             <Route path="/defense/:params" children={<DefenseCalc />} />
             <Route path="/defense" children={<DefenseCalc />} />
             <Route path="/food/:sort" children={<FoodTable />} />
             <Route path="/food" children={<FoodTable />} />
-            <Route path="/obj/:id/:level" children={<GameObject />} />
-            <Route path="/obj/:id" children={<GameObject />} />
-            <Route path="/loc/:id" children={<Location />} />
             <Route path="/biome/:id" children={<Biome />} />
             <Route path="/info/:id" children={<Info />} />
             <Route path="/event/:id" children={<GameEvent />} />

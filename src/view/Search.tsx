@@ -11,7 +11,7 @@ import { data } from '../model/objects';
 import { TranslationContext, Translator } from '../effects';
 import { assertNever, days, timeI2S } from '../model/utils';
 import { SkillType } from '../model/skills';
-import { averageAttacksDamage, findDropChanceFromCreature, List, ShortWeaponDamage } from './helpers';
+import { averageAttacksDamage, findDropChanceFromCreature, List, Materials, ShortWeaponDamage } from './helpers';
 import { getCraftingStationId } from '../model/building';
 import { events } from '../model/events';
 import { locations } from '../model/location';
@@ -90,7 +90,7 @@ function renderItem(entry: SearchEntry, text: string, translate: Translator, onC
 function renderLocation(entry: SearchEntry, text: string, onClick: React.MouseEventHandler) {
   const { id } = entry;
   const boss = locations.find(l => l.id === id)?.vegvisir?.boss;
-  return  <div className="SearchItem">
+  return <div className="SearchItem">
     <Link to={`/loc/${id}`} onClick={onClick}>{text}</Link>
     {boss ? <span>
       <ItemIcon item={data[boss]} useAlt />
@@ -102,20 +102,6 @@ function renderLocation(entry: SearchEntry, text: string, onClick: React.MouseEv
 function renderLink(path: string, entry: SearchEntry, text: string, onClick: React.MouseEventHandler) {
   const { id } = entry;
   return <Link to={`${path}${id}`} onClick={onClick}>{text}</Link>
-}
-
-function Materials(props: { materials: Record<EntityId, number> }) {
-  const { materials } = props;
-  const maxTier = Object.keys(materials).reduce((a, id) => Math.max(a, data[id]?.tier ?? 0), 0);
-  return <span className="SearchItem__recipe">
-    <List separator=''>{Object
-      .entries(materials)
-      .filter(([key]) => (data[key]?.tier ?? 0) >= maxTier - 2)
-      .flatMap(([key, val]) => <>
-        <ItemIcon key={`${key}_icon`} item={data[key]} size={16} />
-        <span key={`${key}_value`}>{val}</span>
-      </>)}</List>
-  </span>
 }
 
 function ShortRecipe(props: { item: GameObject }) {
@@ -144,7 +130,7 @@ function ShortRecipe(props: { item: GameObject }) {
         case 'craft_one':
         case 'craft_piece':
         case 'craft_upg':
-          return <Materials materials={recipe.materials} />
+          return <Materials materials={recipe.materials} iconSize={16} />
         case 'trader':
           // disabled for now
           return null && <span><Icon id="coin" alt="" size={16} /> {recipe.value}</span>
