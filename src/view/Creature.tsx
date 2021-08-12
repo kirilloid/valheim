@@ -20,9 +20,10 @@ function NormalAttack({ attack: a, dmgScale }: { attack: NormalAttackProfile, dm
     <dt key={`atk-key-${a.name}`}>{a.name}</dt>
     <dd key={`atk-val-${a.name}`}>
       {shortCreatureDamage(dmg)}
-      {a.burst ? ` ×${a.burst}` : ''}
+      {a.burst ? `×${a.burst}` : ''}
       {a.unblockable ? ', unblockable' : ''}
       {a.undodgeable ? ', undodgeable' : ''}
+      {a.stagger ? ', stagger=' + a.stagger : ', no stagger'}
     </dd>
   </>
 }
