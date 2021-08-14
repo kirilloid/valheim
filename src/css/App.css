@@ -73,3 +73,23 @@ ul {
   padding: 0;
   list-style-type: none;
 }
+
+.dlc--beta::after {
+  content: '\1D5D'; /* superscript betas */
+}
+
+.season--midsummer {
+  color: #0c0;
+}
+
+.season--christmas {
+  color: #c00;
+}
+
+.season--helloween {
+  color: #c80;
+}
+
+.disabled {
+  color: gray;
+}

@@ -61,7 +61,7 @@ export function FoodTable() {
   }
 
   return (<>
-    <h1>{translate('ui.page.food')}</h1>
+    <h1>{translate('ui.page.foodNutrition')}</h1>
     <table className="FoodTable" style={{ width: '100%' }}>
       <thead>
         <tr>

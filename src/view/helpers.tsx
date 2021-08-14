@@ -146,9 +146,18 @@ export function List({ children, separator = ', ' }: { children: JSX.Element[], 
   return <>{children.flatMap((item, i) => i ? [separator, item] : [item])}</>;
 }
 
-export function InlineObject({ id, ...props }: { id: EntityId } & React.AnchorHTMLAttributes<HTMLAnchorElement>) {
+export function InlineObject({ id, className, ...props }: { id: EntityId } & React.AnchorHTMLAttributes<HTMLAnchorElement>) {
   const translate = useContext(TranslationContext);
-  return <Link to={`/obj/${id}`} {...props}>{translate(id)}</Link>
+  const obj = data[id];
+  if (!obj) {
+    return <span className="error">#{id}</span>
+  }
+  const { dlc, season, disabled } = obj;
+  const dlcClass = dlc ? `dlc dlc--${dlc}` : '';
+  const seasonClass = season ? `season season--${season}` : '';
+  const disabledClass = disabled ? 'disabled' : '';
+  const fullClass = [className ?? '', dlcClass, seasonClass, disabledClass].join(' ');
+  return <Link to={`/obj/${id}`} className={fullClass} {...props}>{translate(id)}</Link>
 }
 
 export function InlineObjectWithIcon({ id }: { id: EntityId }) {
@@ -160,7 +169,7 @@ export function InlineObjectWithIcon({ id }: { id: EntityId }) {
   </>
 }
 
-export function Materials(props: { materials: Record<EntityId, number> }) {
+export function Materials(props: { materials: Record<EntityId, number>, iconSize: number }) {
   const { materials } = props;
   const maxTier = Object.keys(materials).reduce((a, id) => Math.max(a, data[id]?.tier ?? 0), 0);
   return <span className="SearchItem__recipe">
@@ -168,7 +177,7 @@ export function Materials(props: { materials: Record<EntityId, number> }) {
       .entries(materials)
       .filter(([key]) => (data[key]?.tier ?? 0) >= maxTier - 2)
       .flatMap(([key, val]) => <>
-        <ItemIcon key={`${key}_icon`} item={data[key]} size={16} />
+        <ItemIcon key={`${key}_icon`} item={data[key]} size={props.iconSize} />
         <span key={`${key}_value`}>{val}</span>
       </>)}</List>
   </span>

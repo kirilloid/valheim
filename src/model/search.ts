@@ -97,16 +97,12 @@ const pages = [
   { id: 'attack' },
   { id: 'comfort' },
   { id: 'defense' },
-  { id: 'food' },
+  { id: 'food-nutrition' },
+  { id: 'food-planner' },
   { id: 'events' },
 ];
 
-preloadLanguage().then(dict => {
-  addArray(pages, 'page', '/', dict, id => `ui.page.${id}`);
-  addArray(locations, 'loc', '/loc/', dict, id => `ui.location.${id}`);
-  addArray(biomes, 'biome', '/biome/', dict, id => `ui.biome.${id}`);
-  addArray(events, 'event', '/event/', dict, id => id, 'ui.event ui.page.events.tags');
-
+function addObjects(dict: Record<string, string>) {
   for (const gobj of Object.values(data)) {
     if (gobj.disabled) continue;
     const key = gobj.id;
@@ -188,6 +184,14 @@ preloadLanguage().then(dict => {
       }
     }
   }
+}
+
+preloadLanguage().then(dict => {
+  addArray(pages, 'page', '/', dict, id => `ui.page.${id}`);
+  addArray(locations, 'loc', '/loc/', dict, id => `ui.location.${id}`);
+  addArray(biomes, 'biome', '/biome/', dict, id => `ui.biome.${id}`);
+  addObjects(dict);
+  addArray(events, 'event', '/event/', dict, id => id, 'ui.event ui.page.events.tags');
 });
 
 const emptyResults: SearchEntry[] = [];
