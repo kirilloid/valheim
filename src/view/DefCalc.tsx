@@ -4,28 +4,241 @@ import { map } from 'lodash-es';
 
 import '../css/Combat.css';
 
-import type { Biome } from '../types';
+import type { Biome, Pair, Creature as CreatureT } from '../types';
 
-import { locationToBiome } from '../model/location';
 import { groupedCreatures } from '../model/combat_creatures';
 import { TranslationContext } from '../effects/translation.effect';
 import { useDebounceEffect } from '../effects/debounce.effect';
 import { Icon, ItemIcon, SkillIcon } from './Icon';
-import { actionCreators, defaultCreature, reducer, shields, State } from '../model/def_calc.reducer';
+import { getInitialState, serializeState } from '../model/def_calc.url';
+import { actionCreators, reducer, State } from '../model/def_calc.reducer';
+import { allItems, shields } from '../model/def_calc.items';
+import { isNotNull, MAX_PLAYERS } from '../model/utils';
+import { addAttackPlayerStats, attackPlayer, AttackPlayerStats, dmgBonus, emptyAttackPlayerStats, isNormalAttackProfile, multiplyDamage, ShieldConfig } from '../model/combat';
+import { InlineObjectWithIcon, List, showNumber } from './helpers';
 
-function getInitialState(params?: string): State {
-  return {
-    creature: defaultCreature,
-    biome: locationToBiome(defaultCreature.locations[0]!),
-    stars: 0,
+type OnChange<T extends HTMLElement> = (e: React.ChangeEvent<T>) => void;
+type OnChangeI = OnChange<HTMLInputElement>;
+type OnChangeS = OnChange<HTMLSelectElement>;
 
-    isWet: false,
-    shield: shields[0]!,
-    level: 3,
-    blocking: 0,
-    armor: 0,
-    players: 1,
-  };
+function applyLevel(baseValue: number | Pair<number>, level: number) {
+  if (typeof baseValue === 'number') return baseValue;
+  return baseValue[0] + baseValue[1] * (level - 1);
+}
+
+function statsResult({ min, max, avg }: { min: number; max: number; avg: number }) {
+  return `${showNumber(min)}–${showNumber(max)} (${showNumber(avg)})`;
+}
+
+function Result({ stats, showBlock }: { stats: AttackPlayerStats; showBlock: boolean }) {
+  const translate = useContext(TranslationContext);
+  const { instant, overTime } = stats;
+  return <dl>
+    {showBlock && <>
+      <dt>{translate('ui.blockChance')}</dt>
+      <dd>{showNumber(stats.blockChance.avg * 100)}%</dd>
+    </>}
+    {instant.avg ? <>
+      <dt>{translate('ui.damage')}</dt>
+      <dd>{statsResult(instant)}</dd>
+    </> : null}
+    {overTime.avg ? <>
+      <dt>{translate('ui.damageOverTime')}</dt>
+      <dd>{statsResult(overTime)}</dd>
+    </> : null}
+    {instant.avg && overTime.avg ? <>
+      <dt>total</dt>
+      <dd>{statsResult({
+        min: instant.min + overTime.min,
+        avg: instant.avg + overTime.avg,
+        max: instant.max + overTime.max,
+      })}</dd>
+    </> : null}
+  </dl>
+}
+
+function Creature({ creature, biome, onChange }: { creature: CreatureT; biome: string; onChange: OnChangeS }) {
+  const translate = useContext(TranslationContext);
+  return <div className="row">
+    <select onChange={onChange} value={creature.id}>
+      {map(
+        groupedCreatures,
+        (group, gBiome: Biome) => group.length ? (
+          <optgroup key={gBiome} label={gBiome}>
+            {group.map(c => <option value={c.id} selected={creature === c && biome === gBiome}>{translate(c.id)}</option>)}
+          </optgroup>
+        ) : null
+      )}
+    </select>
+    <ItemIcon item={creature} size={24} />
+  </div>
+}
+
+function CreatureStars({ stars, max, onChange }: { stars: number; max: number; onChange: OnChangeI }) {
+  return <div className="row">
+    {Array.from({ length: max }).map((_, s) => {
+      return <>
+        <input id={`star-${s}`} key={'i' + s}
+          type="radio" name="stars" value={s}
+          checked={stars === s} onChange={onChange} />
+        <label key={'l' + s} htmlFor={`star-${s}`}>{s}⭐</label>
+      </>
+    })}
+  </div>;
+}
+
+function CreatureAttackVar({ creature, variety, onChange }: { creature: CreatureT, variety: number, onChange: OnChangeI }) {
+  return <div className="row">
+    {creature.attacks.map((a, i) => {
+      return <>
+        <input id={`variety-${i}`} key={`i-${creature.id}-${i}`}
+          type="radio" name="variety" value={i}
+          checked={variety === i} onChange={onChange} />
+        <label key={`l-${creature.id}-${i}`} htmlFor={`variety-${i}`}>{a.variety}</label>
+      </>
+    })}
+  </div>;
+}
+
+function Players({ players, onChange }: { players: number; onChange: OnChangeI }) {
+  const translate = useContext(TranslationContext);
+  return <div className="row">
+    <input type="range" id="players"
+      className="BigInput"
+      min="1" max={MAX_PLAYERS} value={players}
+      onChange={onChange} />
+    <input type="number" inputMode="numeric"
+      min="1" max={MAX_PLAYERS} value={players}
+      onChange={onChange} />
+    <label htmlFor="players">{translate('ui.players')}</label>
+  </div>;
+}
+
+function Wet({ wet, onChange }: { wet: boolean; onChange: OnChangeI }) {
+  const translate = useContext(TranslationContext);
+  return <div className="row">
+    <input id="wet" type="checkbox" checked={wet} onChange={onChange} />
+    <label htmlFor="wet">
+      {' '}
+      {translate('ui.wet')}
+    </label>
+  </div>
+}
+
+function Shield({ shield, onShieldChange, onLevelChange } : {
+  shield: ShieldConfig | undefined;
+  onShieldChange: OnChangeS;
+  onLevelChange: OnChangeI;
+}) {
+  const translate = useContext(TranslationContext);
+  return <div className="row weapon">
+    <div className="weapon__label">
+      <label htmlFor="shield">
+        {translate('ui.itemType.shield')}
+      </label>
+      <ItemIcon item={shield?.item} size={24} />
+    </div>
+    <div className={'weapon__input-primary'}>
+      <select id="shield"
+        className="BigInput"
+        onChange={onShieldChange}
+        value={shield?.item.id ?? ''}>
+        <option value="">—</option>
+        {shields.map(s => <option key={s.id} value={s.id}>{translate(s.id)}</option>)}
+      </select>
+    </div>
+    {!!shield && shield.item.maxLvl > 1 && <div className="weapon__input-secondary">
+      <input type="number" inputMode="numeric" pattern="[0-9]*"
+        min="1" max={shield.item.maxLvl} value={shield.level}
+        onChange={onLevelChange}
+        style={{ width: '3em' }} />
+      <Icon id="star" alt="level" size={16} />
+    </div>}
+  </div>;
+}
+
+function Skill({ shield, onChange }: { shield: ShieldConfig | undefined; onChange: OnChangeI; }) {
+  const translate = useContext(TranslationContext);
+  if (!shield) return null;
+  return <div className="row weapon">
+    <div className="weapon__label">
+      <label htmlFor="skill">{translate('ui.skill')}</label>
+      <SkillIcon skill={shield.item.skill} useAlt size={24} />
+    </div>
+    <div className="weapon__input-primary">
+      <datalist id="skill">
+        <option value="0" />
+        <option value="10" />
+        <option value="20" />
+        <option value="30" />
+        <option value="40" />
+        <option value="50" />
+        <option value="60" />
+        <option value="70" />
+        <option value="80" />
+        <option value="90" />
+        <option value="100"/>
+      </datalist>
+      <input type="range" id="skill"
+        className="BigInput"
+        min="0" max="100" value={shield.skill}
+        onChange={onChange}
+        list="skill" />
+    </div>
+    <div className="weapon__input-secondary">
+      <input type="number" inputMode="numeric" pattern="[0-9]*"
+        min="0" max="100" value={shield.skill}
+        onChange={onChange}
+        style={{ width: '3em' }} />
+    </div>
+  </div>;
+}
+
+function Armor({ armor, onChange }: { armor: number; onChange: OnChangeI; }) {
+  const translate = useContext(TranslationContext);
+  return <div className="row weapon">
+    <div className="weapon__label">
+      <label htmlFor="armor">{translate('ui.armor')}</label>
+      <Icon id="armor" alt="" size={24} />
+    </div>
+    <div className="weapon__input-primary">
+      <datalist id="armor">
+        <option value="2" label="Rag" />
+        <option value="7" label="Leather 1" />
+        <option value="14" label="Leather 2" />
+        <option value="21" label="Leather 3"/>
+        <option value="28" label="Leather" />
+        <option value="33" label="Troll" />
+        <option value="46" label="Bronze" />
+        <option value="64" label="Iron" />
+        <option value="82" label="Silver" />
+        <option value="100" label="Padded" />
+      </datalist>
+      <input type="range" id="skill"
+        className="BigInput" list="armor"
+        min="0" max="100" value={armor}
+        onChange={onChange} />
+    </div>
+    <div className="weapon__input-secondary">
+      <input type="number" inputMode="numeric" pattern="[0-9]*"
+        min="0" max="100" value={armor}
+        onChange={onChange}
+        style={{ width: '3em' }} />
+    </div>
+  </div>
+}
+
+function Items({ resTypes, onChange }: { resTypes: string[], onChange: (item: string) => OnChangeI }) {
+  return <>
+    {[...allItems.entries()].map(([hash, { items }]) => <div key={hash}>
+      <input type="checkbox" id={hash} checked={resTypes.includes(hash)} onChange={onChange(hash)} />
+      <label htmlFor={hash}>
+        <List separator=" / ">
+          {items.map(item => <InlineObjectWithIcon id={item.id} />)}
+        </List>
+      </label>
+    </div>)}
+  </>;
 }
 
 export function DefenseCalc() {
@@ -34,171 +247,98 @@ export function DefenseCalc() {
   const { params } = useParams<{ params?: string }>();
   const [state, dispatch] = useReducer(reducer, getInitialState(params));
   const {
-    creature,
-    biome,
-    stars,
-
-    isWet,
+    enemy: { creature, biome, stars, variety },
+    
     players,
+    isWet,
     shield,
-    level,
-    blocking,
     armor,
+    resTypes,
   } = state;
 
-  // const onArmorChange = useStateNumberUpdate(updateGeneric(statePair, 'armor'));
-  // const onPlayersChange = useStateNumberUpdate(updateGeneric(statePair, 'players'));
+  useDebounceEffect(state, (state) => {
+    const path = `/defense/${serializeState(state)}`;
+    if (history.location.pathname !== path) {
+      history.replace(path);
+    }
+  }, 200);
+
   const {
     changeCreature,
     changeStars,
+    changeVariety,
+    changePlayers,
     changeShield,
     changeLevel,
     changeSkill,
     changeArmor,
     changeIsWet,
+    changeResType,
   } = actionCreators;
   
   const onCreatureChange = (e: React.ChangeEvent<HTMLSelectElement>) => dispatch(changeCreature(e.target.value, (e.target.selectedOptions[0]?.parentElement as HTMLOptGroupElement).label as Biome));
   const onStarsChange = (e: React.ChangeEvent<HTMLInputElement>) => dispatch(changeStars(Number(e.target.value)));
-
+  const onVarietyChange = (e: React.ChangeEvent<HTMLInputElement>) => dispatch(changeVariety(Number(e.target.value)));
+  
+  const onPlayersChange = (e: React.ChangeEvent<HTMLInputElement>) => dispatch(changePlayers(Number(e.target.value)));
   const onShieldChange = (e: React.ChangeEvent<HTMLSelectElement>) => dispatch(changeShield(e.target.value));
   const onLevelChange = (e: React.ChangeEvent<HTMLInputElement>) => dispatch(changeLevel(Number(e.target.value)));
   const onSkillChange = (e: React.ChangeEvent<HTMLInputElement>) => dispatch(changeSkill(Number(e.target.value)));
   const onArmorChange = (e: React.ChangeEvent<HTMLInputElement>) => dispatch(changeArmor(Number(e.target.value)));
   const onWetChange = (e: React.ChangeEvent<HTMLInputElement>) => dispatch(changeIsWet(e.target.checked));
+  const onItemChange = (resType: string) => (e: React.ChangeEvent<HTMLInputElement>) => dispatch(changeResType(resType, e.target.checked));
   const scale = { players, stars: Math.min(stars, creature.maxLvl - 1) };
+  const bonus = dmgBonus(scale);
 
-return (<>
+  const block = shield?.item
+    ? applyLevel(shield.item.block, shield.level) * (1 + 0.005 * shield.skill)
+    : 0;
+  const perfectBlock = block * (shield?.item.parryBonus ?? 1);
+  const attacks = creature.attacks[variety]!.attacks.filter(isNormalAttackProfile);
+  const resistItems = state.resTypes
+    .map(rt => allItems.get(rt)?.damageModifiers)
+    .filter(isNotNull);
+
+  const getStats = (block: number) => attacks
+    .map(a => attackPlayer(multiplyDamage(a.dmg, bonus), isWet, resistItems, armor, block))
+    .reduce(addAttackPlayerStats, emptyAttackPlayerStats());
+
+  return (<>
     <h1>{translate('ui.page.defense')}</h1>
     <div className="CombatCalc">
-      <div className="CombatCalc__Creature">
+      <section className="CombatCalc__Creature">
         <h2>Creature</h2>
-        <div className="row">
-          <select onChange={onCreatureChange} value={creature.id}>
-            {map(
-              groupedCreatures,
-              (group, gBiome: Biome) => group.length ? (
-                <optgroup key={gBiome} label={gBiome}>
-                  {group.map(c => <option value={c.id} selected={creature === c && biome === gBiome}>{translate(c.id)}</option>)}
-                </optgroup>
-              ) : null
-            )}
-          </select>
-          <ItemIcon item={creature} size={24} />
-          {creature.maxLvl > 1 &&
-            <>
-              {Array.from({ length: creature.maxLvl }).map((_, s) => {
-                return <>
-                  <input id={`star-${s}`} key={`i${s}`}
-                    type="radio" name="stars" value={s}
-                    checked={stars === s} onChange={onStarsChange} />
-                  <label key={`l${s}`} htmlFor={`star-${s}`}>{s}⭐</label>
-                </>
-              })}
-            </>
-          }
-        </div>
-        <div className="row">
-          <input id="wet" type="checkbox" checked={isWet} onChange={onWetChange} />
-          <label htmlFor="wet">
-            {' '}
-            wet
-          </label>
-        </div>
-      </div>
-      <div className="CombatCalc__Player">
-        <div className="row PlayerHeader">
+        <Creature creature={creature} biome={biome} onChange={onCreatureChange} />
+        {creature.maxLvl > 1 && <CreatureStars max={creature.maxLvl} stars={stars} onChange={onStarsChange} />}
+        {creature.attacks.length > 1 && <CreatureAttackVar creature={creature} variety={variety} onChange={onVarietyChange} />}
+      </section>
+      <section className="CombatCalc__Player">
+        <div className="PlayerHeader">
           <h2 className="PlayerHeader__text">
             {translate('ui.player')}
           </h2>
         </div>
+        <Players players={players} onChange={onPlayersChange} />
+        <Wet wet={isWet} onChange={onWetChange} />
         <div className="Weapon">
-          <div className="row weapon">
-            <div className="weapon__label">
-              <label htmlFor="shield">
-                {translate('ui.itemType.weapon')}
-              </label>
-              <ItemIcon item={shield} size={24} />
-            </div>
-            <div className={'weapon__input-primary'}>
-              <select id="shield"
-                className="BigInput"
-                onChange={onShieldChange}
-                value={shield.id}>
-                {shields.map(s => <option key={s.id} value={s.id}>{translate(s.id)}</option>)}
-              </select>
-            </div>
-            {shield.maxLvl > 1 && <div className="weapon__input-secondary">
-              <input type="number" inputMode="numeric" pattern="[0-9]*"
-                min="1" max={shield.maxLvl} value={level}
-                onChange={onLevelChange}
-                style={{ width: '3em' }} />
-              <Icon id="star" alt="level" size={16} />
-            </div>}
-          </div>
-          <div className="row weapon">
-            <div className="weapon__label">
-              <label htmlFor="skill">{translate('ui.skill')}</label>
-              <SkillIcon skill={shield.skill} useAlt size={24} />
-            </div>
-            <div className="weapon__input-primary">
-              <datalist id="skill">
-                <option value="0" />
-                <option value="10" />
-                <option value="20" />
-                <option value="30" />
-                <option value="40" />
-                <option value="50" />
-                <option value="60" />
-                <option value="70" />
-                <option value="80" />
-                <option value="90" />
-                <option value="100"/>
-              </datalist>
-              <input type="range" id="skill"
-                className="BigInput"
-                min="0" max="100" value={blocking}
-                onChange={onSkillChange}
-                list="skill" />
-            </div>
-            <div className="weapon__input-secondary">
-              <input type="number" inputMode="numeric" pattern="[0-9]*"
-                min="0" max="100" value={blocking}
-                onChange={onSkillChange}
-                style={{ width: '3em' }} />
-            </div>
-          </div>
-          <div className="row weapon">
-            <div className="weapon__label">
-              <label htmlFor="armor">{translate('ui.armor')}</label>
-              <Icon id="armor" alt="" size={24} />
-            </div>
-            <div className="weapon__input-primary">
-              <datalist id="armor">
-                <option value="2" label="Rag" />
-                <option value="7" label="Leather 1" />
-                <option value="14" label="Leather 2" />
-                <option value="21" label="Leather 3"/>
-                <option value="28" label="Leather" />
-                <option value="33" label="Troll" />
-                <option value="46" label="Bronze" />
-                <option value="64" label="Iron" />
-                <option value="82" label="Silver" />
-                <option value="100" label="Padded" />
-              </datalist>
-              <input type="range" id="skill"
-                className="BigInput" list="armor"
-                min="0" max="100" value={armor}
-                onChange={onArmorChange} />
-            </div>
-            <div className="weapon__input-secondary">
-              <input type="number" inputMode="numeric" pattern="[0-9]*"
-                min="0" max="100" value={armor}
-                onChange={onArmorChange}
-                style={{ width: '3em' }} />
-            </div>
-          </div>
+          <Shield shield={state.shield} onShieldChange={onShieldChange} onLevelChange={onLevelChange} />
+          <Skill shield={state.shield} onChange={onSkillChange} />
+          <Armor armor={armor} onChange={onArmorChange} />
         </div>
+        <Items resTypes={state.resTypes} onChange={onItemChange} />
+      </section>
+      <div className="CombatCalc__Results">
+        <h2>Results</h2>
+        <h3>No shield</h3>
+        <Result stats={getStats(0)} showBlock={false} />
+        {block > 0 && !attacks.every(a => a.unblockable) ? <>
+          <h3>Block</h3>
+          <Result stats={getStats(block)} showBlock={true} />
+        </> : null}
+        {perfectBlock !== block && !attacks.every(a => a.unblockable) ? <>
+          <h3>Parry</h3>
+          <Result stats={getStats(perfectBlock)} showBlock={true} />
+        </> : null}
       </div>
     </div>
   </>);

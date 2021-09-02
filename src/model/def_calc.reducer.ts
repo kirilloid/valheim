@@ -1,22 +1,25 @@
-import type { Biome, Creature, EntityId, Shield, Weapon } from '../types';
+import type { Biome, Creature, EntityId, Shield } from '../types';
 import { creatures } from './creatures';
+import { shields } from './def_calc.items';
 import { assertNever } from './utils';
-import { items } from './weapons';
-import { arrows } from './arrows';
-
-export const shields = items.filter(i => !i.disabled && i.type === 'shield') as Shield[]; 
 
 export interface State {
-  creature: Creature;
-  biome: Biome;
-  stars: number;
+  enemy: {
+    creature: Creature;
+    biome: Biome;
+    variety: number;
+    stars: number;
+  };
 
   players: number;
-  shield: Shield;
-  level: number;
-  blocking: number;
+  shield?: {
+    item: Shield;
+    level: number;
+    skill: number;
+  };
   armor: number;
   isWet: boolean;
+  resTypes: string[];
 }
 
 const CHANGE_CREATURE = 'CHANGE_CREATURE' as const;
@@ -25,11 +28,17 @@ const changeCreature = (id: EntityId, biome: Biome) => ({ type: CHANGE_CREATURE,
 const CHANGE_STARS = 'CHANGE_STARS' as const;
 const changeStars = (stars: number) => ({ type: CHANGE_STARS, stars });
 
+const CHANGE_VARIETY = 'CHANGE_VARIETY' as const;
+const changeVariety = (variety: number) => ({ type: CHANGE_VARIETY, variety });
+
+const CHANGE_PLAYERS = 'CHANGE_PLAYERS' as const;
+const changePlayers = (players: number) => ({ type: CHANGE_PLAYERS, players });
+
 const CHANGE_SHIELD = 'CHANGE_SHIELD' as const;
 const changeShield = (id: EntityId) => ({ type: CHANGE_SHIELD, id });
 
-const CHANGE_BLOCKING = 'CHANGE_BLOCKING' as const;
-const changeSkill = (skill: number) => ({ type: CHANGE_BLOCKING, skill });
+const CHANGE_SKILL = 'CHANGE_SKILL' as const;
+const changeSkill = (skill: number) => ({ type: CHANGE_SKILL, skill });
 
 const CHANGE_LEVEL = 'CHANGE_LEVEL' as const;
 const changeLevel = (level: number) => ({ type: CHANGE_LEVEL, level });
@@ -40,20 +49,24 @@ const changeArmor = (armor: number) => ({ type: CHANGE_ARMOR, armor });
 const CHANGE_IS_WET = 'CHANGE_IS_WET' as const;
 const changeIsWet = (isWet: boolean) => ({ type: CHANGE_IS_WET, isWet });
 
+const CHANGE_RES_TYPE = 'CHANGE_RES_TYPE' as const;
+const changeResType = (resType: string, toggle: boolean) => ({ type: CHANGE_RES_TYPE, resType, toggle });
+
 export const actionCreators = {
   changeCreature,
   changeStars,
+  changeVariety,
+  changePlayers,
   changeShield,
   changeSkill,
   changeLevel,
   changeArmor,
   changeIsWet,
+  changeResType,
 };
 
 export type ActionCreators = typeof actionCreators;
 export type Action = ReturnType<ActionCreators[keyof ActionCreators]>;
-
-export const defaultCreature = creatures.find(c => c.id === 'Greyling')!;
 
 export function reducer(state: State, action: Action): State {
   switch (action.type) {
@@ -61,29 +74,45 @@ export function reducer(state: State, action: Action): State {
       const { id, biome } = action;
       const creature = creatures.find(c => c.id === id);
       if (creature == null) return state;
-      const stars = creature.maxLvl - 1;
-      return { ...state, creature, biome, stars };
+      const stars = Math.min(creature.maxLvl - 1, state.enemy.stars);
+      return { ...state, enemy: { creature, biome, variety: 0, stars } };
     }
     case CHANGE_STARS: {
       const { stars } = action;
-      return { ...state, stars };
+      return { ...state, enemy: { ...state.enemy, stars } };
+    }
+    case CHANGE_VARIETY: {
+      const { variety } = action;
+      return { ...state, enemy: { ...state.enemy, variety } };
+    }
+    case CHANGE_PLAYERS: {
+      const { players } = action;
+      return { ...state, players };
     }
     case CHANGE_IS_WET: {
       const { isWet } = action;
       return { ...state, isWet };
     }
+    case CHANGE_RES_TYPE: {
+      const { resType, toggle } = action;
+      const { resTypes: items } = state;
+      const newItems = toggle
+        ? items.concat([resType])
+        : items.filter(e => e !== resType);
+      return { ...state, resTypes: newItems };
+    }
     case CHANGE_SHIELD: {
       const item = shields.find(s => s.id === action.id);
       if (item == null) return state;
-      return { ...state, shield: item };
+      return { ...state, shield: { level: item.maxLvl, skill: 0, ...state.shield, item } };
     }
     case CHANGE_LEVEL: {
       const { level } = action;
-      return { ...state, level };
+      return state.shield ? { ...state, shield: { ...state.shield, level } } : state;
     }
-    case CHANGE_BLOCKING: {
+    case CHANGE_SKILL: {
       const { skill } = action;
-      return { ...state, blocking: skill };
+      return state.shield ? { ...state, shield: { ...state.shield, skill } } : state;
     }
     case CHANGE_ARMOR: {
       const { armor } = action;

@@ -5,7 +5,7 @@ import { groupBy, mapValues } from 'lodash-es';
 import '../css/FoodPlanner.css';
 
 import type { Food, GameObject, Item, SimpleDrop } from '../types';
-import { BASE_HEALTH, BASE_STAMINA, days, isNotNull } from '../model/utils';
+import { BASE_HEALTH, BASE_STAMINA, days, isNotNull, MAX_PLAYERS } from '../model/utils';
 import { Icon, ItemIcon } from './Icon';
 import { TranslationContext, useDebounceEffect } from '../effects';
 import { resources } from '../model/resources';
@@ -242,12 +242,12 @@ export function FoodPlanner() {
     </div>
     <div>
       <input id="players" className="FoodPlanner__range"
-        type="range" min="1" max="10" value={players}
+        type="range" min="1" max={MAX_PLAYERS} value={players}
         onChange={e => setPlayers(Number(e.target.value))}
       />
       {' '}
       <input className="FoodPlanner__numeric"
-        type="number" min="1" max="10" value={players}
+        type="number" min="1" max={MAX_PLAYERS} value={players}
         onChange={e => setPlayers(Number(e.target.value))}
       />
       {' '}

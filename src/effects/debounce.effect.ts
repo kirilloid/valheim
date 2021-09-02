@@ -4,5 +4,5 @@ export function useDebounceEffect<S>(state: S, fn: (arg: S) => void, timeout: nu
   useEffect(() => {
     const timer = setTimeout(() => fn(state), timeout);
     return () => clearTimeout(timer);
-  }, [state, fn]);
+  }, [state, fn, timeout]);
 }

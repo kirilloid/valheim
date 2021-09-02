@@ -227,3 +227,34 @@ export function Area({ area }: { area: Biome | GameLocationId }) {
     return <Link to={`/biome/${area}`}>{translate(`ui.biome.${area}`)}</Link>;
   }
 }
+
+export class StatCounter {
+  _min = 1e9;
+  _max = -1e9;
+  _total = 0;
+  _num = 0;
+  add(val: number) {
+    this._min = Math.min(this._min, val);
+    this._max = Math.max(this._max, val);
+    this._total += val;
+    this._num++;
+  }
+  get min() {
+    return this._min;
+  }
+  get max() {
+    return this._max;
+  }
+  get avg() {
+    return this._total / this._num;
+  }
+}
+
+export function addStatCounters(a: StatCounter, b: StatCounter): StatCounter {
+  const result = new StatCounter();
+  result._min = Math.min(a._min, b._min);
+  result._max = Math.max(a._max, b._max);
+  result._total = a._total + b._total;
+  result._num = a._num + b._num;
+  return result;
+}

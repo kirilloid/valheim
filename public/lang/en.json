@@ -618,12 +618,14 @@
     "ui.biome.Mistlands": "Mistlands",
     "ui.biome.DeepNorth": "Deep north",
     "ui.biome.Ashlands": "Ashlands",
+    "ui.blockChance": "block chance",
     "ui.damage": "damage",
     "ui.damageModifier.immune": "Immune",
     "ui.damageModifier.veryResistant": "Very resistant",
     "ui.damageModifier.resistant": "Resistant",
     "ui.damageModifier.weak": "Weak",
     "ui.damageModifier.veryWeak": "Very weak",
+    "ui.damageOverTime": "over time",
     "ui.damageType.blunt": "blunt",
     "ui.damageType.slash": "slash",
     "ui.damageType.pierce": "pierce",
@@ -833,6 +835,8 @@
     "ui.usedToCraft": "Used to craft",
     "ui.value": "value",
     "ui.weight": "weight",
+    "ui.wet": "wet",
+    "ui.wetOnlyInWater": "in water, not in rain",
 
     "": ""
 }

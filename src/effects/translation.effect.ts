@@ -23,9 +23,8 @@ export function useTranslation(): Translator {
     setLang(userLang);
     setDict(dict);
   });
-  return useCallback(dict === null
-    ? (key: string) => key
-    : (key: string, ...extraArgs: (string | number)[]) => (dict[key] ?? key).replace(/\{(\d+)\}/g, (_, n: string) => String(extraArgs[+n]))
+  return useCallback(
+    (key: string, ...extraArgs: (string | number)[]) => (dict?.[key] ?? key).replace(/\{(\d+)\}/g, (_, n: string) => String(extraArgs[+n]))
   , [dict])
 }
 

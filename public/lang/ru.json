@@ -583,12 +583,14 @@
     "ui.biome.Mistlands": "Туманные земли",
     "ui.biome.DeepNorth": "Крайний север",
     "ui.biome.Ashlands": "Пепельные земли",
+    "ui.blockChance": "шанс блока",
     "ui.damage": "урон",
     "ui.damageModifier.Immune": "Иммунитет",
     "ui.damageModifier.VeryResistant": "Высокое сопротивление",
     "ui.damageModifier.Resistant": "Сопротивление",
     "ui.damageModifier.Weak": "Слабый",
     "ui.damageModifier.VeryWeak": "Очень слабый",
+    "ui.damageOverTime": "за время",
     "ui.damageType.blunt": "оглушающий",
     "ui.damageType.slash": "режущий",
     "ui.damageType.pierce": "колющий",
@@ -797,6 +799,8 @@
     "ui.usedToCraft": "Используется для изготовления",
     "ui.value": "ценность",
     "ui.weight": "вес",
+    "ui.wet": "мокрый",
+    "ui.wetOnlyInWater": "только в воде, не под дождём",
 
     "": ""
 }

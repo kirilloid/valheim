@@ -12,5 +12,5 @@ export function useThrottleEffect<S>(state: S, fn: (arg: S) => void, timeout: nu
       }, timeout);
     }
     return () => timerRef.current != null ? clearTimeout(timerRef.current) : void 0;
-  }, [state]);
+  }, [state, fn, timeout]);
 }

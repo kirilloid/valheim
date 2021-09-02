@@ -1,5 +1,20 @@
 import mapValues from 'lodash-es/mapValues';
-import { Arrow, Attack, Creature, DamageModifier, DamageModifiers, damageModifiersValues, DamageProfile, DamageType, Pair, Weapon } from "../types";
+import {
+  Arrow,
+  Attack,
+  AttackProfile,
+  Creature,
+  DamageModifier,
+  DamageModifiers,
+  damageModifiersValues,
+  DamageProfile,
+  DamageType,
+  NormalAttackProfile,
+  Pair,
+  Shield,
+  Weapon,
+} from '../types';
+import { addStatCounters, StatCounter } from '../view/helpers';
 import { effects } from './effects';
 import { animations } from './weapons';
 
@@ -52,8 +67,13 @@ export function applyDamageModifier(damage: DamageProfile, modifiers: DamageModi
 }
 
 function getBlockableDamage(damage: DamageProfile): DamageProfile {
-  const { poison: _, ...other } = damage;
-  return other;
+  const { chop, pickaxe, ...rest } = damage;
+  return rest;
+}
+
+function getArmorableDamage(damage: DamageProfile): DamageProfile {
+  const { poison, ...rest } = damage;
+  return rest;
 }
 
 export function getWeaponSkillFactor(skill: number): Pair<number> {
@@ -67,7 +87,7 @@ export function getCreatureDamageRandomFactor(): number {
   return 0.875;
 }
 
-export function getTotalDamage(damage: DamageProfile): number {
+export function getTotalDamage(damage: Partial<DamageProfile>): number {
   return Object.values(damage).reduce<number>((a, b) => a + (b ?? 0), 0);
 }
 
@@ -80,21 +100,39 @@ type DamageOverTime = {
 export function doAttack(
   damage: DamageProfile,
   modifiers: DamageModifiers,
+  block: number,
   armor: number,
   isPlayer: boolean,
 ) {
-  const { poison, ...derivedDamage } = applyDamageModifier(damage, modifiers);
-  const blockableDamage = getTotalDamage(getBlockableDamage(derivedDamage));
-  const resDamage = armor ? applyArmor(blockableDamage, armor) : blockableDamage;
-  const { fire, spirit, ...rest } = multiplyDamage(derivedDamage, resDamage / blockableDamage);
   let overTime: Partial<Record<'fire' | 'spirit' | 'poison', DamageOverTime>> = {};
-  if (fire) overTime.fire = { total: fire, time: 5, period: 1 };
-  if (spirit) overTime.spirit = { total: spirit, time: 3, period: 0.5 };
+  // block
+  const blockableDamage = getTotalDamage(getBlockableDamage(damage));
+  const blocked = Math.min(blockableDamage, block);
+  if (block >= blockableDamage) {
+    return { instant: {}, overTime, total: 0 };
+  }
+  const blockScale = (blockableDamage - blocked) / blockableDamage;
+  // resist
+  const { poison, ...derivedDamage } = applyDamageModifier(multiplyDamage(damage, blockScale), modifiers);
+  const armorableDamage = getTotalDamage(getArmorableDamage(derivedDamage));
+  // armor
+  const resDamage = applyArmor(armorableDamage, armor);
+  const { fire, spirit, ...rest } = multiplyDamage(derivedDamage, resDamage / armorableDamage);
+  let total = getTotalDamage(rest);
+  if (fire) {
+    overTime.fire = { total: fire, time: 5, period: 1 };
+    total += fire;
+  }
+  if (spirit) {
+    overTime.spirit = { total: spirit, time: 3, period: 0.5 };
+    total += spirit;
+  }
   if (poison) {
     const ttl = 1 + Math.floor(Math.sqrt((isPlayer ? 5 : 1) * poison));
     overTime.poison = { total: poison, time: ttl, period: 1 };
+    total += poison;
   }
-  return { damage: rest, overTime };
+  return { instant: rest, overTime, total };
 }
 
 function getAttackStats(weapon: Weapon, attack: Attack, skillLvl: number) {
@@ -156,6 +194,12 @@ export interface WeaponConfig {
   arrow: Arrow;
 }
 
+export interface ShieldConfig {
+  item: Shield;
+  level: number;
+  skill: number;
+}
+
 export interface AttackStats {
   singleHit: Pair<number>,
   averageHit: Pair<number>,
@@ -181,10 +225,10 @@ export function attackCreature(
     ? [1, 2] // ooze bomb
     : getWeaponSkillFactor(skill);
   const skillAvg = (skillMin + skillMax) / 2;
-  const { damage, overTime } = doAttack(totalDamage, damageModifiers, 0, false);
-  const singleHit = getTotalDamage(addDamage(damage, mapValues(overTime, d => d?.total)));
+  const { instant, overTime, total } = doAttack(totalDamage, damageModifiers, 0, 0, false);
+  const singleHit = total;
 
-  const damageFixed = getTotalDamage(damage);
+  const damageFixed = getTotalDamage(instant);
 
   const { times, totalStamina, totalTime, comboTotal } = getAttackStats(item, attack, skill);
 
@@ -228,4 +272,77 @@ export function attackCreature(
     dpSec,
     dpSta,
   };
+}
+
+function overTimeSummary(overTime: Partial<Record<DamageType, DamageOverTime>>): DamageOverTime {
+  let total = 0;
+  let time = 0;
+  let period = 100;
+  for (const entry of Object.values(overTime)) {
+    if (!entry) continue;
+    total += entry.total;
+    time = Math.max(time, entry.time);
+    period = Math.min(period, entry.period);
+  }
+  return { total, time, period };
+}
+
+export type AttackPlayerStats = {
+  blockChance: StatCounter;
+  instant: StatCounter;
+  overTime: StatCounter;
+};
+
+export function attackPlayer(
+  damage: DamageProfile,
+  isWet: boolean,
+  resists: Partial<DamageModifiers>[],
+  armor: number,
+  block: number,
+): AttackPlayerStats {
+  // TODO: optimize calculations
+  const ITERATIONS = 100;
+  const mods = resists.reduce(modifyResistances, playerDamageModifiers);
+  const damageModifiers = isWet ? wetModifyResistances(mods) : mods;
+  const skillMin = 0.75;
+  const skillMax = 1;
+
+  let instantStats = new StatCounter();
+  let overTimeStats = new StatCounter();
+  let zeroes = new StatCounter();
+
+  for (let i = 0; i < ITERATIONS; i++) {
+    const skillFactor = skillMin + (skillMax - skillMin) * i / (ITERATIONS - 1);
+    const stats = doAttack(multiplyDamage(damage, skillFactor), damageModifiers, block, armor, true);
+    const { total } = stats;
+    const overTime = overTimeSummary(stats.overTime);
+    const instant = total - overTime.total;
+    zeroes.add(total === 0 ? 1 : 0);
+    instantStats.add(instant);
+    overTimeStats.add(overTime.total);
+  }
+
+  return {
+    blockChance: zeroes,
+    instant: instantStats,
+    overTime: overTimeStats,
+  };
+}
+
+export const emptyAttackPlayerStats: () => AttackPlayerStats = () => ({
+  blockChance: new StatCounter(),
+  instant: new StatCounter(),
+  overTime: new StatCounter(),
+});
+
+export function addAttackPlayerStats(a: AttackPlayerStats, b: AttackPlayerStats): AttackPlayerStats {
+  return {
+    blockChance: addStatCounters(a.blockChance, b.blockChance),
+    instant: addStatCounters(a.instant, b.instant),
+    overTime: addStatCounters(a.overTime, b.overTime),
+  };
+}
+
+export function isNormalAttackProfile(ap: AttackProfile): ap is NormalAttackProfile {
+  return 'dmg' in ap;
 }

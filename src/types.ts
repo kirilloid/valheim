@@ -477,7 +477,7 @@ export interface Potion extends BaseItem {
   stamina?: [adds: number, time: number];
   healthRegen?: number;
   staminaRegen?: number;
-  resist?: Partial<DamageModifiers>;
+  damageModifiers?: Partial<DamageModifiers>;
   cooldown: number;
 }
 
@@ -551,7 +551,9 @@ export interface Weapon extends BaseItem {
   damage: Pair<DamageProfile>;
   attacks: Attack[];
   block: number | Pair<number>;
+  // knockback when blocking
   parryForce: number | Pair<number>;
+  // perfect block multiplier
   parryBonus: number;
   maxLvl: number;
   knockback: number;
@@ -594,8 +596,3 @@ export type Item = Resource | Valuable | Food | Potion | Weapon | Shield | Armor
 export type ItemSpecial = Weapon['special'] | Armor['special'] | Tool['special'];
 
 export type GameObject = Item | Piece | Destructible | Ship | Cart | Creature | Plant;
-
-export enum Skill {
-  Clubs,
-  Swords
-}

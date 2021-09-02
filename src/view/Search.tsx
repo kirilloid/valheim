@@ -273,8 +273,8 @@ function renderObject(id: EntityId, text: string, translate: Translator, onClick
                 {item.stamina[0]} / {item.stamina[1]}s
               </>
             : null}
-          {item.resist
-            ? (Object.keys(item.resist) as DamageType[]).map(type => resistIcon(translate, type))
+          {item.damageModifiers
+            ? (Object.keys(item.damageModifiers) as DamageType[]).map(type => resistIcon(translate, type))
             : null}
         </span>
         <ShortRecipe item={item} />

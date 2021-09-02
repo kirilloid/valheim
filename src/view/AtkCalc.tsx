@@ -13,7 +13,7 @@ import { useDebounceEffect } from '../effects/debounce.effect';
 import { Icon, ItemIcon, SkillIcon } from './Icon';
 import { Action, actionCreators, ActionCreators, reducer, enabledItems, CombatStat } from '../model/off_calc.reducer';
 import { showNumber } from './helpers';
-import { getInitialState, serializeState } from '../model/off.calc.url';
+import { getInitialState, serializeState } from '../model/off_calc.url';
 import { groupedCreatures } from '../model/combat_creatures';
 
 const weaponGroups = groupBy(enabledItems, w => w.tier);
@@ -256,11 +256,11 @@ export function AttackCalc() {
           <input id="wet" type="checkbox" checked={isWet} onChange={onChangeIsWet} />
           <label htmlFor="wet">
             {' '}
-            wet
+            {translate('ui.wet')}
           </label>
           {' '}
           <span style={{ color: 'gray' }}>
-            (in water, not in rain)
+            ({translate('ui.wetOnlyInWater')})
           </span>
         </div>
         <div className="row">
@@ -341,8 +341,8 @@ export function AttackCalc() {
           players
           <span className="InputBlock__Gap" />
           <Icon id="player" alt="" size={24} />
-          <input type="number" pattern="[0-9]+" min="1" max="10" onChange={onPlayersChange} value={players} style={{ width: '3em' }} />
-          <input type="range" min="1" max="10" onChange={onPlayersChange} value={players} className="BigInput" />
+          <input type="number" pattern="[0-9]+" min="1" max={MAX_PLAYERS} onChange={onPlayersChange} value={players} style={{ width: '3em' }} />
+          <input type="range" min="1" max={MAX_PLAYERS} onChange={onPlayersChange} value={players} className="BigInput" />
         </label>*/}
       </div>
     </div>
