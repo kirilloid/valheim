@@ -1,10 +1,10 @@
 import React, { useState, useContext } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { groupBy, mapValues } from 'lodash-es';
 
 import '../css/FoodPlanner.css';
 
-import type { Food, GameObject, Item, SimpleDrop } from '../types';
+import type { Biome, Food, GameObject, Item, SimpleDrop } from '../types';
 import { BASE_HEALTH, BASE_STAMINA, days, isNotNull, MAX_PLAYERS } from '../model/utils';
 import { Icon, ItemIcon } from './Icon';
 import { TranslationContext, useDebounceEffect } from '../effects';
@@ -176,10 +176,10 @@ export function FoodPlanner() {
   );
   const mul = (nightEat ? 1 : 0.7) * players * daysDuration * repeat;
 
-  const biomes = ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains'];
+  const biomes: Biome[] = ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains'];
 
   return (<>
-    <h1>{translate('ui.page.foodPlanner')}</h1>
+    <h1>{translate('ui.page.food-planner')}</h1>
     <div className="FoodPresets">
       <div className="FoodPresets__cell FoodPresets__title FoodPresets__title--initial">{translate('ui.biome')}</div>
       {Object.keys(bestTypes).map(key =>

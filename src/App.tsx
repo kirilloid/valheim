@@ -8,6 +8,7 @@ import {
 import './css/App.css';
 
 import { Search } from './view/Search';
+import { Index } from './view/Index';
 import { GameObject } from './view/GameObject';
 import { Location } from './view/Location';
 import { Biome } from './view/Biome';
@@ -28,6 +29,7 @@ function App() {
         <Router>
           <Search />
           <Switch>
+            <Route path="/" exact children={<Index />} />
             <Route path="/obj/:id/:level" children={<GameObject />} />
             <Route path="/obj/:id" children={<GameObject />} />
             <Route path="/loc/:id" children={<Location />} />

@@ -93,7 +93,7 @@ function addArray<T extends { id: string; tags?: string[] }>(
   }
 }
 
-const pages = [
+export const pages = [
   { id: 'attack' },
   { id: 'comfort' },
   { id: 'defense' },
