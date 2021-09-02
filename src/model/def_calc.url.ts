@@ -50,7 +50,7 @@ function parseEnemy(url?: string): State['enemy'] {
   const [, id, varietyName, stars = '0'] = match;
   const creature = creatures.find(c => c.id === id);
   if (creature == null) return defaultEnemy;
-  const variety = creature.attacks.findIndex(a => a.variety === varietyName);
+  const variety = Math.max(creature.attacks.findIndex(a => a.variety === varietyName), 0);
   return {
     creature,
     biome: locationToBiome(creature.locations[0]!),
