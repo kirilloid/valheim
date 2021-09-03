@@ -10,7 +10,7 @@ import { events } from '../model/events';
 import { EntityId } from '../types';
 
 function creature(id: EntityId) {
-  return <Link to={`/obj/${id}`}><ItemIcon item={data[id]} useAlt /></Link>
+  return <Link key={id} to={`/obj/${id}`}><ItemIcon item={data[id]} useAlt /></Link>
 }
 
 export function GameEvent() {
@@ -43,14 +43,14 @@ export function GameEvent() {
           <dd>"{translate(`${id}.end`)}"</dd>
           {killed.length ? <>
             <dt>requires killed</dt>
-            <dd><List>{killed.map(id => <InlineObjectWithIcon id={id} />)}</List></dd>
+            <dd><List>{killed.map(id => <InlineObjectWithIcon key={id} id={id} />)}</List></dd>
           </> : null}
           {notKilled.length ? <>
             <dt>requires not killed</dt>
-            <dd><List>{notKilled.map(id => <InlineObjectWithIcon id={id} />)}</List></dd>
+            <dd><List>{notKilled.map(id => <InlineObjectWithIcon key={id} id={id} />)}</List></dd>
           </> : null}
           <dt>biomes</dt>
-          <dd><List>{event.biomes.map(bid => <Area area={bid} />)}</List></dd>
+          <dd><List>{event.biomes.map(bid => <Area key={bid} area={bid} />)}</List></dd>
           <dt>at player's base</dt>
           <dd>{yesNo(base)}</dd>
           <dt>duration</dt>
@@ -110,11 +110,11 @@ export function GameEventTable() {
               <td><List>{e.killed.map(creature)}</List></td>
               <td><List>{e.notKilled.map(creature)}</List></td>
               <td>{timeI2S(e.duration)}</td>
-              <td><List>{e.spawns.map(s => <>
+              <td><List>{e.spawns.map(s => <React.Fragment key={s.id}>
                 {creature(s.id)}×{s.max}
-              </>)}</List></td>
+              </React.Fragment>)}</List></td>
               <td>{yesNo(e.base)}</td>
-              <td><List>{e.biomes.map(b => <Area area={b} />)}</List></td>
+              <td><List>{e.biomes.map(b => <Area key={b} area={b} />)}</List></td>
             </tr>)}
           </tbody>
         </table>

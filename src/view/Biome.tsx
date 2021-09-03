@@ -8,16 +8,14 @@ import { TranslationContext } from '../effects';
 import { biomes } from '../model/location';
 import { ItemIcon } from './Icon';
 import { data } from '../model/objects';
-import { averageAttacksDamage, yesNo } from './helpers';
+import { averageAttacksDamage, InlineObjectWithIcon, yesNo } from './helpers';
 import { resourceCraftMap } from '../model/resource-usage';
 
 function ResourceList(props: { list: GameObject[] }) {
-  const translate = useContext(TranslationContext);
   const { list } = props;
   return <ul className="plainList">
-    {list.map(item => <li>
-      <ItemIcon item={item} size={32} />
-      <Link to={`/obj/${item.id}`}>{translate(item.id)}</Link>
+    {list.map(item => <li key={item.id}>
+      <InlineObjectWithIcon id={item.id} />
     </li>)}
   </ul>
 }
@@ -96,27 +94,31 @@ export function Biome() {
       <section>
         <h2>creatures</h2>
         <table width="100%">
-          <tr>
-            <th></th>
-            <th>creature</th>
-            <th>health</th>
-            <th>damage</th>
-            <th>⭐</th>
-          </tr>
-          {biome.creatures.map(c =>
-          <tr>
-            <td><ItemIcon item={c} size={32} /></td>
-            <td><Link to={`/obj/${c.id}`}>{translate(c.id)}</Link></td>
-            <td className="value">{c.hp}</td>
-            <td className="value">{averageAttacksDamage(c) || '—'}</td>
-            <td className="value">{yesNo(c.maxLvl > 1)}</td>
-          </tr>)}
+          <thead>
+            <tr>
+              <th></th>
+              <th>creature</th>
+              <th>health</th>
+              <th>damage</th>
+              <th>⭐</th>
+            </tr>
+          </thead>
+          <tbody>
+            {biome.creatures.map(c =>
+            <tr key={c.id}>
+              <td><ItemIcon item={c} size={32} /></td>
+              <td><Link to={`/obj/${c.id}`}>{translate(c.id)}</Link></td>
+              <td className="value">{c.hp}</td>
+              <td className="value">{averageAttacksDamage(c) || '—'}</td>
+              <td className="value">{yesNo(c.maxLvl > 1)}</td>
+            </tr>)}
+          </tbody>
         </table>
       </section>
       <section>
         <h2>locations</h2>
         <ul className="plainList">{biome.locations.map(id =>
-          <li>
+          <li key={id}>
             <Link to={`/loc/${id}`}>{translate(`ui.location.${id}`)}</Link>
           </li>)}
         </ul>

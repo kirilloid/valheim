@@ -42,7 +42,7 @@ export function Location() {
         ? <>
             <h2>creatures</h2>
             <ul>{loc.creatures.map(c =>
-              <li>
+              <li key={loc.id}>
                 <ItemIcon item={c} size={32} />
                 <Link to={`/obj/${c.id}`}>{translate(c.id)}</Link>
               </li>)}
@@ -53,7 +53,7 @@ export function Location() {
         ? <>
             <h2>resources</h2>
             <ul>{loc.resources.map(id =>
-              <li>
+              <li key={id}>
                 <InlineObjectWithIcon id={id} />
               </li>
             )}

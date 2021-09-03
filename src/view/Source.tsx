@@ -212,7 +212,7 @@ function GrowSection({ item }: { item: GameObject | undefined }) {
   }
   const { grow } = item;
   return grow ? <>
-    Sourced from <List>{grow.locations.map(loc => <Area area={loc} />)}</List>
+    Sourced from <List>{grow.locations.map(loc => <Area key={loc} area={loc} />)}</List>
     {'; '}
     {grow.respawn ? `respawns every ${days(grow.respawn)} game days` : 'does not respawn'}
   </> : null;
