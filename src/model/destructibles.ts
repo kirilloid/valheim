@@ -61,7 +61,7 @@ function tree({
   hp: [baseHp, logHp, logHalfHp],
   drop: [baseDrop, chunkDrop],
 }: {
-  id: [string, string, string, string];
+  id: [EntityId, EntityId, EntityId, EntityId];
   tiers: [number, number];
   locations: (Biome | GameLocationId)[];
   hp: [number, number, number];
@@ -131,7 +131,7 @@ function treeSimpler({
   hp: [baseHp, logHp],
   drop: [baseDrop, chunkDrop],
 }: {
-  id: [string, string, string];
+  id: [EntityId, EntityId, EntityId];
   tiers: [number, number];
   locations: (Biome | GameLocationId)[];
   hp: [number, number];
@@ -189,7 +189,7 @@ function rock({
   hp: fracHp,
   drop: fracDrop,
 }: {
-  id: [string, string];
+  id: [EntityId, EntityId];
   tiers: [number, number];
   locations: (Biome | GameLocationId)[];
   children: number;

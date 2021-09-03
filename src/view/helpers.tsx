@@ -8,9 +8,7 @@ import {
   DamageType,
   EntityId,
   GameLocationId,
-  GeneralDrop,
   ItemSpecial as TItemSpecial,
-  SimpleDrop
 } from '../types';
 import { ItemIcon, SkillIcon } from './Icon';
 import { TranslationContext } from '../effects';
@@ -160,13 +158,14 @@ export function InlineObject({ id, className, ...props }: { id: EntityId } & Rea
   return <Link to={`/obj/${id}`} className={fullClass} {...props}>{translate(id)}</Link>
 }
 
-export function InlineObjectWithIcon({ id }: { id: EntityId }) {
+export function InlineObjectWithIcon({ id, nobr }: { id: EntityId, nobr?: boolean }) {
   const item = data[id];
-  return <>
+  const display = nobr ? 'inline-block' : 'inline';
+  return <span style={{ display }}>
     <ItemIcon item={item} />
     {' '}
     <InlineObject id={id} />
-  </>
+  </span>
 }
 
 export function Materials(props: { materials: Record<EntityId, number>, iconSize: number }) {
@@ -176,10 +175,9 @@ export function Materials(props: { materials: Record<EntityId, number>, iconSize
     <List separator=''>{Object
       .entries(materials)
       .filter(([key]) => (data[key]?.tier ?? 0) >= maxTier - 2)
-      .flatMap(([key, val]) => <>
-        <ItemIcon key={`${key}_icon`} item={data[key]} size={props.iconSize} />
-        <span key={`${key}_value`}>{val}</span>
-      </>)}</List>
+      .map(([key, val]) => <React.Fragment key={key}>
+        <ItemIcon item={data[key]} size={props.iconSize} />{val}
+      </React.Fragment>)}</List>
   </span>
 }
 

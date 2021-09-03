@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
 
 import { TranslationContext } from '../effects';
 import { fullDestructible } from '../model/destructibles';
@@ -10,7 +9,6 @@ import { Area, InlineObjectWithIcon, List, Resistances } from './helpers';
 import { items as weapons } from '../model/weapons';
 import { ItemHeader } from './ItemHeader';
 import { SkillType } from '../model/skills';
-import { ItemIcon } from './Icon';
 import { biomes, locations } from '../model/location';
 
 const axes = weapons.filter(w => w.skill === SkillType.Axes && !w.disabled) as Weapon[];

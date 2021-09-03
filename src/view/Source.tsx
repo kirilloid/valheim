@@ -45,7 +45,6 @@ export function DropSection({ sources }: { sources: string[] | undefined }) {
 }
 
 function Station({ station }: { station: CraftingStation }) {
-  const translate = useContext(TranslationContext);
   if (station === CraftingStation.Inventory) {
     return <>
       <SkillIcon skill={SkillType.Unarmed} useAlt={false} />{' '}

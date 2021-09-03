@@ -180,6 +180,7 @@ export function FoodPlanner() {
 
   return (<>
     <h1>{translate('ui.page.food-planner')}</h1>
+    <h2>pick foods</h2>
     <div className="FoodPresets">
       <div className="FoodPresets__cell FoodPresets__title FoodPresets__title--initial">{translate('ui.biome')}</div>
       {Object.keys(bestTypes).map(key =>
@@ -217,7 +218,7 @@ export function FoodPlanner() {
         </tr>
         {[0, 1, 2].map(idx => <tr>
           <td><ItemIcon key={idx} item={selectedFoods[idx]} /></td>
-          <td><FoodSelector key={idx} state={selectedFoods} setState={setSelectedFoods} idx={idx} error={wrongFoods[idx]} /></td>
+          <td className="FoodPlanner__select"><FoodSelector key={idx} state={selectedFoods} setState={setSelectedFoods} idx={idx} error={wrongFoods[idx]} /></td>
           <td className="FoodPlanner__value">{selectedFoods[idx]?.health}</td>
           <td className="FoodPlanner__value">{selectedFoods[idx]?.stamina}</td>
         </tr>)}
@@ -233,6 +234,7 @@ export function FoodPlanner() {
     </table>
     <hr />
     <div>
+      <h2>regularity</h2>
       <input id="nightEat"
         type="checkbox"
         checked={nightEat}

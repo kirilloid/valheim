@@ -1,9 +1,7 @@
-import React, { useState, useContext, useCallback } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import React, { useContext } from 'react';
 
-import type { Food, Item, Piece } from '../types';
-import { timeI2S } from '../model/utils';
-import { Icon, ItemIcon } from './Icon';
+import type { Piece } from '../types';
+import { ItemIcon } from './Icon';
 import { TranslationContext } from '../effects';
 import { InlineObject, Materials } from './helpers';
 import { pieces } from '../model/building';

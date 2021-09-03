@@ -11,7 +11,7 @@ import { data } from '../model/objects';
 import { TranslationContext, Translator } from '../effects';
 import { assertNever, days, timeI2S } from '../model/utils';
 import { SkillType } from '../model/skills';
-import { averageAttacksDamage, findDropChanceFromCreature, List, Materials, ShortWeaponDamage } from './helpers';
+import { averageAttacksDamage, findDropChanceFromCreature, Materials, ShortWeaponDamage } from './helpers';
 import { getCraftingStationId } from '../model/building';
 import { events } from '../model/events';
 import { locations } from '../model/location';

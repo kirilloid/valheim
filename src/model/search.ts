@@ -95,11 +95,11 @@ function addArray<T extends { id: string; tags?: string[] }>(
 
 export const pages = [
   { id: 'attack' },
-  { id: 'comfort' },
   { id: 'defense' },
+  { id: 'events' },
   { id: 'food-nutrition' },
   { id: 'food-planner' },
-  { id: 'events' },
+  { id: 'comfort' },
 ];
 
 function addObjects(dict: Record<string, string>) {

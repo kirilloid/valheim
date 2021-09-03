@@ -39,6 +39,7 @@ function replaceWidget(
   let match: RegExpExecArray | null = null;
   let lastMatchIndex = 0;
   const result: ReactChildren = [];
+  /* eslint-disable no-cond-assign */
   while (match = regex.exec(text)) {
     result.push(text.slice(lastMatchIndex, match.index));
     result.push(widgetFactory(...match));

@@ -1,13 +1,11 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
 
 import { Tool as TTool } from '../types';
-import { Icon, ItemIcon } from './Icon';
+import { Icon } from './Icon';
 import { RecipeSection } from './Source';
 import { durability, InlineObjectWithIcon, yesNo } from './helpers';
 import { TranslationContext } from '../effects';
 import { ItemHeader } from './ItemHeader';
-import { data } from '../model/objects';
 
 export function Tool({ item, level }: { item: TTool, level?: number }) {
   const translate = useContext(TranslationContext);

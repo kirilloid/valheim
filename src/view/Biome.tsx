@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 
 import '../css/Biome.css';
 
-import type { Destructible, GameObject, Item, Plant } from '../types';
+import type { Destructible, GameObject, Item } from '../types';
 import { TranslationContext } from '../effects';
 import { biomes } from '../model/location';
 import { ItemIcon } from './Icon';
@@ -66,7 +66,7 @@ export function Biome() {
       <h1>{translate(`ui.biome.${id}`)}</h1>
       <picture>
         <source srcSet={`${imgPath}.webp`} type="image/webp" />
-        <img src={`${imgPath}.jpg`} className="BiomePicture" />
+        <img src={`${imgPath}.jpg`} className="BiomePicture" alt="illustration" />
       </picture>
       <section>
         <dl>

@@ -11,7 +11,7 @@ import { TranslationContext } from '../effects/translation.effect';
 import { useDebounceEffect } from '../effects/debounce.effect';
 import { Icon, ItemIcon, SkillIcon } from './Icon';
 import { getInitialState, serializeState } from '../model/def_calc.url';
-import { actionCreators, reducer, State } from '../model/def_calc.reducer';
+import { actionCreators, reducer } from '../model/def_calc.reducer';
 import { allItems, shields } from '../model/def_calc.items';
 import { isNotNull, MAX_PLAYERS } from '../model/utils';
 import { addAttackPlayerStats, attackPlayer, AttackPlayerStats, dmgBonus, emptyAttackPlayerStats, isNormalAttackProfile, multiplyDamage, ShieldConfig } from '../model/combat';
@@ -65,7 +65,7 @@ function Creature({ creature, biome, onChange }: { creature: CreatureT; biome: s
         groupedCreatures,
         (group, gBiome: Biome) => group.length ? (
           <optgroup key={gBiome} label={gBiome}>
-            {group.map(c => <option value={c.id} selected={creature === c && biome === gBiome}>{translate(c.id)}</option>)}
+            {group.map(c => <option key={`${gBiome}_${c.id}`} value={c.id} selected={creature === c && biome === gBiome}>{translate(c.id)}</option>)}
           </optgroup>
         ) : null
       )}
@@ -75,27 +75,27 @@ function Creature({ creature, biome, onChange }: { creature: CreatureT; biome: s
 }
 
 function CreatureStars({ stars, max, onChange }: { stars: number; max: number; onChange: OnChangeI }) {
-  return <div className="row">
+  return <div className="row" key="stars">
     {Array.from({ length: max }).map((_, s) => {
-      return <>
-        <input id={`star-${s}`} key={'i' + s}
+      return <React.Fragment key={s}>
+        <input id={`star-${s}`}
           type="radio" name="stars" value={s}
           checked={stars === s} onChange={onChange} />
-        <label key={'l' + s} htmlFor={`star-${s}`}>{s}⭐</label>
-      </>
+        <label htmlFor={`star-${s}`}>{s}⭐</label>
+      </React.Fragment>
     })}
   </div>;
 }
 
 function CreatureAttackVar({ creature, variety, onChange }: { creature: CreatureT, variety: number, onChange: OnChangeI }) {
-  return <div className="row">
+  return <div className="row" key="variants">
     {creature.attacks.map((a, i) => {
-      return <>
-        <input id={`variety-${i}`} key={`i-${creature.id}-${i}`}
+      return <React.Fragment key={a.variety}>
+        <input id={`variety-${i}`}
           type="radio" name="variety" value={i}
           checked={variety === i} onChange={onChange} />
-        <label key={`l-${creature.id}-${i}`} htmlFor={`variety-${i}`}>{a.variety}</label>
-      </>
+        <label htmlFor={`variety-${i}`}>{a.variety}</label>
+      </React.Fragment>
     })}
   </div>;
 }
@@ -232,9 +232,9 @@ function Items({ resTypes, onChange }: { resTypes: string[], onChange: (item: st
   return <>
     {[...allItems.entries()].map(([hash, { items }]) => <div key={hash}>
       <input type="checkbox" id={hash} checked={resTypes.includes(hash)} onChange={onChange(hash)} />
-      <label htmlFor={hash}>
+      <label htmlFor={hash} className="checkbox-multiline-label">
         <List separator=" / ">
-          {items.map(item => <InlineObjectWithIcon id={item.id} />)}
+          {items.map(item => <InlineObjectWithIcon key={item.id} id={item.id} nobr />)}
         </List>
       </label>
     </div>)}
@@ -248,12 +248,7 @@ export function DefenseCalc() {
   const [state, dispatch] = useReducer(reducer, getInitialState(params));
   const {
     enemy: { creature, biome, stars, variety },
-    
-    players,
-    isWet,
     shield,
-    armor,
-    resTypes,
   } = state;
 
   useDebounceEffect(state, (state) => {
@@ -287,7 +282,10 @@ export function DefenseCalc() {
   const onArmorChange = (e: React.ChangeEvent<HTMLInputElement>) => dispatch(changeArmor(Number(e.target.value)));
   const onWetChange = (e: React.ChangeEvent<HTMLInputElement>) => dispatch(changeIsWet(e.target.checked));
   const onItemChange = (resType: string) => (e: React.ChangeEvent<HTMLInputElement>) => dispatch(changeResType(resType, e.target.checked));
-  const scale = { players, stars: Math.min(stars, creature.maxLvl - 1) };
+  const scale = {
+    players: state.players,
+    stars: Math.min(stars, creature.maxLvl - 1),
+  };
   const bonus = dmgBonus(scale);
 
   const block = shield?.item
@@ -300,7 +298,7 @@ export function DefenseCalc() {
     .filter(isNotNull);
 
   const getStats = (block: number) => attacks
-    .map(a => attackPlayer(multiplyDamage(a.dmg, bonus), isWet, resistItems, armor, block))
+    .map(a => attackPlayer(multiplyDamage(a.dmg, bonus), state.isWet, resistItems, state.armor, block))
     .reduce(addAttackPlayerStats, emptyAttackPlayerStats());
 
   return (<>
@@ -318,12 +316,12 @@ export function DefenseCalc() {
             {translate('ui.player')}
           </h2>
         </div>
-        <Players players={players} onChange={onPlayersChange} />
-        <Wet wet={isWet} onChange={onWetChange} />
+        <Players players={state.players} onChange={onPlayersChange} />
+        <Wet wet={state.isWet} onChange={onWetChange} />
         <div className="Weapon">
           <Shield shield={state.shield} onShieldChange={onShieldChange} onLevelChange={onLevelChange} />
           <Skill shield={state.shield} onChange={onSkillChange} />
-          <Armor armor={armor} onChange={onArmorChange} />
+          <Armor armor={state.armor} onChange={onArmorChange} />
         </div>
         <Items resTypes={state.resTypes} onChange={onItemChange} />
       </section>

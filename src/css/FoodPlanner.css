@@ -1,3 +1,4 @@
+/* PRESETS */
 .FoodPresets {
   display: grid;
   grid-auto-flow: row;
@@ -21,6 +22,11 @@
 .FoodPresets__button > button {
   width: 100%;
   padding: 0;
+}
+
+.FoodPresets__button img {
+  width: 24px;
+  height: 24px;
 }
 
 .FoodPresets__title {
@@ -47,7 +53,7 @@
   .FoodPresets {
     grid-auto-flow: column;
     grid-template-rows: auto repeat(3, 1fr);
-    grid-template-columns: auto repeat(5, calc(32px + 10%));
+    grid-template-columns: auto repeat(5, calc(42px + 10%));
   }
   .FoodPresets__title {
     text-align: left;
@@ -56,19 +62,30 @@
     text-align: center;
     padding: 0;
   }
+  .FoodPresets__button img {
+    width: 32px;
+    height: 32px;
+  }
 }
 
-
+/* PLANNER */
 .FoodPlanner {
   width: 100%;
   max-width: 420px;
 }
 
 .FoodPlanner__range {
+  width: 100%;
   vertical-align: middle;
-  width: calc(100vw - 160px);
-  max-width: 310px;
 }
+
+@media screen and (min-width: 360px) {
+  .FoodPlanner__range {
+    width: calc(100vw - 160px);
+    max-width: 310px;
+  }    
+}
+
 .FoodPlanner__numeric {
   width: 50px;
 }
@@ -86,6 +103,38 @@
   text-align: right;
 }
 
+@media screen and (max-width: 319px) {
+  .FoodPlanner {
+    display: block;
+  }
+  .FoodPlanner tr {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .FoodPlanner__select {
+    width: 100%;
+  }
+  .FoodPlanner__value {
+    width: 3em;
+    align-self: flex-end;
+  }
+  .FoodPlanner__value {
+    margin-left: auto;
+  }
+  .FoodPlanner__value + .FoodPlanner__value {
+    margin-left: 0;
+  }
+  .FoodPlanner tr td:first-child {
+    display: none;
+  }
+  .FoodPresets__button img {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* TOTALS */
 .FoodTotals {
   display: flex;
   flex-direction: column;
