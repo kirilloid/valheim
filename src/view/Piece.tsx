@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { getCraftingStationId, getStructuralIntegrity } from '../model/building';
+import { getCraftingStationId, getStructuralIntegrity, pieces } from '../model/building';
 import { data } from '../model/objects';
 import { stationsMap } from '../model/resource-usage';
 import { assertNever, GAME_DAY, timeI2S } from '../model/utils';
 import { TranslationContext } from '../effects';
 
 import { ItemType, MaterialType, Piece as TPiece } from '../types';
-import { Resistances, yesNo } from './helpers';
+import { InlineObjectWithIcon, Resistances, yesNo } from './helpers';
 import { ItemIcon } from './Icon';
 import { ItemHeader } from './ItemHeader';
 import { Recipe } from './Source';
@@ -30,12 +30,21 @@ function PieceSpecific({ item }: { item: TPiece }) {
     }
     case 'craft': {
       const { requiresFire, requiresRoof, buildRange, queueSize } = item.craft;
-      return (<dl>
-        <dt>requires fire</dt><dd>{yesNo(requiresFire)}</dd>
-        <dt>requires roof</dt><dd>{yesNo(requiresRoof)}</dd>
-        {buildRange ? <><dt>building radius</dt><dd>{buildRange}m</dd></> : null}
-        {queueSize ? <><dt>queued</dt><dd>{queueSize}</dd></> : null}
-      </dl>);
+      const extensions = pieces.filter(p => p.subtype === 'craft_ext' && getCraftingStationId(p.extends.id) === item.id);
+      return (<>
+        <dl>
+          <dt>requires fire</dt><dd>{yesNo(requiresFire)}</dd>
+          <dt>requires roof</dt><dd>{yesNo(requiresRoof)}</dd>
+          {buildRange ? <><dt>building radius</dt><dd>{buildRange}m</dd></> : null}
+          {queueSize ? <><dt>queued</dt><dd>{queueSize}</dd></> : null}
+        </dl>
+        {extensions.length > 0 && <>
+          <h2>extensions</h2>
+          <ul>
+            {extensions.map(p => <li key={p.id}><InlineObjectWithIcon id={p.id} /></li>)}
+          </ul>
+        </>}
+      </>);
     }
     case 'craft_ext': {
       const { id, distance, requiresFire, requiresRoof } = item.extends;
