@@ -16,7 +16,7 @@ import { applyDamageModifier, getTotalDamage, playerDamageModifiers } from '../m
 import { SkillType } from '../model/skills';
 import { locationBiomes } from '../model/location';
 import { Link } from 'react-router-dom';
-import { data } from '../model/objects';
+import { data } from '../model/itemDB';
 import { creatures } from '../model/creatures';
 
 export function durability(values: [number, number], level?: number): string | number {
@@ -140,7 +140,7 @@ export function ItemSpecial({ special }: { special: TItemSpecial }) {
   </>);
 }
 
-export function List({ children, separator = ', ' }: { children: JSX.Element[], separator?: string }) {
+export function List({ children, separator = ', ' }: { children: JSX.Element[], separator?: string | JSX.Element }) {
   return <>{children.flatMap((item, i) => i ? [separator, item] : [item])}</>;
 }
 

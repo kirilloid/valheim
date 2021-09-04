@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import '../css/Creature.css';
 
 import { dmgBonus, hpBonus, multiplyDamage } from '../model/combat';
-import { data } from '../model/objects';
+import { data } from '../model/itemDB';
 import { getSummon } from '../model/resources';
 import { timeI2S } from '../model/utils';
 import { TranslationContext } from '../effects';

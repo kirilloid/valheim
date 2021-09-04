@@ -1,8 +1,8 @@
 import type { Biome, BiomeConfig, Creature, Destructible, EntityId, GameLocationId, GeneralDrop, LocationConfig } from '../types';
 import { chestDrops } from './chests';
 import { creatures } from './creatures';
-import { destructibles } from './destructibles';
-import { data } from './objects';
+import { destructibles } from './objects';
+import { data } from './itemDB';
 import { resources } from './resources';
 
 export const locationBiomes: Record<GameLocationId, Biome> = {};
@@ -109,7 +109,7 @@ export const locations: LocationConfig[] = [
   ...loc('Runestone_Swamps', [], ['Swamp'], 100, { type: 'runestone', minApart: 128 }),
   ...loc('Bonemass', [], ['Swamp'], 5, { minDistance: 2000, minApart: 3000 }),
   // ocean
-  ...loc('Leviathan', [''], ['Ocean'], 200, { minApart: 100, minAlt: 100 }), // 21 barnacles
+  ...loc('Leviathan', [''], ['Ocean'], 200, { minApart: 100 }), // 21 barnacles
   // mountain
   ...loc('DrakeNest', ['01'], ['Mountain'], 200, { minApart: 100, minAlt: 100 }),
   ...loc('Waymarker', ['01', '02'], ['Mountain'], 50, { minAlt: 100 }),
@@ -170,14 +170,14 @@ function addToLocation(
 }
 
 for (const destr of destructibles) {
-  for (const loc of destr.locations) {
+  for (const loc of destr.grow.flatMap(g => g.locations)) {
     addToLocation(loc, [], [], [destr]);
   }
 }
 
 for (const { id, grow } of resources) {
   if (!grow) continue;
-  for (const loc of grow.locations) {
+  for (const loc of grow.flatMap(g => g.locations)) {
     addToLocation(loc, [id], [], []);
   }
 }

@@ -5,7 +5,7 @@ import { TranslationContext } from '../effects';
 import type { Plant as TPlant } from '../types';
 import { ItemIcon } from './Icon';
 import { ItemHeader } from './ItemHeader';
-import { data } from '../model/objects';
+import { data } from '../model/itemDB';
 import { timeI2S } from '../model/utils';
 import { Area, List, rangeBy } from './helpers';
 

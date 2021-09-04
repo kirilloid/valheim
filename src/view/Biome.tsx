@@ -7,7 +7,7 @@ import type { Destructible, GameObject, Item } from '../types';
 import { TranslationContext } from '../effects';
 import { biomes } from '../model/location';
 import { ItemIcon } from './Icon';
-import { data } from '../model/objects';
+import { data } from '../model/itemDB';
 import { averageAttacksDamage, InlineObjectWithIcon, yesNo } from './helpers';
 import { resourceCraftMap } from '../model/resource-usage';
 

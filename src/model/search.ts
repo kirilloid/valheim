@@ -1,4 +1,4 @@
-import { data } from './objects';
+import { data } from './itemDB';
 import { locations, biomes } from './location';
 import { preloadLanguage } from '../effects';
 import { EntityId } from '../types';

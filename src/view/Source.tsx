@@ -1,16 +1,17 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import { Cart, CraftingStation, Destructible, EntityId, GameObject, Item, Piece, Plant, Ship } from '../types';
+import { Cart, CraftingStation, Destructible, EntityId, GameObject, Item, Pair, Piece, Plant, Ship } from '../types';
 import { TranslationContext, useGlobalState } from '../effects';
-import { data } from '../model/objects';
+import { data } from '../model/itemDB';
 import { creatures } from '../model/creatures';
 import { Icon, ItemIcon, SkillIcon } from './Icon';
 import { assertNever, days, timeI2S } from '../model/utils';
 import { getCraftingStationId } from '../model/building';
 import { miningMap, resourceBuildMap, resourceCraftMap } from '../model/resource-usage';
 import { SkillType } from '../model/skills';
-import { Area, InlineObject, InlineObjectWithIcon, List } from './helpers';
+import { Area, InlineObject, InlineObjectWithIcon, List, rangeBy } from './helpers';
+import { locationBiomes } from '../model/location';
 
 export const SOURCE_CRAFT = 1;
 export const SOURCE_DROP = 2;
@@ -199,10 +200,41 @@ export function RecipeSection({ item }: { item: GameObject | undefined }) {
     : null;
 }
 
-function GrowSection({ item }: { item: GameObject | undefined }) {
+function showAltitude(num: Pair<number>): string {
+  const [min, max] = num;
+  if (max === 1000) return `${min}..`;
+  return rangeBy(num, String, '..');
+}
+
+function showSurface(onSurface: boolean, offset: number): string {
+  if (onSurface) {
+    return offset
+      ? offset < 0
+        ? `${-offset}m underwater`
+        : `${offset}m above water`
+      : 'on water';
+  }
+  return offset
+    ? offset < 0
+      ? `${-offset}m underground`
+      : `${offset}m above ground`
+    : 'on ground';
+}
+
+function showTilt(num: Pair<number>): string {
+  return rangeBy(num, x => `${x}°`);
+}
+
+function showNumber(num: Pair<number>): string {
+  const [min, max] = num;
+  if (max < 1) return `1 in ${Math.round(1 / max)}`;
+  if (min === max) return String(min);
+  return rangeBy(num, String);
+}
+
+export function GrowSection({ item }: { item: GameObject | undefined }) {
   if (!item) return null;
   switch (item.type) {
-    case 'destructible':
     case 'creature':
     case 'piece':
     case 'plant':
@@ -211,11 +243,25 @@ function GrowSection({ item }: { item: GameObject | undefined }) {
       return null;
   }
   const { grow } = item;
-  return grow ? <>
-    Sourced from <List>{grow.locations.map(loc => <Area key={loc} area={loc} />)}</List>
-    {'; '}
-    {grow.respawn ? `respawns every ${days(grow.respawn)} game days` : 'does not respawn'}
-  </> : null;
+  if (!grow) return null;
+  const respawn = item.grow?.find(g => g.respawn)?.respawn ?? 0;
+  return <>
+    {item.type === 'destructible' ? 'Can be found in' : 'Sourced from'}
+    <List separator={<hr />}>{grow.map((g, i) => <dl key={i}>
+      <dt>locations</dt>
+      <dd>{g.locations.map(loc => <Area key={loc} area={loc} />)}</dd>
+      <dt>altitude</dt>
+      <dd>{showAltitude(g.altitude)}</dd>
+      <dt>surface</dt>
+      <dd>{showSurface(g.onSurface, g.offset)}</dd>
+      <dt>ground tilt</dt>
+      <dd>{showTilt(g.tilt)}</dd>
+      <dt>number{g.locations[0]! in locationBiomes ? '' : ' (per 64x64m zone)'}</dt>
+      <dd>{showNumber(g.num)}</dd>
+      <dt>respawn</dt>
+      <dd>{g.respawn ? `every ${days(respawn)} game days` : 'never'}</dd>
+    </dl>)}</List>
+  </>;
 }
 
 function MiningSection({ id }: { id: EntityId }) {

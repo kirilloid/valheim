@@ -4,7 +4,7 @@ import { arrows } from './arrows';
 import { resources } from './resources';
 import { Cart, CraftingStation, Destructible, EntityId, Item, Piece, Ship } from '../types';
 import { pieces } from './building';
-import { destructibles } from './destructibles';
+import { destructibles } from './objects';
 import { ships, carts } from './transport';
 
 export const resourceCraftMap: Record<EntityId, Item[]> = {};

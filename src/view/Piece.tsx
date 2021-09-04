@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { getCraftingStationId, getStructuralIntegrity, pieces } from '../model/building';
-import { data } from '../model/objects';
+import { data } from '../model/itemDB';
 import { stationsMap } from '../model/resource-usage';
 import { assertNever, GAME_DAY, timeI2S } from '../model/utils';
 import { TranslationContext } from '../effects';

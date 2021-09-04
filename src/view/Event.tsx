@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { TranslationContext } from '../effects';
-import { data } from '../model/objects';
+import { data } from '../model/itemDB';
 import { timeI2S } from '../model/utils';
 import { ItemIcon } from './Icon';
 import { Area, InlineObject, InlineObjectWithIcon, List, yesNo } from './helpers';

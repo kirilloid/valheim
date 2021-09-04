@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 
 import { TranslationContext } from '../effects';
-import { fullDestructible } from '../model/destructibles';
+import { fullDestructible } from '../model/objects';
 
 import type { BiomeConfig, DamageModifier, Destructible as TDestructible, LocationConfig, Weapon } from '../types';
 import { DropTable } from './DropTable';
@@ -10,6 +10,7 @@ import { items as weapons } from '../model/weapons';
 import { ItemHeader } from './ItemHeader';
 import { SkillType } from '../model/skills';
 import { biomes, locations } from '../model/location';
+import { GrowSection } from './Source';
 
 const axes = weapons.filter(w => w.skill === SkillType.Axes && !w.disabled) as Weapon[];
 const pickaxes = weapons.filter(w => w.skill === SkillType.Pickaxes && !w.disabled) as Weapon[];
@@ -38,12 +39,6 @@ export function Destructible({ item }: { item: TDestructible }) {
       <section>
         <h2>{translate('ui.destructible')}</h2>
         <dl>
-          <dt>could be found in</dt>
-          <dd><List>{
-            ([] as (LocationConfig | BiomeConfig)[]).concat(locations, biomes)
-              .filter(loc => loc.destructibles.includes(item))
-              .map(loc => <Area key={loc.id} area={loc.id} />)
-          }</List></dd>
           <dt>{translate('ui.durability')}</dt><dd>{hp}</dd>
           <Resistances mods={damageModifiers} />
           {item.minToolTier >= 0 ? <>
@@ -57,6 +52,10 @@ export function Destructible({ item }: { item: TDestructible }) {
             </dd>
           </> : null}
         </dl>
+      </section>
+      <section>
+        <h2>Source</h2>
+        <GrowSection item={item} />
       </section>
       <section>
         <h2>{translate('ui.drops')}</h2>

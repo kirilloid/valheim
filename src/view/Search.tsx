@@ -7,7 +7,7 @@ import '../css/Search.css';
 import { DamageType, EntityId, GameObject, ItemSpecial, Piece } from '../types';
 import { match, SearchEntry } from '../model/search';
 import { Icon, ItemIcon, SkillIcon } from './Icon';
-import { data } from '../model/objects';
+import { data } from '../model/itemDB';
 import { TranslationContext, Translator } from '../effects';
 import { assertNever, days, timeI2S } from '../model/utils';
 import { SkillType } from '../model/skills';
@@ -181,13 +181,14 @@ function renderObject(id: EntityId, text: string, translate: Translator, onClick
       </div>
     }
     case 'item':
+      const respawn = item.grow?.find(g => g.respawn)?.respawn ?? 0;
       return <div className="SearchItem">
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         {item.summon
         ? <ItemIcon item={data[item.summon[0]]} useAlt size={32} />
-        : item.grow?.respawn
-        ? <span>{days(item.grow.respawn)} <Icon id="time" alt={translate('ui.time')} size={16} /></span>
+        : respawn
+        ? <span>{days(respawn)} <Icon id="time" alt={translate('ui.time')} size={16} /></span>
         : null}
       </div>
     case 'trophy':

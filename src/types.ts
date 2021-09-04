@@ -196,6 +196,17 @@ export interface Creature extends GameObjectBase {
   pregnancy?: { time: number; chance: number; grow: number; };
 }
 
+/**
+ *           hp drop place plant
+ * tree    | v | v  |  v  |  v  |
+ * carrot  |   | v  |     |  v  |
+ * seeds   |   | v  |  v  |  v  |
+ * rock    | v | v  |  v  |     |
+ */
+export interface Mineable {
+
+}
+
 export interface Plant extends GameObjectBase {
   type: 'plant';
   subtype: 'tree' | 'vegetable' | 'crop';
@@ -350,7 +361,7 @@ export interface Cart extends Transport {
 export interface Destructible extends GameObjectBase {
   type: 'destructible';
   hp: number;
-  locations: (Biome | GameLocationId)[],
+  grow: ItemGrow[];
   damageModifiers: DamageModifiers;
   minToolTier: number;
   parts: {
@@ -389,13 +400,33 @@ interface GameObjectBase {
   emoji?: string;
 }
 
-export interface ItemGrow {
+interface ItemGrowConfig {
   locations: (Biome | GameLocationId)[];
-  abundance: number;
+  abundance?: number;
+  altitude?: Pair<number>;
+  tilt?: Pair<number>;
+  offset?: number;
   num: Pair<number>;
-  group: Pair<number>;
-  inForest?: Pair<number>;
-  respawn: number;
+  group?: Pair<number>;
+  onSurface?: boolean;
+  inForest?: Pair<number> | null;
+  respawn?: number;
+}
+
+export type ItemGrow = Required<ItemGrowConfig>
+
+export function itemGrow(...grows: ItemGrowConfig[]): ItemGrow[] {
+  return grows.map(grow => ({
+    abundance: 1,
+    altitude: [1, 1000],
+    tilt: [0, 90],
+    offset: 0,
+    group: [1, 1],
+    onSurface: false,
+    inForest: null,
+    respawn: 0,
+    ...grow,
+  }));
 }
 
 interface BaseItem extends GameObjectBase {
@@ -421,7 +452,7 @@ interface BaseItem extends GameObjectBase {
     value: number;
     number?: number;
   };
-  grow?: ItemGrow;
+  grow?: ItemGrow[];
 }
 
 export enum ItemType {

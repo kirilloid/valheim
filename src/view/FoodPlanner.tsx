@@ -11,7 +11,7 @@ import { TranslationContext, useDebounceEffect } from '../effects';
 import { resources } from '../model/resources';
 import { InlineObjectWithIcon, showNumber } from './helpers';
 import { addDrop } from '../model/dist';
-import { data } from '../model/objects';
+import { data } from '../model/itemDB';
 
 function isFood(item: Item): item is Food {
   return item.type === 'food';
