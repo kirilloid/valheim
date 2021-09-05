@@ -592,6 +592,23 @@ export const destructibles: Destructible[] = [
       options: [{ item: 'TinOre' }],
     }],
   },
+  // SWAMP
+  {
+    id: 'StatueEvil',
+    type: 'destructible',
+    tier: 3,
+    grow: itemGrow({
+      locations: ['Swamp'],
+      num: [2, 2],
+      altitude: [0, 1000],
+      tilt: [0, 20],
+    }),
+    hp: Infinity,
+    damageModifiers: allImmune,
+    minToolTier: 0,
+    parts: [],
+    drop: [],
+  },
   ...rock({
     id: ['mudpile2', 'mudpile2_frac'],
     tier: 3,
@@ -637,7 +654,7 @@ export const destructibles: Destructible[] = [
     tier: 3,
     grow: itemGrow({
       locations: ['InfestedTree'],
-      num: [2, 2],
+      num: [0, 6], // 6 with 2/3 prob
     }),
     hp: 30,
     damageModifiers: chopPickOnly,
@@ -651,7 +668,7 @@ export const destructibles: Destructible[] = [
     tier: 3,
     grow: itemGrow({
       locations: ['InfestedTree'],
-      num: [2, 2],
+      num: [0, 2], // 2 with 1/4 prob
     }),
     hp: 30,
     damageModifiers: chopPickOnly,
@@ -717,6 +734,7 @@ export const destructibles: Destructible[] = [
     hp: 15,
     drop: singleDrop('Stone', 3, 6),
   }),
+  // MOUNTAIN
   {
     id: 'MineRock_Obsidian',
     type: 'destructible',

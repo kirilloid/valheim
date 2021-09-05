@@ -109,7 +109,7 @@ export const locations: LocationConfig[] = [
   ...loc('Runestone_Swamps', [], ['Swamp'], 100, { type: 'runestone', minApart: 128 }),
   ...loc('Bonemass', [], ['Swamp'], 5, { minDistance: 2000, minApart: 3000 }),
   // ocean
-  ...loc('Leviathan', [''], ['Ocean'], 200, { minApart: 100 }), // 21 barnacles
+  ...loc('Leviathan', [''], ['Ocean'], 200, { minApart: 100, minAlt: -1000, maxAlt: -30 }), // 21 barnacles
   // mountain
   ...loc('DrakeNest', ['01'], ['Mountain'], 200, { minApart: 100, minAlt: 100 }),
   ...loc('Waymarker', ['01', '02'], ['Mountain'], 50, { minAlt: 100 }),
