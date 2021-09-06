@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
+import { locations } from '../data/location';
+
 import { TranslationContext } from '../effects';
-import { locations } from '../model/location';
 import { ItemIcon } from './Icon';
 import { DropTable } from './DropTable';
 import { Area, InlineObjectWithIcon, rangeBy } from './helpers';

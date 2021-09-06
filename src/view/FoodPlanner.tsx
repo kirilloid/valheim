@@ -6,12 +6,14 @@ import '../css/FoodPlanner.css';
 
 import type { Biome, Food, GameObject, Item, SimpleDrop } from '../types';
 import { BASE_HEALTH, BASE_STAMINA, days, isNotNull, MAX_PLAYERS } from '../model/utils';
-import { Icon, ItemIcon } from './Icon';
-import { TranslationContext, useDebounceEffect } from '../effects';
-import { resources } from '../model/resources';
-import { InlineObjectWithIcon, showNumber } from './helpers';
 import { addDrop } from '../model/dist';
-import { data } from '../model/itemDB';
+
+import { resources } from '../data/resources';
+import { data } from '../data/itemDB';
+
+import { TranslationContext, useDebounceEffect } from '../effects';
+import { InlineObjectWithIcon, showNumber } from './helpers';
+import { Icon, ItemIcon } from './Icon';
 
 function isFood(item: Item): item is Food {
   return item.type === 'food';

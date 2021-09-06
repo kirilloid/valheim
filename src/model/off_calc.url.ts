@@ -1,8 +1,8 @@
-import { arrows } from './arrows';
-import { WeaponConfig } from './combat';
+import type { WeaponConfig } from './combat';
 import { State, CombatStat, defaultCreature, defaultWeapon, enabledItems } from './off_calc.reducer';
-import { creatures } from './creatures';
-import { locationToBiome } from './location';
+import { arrows } from '../data/arrows';
+import { creatures } from '../data/creatures';
+import { locationToBiome } from '../data/location';
 
 function serializeWeapon(weapon: WeaponConfig): string {
   const levelPart = weapon.level === weapon.item.maxLvl ? '' : `-${weapon.level}`;

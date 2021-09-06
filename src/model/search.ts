@@ -1,9 +1,10 @@
-import { data } from './itemDB';
-import { locations, biomes } from './location';
-import { preloadLanguage } from '../effects';
 import { EntityId } from '../types';
-import { getCraftingStationId } from './building';
-import { events } from './events';
+import { data } from '../data/itemDB';
+import { locations, biomes } from '../data/location';
+import { getCraftingStationId } from '../data/building';
+import { events } from '../data/events';
+
+import { preloadLanguage } from '../effects';
 
 type PrefixTree<T> = {
   children: Map<string, PrefixTree<T>>;

@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom';
 
 import '../css/Creature.css';
 
-import { dmgBonus, hpBonus, multiplyDamage } from '../model/combat';
-import { data } from '../model/itemDB';
-import { getSummon } from '../model/resources';
-import { timeI2S } from '../model/utils';
-import { TranslationContext } from '../effects';
-
 import { Creature as TCreature, NormalAttackProfile, SpawnAttackProfile } from '../types';
+import { dmgBonus, hpBonus, multiplyDamage } from '../model/combat';
+import { timeI2S } from '../model/utils';
+
+import { data } from '../data/itemDB';
+import { getSummon } from '../data/resources';
+
+import { TranslationContext } from '../effects';
 import { Area, rangeBy, Resistances, shortCreatureDamage, yesNo } from './helpers';
 import { ItemIcon } from './Icon';
 import { ItemHeader } from './ItemHeader';

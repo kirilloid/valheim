@@ -1,8 +1,8 @@
+import { Cart, CraftingStation, Destructible, EntityId, Item, Piece, Ship } from '../types';
 import { items as weapons } from './weapons';
 import { items as armors } from './armors';
 import { arrows } from './arrows';
 import { resources } from './resources';
-import { Cart, CraftingStation, Destructible, EntityId, Item, Piece, Ship } from '../types';
 import { pieces } from './building';
 import { destructibles } from './objects';
 import { ships, carts } from './transport';

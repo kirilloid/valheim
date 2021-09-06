@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom';
 import { TranslationContext } from '../effects';
 
 import type { Plant as TPlant } from '../types';
+import { timeI2S } from '../model/utils';
+import { data } from '../data/itemDB';
+
+import { Area, List, rangeBy } from './helpers';
 import { ItemIcon } from './Icon';
 import { ItemHeader } from './ItemHeader';
-import { data } from '../model/itemDB';
-import { timeI2S } from '../model/utils';
-import { Area, List, rangeBy } from './helpers';
 
 export function Plant({ item }: { item: TPlant }) {
   const { biomes, growTime, growsInto } = item;

@@ -5,15 +5,16 @@ import { map } from 'lodash-es';
 import '../css/Combat.css';
 
 import type { Biome, Pair, Creature as CreatureT } from '../types';
-
-import { groupedCreatures } from '../model/combat_creatures';
-import { TranslationContext } from '../effects/translation.effect';
-import { useDebounceEffect } from '../effects/debounce.effect';
-import { Icon, ItemIcon, SkillIcon } from './Icon';
 import { getInitialState, serializeState } from '../model/def_calc.url';
 import { actionCreators, reducer } from '../model/def_calc.reducer';
 import { allItems, shields } from '../model/def_calc.items';
 import { isNotNull, MAX_PLAYERS } from '../model/utils';
+
+import { groupedCreatures } from '../data/combat_creatures';
+
+import { TranslationContext } from '../effects/translation.effect';
+import { useDebounceEffect } from '../effects/debounce.effect';
+import { Icon, ItemIcon, SkillIcon } from './Icon';
 import { addAttackPlayerStats, attackPlayer, AttackPlayerStats, dmgBonus, emptyAttackPlayerStats, isNormalAttackProfile, multiplyDamage, ShieldConfig } from '../model/combat';
 import { InlineObjectWithIcon, List, showNumber } from './helpers';
 

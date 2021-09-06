@@ -1,13 +1,15 @@
 import React, { useContext } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
-import { TranslationContext } from '../effects';
-import { data } from '../model/itemDB';
+import type { EntityId } from '../types';
 import { timeI2S } from '../model/utils';
-import { ItemIcon } from './Icon';
+
+import { data } from '../data/itemDB';
+import { events } from '../data/events';
+
+import { TranslationContext } from '../effects';
 import { Area, InlineObject, InlineObjectWithIcon, List, yesNo } from './helpers';
-import { events } from '../model/events';
-import { EntityId } from '../types';
+import { ItemIcon } from './Icon';
 
 function creature(id: EntityId) {
   return <Link key={id} to={`/obj/${id}`}><ItemIcon item={data[id]} useAlt /></Link>

@@ -1,15 +1,14 @@
 import React, { useContext } from 'react';
 
-import { TranslationContext } from '../effects';
-import { fullDestructible } from '../model/objects';
-
-import type { BiomeConfig, DamageModifier, Destructible as TDestructible, LocationConfig, Weapon } from '../types';
-import { DropTable } from './DropTable';
-import { Area, InlineObjectWithIcon, List, Resistances } from './helpers';
-import { items as weapons } from '../model/weapons';
-import { ItemHeader } from './ItemHeader';
+import type { DamageModifier, Destructible as TDestructible, Weapon } from '../types';
 import { SkillType } from '../model/skills';
-import { biomes, locations } from '../model/location';
+import { items as weapons } from '../data/weapons';
+import { fullDestructible } from '../data/objects';
+
+import { TranslationContext } from '../effects';
+import { InlineObjectWithIcon, Resistances } from './helpers';
+import { ItemHeader } from './ItemHeader';
+import { DropTable } from './DropTable';
 import { GrowSection } from './Source';
 
 const axes = weapons.filter(w => w.skill === SkillType.Axes && !w.disabled) as Weapon[];

@@ -2,7 +2,8 @@ import { useParams } from 'react-router-dom';
 
 import type * as T from '../types';
 import { assertNever } from '../model/utils';
-import { data } from '../model/itemDB';
+import { data } from '../data/itemDB';
+
 import { Armor } from './Armor';
 import { Weapon, Shield } from './Weapon';
 import { Food } from './Food';

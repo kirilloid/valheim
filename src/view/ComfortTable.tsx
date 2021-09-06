@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
 
 import type { Piece } from '../types';
-import { ItemIcon } from './Icon';
+import { pieces } from '../data/building';
+
 import { TranslationContext } from '../effects';
 import { InlineObject, Materials } from './helpers';
-import { pieces } from '../model/building';
+import { ItemIcon } from './Icon';
 
 const isComfortPieceType = (p: Piece): p is Piece & { comfort: any } => {
   return 'comfort' in p;

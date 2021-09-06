@@ -1,4 +1,5 @@
 import mapValues from 'lodash-es/mapValues';
+
 import {
   Arrow,
   Attack,
@@ -15,8 +16,8 @@ import {
   Weapon,
 } from '../types';
 import { addStatCounters, StatCounter } from '../view/helpers';
-import { effects } from './effects';
-import { animations } from './weapons';
+import { effects } from '../data/effects';
+import { animations } from '../data/weapons';
 
 function applyArmor(damage: number, armor: number): number {
   return armor < damage / 2

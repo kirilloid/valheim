@@ -1,5 +1,5 @@
-import { Effect } from "../types";
-import { SkillType } from "./skills";
+import type { Effect } from '../types';
+import { SkillType } from '../model/skills';
 
 export const effects: Effect[] = [
   {

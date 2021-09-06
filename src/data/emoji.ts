@@ -1,5 +1,5 @@
-import { Biome, DamageType } from "../types"
-import { SkillType } from "./skills";
+import { Biome, DamageType } from '../types'
+import { SkillType } from '../model/skills';
 
 export const damage: Record<DamageType, string> = {
   blunt: '🧱',

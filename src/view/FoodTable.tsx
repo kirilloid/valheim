@@ -5,10 +5,11 @@ import '../css/FoodTable.css';
 
 import type { Food, Item } from '../types';
 import { timeI2S } from '../model/utils';
-import { Icon, ItemIcon } from './Icon';
+import { resources } from '../data/resources';
+
 import { TranslationContext } from '../effects';
-import { resources } from '../model/resources';
 import { InlineObject } from './helpers';
+import { Icon, ItemIcon } from './Icon';
 
 function isFood(item: Item): item is Food {
   return item.type === 'food';

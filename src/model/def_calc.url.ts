@@ -1,9 +1,10 @@
 import type { State } from './def_calc.reducer';
 import { allItems, defaultCreature, shields } from './def_calc.items';
+import type { ShieldConfig } from './combat';
 import { isNotNull } from './utils';
-import { locationToBiome } from './location';
-import { creatures } from './creatures';
-import { ShieldConfig } from './combat';
+
+import { locationToBiome } from '../data/location';
+import { creatures } from '../data/creatures';
 
 const defaultEnemy = {
   creature: defaultCreature,

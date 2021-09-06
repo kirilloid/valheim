@@ -1,7 +1,8 @@
 import type { Biome, Creature, EntityId, Shield } from '../types';
-import { creatures } from './creatures';
 import { shields } from './def_calc.items';
 import { assertNever } from './utils';
+
+import { creatures } from '../data/creatures';
 
 export interface State {
   enemy: {

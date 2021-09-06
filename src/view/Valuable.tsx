@@ -1,9 +1,11 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { resourceCraftMap } from '../model/resource-usage';
+
+import { resourceCraftMap } from '../data/resource-usage';
 import { TranslationContext } from '../effects';
 
 import type { Valuable as TValuable } from '../types';
+
 import { yesNo } from './helpers';
 import { Icon, ItemIcon } from './Icon';
 import { ItemHeader } from './ItemHeader';

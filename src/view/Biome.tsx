@@ -4,12 +4,13 @@ import { Link, useParams } from 'react-router-dom';
 import '../css/Biome.css';
 
 import type { Destructible, GameObject, Item } from '../types';
+import { biomes } from '../data/location';
+import { data } from '../data/itemDB';
+import { resourceCraftMap } from '../data/resource-usage';
+
 import { TranslationContext } from '../effects';
-import { biomes } from '../model/location';
-import { ItemIcon } from './Icon';
-import { data } from '../model/itemDB';
 import { averageAttacksDamage, InlineObjectWithIcon, yesNo } from './helpers';
-import { resourceCraftMap } from '../model/resource-usage';
+import { ItemIcon } from './Icon';
 
 function ResourceList(props: { list: GameObject[] }) {
   const { list } = props;

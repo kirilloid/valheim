@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import { TranslationContext } from '../effects';
-import { biomes } from '../model/location';
 import { pages } from '../model/search';
+import { biomes } from '../data/location';
+
+import { TranslationContext } from '../effects';
 
 export function Index() {
   const translate = useContext(TranslationContext);

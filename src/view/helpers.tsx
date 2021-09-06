@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 
 import {
   Biome,
@@ -10,14 +11,15 @@ import {
   GameLocationId,
   ItemSpecial as TItemSpecial,
 } from '../types';
-import { ItemIcon, SkillIcon } from './Icon';
-import { TranslationContext } from '../effects';
 import { applyDamageModifier, getTotalDamage, playerDamageModifiers } from '../model/combat';
 import { SkillType } from '../model/skills';
-import { locationBiomes } from '../model/location';
-import { Link } from 'react-router-dom';
-import { data } from '../model/itemDB';
-import { creatures } from '../model/creatures';
+
+import { locationBiomes } from '../data/location';
+import { data } from '../data/itemDB';
+import { creatures } from '../data/creatures';
+
+import { TranslationContext } from '../effects';
+import { ItemIcon, SkillIcon } from './Icon';
 
 export function durability(values: [number, number], level?: number): string | number {
   if (values[0] === Infinity) return 'indestructible';

@@ -1,12 +1,14 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { getCraftingStationId, getStructuralIntegrity, pieces } from '../model/building';
-import { data } from '../model/itemDB';
-import { stationsMap } from '../model/resource-usage';
-import { assertNever, GAME_DAY, timeI2S } from '../model/utils';
-import { TranslationContext } from '../effects';
 
 import { ItemType, MaterialType, Piece as TPiece } from '../types';
+
+import { getCraftingStationId, getStructuralIntegrity, pieces } from '../data/building';
+import { data } from '../data/itemDB';
+import { stationsMap } from '../data/resource-usage';
+import { assertNever, GAME_DAY, timeI2S } from '../model/utils';
+
+import { TranslationContext } from '../effects';
 import { InlineObjectWithIcon, Resistances, yesNo } from './helpers';
 import { ItemIcon } from './Icon';
 import { ItemHeader } from './ItemHeader';

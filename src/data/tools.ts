@@ -1,6 +1,6 @@
-import { CraftingStation, Tool } from "../types";
-import { pieces } from "./building";
-import { plants } from "./plants";
+import { CraftingStation, Tool } from '../types';
+import { pieces } from './building';
+import { plants } from './plants';
 
 export const tools: Tool[] = [
   {

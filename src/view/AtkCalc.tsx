@@ -5,16 +5,17 @@ import { groupBy, map } from 'lodash-es';
 import '../css/Combat.css';
 
 import type { Biome, Creature } from '../types';
-
-import { arrows } from '../model/arrows';
 import { attackCreature, AttackStats, WeaponConfig } from '../model/combat';
+import { Action, actionCreators, ActionCreators, reducer, enabledItems, CombatStat } from '../model/off_calc.reducer';
+import { getInitialState, serializeState } from '../model/off_calc.url';
+
+import { arrows } from '../data/arrows';
+import { groupedCreatures } from '../data/combat_creatures';
+
 import { TranslationContext } from '../effects/translation.effect';
 import { useDebounceEffect } from '../effects/debounce.effect';
-import { Icon, ItemIcon, SkillIcon } from './Icon';
-import { Action, actionCreators, ActionCreators, reducer, enabledItems, CombatStat } from '../model/off_calc.reducer';
 import { showNumber } from './helpers';
-import { getInitialState, serializeState } from '../model/off_calc.url';
-import { groupedCreatures } from '../model/combat_creatures';
+import { Icon, ItemIcon, SkillIcon } from './Icon';
 
 const weaponGroups = groupBy(enabledItems, w => w.tier);
 

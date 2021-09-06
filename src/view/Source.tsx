@@ -2,16 +2,18 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Cart, CraftingStation, Destructible, EntityId, GameObject, Item, Pair, Piece, Plant, Ship } from '../types';
-import { TranslationContext, useGlobalState } from '../effects';
-import { data } from '../model/itemDB';
-import { creatures } from '../model/creatures';
-import { Icon, ItemIcon, SkillIcon } from './Icon';
-import { assertNever, days, timeI2S } from '../model/utils';
-import { getCraftingStationId } from '../model/building';
-import { miningMap, resourceBuildMap, resourceCraftMap } from '../model/resource-usage';
 import { SkillType } from '../model/skills';
+import { assertNever, days, timeI2S } from '../model/utils';
+
+import { data } from '../data/itemDB';
+import { creatures } from '../data/creatures';
+import { getCraftingStationId } from '../data/building';
+import { miningMap, resourceBuildMap, resourceCraftMap } from '../data/resource-usage';
+import { locationBiomes } from '../data/location';
+
+import { TranslationContext, useGlobalState } from '../effects';
 import { Area, InlineObject, InlineObjectWithIcon, List, rangeBy } from './helpers';
-import { locationBiomes } from '../model/location';
+import { Icon, ItemIcon, SkillIcon } from './Icon';
 
 export const SOURCE_CRAFT = 1;
 export const SOURCE_DROP = 2;
