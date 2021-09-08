@@ -45,7 +45,8 @@
     ]
   },
   "devDependencies": {
+    "@types/lodash-es": "^4.17.4",
     "@types/react-router-dom": "^5.1.7",
-    "@types/lodash-es": "^4.17.4"
+    "csv-parse": "^4.16.3"
   }
 }

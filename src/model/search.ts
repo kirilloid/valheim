@@ -154,6 +154,7 @@ function addObjects(dict: Record<string, string>) {
             break;
           case 'fireplace':
             addTag('ui.tags.fire');
+            addTag('ui.tags.light');
             break;
         }
         break;

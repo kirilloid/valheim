@@ -57,6 +57,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Deer',
+    tags: ['animal'],
     tier: 1,
     maxLvl: 3,
     emoji: '🦌',
@@ -74,6 +75,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Seagal',
+    tags: ['fly'],
     tier: 1,
     maxLvl: 1,
     emoji: '🦆',
@@ -108,6 +110,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Neck',
+    tags: ['animal'],
     tier: 1,
     maxLvl: 3,
     upgradeDistance: 800,
@@ -142,6 +145,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Boar',
+    tags: ['animal'],
     tier: 1,
     maxLvl: 3,
     upgradeDistance: 800,
@@ -189,6 +193,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Crow',
+    tags: ['fly'],
     tier: 2,
     maxLvl: 1,
     emoji: '🐦',
@@ -538,6 +543,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Wraith',
+    tags: ['fly'],
     tier: 3,
     maxLvl: 1,
     nightOnly,
@@ -661,6 +667,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Wolf',
+    tags: ['animal'],
     tier: 4,
     maxLvl: 3,
     emoji: '🐺',
@@ -775,6 +782,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Hatchling', // drake
+    tags: ['animal', 'fly'],
     tier: 4,
     maxLvl: 1,
     emoji: '🐉',
@@ -795,6 +803,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Dragon',
+    tags: ['fly'],
     tier: 4,
     maxLvl: 1,
     emoji: '🐲',
@@ -938,6 +947,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Deathsquito',
+    tags: ['fly'],
     tier: 5,
     maxLvl: 1,
     emoji: '🦟',
@@ -954,6 +964,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Lox',
+    tags: ['animal'],
     tier: 5,
     maxLvl: 1,
     emoji: '🐂',
@@ -1030,6 +1041,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Serpent',
+    tags: ['animal'],
     tier: 4,
     maxLvl: 1,
     emoji: '🐍',

@@ -528,7 +528,7 @@
     "ui.duration": "item_food_duration",
 
     "ui.effects": "",
-    "ui.effect.BeltStrength": "BeltStrength",
+    "ui.effect.BeltStrength": "",
     "ui.effect.Burning": "se_burning_name",
     "ui.effect.Cold": "se_cold_name",
     "ui.effect.CorpseRun": "se_corpserun_name",
@@ -669,7 +669,7 @@
     "ui.pieceType.bed": "",
     "ui.pieceType.chair": "",
     "ui.pieceType.chest": "",
-    "ui.pieceType.craft": "",
+    "ui.pieceType.craft": "piece_craftingstation",
     "ui.pieceType.craft_ext": "",
     "ui.pieceType.decoration": "",
     "ui.pieceType.door": "",
