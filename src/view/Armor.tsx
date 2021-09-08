@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { TranslationContext } from '../effects';
 
 import type { Armor as TArmor } from '../types';
-import { durability, ItemSpecial, showPair, yesNo } from './helpers';
+import { durability, ItemSpecial, Resistances, showPair, yesNo } from './helpers';
 import { Icon } from './Icon';
 import { ItemHeader } from './ItemHeader';
 import { RecipeSection } from './Source';
@@ -19,9 +19,9 @@ export function Armor({ item, level }: { item: TArmor, level?: number }) {
           <dt>{translate('ui.slot')}</dt><dd>{translate(`ui.slot.${item.slot}`)}</dd>
           <dt><Link to="/info/combat#armor">{translate('ui.armor')}</Link></dt><dd>{showPair(item.armor, level)}</dd>
           <dt>{translate('ui.maxQuality')}</dt><dd>{item.maxLvl}</dd>
-          <dt title="armor loose durability 1:1 to received damage, but only for one randomly chosen piece of armor">durability</dt><dd>{durability(item.durability, level)}</dd>
-          {item.moveSpeed ? <><dt title="when equipeed">move speed</dt><dd>{item.moveSpeed * 100}%</dd></> : null}
-          {item.damageModifiers ? <><dt>resistance</dt><dd>{JSON.stringify(item.damageModifiers)}</dd></> : null}
+          <dt title="armor loose durability 1:1 to received damage, but only for one randomly chosen piece of armor">{translate('ui.durability')}</dt><dd>{durability(item.durability, level)}</dd>
+          {item.moveSpeed ? <><dt title="when equipeed">{translate('ui.moveSpeed')}</dt><dd>{item.moveSpeed * 100}%</dd></> : null}
+          {item.damageModifiers ? <Resistances mods={item.damageModifiers} /> : null}
           <ItemSpecial special={item.special} />
         </dl>
       </section>

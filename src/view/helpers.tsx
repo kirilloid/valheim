@@ -183,7 +183,7 @@ export function Materials(props: { materials: Record<EntityId, number>, iconSize
   </span>
 }
 
-export function Resistances({ mods }: { mods: DamageModifiers }) {
+export function Resistances({ mods }: { mods: Partial<DamageModifiers> }) {
   const translate = useContext(TranslationContext);
   const modGroups = {
     veryWeak: [] as DamageType[],
