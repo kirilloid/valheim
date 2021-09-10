@@ -16,6 +16,7 @@ const shipDamageModifiers: DamageModifiers = {
 export const ships: Ship[] = [
   {
     type: 'ship',
+    group: 'ship',
     id: 'Raft',
     tier: 1,
     emoji: '',
@@ -55,6 +56,7 @@ export const ships: Ship[] = [
   },
   {
     type: 'ship',
+    group: 'ship',
     id: 'Karve',
     tier: 2,
     emoji: '⛵',
@@ -99,6 +101,7 @@ export const ships: Ship[] = [
   },
   {
     type: 'ship',
+    group: 'ship',
     id: 'VikingShip',
     tier: 3,
     emoji: '🚢',
@@ -143,6 +146,7 @@ export const ships: Ship[] = [
   },
 /*  {
     type: 'ship',
+    group: 'ship',
     id: 'TrailerShip',
     tier: 4,
     wear: {

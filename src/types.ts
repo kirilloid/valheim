@@ -2,6 +2,20 @@ import { SkillType } from "./model/skills";
 
 export type EntityId = string;
 
+export type EntityGroup =
+  | 'banner' | 'bed' | 'beech' | 'berry' | 'bird' | 'blob'
+  | 'chair' | 'chest' | 'cook'
+  | 'fir' | 'fire'
+  | 'goblin' | 'gray'
+  | 'hide'
+  | 'lumber'
+  | 'metal'
+  | 'ore'
+  | 'rug'
+  | 'seed' | 'ship' | 'smelt' | 'stack' | 'stand'
+  | 'torch'
+  | 'value'
+
 export type Biome =
   | 'Meadows'
   | 'BlackForest'
@@ -360,6 +374,7 @@ export interface Cart extends Transport {
 
 export interface Destructible extends GameObjectBase {
   type: 'destructible';
+  subtype: 'tree' | 'rock' | 'misc';
   hp: number;
   grow: ItemGrow[];
   damageModifiers: DamageModifiers;
@@ -392,6 +407,7 @@ export interface GameEvent {
 
 interface GameObjectBase {
   id: EntityId;
+  group?: EntityGroup;
   tags?: string[];
   dlc?: 'beta';
   disabled?: true;

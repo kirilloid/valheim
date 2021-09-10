@@ -1,11 +1,14 @@
 import React, { useContext } from 'react';
 
 import type { GameObject } from '../types';
+import { groups } from '../data/itemDB';
 import { TranslationContext } from '../effects';
+import { InlineObject, List } from './helpers';
 import { ItemIcon } from './Icon';
 
 export function ItemHeader({ item, children }: { item: GameObject, children?: React.ReactNode }) {
   const translate = useContext(TranslationContext);
+  const group = item.group && groups[item.group];
   return <>
     {item.disabled && <div className="info">{translate('ui.onlyWithCheats')}</div>}
     {item.season && <div className="info">{translate('ui.onlyInSeason', translate(`ui.onlyInSeason.${item.season}`))}</div>}
@@ -16,5 +19,10 @@ export function ItemHeader({ item, children }: { item: GameObject, children?: Re
       {translate(item.id)}
       {children}
     </h1>
+    {group ? <div>See also: <List>{
+      group
+        .filter(e => e !== item)
+        .map(e => <InlineObject id={e.id} />)
+    }</List></div> : null}
   </>;
 }

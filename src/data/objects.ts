@@ -1,6 +1,7 @@
 import {
   DamageModifiers,
   Destructible,
+  EntityGroup,
   EntityId,
   GeneralDrop,
   itemGrow,
@@ -64,6 +65,7 @@ const emptyGrow: ItemGrow[] = [];
 
 function tree({
   id: [baseId, stubId, logId, logHalfId],
+  group,
   tier,
   minToolTier,
   grow,
@@ -71,6 +73,7 @@ function tree({
   drop: [baseDrop, chunkDrop],
 }: {
   id: [EntityId, EntityId, EntityId, EntityId];
+  group?: EntityGroup;
   tier: number;
   minToolTier: number;
   grow: ItemGrow[];
@@ -83,6 +86,7 @@ function tree({
       subtype: 'tree',
       tags: ['plant', 'tree'],
       id: baseId,
+      group,
       tier,
       grow,
       hp: baseHp,
@@ -308,6 +312,7 @@ export const destructibles: Destructible[] = [
     type: 'destructible',
     subtype: 'tree',
     id: 'beech_small',
+    group: 'beech',
     tier: 0,
     grow: itemGrow({
       locations: ['Meadows'],
@@ -332,6 +337,7 @@ export const destructibles: Destructible[] = [
   },
   ...tree({
     id: ['Beech1', 'Beech_Stub', 'beech_log', 'beech_log_half'],
+    group: 'beech',
     tier: 1,
     minToolTier: 0,
     grow: itemGrow({
@@ -382,6 +388,7 @@ export const destructibles: Destructible[] = [
     type: 'destructible',
     subtype: 'tree',
     id: 'FirTree_small',
+    group: 'fir',
     tier: 0,
     grow: itemGrow({
       locations: ['BlackForest'],
@@ -409,6 +416,7 @@ export const destructibles: Destructible[] = [
   },
   ...tree({
     id: ['FirTree', 'FirTree_Stub', 'FirTree_log', 'FirTree_log_half'],
+    group: 'fir',
     tier: 1,
     minToolTier: 0,
     grow: itemGrow({
@@ -979,6 +987,7 @@ export const destructibles: Destructible[] = [
     type: 'destructible',
     subtype: 'misc',
     id: 'FirTree_small_dead',
+    group: 'fir',
     tier: 0,
     grow: itemGrow({
       locations: ['Swamp'],

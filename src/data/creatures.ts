@@ -74,6 +74,7 @@ export const creatures: Creature[] = [
   },
   {
     type: 'creature',
+    group: 'bird',
     id: 'Seagal',
     tags: ['fly'],
     tier: 1,
@@ -192,6 +193,7 @@ export const creatures: Creature[] = [
 // FOREST
   {
     type: 'creature',
+    group: 'bird',
     id: 'Crow',
     tags: ['fly'],
     tier: 2,
@@ -281,6 +283,7 @@ export const creatures: Creature[] = [
   },
   {
     type: 'creature',
+    group: 'gray',
     id: 'Greydwarf',
     tier: 2,
     maxLvl: 3,
@@ -307,6 +310,7 @@ export const creatures: Creature[] = [
   },
   {
     type: 'creature',
+    group: 'gray',
     id: 'GreydwarfShaman',
     tier: 2,
     maxLvl: 3,
@@ -334,6 +338,7 @@ export const creatures: Creature[] = [
   },
   {
     type: 'creature',
+    group: 'gray',
     id: 'Greydwarf_Elite',
     tier: 2,
     maxLvl: 3,
@@ -453,6 +458,7 @@ export const creatures: Creature[] = [
 // SWAMP
   {
     type: 'creature',
+    group: 'blob',
     id: 'Blob',
     tier: 3,
     maxLvl: 1,
@@ -469,6 +475,7 @@ export const creatures: Creature[] = [
   },
   {
     type: 'creature',
+    group: 'blob',
     id: 'BlobElite',
     tier: 3,
     maxLvl: 1,
@@ -848,6 +855,7 @@ export const creatures: Creature[] = [
 // PLAINS
   {
     type: 'creature',
+    group: 'goblin',
     id: 'Goblin', // Fulling
     tier: 5,
     maxLvl: 3,
@@ -882,6 +890,7 @@ export const creatures: Creature[] = [
   },
   {
     type: 'creature',
+    group: 'goblin',
     id: 'GoblinShaman', // Fulling
     tier: 5,
     maxLvl: 1,
@@ -912,6 +921,7 @@ export const creatures: Creature[] = [
   },
   {
     type: 'creature',
+    group: 'goblin',
     id: 'GoblinBrute', // Berserk
     tier: 5,
     maxLvl: 3,
