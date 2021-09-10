@@ -251,15 +251,15 @@ export function GrowSection({ item }: { item: GameObject | undefined }) {
     {item.type === 'destructible' ? 'Can be found in' : 'Sourced from'}
     <List separator={<hr />}>{grow.map((g, i) => <dl key={i}>
       <dt>locations</dt>
-      <dd>{g.locations.map(loc => <Area key={loc} area={loc} />)}</dd>
+      <dd><List>{g.locations.map(loc => <Area key={loc} area={loc} />)}</List></dd>
       <dt>altitude</dt>
       <dd>{showAltitude(g.altitude)}</dd>
       <dt>surface</dt>
       <dd>{showSurface(g.onSurface, g.offset)}</dd>
       <dt>ground tilt</dt>
       <dd>{showTilt(g.tilt)}</dd>
-      <dt>number{g.locations[0]! in locationBiomes ? '' : ' (per 64x64m zone)'}</dt>
-      <dd>{showNumber(g.num)}</dd>
+      <dt>number</dt>
+      <dd>{showNumber(g.num)}{g.locations[0]! in locationBiomes ? '' : ' (per 64x64m zone)'}</dd>
       <dt>respawn</dt>
       <dd>{g.respawn ? `every ${days(respawn)} game days` : 'never'}</dd>
     </dl>)}</List>

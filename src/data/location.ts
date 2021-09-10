@@ -190,6 +190,7 @@ for (const creature of creatures) {
 }
 
 for (const loc of locations) {
+  addToLocation(loc.id, loc.chest?.options.map(opt => opt.item) ?? [], [], []);
   loc.resources = [...new Set(loc.resources)];
   if (loc.vegvisir) {
     loc.tags = ['vegvisir'];

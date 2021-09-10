@@ -60,10 +60,7 @@ const singleDrop = (item: EntityId, min: number, max: number): GeneralDrop => ({
 });
 
 
-const emptyGrow: ItemGrow[] = itemGrow({
-  locations: [],
-  num: [0, 0],
-});
+const emptyGrow: ItemGrow[] = [];
 
 function tree({
   id: [baseId, stubId, logId, logHalfId],
@@ -83,6 +80,7 @@ function tree({
   return [
     {
       type: 'destructible',
+      subtype: 'tree',
       tags: ['plant', 'tree'],
       id: baseId,
       tier,
@@ -98,6 +96,7 @@ function tree({
     },
     {
       type: 'destructible',
+      subtype: 'tree',
       id: stubId,
       tier,
       grow: emptyGrow,
@@ -109,6 +108,7 @@ function tree({
     },
     {
       type: 'destructible',
+      subtype: 'tree',
       id: logId,
       tier,
       grow: emptyGrow,
@@ -122,6 +122,7 @@ function tree({
     },
     {
       type: 'destructible',
+      subtype: 'tree',
       id: logHalfId,
       tier,
       grow: emptyGrow,
@@ -152,6 +153,7 @@ function treeSimpler({
   return [
     {
       type: 'destructible',
+      subtype: 'tree',
       tags: ['plant', 'tree'],
       id: baseId,
       tier,
@@ -167,6 +169,7 @@ function treeSimpler({
     },
     {
       type: 'destructible',
+      subtype: 'tree',
       id: stubId,
       tier,
       grow: emptyGrow,
@@ -178,6 +181,7 @@ function treeSimpler({
     },
     {
       type: 'destructible',
+      subtype: 'tree',
       id: logId,
       tier,
       grow: emptyGrow,
@@ -191,6 +195,7 @@ function treeSimpler({
 };
 
 function rock({
+  subtype,
   id: [baseId, fracId],
   tier = 1,
   minToolTier = 0,
@@ -199,6 +204,7 @@ function rock({
   hp: fracHp,
   drop: fracDrop,
 }: {
+  subtype: Destructible['subtype'],
   id: [EntityId, EntityId];
   tier?: number;
   minToolTier?: number;
@@ -210,6 +216,7 @@ function rock({
   return [
     {
       type: 'destructible',
+      subtype,
       id: baseId,
       tier,
       grow,
@@ -221,9 +228,10 @@ function rock({
     },
     {
       type: 'destructible',
+      subtype,
       id: fracId,
       tier,
-      grow,
+      grow: emptyGrow,
       hp: fracHp,
       damageModifiers: pickOnly,
       minToolTier,
@@ -256,6 +264,7 @@ export function fullDestructible(obj: Destructible): Destructible {
 
 export const destructibles: Destructible[] = [
   ...rock({
+    subtype: 'rock',
     id: ['rock4_coast', 'rock4_coast_frac'],
     grow: itemGrow({
       locations: ['Meadows', 'BlackForest', 'Ashlands', 'DeepNorth', 'Mistlands'],
@@ -270,6 +279,7 @@ export const destructibles: Destructible[] = [
   }),
   {
     type: 'destructible',
+    subtype: 'misc',
     id: 'beehive',
     tier: 1,
     grow: itemGrow({
@@ -296,6 +306,7 @@ export const destructibles: Destructible[] = [
   },
   {
     type: 'destructible',
+    subtype: 'tree',
     id: 'beech_small',
     tier: 0,
     grow: itemGrow({
@@ -342,6 +353,7 @@ export const destructibles: Destructible[] = [
   }),
   {
     type: 'destructible',
+    subtype: 'tree',
     id: 'FirTree_oldLog',
     tier: 0,
     grow: itemGrow({
@@ -368,6 +380,7 @@ export const destructibles: Destructible[] = [
   },
   {
     type: 'destructible',
+    subtype: 'tree',
     id: 'FirTree_small',
     tier: 0,
     grow: itemGrow({
@@ -526,6 +539,7 @@ export const destructibles: Destructible[] = [
   }),
   {
     id: 'SwampTree2',
+    subtype: 'tree',
     type: 'destructible',
     tier: 3,
     minToolTier: 0,
@@ -541,6 +555,7 @@ export const destructibles: Destructible[] = [
     drop: [],
   },
   ...rock({
+    subtype: 'rock',
     id: ['rock4_forest', 'rock4_forest_frac'],
     grow: itemGrow({
       locations: ['BlackForest'],
@@ -554,6 +569,7 @@ export const destructibles: Destructible[] = [
     drop: singleDrop('Stone', 4, 8),
   }),
   ...rock({
+    subtype: 'misc',
     id: ['rock4_copper', 'rock4_copper_frac'],
     tier: 2,
     grow: itemGrow({
@@ -575,6 +591,7 @@ export const destructibles: Destructible[] = [
   }),
   {
     id: 'MineRock_Tin',
+    subtype: 'misc',
     type: 'destructible',
     tier: 2,
     minToolTier: 0,
@@ -595,6 +612,7 @@ export const destructibles: Destructible[] = [
   // SWAMP
   {
     id: 'StatueEvil',
+    subtype: 'misc',
     type: 'destructible',
     tier: 3,
     grow: itemGrow({
@@ -610,6 +628,7 @@ export const destructibles: Destructible[] = [
     drop: [],
   },
   ...rock({
+    subtype: 'misc',
     id: ['mudpile2', 'mudpile2_frac'],
     tier: 3,
     grow: itemGrow({
@@ -629,6 +648,7 @@ export const destructibles: Destructible[] = [
     },
   }),
   ...rock({ // beacon: 25
+    subtype: 'misc',
     id: ['mudpile_beacon', 'mudpile_frac'],
     tier: 3,
     grow: itemGrow({
@@ -650,6 +670,7 @@ export const destructibles: Destructible[] = [
   }),
   {
     id: 'GuckSack_small',
+    subtype: 'misc',
     type: 'destructible',
     tier: 3,
     grow: itemGrow({
@@ -664,6 +685,7 @@ export const destructibles: Destructible[] = [
   },
   {
     id: 'GuckSack',
+    subtype: 'misc',
     type: 'destructible',
     tier: 3,
     grow: itemGrow({
@@ -679,6 +701,7 @@ export const destructibles: Destructible[] = [
   {
     id: 'Rock_4_plains',
     type: 'destructible',
+    subtype: 'rock',
     tier: 1,
     grow: itemGrow({
       locations: ['Plains'],
@@ -694,6 +717,7 @@ export const destructibles: Destructible[] = [
   {
     id: 'Rock_4',
     type: 'destructible',
+    subtype: 'rock',
     tier: 1,
     grow: itemGrow({
       locations: ['BlackForest', 'Mistlands'],
@@ -716,6 +740,7 @@ export const destructibles: Destructible[] = [
     drop: [singleDrop('Stone', 3, 6)],
   },
   ...rock({
+    subtype: 'rock',
     id: ['Rock_3', 'Rock_3_frac'],
     tier: 1,
     minToolTier: 0,
@@ -737,6 +762,7 @@ export const destructibles: Destructible[] = [
   // MOUNTAIN
   {
     id: 'MineRock_Obsidian',
+    subtype: 'misc',
     type: 'destructible',
     tier: 4,
     grow: itemGrow({
@@ -751,6 +777,7 @@ export const destructibles: Destructible[] = [
     drop: [singleDrop('Obsidian', 5, 8)],
   },
   ...rock({
+    subtype: 'misc',
     // beacon: 50
     id: ['silvervein', 'silvervein_frac'],
     tier: 4,
@@ -774,6 +801,7 @@ export const destructibles: Destructible[] = [
     },
   }),
   ...rock({
+    subtype: 'rock',
     id: ['rock1_mountain', 'rock1_mountain_frac'],
     grow: itemGrow({
       locations: ['Mountain'],
@@ -786,6 +814,7 @@ export const destructibles: Destructible[] = [
     drop: singleDrop('Stone', 4, 8),
   }),
   ...rock({
+    subtype: 'rock',
     id: ['rock2_mountain', 'rock2_mountain_frac'],
     grow: itemGrow({
       locations: ['Mountain'],
@@ -798,6 +827,7 @@ export const destructibles: Destructible[] = [
     drop: singleDrop('Stone', 4, 8),
   }),
   ...rock({
+    subtype: 'rock',
     id: ['rock3_mountain', 'rock3_mountain_frac'],
     grow: itemGrow({
       locations: ['Mountain'],
@@ -810,6 +840,7 @@ export const destructibles: Destructible[] = [
     drop: singleDrop('Stone', 4, 8),
   }),
   ...rock({
+    subtype: 'rock',
     id: ['rock4_heath', 'rock4_heath_frac'],
     grow: itemGrow({
       locations: ['Plains'],
@@ -822,6 +853,7 @@ export const destructibles: Destructible[] = [
     drop: singleDrop('Stone', 4, 8),
   }),
   ...rock({
+    subtype: 'rock',
     id: ['rock2_heath', 'rock2_heath_frac'],
     grow: itemGrow({
       locations: ['Plains'],
@@ -833,6 +865,7 @@ export const destructibles: Destructible[] = [
     drop: singleDrop('Stone', 4, 8),
   }),
   ...rock({
+    subtype: 'rock',
     id: ['HeathRockPillar', 'HeathRockPillar_frac'],
     grow: itemGrow({
       locations: ['Plains'],
@@ -848,6 +881,7 @@ export const destructibles: Destructible[] = [
   {
     id: 'stubbe',
     type: 'destructible',
+    subtype: 'tree',
     tier: 1,
     minToolTier: 0,
     grow: itemGrow({
@@ -874,6 +908,7 @@ export const destructibles: Destructible[] = [
   {
     id: 'Leviathan',
     type: 'destructible',
+    subtype: 'misc',
     tier: 3,
     grow: itemGrow({
       locations: ['Ocean'],
@@ -890,6 +925,7 @@ export const destructibles: Destructible[] = [
   {
     id: 'Barnacle',
     type: 'destructible',
+    subtype: 'misc',
     tier: 3,
     grow: itemGrow({
       locations: ['Leviathan'],
@@ -906,6 +942,7 @@ export const destructibles: Destructible[] = [
   {
     id: 'ice1',
     type: 'destructible',
+    subtype: 'misc',
     tier: 6,
     grow: itemGrow({
       locations: ['DeepNorth'],
@@ -922,6 +959,7 @@ export const destructibles: Destructible[] = [
   {
     id: 'ice_rock1',
     type: 'destructible',
+    subtype: 'rock',
     tier: 6,
     grow: itemGrow({
       locations: ['DeepNorth'],
@@ -939,6 +977,7 @@ export const destructibles: Destructible[] = [
   // MISTLANDS
   {
     type: 'destructible',
+    subtype: 'misc',
     id: 'FirTree_small_dead',
     tier: 0,
     grow: itemGrow({
@@ -961,6 +1000,7 @@ export const destructibles: Destructible[] = [
   {
     id: 'vertical_web',
     type: 'destructible',
+    subtype: 'misc',
     tier: 6,
     grow: itemGrow({
       locations: ['Mistlands'],
@@ -976,6 +1016,7 @@ export const destructibles: Destructible[] = [
   {
     id: 'horizontal_web',
     type: 'destructible',
+    subtype: 'misc',
     tier: 6,
     grow: itemGrow({
       locations: ['Mistlands'],
@@ -991,6 +1032,7 @@ export const destructibles: Destructible[] = [
   {
     id: 'tunnel_web',
     type: 'destructible',
+    subtype: 'misc',
     tier: 6,
     grow: itemGrow({
       locations: ['Mistlands'],
@@ -1006,6 +1048,7 @@ export const destructibles: Destructible[] = [
   {
     id: 'Skull1',
     type: 'destructible',
+    subtype: 'misc',
     tier: 6,
     grow: itemGrow({
       locations: ['Mistlands'],
@@ -1021,6 +1064,7 @@ export const destructibles: Destructible[] = [
   {
     id: 'Skull2',
     type: 'destructible',
+    subtype: 'misc',
     tier: 6,
     grow: itemGrow({
       locations: ['Mistlands'],

@@ -37,8 +37,10 @@ export function Biome() {
   const resources = {
     trophies: [] as Item[],
     food: [] as Item[],
-    mining: [] as Destructible[],
     others: [] as Item[],
+    rock: [] as Destructible[],
+    tree: [] as Destructible[],
+    misc: [] as Destructible[],
   };
   for (const res of biome.resources) {
     const item = data[res];
@@ -48,15 +50,23 @@ export function Biome() {
     }
     if (item.type === 'piece' || item.type === 'creature' || item.type === 'plant') continue;
     if (item.type === 'destructible') {
-      resources.mining.push(item);
+      // they are not here
     } else if (item.type === 'trophy') {
       resources.trophies.push(item);
     } else if (item.type === 'ship' || item.type === 'cart') {
       // skip them
-    } else if (item.type === 'food' || resourceCraftMap[item.id]?.some(v => v.type === 'food')) {
+    } else if (item.type === 'food'
+            || resourceCraftMap[item.id]?.some(v => v.type === 'food'
+              || resourceCraftMap[v.id]?.some(v2 => v2.type === 'food'))
+    ) {
       resources.food.push(item);
     } else {
       resources.others.push(item);
+    }
+  }
+  for (const item of biome.destructibles) {
+    if (item.hp !== Infinity) {
+      resources[item.subtype].push(item);
     }
   }
 
@@ -75,8 +85,6 @@ export function Biome() {
       </section>
       <section>
         <h2>resources</h2>
-        <h3>mining</h3>
-        <ResourceList list={biome.destructibles} />
         <div className="multiList">
           <div>
             <h3>food</h3>
@@ -89,6 +97,21 @@ export function Biome() {
           <div>
             <h3>trophies</h3>
             <ResourceList list={resources.trophies} />
+          </div>
+        </div>
+        <h2>mining</h2>
+        <div className="multiList">
+          <div>
+            <h3>unique</h3>
+            <ResourceList list={resources.misc} />
+          </div>
+          <div>
+            <h3>trees</h3>
+            <ResourceList list={resources.tree} />
+          </div>
+          <div>
+            <h3>rocks</h3>
+            <ResourceList list={resources.rock} />
           </div>
         </div>
       </section>
