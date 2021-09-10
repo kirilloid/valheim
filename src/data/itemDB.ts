@@ -31,3 +31,5 @@ for (const coll of [
 ]) {
   addCollection(coll);
 }
+
+(window as any).objectDB = data;
