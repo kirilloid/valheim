@@ -11,7 +11,7 @@ import { data } from '../data/itemDB';
 import { getSummon } from '../data/resources';
 
 import { TranslationContext } from '../effects';
-import { Area, rangeBy, Resistances, shortCreatureDamage, yesNo } from './helpers';
+import { Area, InlineObjectWithIcon, rangeBy, Resistances, shortCreatureDamage, yesNo } from './helpers';
 import { ItemIcon } from './Icon';
 import { ItemHeader } from './ItemHeader';
 
@@ -69,7 +69,7 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
         <dd>{translate(`ui.faction.${creature.faction}`)}</dd>
       {sid ? <>
         <dt>{translate('ui.summonedWith')}</dt>
-        <dd><ItemIcon item={data[sid]} size={16} /> <Link to={`/obj/${sid}`}>{translate(sid)}</Link> ×{snr}</dd>
+        <dd><InlineObjectWithIcon id={sid} size={16} /> ×{snr}</dd>
       </> : null}
       <dt>{translate('ui.health')}</dt>
       <dd>{creature.hp * hpBonus(scale)}</dd>
@@ -100,10 +100,7 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
         {creature.drop.map(({ item, min, max, scale, chance }) => {
           const dropScale = scale ? dropGlobalScale : 1;
           return <li key={item}>
-            <ItemIcon item={data[item]} />
-            <Link to={`/obj/${item}`}>
-              {translate(item)}
-            </Link>{' '}
+            <InlineObjectWithIcon id={item} />
             {min >= max - 1
               ? `${min * dropScale}`
               : `${rangeBy([min * dropScale, (max - 1) * dropScale], String)}`}

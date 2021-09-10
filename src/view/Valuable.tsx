@@ -1,13 +1,12 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
 
 import { resourceCraftMap } from '../data/resource-usage';
 import { TranslationContext } from '../effects';
 
 import type { Valuable as TValuable } from '../types';
 
-import { yesNo } from './helpers';
-import { Icon, ItemIcon } from './Icon';
+import { InlineObjectWithIcon, yesNo } from './helpers';
+import { Icon } from './Icon';
 import { ItemHeader } from './ItemHeader';
 import { Source, SOURCE_DROP, SOURCE_GROW } from './Source';
 
@@ -30,9 +29,7 @@ export function Valuable({ item }: { item: TValuable }) {
               {translate('ui.usedToCraft')}:
               <ul className="CraftList">
                 {resourceCraftMap.Coins?.map(item => <li>
-                  <ItemIcon item={item} />
-                  {' '}
-                  <Link to={`/obj/${item.id}`}>{translate(item.id)}</Link>
+                  <InlineObjectWithIcon id={item.id} />
                 </li>)}
               </ul>
             </section>

@@ -1,10 +1,9 @@
 import React, { useContext } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { locations } from '../data/location';
 
 import { TranslationContext } from '../effects';
-import { ItemIcon } from './Icon';
 import { DropTable } from './DropTable';
 import { Area, InlineObjectWithIcon, rangeBy } from './helpers';
 
@@ -44,9 +43,9 @@ export function Location() {
             <h2>creatures</h2>
             <ul>{loc.creatures.map(c =>
               <li key={loc.id}>
-                <ItemIcon item={c} size={32} />
-                <Link to={`/obj/${c.id}`}>{translate(c.id)}</Link>
-              </li>)}
+                <InlineObjectWithIcon id={c.id} size={32} />
+              </li>
+            )}
             </ul>
           </>
         : null}

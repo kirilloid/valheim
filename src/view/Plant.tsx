@@ -6,8 +6,7 @@ import type { Plant as TPlant } from '../types';
 import { timeI2S } from '../model/utils';
 import { data } from '../data/itemDB';
 
-import { Area, List, rangeBy } from './helpers';
-import { ItemIcon } from './Icon';
+import { Area, InlineObjectWithIcon, List, rangeBy } from './helpers';
 import { ItemHeader } from './ItemHeader';
 
 export function Plant({ item }: { item: TPlant }) {
@@ -24,7 +23,7 @@ export function Plant({ item }: { item: TPlant }) {
           <dt>grow time</dt>
           <dd>{rangeBy(growTime, timeI2S)}</dd>
           <dt>grown form</dt>
-          <dd>{<ItemIcon item={data[growsInto]} />} <Link to={`/obj/${growsInto}`}>{translate(growsInto)}</Link></dd>
+          <dd><InlineObjectWithIcon id={growsInto} /></dd>
         </dl>
       </section>
     </>

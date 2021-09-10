@@ -160,11 +160,11 @@ export function InlineObject({ id, className, ...props }: { id: EntityId } & Rea
   return <Link to={`/obj/${id}`} className={fullClass} {...props}>{translate(id)}</Link>
 }
 
-export function InlineObjectWithIcon({ id, nobr }: { id: EntityId, nobr?: boolean }) {
+export function InlineObjectWithIcon({ id, nobr, size }: { id: EntityId, nobr?: boolean; size?: number }) {
   const item = data[id];
   const display = nobr ? 'inline-block' : 'inline';
   return <span style={{ display }}>
-    <ItemIcon item={item} />
+    <ItemIcon item={item} size={size} />
     {' '}
     <InlineObject id={id} />
   </span>

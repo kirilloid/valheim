@@ -1,16 +1,13 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
 
 import { ItemType, MaterialType, Piece as TPiece } from '../types';
 
 import { getCraftingStationId, getStructuralIntegrity, pieces } from '../data/building';
-import { data } from '../data/itemDB';
 import { stationsMap } from '../data/resource-usage';
 import { assertNever, GAME_DAY, timeI2S } from '../model/utils';
 
 import { TranslationContext } from '../effects';
 import { InlineObjectWithIcon, Resistances, yesNo } from './helpers';
-import { ItemIcon } from './Icon';
 import { ItemHeader } from './ItemHeader';
 import { Recipe } from './Source';
 
@@ -21,7 +18,7 @@ function PieceSpecific({ item }: { item: TPiece }) {
       const { fuel, burnTime, capacity, minHeightAbove, smoke, fireworks } = item.fireplace;
       const totalTime = burnTime * capacity;
       return (<dl>
-        <dt>fuel type</dt><dd><ItemIcon item={data[fuel]} />{' '}{translate(fuel)}</dd>
+        <dt>fuel type</dt><dd><InlineObjectWithIcon id={fuel} /></dd>
         <dt>capacity</dt><dd>{capacity}</dd>
         <dt>burn time</dt><dd>{timeI2S(burnTime)}</dd>
         <dt>total burn time</dt><dd>{timeI2S(totalTime)} = {(totalTime / GAME_DAY).toPrecision(2)} days</dd>
@@ -144,9 +141,7 @@ export function Piece({ item }: { item: TPiece }) {
       {producedItems.length
       ? <><h2>Produces</h2>
           <ul className="CraftList">{producedItems.map(item => <li key={item.id}>
-            <ItemIcon item={item} />
-            {' '}
-            <Link to={`/obj/${item.id}`}>{translate(item.id)}</Link>
+            <InlineObjectWithIcon id={item.id} />
           </li>)}</ul>
         </>
       : null}
