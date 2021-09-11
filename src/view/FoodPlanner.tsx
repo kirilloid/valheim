@@ -1,17 +1,16 @@
 import React, { useState, useContext } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { groupBy, mapValues } from 'lodash-es';
 
 import '../css/FoodPlanner.css';
 
 import type { Biome, Food, GameObject, Item, SimpleDrop } from '../types';
-import { BASE_HEALTH, BASE_STAMINA, days, isNotNull, MAX_PLAYERS } from '../model/utils';
+import { BASE_HEALTH, BASE_STAMINA, days, isNotNull, MAX_PLAYERS, groupBy, mapValues } from '../model/utils';
 import { addDrop } from '../model/dist';
 
 import { resources } from '../data/resources';
 import { data } from '../data/itemDB';
 
-import { TranslationContext, useDebounceEffect } from '../effects';
+import { TranslationContext, useDebounceEffect, useGlobalState } from '../effects';
 import { InlineObjectWithIcon, showNumber } from './helpers';
 import { Icon, ItemIcon } from './Icon';
 
@@ -23,9 +22,12 @@ const foods = resources.filter(isFood);
 const foodMap = new Map(foods.map(f => [f.id, f]));
 
 const FoodOptions = React.memo(() => {
+  const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
   return <><option value="" className="FoodOption--even">&mdash;</option>{foods.map(food =>
-    <option key={food.id} value={food.id} className={food.tier % 2 ? 'FoodOption--even' : 'FoodOption--odd'}>{translate(food.id)}</option>)}</>;
+    <option key={food.id} value={food.id}
+      className={`${food.tier % 2 ? 'FoodOption--even' : 'FoodOption--odd'} ${food.tier > spoiler ? 'spoiler' : ''}`}
+    >{translate(food.id)}</option>)}</>;
 });
 
 function getItemResources(item: GameObject | undefined): SimpleDrop {
@@ -143,6 +145,7 @@ function serializeState(state: State): string {
 }
 
 export function FoodPlanner() {
+  const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
   const history = useHistory();
   const { params } = useParams<{ params?: string }>();
@@ -160,7 +163,7 @@ export function FoodPlanner() {
   const setDaysDuration = (days: number) => setState({ ...state, days });
   const setRepeat = (repeat: number) => setState({ ...state, repeat });
   const selectedFoods = foods.map(id => foodMap.get(id)) as Foods;
-  const foodCount = groupBy(foods);
+  const foodCount = groupBy(foods, x => x);
   const wrongFoods = foods.map(id => !!id && (foodCount[id]?.length ?? 0) > 1);
 
   useDebounceEffect(state, (st) => {
@@ -190,10 +193,10 @@ export function FoodPlanner() {
       )}
       {biomes.map((biome, tier) => {
         return <>
-          <div className="FoodPresets__cell FoodPresets__biome">{translate(`ui.biome.${biome}`)}</div>
+          <div className={`FoodPresets__cell FoodPresets__biome ${tier + 1 > spoiler ? 'spoiler' : ''}`}>{translate(`ui.biome.${biome}`)}</div>
           {Object.entries(bestTypes).map(([key, fn]) => {
             const bestFood = bestFoods(tier + 1, fn);
-            return <div className="FoodPresets__cell FoodPresets__button" key={`${key}_${tier}`}>
+            return <div className={`FoodPresets__cell FoodPresets__button ${tier + 1 > spoiler ? 'spoiler' : ''}`} key={`${key}_${tier}`}>
               <button type="button" onClick={() => setSelectedFoods(bestFood)}>
                 {bestFood.map(f => <ItemIcon key={`${key}_${tier}_${f.id}`} item={f} useAlt size={24} />)}
               </button>

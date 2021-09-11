@@ -43,3 +43,21 @@ export const assertNever = (x: never): never => {
 }
 
 export const isNotNull = <T>(arg: T): arg is NonNullable<T> => arg != null;
+
+export function mapValues<K extends string, T, R = T>(obj: Record<K, T>, fn: (arg: T, key: K) => R): Record<K, R>;
+export function mapValues<K extends string, T, R = T>(obj: Partial<Record<K, T>>, fn: (arg: T, key: K) => R): Partial<Record<K, R>>;
+export function mapValues<K extends string, T, R = T>(obj: Partial<Record<K, T>>, fn: (arg: T, key: K) => R): Partial<Record<K, R>> {
+  return Object.fromEntries(
+    Object.entries(obj)
+      .map(([key, val]) => [key, fn(val as T, key as K)])
+  ) as Record<K, R>;
+}
+
+export function groupBy<T, K extends string = string>(arr: T[], fn: (arg: T) => K): Record<K, T[]> {
+  const result = {} as Record<K, T[]>;
+  for (const el of arr) {
+    const key = fn(el);
+    (result[key] ?? (result[key] = [])).push(el);
+  }
+  return result;
+}

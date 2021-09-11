@@ -11,6 +11,7 @@ import { resourceCraftMap } from '../data/resource-usage';
 import { TranslationContext } from '../effects';
 import { averageAttacksDamage, InlineObjectWithIcon, yesNo } from './helpers';
 import { ItemIcon } from './Icon';
+import { SpoilerAlert } from './Spoiler';
 
 function ResourceList(props: { list: GameObject[] }) {
   const { list } = props;
@@ -72,6 +73,7 @@ export function Biome() {
 
   return (
     <>
+      <SpoilerAlert tier={biome.tier} />
       <h1>{translate(`ui.biome.${id}`)}</h1>
       <picture>
         <source srcSet={`${imgPath}.webp`} type="image/webp" />

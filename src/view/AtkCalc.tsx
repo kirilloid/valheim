@@ -1,6 +1,5 @@
 import React, { useContext, useReducer, useState } from 'react';
 import { Link, useParams, useHistory } from 'react-router-dom';
-import { groupBy, map } from 'lodash-es';
 
 import '../css/Combat.css';
 
@@ -16,8 +15,11 @@ import { TranslationContext } from '../effects/translation.effect';
 import { useDebounceEffect } from '../effects/debounce.effect';
 import { showNumber } from './helpers';
 import { Icon, ItemIcon, SkillIcon } from './Icon';
+import { useGlobalState } from '../effects';
+import { SpoilerAlert } from './Spoiler';
+import { groupBy } from '../model/utils';
 
-const weaponGroups = groupBy(enabledItems, w => w.tier);
+const weaponGroups = groupBy(enabledItems, w => String(w.tier));
 
 interface SameWeaponConfig {
   item: boolean;
@@ -41,6 +43,7 @@ function WeaponBlock(props: {
   dispatch: React.Dispatch<Action>;
   canDelete: boolean;
 }) {
+  const [spoiler] = useGlobalState('spoiler');
   const { weapon, index, maxTier, smart, same, actionCreators, dispatch, canDelete } = props;
   const { item, level, skill, arrow } = weapon;
   const { changeWeapon, changeLevel, changeSkill, changeArrow, removeWeapon } = actionCreators;
@@ -59,8 +62,16 @@ function WeaponBlock(props: {
           className="BigInput"
           onChange={e => dispatch(changeWeapon(index, e.target.value, smart))}
           value={item.id}>
-          {map(weaponGroups, (group, tier) => (<optgroup label={`tier ${tier}`} className={Number(tier) > maxTier ? 'disabled' : ''}>
-            {group.map(w => <option key={w.id} value={w.id}>{translate(w.id)}</option>)}
+          {Object.entries(weaponGroups).map(([tier, group]) => (<optgroup
+            key={tier}
+            label={`tier ${tier}`}
+            className={Number(tier) > maxTier ? 'disabled' : ''}
+          >
+            {group.map(w => <option
+              key={w.id}
+              value={w.id}
+              className={Number(tier) > spoiler ? 'spoiler' : ''}
+            >{translate(w.id)}</option>)}
           </optgroup>))}
         </select>
       </div>
@@ -171,6 +182,7 @@ function StatBar(props: {
 }
 
 export function AttackCalc() {
+  const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
   const history = useHistory();
   const { params } = useParams<{ params?: string }>();
@@ -228,18 +240,23 @@ export function AttackCalc() {
     arrow: sameArrow,
   };
 
+  const maxTier = Math.max(creature.tier, ...weapons.map(w => w.item.tier));
+
   return (<>
+    <SpoilerAlert tier={maxTier} />
     <h1>{translate('ui.page.attack')}</h1>
     <div className="CombatCalc">
       <div className="CombatCalc__Creature">
         <h2>Creature</h2>
         <div className="row">
           <select onChange={onCreatureChange} value={creature.id}>
-            {map(
-              groupedCreatures,
-              (group, gBiome: Biome) => group.length ? (
+            {Object.entries(groupedCreatures).map(([gBiome, group]) => group.length ? (
                 <optgroup key={gBiome} label={gBiome}>
-                  {group.map(c => <option value={c.id} selected={creature === c && biome === gBiome}>{translate(c.id)}</option>)}
+                  {group.map(c => <option
+                    value={c.id}
+                    selected={creature === c && biome === gBiome}
+                    className={creature.tier > spoiler ? 'spoiler' : ''}
+                  >{translate(c.id)}</option>)}
                 </optgroup>
               ) : null
             )}

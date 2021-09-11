@@ -3,6 +3,7 @@ import type { GameEvent } from '../types';
 export const events: GameEvent[] = [
   {
     id: 'army_eikthyr',
+    tier: 1,
     icon: 'Eikthyr',
     biomes: ['Meadows', 'BlackForest'],
     killed: [],
@@ -24,6 +25,7 @@ export const events: GameEvent[] = [
   },
   {
     id: 'army_theelder',
+    tier: 2,
     icon: 'gd_king',
     biomes: ['Meadows', 'BlackForest', 'Swamp', 'Plains'],
     killed: ['Eikthyr'],
@@ -50,6 +52,7 @@ export const events: GameEvent[] = [
   },
   {
     id: 'foresttrolls',
+    tier: 2,
     icon: 'Troll',
     biomes: ['Meadows', 'BlackForest', 'Swamp', 'Plains'],
     killed: ['gd_king', 'Troll'],
@@ -66,6 +69,7 @@ export const events: GameEvent[] = [
   },
   {
     id: 'army_bonemass',
+    tier: 3,
     icon: 'Bonemass',
     biomes: ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains'],
     killed: ['gd_king'],
@@ -87,6 +91,7 @@ export const events: GameEvent[] = [
   },
   {
     id: 'skeletons',
+    tier: 4,
     icon: 'Skeleton',
     biomes: ['Meadows', 'BlackForest', 'Swamp', 'Plains', 'Mistlands'],
     killed: ['Bonemass'],
@@ -110,6 +115,7 @@ export const events: GameEvent[] = [
   },
   {
     id: 'surtlings',
+    tier: 4,
     icon: 'Surtling',
     biomes: ['Meadows', 'BlackForest', 'Swamp', 'Plains'],
     killed: ['Bonemass', 'Surtling'],
@@ -126,6 +132,7 @@ export const events: GameEvent[] = [
   },
   {
     id: 'blobs',
+    tier: 4,
     icon: 'Blob',
     biomes: ['Meadows', 'BlackForest', 'Swamp', 'Plains'],
     killed: ['Bonemass'],
@@ -147,6 +154,7 @@ export const events: GameEvent[] = [
   },
   {
     id: 'army_moder',
+    tier: 4,
     icon: 'Dragon',
     biomes: ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains'],
     killed: ['Bonemass'],
@@ -163,6 +171,7 @@ export const events: GameEvent[] = [
   },
   {
     id: 'wolves',
+    tier: 4,
     icon: 'Wolf',
     biomes: ['Mountain', 'Plains'],
     killed: ['Bonemass'],
@@ -179,6 +188,7 @@ export const events: GameEvent[] = [
   },
   {
     id: 'army_goblin',
+    tier: 5,
     icon: 'GoblinKing',
     biomes: ['Meadows', 'BlackForest', 'Plains'],
     killed: ['Dragon'],

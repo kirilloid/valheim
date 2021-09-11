@@ -91,6 +91,7 @@ export type BiomeConfig = {
 
 export type LocationConfig = {
   id: GameLocationId;
+  tier: number;
   tags?: string[];
   biome: Biome;
   quantity: number;
@@ -396,6 +397,7 @@ interface GameEventSpawn {
 
 export interface GameEvent {
   id: EntityId;
+  tier: number;
   icon: EntityId;
   biomes: Biome[];
   killed: EntityId[];

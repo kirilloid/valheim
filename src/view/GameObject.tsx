@@ -18,6 +18,7 @@ import { Ship } from './Ship';
 import { Cart } from './Cart';
 import { Destructible } from './Destructible';
 import { Plant } from './Plant';
+import { SpoilerAlert } from './Spoiler';
 
 function parseLevel(level: string | undefined): number | undefined {
   if (level == null) return undefined;
@@ -32,7 +33,10 @@ export function GameObject() {
   const level = parseLevel(params.level);
   const item = data[id];
   if (item == null) return <>Entity with id '{id}' not found!</>
-  return <Item item={item} level={level} />;
+  return <>
+    <SpoilerAlert tier={item.tier} />
+    <Item item={item} level={level} />
+  </>;
 }
 
 function Item({ item, level }: { item: T.GameObject, level?: number }) {

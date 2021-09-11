@@ -36,15 +36,23 @@ label {
 }
 
 .btn {
+  height: 2rem;
+  padding: 0.5rem;
   cursor: pointer;
   border: 0 solid black;
   background-color: var(--color-secondary);
+  color: white;
   border-radius: 0.25em;
 }
 
 .btn--info {
   background-color: var(--color-primary);
   color: white;
+}
+
+.btn--warning {
+  background-color: var(--color-warning);
+  color: black;
 }
 
 .btn--danger {

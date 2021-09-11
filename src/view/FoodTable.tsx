@@ -7,7 +7,7 @@ import type { Food, Item } from '../types';
 import { timeI2S } from '../model/utils';
 import { resources } from '../data/resources';
 
-import { TranslationContext } from '../effects';
+import { TranslationContext, useGlobalState } from '../effects';
 import { InlineObject } from './helpers';
 import { Icon, ItemIcon } from './Icon';
 
@@ -37,6 +37,7 @@ function sortBy<T>(array: T[], orderFn: (value: T) => number, asc: boolean = tru
 }
 
 export function FoodTable() {
+  const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
   const params = useParams<{ sort?: string }>();
   const history = useHistory();
@@ -44,7 +45,7 @@ export function FoodTable() {
 
   const Radio = useCallback((value: SortField) => {
     return <input type="radio" name="sort" id={`sort_${value}`} checked={sort === value} value={value} onClick={() => {
-      const path = `/food/${value}`;
+      const path = `/food-nutrition/${value}`;
       if (history.location.pathname !== path) {
         history.replace(path);
       };
@@ -108,7 +109,7 @@ export function FoodTable() {
       </thead>
       <tbody>
       {items.map(food => {
-        return <tr key={food.id}>
+        return <tr key={food.id} className={food.tier > spoiler ? 'spoiler' : ''}>
           <td><ItemIcon item={food} size={32} /></td>
           <td><InlineObject id={food.id} className="FoodTable__extra" /></td>
           <td className="FoodTable__value">{food.health}</td>

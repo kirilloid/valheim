@@ -1,5 +1,3 @@
-import mapValues from 'lodash-es/mapValues';
-
 import {
   Arrow,
   Attack,
@@ -18,6 +16,7 @@ import {
 import { addStatCounters, StatCounter } from '../view/helpers';
 import { effects } from '../data/effects';
 import { animations } from '../data/weapons';
+import { mapValues } from './utils';
 
 function applyArmor(damage: number, armor: number): number {
   return armor < damage / 2
@@ -176,10 +175,10 @@ const modifyResistances = (
   original: DamageModifiers,
   override: Partial<DamageModifiers>
 ) => {
-  return mapValues<DamageModifiers, DamageModifier>(
+  return mapValues<DamageType, DamageModifier>(
     original,
-    (val: DamageModifier, key) => key in override
-      ? overrideResistance(val, override[key as DamageType])
+    (val, key) => key in override
+      ? overrideResistance(val, override[key])
       : val
   );
 };

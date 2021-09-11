@@ -1,6 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-type GlobalKeys = 'aggregate';
+type GlobalKeys =
+  | 'aggregate' // to sum total resources for item levels or not
+  | 'spoiler' // spoiler levels
+;
 
 function read<T>(name: string, defaultValue: T): T {
   try {
@@ -20,15 +23,17 @@ function write<T>(name: string, value: T): void {
 
 const globalKeysDefaultValue = {
   aggregate: false as boolean,
+  spoiler: 0 as number,
 } as const;
 
 const listeners: Record<GlobalKeys, Function[]> = {
   aggregate: [],
+  spoiler: [],
 };
 
 type GK = typeof globalKeysDefaultValue;
 
-export function useGlobalState<K extends GlobalKeys, T = GK[K]>(name: GlobalKeys): [T, (val: T) => void] {
+export function useGlobalState<K extends GlobalKeys, T = GK[K]>(name: K): [T, (val: T) => void] {
   const defaultValue = globalKeysDefaultValue[name] as any as T;
   const value = read<T>(name, defaultValue);
   const [, setModel] = useState(value);

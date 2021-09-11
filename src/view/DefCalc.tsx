@@ -1,6 +1,5 @@
 import React, { useContext, useReducer } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import { map } from 'lodash-es';
 
 import '../css/Combat.css';
 
@@ -62,9 +61,8 @@ function Creature({ creature, biome, onChange }: { creature: CreatureT; biome: s
   const translate = useContext(TranslationContext);
   return <div className="row">
     <select onChange={onChange} value={creature.id}>
-      {map(
-        groupedCreatures,
-        (group, gBiome: Biome) => group.length ? (
+      {Object.entries(groupedCreatures).map(([gBiome, group]) =>
+        group.length ? (
           <optgroup key={gBiome} label={gBiome}>
             {group.map(c => <option key={`${gBiome}_${c.id}`} value={c.id} selected={creature === c && biome === gBiome}>{translate(c.id)}</option>)}
           </optgroup>

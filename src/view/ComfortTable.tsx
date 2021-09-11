@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import type { Piece } from '../types';
 import { pieces } from '../data/building';
 
-import { TranslationContext } from '../effects';
+import { TranslationContext, useGlobalState } from '../effects';
 import { InlineObject, Materials } from './helpers';
 import { ItemIcon } from './Icon';
 
@@ -13,6 +13,7 @@ const isComfortPieceType = (p: Piece): p is Piece & { comfort: any } => {
 const comfortables = pieces.filter(isComfortPieceType);
 
 export function ComfortTable() {
+  const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
 
   return (<>
@@ -29,7 +30,7 @@ export function ComfortTable() {
       </thead>
       <tbody>
       {comfortables.map(piece => {
-        return <tr key={piece.id}>
+        return <tr key={piece.id} className={piece.tier > spoiler ? 'spoiler' : ''}>
           <td><ItemIcon item={piece} size={32} /></td>
           <td><InlineObject id={piece.id} /></td>
           <td>{piece.comfort.value}</td>

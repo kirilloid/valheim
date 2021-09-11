@@ -12,9 +12,9 @@ import { match, SearchEntry } from '../model/search';
 import { data } from '../data/itemDB';
 import { getCraftingStationId } from '../data/building';
 import { events } from '../data/events';
-import { locations } from '../data/location';
+import { biomes, locations } from '../data/location';
 
-import { TranslationContext, Translator } from '../effects';
+import { TranslationContext, Translator, useGlobalState } from '../effects';
 import { averageAttacksDamage, findDropChanceFromCreature, Materials, ShortWeaponDamage } from './helpers';
 import { Icon, ItemIcon, SkillIcon } from './Icon';
 
@@ -80,25 +80,38 @@ function showSpecialIcon(special: ItemSpecial, translate: Translator) {
 
 function renderItem(entry: SearchEntry, text: string, translate: Translator, onClick: React.MouseEventHandler) {
   switch (entry.type) {
-    case 'obj': return renderObject(entry.id, text, translate, onClick);
+    case 'obj': return <SearchObject id={entry.id} text={text} onClick={onClick} />;
     case 'page': return renderLink('/', entry, text, onClick);
-    case 'loc': return renderLocation(entry, text, onClick);
-    case 'biome': return renderLink('/biome/', entry, text, onClick);
-    case 'event': return renderEvent(entry.id, text, translate, onClick);
+    case 'loc': return <SearchLocation entry={entry} text={text} onClick={onClick} />;
+    case 'biome': return <SearchBiome id={entry.id} text={text} onClick={onClick} />;
+    case 'event': return <SearchEvent id={entry.id} text={text} onClick={onClick} />;
     default: return assertNever(entry.type);
   }
 }
 
-function renderLocation(entry: SearchEntry, text: string, onClick: React.MouseEventHandler) {
+function SearchLocation({ entry, text, onClick }: { entry: SearchEntry, text: string, onClick: React.MouseEventHandler }) {
+  const [spoiler] = useGlobalState('spoiler');
   const { id } = entry;
-  const boss = locations.find(l => l.id === id)?.vegvisir?.boss;
-  return <div className="SearchItem">
+  const loc = locations.find(l => l.id === id);
+  if (!loc) return null;
+  
+  const boss = loc.vegvisir?.boss;
+  return <div className={`SearchItem ${loc.tier > spoiler ? 'spoiler' : ''}`}>
     <Link to={`/loc/${id}`} onClick={onClick}>{text}</Link>
     {boss ? <span>
       <ItemIcon item={data[boss]} useAlt />
     </span> : null}
   </div>;
   // <Link to={`${path}${id}`} onClick={onClick}>{text}</Link> 
+}
+
+function SearchBiome({ id, text, onClick }: { id: EntityId, text: string, onClick: React.MouseEventHandler }) {
+  const [spoiler] = useGlobalState('spoiler');
+  const biome = biomes.find(b => b.id === id);
+  return biome
+    ? <Link to={`/biome/${id}`} onClick={onClick}
+        className={biome.tier > spoiler ? 'spoiler' : ''}>{text}</Link>
+    : null;
 }
 
 function renderLink(path: string, entry: SearchEntry, text: string, onClick: React.MouseEventHandler) {
@@ -145,9 +158,11 @@ function ShortRecipe(props: { item: GameObject }) {
   }
 }
 
-function renderEvent(id: EntityId, text: string, translate: Translator, onClick: React.MouseEventHandler) {
+function SearchEvent({ id, text, onClick }: { id: EntityId, text: string, onClick: React.MouseEventHandler }) {
+  const [spoiler] = useGlobalState('spoiler');
+  const translate = useContext(TranslationContext);
   const event = events.find(e => e.id === id)!;
-  return <div className="SearchItem">
+  return <div className={`SearchItem ${event.tier > spoiler ? 'spoiler' : ''}`}>
     <ItemIcon item={data[event.icon]} size={32} />
     <Link to={`/event/${id}`} onClick={onClick}>{text}</Link>
     <span>
@@ -160,16 +175,19 @@ function renderEvent(id: EntityId, text: string, translate: Translator, onClick:
   </div>
 }
 
-function renderObject(id: EntityId, text: string, translate: Translator, onClick: React.MouseEventHandler) {
+function SearchObject({ id, text, onClick }: { id: EntityId, text: string, onClick: React.MouseEventHandler }) {
+  const [spoiler] = useGlobalState('spoiler');
+  const translate = useContext(TranslationContext);
   const item = data[id];
   if (!item) {
     return <span className="danger">Item "{id}" appears in search index, but missing from the main DB</span>
   }
+  const className = `SearchItem ${item.tier > spoiler ? 'spoiler' : ''}`;
   switch (item.type) {
     case 'creature': {
       const { hp } = item;
       const avgDmg = averageAttacksDamage(item);
-      return <div className="SearchItem">
+      return <div className={className}>
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         <span>
@@ -184,7 +202,7 @@ function renderObject(id: EntityId, text: string, translate: Translator, onClick
     }
     case 'item':
       const respawn = item.grow?.find(g => g.respawn)?.respawn ?? 0;
-      return <div className="SearchItem">
+      return <div className={className}>
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         {item.summon
@@ -194,7 +212,7 @@ function renderObject(id: EntityId, text: string, translate: Translator, onClick
         : null}
       </div>
     case 'trophy':
-      return <div className="SearchItem">
+      return <div className={className}>
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         <span>
@@ -205,21 +223,21 @@ function renderObject(id: EntityId, text: string, translate: Translator, onClick
         </span>
       </div>
     case 'tool':
-      return <div className="SearchItem">
+      return <div className={className}>
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         {showSpecialIcon(item.special, translate)}
         <ShortRecipe item={item} />
       </div>
     case 'weapon':
-      return <div className="SearchItem">
+      return <div className={className}>
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         {showSpecialIcon(item.special, translate) ?? <ShortWeaponDamage damage={item.damage[0]} skill={item.skill} />}
         <ShortRecipe item={item} />
       </div>
     case 'shield':
-      return <div className="SearchItem">
+      return <div className={className}>
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         <span>
@@ -229,7 +247,7 @@ function renderObject(id: EntityId, text: string, translate: Translator, onClick
         <ShortRecipe item={item} />
       </div>
     case 'armor':
-      return <div className="SearchItem">
+      return <div className={className}>
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         <span>{
@@ -242,14 +260,14 @@ function renderObject(id: EntityId, text: string, translate: Translator, onClick
         <ShortRecipe item={item} />
       </div>
     case 'ammo':
-      return <div className="SearchItem">
+      return <div className={className}>
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         <span><ShortWeaponDamage damage={item.damage} skill={SkillType.Bows} /></span>
         <ShortRecipe item={item} />
       </div>
     case 'food':
-      return <div className="SearchItem">
+      return <div className={className}>
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         <span>
@@ -260,7 +278,7 @@ function renderObject(id: EntityId, text: string, translate: Translator, onClick
         </span>
       </div>
     case 'potion':
-      return <div className="SearchItem">
+      return <div className={className}>
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         <span>
@@ -283,7 +301,7 @@ function renderObject(id: EntityId, text: string, translate: Translator, onClick
         <ShortRecipe item={item} />
       </div>
     case 'valuable':
-      return <div className="SearchItem">
+      return <div className={className}>
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         <span>
@@ -292,7 +310,7 @@ function renderObject(id: EntityId, text: string, translate: Translator, onClick
         </span>
       </div>
     case 'plant':
-      return <div className="SearchItem">
+      return <div className={className}>
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         <span>
@@ -304,12 +322,12 @@ function renderObject(id: EntityId, text: string, translate: Translator, onClick
         </span>
       </div>
     case 'destructible':
-      return <div className="SearchItem">
+      return <div className={className}>
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
       </div>
     case 'piece':
-      return <div className="SearchItem">
+      return <div className={className}>
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         {pieceExtra(item)}
@@ -317,7 +335,7 @@ function renderObject(id: EntityId, text: string, translate: Translator, onClick
       </div>
     case 'ship':
     case 'cart':
-      return <div className="SearchItem">
+      return <div className={className}>
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         <span>
@@ -326,7 +344,7 @@ function renderObject(id: EntityId, text: string, translate: Translator, onClick
         </span>
       </div>
     default:
-      assertNever(item);
+      return assertNever(item);
   }
 }
 

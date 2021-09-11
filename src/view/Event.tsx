@@ -7,16 +7,18 @@ import { timeI2S } from '../model/utils';
 import { data } from '../data/itemDB';
 import { events } from '../data/events';
 
-import { TranslationContext } from '../effects';
+import { TranslationContext, useGlobalState } from '../effects';
 import { Area, InlineObject, InlineObjectWithIcon, List, yesNo } from './helpers';
 import { ItemIcon } from './Icon';
+import { SpoilerAlert } from './Spoiler';
 
-function creature(id: EntityId) {
-  return <Link key={id} to={`/obj/${id}`}><ItemIcon item={data[id]} useAlt /></Link>
+function creature(id: EntityId, useAlt: boolean) {
+  return <Link key={id} to={`/obj/${id}`}><ItemIcon item={data[id]} useAlt={useAlt} /></Link>
 }
 
 export function GameEvent() {
   const { id } = useParams<{ id: string }>();
+  const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
   const event = events.find(e => e.id === id);
   if (event == null) {
@@ -33,6 +35,7 @@ export function GameEvent() {
   } = event;
   return (
     <>
+      <SpoilerAlert tier={event.tier} />
       <h1>
         {translate(event.id)}
       </h1>
@@ -73,7 +76,7 @@ export function GameEvent() {
           </thead>
           <tbody>
             {spawns.map(s => <tr key={s.id}>
-              <td>{creature(s.id)}</td>
+              <td>{creature(s.id, true)}</td>
               <td>{<InlineObject id={s.id} />}</td>
               <td>{`${((s.chance ?? 1) * 100).toFixed(2).replace(/0+$/, '').replace(/\.$/, '')}%`}</td>
               <td>{timeI2S(s.interval)}</td>
@@ -87,6 +90,7 @@ export function GameEvent() {
 }
 
 export function GameEventTable() {
+  const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
   return (
     <>
@@ -107,13 +111,13 @@ export function GameEventTable() {
             </tr>
           </thead>
           <tbody>
-            {events.map(e => <tr key={e.id}>
+            {events.map(e => <tr key={e.id} className={e.tier > spoiler ? 'spoiler' : ''}>
               <td><Link to={`/event/${e.id}`}>{translate(e.id)}</Link></td>
-              <td><List>{e.killed.map(creature)}</List></td>
-              <td><List>{e.notKilled.map(creature)}</List></td>
+              <td><List>{e.killed.map(id => creature(id, e.tier <= spoiler))}</List></td>
+              <td><List>{e.notKilled.map(id => creature(id, e.tier <= spoiler))}</List></td>
               <td>{timeI2S(e.duration)}</td>
               <td><List>{e.spawns.map(s => <React.Fragment key={s.id}>
-                {creature(s.id)}×{s.max}
+                {creature(s.id, e.tier <= spoiler)}×{s.max}
               </React.Fragment>)}</List></td>
               <td>{yesNo(e.base)}</td>
               <td><List>{e.biomes.map(b => <Area key={b} area={b} />)}</List></td>

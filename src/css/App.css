@@ -98,3 +98,75 @@ ul {
   text-indent: 16px;
   margin-left: -16px;
 }
+
+.spoiler {
+  filter: blur(8px);
+}
+option.spoiler {
+  color: #eee0;
+}
+
+.SpoilerAlert {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.SpoilerAlert__curtain {
+  height: 100%;
+  background-color: #fff8;
+  backdrop-filter: blur(8px);
+}
+
+.SpoilerAlert__message {
+  width: calc(160px + 25%);
+  max-width: 480px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.SpoilerAlert__header {
+  color: var(--color-danger);
+  letter-spacing: 0.125rem;
+}
+
+.Dialog {
+  border: 1px solid gray;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: white;
+}
+
+.Dialog__body {
+  padding: 1rem;
+}
+
+.Dialog__header {
+  background: #eee;
+  text-align: center;
+  font-size: 1.5rem;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+}
+
+.Dialog__button {
+  margin: 0 0 1rem 1rem;
+}
+
+.Dialog__buttons {
+  background: #eee;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1rem 0 0;
+}
+
+@media screen and (min-width: 640px) { 
+  .Dialog__buttons {
+    flex-direction: row;
+    justify-content: flex-end;
+  }    
+}
