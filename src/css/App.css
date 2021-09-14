@@ -100,7 +100,7 @@ ul {
 }
 
 .spoiler {
-  filter: blur(8px);
+  filter: blur(4px);
 }
 option.spoiler {
   color: #eee0;
@@ -112,43 +112,53 @@ option.spoiler {
   right: 0;
   top: 0;
   bottom: 0;
+  z-index: 1;
 }
 
 .SpoilerAlert__curtain {
   height: 100%;
   background-color: #fff8;
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(4px);
 }
 
-.SpoilerAlert__message {
+.SpoilerAlert__header {
+  color: var(--color-danger);
+  letter-spacing: 0.0625rem;
+  text-transform: uppercase;
+}
+
+.Dialog {
+  z-index: 1;
   width: calc(160px + 25%);
   max-width: 480px;
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-}
-
-.SpoilerAlert__header {
-  color: var(--color-danger);
-  letter-spacing: 0.125rem;
-}
-
-.Dialog {
   border: 1px solid gray;
   border-radius: 0.5rem;
   overflow: hidden;
   background: white;
+  box-shadow: 0 0 1rem #0008;
 }
 
 .Dialog__body {
   padding: 1rem;
 }
 
+.Dialog__row {
+  height: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.Dialog__body dl {
+  margin-top: -0.5rem;
+}
+
 .Dialog__header {
   background: #eee;
-  text-align: center;
   font-size: 1.5rem;
+  line-height: 2.5rem;
   padding: 0.5rem 1rem;
   font-weight: bold;
 }

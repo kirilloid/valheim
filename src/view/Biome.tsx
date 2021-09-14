@@ -86,46 +86,46 @@ export function Biome() {
         </dl>
       </section>
       <section>
-        <h2>resources</h2>
+        <h2>{translate('ui.resources')}</h2>
         <div className="multiList">
           <div>
             <h3>food</h3>
             <ResourceList list={resources.food} />
           </div>
           <div>
-            <h3>resources</h3>
+            <h3>{translate('ui.resources')}</h3>
             <ResourceList list={resources.others} />
           </div>
           <div>
-            <h3>trophies</h3>
+            <h3>{translate('ui.trophies')}</h3>
             <ResourceList list={resources.trophies} />
           </div>
         </div>
-        <h2>mining</h2>
+        <h2>{translate('ui.mining')}</h2>
         <div className="multiList">
           <div>
             <h3>unique</h3>
             <ResourceList list={resources.misc} />
           </div>
           <div>
-            <h3>trees</h3>
+            <h3>{translate('ui.trees')}</h3>
             <ResourceList list={resources.tree} />
           </div>
           <div>
-            <h3>rocks</h3>
+            <h3>{translate('ui.rocks')}</h3>
             <ResourceList list={resources.rock} />
           </div>
         </div>
       </section>
       <section>
-        <h2>creatures</h2>
+        <h2>{translate('ui.creatures')}</h2>
         <table width="100%">
           <thead>
             <tr>
               <th></th>
-              <th>creature</th>
-              <th>health</th>
-              <th>damage</th>
+              <th>{translate('ui.creature')}</th>
+              <th>{translate('ui.health')}</th>
+              <th>{translate('ui.damage')}</th>
               <th>⭐</th>
             </tr>
           </thead>
@@ -142,7 +142,7 @@ export function Biome() {
         </table>
       </section>
       <section>
-        <h2>locations</h2>
+        <h2>{translate('ui.locations')}</h2>
         <ul className="plainList">{biome.locations.map(id =>
           <li key={id}>
             <Link to={`/loc/${id}`}>{translate(`ui.location.${id}`)}</Link>

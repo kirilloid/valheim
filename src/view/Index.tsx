@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 import { pages } from '../model/search';
 import { biomes } from '../data/location';
 
-import { TranslationContext, useGlobalState } from '../effects';
+import { TranslationContext, useRuneTranslate } from '../effects';
 
 export function Index() {
   const translate = useContext(TranslationContext);
-  const [spoiler] = useGlobalState('spoiler');
+  const runeTranslate = useRuneTranslate();
   return <div>
     <h1>{translate('ui.index.utils')}</h1>
     <p>{translate('ui.index.description')}</p>
@@ -23,8 +23,8 @@ export function Index() {
     <section>
       <h2>{translate('ui.biomes')}</h2>
       <ul>
-        {biomes.map(({ id, tier }) => <li key={id} className={tier > spoiler ? 'spoiler' : ''}>
-          <Link to={`/biome/${id}`}>{translate(`ui.biome.${id}`)}</Link>
+        {biomes.map(({ id, tier }) => <li key={id}>
+          <Link to={`/biome/${id}`}>{runeTranslate({ tier, id: `ui.biome.${id}` })}</Link>
         </li>)}
       </ul>
     </section>

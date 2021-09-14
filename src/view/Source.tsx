@@ -124,7 +124,7 @@ function CraftingSection({ id }: { id: EntityId }) {
   return <>
     {crafts?.length
       ? <section>
-          <h2>crafting</h2>
+          <h2>{translate('ui.crafting')}</h2>
           <div>{translate('ui.usedToCraft')}:</div>
           <ul className="CraftList">
             {crafts.sort((a, b) => a.tier - b.tier).map(item => <li key={item.id}>
@@ -135,7 +135,7 @@ function CraftingSection({ id }: { id: EntityId }) {
       : null}
     {builds?.length
       ? <section>
-          <h2>building</h2>
+          <h2>{translate('ui.building')}</h2>
           <div>{translate('ui.usedToBuild')}:</div>
           <ul className="CraftList">
             {builds.sort((a, b) => a.tier - b.tier).map(item => <li key={item.id}>
@@ -165,12 +165,12 @@ export function Recipe({ item }: { item: Item | Piece | Destructible | Plant | S
       return <dl>
         <dt>station</dt><dd><Station station={station} /></dd>
         <dt>{translate('ui.time')}</dt><dd><Icon id="time" alt="" size={16} />{timeI2S(time)}</dd>
-        <dt>resources</dt><dd>{
+        <dt>{translate('ui.resources')}</dt><dd>{
         Object.keys(materials).length
           ? <Materials materials={materials} />
           : 'for free'
         }</dd>
-        {number === 1 ? null : <><dt>quantity</dt><dd>{number}</dd></>} 
+        {number === 1 ? null : <><dt>{translate('ui.quantity')}</dt><dd>{number}</dd></>} 
       </dl>;
     case 'craft_upg': {
       const { station, level } = recipe.source;
@@ -235,6 +235,7 @@ function showNumber(num: Pair<number>): string {
 }
 
 export function GrowSection({ item }: { item: GameObject | undefined }) {
+  const translate = useContext(TranslationContext);
   if (!item) return null;
   switch (item.type) {
     case 'creature':
@@ -250,17 +251,17 @@ export function GrowSection({ item }: { item: GameObject | undefined }) {
   return <>
     {item.type === 'destructible' ? 'Can be found in' : 'Sourced from'}
     <List separator={<hr />}>{grow.map((g, i) => <dl key={i}>
-      <dt>locations</dt>
+      <dt>{translate('ui.locations')}</dt>
       <dd><List>{g.locations.map(loc => <Area key={loc} area={loc} />)}</List></dd>
-      <dt>altitude</dt>
+      <dt>{translate('ui.altitude')}</dt>
       <dd>{showAltitude(g.altitude)}</dd>
       <dt>surface</dt>
       <dd>{showSurface(g.onSurface, g.offset)}</dd>
-      <dt>ground tilt</dt>
+      <dt>{translate('ui.groundTilt')}</dt>
       <dd>{showTilt(g.tilt)}</dd>
-      <dt>number</dt>
+      <dt>{translate('ui.quantity')}</dt>
       <dd>{showNumber(g.num)}{g.locations[0]! in locationBiomes ? '' : ' (per 64x64m zone)'}</dd>
-      <dt>respawn</dt>
+      <dt>{translate('ui.respawn')}</dt>
       <dd>{g.respawn ? `every ${days(respawn)} game days` : 'never'}</dd>
     </dl>)}</List>
   </>;

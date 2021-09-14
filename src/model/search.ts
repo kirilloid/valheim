@@ -5,6 +5,8 @@ import { getCraftingStationId } from '../data/building';
 import { events } from '../data/events';
 
 import { preloadLanguage } from '../effects';
+import { read } from '../effects/globalState.effect';
+import { getDefaultUserLanguage } from '../effects/translation.effect';
 
 type PrefixTree<T> = {
   children: Map<string, PrefixTree<T>>;
@@ -40,16 +42,17 @@ export type SearchEntry = {
   type: 'obj' | 'loc' | 'biome' | 'page' | 'event';
   path: string;
   id: string;
+  tier: number;
   i18nKey: string;
 };
 
-const obj = (id: string): SearchEntry => ({ type: 'obj', path: '/obj/', id, i18nKey: id });
+const obj = (id: string, tier: number): SearchEntry => ({ type: 'obj', path: '/obj/', id, i18nKey: id, tier });
 
 const fullMatch = new Map<string, EntityId>();
 const startTree = treeNode<SearchEntry>();
 const anyTree = treeNode<SearchEntry>();
 
-function addArray<T extends { id: string; tags?: string[] }>(
+function addArray<T extends { id: string; tier?: number; tags?: string[] }>(
   data: T[],
   type: SearchEntry['type'],
   path: string,
@@ -59,7 +62,7 @@ function addArray<T extends { id: string; tags?: string[] }>(
 ) {
   const visited = new Set<string>();
   for (const obj of data) {
-    const { id } = obj;
+    const { id, tier = 0 } = obj;
     // avoid duplicating locations via different parent biomes
     if (visited.has(id)) continue
     visited.add(id);
@@ -69,7 +72,7 @@ function addArray<T extends { id: string; tags?: string[] }>(
     const normalized = entry.toLowerCase();
     fullMatch.set(normalized, id);
     const words = normalized.split(' ');
-    const item: SearchEntry = { type, id, path, i18nKey };
+    const item: SearchEntry = { type, id, path, i18nKey, tier };
     for (const word of words) {
       addToTree(startTree, word, item);
       for (let i = 1; i < word.length - 1; i++) {
@@ -107,12 +110,13 @@ function addObjects(dict: Record<string, string>) {
   for (const gobj of Object.values(data)) {
     if (gobj.disabled) continue;
     const key = gobj.id;
+    const tier = gobj.tier;
     const entry = dict[key];
     if (entry == null) continue;
     const normalized = entry.toLowerCase();
     fullMatch.set(normalized, key);
     const words = normalized.split(' ');
-    const item = obj(key);
+    const item = { type: 'obj', path: '/obj/', id: key, i18nKey: key, tier };
     for (const word of words) {
       addToTree(startTree, word, item);
       for (let i = 1; i < word.length - 1; i++) {
@@ -188,10 +192,12 @@ function addObjects(dict: Record<string, string>) {
   }
 }
 
-preloadLanguage().then(dict => {
+const lang = read('language', getDefaultUserLanguage());
+
+preloadLanguage(lang).then(dict => {
   addArray(pages, 'page', '/', dict, id => `ui.page.${id}`);
   addArray(locations, 'loc', '/loc/', dict, id => `ui.location.${id}`);
-  addArray(biomes, 'biome', '/biome/', dict, id => `ui.biome.${id}`);
+  addArray(biomes, 'biome', '/biome/', dict, id => `ui.biome.${id}`, 'ui.biome');
   addObjects(dict);
   addArray(events, 'event', '/event/', dict, id => id, 'ui.event ui.page.events.tags');
 });

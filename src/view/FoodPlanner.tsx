@@ -8,9 +8,10 @@ import { BASE_HEALTH, BASE_STAMINA, days, isNotNull, MAX_PLAYERS, groupBy, mapVa
 import { addDrop } from '../model/dist';
 
 import { resources } from '../data/resources';
+import { area } from '../data/location';
 import { data } from '../data/itemDB';
 
-import { TranslationContext, useDebounceEffect, useGlobalState } from '../effects';
+import { TranslationContext, useRuneTranslate, useDebounceEffect, useGlobalState } from '../effects';
 import { InlineObjectWithIcon, showNumber } from './helpers';
 import { Icon, ItemIcon } from './Icon';
 
@@ -23,11 +24,17 @@ const foodMap = new Map(foods.map(f => [f.id, f]));
 
 const FoodOptions = React.memo(() => {
   const [spoiler] = useGlobalState('spoiler');
-  const translate = useContext(TranslationContext);
-  return <><option value="" className="FoodOption--even">&mdash;</option>{foods.map(food =>
-    <option key={food.id} value={food.id}
-      className={`${food.tier % 2 ? 'FoodOption--even' : 'FoodOption--odd'} ${food.tier > spoiler ? 'spoiler' : ''}`}
-    >{translate(food.id)}</option>)}</>;
+  const runeTranslate = useRuneTranslate();
+  return <>
+    <option value="" className="FoodOption--even">&mdash;</option>
+    {foods
+      .filter(food => food.tier <= spoiler)
+      .map(food =>
+        <option key={food.id} value={food.id}
+          className={food.tier % 2 ? 'FoodOption--even' : 'FoodOption--odd'}
+        >{runeTranslate(food)}
+      </option>)}
+  </>;
 });
 
 function getItemResources(item: GameObject | undefined): SimpleDrop {
@@ -119,7 +126,7 @@ type State = {
 function parseState(string: string | undefined): State {
   const match = string?.match(/(\w+,\w+,\w+)(-night-eat)?(?:-players-(\d+))?(?:-days-(\d+))?(?:-repeat-(\d+(?:\.\d+)?))?/);
   if (match == null) return {
-    foods: ['CookedMeat', 'Rasperries', ''],
+    foods: ['CookedMeat', 'Raspberries', ''],
     nightEat: false,
     players: 1,
     days: 1,
@@ -147,6 +154,7 @@ function serializeState(state: State): string {
 export function FoodPlanner() {
   const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
+  const runeTranslate = useRuneTranslate();
   const history = useHistory();
   const { params } = useParams<{ params?: string }>();
   const [state, setState] = useState(parseState(params));
@@ -185,25 +193,28 @@ export function FoodPlanner() {
 
   return (<>
     <h1>{translate('ui.page.food-planner')}</h1>
-    <h2>pick foods</h2>
+    <h2>{translate('ui.pickFoods')}</h2>
     <div className="FoodPresets">
       <div className="FoodPresets__cell FoodPresets__title FoodPresets__title--initial">{translate('ui.biome')}</div>
       {Object.keys(bestTypes).map(key =>
         <div className="FoodPresets__cell FoodPresets__title" key={key}>{translate(`ui.bestFood.${key}`)}</div>
       )}
-      {biomes.map((biome, tier) => {
-        return <>
-          <div className={`FoodPresets__cell FoodPresets__biome ${tier + 1 > spoiler ? 'spoiler' : ''}`}>{translate(`ui.biome.${biome}`)}</div>
-          {Object.entries(bestTypes).map(([key, fn]) => {
-            const bestFood = bestFoods(tier + 1, fn);
-            return <div className={`FoodPresets__cell FoodPresets__button ${tier + 1 > spoiler ? 'spoiler' : ''}`} key={`${key}_${tier}`}>
-              <button type="button" onClick={() => setSelectedFoods(bestFood)}>
-                {bestFood.map(f => <ItemIcon key={`${key}_${tier}_${f.id}`} item={f} useAlt size={24} />)}
-              </button>
-            </div>;
-          })}
-        </>;
-      })}
+      {biomes
+        .filter((_, tier) => tier < spoiler)
+        .map((biome, idx) => {
+          const tier = idx + 1;
+          return <React.Fragment key={biome}>
+            <div className="FoodPresets__cell FoodPresets__biome">{runeTranslate({ tier, id: `ui.biome.${biome}` })}</div>
+            {Object.entries(bestTypes).map(([key, fn]) => {
+              const bestFood = bestFoods(tier, fn);
+              return <div className="FoodPresets__cell FoodPresets__button" key={key}>
+                <button type="button" onClick={() => setSelectedFoods(bestFood)}>
+                  {bestFood.map(f => <ItemIcon key={f.id} item={f} useAlt size={24} />)}
+                </button>
+              </div>;
+            })}
+          </React.Fragment>;
+        })}
     </div>
     <table className="FoodPlanner">
       <thead>
@@ -222,7 +233,7 @@ export function FoodPlanner() {
           <td className="FoodPlanner__value">{BASE_STAMINA}</td>
         </tr>
         {[0, 1, 2].map(idx => <tr>
-          <td><ItemIcon key={idx} item={selectedFoods[idx]} /></td>
+          <td><ItemIcon key={idx} item={selectedFoods[idx]} className={(selectedFoods[idx]?.tier ?? 0) > spoiler ? 'spoiler' : ''} /></td>
           <td className="FoodPlanner__select"><FoodSelector key={idx} state={selectedFoods} setState={setSelectedFoods} idx={idx} error={wrongFoods[idx]} /></td>
           <td className="FoodPlanner__value">{selectedFoods[idx]?.health}</td>
           <td className="FoodPlanner__value">{selectedFoods[idx]?.stamina}</td>
@@ -239,7 +250,7 @@ export function FoodPlanner() {
     </table>
     <hr />
     <div>
-      <h2>regularity</h2>
+      <h2>{translate('ui.repEat')}</h2>
       <input id="nightEat"
         type="checkbox"
         checked={nightEat}
@@ -247,6 +258,13 @@ export function FoodPlanner() {
       />
       <label htmlFor="nightEat">{translate('ui.nightEat')}</label> {translate('ui.nightEat.extra')}
     </div>
+    <div>
+    {translate('ui.repEat.when')}
+      <br /><Radio key={0} val={2} repeat={repeat} setRepeat={setRepeat}>{translate('ui.repEat.maximum')}</Radio>
+      <br /><Radio key={1} val={1} repeat={repeat} setRepeat={setRepeat}>{translate('ui.repEat.moderate')}</Radio>
+      <br /><Radio key={2} val={0.5} repeat={repeat} setRepeat={setRepeat}>{translate('ui.repEat.rarely')}</Radio>
+    </div>
+    {translate('ui.repEat.planTime')}
     <div>
       <input id="players" className="FoodPlanner__range"
         type="range" min="1" max={MAX_PLAYERS} value={players}
@@ -273,21 +291,15 @@ export function FoodPlanner() {
       {' '}
       <label htmlFor="days">{translate('ui.days')}</label>
     </div>
-    <div>
-    {translate('ui.repEat.when')}
-      <br /><Radio key={0} val={2} repeat={repeat} setRepeat={setRepeat}>{translate('ui.repEat.maximum')}</Radio>
-      <br /><Radio key={1} val={1} repeat={repeat} setRepeat={setRepeat}>{translate('ui.repEat.moderate')}</Radio>
-      <br /><Radio key={2} val={0.5} repeat={repeat} setRepeat={setRepeat}>{translate('ui.repEat.rarely')}</Radio>
-    </div>
     <hr />
     <div className="FoodTotals">
       <div className="FoodTotals__section">
-        <h2>Food</h2>
+        <h2>{translate('ui.itemType.food')}</h2>
         <ul>{Object.entries(totalFood).map(([key, val]) => 
           <li><InlineObjectWithIcon id={key} key={key} /> {showNumber(val * mul)}</li>)}</ul>
       </div>
       <div className="FoodTotals__section">
-        <h2>Resources</h2>
+        <h2>{translate('ui.resources')}</h2>
         <ul>{Object.entries(totalRes).map(([key, val]) => 
           <li><InlineObjectWithIcon id={key} key={key} /> {showNumber(val * mul)}</li>)}</ul>
       </div>

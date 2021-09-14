@@ -58,7 +58,7 @@ function WeaponStats({ item, level }: { item: TWeapon, level?: number }) {
     <dl>
       <dt>{translate('ui.damage')}</dt><dd>{showPair([baseDmg, lvlDmg], level)}</dd>
       <dt>{translate('ui.skill')}</dt><dd>{skill(item.skill) ?? <em>{translate('ui.skillType.None')}</em>}</dd>
-      <dt><Link to="/info/combat#backstab">{translate('ui.backstab')}</Link></dt><dd>{item.backstab}×</dd>
+      <dt>{translate('ui.backstab')} <Link to="/info/combat#backstab">ℹ️</Link></dt><dd>{item.backstab}×</dd>
       <dt>{translate('ui.hands')}</dt><dd>{translate(`ui.slot.${item.slot}`)}</dd>
       <dt>{translate('ui.maxQuality')}</dt><dd><Icon id="star" alt="" size={16} />{' '}{item.maxLvl}</dd>
       <dt title="weapons loose 1 durability point per hit">{translate('ui.durability')}</dt>
@@ -89,8 +89,8 @@ function Attack({ item, attack }: { item: TWeapon, attack: TAttack }) {
       <dd>{attack.projAcc[1]}&deg;</dd>
     </>}
     {damage !== 1 && <><dt>{translate('ui.damage')}</dt><dd>{damage}×</dd></>}
-    {force !== 1 && <><dt>knockback</dt><dd>{force}×</dd></>}
-    {stagger !== 1 && <><dt>stagger</dt><dd>{stagger}×</dd></>}
+    {force !== 1 && <><dt>{translate('ui.knockback')}</dt><dd>{force}×</dd></>}
+    {stagger !== 1 && <><dt>{translate('ui.stagger')}</dt><dd>{stagger}×</dd></>}
   </dl>;
 }
 
@@ -102,11 +102,11 @@ export function Weapon({ item, level }: { item: TWeapon, level?: number }) {
       <ItemHeader item={item} />
       <WeaponStats item={item} level={level} />
       {primaryAttack && <section>
-        <h2>primary attack</h2>
+        <h2>{translate('ui.attack.primary')}</h2>
         <Attack item={item} attack={primaryAttack} />
       </section>}
       {secondaryAttack && <section>
-        <h2>secondary attack</h2>
+        <h2>{translate('ui.attack.secondary')}</h2>
         <Attack item={item} attack={secondaryAttack} />
       </section>}
       <hr />

@@ -18,7 +18,6 @@ function creature(id: EntityId, useAlt: boolean) {
 
 export function GameEvent() {
   const { id } = useParams<{ id: string }>();
-  const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
   const event = events.find(e => e.id === id);
   if (event == null) {
@@ -54,7 +53,7 @@ export function GameEvent() {
             <dt>requires not killed</dt>
             <dd><List>{notKilled.map(id => <InlineObjectWithIcon key={id} id={id} />)}</List></dd>
           </> : null}
-          <dt>biomes</dt>
+          <dt>{translate('ui.biomes')}</dt>
           <dd><List>{event.biomes.map(bid => <Area key={bid} area={bid} />)}</List></dd>
           <dt>at player's base</dt>
           <dd>{yesNo(base)}</dd>
@@ -63,7 +62,7 @@ export function GameEvent() {
         </dl>        
       </section>
       <section>
-        <h2>creatures</h2>
+        <h2>{translate('ui.creatures')}</h2>
         <table>
           <thead>
             <tr>
@@ -104,24 +103,26 @@ export function GameEventTable() {
               <th>event</th>
               <th>killed</th>
               <th>not killed</th>
-              <th>duration</th>
+              <th>{translate('ui.duration')}</th>
               <th>spawns (max)</th>
               <th>base</th>
-              <th>biomes</th>
+              <th>{translate('ui.biomes')}</th>
             </tr>
           </thead>
           <tbody>
-            {events.map(e => <tr key={e.id} className={e.tier > spoiler ? 'spoiler' : ''}>
-              <td><Link to={`/event/${e.id}`}>{translate(e.id)}</Link></td>
-              <td><List>{e.killed.map(id => creature(id, e.tier <= spoiler))}</List></td>
-              <td><List>{e.notKilled.map(id => creature(id, e.tier <= spoiler))}</List></td>
-              <td>{timeI2S(e.duration)}</td>
-              <td><List>{e.spawns.map(s => <React.Fragment key={s.id}>
-                {creature(s.id, e.tier <= spoiler)}×{s.max}
-              </React.Fragment>)}</List></td>
-              <td>{yesNo(e.base)}</td>
-              <td><List>{e.biomes.map(b => <Area key={b} area={b} />)}</List></td>
-            </tr>)}
+            {events
+              .filter(e => e.tier <= spoiler)
+              .map(e => <tr key={e.id}>
+                <td><Link to={`/event/${e.id}`}>{translate(e.id)}</Link></td>
+                <td><List>{e.killed.map(id => creature(id, e.tier <= spoiler))}</List></td>
+                <td><List>{e.notKilled.map(id => creature(id, e.tier <= spoiler))}</List></td>
+                <td>{timeI2S(e.duration)}</td>
+                <td><List>{e.spawns.map(s => <React.Fragment key={s.id}>
+                  {creature(s.id, e.tier <= spoiler)}×{s.max}
+                </React.Fragment>)}</List></td>
+                <td>{yesNo(e.base)}</td>
+                <td><List>{e.biomes.map(b => <Area key={b} area={b} />)}</List></td>
+              </tr>)}
           </tbody>
         </table>
       </section>

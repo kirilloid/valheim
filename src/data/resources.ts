@@ -35,7 +35,7 @@ export const resources: Item[] = [
     grow: itemGrow({ locations: ['Meadows', 'Swamp', 'BlackForest'], altitude: [0, 1000], inForest: [0, 1.1], num: [15, 15] })
   },
   { type: 'item', id: 'Coal', tier: 2, weight: 2, stack: 50,
-    recipe: { type: 'craft_one', time: KILN_TIME, materials: { wood: 1 },
+    recipe: { type: 'craft_one', time: KILN_TIME, materials: { Wood: 1 },
               source: { station: CraftingStation.CharcoalKiln }, number: 1 },
   },
   { type: 'item', id: 'Resin', tier: 1, weight: 0.3, stack: 50 },

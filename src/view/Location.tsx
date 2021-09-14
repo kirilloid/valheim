@@ -29,7 +29,7 @@ export function Location() {
           <dd><Area area={biome} /></dd>
           <dt>{translate('ui.locationType')}</dt>
           <dd>{translate(`ui.locationType.${loc.type}`)}</dd>
-          <dt>altitude range</dt>
+          <dt>{translate('ui.altitude')}</dt>
           <dd>{rangeBy(loc.altitude, String, '..')}</dd>
           <dt>number in world</dt>
           <dd>{loc.quantity}</dd>
@@ -40,7 +40,7 @@ export function Location() {
         </dl>
         {loc.creatures.length
         ? <>
-            <h2>creatures</h2>
+            <h2>{translate('ui.creatures')}</h2>
             <ul>{loc.creatures.map(c =>
               <li key={loc.id}>
                 <InlineObjectWithIcon id={c.id} size={32} />
@@ -51,7 +51,7 @@ export function Location() {
         : null}
         {loc.resources.length
         ? <>
-            <h2>resources</h2>
+            <h2>{translate('ui.resources')}</h2>
             <ul>{loc.resources.map(id =>
               <li key={id}>
                 <InlineObjectWithIcon id={id} />
@@ -61,7 +61,7 @@ export function Location() {
           </>
         : null}
         {loc.chest && <>
-          <h2>chest</h2>
+          <h2>{translate('piece_chest_wood')}</h2>
           <DropTable drops={[loc.chest]} />
         </>}
       </section>

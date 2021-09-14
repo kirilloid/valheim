@@ -10,10 +10,11 @@ import { timeI2S } from '../model/utils';
 import { data } from '../data/itemDB';
 import { getSummon } from '../data/resources';
 
-import { TranslationContext } from '../effects';
+import { TranslationContext, useGlobalState } from '../effects';
 import { Area, InlineObjectWithIcon, rangeBy, Resistances, shortCreatureDamage, yesNo } from './helpers';
 import { ItemIcon } from './Icon';
 import { ItemHeader } from './ItemHeader';
+import { area } from '../data/location';
 
 function NormalAttack({ attack: a, dmgScale }: { attack: NormalAttackProfile, dmgScale: number }) {
   const dmg = multiplyDamage(a.dmg, dmgScale);
@@ -37,6 +38,7 @@ function SpawnAttack({ attack }: { attack: SpawnAttackProfile }) {
 }
 
 export function Creature({ creature, level = 1 }: { creature: TCreature, level?: number }) {
+  const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
   const { id, tame, pregnancy, stagger } = creature;
   const scale = { stars: level - 1 };
@@ -57,12 +59,14 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
       : null}
     </ItemHeader>
     <section>
-      <h2>creature</h2>
+      <h2>{translate('ui.creature')}</h2>
       <dl>
         <dt>areal</dt>
         <dd>
           <ul style={{ padding: 0 }}>
-            {creature.locations.map(loc => <li key={loc}><Area area={loc} /></li>)}
+            {creature.locations
+              .filter(loc => (area(loc)?.tier ?? 1000) <= spoiler)
+              .map(loc => <li key={loc}><Area area={loc} /></li>)}
           </ul>
         </dd>
         <dt>{translate('ui.faction')}</dt>
@@ -78,12 +82,12 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
         ? creature.hp * hpBonus(scale) * stagger.factor
         : translate('ui.damageModifier.immune')}</dd>
       </dl>
-      <h3>resistances</h3>
+      <h3>{translate('ui.damageModifiers')}</h3>
       <dl>
       <Resistances mods={creature.damageModifiers} />
       </dl>
       {creature.attacks.length ? <div className="Creature__Attacks">
-        <h3>attacks</h3>
+        <h3>{translate('ui.attacks')}</h3>
         {creature.attacks.map(a => <div className="Creature__Attack" key={`${id}_${a.variety}`}>
           {creature.attacks.length > 1 ? <h4>{a.variety} ({Math.round(100 * a.rate / totalVarietyRates)}%)</h4> : null}
           <dl key={a.variety}>

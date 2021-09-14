@@ -33,6 +33,13 @@ export const biomes: BiomeConfig[] = [
   biome('DeepNorth', 8, false),
 ];
 
+export const biomeTiers = Object.fromEntries(biomes.map(b => [b.id as Biome, b.tier]));
+
+export function area(id: Biome | GameLocationId): BiomeConfig | LocationConfig | undefined {
+  return biomes.find(b => b.id === id)
+      ?? locations.find(l => l.id === id)
+}
+
 function loc(
   tier: number,
   id: GameLocationId,

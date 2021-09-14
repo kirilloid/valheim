@@ -1,0 +1,12 @@
+.TopBar {
+  display: flex;
+  flex-direction: row;
+}
+
+.TopBar__search {
+  flex: 1 0 auto;
+}
+
+.TopBar__settings {
+  flex: 0 1 auto;
+}

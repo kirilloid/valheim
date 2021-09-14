@@ -53,10 +53,12 @@
   .FoodPresets {
     grid-auto-flow: column;
     grid-template-rows: auto repeat(3, 1fr);
-    grid-template-columns: auto repeat(5, calc(42px + 10%));
+    grid-template-columns: auto;
+    grid-auto-columns: calc(42px + 10%);
   }
   .FoodPresets__title {
     text-align: left;
+    width: auto;
   }
   .FoodPresets__biome {
     text-align: center;
@@ -71,7 +73,7 @@
 /* PLANNER */
 .FoodPlanner {
   width: 100%;
-  max-width: 420px;
+  max-width: 400px;
 }
 
 .FoodPlanner__range {

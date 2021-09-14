@@ -16,6 +16,7 @@ import { useDebounceEffect } from '../effects/debounce.effect';
 import { Icon, ItemIcon, SkillIcon } from './Icon';
 import { addAttackPlayerStats, attackPlayer, AttackPlayerStats, dmgBonus, emptyAttackPlayerStats, isNormalAttackProfile, multiplyDamage, ShieldConfig } from '../model/combat';
 import { InlineObjectWithIcon, List, showNumber } from './helpers';
+import { useGlobalState, useRuneTranslate } from '../effects';
 
 type OnChange<T extends HTMLElement> = (e: React.ChangeEvent<T>) => void;
 type OnChangeI = OnChange<HTMLInputElement>;
@@ -130,6 +131,7 @@ function Shield({ shield, onShieldChange, onLevelChange } : {
   onLevelChange: OnChangeI;
 }) {
   const translate = useContext(TranslationContext);
+  const runeTranslate = useRuneTranslate();
   return <div className="row weapon">
     <div className="weapon__label">
       <label htmlFor="shield">
@@ -143,7 +145,7 @@ function Shield({ shield, onShieldChange, onLevelChange } : {
         onChange={onShieldChange}
         value={shield?.item.id ?? ''}>
         <option value="">—</option>
-        {shields.map(s => <option key={s.id} value={s.id}>{translate(s.id)}</option>)}
+        {shields.map(s => <option key={s.id} value={s.id}>{runeTranslate(s)}</option>)}
       </select>
     </div>
     {!!shield && shield.item.maxLvl > 1 && <div className="weapon__input-secondary">
@@ -194,7 +196,9 @@ function Skill({ shield, onChange }: { shield: ShieldConfig | undefined; onChang
 }
 
 function Armor({ armor, onChange }: { armor: number; onChange: OnChangeI; }) {
+  const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
+  const spoilerArmor = [2, 21, 46, 64, 82, 100];
   return <div className="row weapon">
     <div className="weapon__label">
       <label htmlFor="armor">{translate('ui.armor')}</label>
@@ -215,12 +219,12 @@ function Armor({ armor, onChange }: { armor: number; onChange: OnChangeI; }) {
       </datalist>
       <input type="range" id="skill"
         className="BigInput" list="armor"
-        min="0" max="100" value={armor}
+        min="0" max={spoilerArmor[spoiler] ?? 100} value={armor}
         onChange={onChange} />
     </div>
     <div className="weapon__input-secondary">
       <input type="number" inputMode="numeric" pattern="[0-9]*"
-        min="0" max="100" value={armor}
+        min="0" max={spoilerArmor[spoiler] ?? 100} value={armor}
         onChange={onChange}
         style={{ width: '3em' }} />
     </div>
@@ -228,15 +232,20 @@ function Armor({ armor, onChange }: { armor: number; onChange: OnChangeI; }) {
 }
 
 function Items({ resTypes, onChange }: { resTypes: string[], onChange: (item: string) => OnChangeI }) {
+  const [spoiler] = useGlobalState('spoiler');
   return <>
-    {[...allItems.entries()].map(([hash, { items }]) => <div key={hash}>
-      <input type="checkbox" id={hash} checked={resTypes.includes(hash)} onChange={onChange(hash)} />
-      <label htmlFor={hash} className="checkbox-multiline-label">
-        <List separator=" / ">
-          {items.map(item => <InlineObjectWithIcon key={item.id} id={item.id} nobr />)}
-        </List>
-      </label>
-    </div>)}
+    {[...allItems.entries()]
+      .filter(([, { items }]) => items.some(i => i.tier <= spoiler))
+      .map(([hash, { items }]) => <div key={hash}>
+        <input type="checkbox" id={hash} checked={resTypes.includes(hash)} onChange={onChange(hash)} />
+        <label htmlFor={hash} className="checkbox-multiline-label">
+          <List separator=" / ">
+            {items
+              .filter(item => item.tier <= spoiler)
+              .map(item => <InlineObjectWithIcon key={item.id} id={item.id} nobr />)}
+          </List>
+        </label>
+      </div>)}
   </>;
 }
 

@@ -6,6 +6,7 @@ import { resources } from './resources';
 import { pieces } from './building';
 import { destructibles } from './objects';
 import { ships, carts } from './transport';
+import { tools } from './tools';
 
 export const resourceCraftMap: Record<EntityId, Item[]> = {};
 export const resourceBuildMap: Record<EntityId, (Piece | Ship | Cart)[]> = {};
@@ -37,6 +38,7 @@ weapons.forEach(addToCraftMap);
 armors.forEach(addToCraftMap);
 resources.forEach(addToCraftMap);
 arrows.forEach(addToCraftMap);
+tools.forEach(addToCraftMap);
 
 pieces.forEach(p => addToMap(resourceBuildMap, p));
 ships.forEach(s => addToMap(resourceBuildMap, s));

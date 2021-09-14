@@ -2,12 +2,13 @@ import React, { useContext } from 'react';
 
 import type { GameObject } from '../types';
 import { groups } from '../data/itemDB';
-import { TranslationContext } from '../effects';
+import { TranslationContext, useRuneTranslate } from '../effects';
 import { InlineObject, List } from './helpers';
 import { ItemIcon } from './Icon';
 
 export function ItemHeader({ item, children }: { item: GameObject, children?: React.ReactNode }) {
   const translate = useContext(TranslationContext);
+  const runeTranslate = useRuneTranslate();
   const group = item.group && groups[item.group];
   return <>
     {item.disabled && <div className="info">{translate('ui.onlyWithCheats')}</div>}
@@ -16,7 +17,7 @@ export function ItemHeader({ item, children }: { item: GameObject, children?: Re
     <h1>
       <ItemIcon item={item} />
       {' '}
-      {translate(item.id)}
+      {runeTranslate(item)}
       {children}
     </h1>
     {group ? <div>See also: <List>{

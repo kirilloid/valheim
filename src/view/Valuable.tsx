@@ -25,7 +25,7 @@ export function Valuable({ item }: { item: TValuable }) {
         </dl>
         {item.id === 'Coins'
           ? <section>
-              <h2>crafting</h2>
+              <h2>{translate('ui.crafting')}</h2>
               {translate('ui.usedToCraft')}:
               <ul className="CraftList">
                 {resourceCraftMap.Coins?.map(item => <li>

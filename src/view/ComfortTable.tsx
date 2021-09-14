@@ -23,21 +23,23 @@ export function ComfortTable() {
         <tr>
           <th>icon</th>
           <th>name</th>
-          <th>comfort</th>
+          <th>{translate('ui.comfort')}</th>
           <th>group</th>
-          <th>resources</th>
+          <th>{translate('ui.resources')}</th>
         </tr>
       </thead>
       <tbody>
-      {comfortables.map(piece => {
-        return <tr key={piece.id} className={piece.tier > spoiler ? 'spoiler' : ''}>
-          <td><ItemIcon item={piece} size={32} /></td>
-          <td><InlineObject id={piece.id} /></td>
-          <td>{piece.comfort.value}</td>
-          <td>{piece.comfort.group}</td>
-          <td><Materials materials={piece.recipe.materials } iconSize={32} /></td>
-        </tr>
-      })}
+      {comfortables
+        .filter(p => p.tier <= spoiler)
+        .map(piece => {
+          return <tr key={piece.id}>
+            <td><ItemIcon item={piece} size={32} /></td>
+            <td><InlineObject id={piece.id} /></td>
+            <td>{piece.comfort.value}</td>
+            <td>{piece.comfort.group}</td>
+            <td><Materials materials={piece.recipe.materials } iconSize={32} /></td>
+          </tr>
+        })}
       </tbody>
     </table>
   </>);

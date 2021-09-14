@@ -7,7 +7,7 @@ import {
 
 import './css/App.css';
 
-import { Search } from './view/Search';
+import { TopBar } from './view/TopBar';
 import { Index } from './view/Index';
 import { GameObject } from './view/GameObject';
 import { Location } from './view/Location';
@@ -27,7 +27,7 @@ function App() {
     <div className="App">
       <TranslationContext.Provider value={translate}>
         <Router>
-          <Search />
+          <TopBar />
           <Switch>
             <Route path="/" exact children={<Index />} />
             <Route path="/obj/:id/:level" children={<GameObject />} />

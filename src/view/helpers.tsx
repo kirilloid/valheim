@@ -18,11 +18,11 @@ import { locationBiomes } from '../data/location';
 import { data } from '../data/itemDB';
 import { creatures } from '../data/creatures';
 
-import { TranslationContext } from '../effects';
+import { TranslationContext, Translator, useGlobalState, useRuneTranslate } from '../effects';
 import { ItemIcon, SkillIcon } from './Icon';
 
 export function durability(values: [number, number], level?: number): string | number {
-  if (values[0] === Infinity) return 'indestructible';
+  if (values[0] === Infinity) return '—';
   if (values[1] === 0) return values[0]
   return showPair(values, level);
 }
@@ -120,13 +120,14 @@ export function shortCreatureDamage(damage: DamageProfile) {
 
 const allDamageTypes: DamageType[] = ['blunt', 'slash', 'pierce', 'chop', 'pickaxe', 'fire', 'frost', 'lightning', 'poison', 'spirit'];
 
-function damageTypesList(list: DamageType[]): string {
+function damageTypesList(translate: Translator, list: DamageType[]): string {
   if (list.length >= 8) {
     const set = new Set(allDamageTypes);
     for (const dm of list) set.delete(dm);
-    return `All but ${[...set].join(', ')}`;
+    const combined = [...set].map(id => translate(`ui.damageType.${id}`)).join(', ');
+    return translate('ui.allBut', combined);
   }
-  return list.join(', ');
+  return list.map(id => translate(`ui.damageType.${id}`)).join(', ');
 } 
 
 export function yesNo(arg?: boolean) {
@@ -147,7 +148,7 @@ export function List({ children, separator = ', ' }: { children: JSX.Element[], 
 }
 
 export function InlineObject({ id, className, ...props }: { id: EntityId } & React.AnchorHTMLAttributes<HTMLAnchorElement>) {
-  const translate = useContext(TranslationContext);
+  const runeTranslate = useRuneTranslate();
   const obj = data[id];
   if (!obj) {
     return <span className="error">#{id}</span>
@@ -157,10 +158,11 @@ export function InlineObject({ id, className, ...props }: { id: EntityId } & Rea
   const seasonClass = season ? `season season--${season}` : '';
   const disabledClass = disabled ? 'disabled' : '';
   const fullClass = [className ?? '', dlcClass, seasonClass, disabledClass].join(' ');
-  return <Link to={`/obj/${id}`} className={fullClass} {...props}>{translate(id)}</Link>
+  return <Link to={`/obj/${id}`} className={fullClass} {...props}>{runeTranslate(obj)}</Link>
 }
 
 export function InlineObjectWithIcon({ id, nobr, size }: { id: EntityId, nobr?: boolean; size?: number }) {
+  const [spoiler] = useGlobalState('spoiler');
   const item = data[id];
   const display = nobr ? 'inline-block' : 'inline';
   return <span style={{ display }}>
@@ -209,7 +211,7 @@ export function Resistances({ mods }: { mods: Partial<DamageModifiers> }) {
       .filter(key => modGroups[key]?.length > 0)
       .flatMap(key => [
         <dt key={'t'+ key}>{translate(`ui.damageModifier.${key}`)}</dt>,
-        <dd key={'d'+ key}>{damageTypesList(modGroups[key])}</dd>,
+        <dd key={'d'+ key}>{damageTypesList(translate, modGroups[key])}</dd>,
       ])
   }</>;
 }

@@ -32,13 +32,13 @@ function PieceSpecific({ item }: { item: TPiece }) {
       const extensions = pieces.filter(p => p.subtype === 'craft_ext' && getCraftingStationId(p.extends.id) === item.id);
       return (<>
         <dl>
-          <dt>requires fire</dt><dd>{yesNo(requiresFire)}</dd>
-          <dt>requires roof</dt><dd>{yesNo(requiresRoof)}</dd>
+          <dt>{translate('ui.crafting.needsFire')}</dt><dd>{yesNo(requiresFire)}</dd>
+          <dt>{translate('ui.crafting.needsRoof')}</dt><dd>{yesNo(requiresRoof)}</dd>
           {buildRange ? <><dt>building radius</dt><dd>{buildRange}m</dd></> : null}
           {queueSize ? <><dt>queued</dt><dd>{queueSize}</dd></> : null}
         </dl>
         {extensions.length > 0 && <>
-          <h2>extensions</h2>
+          <h2>{translate('ui.crafting.extensions')}</h2>
           <ul>
             {extensions.map(p => <li key={p.id}><InlineObjectWithIcon id={p.id} /></li>)}
           </ul>
@@ -48,9 +48,9 @@ function PieceSpecific({ item }: { item: TPiece }) {
     case 'craft_ext': {
       const { id, distance, requiresFire, requiresRoof } = item.extends;
       return (<dl>
-        <dt>extends</dt><dd>{translate(getCraftingStationId(id))}</dd>
-        <dt>requires fire</dt><dd>{yesNo(requiresFire)}</dd>
-        <dt>requires roof</dt><dd>{yesNo(requiresRoof)}</dd>
+        <dt>{translate('ui.crafting.extends')}</dt><dd>{translate(getCraftingStationId(id))}</dd>
+        <dt>{translate('ui.crafting.needsFire')}</dt><dd>{yesNo(requiresFire)}</dd>
+        <dt>{translate('ui.crafting.needsRoof')}</dt><dd>{yesNo(requiresRoof)}</dd>
         <dt>max distance</dt><dd>{distance}m</dd>
       </dl>);
     }
@@ -79,7 +79,7 @@ function PieceSpecific({ item }: { item: TPiece }) {
     case 'decoration': {
       const { value, group } = item.comfort;
       return (<dl>
-        <dt>comfort</dt><dd>{value}</dd>
+        <dt>{translate('ui.comfort')}</dt><dd>{value}</dd>
         {group ? <><dt>comfort group</dt><dd>{group}</dd></> : null}
       </dl>);
     }

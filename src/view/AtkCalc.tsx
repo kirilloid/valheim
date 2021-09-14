@@ -7,17 +7,16 @@ import type { Biome, Creature } from '../types';
 import { attackCreature, AttackStats, WeaponConfig } from '../model/combat';
 import { Action, actionCreators, ActionCreators, reducer, enabledItems, CombatStat } from '../model/off_calc.reducer';
 import { getInitialState, serializeState } from '../model/off_calc.url';
+import { groupBy } from '../model/utils';
 
 import { arrows } from '../data/arrows';
+import { biomeTiers } from '../data/location';
 import { groupedCreatures } from '../data/combat_creatures';
 
-import { TranslationContext } from '../effects/translation.effect';
-import { useDebounceEffect } from '../effects/debounce.effect';
+import { TranslationContext, useGlobalState, useDebounceEffect, useRuneTranslate } from '../effects';
 import { showNumber } from './helpers';
 import { Icon, ItemIcon, SkillIcon } from './Icon';
-import { useGlobalState } from '../effects';
 import { SpoilerAlert } from './Spoiler';
-import { groupBy } from '../model/utils';
 
 const weaponGroups = groupBy(enabledItems, w => String(w.tier));
 
@@ -44,10 +43,11 @@ function WeaponBlock(props: {
   canDelete: boolean;
 }) {
   const [spoiler] = useGlobalState('spoiler');
+  const translate = useContext(TranslationContext);
+  const runeTranslate = useRuneTranslate();
   const { weapon, index, maxTier, smart, same, actionCreators, dispatch, canDelete } = props;
   const { item, level, skill, arrow } = weapon;
   const { changeWeapon, changeLevel, changeSkill, changeArrow, removeWeapon } = actionCreators;
-  const translate = useContext(TranslationContext);
   return <div className="Weapon">
     <div className="row weapon">
 
@@ -62,17 +62,18 @@ function WeaponBlock(props: {
           className="BigInput"
           onChange={e => dispatch(changeWeapon(index, e.target.value, smart))}
           value={item.id}>
-          {Object.entries(weaponGroups).map(([tier, group]) => (<optgroup
-            key={tier}
-            label={`tier ${tier}`}
-            className={Number(tier) > maxTier ? 'disabled' : ''}
-          >
-            {group.map(w => <option
-              key={w.id}
-              value={w.id}
-              className={Number(tier) > spoiler ? 'spoiler' : ''}
-            >{translate(w.id)}</option>)}
-          </optgroup>))}
+          {Object.entries(weaponGroups)
+            .filter(([tier]) => Number(tier) <= spoiler)
+            .map(([tier, group]) => (<optgroup
+              key={tier}
+              label={`tier ${tier}`}
+              className={Number(tier) > maxTier ? 'disabled' : ''}
+            >
+              {group.map(w => <option
+                key={w.id}
+                value={w.id}
+              >{runeTranslate(w)}</option>)}
+            </optgroup>))}
         </select>
       </div>
       {item.maxLvl > 1 && <div className={`weapon__input-secondary ${sameClass(same.level)}`}>
@@ -95,7 +96,11 @@ function WeaponBlock(props: {
         <select id={`arrow${index}`}
           className="BigInput"
           onChange={e => dispatch(changeArrow(index, e.target.value))} value={arrow.id}>
-          {arrows.map(a => <option key={a.id} value={a.id} className={a.tier > maxTier ? 'disabled' : ''}>{translate(a.id)}</option>)}
+          {arrows
+            .filter(a => a.tier <= spoiler)
+            .map(a => <option key={a.id} value={a.id} className={a.tier > maxTier ? 'disabled' : ''}>
+              {runeTranslate(a)}
+            </option>)}
         </select>
       </div>
     </div>}
@@ -184,6 +189,7 @@ function StatBar(props: {
 export function AttackCalc() {
   const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
+  const runeTranslate = useRuneTranslate();
   const history = useHistory();
   const { params } = useParams<{ params?: string }>();
   const [state, dispatch] = useReducer(reducer, getInitialState(params));
@@ -250,16 +256,17 @@ export function AttackCalc() {
         <h2>Creature</h2>
         <div className="row">
           <select onChange={onCreatureChange} value={creature.id}>
-            {Object.entries(groupedCreatures).map(([gBiome, group]) => group.length ? (
-                <optgroup key={gBiome} label={gBiome}>
-                  {group.map(c => <option
-                    value={c.id}
-                    selected={creature === c && biome === gBiome}
-                    className={creature.tier > spoiler ? 'spoiler' : ''}
-                  >{translate(c.id)}</option>)}
-                </optgroup>
-              ) : null
-            )}
+            {Object.entries(groupedCreatures)
+              .filter(([gBiome]) => (biomeTiers[gBiome] ?? 0) <= spoiler)
+              .map(([gBiome, group]) => group.length ? (
+                  <optgroup key={gBiome} label={gBiome}>
+                    {group.map(c => <option
+                      value={c.id}
+                      selected={creature === c && biome === gBiome}
+                    >{runeTranslate(c)}</option>)}
+                  </optgroup>
+                ) : null
+              )}
           </select>
           <ItemIcon item={creature} size={24} />
           {/*creature.maxLvl &&
@@ -285,10 +292,10 @@ export function AttackCalc() {
           <input id="backstab" type="checkbox" checked={backstab} onChange={onChangeBackstab} />
           <label htmlFor="backstab">
             {' '}
-            backstab
+            {translate('ui.backstab')}
           </label>
           {' '}
-          <Link to="/info/combat#backatb">(?)</Link>
+          <Link to="/info/combat#backatb">ℹ️</Link>
         </div>
       </div>
       <div className="CombatCalc__Player">

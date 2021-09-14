@@ -3,9 +3,10 @@ import { useEffect, useState } from 'react';
 type GlobalKeys =
   | 'aggregate' // to sum total resources for item levels or not
   | 'spoiler' // spoiler levels
+  | 'language' // currently selected & loaded language
 ;
 
-function read<T>(name: string, defaultValue: T): T {
+export function read<T>(name: string, defaultValue: T): T {
   try {
     const val = localStorage.getItem(name);
     if (val == null) return defaultValue;
@@ -24,17 +25,19 @@ function write<T>(name: string, value: T): void {
 const globalKeysDefaultValue = {
   aggregate: false as boolean,
   spoiler: 0 as number,
+  language: undefined as string | undefined,
 } as const;
 
 const listeners: Record<GlobalKeys, Function[]> = {
   aggregate: [],
   spoiler: [],
+  language: [],
 };
 
 type GK = typeof globalKeysDefaultValue;
 
-export function useGlobalState<K extends GlobalKeys, T = GK[K]>(name: K): [T, (val: T) => void] {
-  const defaultValue = globalKeysDefaultValue[name] as any as T;
+export function useGlobalState<K extends GlobalKeys, T = GK[K]>(name: K, initialValue?: T): [T, (val: T) => void] {
+  const defaultValue = initialValue ?? globalKeysDefaultValue[name] as any as T;
   const value = read<T>(name, defaultValue);
   const [, setModel] = useState(value);
   const setValue = (val: T) => {

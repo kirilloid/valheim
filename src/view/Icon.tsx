@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { SkillType } from '../model/skills';
 import { assertNever } from '../model/utils';
-import { TranslationContext } from '../effects';
+import { TranslationContext, useGlobalState } from '../effects';
 
 import type { GameObject } from '../types';
 
@@ -59,14 +59,16 @@ type ItemIconProps = {
   item: GameObject | undefined;
   useAlt?: boolean;
   size?: number;
+  className?: string;
 }
 
 export function ItemIcon(props: ItemIconProps) {
+  const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
   const { item, useAlt, size = 32 } = props;
   if (item === undefined) {
     return <img
-      className="icon"
+      className={'icon ' + (props.className ?? '')}
       src={`/icons/nostroke.png`}
       alt="not found"
       title="not found"
@@ -76,10 +78,18 @@ export function ItemIcon(props: ItemIconProps) {
   }
   const { type, id } = item;
   const path = `/icons/${iconType(type)}/${id}`;
+  if (item.tier > spoiler) {
+    return <img
+      className="icon"
+      src="/icons/icon/hammer_spinner.png"
+      width={size}
+      height={size}
+    />
+  }
   return <picture key={id}>
     <source srcSet={`${path}.webp`} type="image/webp" />
     <img
-      className="icon"
+      className={'icon ' + (props.className ?? '')}
       src={`${path}.png`}
       alt={useAlt ? translate(id) : ''}
       title={useAlt ? translate(id) : ''}

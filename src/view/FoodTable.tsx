@@ -108,8 +108,8 @@ export function FoodTable() {
         </tr>
       </thead>
       <tbody>
-      {items.map(food => {
-        return <tr key={food.id} className={food.tier > spoiler ? 'spoiler' : ''}>
+      {items.filter(food => food.tier <= spoiler).map(food => {
+        return <tr key={food.id}>
           <td><ItemIcon item={food} size={32} /></td>
           <td><InlineObject id={food.id} className="FoodTable__extra" /></td>
           <td className="FoodTable__value">{food.health}</td>
