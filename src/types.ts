@@ -287,6 +287,7 @@ export interface BasePiece extends GameObjectBase {
 
 export type Piece = BasePiece & {
   type: 'piece';
+  base: boolean;
   wear: {
     hp: number;
     damageModifiers: DamageModifiers;

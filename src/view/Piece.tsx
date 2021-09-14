@@ -126,6 +126,7 @@ export function Piece({ item }: { item: TPiece }) {
         <dl>
           <dt>{translate('ui.healthStructure')}</dt><dd>{hp}</dd>
           <Resistances mods={damageModifiers} />
+          <dt>base</dt><dd>{yesNo(item.base)}</dd>
           <dt>{translate('ui.pieceTarget')}</dt><dd>{translate(`ui.pieceTarget.${target}`)}</dd>
           <dt>degrades w/o roof</dt><dd>{yesNo(noRoof)}</dd>
           {specialReqs.length ? <><dt>specific</dt><dd>{specialReqs.join(', ')}</dd></> : null}
