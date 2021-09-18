@@ -103,6 +103,9 @@ export function reducer(state: State, action: Action): State {
       return { ...state, resTypes: newItems };
     }
     case CHANGE_SHIELD: {
+      if (action.id === '') {
+        return { ...state, shield: undefined };
+      }
       const item = shields.find(s => s.id === action.id);
       if (item == null) return state;
       return { ...state, shield: { level: item.maxLvl, skill: 0, ...state.shield, item } };

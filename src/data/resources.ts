@@ -29,6 +29,32 @@ const fromDungeons: ItemGrow[] = itemGrow({
   respawn: 0,
 });
 
+// Acorn
+// BirchSeeds
+// BlackSoup
+// BoarJerky
+// BreadDough
+// CookedDeerMeat
+// CookedWolfMeat
+// MinceMeatSauce
+// DeerMeat
+// DeerStew
+// Eyescream
+// Onion
+// OnionSeeds
+// OnionSoup
+// Pukeberries
+// SaddleLox
+// ShocklateSmoothie
+// SledgeCheat
+// Tar
+// Thunderstone
+// TrophyGrowth
+// WolfJerky
+// WolfMeat
+// WolfMeatSkewer
+// WolfPelt
+
 export const resources: Item[] = [
 // MEADOWS
   { type: 'item', group: 'lumber', id: 'Wood', emoji: '🪵', tier: 0, weight: 2, stack: 50, floating: true,

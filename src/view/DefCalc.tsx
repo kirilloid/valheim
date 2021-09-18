@@ -102,15 +102,23 @@ function CreatureAttackVar({ creature, variety, onChange }: { creature: Creature
 
 function Players({ players, onChange }: { players: number; onChange: OnChangeI }) {
   const translate = useContext(TranslationContext);
-  return <div className="row">
-    <input type="range" id="players"
-      className="BigInput"
-      min="1" max={MAX_PLAYERS} value={players}
-      onChange={onChange} />
-    <input type="number" inputMode="numeric"
-      min="1" max={MAX_PLAYERS} value={players}
-      onChange={onChange} />
-    <label htmlFor="players">{translate('ui.players')}</label>
+  return <div className="row weapon">
+    <div className="weapon__label">
+      <label htmlFor="players">{translate('ui.players')}</label>
+      <Icon id="player" alt="" size={24} />
+    </div>
+    <div className="weapon__input-primary">
+      <input type="range" id="players"
+        className="BigInput"
+        min="1" max={MAX_PLAYERS} value={players}
+        onChange={onChange} />
+    </div>
+    <div className="weapon__input-secondary">
+      <input type="number" inputMode="numeric" pattern="[0-9]*"
+        min="1" max={MAX_PLAYERS} value={players}
+        onChange={onChange}
+        style={{ width: '3em' }} />
+    </div>
   </div>;
 }
 
@@ -130,14 +138,14 @@ function Shield({ shield, onShieldChange, onLevelChange } : {
   onShieldChange: OnChangeS;
   onLevelChange: OnChangeI;
 }) {
+  const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
-  const runeTranslate = useRuneTranslate();
   return <div className="row weapon">
     <div className="weapon__label">
       <label htmlFor="shield">
         {translate('ui.itemType.shield')}
       </label>
-      <ItemIcon item={shield?.item} size={24} />
+      {shield ? <ItemIcon item={shield.item} size={24} /> : null}
     </div>
     <div className={'weapon__input-primary'}>
       <select id="shield"
@@ -145,7 +153,9 @@ function Shield({ shield, onShieldChange, onLevelChange } : {
         onChange={onShieldChange}
         value={shield?.item.id ?? ''}>
         <option value="">—</option>
-        {shields.map(s => <option key={s.id} value={s.id}>{runeTranslate(s)}</option>)}
+        {shields
+          .filter(s => s.tier <= spoiler)
+          .map(s => <option key={s.id} value={s.id}>{translate(s.id)}</option>)}
       </select>
     </div>
     {!!shield && shield.item.maxLvl > 1 && <div className="weapon__input-secondary">
@@ -324,8 +334,8 @@ export function DefenseCalc() {
             {translate('ui.player')}
           </h2>
         </div>
-        <Players players={state.players} onChange={onPlayersChange} />
         <Wet wet={state.isWet} onChange={onWetChange} />
+        <Players players={state.players} onChange={onPlayersChange} />
         <div className="Weapon">
           <Shield shield={state.shield} onShieldChange={onShieldChange} onLevelChange={onLevelChange} />
           <Skill shield={state.shield} onChange={onSkillChange} />

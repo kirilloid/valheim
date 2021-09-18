@@ -26,6 +26,13 @@ export const animations: Record<AttackAnimation, number[]> = {
 };
 // bow_aim_recoil: 21
 
+// BattleaxeCrystal
+// KnifeButcher
+// KnifeSilver
+// LofPieUncooked
+// ShieldBoneTower
+// ShieldIronBuckler
+
 export const items: (Weapon | Shield)[] = [
 // PRE-CRAFT AGE
   { type: 'weapon', slot: 'both',

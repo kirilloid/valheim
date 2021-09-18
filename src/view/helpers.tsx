@@ -11,7 +11,7 @@ import {
   GameLocationId,
   ItemSpecial as TItemSpecial,
 } from '../types';
-import { applyDamageModifier, getTotalDamage, playerDamageModifiers } from '../model/combat';
+import { applyDamageModifiers, getTotalDamage, playerDamageModifiers } from '../model/combat';
 import { SkillType } from '../model/skills';
 
 import { locationBiomes } from '../data/location';
@@ -96,7 +96,7 @@ export const averageAttacksDamage = (creature: Creature) => {
   for (const attack of attacks) {
     if ('dmg' in attack) {
       nr++;
-      total += getTotalDamage(applyDamageModifier(attack.dmg, playerDamageModifiers));
+      total += getTotalDamage(applyDamageModifiers(attack.dmg, playerDamageModifiers));
     }
   }
   const avg = total / nr;

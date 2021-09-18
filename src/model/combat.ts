@@ -16,12 +16,18 @@ import {
 import { addStatCounters, StatCounter } from '../view/helpers';
 import { effects } from '../data/effects';
 import { animations } from '../data/weapons';
-import { mapValues } from './utils';
+import { lerp, mapValues } from './utils';
 
-function applyArmor(damage: number, armor: number): number {
+function applyArmorTotal(damage: number, armor: number): number {
   return armor < damage / 2
     ? damage - armor
     : damage ** 2 / (armor * 4);
+}
+
+function applyArmor(damage: DamageProfile, armor: number): DamageProfile {
+  const total = getTotalDamage(getBlockableDamage(damage));
+  const mul = applyArmorTotal(total, armor) / total;
+  return mapValues(damage, (v, k) => k === 'chop' || k === 'pickaxe' ? v : v * mul);
 }
 
 export const playerDamageModifiers: DamageModifiers = {
@@ -62,17 +68,12 @@ export function dmgBonus({ players = 1, stars = 0 }: { players?: number, stars?:
   return (1 + (players - 1) * 0.04) * (1 + stars * 0.5);
 }
 
-export function applyDamageModifier(damage: DamageProfile, modifiers: DamageModifiers): DamageProfile {
+export function applyDamageModifiers(damage: DamageProfile, modifiers: DamageModifiers): DamageProfile {
   return mapValues(damage, (val, type: DamageType) => val == null ? val : val * damageModifiersValues[modifiers[type]])
 }
 
 function getBlockableDamage(damage: DamageProfile): DamageProfile {
   const { chop, pickaxe, ...rest } = damage;
-  return rest;
-}
-
-function getArmorableDamage(damage: DamageProfile): DamageProfile {
-  const { poison, ...rest } = damage;
   return rest;
 }
 
@@ -105,46 +106,39 @@ export function doAttack(
   isPlayer: boolean,
 ) {
   let overTime: Partial<Record<'fire' | 'spirit' | 'poison', DamageOverTime>> = {};
-  // block
-  const blockableDamage = getTotalDamage(getBlockableDamage(damage));
-  const blocked = Math.min(blockableDamage, block);
-  if (block >= blockableDamage) {
-    return { instant: {}, overTime, total: 0 };
-  }
-  const blockScale = (blockableDamage - blocked) / blockableDamage;
   // resist
-  const { poison, ...derivedDamage } = applyDamageModifier(multiplyDamage(damage, blockScale), modifiers);
-  const armorableDamage = getTotalDamage(getArmorableDamage(derivedDamage));
+  const afterBlock = applyArmor(damage, block);
+  const afterRes = applyDamageModifiers(afterBlock, modifiers);
+  const afterArmor = applyArmor(afterRes, armor);
   // armor
-  const resDamage = applyArmor(armorableDamage, armor);
-  const { fire, spirit, ...rest } = multiplyDamage(derivedDamage, resDamage / armorableDamage);
-  let total = getTotalDamage(rest);
+  const { fire, spirit, poison, ...rest } = afterArmor;
   if (fire) {
     overTime.fire = { total: fire, time: 5, period: 1 };
-    total += fire;
   }
   if (spirit) {
     overTime.spirit = { total: spirit, time: 3, period: 0.5 };
-    total += spirit;
   }
   if (poison) {
     const ttl = 1 + Math.floor(Math.sqrt((isPlayer ? 5 : 1) * poison));
     overTime.poison = { total: poison, time: ttl, period: 1 };
-    total += poison;
+  }
+  const total = getTotalDamage(afterArmor);
+  if (total <= 0.1) {
+    return { instant: {}, overTime: {}, total: 0 };
   }
   return { instant: rest, overTime, total };
 }
 
 function getAttackStats(weapon: Weapon, attack: Attack, skillLvl: number) {
   const animationTimes = animations[attack.animation];
-  const drawTime = (weapon.holdDurationMin ?? 0) * (1 - skillLvl / 100);
+  const drawTime = (weapon.holdDurationMin ?? 0) * lerp(1, 0.2, skillLvl / 100);
   const times = weapon.slot === 'bow'
     ? animationTimes.map(t => t + drawTime)
     : animationTimes;
   const totalTime = times.reduce((a, b) => a + b, 0);
 
   const drawStamina = weapon.holdDurationMin != null ? drawTime * 5 + 3 * FRAME : 0;
-  const attackStamina = attack.stamina * (1 - 0.33 * skillLvl / 100) * times.length;
+  const attackStamina = attack.stamina * lerp(1, 0.67, skillLvl / 100) * times.length;
   const totalStamina = drawStamina + attackStamina;
 
   const comboTotal = attack.type !== 'proj' && times.length > 1
@@ -164,10 +158,24 @@ const FRAME = 1 / 50;
 const wetEffect = effects.find(e => e.id === 'Wet');
 const wetModifiers = wetEffect?.damageModifiers;
 
+/**
+ * orig\over No Re We Im Ig VR VW
+ *  Normal         x  v        x
+ *  Resist         x  v        x
+ *  Weak              v         
+ *  Immune            v         
+ *  Ignore   x  x  x  x  x  x  x
+ *  VeRes       x  x  v        x
+ *  VeWeak         x  v         
+ */
 const overrideResistance = (original: DamageModifier, override: DamageModifier | undefined): DamageModifier => {
   if (original === 'ignore') return original;
   if (original === 'veryResistant' && override === 'resistant') return original;
   if (original === 'veryWeak' && override === 'weak') return original;
+  if (original === 'resistant' && override === 'weak') return original;
+  if (original === 'resistant' || original === 'veryResistant' || original === 'immune'
+  &&  override === 'weak' || override === 'veryWeak')
+    return original;
   return override ?? original;
 };
 
@@ -235,26 +243,24 @@ export function attackCreature(
   const multiplier = attack.mul?.damage ?? 1;
   const backstabBonus = backstab && item.skill !== null ? item.backstab : 1;
 
-  let wastedDamage = 0;
-  let overTimeTotal = 0;
-  function updateDamage(dot: DamageOverTime | undefined, skillMul: number, stack: boolean, extinguished: boolean) {
-    if (dot == null) return;
+  const { fire, spirit, poison } = overTime;
+  if (isWet) {
+    if (fire) fire.total /= 5;
+    if (spirit) spirit.total /= 5;
+  }
+  let overTimeTotal = ((fire?.total ?? 0) + (spirit?.total ?? 0)) * skillAvg * comboTotal;
+
+  if (poison != null) {
     const maxHit = comboTotal - times.length + 1;
     for (const t of times) {
-      const total = dot.total * skillMul * (stack && !extinguished ? maxHit : 1);
-      const { time, period } = dot;
-      const ticks = (extinguished ? 1 : t) / period;
+      const total = poison.total * skillAvg * maxHit;
+      const { time, period } = poison;
+      const ticks = t / period;
       const maxTicks = Math.ceil(time / period);
       const inflicted = total / maxTicks * Math.min(ticks, maxTicks);
       overTimeTotal += inflicted;
-      wastedDamage += total - inflicted;
     }
   }
-
-  const { fire, spirit, poison } = overTime;
-  updateDamage(fire, skillMax, true, isWet);
-  updateDamage(spirit, skillMax, true, isWet);
-  updateDamage(poison, skillAvg, false, false);
 
   const totalDamageNum = (damageFixed * skillAvg * comboTotal + overTimeTotal) * multiplier;
   const dpSec = totalDamageNum / totalTime;
