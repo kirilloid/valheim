@@ -8,6 +8,7 @@ import { magnitude, timeI2S } from '../model/utils';
 import { Ship as ShipPiece } from '../types';
 import { Resistances } from './helpers';
 import { ItemHeader } from './ItemHeader';
+import { Source } from './Source';
 
 type ChartProps = {
   dpi: number;
@@ -235,6 +236,7 @@ export function Ship(props: { item: ShipPiece }) {
         {size ? <><dt>size</dt><dd>{size.filter(Boolean).join('×')}</dd></> : null}
       </dl>
     </section>
+    <Source id={item.id} />
     <section>
       <h2>{translate('ui.ship')}</h2>
       <dl>

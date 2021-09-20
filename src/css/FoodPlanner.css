@@ -142,7 +142,7 @@
   flex-direction: column;
 }
 
-@media screen and (min-width: 370px) {
+@media screen and (min-width: 480px) {
   .FoodTotals {
     flex-direction: row;
   }

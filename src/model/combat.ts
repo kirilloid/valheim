@@ -132,12 +132,10 @@ export function doAttack(
 function getAttackStats(weapon: Weapon, attack: Attack, skillLvl: number) {
   const animationTimes = animations[attack.animation];
   const drawTime = (weapon.holdDurationMin ?? 0) * lerp(1, 0.2, skillLvl / 100);
-  const times = weapon.slot === 'bow'
-    ? animationTimes.map(t => t + drawTime)
-    : animationTimes;
+  const times = animationTimes.map(t => t + drawTime);
   const totalTime = times.reduce((a, b) => a + b, 0);
 
-  const drawStamina = weapon.holdDurationMin != null ? drawTime * 5 + 3 * FRAME : 0;
+  const drawStamina = weapon.holdDurationMin != null ? drawTime * (weapon.holdStaminaDrain ?? 0) + 3 * FRAME : 0;
   const attackStamina = attack.stamina * lerp(1, 0.67, skillLvl / 100) * times.length;
   const totalStamina = drawStamina + attackStamina;
 

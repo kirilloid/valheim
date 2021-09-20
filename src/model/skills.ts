@@ -14,6 +14,7 @@ export enum SkillType {
   Sneak,
   Run,
   Swim,
+  Ride = 110,
 }
 
 /*

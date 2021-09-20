@@ -35,8 +35,27 @@ export const tools: Tool[] = [
       time: 4,
       materials: { Wood: 5, Stone: 2 },
       materialsPerLevel: { Wood: 1, Stone: 1 },
-      source: { station: CraftingStation.Inventory, level: 0 },
+      source: { station: CraftingStation.Workbench, level: 1 },
       upgrade: { station: CraftingStation.Workbench, level: 2 },
+    }
+  },
+  { 
+    id: 'KnifeButcher',
+    type: 'tool',
+    special: 'butcher',
+    emoji: '🔪',
+    tier: 2,
+    weight: 0.3,
+    maxLvl: 1,
+    durability: [100, 50],
+    produces: [],
+    recipe: {
+      type: 'craft_upg',
+      time: 4,
+      materials: { Wood: 2, Tin: 4 },
+      materialsPerLevel: {},
+      source: { station: CraftingStation.Forge, level: 1 },
+      upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
   {
@@ -67,6 +86,18 @@ export const tools: Tool[] = [
     maxLvl: 1,
     durability: [Infinity, 0],
     produces: ['Fish'],
+    recipe: { type: 'trader', value: 350 }
+  },
+  {
+    id: 'Chisel',
+    type: 'tool',
+    special: 'build',
+    tier: 3,
+    weight: 1.5,
+    floating: true,
+    maxLvl: 1,
+    durability: [Infinity, 0],
+    produces: pieces.map(p => p.id),
     recipe: { type: 'trader', value: 350 }
   },
 ];

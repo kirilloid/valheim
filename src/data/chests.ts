@@ -1,8 +1,17 @@
 import type { GeneralDrop } from '../types';
 
 export const chestDrops: Record<string, GeneralDrop> = {
+  shipwreck_karve_chest: {
+    num: [1, 4],
+    options: [
+      { item: 'Coins', num: [50, 100], weight: 5 },
+      { item: 'AmberPearl', num: [1, 10], weight: 5 },
+      { item: 'Ruby', num: [1, 2], },
+    ],
+  },
   blackforest: {
-    num: [2, 4],
+    num: [2, 3],
+    oneOfEach: true,
     options: [
       { item: 'Feathers', num: [2, 4], },
       { item: 'ArrowFlint', num: [5, 10], },

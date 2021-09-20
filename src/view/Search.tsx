@@ -74,6 +74,7 @@ function showSpecialIcon(special: ItemSpecial, translate: Translator) {
     case 'garden': return <Icon path="piece/replant" alt="gardening" size={32} />;
     case 'ground': return <Icon path="piece/raise" alt="terraforming" size={32} />;
     case 'fishing': return null;
+    case 'butcher': return null;
     default: return assertNever(special);
   }
 }

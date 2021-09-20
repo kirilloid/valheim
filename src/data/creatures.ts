@@ -242,7 +242,7 @@ export const creatures: Creature[] = [
     locations: ['Crypt'],
     attacks: single([{
       dmg: { blunt: 20,
-             poison: 20 },
+             poison: 30 },
       stagger: 3.96, 
       name: 'mace',
     }]),
@@ -319,7 +319,7 @@ export const creatures: Creature[] = [
     faction: 'ForestMonsters',
     locations: ['BlackForest'/*, 'StoneTowerRuinsF'*/, 'Greydwarf_camp'],
     attacks: single([
-      { dmg: { poison: 25 }, stagger: 1.12, name: 'poison breath' },
+      { dmg: { poison: 30 }, stagger: 1.12, name: 'poison breath' },
       { dmg: { slash: 14 }, stagger: 1.12, name: 'slash' },
     ]),
     hp: 60,
@@ -465,7 +465,7 @@ export const creatures: Creature[] = [
     emoji: '🦠',
     faction: 'Undead',
     locations: ['Swamp', 'SunkenCrypt'],
-    attacks: single([{ dmg: { poison: 70 }, name: 'poison', unblockable }]),
+    attacks: single([{ dmg: { poison: 90 }, name: 'poison', unblockable }]),
     hp: 50,
     damageModifiers: blobDamageModifiers,
     drop: [
@@ -483,7 +483,7 @@ export const creatures: Creature[] = [
     emoji: '🦠',
     faction: 'Undead',
     locations: ['Swamp'],
-    attacks: single([{ dmg: { poison: 90 }, name: 'poison', unblockable }]),
+    attacks: single([{ dmg: { poison: 115 }, name: 'poison', unblockable }]),
     hp: 150,
     damageModifiers: blobDamageModifiers,
     drop: [
@@ -503,7 +503,7 @@ export const creatures: Creature[] = [
     locations: ['Swamp'],
     attacks: single([{ dmg: {
       pierce: 20,
-      poison: 60,
+      poison: 70,
     }, name: 'bite', force: 30 }]),
     hp: 60,
     damageModifiers: {
@@ -645,12 +645,12 @@ export const creatures: Creature[] = [
     faction: 'Boss',
     locations: ['Bonemass'],
     attacks: single([
-      { dmg: { poison: 100 }, name: 'poison', force: 0, unblockable, undodgeable },
+      { dmg: { poison: 130 }, name: 'poison', force: 0, unblockable, undodgeable },
       { dmg: {
         blunt: 80,
         chop: 1000,
         pickaxe: 1000,
-        poison: 30,
+        poison: 50,
       }, name: 'punch', force: 100, toolTier: 0 },
       { spawn: ['Skeleton', 'Blob'], number: 4, max: 8, }
     ]),
@@ -691,7 +691,7 @@ export const creatures: Creature[] = [
     },
     drop: [
       dropEntry('WolfFang', { chance: 0.4 }),
-      dropEntry('RawMeat', { chance: 0.4 }),
+      dropEntry('WolfMeat', { chance: 0.4 }),
       dropEntry('WolfPelt', { max: 2 }),
       dropTrophy('TrophyWolf', 0.1),
     ],
@@ -863,17 +863,17 @@ export const creatures: Creature[] = [
     faction: 'PlainsMonsters',
     locations: ['Plains', 'GoblinCamp', 'StoneTower', 'StoneHengeS'],
     attacks: [
-      { rate: 2, variety: 'club', attacks: [{ dmg: { blunt: 110 }, name: 'club', stagger: 2.08 }] },
-      { rate: 1, variety: 'spear', attacks: [{ dmg: { pierce: 110 }, name: 'spear', stagger: 3.38 }] },
-      { rate: 2, variety: 'sword', attacks: [{ dmg: { slash: 110 }, name: 'sword', stagger: 2.08 }] },
-      { rate: 1, variety: 'torch', attacks: [{ dmg: { blunt: 55, fire: 55 }, name: 'torch', stagger: 2.08 }] },
+      { rate: 2, variety: 'club', attacks: [{ dmg: { blunt: 85 }, name: 'club', stagger: 2.08 }] },
+      { rate: 1, variety: 'spear', attacks: [{ dmg: { pierce: 85 }, name: 'spear', stagger: 3.38 }] },
+      { rate: 2, variety: 'sword', attacks: [{ dmg: { slash: 85 }, name: 'sword', stagger: 2.08 }] },
+      { rate: 1, variety: 'torch', attacks: [{ dmg: { blunt: 45, fire: 45 }, name: 'torch', stagger: 2.08 }] },
       // vs 26 arm 24.3-37.6
       // vs 52 arm 18.6-28.2
       // vs 52 arm & FR 12.5-21.4
     ],
-    hp: 200,
+    hp: 175,
     stagger: {
-      factor: 0.4,
+      factor: 0.3,
       time: 2.08,
     },
     damageModifiers: animalDmgModifiers,
@@ -907,7 +907,7 @@ export const creatures: Creature[] = [
     // vs 26 arm 10.9-15.7
     // vs 52 arm 6.5-11.1
     // vs 52 arm + FR 3.8-6.7 (instantly + 5x over time halved due to FR)
-    hp: 150,
+    hp: 100,
     stagger: {
       factor: 0.3,
       time: 3.2,
@@ -986,7 +986,7 @@ export const creatures: Creature[] = [
     ]),
     hp: 1000,
     stagger: {
-      factor: 1,
+      factor: 0.3,
       time: NaN,
     },
     damageModifiers: {
@@ -1008,6 +1008,35 @@ export const creatures: Creature[] = [
   },
   {
     type: 'creature',
+    id: 'BlobTar',
+    tier: 5,
+    maxLvl: 1,
+    emoji: '🦠',
+    faction: 'Undead',
+    locations: ['TarPit'],
+    attacks: single([
+      { dmg: { blunt: 45, poison: 50, }, name: 'stomp', force: 80, toolTier: 0 },
+    ]),
+    hp: 100,
+    damageModifiers: {
+      blunt: 'weak',
+      slash: 'resistant',
+      pierce: 'resistant',
+      chop: 'ignore',
+      pickaxe: 'ignore',
+      fire: 'weak',
+      frost: 'resistant',
+      lightning: 'normal',
+      poison: 'immune',
+      spirit: 'normal',
+    },
+    drop: [
+      dropEntry('Tar'),
+      dropTrophy('TrophyGrowth', 0.1),
+    ],
+  },
+  {
+    type: 'creature',
     id: 'GoblinKing',
     tier: 5,
     maxLvl: 1,
@@ -1019,18 +1048,19 @@ export const creatures: Creature[] = [
         blunt: 40,
         chop: 50,
         pickaxe: 50,
-        fire: 140,
+        fire: 120,
       }, burst: 20, name: 'meteors', force: 100, unblockable }, // no toolTier
       { dmg: {
-        blunt: 50,
         chop: 50,
         pickaxe: 50,
-        fire: 60,
+        fire: 40,
+        lightning: 20,
       }, name: 'fire Breath' }, // aka beam burst: 20*0.1 V=30/40 spread=1/1
       { dmg: {
-        blunt: 130,
         chop: 100,
         pickaxe: 100,
+        fire: 65,
+        lightning: 65,
       }, name: 'nova', force: 100, toolTier: 2, unblockable },
       // Taunt
     ]),

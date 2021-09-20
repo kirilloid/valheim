@@ -1,3 +1,4 @@
+import { singleDrop } from '../model/game';
 import {
   DamageModifiers,
   Destructible,
@@ -54,12 +55,6 @@ const emptyDrop: GeneralDrop = {
   num: [1, 4],
   options: [],
 };
-
-const singleDrop = (item: EntityId, min: number, max: number): GeneralDrop => ({
-  num: [min, max],
-  options: [{ item }]
-});
-
 
 const emptyGrow: ItemGrow[] = [];
 

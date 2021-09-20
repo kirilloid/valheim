@@ -32,7 +32,7 @@ export const timeI2S = (seconds: number) => {
 
 export const GAME_DAY = 1800;
 export const BASE_HEALTH = 25;
-export const BASE_STAMINA = 75;
+export const BASE_STAMINA = 50;
 export const MAX_PLAYERS = 10;
 
 export const days = (seconds: number) => seconds / GAME_DAY;

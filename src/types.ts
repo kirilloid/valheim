@@ -240,7 +240,9 @@ export enum CraftingStation {
   ArtisanTable,
   StoneCutter,
   CookingStation, // overcooked: 75431; 75432 -> 75418: 25, 75538 -> 75420: 20, 75533 -> 75504: 60, 75448 -> 75554: 60, 75489 -> 75559: 25 
+  CookingStationIron,
   Cauldron,
+  Oven,
   Fermenter,
   Smelter, // fuel: 75431; 75512 -> 75520, 75531 -> 75553, 75399 -> 75553, 75463 -> 75434, 75419 -> 75404
   BlastFurnace,
@@ -315,6 +317,7 @@ export type Piece = BasePiece & {
   craft: {
     id: CraftingStation;
     queueSize?: number;
+    batchSize?: number;
     buildRange?: number;
     requiresRoof?: boolean;
     requiresFire?: boolean;
@@ -583,7 +586,7 @@ export interface Arrow extends BaseItem {
 
 export interface Tool extends BaseItem {
   type: 'tool';
-  special: 'build' | 'garden' | 'ground' | 'fishing';
+  special: 'build' | 'garden' | 'ground' | 'fishing' | 'butcher';
   maxLvl: number;
   durability: Pair<number>;
   produces: EntityId[];
@@ -619,6 +622,7 @@ export interface Shield extends BaseItem {
   type: 'shield';
   emoji: string,
   damage?: DamageProfile;
+  damageModifiers?: Partial<DamageModifiers>;
   slot: 'secondary';
   skill: SkillType.Blocking;
   block: number | Pair<number>;

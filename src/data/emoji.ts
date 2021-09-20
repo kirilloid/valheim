@@ -30,6 +30,7 @@ export const skill: Record<SkillType, string> = {
   [SkillType.Sneak]: '👟',
   [SkillType.Run]: '🏃‍♂️',
   [SkillType.Swim]: '🏊',
+  [SkillType.Ride]: '🏇',
 };
 
 export const biome: Record<Biome, string> = {
