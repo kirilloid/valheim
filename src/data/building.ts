@@ -425,6 +425,7 @@ export const pieces: Piece[] = [
     emoji: '🍳',
     craft: {
       id: CraftingStation.CookingStation,
+      returnsMaterials: false,
       requiresFire,
       batchSize: 2,
     },
@@ -451,6 +452,7 @@ export const pieces: Piece[] = [
     emoji: '🍳',
     craft: {
       id: CraftingStation.CookingStationIron,
+      returnsMaterials: false,
       requiresFire,
       batchSize: 5,
     },
@@ -481,6 +483,7 @@ export const pieces: Piece[] = [
     },
     craft: {
       id: CraftingStation.Cauldron,
+      returnsMaterials: false,
       requiresFire,
     },
     wear: {
@@ -579,6 +582,7 @@ export const pieces: Piece[] = [
     // fuel: Wood, max: 10, burnTime: 2000
     craft: {
       id: CraftingStation.Oven,
+      returnsMaterials: false,
     },
     wear: {
       hp: 500,
@@ -951,7 +955,11 @@ export const pieces: Piece[] = [
       notOnWood,
       onlyOnFlat,
     },
-    craft: { id: CraftingStation.Smelter },
+    craft: {
+      id: CraftingStation.Smelter,
+      returnsMaterials: true,
+      queueSize: 10,
+    },
     wear: {
       hp: 2000,
       damageModifiers: craftStationResist,
@@ -976,6 +984,7 @@ export const pieces: Piece[] = [
     },
     craft: {
       id: CraftingStation.BlastFurnace,
+      returnsMaterials: true,
       queueSize: 10,
     },
     wear: {
@@ -1000,7 +1009,11 @@ export const pieces: Piece[] = [
       notOnWood,
       onlyOnFlat,
     },
-    craft: { id: CraftingStation.CharcoalKiln, queueSize: 25 },
+    craft: {
+      id: CraftingStation.CharcoalKiln,
+      returnsMaterials: true,
+      queueSize: 25,
+    },
     wear: {
       hp: 1500,
       damageModifiers: craftStationResist,
@@ -1022,7 +1035,11 @@ export const pieces: Piece[] = [
       notOnWood,
       onlyOnFlat,
     },
-    craft: { id: CraftingStation.Windmill, queueSize: 50 },
+    craft: {
+      id: CraftingStation.Windmill,
+      returnsMaterials: true,
+      queueSize: 50,
+    },
     wear: {
       hp: 1000,
       damageModifiers: craftStationResist,
@@ -1042,7 +1059,12 @@ export const pieces: Piece[] = [
       water: false,
       onlyOnFlat,
     },
-    craft: { id: CraftingStation.SpinningWheel, queueSize: 40, requiresRoof, },
+    craft: {
+      id: CraftingStation.SpinningWheel,
+      returnsMaterials: true,
+      queueSize: 40,
+      requiresRoof,
+    },
     wear: {
       hp: 200,
       damageModifiers: craftStationResist,
@@ -2191,7 +2213,10 @@ export const pieces: Piece[] = [
     subtype: 'craft',
     tier: 1,
     emoji: '🐝🏠',
-    craft: { id: CraftingStation.BeeHive },
+    craft: {
+      id: CraftingStation.BeeHive,
+      returnsMaterials: true,
+    },
     piece: { target: 'primary', water: undefined, size: [0.5, 0.5, 0.5] },
     wear: { ...woodRoofStructureWear, hp: 100 },
     recipe: { type: 'craft_piece', materials: { Wood: 10, QueenBee: 1 }, station: CraftingStation.Workbench },
@@ -2201,7 +2226,11 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'craft',
     tier: 2,
-    craft: { id: CraftingStation.Fermenter, requiresRoof },
+    craft: {
+      id: CraftingStation.Fermenter,
+      returnsMaterials: true,
+      requiresRoof,
+    },
     piece: { target: 'primary', water: false, onlyOnFlat, size: [2, 2, 3] },
     wear: wearStructure(1000, craftStationResist, MaterialType.Wood, { noRoof: false }),
     recipe: { type: 'craft_piece', materials: { FineWood: 30, Bronze: 5, Resin: 10 }, station: CraftingStation.Workbench },

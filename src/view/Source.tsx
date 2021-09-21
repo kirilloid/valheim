@@ -160,10 +160,10 @@ export function Recipe({ item }: { item: Item | Piece | Destructible | Plant | S
         Bought from <Link to="/info/trader">trader</Link> for {recipe.value} <Icon id="coin" alt={translate('Coins')} size={16} />
       </>;
     case 'craft_one':
-      const { station } = recipe.source;
+      const { station, level } = recipe.source;
       const { number, materials, time } = recipe;
       return <dl>
-        <dt>station</dt><dd><Station station={station} /></dd>
+        <dt>station</dt><dd><Station station={station} /> {level ? `lvl ${level}` : ''}</dd>
         <dt>{translate('ui.time')}</dt><dd><Icon id="time" alt="" size={16} />{timeI2S(time)}</dd>
         <dt>{translate('ui.resources')}</dt><dd>{
         Object.keys(materials).length

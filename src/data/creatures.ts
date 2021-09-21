@@ -161,14 +161,15 @@ export const creatures: Creature[] = [
     },
     damageModifiers: animalDmgModifiers,
     drop: [
-      dropEntry('RawMeat', { chance: 0.5 }),
+      dropEntry('RawMeat'),
       dropEntry('LeatherScraps'),
       dropTrophy('TrophyBoar', 0.15),
     ],
     tame: { tameTime: 1800, fedTime: 600, commandable: true,
-            eats: ['Carrot', 'Turnip', 'Blueberries', 'Mushroom', 'Raspberry'] },
+            eats: ['Raspberry', 'Mushroom', 'Blueberries', 'Carrot', 'Turnip', 'Onion'] },
             // eatRange:1.0, searchRange:10, heal:5
-    pregnancy: { time: 60, chance: 0.33, grow: 3000 },
+    pregnancy: { points: 3, time: 60, chance: 0.33, grow: 3000 },
+    // Boar_piggy: 10hp
   },
   {
     type: 'creature',
@@ -602,8 +603,8 @@ export const creatures: Creature[] = [
       time: 2.8,
     },
     damageModifiers: {
-      ...animalDmgModifiers,
-      fire: 'weak',
+      ...defaultDmgModifiers,
+      fire: 'resistant',
       poison: 'immune',
     },
     drop: [
@@ -627,8 +628,8 @@ export const creatures: Creature[] = [
       time: 2.8,
     },
     damageModifiers: {
-      ...animalDmgModifiers,
-      fire: 'weak',
+      ...defaultDmgModifiers,
+      fire: 'resistant',
       poison: 'immune',
     },
     drop: [
@@ -691,14 +692,15 @@ export const creatures: Creature[] = [
     },
     drop: [
       dropEntry('WolfFang', { chance: 0.4 }),
-      dropEntry('WolfMeat', { chance: 0.4 }),
+      dropEntry('WolfMeat', { chance: 1 }),
       dropEntry('WolfPelt', { max: 2 }),
       dropTrophy('TrophyWolf', 0.1),
     ],
     tame: { tameTime: 1800, fedTime: 600, commandable: true,
-            eats: ['NeckTail', 'RawMeat', 'LoxMeat', 'Sausages', 'FishRaw'] },
+            eats: ['RawMeat', 'DeerMeat', 'NeckTail', 'LoxMeat', 'Sausages', 'FishRaw'] },
             // eatRange:1.4, searchRange:10, heal:20
-    pregnancy: { time: 60, chance: 0.33, grow: 3000 }, // max: 4, range: 3
+    pregnancy: { points: 3, time: 60, chance: 0.33, grow: 3000 }, // max: 4, range: 3
+    // Wolf_cub: 10hp
   },
   {
     type: 'creature',
@@ -1005,7 +1007,8 @@ export const creatures: Creature[] = [
     tame: { tameTime: 1800, fedTime: 600, commandable: false,
             eats: ['Cloudberry', 'Barley', 'Flax'] },
             // eatRange:4, searchRange:10, heal:10
-    pregnancy: { time: 60, chance: 0.33, grow: 3000 },
+    pregnancy: { points: 4, time: 120, chance: 0.33, grow: 6000 },
+    // Lox_calf: 100hp res 1104421003
   },
   {
     type: 'creature',

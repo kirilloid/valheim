@@ -3,7 +3,7 @@ import { SkillType } from "./model/skills";
 export type EntityId = string;
 
 export type EntityGroup =
-  | 'banner' | 'bed' | 'beech' | 'berry' | 'bird' | 'blob'
+  | 'banner' | 'bed' | 'beech' | 'berry' | 'birch' | 'bird' | 'blob'
   | 'chair' | 'chest' | 'cook'
   | 'fir' | 'fire'
   | 'goblin' | 'gray'
@@ -210,7 +210,7 @@ export interface Creature extends GameObjectBase {
   damageModifiers: DamageModifiers;
   drop: DropEntry[];
   tame?: { fedTime: number; tameTime: number; commandable: boolean; eats: string[] };
-  pregnancy?: { time: number; chance: number; grow: number; };
+  pregnancy?: { points: number; time: number; chance: number; grow: number; };
 }
 
 /**
@@ -318,6 +318,7 @@ export type Piece = BasePiece & {
   subtype: 'craft';
   craft: {
     id: CraftingStation;
+    returnsMaterials?: boolean;
     queueSize?: number;
     batchSize?: number;
     buildRange?: number;

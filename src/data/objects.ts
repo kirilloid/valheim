@@ -298,8 +298,8 @@ export const destructibles: Destructible[] = [
       num: [2, 2],
       oneOfEach: true,
       options: [
-        { weight: 1, item: 'QueenBee' },
-        { weight: 1, item: 'Honey', num: [1, 3] },
+        { item: 'QueenBee' },
+        { item: 'Honey', num: [1, 3] },
       ]
     }],
   },
@@ -438,6 +438,7 @@ export const destructibles: Destructible[] = [
   }),
   ...tree({
     id: ['Birch1', 'BirchStub', 'Birch_log', 'Birch_log_half'],
+    group: 'birch',
     tier: 2,
     minToolTier: 2,
     grow: itemGrow(
@@ -448,19 +449,15 @@ export const destructibles: Destructible[] = [
         num: [5, 8], // type1: 5-5, type2: 0-3 
         inForest: [0, 1.15],
       },
-      { // Birch{1,2}_aut
-        locations: ['Plains'],
-        altitude: [0.1, 1000],
-        tilt: [0, 30],
-        num: [40, 40], // type1: 30, type2: 10
-        inForest: [0, 0.8],
-      },
     ),
     hp: [80, 60, 60],
     drop: [{
       chance: 0.3,
-      num: [1, 1],
-      options: [{ weight: 1, item: 'Resin' }],
+      num: [1, 2],
+      options: [
+        { weight: 2, item: 'Resin' },
+        { weight: 1, item: 'BirchSeeds' },
+      ],
     }, {
       num: [10, 10],
       options: [
@@ -469,6 +466,38 @@ export const destructibles: Destructible[] = [
       ],
     }],
   }),
+  {
+    type: 'destructible',
+    subtype: 'tree',
+    id: 'Birch1_aut',
+    group: 'birch',
+    hp: 80,
+    // tags: ['plant', 'tree'],
+    tier: 2,
+    damageModifiers: chopOnly,
+    minToolTier: 2,
+    parts: [
+      { id: 'BirchStub', num: 1 },
+      { id: 'Birch_log', num: 1 },
+    ],
+    grow: itemGrow(
+      { // Birch{1,2}_aut
+        locations: ['Plains'],
+        altitude: [0.1, 1000],
+        tilt: [0, 30],
+        num: [40, 40], // type1: 30, type2: 10
+        inForest: [0, 0.8],
+      },
+    ),
+    drop: [{
+      chance: 0.3,
+      num: [1, 1],
+      options: [
+        { weight: 2, item: 'Resin' },
+        { weight: 1, item: 'BirchSeeds' },
+      ],
+    }],
+  },
   ...tree({
     id: ['Oak1', 'OakStub', 'Oak_log', 'Oak_log_half'],
     tier: 2,
@@ -481,7 +510,11 @@ export const destructibles: Destructible[] = [
       inForest: [1, 3],
     }),
     hp: [200, 160, 140],
-    drop: [emptyDrop, {
+    drop: [{
+      chance: 0.1,
+      num: [1, 1],
+      options: [{ item: 'Acorn' }]
+    }, {
       num: [25, 25],
       options: [
         { item: 'Wood' },

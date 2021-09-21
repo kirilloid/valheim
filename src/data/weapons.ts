@@ -808,7 +808,7 @@ export const items: (Weapon | Shield)[] = [
     tier: 3,
     weight: 0.3, stack: 50,
     skill: null,
-    damage: [{ blunt: 5, poison: 30 }, {}],
+    damage: [{ blunt: 5, poison: 40 }, {}],
     attacks: [{
       type: 'proj',
       animation: 'throw_bomb',

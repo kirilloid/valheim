@@ -28,7 +28,7 @@ function PieceSpecific({ item }: { item: TPiece }) {
       </dl>);
     }
     case 'craft': {
-      const { requiresFire, requiresRoof, buildRange, queueSize } = item.craft;
+      const { returnsMaterials, requiresFire, requiresRoof, buildRange, queueSize } = item.craft;
       const extensions = pieces.filter(p => p.subtype === 'craft_ext' && getCraftingStationId(p.extends.id) === item.id);
       return (<>
         <dl>
@@ -36,6 +36,7 @@ function PieceSpecific({ item }: { item: TPiece }) {
           <dt>{translate('ui.crafting.needsRoof')}</dt><dd>{yesNo(requiresRoof)}</dd>
           {buildRange ? <><dt>building radius</dt><dd>{buildRange}m</dd></> : null}
           {queueSize ? <><dt>queued</dt><dd>{queueSize}</dd></> : null}
+          {returnsMaterials != null ? <><dt>returns loaded materials if destroyed</dt><dd>{yesNo(returnsMaterials)}</dd></> : null}
         </dl>
         {extensions.length > 0 && <>
           <h2>{translate('ui.crafting.extensions')}</h2>
