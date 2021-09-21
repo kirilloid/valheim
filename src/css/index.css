@@ -63,13 +63,13 @@ label {
 .btn--sm {
   height: 1.5rem;
   font-size: 0.8em;
-  padding-inline: 0.75em;
+  padding: 0.25rem 0.75em;
 }
 
 .btn--lg {
   height: 2.5rem;
   font-size: 1.333rem;
-  padding-inline: 1rem;
+  padding: 0.5rem 1rem;
 }
 
 .btn:disabled {

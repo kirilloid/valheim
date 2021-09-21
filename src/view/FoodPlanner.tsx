@@ -125,7 +125,7 @@ type State = {
 function parseState(string: string | undefined): State {
   const match = string?.match(/(\w+,\w+,\w+)(-night-eat)?(?:-players-(\d+))?(?:-days-(\d+))?(?:-repeat-(\d+(?:\.\d+)?))?/);
   if (match == null) return {
-    foods: ['CookedMeat', 'Raspberries', ''],
+    foods: ['CookedMeat', 'Raspberry', ''],
     nightEat: false,
     players: 1,
     days: 1,

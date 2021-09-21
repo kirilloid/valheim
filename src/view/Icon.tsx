@@ -102,14 +102,14 @@ export function ItemIcon(props: ItemIconProps) {
 
 type IconProps =
 ( { id: string; } | { path: string } )
-& { alt: string; size?: number; }
+& { alt: string; size?: number; style?: React.CSSProperties }
 
 export function Icon(props: IconProps) {
   const { alt = "", size = 32 } = props;
   if ('id' in props) {
     const { id } = props;
     return (
-      <picture key={id}>
+      <picture key={id} style={props.style}>
         <source srcSet={`/icons/icon/${id}_${size}.png, /icons/icon/${id}_${size*2}.png 2x`} />
         <img className="icon" src={`/icons/icon/${id}_${size}.png`} alt={alt} title={alt} width={size} height={size} />
       </picture>

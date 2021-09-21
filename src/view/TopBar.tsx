@@ -7,6 +7,7 @@ import { Icon } from './Icon';
 import { languages, TranslationContext, useLanguage } from '../effects/translation.effect';
 import { useGlobalState } from '../effects';
 import { biomes } from '../data/location';
+import { Link } from 'react-router-dom';
 
 function Settings() {
   const translate = useContext(TranslationContext);
@@ -59,6 +60,11 @@ function Settings() {
 
 export function TopBar() {
   return <div className="TopBar">
+    <div className="TopBar__home">
+      <Link to="/" className="btn btn--sm">
+        <Icon id="house" size={16} alt="home" style={{ verticalAlign: 'middle' }} />
+      </Link>
+    </div>
     <div className="TopBar__search">
       <Search />
     </div>
