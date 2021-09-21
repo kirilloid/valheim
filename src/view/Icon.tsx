@@ -109,9 +109,9 @@ export function Icon(props: IconProps) {
   if ('id' in props) {
     const { id } = props;
     return (
-      <picture key={id} style={props.style}>
+      <picture key={id}>
         <source srcSet={`/icons/icon/${id}_${size}.png, /icons/icon/${id}_${size*2}.png 2x`} />
-        <img className="icon" src={`/icons/icon/${id}_${size}.png`} alt={alt} title={alt} width={size} height={size} />
+        <img className="icon" src={`/icons/icon/${id}_${size}.png`} alt={alt} title={alt} width={size} height={size} style={props.style} />
       </picture>
     );
   }

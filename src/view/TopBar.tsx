@@ -27,7 +27,7 @@ function Settings() {
     }
   }, [isOpen]);
   return <>
-    <button onClick={() => {
+    <button className="btn btn--sm" style={{ verticalAlign: 'bottom' }} onClick={() => {
       setIsOpen(open => !open);
     }}>
       <Icon id="wrench" size={16} alt="settings" />
@@ -62,7 +62,7 @@ export function TopBar() {
   return <div className="TopBar">
     <div className="TopBar__home">
       <Link to="/" className="btn btn--sm">
-        <Icon id="house" size={16} alt="home" style={{ verticalAlign: 'middle' }} />
+        <Icon id="house" size={16} alt="home" style={{ verticalAlign: 'text-bottom' }} />
       </Link>
     </div>
     <div className="TopBar__search">
