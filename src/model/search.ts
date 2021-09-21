@@ -46,8 +46,6 @@ export type SearchEntry = {
   i18nKey: string;
 };
 
-const obj = (id: string, tier: number): SearchEntry => ({ type: 'obj', path: '/obj/', id, i18nKey: id, tier });
-
 const fullMatch = new Map<string, EntityId>();
 const startTree = treeNode<SearchEntry>();
 const anyTree = treeNode<SearchEntry>();

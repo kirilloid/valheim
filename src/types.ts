@@ -118,8 +118,10 @@ export const damageModifiersValues: Record<DamageModifier, number> = {
 
 export type Effect = {
   id: string;
+  tier: number;
   special?: 'Tailwind';
   time?: number;
+  comfort?: { value: number; };
   cooldown?: number;
   healthOverTime?: [change: number, interval: number],
   damageModifiers?: Partial<DamageModifiers>;
@@ -260,7 +262,7 @@ export enum MaterialType {
   HardWood,
 };
 
-export type ComfortGroup = 'fire' | 'bed' | 'banner' | 'sit';
+export type ComfortGroup = 'fire' | 'bed' | 'banner' | 'chair' | 'table';
 
 export interface BasePiece extends GameObjectBase {
   wear: {

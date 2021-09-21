@@ -84,7 +84,7 @@ export const resources: Item[] = [
   { type: 'item', id: 'DeerMeat', emoji: '🥩', tier: 0, weight: 1, stack: 20 },
   { type: 'food', id: 'CookedDeerMeat', emoji: '🍗', tier: 1, weight: 1, stack: 20,
     health: 35, stamina: 12, duration: 1200, regen: 2, color: '#ab7862ff',
-    recipe: { type: 'craft_one', time: 25, materials: { RawMeat: 1 },
+    recipe: { type: 'craft_one', time: 25, materials: { DeerMeat: 1 },
               source: { station: CraftingStation.CookingStation }, number: 1 },
   },
   { type: 'item', id: 'NeckTail', tier: 0, weight: 0.5, stack: 50 },

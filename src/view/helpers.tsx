@@ -18,7 +18,7 @@ import { locationBiomes } from '../data/location';
 import { data } from '../data/itemDB';
 import { creatures } from '../data/creatures';
 
-import { TranslationContext, Translator, useGlobalState, useRuneTranslate } from '../effects';
+import { TranslationContext, Translator, useRuneTranslate } from '../effects';
 import { ItemIcon, SkillIcon } from './Icon';
 
 export function durability(values: [number, number], level?: number): string | number {
@@ -162,7 +162,6 @@ export function InlineObject({ id, className, ...props }: { id: EntityId } & Rea
 }
 
 export function InlineObjectWithIcon({ id, nobr, size }: { id: EntityId, nobr?: boolean; size?: number }) {
-  const [spoiler] = useGlobalState('spoiler');
   const item = data[id];
   const display = nobr ? 'inline-block' : 'inline';
   return <span style={{ display }}>
@@ -174,11 +173,11 @@ export function InlineObjectWithIcon({ id, nobr, size }: { id: EntityId, nobr?: 
 
 export function Materials(props: { materials: Record<EntityId, number>, iconSize: number }) {
   const { materials } = props;
-  const maxTier = Object.keys(materials).reduce((a, id) => Math.max(a, data[id]?.tier ?? 0), 0);
+  // const maxTier = Object.keys(materials).reduce((a, id) => Math.max(a, data[id]?.tier ?? 0), 0);
   return <span className="SearchItem__recipe">
     <List separator=''>{Object
       .entries(materials)
-      .filter(([key]) => (data[key]?.tier ?? 0) >= maxTier - 2)
+      // .filter(([key]) => (data[key]?.tier ?? 0) >= maxTier - 2)
       .map(([key, val]) => <React.Fragment key={key}>
         <ItemIcon item={data[key]} size={props.iconSize} />{val}
       </React.Fragment>)}</List>

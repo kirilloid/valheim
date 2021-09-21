@@ -82,6 +82,7 @@ export function ItemIcon(props: ItemIconProps) {
     return <img
       className="icon"
       src="/icons/icon/hammer_spinner.png"
+      alt="loading"
       width={size}
       height={size}
     />

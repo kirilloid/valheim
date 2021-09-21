@@ -1005,6 +1005,7 @@ export const creatures: Creature[] = [
     tame: { tameTime: 1800, fedTime: 600, commandable: false,
             eats: ['Cloudberry', 'Barley', 'Flax'] },
             // eatRange:4, searchRange:10, heal:10
+    pregnancy: { time: 60, chance: 0.33, grow: 3000 },
   },
   {
     type: 'creature',

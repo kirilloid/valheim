@@ -253,7 +253,7 @@ export function AttackCalc() {
     <h1>{translate('ui.page.attack')}</h1>
     <div className="CombatCalc">
       <div className="CombatCalc__Creature">
-        <h2>Creature</h2>
+        <h2>{translate('ui.creature')}</h2>
         <div className="row">
           <select onChange={onCreatureChange} value={creature.id}>
             {Object.entries(groupedCreatures)
@@ -305,10 +305,10 @@ export function AttackCalc() {
           </h2>
           <div className="PlayerHeader__stat">
             <select value={stat} onChange={onChangeStat}>
-              <option value="single">single hit</option>
-              <option value="hits">hits to kill</option>
-              <option value="dps">dmg/second</option>
-              <option value="dpsta">dmg/stamina</option>
+              <option value="single">{translate('ui.attackStat.single')}</option>
+              <option value="hits">{translate('ui.attackStat.hits')}</option>
+              <option value="dps">{translate('ui.attackStat.dps')}</option>
+              <option value="dpsta">{translate('ui.attackStat.dpsta')}</option>
             </select>
           </div>
         </div>

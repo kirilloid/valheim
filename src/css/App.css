@@ -94,11 +94,6 @@ ul {
   color: gray;
 }
 
-.checkbox-multiline-label {
-  text-indent: 16px;
-  margin-left: -16px;
-}
-
 .spoiler {
   filter: blur(4px);
 }

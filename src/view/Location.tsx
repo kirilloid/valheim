@@ -13,9 +13,9 @@ export function Location() {
 
   const loc = locations.find(l => l.id === id);
   if (loc == null) {
-    return <span className="error">
+    return <div className="error">
       Location "{id}" not found
-    </span>
+    </div>
   }
 
   const { biome, vegvisir } = loc;

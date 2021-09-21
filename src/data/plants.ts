@@ -47,7 +47,7 @@ export const plants: Plant[] = [
     cultivatedGround: false,
     destroyUnhealthy: true,
     freeSpaceRadius: 2,
-    biomes: ['Meadows', 'BlackForest', 'Mountain', 'Plains'],
+    biomes: ['Meadows', 'BlackForest', 'Plains'],
   },
   {
     type: 'plant',
@@ -59,7 +59,7 @@ export const plants: Plant[] = [
     cultivatedGround: false,
     destroyUnhealthy: true,
     freeSpaceRadius: 3,
-    biomes: ['Meadows', 'BlackForest', 'Mountain', 'Plains'],
+    biomes: ['Meadows', 'BlackForest', 'Plains'],
   },
   {
     type: 'plant',
@@ -119,7 +119,7 @@ export const plants: Plant[] = [
     cultivatedGround: true,
     destroyUnhealthy: true,
     freeSpaceRadius: 0.5,
-    biomes: [],
+    biomes: ['Meadows', 'BlackForest', 'Plains'],
   },
   {
     type: 'plant',
@@ -131,7 +131,7 @@ export const plants: Plant[] = [
     cultivatedGround: true,
     destroyUnhealthy: true,
     freeSpaceRadius: 0.5,
-    biomes: [],
+    biomes: ['Meadows', 'BlackForest', 'Plains'],
   },
   {
     type: 'plant',

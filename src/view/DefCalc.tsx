@@ -16,7 +16,7 @@ import { useDebounceEffect } from '../effects/debounce.effect';
 import { Icon, ItemIcon, SkillIcon } from './Icon';
 import { addAttackPlayerStats, attackPlayer, AttackPlayerStats, dmgBonus, emptyAttackPlayerStats, isNormalAttackProfile, multiplyDamage, ShieldConfig } from '../model/combat';
 import { InlineObjectWithIcon, List, showNumber } from './helpers';
-import { useGlobalState, useRuneTranslate } from '../effects';
+import { useGlobalState } from '../effects';
 
 type OnChange<T extends HTMLElement> = (e: React.ChangeEvent<T>) => void;
 type OnChangeI = OnChange<HTMLInputElement>;
@@ -246,9 +246,13 @@ function Items({ resTypes, onChange }: { resTypes: string[], onChange: (item: st
   return <>
     {[...allItems.entries()]
       .filter(([, { items }]) => items.some(i => i.tier <= spoiler))
-      .map(([hash, { items }]) => <div key={hash}>
-        <input type="checkbox" id={hash} checked={resTypes.includes(hash)} onChange={onChange(hash)} />
-        <label htmlFor={hash} className="checkbox-multiline-label">
+      .map(([hash, { items }]) => <div className="ItemGroup" key={hash}>
+        <input type="checkbox" id={hash}
+          className="ItemGroup__input"
+          checked={resTypes.includes(hash)}
+          onChange={onChange(hash)} />
+        <label htmlFor={hash}
+          className="ItemGroup__label">
           <List separator=" / ">
             {items
               .filter(item => item.tier <= spoiler)
@@ -323,7 +327,7 @@ export function DefenseCalc() {
     <h1>{translate('ui.page.defense')}</h1>
     <div className="CombatCalc">
       <section className="CombatCalc__Creature">
-        <h2>Creature</h2>
+        <h2>{translate('ui.creature')}</h2>
         <Creature creature={creature} biome={biome} onChange={onCreatureChange} />
         {creature.maxLvl > 1 && <CreatureStars max={creature.maxLvl} stars={stars} onChange={onStarsChange} />}
         {creature.attacks.length > 1 && <CreatureAttackVar creature={creature} variety={variety} onChange={onVarietyChange} />}

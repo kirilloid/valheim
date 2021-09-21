@@ -8,7 +8,6 @@ import { BASE_HEALTH, BASE_STAMINA, days, isNotNull, MAX_PLAYERS, groupBy, mapVa
 import { addDrop } from '../model/dist';
 
 import { resources } from '../data/resources';
-import { area } from '../data/location';
 import { data } from '../data/itemDB';
 
 import { TranslationContext, useRuneTranslate, useDebounceEffect, useGlobalState } from '../effects';

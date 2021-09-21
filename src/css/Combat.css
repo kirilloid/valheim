@@ -149,6 +149,18 @@ input[type='range'] {
   margin: 0;
 }
 
+.ItemGroup {
+  display: flex;
+}
+
+.ItemGroup__input {
+  flex-grow: 0;
+}
+
+.ItemGroup__label {
+  flex-grow: 1;
+}
+
 @media screen and (min-width: 480px) {
   .row {
     height: 1.5em;

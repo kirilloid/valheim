@@ -38,6 +38,7 @@ function App() {
             <Route path="/attack" children={<AttackCalc />} />
             <Route path="/defense/:params" children={<DefenseCalc />} />
             <Route path="/defense" children={<DefenseCalc />} />
+            <Route path="/comfort/:params" children={<ComfortTable />} />
             <Route path="/comfort" children={<ComfortTable />} />
             <Route path="/food-nutrition/:sort" children={<FoodTable />} />
             <Route path="/food-nutrition" children={<FoodTable />} />

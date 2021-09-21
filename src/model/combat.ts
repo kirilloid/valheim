@@ -171,8 +171,8 @@ const overrideResistance = (original: DamageModifier, override: DamageModifier |
   if (original === 'veryResistant' && override === 'resistant') return original;
   if (original === 'veryWeak' && override === 'weak') return original;
   if (original === 'resistant' && override === 'weak') return original;
-  if (original === 'resistant' || original === 'veryResistant' || original === 'immune'
-  &&  override === 'weak' || override === 'veryWeak')
+  if ((original === 'resistant' || original === 'veryResistant' || original === 'immune')
+  &&  (override === 'weak' || override === 'veryWeak'))
     return original;
   return override ?? original;
 };

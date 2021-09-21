@@ -66,5 +66,5 @@ export function useRuneTranslate(): RuneTranslator {
     return tier > spoiler
       ? runeText(id)
       : translate(id);
-  }, [translate, spoiler, runeText]);
+  }, [translate, spoiler]);
 }
