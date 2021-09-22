@@ -163,7 +163,7 @@ export const locations: LocationConfig[] = [
       subtype: '234',
       quantity: 200 * 3,
       items: [
-        locItem('TreasureChest_forest_crypt', 0.2, 10),
+        locItem('TreasureChest_forestcrypt', 0.2, 10),
         locItem('Pickable_ForestCryptRandom', 0.5, 30),
         locItem('Vegvisir_GDKing', 0.5),
       ],
@@ -584,7 +584,7 @@ export const locations: LocationConfig[] = [
     subtype: '2',
     quantity: 200,
     items: [
-      locItem('TreasureChest_Plains', 0.5, 3),
+      locItem('TreasureChest_heath', 0.5, 3),
     ]
   }]),
   loc(5, 'StoneTower', ['Plains'], { minApart: 512 }, [{
@@ -594,7 +594,7 @@ export const locations: LocationConfig[] = [
       locItem('Fulling', 0.54, 6),
       locItem('GoblinTotem', 1, 1),
       locItem([
-        locItem('TreasureChest_Plains', 1, 1),
+        locItem('TreasureChest_heath', 1, 1),
         locItem('Fulling', 0.54, 3),
       ], 0.5, 1),
     ],
@@ -604,7 +604,7 @@ export const locations: LocationConfig[] = [
     items: [
       locItem('Fulling', 0.54, 10),
       locItem([
-        locItem('TreasureChest_Plains', 1, 1),
+        locItem('TreasureChest_heath', 1, 1),
         locItem('Fulling', 0.54, 2),
       ], 0.5, 1),
     ],
@@ -613,7 +613,7 @@ export const locations: LocationConfig[] = [
     subtype: '3',
     quantity: 50,
     items: [
-      locItem('TreasureChest_Plains'),
+      locItem('TreasureChest_heath'),
       locItem('Fulling', 1, 2),
     ],
   }]),
@@ -625,7 +625,7 @@ export const locations: LocationConfig[] = [
         locItem([
           locItem('GoblinBrute', 0.5, 2),
           locItem('GoblinBrute', 1, 1),
-          locItem('TreasureChest_Plains_stone', 1, 1),
+          locItem('TreasureChest_heath_stone', 1, 1),
           // locItem('Rock_3', 1, 6),
         ], 0.5, 1),
         locItem('Vegvisir_GoblinKing', 0.4),
@@ -639,7 +639,7 @@ export const locations: LocationConfig[] = [
         locItem([
           locItem('GoblinBrute', 0.5, 2),
           locItem('GoblinBrute', 1, 1),
-          locItem('TreasureChest_Plains_stone', 1, 1),
+          locItem('TreasureChest_heath_stone', 1, 1),
         ], 0.5, 1),
       ],
     },
@@ -650,7 +650,7 @@ export const locations: LocationConfig[] = [
         locItem([
           locItem('GoblinBrute', 0.5, 2),
           locItem('GoblinBrute', 1, 1),
-          locItem('TreasureChest_Plains_stone', 1, 1),
+          locItem('TreasureChest_heath_stone', 1, 1),
         ], 0.5, 1),
         locItem('Vegvisir_GoblinKing', 0.4),
         // locItem([locItem('Rock_3', 1, 3)], 0.5),

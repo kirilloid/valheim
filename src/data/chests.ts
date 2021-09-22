@@ -53,10 +53,11 @@ export const chests: TreasureChest[] = [
     id: 'shipwreck_karve_chest',
     tier: 2,
     drop: {
+      oneOfEach,
       num: [1, 4],
       options: [
         { item: 'Coins', num: [50, 100], weight: 5 },
-        { item: 'AmberPearl', num: [1, 10], weight: 5 },
+        { item: 'AmberPearl', num: [1, 10], weight: 2 },
         { item: 'Ruby', num: [1, 2], },
       ],
     },  
@@ -67,8 +68,8 @@ export const chests: TreasureChest[] = [
     tier: 2,
     // damageModifiers: mod([1,1,1,1,1,1,1,3,3,3]),
     drop: {
-      num: [2, 3],
       oneOfEach,
+      num: [2, 3],
       options: [
         { item: 'Feathers', num: [2, 4], },
         { item: 'ArrowFlint', num: [5, 10], },
@@ -79,9 +80,10 @@ export const chests: TreasureChest[] = [
   },
   {
     type: 'treasure',
-    id: 'TreasureChest_forest_crypt',
+    id: 'TreasureChest_forestcrypt',
     tier: 2,
     drop: {
+      oneOfEach,
       num: [2, 4],
       options: [
         { item: 'Feathers', num: [1, 10], },
@@ -185,9 +187,10 @@ export const chests: TreasureChest[] = [
   },
   {
     type: 'treasure',
-    id: 'TreasureChest_Plains',
+    id: 'TreasureChest_heath',
     tier: 5,
     drop: {
+      oneOfEach,
       num: [2, 3],
       options: [
         { item: 'Barley', num: [2, 4], weight: 0.5, },
@@ -201,8 +204,9 @@ export const chests: TreasureChest[] = [
   {
     type: 'treasure',
     tier: 5,
-    id: 'TreasureChest_Plains_stone',
+    id: 'TreasureChest_heath_stone',
     drop: {
+      oneOfEach,
       num: [2, 4],
       options: [
         { item: 'Feathers', num: [5, 10], },

@@ -35,6 +35,13 @@ const iconType = (type: GameObject['type']): IconType => {
   }
 };
 
+const iconPath = (item: GameObject): string => {
+  return item.type === 'treasure'
+    ? item.id.toLowerCase().includes('chest')
+      ? `/icons/piece/piece_chest_wood`
+      : `/icons/resource/Coins`
+    : `/icons/${iconType(item.type)}/${item.id}`;
+};
 
 type SkillIconProps = {
   skill: SkillType;
@@ -78,7 +85,6 @@ export function ItemIcon(props: ItemIconProps) {
     />;
   }
   const { type, id } = item;
-  const path = `/icons/${iconType(type)}/${id}`;
   if (item.tier > spoiler) {
     return <img
       className="icon"
@@ -88,6 +94,7 @@ export function ItemIcon(props: ItemIconProps) {
       height={size}
     />
   }
+  const path = iconPath(item);
   return <picture key={id}>
     <source srcSet={`${path}.webp`} type="image/webp" />
     <img
