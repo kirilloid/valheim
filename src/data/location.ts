@@ -1,10 +1,8 @@
-import type { Biome, BiomeConfig, Creature, Destructible, EntityId, GameLocationId, GeneralDrop, LocationConfig } from '../types';
-import { chestDrops } from './chests';
+import type { Biome, BiomeConfig, Creature, Destructible, EntityId, GameLocationId, GeneralDrop, LocationConfig, LocationItem, LocationVariation } from '../types';
 import { creatures } from './creatures';
 import { destructibles } from './objects';
 import { data } from './itemDB';
 import { resources } from './resources';
-import { singleDrop } from '../model/game';
 
 export const locationBiomes: Record<GameLocationId, Biome> = {};
 
@@ -44,9 +42,7 @@ export function area(id: Biome | GameLocationId): BiomeConfig | LocationConfig |
 function loc(
   tier: number,
   id: GameLocationId,
-  variations: string[],
   biomes: Biome[],
-  quantity: number,
   {
     type = 'misc',
     minAlt = 1,
@@ -54,244 +50,769 @@ function loc(
     minApart = 0,
     minDistance = 0,
     maxDistance = 10000,
-    vegvisir,
-    chest,
-    items,
   }: {
     type?: LocationConfig['type'],
-    vegvisir?: { chance: number; boss: EntityId };
     minAlt?: number,
     maxAlt?: number,
     minApart?: number,
     minDistance?: number,
     maxDistance?: number,
-    chest?: GeneralDrop,
-    items?: { item: GeneralDrop, num: number, chance: number }[],
-  }
-): LocationConfig[] {
-  const vars = Math.max(variations.length, 1);
-  return biomes.map(biome => ({
+  },
+  variations: LocationVariation[],
+): LocationConfig {
+  const totalQuantity = variations.reduce((a, v) => a + v.quantity, 0);
+  return {
     id,
     tier,
-    biome,
-    quantity: quantity * vars,
+    biomes,
+    quantity: totalQuantity,
     type,
-    vegvisir,
     minApart,
     altitude: [minAlt, maxAlt],
     distance: [minDistance, maxDistance],
     destructibles: [],
     creatures: [],
     resources: [],
-    chest,
-    items,
-  }));
+    variations,
+  };
+}
+
+function locItem(item: EntityId | LocationItem[], chance: number = 1, number: number = 1): LocationItem {
+  return { item, chance, number };
 }
 
 export const locations: LocationConfig[] = [
   // meadows
-  ...loc(1, 'StartTemple', [], ['Meadows'], 1, { minAlt: 3, vegvisir: { chance: 1, boss: 'Eikthyr' } }),
-  ...loc(1, 'StoneCircle', [], ['Meadows'], 25, { minApart: 200 }),
-  ...loc(1, 'WoodHouse', ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13'], ['Meadows'], 20, {
-    // 1,2: chest + beehive 25%
-    // 3: lean-to
-    chest: chestDrops.meadows
-  }),
-  ...loc(1, 'WoodFarm', ['1'], ['Meadows'], 10, { minApart: 128, minDistance: 500, maxDistance: 2000 }),
-  ...loc(1, 'WoodVillage', ['1'], ['Meadows'], 15, { minApart: 256, minDistance: 2000 }),
-  ...loc(1, 'ShipSetting', ['01'], ['Meadows'], 100, { minApart: 128, chest: chestDrops.meadowsBuried }),
-  ...loc(1, 'Runestone_Meadows', [], ['Meadows'], 100, { minApart: 128, type: 'runestone' }),
-  ...loc(1, 'Runestone_Boars', [], ['Meadows'], 50, { minApart: 128, type: 'runestone' }),
-  ...loc(1, 'Eikthyrnir', [], ['Meadows'], 3, { type: 'altar', maxDistance: 1000 }),
-  // black forest
-  ...loc(2, 'Crypt', ['2', '3', '4'], ['BlackForest'], 200, { type: 'dungeon', minApart: 128, chest: chestDrops.fCrypt, vegvisir: { chance: 0.5, boss: 'gd_king' } }),
-  ...loc(2, 'Greydwarf_camp', ['1'], ['BlackForest'], 300, {
-    minApart: 128,
-    /*
-      greydwarf spawner:
-        greydwarf 5
-        greydwarf_elite 1
-        greydwarf_shaman 1
-        interval: 10
-        drop: singleDrop('AncientSeed')
-      3 root:
-        100hp
-        drop: {
-          num: [2, 4],
-          options: { item: 'Wood' },
-          options: { item: 'Resin' },
-        }
-     */
-  }),
-  ...loc(2, 'Ruin', ['1', '2'], ['BlackForest'], 200, {
-    /*
-    # 1
-      5 graydwarf
-      1 graydwarf_shaman
-      chest
-    # 2
-      chest
-      barrel: {
-        num: [2, 3],
-        options: [
-          { item: 'Blueberries', num: [2, 4] },
-          { item: 'DeerHide', num: [2, 3] },
-          { item: 'Flint', num: [2, 3] },
-          { item: 'Coal', num: [5, 8] },
-          { item: 'GreydwarfEeye', num: [2, 4] },
-          { item: 'Resin', num: [3, 6] },
-          { item: 'LeatherScraps', num: [2, 3] },
-          { item: 'TinOre', num: [2, 3] },
-        ]
-      }
-      6 greydwarf 100%
-      1 greydwarf 20%
-      1 greydwarf_elite 20%
-     */
-    vegvisir: { chance: 0.3, boss: 'gd_king' }
-  }),
-  ...loc(2, 'StoneTowerRuinsF', ['03', '07', '08', '09', '10'], ['BlackForest'], 80, {
-    minAlt: 2,
-    minApart: 200,
-    chest: chestDrops.blackforest,
-    /*
-    # 03
-      beehive 28.1%
-      chest
-      1 graydwarf 50%
-      1 graydwarf_elite 50%
-      vegvisir 30%
-      3 graydwarves 50%
-      Loot 30%
-        6 skeletons
-        1 chest
-    # 07
-      random_roof 25%
-        chest
-        skeleton
-        skeleton 50%
-      2x random_roof 25%
-        skeleton
-      2 skeleton
-    # 08
-      random_roof 25%
-        2 skeleton 50%
-      random_roof 25%
-        chest
-        skeleton 50%
-      3 skeleton
-    # 09
-      random_roof 50%
-        chest
-        4 skeleton 33%
-      3 skeleton 33%
-    # 10
-      random_roof 25%
-        2 skeleton 50%
-      random_roof 25%
-        chest
-        2 skeleton 50%
-      3 skeleton 50%
-    */
-  }),
-  ...loc(2, 'StoneHouse', ['3', '4'], ['BlackForest'], 200, {}),
-  ...loc(2, 'Runestone_Greydwarfs', [], ['BlackForest'], 50, { maxDistance: 2000, minApart: 128, type: 'runestone' }),
-  // ...loc('Runestone_BlackForest', [], ['BlackForest'], 0, { minApart: 128, type: 'runestone' }),
-  ...loc(2, 'TrollCave', ['02'], ['BlackForest'], 250, {
-    type: 'dungeon',
+  loc(1, 'StartTemple', ['Meadows'], {
     minAlt: 3,
-    chest: chestDrops.trollCave,
+  }, [{
+    subtype: '',
+    quantity: 1,
     items: [
-      { item: singleDrop('BoneFragments'), num: 3, chance: 0.66 }, // entrance
-      { item: singleDrop('YellowMushroom'), num: 12, chance: 0.5 }, // growing
-      { item: chestDrops.trollCave!, num: 2, chance: 0.75 }, // chests
-      { item: { // pickups
-          num: [1, 1],
-          options: [
-            { item: 'Coins', num: [5, 20] },
-            { item: 'Ruby', num: [1, 2] },
-            { item: 'Amber', num: [1, 5] },
-            { item: 'AmberPearl', num: [1, 3] },
-          ]
-        },
-        num: 9,
-        chance: 0.5,
-      }
+      locItem('Vegvisir_Eikthyr'),
+      locItem('Raspberry', 1, 2),
+      locItem('Mushroom', 1, 2),
+      locItem('Wood', 1, 2),
+      locItem('Wood', 0.75, 2),
+      locItem('Stone', 0.75, 2),
+      locItem('Stone', 0.125, 2),
+      locItem('Stone', 1, 3),
     ],
-    // Troll: 0.33
-  }),
-  ...loc(2, 'Vendor_BlackForest', [], ['BlackForest'], 10, {}),
-  ...loc(2, 'GDKing', [], ['BlackForest'], 4, { type: 'altar', minDistance: 1000, maxDistance: 7000 }),
+  }]),
+  loc(1, 'StoneCircle', ['Meadows'], { minApart: 200 }, [
+    { subtype: '', quantity: 25, items: [] },
+  ]),
+  loc(1, 'WoodHouse', ['Meadows'], {}, [
+    // ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13']
+    {
+      subtype: '1',
+      quantity: 20,
+      items: [
+        // all but 8,12 have 25% for beehive
+        locItem('beehive', 0.25),
+        // mostly 50%; 3,4,5,8: 0%, 6: 100%
+        locItem('TreasureChest_Meadows', 0.5),
+      ],
+    }
+  ]),
+  loc(1, 'WoodFarm', ['Meadows'], { minApart: 128, minDistance: 500, maxDistance: 2000 }, [
+    {
+      subtype: '1',
+      quantity: 10,
+      items: [],
+    }
+  ]),
+  loc(1, 'WoodVillage', ['Meadows'], { minApart: 256, minDistance: 2000 }, [
+    {
+      subtype: '1',
+      quantity: 15,
+      items: [],
+    }
+  ]),
+  loc(1, 'ShipSetting', ['Meadows'], { minApart: 128 }, [{
+    subtype: '01',
+    quantity: 100,
+    items: [
+      locItem('BoneFragments', 1, 2),
+      locItem('Rock_4', 1, 24),
+      locItem('TreasureChest_meadows_buried', 0.8, 1), // beacon: 40
+    ],
+  }]),
+  loc(1, 'Runestone_Meadows', ['Meadows'], { minApart: 128, type: 'runestone' }, [{
+    subtype: '',
+    quantity: 100,
+    items: [],
+  }]),
+  loc(1, 'Runestone_Boars', ['Meadows'], { type: 'runestone', minApart: 128 }, [{
+    subtype: '',
+    quantity: 50,
+    items: [
+      locItem('Boar', 1, 1),
+      locItem('Boar', 0.5, 8),
+    ],
+  }]),
+  loc(1, 'Eikthyrnir', ['Meadows'], { type: 'altar', maxDistance: 1000 }, [{
+    subtype: '',
+    quantity: 3,
+    items: [],
+  }]),
+  // BLACK FOREST
+  loc(2, 'Crypt', ['BlackForest'], { type: 'dungeon', minApart: 128, }, [
+    {
+      // 3 types of entrances, everything the same inside
+      subtype: '234',
+      quantity: 200 * 3,
+      items: [
+        locItem('TreasureChest_forest_crypt', 0.2, 10),
+        locItem('Pickable_ForestCryptRandom', 0.5, 30),
+        locItem('Vegvisir_GDKing', 0.5),
+      ],
+    }
+  ]),
+  loc(2, 'Greydwarf_camp', ['BlackForest'], { minApart: 128, }, [
+    {
+      subtype: '1',
+      quantity: 300,
+      items: [
+        locItem('Greydwarf_Root', 1, 3),        
+        locItem('Spawner_GreydwarfNest'),
+      ]
+    }
+  ]),
+  loc(2, 'Ruin', ['BlackForest'], {}, [
+    {
+      subtype: '1',
+      quantity: 200,
+      items: [
+        locItem('Greydwarf', 1, 5),
+        locItem('GreydwarfShaman', 1, 1),
+        locItem('Crow', 1, 2),
+        /*
+        locItem('stone_wall_2x1', 1, 16),
+        locItem([locItem('stone_wall_2x1', 1, 6)], 0.25),
+        */
+      ],
+    },
+    {
+      subtype: '2',
+      quantity: 200,
+      items: [
+        locItem('Greydwarf_Elite', 0.2, 1),
+        locItem('Greydwarf', 1, 5),
+        locItem('Greydwarf', 0.2, 1),
+        locItem('TreasureChest_blackforest', 0.3),
+        locItem('barrel', 0.3),
+        locItem('Vegvisir_GDKing', 0.3),
+        locItem('Crow', 1, 2),
+        /*
+        locItem('stone_wall', 1, 63),
+        locItem('stone_arch', 1),
+        locItem('wood_door', 1),
+        locItem('piece_chair', 1),
+        */
+      ],
+    },
+  ]),
+  loc(2, 'StoneTowerRuinsF', ['BlackForest'], { minAlt: 2, minApart: 200 }, [
+    {
+      subtype: '03',
+      quantity: 80,
+      items: [
+        locItem([
+          locItem('Skeleton', 1, 6),
+          locItem('TreasureChest_blackforest'),
+        ], 0.33),
+        locItem([locItem('Greydwarf', 1, 3)], 0.5),
+        locItem('Crow', 1, 2),
+        // lvl1
+        locItem([
+          locItem('BeeHive', 0.281),
+          locItem('TreasureChest_blackforest'),
+          locItem('Greydwarf', 0.5),
+          locItem('Greydwarf_Elite', 0.5),
+          locItem('Vegvisir_GDKing', 0.3),
+        ], 0.818),
+      ],
+    },
+    {
+      subtype: '07',
+      quantity: 80,
+      items: [
+        locItem([
+          locItem('TreasureChest_blackforest'),
+          locItem('Skeleton', 1),
+          locItem('Skeleton', 0.5),
+        ], 0.25),
+        locItem([locItem('Skeleton')], 0.25, 2),
+        locItem('Skeleton', 1, 2),
+        locItem('Crow', 1, 2),
+      ],
+    },
+    {
+      subtype: '08',
+      quantity: 80,
+      items: [
+        locItem('TreasureChest_blackforest'),
+        locItem('Skeleton', 1, 3),
+        locItem([locItem('Skeleton', 0.5, 2)], 0.25),
+        locItem([
+          locItem('TreasureChest_blackforest'),
+          locItem('Skeleton', 0.5),
+        ], 0.25),
+        locItem('Crow', 1, 2),
+      ],
+    },
+    {
+      subtype: '09',
+      quantity: 80,
+      items: [
+        locItem([
+          locItem('TreasureChest_blackforest'),
+          locItem('Skeleton', 0.33, 4),
+        ], 0.5),
+        locItem('Skeleton', 0.33, 3),
+        locItem('Crow', 1, 2),
+      ],
+    },
+    {
+      subtype: '10',
+      quantity: 80,
+      items: [
+        locItem([locItem('Skeleton', 0.5, 2)], 0.25),
+        locItem([
+          locItem('TreasureChest_blackforest'),
+          locItem('Skeleton', 0.5, 2),
+        ], 0.5),
+        locItem('Skeleton', 0.5, 3),
+        locItem('Crow', 1, 2),
+      ],
+    },
+  ]),
+  loc(2, 'StoneHouse', ['BlackForest'], {}, [
+    {
+      subtype: '3',
+      quantity: 200,
+      items: [
+        locItem('Greydwarf'),
+        locItem('TreasureChest_blackforest'),
+      ],
+    },
+    {
+      subtype: '4',
+      quantity: 200,
+      items: [
+        locItem('Greydwarf', 0.5, 2),
+      ],
+    },
+  ]),
+  loc(2, 'Runestone_Greydwarfs', ['BlackForest'],
+    { maxDistance: 2000, minApart: 128, type: 'runestone' },
+    [{ subtype: '', quantity: 50, items: [locItem('FirTree_oldLog', 1, 4)] }]
+  ),
+  // loc('Runestone_BlackForest', [], ['BlackForest'], 0, { minApart: 128, type: 'runestone' }),
+  loc(2, 'TrollCave', ['BlackForest'], { type: 'dungeon', minAlt: 3, }, [
+    {
+      subtype:'02',
+      quantity: 250,
+      items: [
+        // entrance
+        locItem('BoneFragments', 0.66, 3),
+        locItem('Troll', 0.33, 1),
+        // growing
+        locItem('YellowMushroom', 0.5, 12),
+        locItem([
+          locItem('TreasureChest_trollcave', 0.75, 2),
+          locItem('Troll', 1, 1),
+        ], 0.75),
+        // pickups
+        locItem('Pickable_ForestCryptRandom', 0.5, 9),
+      ],
+    }
+  ]),
+  loc(2, 'Vendor_BlackForest', ['BlackForest'], {}, [{ subtype: '', quantity: 10, items: [locItem('Haldor')] }]),
+  loc(2, 'GDKing', ['BlackForest'], { type: 'altar', minDistance: 1000, maxDistance: 7000 }, [{ subtype: '', quantity: 4, items: [] }]),
   // swamp
-  ...loc(3, 'Grave', ['1'], ['Swamp'], 50, {}),
-  ...loc(3, 'SwampRuin', ['1', '2'], ['Swamp'], 50, { minApart: 512, vegvisir: { chance: 0.15, boss: 'Bonemass' } }),
-  ...loc(3, 'InfestedTree', ['01'], ['Swamp'], 700, {}),
-  ...loc(3, 'SwampHut', ['1', '2', '3', '4', '5'], ['Swamp'], 50 /* 25 for 5 */, { chest: chestDrops.swamp }),
-  ...loc(3, 'SwampWell', ['1'], ['Swamp'], 25, {}),
-  ...loc(3, 'FireHole', [], ['Swamp'], 200, { minAlt: 0.5 }),
-  ...loc(3, 'Runestone_Draugr', [], ['Swamp'], 50, { type: 'runestone', minApart: 128 }),
-  ...loc(3, 'SunkenCrypt', ['4'], ['Swamp'], 400, { type: 'dungeon', minApart: 64, minAlt: 0, maxAlt: 2, chest: chestDrops.sunkenCrypt, vegvisir: { chance: 0.5, boss: 'Bonemass' } }),
-  ...loc(3, 'Runestone_Swamps', [], ['Swamp'], 100, { type: 'runestone', minApart: 128 }),
-  ...loc(3, 'Bonemass', [], ['Swamp'], 5, { minDistance: 2000, minApart: 3000 }),
-  // ocean
-  ...loc(3, 'Leviathan', [''], ['Ocean'], 200, { minApart: 100, minAlt: -1000, maxAlt: -30 }), // 21 barnacles
+  loc(3, 'Grave', ['Swamp'], {}, [{
+    subtype: '1',
+    quantity: 50,
+    items: [
+      locItem('TreasureChest_swamp', 0.5),
+      locItem('Spawner_DraugrPile', 1, 2),
+      locItem('BonePileSpawner', 1, 1),
+    ],
+  }]),
+  loc(3, 'SwampRuin', ['Swamp'], { minApart: 512 }, [
+    {
+      subtype: '1',
+      quantity: 50,
+      items: [
+        locItem('Vegvisir_Bonemass', 0.3),
+        locItem('TreasureChest_swamp', 0.251),
+        locItem('Draugr', 0.5, 2),
+        locItem('Draugr_Elite', 0.321),
+        locItem('Spawner_DragurPile', 0.321),
+        locItem('Crow', 1, 2),
+      ],
+    },
+    {
+      subtype: '2',
+      quantity: 50,
+      items: [
+        locItem('Vegvisir_Bonemass', 0.3),
+        locItem('TreasureChest_swamp', 0.251),
+        locItem('Draugr', 0.5, 2),
+        locItem('Draugr_Elite', 0.321),
+        locItem('Spawner_DragurPile', 0.321),
+        locItem('piece_groundtorch_green'),
+        locItem('Crow', 1, 2),
+      ],
+    },
+  ]),
+  loc(3, 'InfestedTree', ['Swamp'], {}, [{
+    subtype: '01',
+    quantity: 700,
+    items: [
+      locItem('GuckSack', 0.66, 6),
+      locItem('GuckSack_small', 0.25, 3),
+    ],
+  }]),
+  loc(3, 'SwampHut', ['Swamp'], {}, [{
+    subtype: '1', 
+    quantity: 50,
+    items: [
+      locItem([
+        locItem('TreasureChest_blackforest'),
+        locItem('Wraith'),
+      ], 0.1),
+    ],
+  },
+  {
+    subtype: '2', 
+    quantity: 50,
+    items: [
+      locItem([
+        locItem('TreasureChest_blackforest'),
+        locItem('Wraith'),
+      ], 0.1),
+    ],
+  },
+  {
+    subtype: '3', 
+    quantity: 50,
+    items: [
+      locItem([
+        // locItem('TreasureChest_blackforest'),
+        locItem('Wraith'),
+      ], 0.1),
+    ],
+  },
+  {
+    subtype: '4', 
+    quantity: 50,
+    items: [
+      locItem([
+        locItem('TreasureChest_blackforest'),
+        locItem('Draugr', 1, 2),
+        locItem('Draugr_ranged', 0.2),
+        locItem('Draugr_ranged', 0.3),
+      ], 0.75),
+    ],
+  },
+  {
+    subtype: '5', // tower
+    quantity: 25,
+    items: [
+      locItem([
+        locItem('TreasureChest_blackforest'),
+        locItem('Wraith'),
+      ], 0.1),
+      locItem('Crow', 1, 2),
+    ],
+  }]),
+  loc(3, 'SwampWell', ['Swamp'], {}, [{
+    subtype: '1',
+    quantity: 25,
+    items: [
+      locItem('Draugr_Elite', 0.321, 2),
+      locItem('piece_groundtorch_green', 1, 1),
+    ],
+  }]),
+  loc(3, 'FireHole', ['Swamp'], { minAlt: 0.5 }, [
+    { subtype: '', quantity: 200, items: [
+      locItem('Surtling', 1, 3), // Spawner_imp_respawn: once in 5 minutes
+    ], }
+  ]),
+  loc(3, 'Runestone_Draugr', ['Swamp'], { type: 'runestone', minApart: 128, }, [
+    {
+      subtype: '',
+      quantity: 50,
+      items: [
+        locItem('Draugr', 1, 3),
+        locItem('piece_groundtorch_green', 1, 2),
+        // locItem('stone_wall_2x2', 1, 1),
+      ]  
+    }
+  ]),
+  loc(3, 'SunkenCrypt', ['Swamp'], { type: 'dungeon', minApart: 64, minAlt: 0, maxAlt: 2, }, [{
+    subtype: '4',
+    quantity: 400,
+    items: [
+      // exterior
+      locItem('Draugr', 0.3, 1),
+      locItem('BlobElite', 0.3, 1),
+      locItem('piece_groundtorch_green', 1, 2),
+      // interior
+      locItem('TreasureChest_sunkencrypt', 0.2, 4),
+      locItem('Blob', 0.4, 10),
+      locItem('Draugr', 0.4, 15),
+    ],
+    // vegvisir: { 0.5, boss: 'Bonemass' }
+  }]),
+  loc(3, 'Runestone_Swamps', ['Swamp'], { type: 'runestone', minApart: 128 },
+    [{ subtype: '', quantity: 100, items: [] }]), // 12 random texts
+  loc(3, 'Bonemass', ['Swamp'], { minDistance: 2000, minApart: 3000 }, [{
+    subtype: '', quantity: 5, items: [],
+  }]),
   // mountain
-  ...loc(4, 'DrakeNest', ['01'], ['Mountain'], 200, { minApart: 100, minAlt: 100 }),
-  ...loc(4, 'Waymarker', ['01', '02'], ['Mountain'], 50, { minAlt: 100 }),
-  ...loc(4, 'AbandonedLogCabin', ['02', '03', '04'], ['Mountain'], 33 /* 50 for 04 */, { minAlt: 100, minApart: 128 }),
-  ...loc(4, 'MountainGrave', ['01'], ['Mountain'], 100, { minAlt: 100, minApart: 128, type: 'runestone' }),
-  ...loc(4, 'DrakeLorestone', [], ['Mountain'], 50, { minAlt: 100, minApart: 50 }),
-  ...loc(4, 'MountainWell', ['1'], ['Mountain'], 25, { minAlt: 100, minApart: 256 }),
-  ...loc(4, 'StoneTowerRuinsM', ['04', '05'], ['Mountain'], 50, { vegvisir: { chance: 0.15, boss: 'Dragon' }, minAlt: 150 }),
-  ...loc(4, 'Runestone_Mountains', [], ['Mountain'], 100, { minApart: 128, type: 'runestone' }),
-  ...loc(4, 'DragonQueen', [], ['Mountain'], 3, { type: 'altar', minApart: 3000, maxDistance: 8000, minAlt: 150, maxAlt: 500 }),
+  loc(4, 'DrakeNest', ['Mountain'], { minApart: 100, minAlt: 100 }, [{
+    subtype: '01',
+    quantity: 200,
+    items: [
+      locItem('Hatchling', 0.66, 3),
+      locItem('DragonEgg'),
+    ],
+  }]),
+  loc(4, 'Waymarker', ['Mountain'], { minAlt: 100 }, [
+    // actually 2 subtypes: 1 & 2, but technically the same
+    { subtype: '', quantity: 100, items: [locItem('marker')], },
+  ]), // just pile of stones
+  loc(4, 'AbandonedLogCabin', ['Mountain'], { minAlt: 100, minApart: 128 }, [
+    {
+      subtype: '02',
+      quantity: 33,
+      items: [
+        locItem('StoneGolem', 0.5),
+        locItem('StoneGolem', 0.1),
+        locItem([
+          locItem('wood_stack', 1),
+          locItem('TreasureChest_mountains', 0.698),
+        ], 0.764 * 0.648),
+      ],
+    },
+    {
+      subtype: '03',
+      quantity: 33,
+      items: [
+        locItem('TreasureChest_mountains'),
+        locItem('wood_stack', 1),
+        locItem('wood_stack', 0.2),
+        locItem('Skeleton', 0.5, 2),
+        locItem('StoneGolem', 0.1, 1),
+      ],
+    },
+    {
+      subtype: '04',
+      quantity: 50,
+      items: [
+        locItem('TreasureChest_mountains'),
+        locItem('Skeleton', 0.5, 2),
+        locItem('StoneGolem', 0.1, 2),
+      ],  
+    },
+  ]),
+  loc(4, 'MountainGrave', ['Mountain'], { minAlt: 100, minApart: 128 }, [{
+    subtype: '01',
+    quantity: 100,
+    items: [
+      locItem('BoneFragments'),
+      locItem('SilverNecklace', 0.506),
+      locItem('MountainGraveStone01', 1, 3),
+      locItem('MountainGraveStone01', 0.5, 6),
+    ],
+  }]),
+  loc(4, 'DrakeLorestone', ['Mountain'], { minAlt: 100, minApart: 50 }, [{
+    subtype: '',
+    quantity: 50,
+    items: [],
+  }]),
+  loc(4, 'MountainWell', ['Mountain'], { minAlt: 100, minApart: 256}, [{
+    subtype: '1',
+    quantity: 25,
+    items: [
+      locItem('TreasureChest_mountains', 0.75),
+    ],
+  }]),
+  loc(4, 'StoneTowerRuinsM', ['Mountain'], { minAlt: 150 }, [
+    {
+      subtype: '04',
+      quantity: 50,
+      items: [
+        locItem([
+          locItem('TreasureChest_mountains', 0.66),
+          locItem('Vegvisir_DragonQueen', 0.7),
+        ], 0.9),
+        locItem([locItem('Draugr', 1, 3)], 0.33),
+      ],
+    },
+    {
+      subtype: '05',
+      quantity: 50,
+      items: [
+        // corner towers
+        locItem([locItem('Skeleton', 0.33, 3)], 0.33, 4),
+        // central towers
+        locItem([
+          locItem('Skeleton', 0.33, 3),
+          locItem('TreasureChest_mountains'),
+        ], 0.5),
+        // spawn
+        locItem('Skeleton', 0.33, 4),
+        locItem('BonePileSpawner', 0.5),
+      ],
+    },
+  ]),
+  loc(4, 'Runestone_Mountains', ['Mountain'], { minApart: 128, type: 'runestone' }, [
+    { subtype: '', quantity: 100, items: [], },
+  ]), // 13 random texts
+  loc(
+    4, 'DragonQueen', ['Mountain'],
+    { type: 'altar', minApart: 3000, maxDistance: 8000, minAlt: 150, maxAlt: 500 },
+    [{ subtype: '', quantity: 3, items: [], }]
+  ),
   // plains
-  ...loc(5, 'GoblinCamp', ['2'], ['Plains'], 200, { minApart: 250, chest: chestDrops.heath }),
-  ...loc(5, 'StoneTower', ['1', '3'], ['Plains'], 50, { minApart: 512 }),
-  ...loc(5, 'Ruin', ['3'], ['Plains'], 50, { minApart: 512 }),
-  ...loc(5, 'StoneHengeS', ['1', '2', '3', '4'], ['Plains'], 5, { minApart: 1000, minAlt: 5 }),
-  ...loc(5, 'StoneHengeL', ['5', '6'], ['Plains'], 20, { minApart: 500, minAlt: 2, vegvisir: { chance: 0.15, boss: 'GoblinKing' } }),
-  ...loc(5, 'Runestone_Plains', [], ['Plains'], 100, { type: 'runestone' }),
-  ...loc(5, 'TarPit', ['1', '2', '3'], ['Plains'], 100, {
-    minApart: 128,
-    minAlt: 5,
-    maxAlt: 60,
-    // maxTerrainDelta: 1.5
-    /*
-    # 1
-      7x Growth 50%
-      2x Growth spawner 1 in 1 hour
-      4x Pickable_TarBig
-      12x Pickable_Tar
-    # 2
-      7x Growth 50%
-      2x Growth spawner 1 in 1 hour
-      4x Pickable_TarBig
-      8x Pickable_Tar
-    # 3
-      4x Growth 50%
-      2x Growth spawner 1 in 1 hour
-      4x Pickable_TarBig
-      8x Pickable_Tar
-    */ 
-  }),
-  ...loc(5, 'GoblinKing', [], ['Plains'], 4, { type: 'altar', minApart: 3000 }),
+  loc(5, 'GoblinCamp', ['Plains'], { minApart: 250 }, [{
+    subtype: '2',
+    quantity: 200,
+    items: [
+      locItem('TreasureChest_Plains', 0.5, 3),
+    ]
+  }]),
+  loc(5, 'StoneTower', ['Plains'], { minApart: 512 }, [{
+    subtype: '1',
+    quantity: 50,
+    items: [
+      locItem('Fulling', 0.54, 6),
+      locItem('GoblinTotem', 1, 1),
+      locItem([
+        locItem('TreasureChest_Plains', 1, 1),
+        locItem('Fulling', 0.54, 3),
+      ], 0.5, 1),
+    ],
+  }, {
+    subtype: '3',
+    quantity: 50,
+    items: [
+      locItem('Fulling', 0.54, 10),
+      locItem([
+        locItem('TreasureChest_Plains', 1, 1),
+        locItem('Fulling', 0.54, 2),
+      ], 0.5, 1),
+    ],
+  }]),
+  loc(5, 'Ruin', ['Plains'], { minApart: 512 }, [{
+    subtype: '3',
+    quantity: 50,
+    items: [
+      locItem('TreasureChest_Plains'),
+      locItem('Fulling', 1, 2),
+    ],
+  }]),
+  loc(5, 'StoneHengeL', ['Plains'], { minApart: 1000, minAlt: 5 }, [
+    {
+      subtype: '1',
+      quantity: 5,
+      items: [
+        locItem([
+          locItem('GoblinBrute', 0.5, 2),
+          locItem('GoblinBrute', 1, 1),
+          locItem('TreasureChest_Plains_stone', 1, 1),
+          // locItem('Rock_3', 1, 6),
+        ], 0.5, 1),
+        locItem('Vegvisir_GoblinKing', 0.4),
+        // locItem('Rock_3', 1, 6),
+      ],
+    },
+    {
+      subtype: '2',
+      quantity: 5,
+      items: [
+        locItem([
+          locItem('GoblinBrute', 0.5, 2),
+          locItem('GoblinBrute', 1, 1),
+          locItem('TreasureChest_Plains_stone', 1, 1),
+        ], 0.5, 1),
+      ],
+    },
+    {
+      subtype: '3',
+      quantity: 5,
+      items: [
+        locItem([
+          locItem('GoblinBrute', 0.5, 2),
+          locItem('GoblinBrute', 1, 1),
+          locItem('TreasureChest_Plains_stone', 1, 1),
+        ], 0.5, 1),
+        locItem('Vegvisir_GoblinKing', 0.4),
+        // locItem([locItem('Rock_3', 1, 3)], 0.5),
+        // locItem([locItem('Rock_3', 1, 5)], 0.5),
+      ],
+    },
+    {
+      subtype: '4',
+      quantity: 5,
+      items: [
+        locItem('GoblinBrute', 0.5, 2),
+        locItem('Vegvisir_GoblinKing', 0.4),
+      ],
+    },
+  ]),
+  loc(5, 'StoneHengeS', ['Plains'], { minApart: 500, minAlt: 2, }, [
+    {
+      subtype: '5',
+      quantity: 20,
+      items: [
+        locItem([locItem('Goblin', 0.54, 3)], 0.75),
+        locItem('Vegvisir_GoblinKing', 0.4),
+        // locItem([locItem('Rock_3', 1, 4)], 0.75),
+        // locItem('Rock_3', 1, 4),
+      ],
+    },
+    {
+      subtype: '6',
+      quantity: 20,
+      items: [
+        locItem([locItem('Rock_3', 1, 3)], 0.5),
+        locItem([locItem('Rock_3', 1, 5)], 0.5),
+      ],
+    },
+  ]),
+  // 13 random texts
+  loc(
+    5, 'Runestone_Plains', ['Plains'],
+    { type: 'runestone' },
+    [{ subtype: '', quantity: 100, items: [] }],
+  ),
+  // maxTerrainDelta: 1.5
+  loc(5, 'TarPit', ['Plains'], { minApart: 128, minAlt: 5, maxAlt: 60 }, [
+    {
+      subtype: '1',
+      quantity: 100,
+      items: [
+        locItem('Growth', .5, 7),
+        // locItem('Spawner_BlobTar_respawn_30', 1, 2),
+        locItem('Pickable_TarBig', 1, 4),
+        locItem('Pickable_Tar', 1, 12),
+      ],
+    },
+    {
+      subtype: '2',
+      quantity: 100,
+      items: [
+        locItem('Growth', .5, 7),
+        // locItem('Spawner_BlobTar_respawn_30', 1, 2),
+        locItem('Pickable_TarBig', 1, 4),
+        locItem('Pickable_Tar', 1, 8),
+      ],
+    },
+    {
+      subtype: '3',
+      quantity: 100,
+      items: [
+        locItem('Growth', .5, 7),
+        // locItem('Spawner_BlobTar_respawn_30', 1, 2),
+        locItem('Pickable_TarBig', 1, 4),
+        locItem('Pickable_Tar', 1, 8),
+      ],
+    },
+  ]),
+  loc(
+    5, 'GoblinKing', ['Plains'],
+    { type: 'altar', minApart: 3000 },
+    [{ subtype: '', quantity: 4, items: [] }],
+  ),
   // Ashlands
-  ...loc(7, 'Meteorite', [], ['Ashlands'], 500, {}),
-  // mixed
-  ...loc(1, 'Dolmen', ['01', '02', '03'], ['Meadows', 'BlackForest'], 100 /* 50 for 03 */, {}),
-  ...loc(2, 'ShipWreck', ['01', '02', '03', '04'], ['BlackForest', 'Swamp', 'Plains', 'Ocean'], 25, { minApart: 1024, minAlt: -1, maxAlt: 1, chest: chestDrops.shipwreck_karve_chest }),
+  loc(7, 'Meteorite', ['Ashlands'], {}, [{
+    subtype: '',
+    quantity: 300,
+    items: [
+      locItem('MineRock_Meteorite', 1, 15),
+      locItem('Surtling', 1, 4),
+    ],
+  }]),
+  // MIXED
+  loc(1, 'Dolmen', ['Meadows', 'BlackForest'], {}, [
+    // skeleton_no_archer, N, *, once 50%
+    {
+      subtype: '01',
+      quantity: 100,
+      items: [
+        locItem('BoneFragments', 0.5, 1),
+        locItem('Pickable_DolmenTreasure', 0.1),
+        // locItem('Rock_4', 1, 3),
+        // locItem('Rock_4', 0.5, 3),
+      ],
+    },
+    {
+      subtype: '02',
+      quantity: 100,
+      items: [
+        locItem('BoneFragments', 0.5, 1),
+        locItem('Pickable_DolmenTreasure', 0.2),
+        // locItem('Rock_4', 1, 4),
+        // locItem('Rock_4', 0.5, 1),
+      ],
+    },
+    {
+      subtype: '03',
+      quantity: 50,
+      items: [
+        locItem('BoneFragments', 0.5, 1),
+        locItem('BoneFragments', 1, 1),
+        locItem('Pickable_DolmenTreasure', 0.3),
+        // locItem('Rock_4', 1, 5),
+        // locItem('Rock_4', 0.5, 3),
+      ],
+    },
+  ]),
+  loc(2, 'ShipWreck', ['BlackForest', 'Swamp', 'Plains', 'Ocean'], { minApart: 1024, minAlt: -1, maxAlt: 1 }, [
+    {
+      subtype: '01',
+      quantity: 25,
+      items: [
+        locItem('shipwreck_karve_chest', 0.749),
+      ]
+    },
+    {
+      subtype: '03',
+      quantity: 25,
+      items: [
+        locItem('shipwreck_karve_chest', 0.749),
+      ]
+    },
+    {
+      subtype: '03',
+      quantity: 25,
+      items: [
+        locItem('shipwreck_karve_chest', 0.749),
+      ]
+    },
+    {
+      subtype: '04',
+      quantity: 25,
+      items: [
+        locItem('shipwreck_karve_chest', 0.749),
+      ]
+    },
+  ]),
 ];
 
 for (const loc of locations) {
-  const biome = biomes.find(b => b.id === loc.biome);
-  if (!biome) continue;
-  biome.locations.push(loc.id);
-  locationBiomes[loc.id] = biome.id;
-}
-
-for (const [loc, biome] of Object.entries(locationBiomes)) {
-  biomes.find(b => b.id === biome)?.locations.push(loc as GameLocationId);
+  for (const lb of loc.biomes) {
+    const biome = biomes.find(b => b.id === lb);
+    if (!biome) continue;
+    biome.locations.push(loc.id);
+    locationBiomes[loc.id] = biome.id;
+  }
 }
 
 function addToLocation(
@@ -337,10 +858,35 @@ for (const creature of creatures) {
   }
 }
 
+function addRecursive(id: GameLocationId, items: LocationItem[]) {
+  for (const { item } of items) {
+    if (typeof item !== 'string') {
+      addRecursive(id, item);
+      continue;
+    }
+    const obj = data[item];
+    switch (obj?.type) {
+      case 'destructible':
+        addToLocation(id, [], [], [obj]);
+        break;
+      case 'creature':
+        addToLocation(id, [], [obj], []);
+        break;
+      case undefined:
+        break;
+      default:
+        addToLocation(id, [item], [], []);
+    }
+  }
+}
+
 for (const loc of locations) {
-  addToLocation(loc.id, loc.chest?.options.map(opt => opt.item) ?? [], [], []);
+  for (const variant of loc.variations) {
+    addRecursive(loc.id, variant.items);
+  }
   loc.resources = [...new Set(loc.resources)];
-  if (loc.vegvisir) {
+  loc.creatures = [...new Set(loc.creatures)];
+  if (loc.variations.some(v => v.items.some(i => String(i.item).startsWith('Vegvisir')))) {
     loc.tags = ['vegvisir'];
   }
 }

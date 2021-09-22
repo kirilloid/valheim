@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import { Cart, CraftingStation, Destructible, EntityId, GameObject, Item, Pair, Piece, Plant, Ship } from '../types';
+import { Cart, CraftingStation, Creature, Destructible, EntityId, GameObject, Item, Pair, Piece, Plant, Ship, TreasureChest } from '../types';
 import { SkillType } from '../model/skills';
 import { assertNever, days, timeI2S } from '../model/utils';
 
@@ -147,9 +147,11 @@ function CraftingSection({ id }: { id: EntityId }) {
   </>
 }
 
-export function Recipe({ item }: { item: Item | Piece | Destructible | Plant | Ship | Cart }) {
+export function Recipe({ item }: { item: Exclude<GameObject, Creature> }) {
   const translate = useContext(TranslationContext);
-  if (item.type === 'destructible' || item.type === 'plant') {
+  if (item.type === 'destructible'
+   || item.type === 'plant'
+   || item.type === 'treasure') {
     return null;
   }
   const { recipe } = item;
@@ -243,6 +245,7 @@ export function GrowSection({ item }: { item: GameObject | undefined }) {
     case 'plant':
     case 'ship':
     case 'cart':
+    case 'treasure':
       return null;
   }
   const { grow } = item;

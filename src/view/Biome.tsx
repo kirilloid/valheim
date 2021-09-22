@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 
 import '../css/Biome.css';
 
-import type { Destructible, GameObject, Item } from '../types';
+import type { Destructible, GameObject, Item, TreasureChest } from '../types';
 import { biomes } from '../data/location';
 import { data } from '../data/itemDB';
 import { resourceCraftMap } from '../data/resource-usage';
@@ -38,7 +38,7 @@ export function Biome() {
   const resources = {
     trophies: [] as Item[],
     food: [] as Item[],
-    others: [] as Item[],
+    others: [] as (Item | TreasureChest)[],
     rock: [] as Destructible[],
     tree: [] as Destructible[],
     misc: [] as Destructible[],
@@ -56,9 +56,10 @@ export function Biome() {
       resources.trophies.push(item);
     } else if (item.type === 'ship' || item.type === 'cart') {
       // skip them
-    } else if (item.type === 'food'
+    } else if ((item.type === 'food'
             || resourceCraftMap[item.id]?.some(v => v.type === 'food'
-              || resourceCraftMap[v.id]?.some(v2 => v2.type === 'food'))
+            || resourceCraftMap[v.id]?.some(v2 => v2.type === 'food'))
+            && item.type !== 'treasure')
     ) {
       resources.food.push(item);
     } else {

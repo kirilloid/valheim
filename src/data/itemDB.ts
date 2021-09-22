@@ -9,6 +9,7 @@ import { creatures } from './creatures';
 import { ships, carts } from './transport';
 import { destructibles } from './objects';
 import { plants } from './plants';
+import { chests } from './chests';
 
 export const data: Record<string, GameObject> = {};
 
@@ -32,6 +33,7 @@ for (const coll of [
   pieces,
   ships,
   carts,
+  chests,
   destructibles,
   plants,
   resources,

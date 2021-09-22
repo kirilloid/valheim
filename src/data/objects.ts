@@ -7,6 +7,7 @@ import {
   GeneralDrop,
   itemGrow,
   ItemGrow,
+  mods,
 } from '../types';
 
 const allNormal: DamageModifiers = {
@@ -33,6 +34,19 @@ const allImmune: DamageModifiers = {
   lightning: 'immune',
   poison: 'immune',
   spirit: 'immune',
+};
+
+const greydwarfNestModifiers: DamageModifiers = {
+  blunt: 'resistant',
+  slash: 'normal',
+  pierce: 'resistant',
+  chop: 'normal',
+  pickaxe: 'ignore',
+  fire: 'weak',
+  frost: 'immune',
+  lightning: 'normal',
+  poison: 'immune',
+  spirit: 'ignore',
 };
 
 const chopOnly: DamageModifiers = {
@@ -645,6 +659,66 @@ export const destructibles: Destructible[] = [
       options: [{ item: 'TinOre' }],
     }],
   },
+  {
+    id: 'Greydwarf_Root',
+    subtype: 'misc',
+    type: 'destructible',
+    tier: 2,
+    minToolTier: 0,
+    grow: [],
+    hp: 100,
+    damageModifiers: greydwarfNestModifiers,
+    parts: [],
+    drop: [{
+      num: [2, 4],
+      options: [{ item: 'Wood' }, { item: 'Resin' }],
+    }],
+  },
+  /*
+  levelUpChance: 0.15
+  maxNear: 3
+  interval: 10
+  greydwarf 5
+  greydwarf_elite 1
+  greydwarf_shaman 1
+  */
+  {
+    id: 'Spawner_GreydwarfNest',
+    subtype: 'misc',
+    type: 'destructible',
+    tier: 2,
+    minToolTier: 0,
+    grow: [],
+    hp: 100,
+    damageModifiers: greydwarfNestModifiers,
+    parts: [],
+    drop: [singleDrop('AncientSeed')],
+  },
+  {
+    id: 'barrel',
+    type: 'destructible',
+    subtype: 'misc',
+    tier: 2,
+    minToolTier: 0,
+    grow: [],
+    hp: 10,
+    damageModifiers: mods([0, 0, 1, 2, 0, 0, 0, 0, 3, 3]),
+    parts: [],
+    drop: [{
+      oneOfEach: true,
+      num: [2, 3],
+      options: [
+        { item: 'Blueberries', num: [2, 4] },
+        { item: 'DeerHide', num: [2, 3], },
+        { item: 'Flint', num: [2, 3], },
+        { item: 'Coal', num: [5, 8], },
+        { item: 'GreydwarfEye', num: [2, 4], },
+        { item: 'Resin', num: [3, 6], },
+        { item: 'LeatherScraps', num: [2, 3], },
+        { item: 'TinOre', num: [2, 3], },
+      ],
+    }]
+  },
   // SWAMP
   {
     id: 'StatueEvil',
@@ -796,6 +870,18 @@ export const destructibles: Destructible[] = [
     drop: singleDrop('Stone', 3, 6),
   }),
   // MOUNTAIN
+  {
+    id: 'marker',
+    subtype: 'rock',
+    type: 'destructible',
+    tier: 4,
+    grow: [],
+    hp: 30,
+    damageModifiers: { ...pickOnly, lightning: 'normal' },
+    minToolTier: 0,
+    parts: [],
+    drop: [singleDrop('Stone', 3, 6)],
+  },
   {
     id: 'MineRock_Obsidian',
     subtype: 'misc',
@@ -1113,6 +1199,24 @@ export const destructibles: Destructible[] = [
     minToolTier: 0,
     parts: [],
     drop: [],
+  },
+  {
+    type: 'destructible',
+    subtype: 'rock',
+    id: 'MineRock_Meteorite',
+    tier: 7,
+    minToolTier: 2,
+    damageModifiers: pickOnly,
+    grow: [],
+    hp: 60,
+    parts: [],
+    drop: [{
+      num: [1, 2],
+      options: [
+        { item: 'FlametalOre' },
+        { item: 'Stone', weight: 2, },
+      ],
+    }],
   },
 ];
 // SwampTree2_Darkland, HugeRoot1

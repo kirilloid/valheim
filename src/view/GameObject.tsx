@@ -14,6 +14,7 @@ import { Arrow } from './Arrow';
 import { GenericItem } from './GenericItem';
 import { Tool } from './Tool';
 import { Piece } from './Piece';
+import { Treasure } from './Treasure';
 import { Ship } from './Ship';
 import { Cart } from './Cart';
 import { Destructible } from './Destructible';
@@ -69,6 +70,8 @@ function Item({ item, level }: { item: T.GameObject, level?: number }) {
       return <Ship item={item} />
     case 'cart':
       return <Cart item={item} />
+    case 'treasure':
+      return <Treasure item={item} />
     case 'item':
     case 'trophy':
       return <GenericItem item={item} />

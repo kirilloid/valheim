@@ -16,6 +16,12 @@ export type EntityGroup =
   | 'torch'
   | 'value'
 
+export interface TreasureChest extends GameObjectBase {
+  type: 'treasure';
+  id: EntityId;
+  drop: GeneralDrop;
+};
+
 export type Biome =
   | 'Meadows'
   | 'BlackForest'
@@ -89,22 +95,29 @@ export type BiomeConfig = {
   resources: EntityId[];
 }
 
+export type LocationItem = { item: EntityId | LocationItem[], chance: number, number: number };
+
+export type LocationVariation = {
+  subtype: string,
+  quantity: number,
+  items: LocationItem[],
+};
+
 export type LocationConfig = {
   id: GameLocationId;
   tier: number;
   tags?: string[];
-  biome: Biome;
+  biomes: Biome[];
   quantity: number;
   type: 'altar' | 'dungeon' | 'runestone' | 'misc';
-  vegvisir?: { chance: number; boss: EntityId };
   minApart: number;
   altitude: [number, number];
   distance: [number, number];
-  chest?: GeneralDrop;
   destructibles: Destructible[];
   creatures: Creature[];
   resources: EntityId[];
-}
+  variations: LocationVariation[];
+};
 
 export const damageModifiersValues: Record<DamageModifier, number> = {
   normal: 1,
@@ -652,4 +665,4 @@ export interface Armor extends BaseItem {
 export type Item = Resource | Valuable | Food | Potion | Weapon | Shield | Armor | Arrow | Tool;
 export type ItemSpecial = Weapon['special'] | Armor['special'] | Tool['special'];
 
-export type GameObject = Item | Piece | Destructible | Ship | Cart | Creature | Plant;
+export type GameObject = Item | Piece | TreasureChest | Destructible | Ship | Cart | Creature | Plant;

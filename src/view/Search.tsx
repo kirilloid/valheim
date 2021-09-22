@@ -96,7 +96,7 @@ function SearchLocation({ entry, text, onClick }: { entry: SearchEntry, text: st
   const loc = locations.find(l => l.id === id);
   if (!loc) return null;
   
-  const boss = loc.vegvisir?.boss;
+  const boss = null; //loc.vegvisir?.boss;
   return <div className="SearchItem">
     <Link to={`/loc/${id}`} onClick={onClick}>{text}</Link>
     {boss ? <span>
@@ -126,6 +126,7 @@ function ShortRecipe(props: { item: GameObject }) {
     case 'item':
     case 'trophy':
     case 'valuable':
+    case 'treasure':
       return null;
     case 'piece':
     case 'ship':
@@ -326,6 +327,8 @@ function SearchObject({ id, text, onClick }: { id: EntityId, text: string, onCli
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
       </div>
+    case 'treasure':
+      return null
     case 'piece':
       return <div className={className}>
         <ItemIcon item={item} size={32} />

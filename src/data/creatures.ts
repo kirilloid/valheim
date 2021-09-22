@@ -44,6 +44,15 @@ const skeletonDamageModifiers: DamageModifiers = {
   poison: 'immune',
 };
 
+const loxDamageModifiers: DamageModifiers = {
+  ...defaultDmgModifiers,
+  blunt: 'resistant',
+  slash: 'resistant',
+  fire: 'weak',
+  frost: 'resistant',
+  spirit: 'immune',
+};
+
 const nightOnly = true;
 const unblockable = true;
 const undodgeable = true;
@@ -991,14 +1000,7 @@ export const creatures: Creature[] = [
       factor: 0.3,
       time: NaN,
     },
-    damageModifiers: {
-      ...defaultDmgModifiers,
-      blunt: 'resistant',
-      slash: 'resistant',
-      fire: 'weak',
-      frost: 'resistant',
-      spirit: 'immune',
-    },
+    damageModifiers: loxDamageModifiers,
     drop: [
       dropEntry('LoxMeat', { min: 4, max: 6 }),
       dropEntry('LoxPelt', { min: 2, max: 3 }),
