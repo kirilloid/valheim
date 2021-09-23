@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 
 import type { DamageModifier, Destructible as TDestructible, Weapon } from '../types';
 import { SkillType } from '../model/skills';
-import { items as weapons } from '../data/weapons';
+import { axes, items as weapons, pickaxes } from '../data/weapons';
 import { fullDestructible } from '../data/objects';
 
 import { TranslationContext } from '../effects';
@@ -10,9 +10,6 @@ import { InlineObjectWithIcon, Resistances } from './helpers';
 import { ItemHeader } from './ItemHeader';
 import { DropTable } from './DropTable';
 import { GrowSection } from './Source';
-
-const axes = weapons.filter(w => w.skill === SkillType.Axes && !w.disabled) as Weapon[];
-const pickaxes = weapons.filter(w => w.skill === SkillType.Pickaxes && !w.disabled) as Weapon[];
 
 const nonImmune = (mod: DamageModifier): boolean => {
   return mod !== 'ignore' && mod !== 'immune';

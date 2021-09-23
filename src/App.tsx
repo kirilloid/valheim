@@ -15,9 +15,10 @@ import { Biome } from './view/Biome';
 import { Info } from './view/Info';
 import { AttackCalc } from './view/AtkCalc';
 import { DefenseCalc } from './view/DefCalc';
-import { FoodTable } from './view/FoodTable';
 import { ComfortTable } from './view/ComfortTable';
+import { FoodTable } from './view/FoodTable';
 import { FoodPlanner } from './view/FoodPlanner';
+import { Mining } from './view/Mining';
 import { TranslationContext, useTranslation } from './effects';
 import { GameEvent, GameEventTable } from './view/Event';
 
@@ -44,9 +45,10 @@ function App() {
             <Route path="/food-nutrition" children={<FoodTable />} />
             <Route path="/food-planner/:params" children={<FoodPlanner />} />
             <Route path="/food-planner" children={<FoodPlanner />} />
-            <Route path="/info/:id" children={<Info />} />
             <Route path="/event/:id" children={<GameEvent />} />
             <Route path="/events" children={<GameEventTable />} />
+            <Route path="/mining" children={<Mining />} />
+            <Route path="/info/:id" children={<Info />} />
           </Switch>
         </Router>
       </TranslationContext.Provider>

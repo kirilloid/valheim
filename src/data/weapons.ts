@@ -2007,3 +2007,7 @@ export const items: (Weapon | Shield)[] = [
     knockback: 40, backstab: 3, moveSpeed: -0.05,
   },
 ];
+
+const enabledWeapons = items.filter(w => !w.disabled && w.type === 'weapon') as Weapon[]; 
+export const axes = enabledWeapons.filter(w => w.damage[0].chop);
+export const pickaxes = enabledWeapons.filter(w => w.damage[0].pickaxe);
