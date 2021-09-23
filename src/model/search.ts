@@ -102,6 +102,7 @@ export const pages = [
   { id: 'food-nutrition' },
   { id: 'food-planner' },
   { id: 'comfort' },
+  { id: 'mining' },
 ];
 
 function addObjects(dict: Record<string, string>) {
