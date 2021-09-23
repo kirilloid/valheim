@@ -30,7 +30,7 @@
     "HelmetOdin": "item_helmet_odin",
     "CapeOdin": "item_cape_odin",
 
-    "Hands": "skill_unarmed",
+    "PlayerUnarmed": "skill_unarmed",
     "Club": "item_club",
     "AxeStone": "item_axe_stone",
     "Torch": "item_torch",

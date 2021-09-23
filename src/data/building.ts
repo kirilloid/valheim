@@ -93,7 +93,7 @@ const ironStructureRecipe = (iron: number): Piece['recipe'] =>
   ({ type: 'craft_piece', materials: { Iron: iron }, station: CraftingStation.Forge });
 
 const craftingStationIds = {
-//  [CraftingStation.Inventory]: 'Hands'
+//  [CraftingStation.Inventory]: 'PlayerUnarmed'
 } as Record<CraftingStation, EntityId>;
 
 export function getCraftingStationId(id: CraftingStation): EntityId {

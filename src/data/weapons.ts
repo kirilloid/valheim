@@ -30,7 +30,7 @@ export const animations: Record<AttackAnimation, number[]> = {
 export const items: (Weapon | Shield)[] = [
 // PRE-CRAFT AGE
   { type: 'weapon', slot: 'both',
-    id: 'Hands',
+    id: 'PlayerUnarmed',
     emoji: '👊',
     tier: 0,
     weight: 0, stack: 0,
@@ -54,7 +54,7 @@ export const items: (Weapon | Shield)[] = [
     }],
     maxLvl: 1,
     durability: [100, 50],
-    block: 5,
+    block: 2,
     parryForce: 0,
     parryBonus: 1.5,
     knockback: 40, backstab: 4, moveSpeed: 0,
@@ -78,7 +78,7 @@ export const items: (Weapon | Shield)[] = [
     maxLvl: 4,
     durability: [100, 50],
     block: 3,
-    parryForce: 20,
+    parryForce: [20, 5],
     parryBonus: 2,
     knockback: 50, backstab: 3, moveSpeed: -0.05,
     recipe: {
@@ -146,8 +146,8 @@ export const items: (Weapon | Shield)[] = [
     maxLvl: 1,
     durability: [20, 0],
     durabilityDrainPerSec: 30,
-    block: 10,
-    parryForce: [10, 5],
+    block: 3,
+    parryForce: [20, 5],
     parryBonus: 2,
     knockback: 30, backstab: 3, moveSpeed: -0.05,
     recipe: {
@@ -179,7 +179,7 @@ export const items: (Weapon | Shield)[] = [
       animation: 'swing_axe',
       chain: 3,
       chainCombo: 2,
-      stamina: 8,
+      stamina: 6,
       range: 2.2,
     }],
     maxLvl: 4,
@@ -228,10 +228,10 @@ export const items: (Weapon | Shield)[] = [
     }],
     maxLvl: 4,
     durability: [100, 50],
-    block: 5,
+    block: 2,
     parryForce: [10, 5],
     parryBonus: 4,
-    knockback: 10, backstab: 10, moveSpeed: 0,
+    knockback: 10, backstab: 6, moveSpeed: 0,
     recipe: {
       type: 'craft_upg',
       time: CRAFT_TIME,
@@ -253,9 +253,9 @@ export const items: (Weapon | Shield)[] = [
       type: 'melee',
       animation: 'spear_poke',
       chain: 0,
-      chainCombo: 2,
+      chainCombo: 1,
       stamina: 6,
-      range: 1.8,
+      range: 1.9,
     }, {
       type: 'proj',
       animation: 'spear_throw',
@@ -268,7 +268,7 @@ export const items: (Weapon | Shield)[] = [
     maxLvl: 4,
     durability: [100, 50],
     block: 4,
-    parryForce: 0,
+    parryForce: [20, 5],
     parryBonus: 2,
     knockback: 20, backstab: 3, moveSpeed: -0.05,
     recipe: {
@@ -509,7 +509,7 @@ export const items: (Weapon | Shield)[] = [
     block: 8,
     parryForce: [10, 5],
     parryBonus: 4,
-    knockback: 10, backstab: 10, moveSpeed: 0,
+    knockback: 10, backstab: 6, moveSpeed: 0,
     recipe: {
       type: 'craft_upg',
       time: CRAFT_TIME,
@@ -850,7 +850,7 @@ export const items: (Weapon | Shield)[] = [
       animation: 'battleaxe_attack',
       chain: 3,
       chainCombo: 2,
-      stamina: 24,
+      stamina: 20,
       range: 2.5,
       mul: { damage: 1, force: 1, stagger: 1.5 },
     }, {
@@ -1478,7 +1478,7 @@ export const items: (Weapon | Shield)[] = [
     block: 10,
     parryForce: [10, 5],
     parryBonus: 4,
-    knockback: 10, backstab: 10, moveSpeed: 0,
+    knockback: 10, backstab: 6, moveSpeed: 0,
     recipe: {
       type: 'craft_upg',
       time: CRAFT_TIME,
@@ -1730,7 +1730,7 @@ export const items: (Weapon | Shield)[] = [
     block: 15,
     parryForce: [10, 5],
     parryBonus: 4,
-    knockback: 10, backstab: 10, moveSpeed: 0,
+    knockback: 10, backstab: 6, moveSpeed: 0,
     recipe: {
       type: 'craft_upg',
       time: CRAFT_TIME,
