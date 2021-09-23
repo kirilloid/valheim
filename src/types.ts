@@ -468,8 +468,9 @@ export function itemGrow(...grows: ItemGrowConfig[]): ItemGrow[] {
 }
 
 interface BaseItem extends GameObjectBase {
-  weight: number;
   stack?: number;
+  maxLvl?: number;
+  weight: number;
   floating?: true;
   teleportable?: false;
   recipe?: {
@@ -614,40 +615,39 @@ export interface Weapon extends BaseItem {
   slot: 'primary' | 'both' | 'secondary' | 'bow' | 'either'
     | 'head' | 'shoulders' | 'body' | 'legs'
     | 'none' | 'util';
-  skill: Exclude<SkillType, SkillType.Blocking> | null;
   special?: 'harpoon';
-  toolTier?: number;
-  damage: Pair<DamageProfile>;
-  attacks: Attack[];
+  maxLvl: number;
+  moveSpeed: number;
   block: number | Pair<number>;
   // knockback when blocking
   parryForce: number | Pair<number>;
   // perfect block multiplier
   parryBonus: number;
-  maxLvl: number;
+  skill: Exclude<SkillType, SkillType.Blocking> | null;
+  toolTier?: number;
+  damage: Pair<DamageProfile>;
   knockback: number;
   backstab: number;
-  moveSpeed: number;
-  holdDurationMin?: number;
-  holdStaminaDrain?: number;
+  attacks: Attack[];
   durability: Pair<number>;
   durabilityDrainPerSec?: number;
+  holdDurationMin?: number;
+  holdStaminaDrain?: number;
 }
-
 export interface Shield extends BaseItem {
   type: 'shield';
   emoji: string,
-  damage?: DamageProfile;
-  damageModifiers?: Partial<DamageModifiers>;
   slot: 'secondary';
-  skill: SkillType.Blocking;
+  maxLvl: number;
+  moveSpeed: number;
+  damageModifiers?: Partial<DamageModifiers>;
   block: number | Pair<number>;
   parryForce: number | Pair<number>;
   parryBonus: number;
-  maxLvl: number;
+  skill: SkillType.Blocking;
+  damage?: DamageProfile;
   knockback?: number;
   backstab?: number;
-  moveSpeed: number;
   durability: Pair<number>;
 }
 
@@ -655,11 +655,11 @@ export interface Armor extends BaseItem {
   type: 'armor';
   slot: 'head' | 'shoulders' | 'body' | 'legs' | 'util' | 'none';
   special?: 'light' | 'strength' | 'search';
-  armor: Pair<number>;
   maxLvl: number;
-  durability: Pair<number>;
   moveSpeed: number;
+  armor: Pair<number>;
   damageModifiers?: Partial<DamageModifiers>;
+  durability: Pair<number>;
 }
 
 export type Item = Resource | Valuable | Food | Potion | Weapon | Shield | Armor | Arrow | Tool;
