@@ -206,6 +206,7 @@ export const creatures: Creature[] = [
     group: 'bird',
     id: 'Crow',
     tags: ['fly'],
+    // grow: { num: [0, 3], alt: [-5, 5], offset: 15, locations: ['BlackForest'] }
     tier: 2,
     maxLvl: 1,
     emoji: '🐦',
