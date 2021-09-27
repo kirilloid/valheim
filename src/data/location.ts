@@ -52,6 +52,7 @@ function loc(
     maxDistance = 10000,
   }: {
     type?: LocationConfig['type'],
+    boss?: EntityId,
     minAlt?: number,
     maxAlt?: number,
     minApart?: number,
@@ -89,7 +90,7 @@ export const locations: LocationConfig[] = [
     subtype: '',
     quantity: 1,
     items: [
-      locItem('Vegvisir_Eikthyr'),
+      locItem('Vegvisir'), // Vegvisir_Eikthyr
       locItem('Raspberry', 1, 2),
       locItem('Mushroom', 1, 2),
       locItem('Wood', 1, 2),
@@ -108,12 +109,115 @@ export const locations: LocationConfig[] = [
       subtype: '1',
       quantity: 20,
       items: [
-        // all but 8,12 have 25% for beehive
         locItem('beehive', 0.25),
-        // mostly 50%; 3,4,5,8: 0%, 6: 100%
         locItem('TreasureChest_Meadows', 0.5),
       ],
-    }
+    },
+    {
+      subtype: '2',
+      quantity: 20,
+      items: [
+        locItem('beehive', 0.25),
+        locItem('TreasureChest_Meadows', 0.5),
+      ],
+    },
+    {
+      subtype: '3',
+      quantity: 20,
+      items: [
+        locItem('beehive', 0.25),
+      ],
+    },
+    {
+      subtype: '4',
+      quantity: 20,
+      items: [
+        locItem('beehive', 0.25),
+      ],
+    },
+    {
+      subtype: '5',
+      quantity: 20,
+      items: [
+        locItem('beehive', 0.25),
+      ],
+    },
+    {
+      subtype: '6',
+      quantity: 20,
+      items: [
+        locItem('beehive', 0.25),
+        locItem('TreasureChest_Meadows', 1),
+      ],
+    },
+    {
+      subtype: '7',
+      quantity: 20,
+      items: [
+        locItem('beehive', 0.25),
+        locItem('TreasureChest_Meadows', 0.5),
+      ],
+    },
+    {
+      subtype: '8',
+      quantity: 20,
+      items: [],
+    },
+    {
+      subtype: '9',
+      quantity: 20,
+      items: [
+        locItem('beehive', 0.25),
+        locItem('TreasureChest_Meadows', 0.5),
+      ],
+    },
+    {
+      subtype: '10',
+      quantity: 20,
+      items: [
+        locItem('beehive', 0.25),
+        locItem('TreasureChest_Meadows', 0.5),
+      ],
+    },
+    {
+      subtype: '11',
+      quantity: 20,
+      items: [
+        locItem('beehive', 0.25),
+        locItem('TreasureChest_Meadows', 0.5),
+      ],
+    },
+    {
+      subtype: '12',
+      quantity: 20,
+      items: [
+        locItem('TreasureChest_Meadows', 0.5),
+      ],
+    },
+    {
+      subtype: '13',
+      quantity: 20,
+      items: [
+        locItem('beehive', 0.25),
+        locItem('TreasureChest_Meadows', 0.5),
+      ],
+    },
+    {
+      subtype: '14',
+      quantity: 20,
+      items: [
+        locItem('beehive', 0.25),
+        locItem('TreasureChest_Meadows', 0.5),
+      ],
+    },
+    {
+      subtype: '15',
+      quantity: 20,
+      items: [
+        locItem('beehive', 0.25),
+        locItem('TreasureChest_Meadows', 0.5),
+      ],
+    },
   ]),
   loc(1, 'WoodFarm', ['Meadows'], { minApart: 128, minDistance: 500, maxDistance: 2000 }, [
     {
@@ -151,11 +255,11 @@ export const locations: LocationConfig[] = [
       locItem('Boar', 0.5, 8),
     ],
   }]),
-  loc(1, 'Eikthyrnir', ['Meadows'], { type: 'altar', maxDistance: 1000 }, [{
-    subtype: '',
-    quantity: 3,
-    items: [],
-  }]),
+  loc(
+    1, 'Eikthyrnir', ['Meadows'],
+    { type: 'altar', boss: 'Eikthyr', maxDistance: 1000 },
+    [{ subtype: '', quantity: 3, items: [], }],
+  ),
   // BLACK FOREST
   loc(2, 'Crypt', ['BlackForest'], { type: 'dungeon', minApart: 128, }, [
     {
@@ -165,7 +269,9 @@ export const locations: LocationConfig[] = [
       items: [
         locItem('TreasureChest_forestcrypt', 0.2, 10),
         locItem('Pickable_ForestCryptRandom', 0.5, 30),
-        locItem('Vegvisir_GDKing', 0.5),
+        locItem('Skeleton_Poison', 0.3, 1),
+        locItem('Ghost', 0.5, 3),
+        locItem('Vegvisir', 0.5), // Vegvisir_GDKing
       ],
     }
   ]),
@@ -179,7 +285,7 @@ export const locations: LocationConfig[] = [
       ]
     }
   ]),
-  loc(2, 'Ruin', ['BlackForest'], {}, [
+  loc(2, 'RuinB', ['BlackForest'], {}, [
     {
       subtype: '1',
       quantity: 200,
@@ -202,7 +308,7 @@ export const locations: LocationConfig[] = [
         locItem('Greydwarf', 0.2, 1),
         locItem('TreasureChest_blackforest', 0.3),
         locItem('barrel', 0.3),
-        locItem('Vegvisir_GDKing', 0.3),
+        locItem('Vegvisir', 0.3), // Vegvisir_GDKing
         locItem('Crow', 1, 2),
         /*
         locItem('stone_wall', 1, 63),
@@ -230,7 +336,7 @@ export const locations: LocationConfig[] = [
           locItem('TreasureChest_blackforest'),
           locItem('Greydwarf', 0.5),
           locItem('Greydwarf_Elite', 0.5),
-          locItem('Vegvisir_GDKing', 0.3),
+          locItem('Vegvisir', 0.3), // Vegvisir_GDKing
         ], 0.818),
       ],
     },
@@ -330,7 +436,11 @@ export const locations: LocationConfig[] = [
     }
   ]),
   loc(2, 'Vendor_BlackForest', ['BlackForest'], {}, [{ subtype: '', quantity: 10, items: [locItem('Haldor')] }]),
-  loc(2, 'GDKing', ['BlackForest'], { type: 'altar', minDistance: 1000, maxDistance: 7000 }, [{ subtype: '', quantity: 4, items: [] }]),
+  loc(
+    2, 'GDKing', ['BlackForest'],
+    { type: 'altar', boss: 'gd_king', minDistance: 1000, maxDistance: 7000 },
+    [{ subtype: '', quantity: 4, items: [] }],
+  ),
   // swamp
   loc(3, 'Grave', ['Swamp'], {}, [{
     subtype: '1',
@@ -346,7 +456,7 @@ export const locations: LocationConfig[] = [
       subtype: '1',
       quantity: 50,
       items: [
-        locItem('Vegvisir_Bonemass', 0.3),
+        locItem('Vegvisir', 0.3), // Vegvisir_Bonemass
         locItem('TreasureChest_swamp', 0.251),
         locItem('Draugr', 0.5, 2),
         locItem('Draugr_Elite', 0.321),
@@ -358,7 +468,7 @@ export const locations: LocationConfig[] = [
       subtype: '2',
       quantity: 50,
       items: [
-        locItem('Vegvisir_Bonemass', 0.3),
+        locItem('Vegvisir', 0.3), // Vegvisir_Bonemass
         locItem('TreasureChest_swamp', 0.251),
         locItem('Draugr', 0.5, 2),
         locItem('Draugr_Elite', 0.321),
@@ -465,8 +575,8 @@ export const locations: LocationConfig[] = [
       locItem('TreasureChest_sunkencrypt', 0.2, 4),
       locItem('Blob', 0.4, 10),
       locItem('Draugr', 0.4, 15),
+      locItem('Vegvisir', 0.2, 2), // Vegvisir_Bonemass
     ],
-    // vegvisir: { 0.5, boss: 'Bonemass' }
   }]),
   loc(3, 'Runestone_Swamps', ['Swamp'], { type: 'runestone', minApart: 128 },
     [{ subtype: '', quantity: 100, items: [] }]), // 12 random texts
@@ -549,7 +659,7 @@ export const locations: LocationConfig[] = [
       items: [
         locItem([
           locItem('TreasureChest_mountains', 0.66),
-          locItem('Vegvisir_DragonQueen', 0.7),
+          locItem('Vegvisir', 0.7), // Vegvisir_DragonQueen
         ], 0.9),
         locItem([locItem('Draugr', 1, 3)], 0.33),
       ],
@@ -576,7 +686,7 @@ export const locations: LocationConfig[] = [
   ]), // 13 random texts
   loc(
     4, 'DragonQueen', ['Mountain'],
-    { type: 'altar', minApart: 3000, maxDistance: 8000, minAlt: 150, maxAlt: 500 },
+    { type: 'altar', boss: 'DragonQueen', minApart: 3000, maxDistance: 8000, minAlt: 150, maxAlt: 500 },
     [{ subtype: '', quantity: 3, items: [], }]
   ),
   // plains
@@ -585,36 +695,42 @@ export const locations: LocationConfig[] = [
     quantity: 200,
     items: [
       locItem('TreasureChest_heath', 0.5, 3),
+      locItem([locItem('Flax', 0.5, 10)], 0.3, 3),
+      locItem([locItem('Barley', 0.5, 10)], 0.3, 3),
+      locItem('GoblinTotem', 0.6, 3),
+      locItem('Goblin', 0.5, 20),
+      locItem('GoblinBrute', 0.75, 4),
+      locItem('GoblinShaman', 0.75, 4),
     ]
   }]),
   loc(5, 'StoneTower', ['Plains'], { minApart: 512 }, [{
     subtype: '1',
     quantity: 50,
     items: [
-      locItem('Fulling', 0.54, 6),
+      locItem('Goblin', 0.54, 6),
       locItem('GoblinTotem', 1, 1),
       locItem([
         locItem('TreasureChest_heath', 1, 1),
-        locItem('Fulling', 0.54, 3),
+        locItem('Goblin', 0.54, 3),
       ], 0.5, 1),
     ],
   }, {
     subtype: '3',
     quantity: 50,
     items: [
-      locItem('Fulling', 0.54, 10),
+      locItem('Goblin', 0.54, 10),
       locItem([
         locItem('TreasureChest_heath', 1, 1),
-        locItem('Fulling', 0.54, 2),
+        locItem('Goblin', 0.54, 2),
       ], 0.5, 1),
     ],
   }]),
-  loc(5, 'Ruin', ['Plains'], { minApart: 512 }, [{
+  loc(5, 'RuinP', ['Plains'], { minApart: 512 }, [{
     subtype: '3',
     quantity: 50,
     items: [
       locItem('TreasureChest_heath'),
-      locItem('Fulling', 1, 2),
+      locItem('Goblin', 1, 2),
     ],
   }]),
   loc(5, 'StoneHengeL', ['Plains'], { minApart: 1000, minAlt: 5 }, [
@@ -628,7 +744,7 @@ export const locations: LocationConfig[] = [
           locItem('TreasureChest_heath_stone', 1, 1),
           // locItem('Rock_3', 1, 6),
         ], 0.5, 1),
-        locItem('Vegvisir_GoblinKing', 0.4),
+        locItem('Vegvisir', 0.4), // Vegvisir_GoblinKing
         // locItem('Rock_3', 1, 6),
       ],
     },
@@ -652,7 +768,7 @@ export const locations: LocationConfig[] = [
           locItem('GoblinBrute', 1, 1),
           locItem('TreasureChest_heath_stone', 1, 1),
         ], 0.5, 1),
-        locItem('Vegvisir_GoblinKing', 0.4),
+        locItem('Vegvisir', 0.4), // Vegvisir_GoblinKing
         // locItem([locItem('Rock_3', 1, 3)], 0.5),
         // locItem([locItem('Rock_3', 1, 5)], 0.5),
       ],
@@ -662,7 +778,7 @@ export const locations: LocationConfig[] = [
       quantity: 5,
       items: [
         locItem('GoblinBrute', 0.5, 2),
-        locItem('Vegvisir_GoblinKing', 0.4),
+        locItem('Vegvisir', 0.4), // Vegvisir_GoblinKing
       ],
     },
   ]),
@@ -672,7 +788,7 @@ export const locations: LocationConfig[] = [
       quantity: 20,
       items: [
         locItem([locItem('Goblin', 0.54, 3)], 0.75),
-        locItem('Vegvisir_GoblinKing', 0.4),
+        locItem('Vegvisir', 0.4), // Vegvisir_GoblinKing
         // locItem([locItem('Rock_3', 1, 4)], 0.75),
         // locItem('Rock_3', 1, 4),
       ],
@@ -698,7 +814,7 @@ export const locations: LocationConfig[] = [
       subtype: '1',
       quantity: 100,
       items: [
-        locItem('Growth', .5, 7),
+        locItem('BlobTar', 0.5, 7),
         // locItem('Spawner_BlobTar_respawn_30', 1, 2),
         locItem('Pickable_TarBig', 1, 4),
         locItem('Pickable_Tar', 1, 12),
@@ -708,7 +824,7 @@ export const locations: LocationConfig[] = [
       subtype: '2',
       quantity: 100,
       items: [
-        locItem('Growth', .5, 7),
+        locItem('BlobTar', 0.5, 7),
         // locItem('Spawner_BlobTar_respawn_30', 1, 2),
         locItem('Pickable_TarBig', 1, 4),
         locItem('Pickable_Tar', 1, 8),
@@ -718,7 +834,7 @@ export const locations: LocationConfig[] = [
       subtype: '3',
       quantity: 100,
       items: [
-        locItem('Growth', .5, 7),
+        locItem('BlobTar', 0.5, 7),
         // locItem('Spawner_BlobTar_respawn_30', 1, 2),
         locItem('Pickable_TarBig', 1, 4),
         locItem('Pickable_Tar', 1, 8),
@@ -727,7 +843,7 @@ export const locations: LocationConfig[] = [
   ]),
   loc(
     5, 'GoblinKing', ['Plains'],
-    { type: 'altar', minApart: 3000 },
+    { type: 'altar', boss: 'GoblinKing', minApart: 3000 },
     [{ subtype: '', quantity: 4, items: [] }],
   ),
   // Ashlands
@@ -815,21 +931,12 @@ for (const loc of locations) {
   }
 }
 
-function addToLocation(
-  loc: string,
+function addToBiome(
+  biomeId: Biome,
   items: EntityId[],
   creatures: Creature[],
-  destructibles: PhysicalObject[],
+  destructibles: EntityId[],
 ) {
-  if (loc in locationBiomes) {
-    const gameLocation = locations.find(l => l.id === loc);
-    if (gameLocation != null) {
-      gameLocation.resources.push(...items);
-      gameLocation.creatures.push(...creatures);
-      gameLocation.destructibles.push(...destructibles);
-    }
-  }
-  const biomeId = locationToBiome(loc);
   const biome = biomes.find(b => b.id === biomeId);
   if (biome != null) {
     biome.resources.push(...items);
@@ -838,17 +945,32 @@ function addToLocation(
   }
 }
 
+function addToLocation(
+  loc: GameLocationId,
+  items: EntityId[],
+  creatures: Creature[],
+  destructibles: EntityId[],
+) {
+  const gameLocation = locations.find(l => l.id === loc);
+  if (gameLocation != null) {
+    gameLocation.resources.push(...items);
+    gameLocation.creatures.push(...creatures);
+    gameLocation.destructibles.push(...destructibles);
+  }
+  const biomeId = locationToBiome(loc);
+  addToBiome(biomeId, items, creatures, destructibles);
+}
+
 for (const obj of objects) {
-  if (!obj.destructible) continue;
   for (const loc of (obj.grow ?? []).flatMap(g => g.locations)) {
-    addToLocation(loc, [], [], [obj]);
+    addToBiome(loc, [], [], [obj.id]);
   }
 }
 
 for (const { id, grow } of resources) {
   if (!grow) continue;
   for (const loc of grow.flatMap(g => g.locations)) {
-    addToLocation(loc, [id], [], []);
+    addToBiome(loc, [id], [], []);
   }
 }
 
@@ -859,8 +981,13 @@ for (const creature of creatures) {
   }
 }
 
+export const objectLocationMap: Record<EntityId, GameLocationId[]> = {};
+
 function addRecursive(id: GameLocationId, items: LocationItem[]) {
-  for (const { item } of items) {
+  function addItem(item: EntityId) {
+    (objectLocationMap[item] ?? (objectLocationMap[item] = [])).push(id);
+  }
+  for (const { item, number, chance } of items) {
     if (typeof item !== 'string') {
       addRecursive(id, item);
       continue;
@@ -868,14 +995,24 @@ function addRecursive(id: GameLocationId, items: LocationItem[]) {
     const obj = data[item];
     switch (obj?.type) {
       case 'object':
-        addToLocation(id, [], [], [obj]);
+        addItem(item);
+        addToLocation(id, [], [], [item]);
         break;
       case 'creature':
+        addItem(item);
         addToLocation(id, [], [obj], []);
+        break;
+      case 'treasure':
+        for (const dropEntry of obj.drop.options) {
+          addItem(dropEntry.item);
+        }
+        addItem(item);
+        addToLocation(id, [item], [], []);
         break;
       case undefined:
         break;
       default:
+        addItem(item);
         addToLocation(id, [item], [], []);
     }
   }
@@ -887,6 +1024,7 @@ for (const loc of locations) {
   }
   loc.resources = [...new Set(loc.resources)];
   loc.creatures = [...new Set(loc.creatures)];
+  loc.destructibles = [...new Set(loc.destructibles)];
   if (loc.variations.some(v => v.items.some(i => String(i.item).startsWith('Vegvisir')))) {
     loc.tags = ['vegvisir'];
   }
@@ -898,4 +1036,8 @@ for (const biome of biomes) {
     .filter(id => data[id]?.type !== 'creature');
   biome.creatures = [...new Set(biome.creatures)].sort((a, b) => a.hp - b.hp);
   biome.locations = [...new Set(biome.locations)];
+}
+
+for (const id in objectLocationMap) {
+  objectLocationMap[id] = [...new Set(objectLocationMap[id])];
 }

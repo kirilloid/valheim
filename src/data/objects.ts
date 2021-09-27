@@ -328,7 +328,7 @@ export const objects: PhysicalObject[] = [
       freeSpaceRadius: 0.5,
       biomes: ['Meadows', 'BlackForest', 'Plains'],
     },
-    drop: [singleDrop('Carrot', 3)],
+    drop: [singleDrop('Carrot', 3, 3)],
   },
   {
     id: 'SeedCarrot',
@@ -344,7 +344,7 @@ export const objects: PhysicalObject[] = [
       freeSpaceRadius: 0.5,
       biomes: ['Meadows', 'BlackForest', 'Plains'],
     },
-    drop: [singleDrop('CarrotSeeds', 3)],
+    drop: [singleDrop('CarrotSeeds', 3, 3)],
   },
   {
     id: 'sapling_turnip',
@@ -360,7 +360,7 @@ export const objects: PhysicalObject[] = [
       freeSpaceRadius: 0.5,
       biomes: ['Meadows', 'BlackForest', 'Swamp', 'Plains'],
     },
-    drop: [singleDrop('Turnip', 3)],
+    drop: [singleDrop('Turnip', 3, 3)],
   },
   {
     id: 'SeedTurnip',
@@ -376,7 +376,7 @@ export const objects: PhysicalObject[] = [
       freeSpaceRadius: 0.5,
       biomes: ['Meadows', 'BlackForest', 'Swamp', 'Plains'],
     },
-    drop: [singleDrop('TurnipSeeds', 3)],
+    drop: [singleDrop('TurnipSeeds', 3, 3)],
   },
   {
     id: 'sapling_onion',
@@ -392,7 +392,7 @@ export const objects: PhysicalObject[] = [
       freeSpaceRadius: 0.5,
       biomes: ['Meadows', 'BlackForest', 'Plains'],
     },
-    drop: [singleDrop('Onion', 3)],
+    drop: [singleDrop('Onion', 3, 3)],
   },
   {
     id: 'SeedOnion',
@@ -408,7 +408,7 @@ export const objects: PhysicalObject[] = [
       freeSpaceRadius: 0.5,
       biomes: ['Meadows', 'BlackForest', 'Plains'],
     },
-    drop: [singleDrop('OnionSeeds', 3)],
+    drop: [singleDrop('OnionSeeds', 3, 3)],
   },
   {
     id: 'sapling_barley',
@@ -424,7 +424,7 @@ export const objects: PhysicalObject[] = [
       freeSpaceRadius: 0.5,
       biomes: ['Plains'],
     },
-    drop: [singleDrop('Barley', 2)],
+    drop: [singleDrop('Barley', 2, 2)],
   },
   {
     id: 'sapling_flax',
@@ -440,7 +440,7 @@ export const objects: PhysicalObject[] = [
       freeSpaceRadius: 0.5,
       biomes: ['Plains'],
     },
-    drop: [singleDrop('Flax', 2)],
+    drop: [singleDrop('Flax', 2, 2)],
   },
   ...rock({
     id: ['rock4_coast', 'rock4_coast_frac'],
@@ -963,10 +963,7 @@ export const objects: PhysicalObject[] = [
   ...rock({
     id: ['mudpile2', 'mudpile2_frac'],
     tier: 3,
-    grow: itemGrow({
-      locations: ['SunkenCrypt'],
-      num: [1, 3],
-    }),
+    grow: [],
     hp: 5,
     children: 30,
     drop: {
@@ -1004,10 +1001,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'rock',
     tier: 3,
-    grow: itemGrow({
-      locations: ['InfestedTree'],
-      num: [0, 6], // 6 with 2/3 prob
-    }),
+    grow: [],
     destructible: {
       hp: 30,
       damageModifiers: chopPickOnly,
@@ -1021,10 +1015,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'rock',
     tier: 3,
-    grow: itemGrow({
-      locations: ['InfestedTree'],
-      num: [0, 2], // 2 with 1/4 prob
-    }),
+    grow: [],
     destructible: {
       hp: 30,
       damageModifiers: chopPickOnly,
@@ -1274,11 +1265,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'rock',
     tier: 3,
-    grow: itemGrow({
-      locations: ['Leviathan'],
-      abundance: 1,
-      num: [21, 21],
-    }),
+    grow: [],
     destructible: {
       hp: 40,
       damageModifiers: pickOnly,
@@ -1413,6 +1400,12 @@ export const objects: PhysicalObject[] = [
         { item: 'Stone', weight: 2, },
       ],
     }],
+  },
+  {
+    type: 'object',
+    subtype: 'indestructible',
+    id: 'Vegvisir',
+    tier: 0,
   },
 ];
 // SwampTree2_Darkland, HugeRoot1

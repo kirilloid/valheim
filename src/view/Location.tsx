@@ -53,7 +53,18 @@ export function Location() {
             <h2>{translate('ui.resources')}</h2>
             <ul>{loc.resources.map(id =>
               <li key={id}>
-                <InlineObjectWithIcon id={id} />
+                <InlineObjectWithIcon id={id} size={32} />
+              </li>
+            )}
+            </ul>
+          </>
+        : null}
+        {loc.destructibles.length
+        ? <>
+            <h2>{translate('ui.objects')}</h2>
+            <ul>{loc.destructibles.map(id =>
+              <li key={id}>
+                <InlineObjectWithIcon id={id} size={32} />
               </li>
             )}
             </ul>

@@ -90,7 +90,7 @@ export type BiomeConfig = {
   active: boolean;
   tier: number;
   locations: GameLocationId[];
-  destructibles: PhysicalObject[];
+  destructibles: EntityId[];
   creatures: Creature[];
   resources: EntityId[];
 }
@@ -113,7 +113,7 @@ export type LocationConfig = {
   minApart: number;
   altitude: [number, number];
   distance: [number, number];
-  destructibles: PhysicalObject[];
+  destructibles: EntityId[];
   creatures: Creature[];
   resources: EntityId[];
   variations: LocationVariation[];
@@ -213,7 +213,7 @@ export interface Creature extends GameObjectBase {
   upgradeDistance?: number;
   nightOnly?: true;
   faction: Faction;
-  locations: (Biome | GameLocationId)[];
+  locations: Biome[];
   hp: number;
   stagger?: {
     factor: number;
@@ -440,7 +440,7 @@ interface GameObjectBase {
 }
 
 interface ItemGrowConfig {
-  locations: (Biome | GameLocationId)[];
+  locations: Biome[];
   abundance?: number;
   altitude?: Pair<number>;
   tilt?: Pair<number>;

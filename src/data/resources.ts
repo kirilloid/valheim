@@ -21,13 +21,6 @@ const HOUR = 3600;
 // DeepNorth = 64
 // Ocean = 256
 // Mistlands = 512
-const fromDungeons: ItemGrow[] = itemGrow({
-  locations: ['TrollCave', 'Crypt', 'SunkenCrypt'],
-  abundance: 1,
-  num: [1, 1],
-  group: [1, 1],
-  respawn: 0,
-});
 
 export const resources: Item[] = [
 // MEADOWS
@@ -128,9 +121,7 @@ export const resources: Item[] = [
   { type: 'item', id: 'GreydwarfEye', tier: 2, weight: 0.2, stack: 50 },
   { type: 'item', id: 'Pukeberries', tier: 2, weight: 0.1, stack: 50 },
   { type: 'item', id: 'BoneFragments', emoji: '🦴', tier: 2, weight: 0.5, stack: 50 },
-  { type: 'item', id: 'SurtlingCore', emoji: '🟥', tier: 2, weight: 5, stack: 10,
-    grow: itemGrow({ locations: ['Crypt'], num: [2, 5], group: [2, 3] }),
-  },
+  { type: 'item', id: 'SurtlingCore', emoji: '🟥', tier: 2, weight: 5, stack: 10 },
   { type: 'item', id: 'AncientSeed', emoji: '🌰', tier: 2, weight: 1, stack: 50, summon: ['gd_king', 3] },
   { type: 'item', group: 'lumber', id: 'RoundLog', tier: 2, weight: 2, stack: 50 },
   { type: 'item', group: 'hide', id: 'TrollHide', tier: 2, weight: 2, stack: 20 },
@@ -152,10 +143,10 @@ export const resources: Item[] = [
     recipe: { type: 'craft_one', time: FORGE_TIME, materials: { Bronze: 1 },
               source: { station: CraftingStation.Forge }, number: 20 },
   },
-  { type: 'valuable', group: 'value', id: 'Coins', emoji: '🪙', tier: 2, weight: 0.1, stack: 999, value: 1, grow: fromDungeons },
-  { type: 'valuable', group: 'value', id: 'Ruby', emoji: '♦️', tier: 2, weight: 0.1, stack: 20, value: 20, grow: fromDungeons },
-  { type: 'valuable', group: 'value', id: 'Amber', emoji: '🍕', tier: 2, weight: 0.1, stack: 20, value: 5, grow: fromDungeons },
-  { type: 'valuable', group: 'value', id: 'AmberPearl', emoji: '🟡', tier: 2, weight: 0.1, stack: 50, value: 10, grow: fromDungeons },
+  { type: 'valuable', group: 'value', id: 'Coins', emoji: '🪙', tier: 2, weight: 0.1, stack: 999, value: 1 },
+  { type: 'valuable', group: 'value', id: 'Ruby', emoji: '♦️', tier: 2, weight: 0.1, stack: 20, value: 20 },
+  { type: 'valuable', group: 'value', id: 'Amber', emoji: '🍕', tier: 2, weight: 0.1, stack: 20, value: 5 },
+  { type: 'valuable', group: 'value', id: 'AmberPearl', emoji: '🟡', tier: 2, weight: 0.1, stack: 50, value: 10 },
   { type: 'valuable', group: 'value', id: 'SilverNecklace', emoji: '💍', tier: 2, weight: 0.1, stack: 50, value: 30 },
   { type: 'item', id: 'YmirRemains', tier: 2, weight: 0.3, stack: 50, recipe: { type: 'trader', value: 120 } },
   { type: 'item', id: 'FishingBait', tier: 2, weight: 0.1, stack: 100, recipe: { type: 'trader', value: 10, number: 50 } },
@@ -170,10 +161,6 @@ export const resources: Item[] = [
   },
   { type: 'food', id: 'MushroomYellow', emoji: '🍄🟡', tier: 2, weight: 0.1, stack: 50,
     health: 10, stamina: 30, duration: 600, regen: 1, color: '#e7c84bff',
-    grow: itemGrow({ locations: ['TrollCave', 'Crypt', 'SunkenCrypt'],
-      // TODO check the numbers
-      num: [1, 2], group: [2, 3],
-      respawn: 4 * HOUR }),
   },
 /*  { type: 'food', id: 'MushroomBlue', emoji: '🍄🔵', tier: 2, weight: 0.1, stack: 50,
     health: 20, stamina: 20, duration: 600, regen: 1, color: '#4be1e7ff' },*/
@@ -291,7 +278,9 @@ export const resources: Item[] = [
   { type: 'item', group: 'hide', id: 'WolfPelt', tier: 4, weight: 1, stack: 50 },
   { type: 'item', id: 'WolfFang', tier: 4, weight: 0.1, stack: 50 },
   { type: 'item', id: 'WolfMeat', tier: 4, weight: 1, stack: 20 },
-  { type: 'item', id: 'Onion', emoji: '', tier: 4, weight: 0.3, stack: 50 },
+  { type: 'food', id: 'Onion', emoji: '', tier: 4, weight: 0.3, stack: 50,
+    health: 13, stamina: 40, duration: 900, regen: 1, color: '#FF7115FF',
+  },
   { type: 'item', group: 'seedVeg', id: 'OnionSeeds', emoji: '', tier: 4, weight: 0.1, stack: 100 },
   { type: 'item', id: 'FreezeGland', tier: 4, weight: 0.5, stack: 50 },
   { type: 'item', group: 'ore', id: 'SilverOre', tier: 4, weight: 14, stack: 30, teleportable: false },
@@ -303,7 +292,6 @@ export const resources: Item[] = [
   { type: 'item', id: 'Crystal', emoji: '💎', tier: 4, weight: 8, stack: 50 },
   { type: 'item', id: 'DragonEgg', emoji: '🥚', tier: 4, weight: 200, stack: 1,
     floating: true, teleportable: false, summon: ['Dragon', 3],
-    grow: itemGrow({ locations: ['DrakeNest'], num: [1, 1], /*6 * HOUR*/ }),
   },
   { type: 'trophy', id: 'TrophyWolf', tier: 4, weight: 1.5, stack: 20 },
   { type: 'trophy', id: 'TrophyFenring', tier: 4, weight: 2, stack: 20 },
@@ -340,7 +328,6 @@ export const resources: Item[] = [
   { type: 'item', id: 'Flax', tier: 5, weight: 0.2, stack: 100, tags: ['plant', 'crop'],
 /*    recipe: { type: 'craft_one', time: 4500, materials: { Flax: 1 },
               source: { station: CraftingStation.Cultivator }, number: 2 },*/
-    grow: itemGrow({ locations: ['GoblinCamp'], num: [4, 20], group: [1, 2] }),
   },
   { type: 'item', id: 'LinenThread', tier: 5, weight: 2, stack: 50,
     recipe: { type: 'craft_one', time: SPIN_WHEEL_TIME, materials: { Flax: 1 },
@@ -349,7 +336,6 @@ export const resources: Item[] = [
   { type: 'item', id: 'Barley', emoji: '🌾', tier: 5, weight: 0.2, stack: 100, tags: ['plant', 'crop'],
 /*    recipe: { type: 'craft_one', time: 4500, materials: { Barley: 1 },
               source: { station: CraftingStation.Cultivator }, number: 2 },*/
-    grow: itemGrow({ locations: ['GoblinCamp'], num: [4, 20], group: [1, 2] }),
   },
   { type: 'item', id: 'BarleyFlour', tier: 5, weight: 0.2, stack: 20,
     recipe: { type: 'craft_one', time: 10, materials: { Barley: 1 },
@@ -413,9 +399,7 @@ export const resources: Item[] = [
     recipe: { type: 'craft_one', time: 2, materials: { LeatherScraps: 10, LinenThread: 20, BlackMetal: 15 },
               source: { station: CraftingStation.Forge, level: 3 }, number: 1 },
   },
-  { type: 'item', id: 'GoblinTotem', tier: 5, weight: 1, stack: 30, summon: ['GoblinKing', 5],
-    grow: itemGrow({ locations: ['GoblinCamp'], num: [1, 3] }),
-  },
+  { type: 'item', id: 'GoblinTotem', tier: 5, weight: 1, stack: 30, summon: ['GoblinKing', 5] },
   { type: 'trophy', id: 'TrophyLox', tier: 5, weight: 2, stack: 20 },
   { type: 'trophy', id: 'TrophyDeathsquito', tier: 5, weight: 0.5, stack: 20 },
   { type: 'trophy', id: 'TrophyGrowth', tier: 5, weight: 1, stack: 20 },

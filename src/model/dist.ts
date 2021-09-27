@@ -127,6 +127,8 @@ export function materializeDrop(drop: GeneralDrop): SimpleDrop {
     options,
   } = drop;
   
+  // FIXME: take weight into account
+  // FIXME: consider max > options.length
   if (oneOfEach) {
     return Object.fromEntries(options.map(opt => {
       const { item, num = [1, 1] } = opt;  

@@ -1,15 +1,16 @@
 import React, { useContext } from 'react';
 
 import type * as T from '../types';
+import { timeI2S } from '../model/utils';
 import { axes, pickaxes } from '../data/weapons';
 import { fullDestructible } from '../data/objects';
+import { objectLocationMap } from '../data/location';
 
 import { TranslationContext } from '../effects';
 import { Area, InlineObjectWithIcon, List, rangeBy, Resistances } from './helpers';
 import { ItemHeader } from './ItemHeader';
 import { DropTable } from './DropTable';
 import { GrowSection } from './Source';
-import { timeI2S } from '../model/utils';
 
 const nonImmune = (mod: T.DamageModifier): boolean => {
   return mod !== 'ignore' && mod !== 'immune';
@@ -33,7 +34,7 @@ function Destructible({ item }: { item: T.Destructible }) {
     <dl>
       <dt>{translate('ui.durability')}</dt><dd>{hp}</dd>
       <Resistances mods={damageModifiers} />
-      {minToolTier >= 0 ? <>
+      {item.minToolTier > 0 || Object.values(damageModifiers).filter(mod => mod === 'immune' || mod === 'ignore').length > 5 ? <>
         <dt>can be damaged only by</dt>
         <dd>
           <ul>
@@ -78,14 +79,13 @@ function Plant({ plant }: { plant: T.Plantable }) {
 
 export function PhysicalObject({ item }: { item: T.PhysicalObject }) {
   const full = fullDestructible(item);
-  if (!full) return null;
 
   return (
     <>
       <ItemHeader item={item} />
-      {item.grow && <Grow item={item} />}
+      <Grow item={item} />
       {item.plant && <Plant plant={item.plant} />}
-      {item.destructible && <Destructible item={item.destructible} />}
+      {full?.destructible && <Destructible item={full.destructible} />}
       {item.drop && <Drop drop={item.drop} />}
     </>
   );

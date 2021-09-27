@@ -43,7 +43,7 @@ m=409, t=25.9
 m= 89, t=25.7
 
 run: stamina drain 10 - 5 * lvl / 100
-swim: stamina drain 5 - 3 * lvl / 100
+swim: stamina drain 6 - 3 * lvl / 100
 
 melee:
 hit stamina *= (1 - 0.33 * skill / 100)
@@ -63,7 +63,7 @@ min = Mathf.Clamp01(num - 0.15f);
 max = Mathf.Clamp01(num + 0.15f);
 
 backstab:
-cannot happen 5min after previous backstab
+cannot happen 5 min after previous backstab
 
 stagger:
 damage *= 2

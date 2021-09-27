@@ -76,7 +76,7 @@ export const creatures: Creature[] = [
     hp: 10,
     damageModifiers: animalDmgModifiers,
     drop: [
-      dropEntry('RawMeat', { min: 2, max: 2 }),
+      dropEntry('DeerMeat', { min: 2, max: 2 }),
       dropEntry('DeerHide',	{ max: 3 }),
       dropTrophy('TrophyDeer', 0.5),
     ],
@@ -143,7 +143,7 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Fish',
     tier: 1,
-    maxLvl: 1,
+    maxLvl: 3,
     emoji: '🐟',
     faction: 'ForestMonsters',
     locations: ['Meadows', 'BlackForest', 'Plains', 'Ocean'],
@@ -161,7 +161,7 @@ export const creatures: Creature[] = [
     upgradeDistance: 800,
     emoji: '🐗',
     faction: 'ForestMonsters',
-    locations: ['Meadows', 'Runestone_Boars'],
+    locations: ['Meadows'],
     attacks: single([{ dmg: { blunt: 10 }, stagger: 1.24, name: 'tusks' }]),
     hp: 10,
     stagger: {
@@ -187,7 +187,7 @@ export const creatures: Creature[] = [
     maxLvl: 1,
     emoji: '🦌',
     faction: 'Boss',
-    locations: ['Eikthyrnir'],
+    locations: [],
     attacks: single([
       { dmg: { pierce: 20, chop: 1000, pickaxe: 1000 }, name: 'antlers', force: 100, toolTier: 0 },
       { dmg: { lightning: 15 }, name: 'pew-pew', force: 200 },
@@ -226,7 +226,7 @@ export const creatures: Creature[] = [
     maxLvl: 3,
     emoji: '💀',
     faction: 'Undead',
-    locations: ['Crypt', 'Swamp', 'StoneTowerRuinsM'],
+    locations: ['Swamp'],
     attacks: [
       { rate: 4, variety: 'sword', attacks: [{ dmg: { slash: 25 }, stagger: 2.48, name: 'sword' }] },
       // { variety: 'mace', attacks: [{ dmg: { blunt: 25 }, stagger: 2.48, name: 'mace' }] },
@@ -250,7 +250,7 @@ export const creatures: Creature[] = [
     maxLvl: 3,
     emoji: '☠️',
     faction: 'Undead',
-    locations: ['Crypt'],
+    locations: [],
     attacks: single([{
       dmg: { blunt: 20,
              poison: 30 },
@@ -275,7 +275,7 @@ export const creatures: Creature[] = [
     maxLvl: 1,
     emoji: '👻',
     faction: 'Undead',
-    locations: ['Crypt'],
+    locations: [],
     attacks: single([ { dmg: { slash: 25 }, stagger: 1.64, name: 'slash' } ]),
     hp: 60,
     stagger: {
@@ -300,7 +300,7 @@ export const creatures: Creature[] = [
     maxLvl: 3,
     emoji: '',
     faction: 'ForestMonsters',
-    locations: ['BlackForest', 'StoneTowerRuinsF', 'Greydwarf_camp'],
+    locations: ['BlackForest'],
     attacks: single([
       { dmg: { slash: 14 }, stagger: 1.94, name: 'hit' },
       { dmg: { blunt: 10 }, stagger: 1.94, name: 'stone' },
@@ -328,9 +328,9 @@ export const creatures: Creature[] = [
     nightOnly,
     emoji: '',
     faction: 'ForestMonsters',
-    locations: ['BlackForest'/*, 'StoneTowerRuinsF'*/, 'Greydwarf_camp'],
+    locations: ['BlackForest'],
     attacks: single([
-      { dmg: { poison: 30 }, stagger: 1.12, name: 'poison breath' },
+      { dmg: { poison: 30 }, name: 'poison breath' },
       { dmg: { slash: 14 }, stagger: 1.12, name: 'slash' },
     ]),
     hp: 60,
@@ -345,6 +345,7 @@ export const creatures: Creature[] = [
       dropEntry('Wood'),
       dropEntry('Resin', { max: 2 }),
       dropTrophy('TrophyGreydwarfShaman', 0.1),
+      dropEntry('Pukeberries', { max: 2 }),
     ],
   },
   {
@@ -356,7 +357,7 @@ export const creatures: Creature[] = [
     upgradeDistance: 2000,
     emoji: '',
     faction: 'ForestMonsters',
-    locations: ['BlackForest', 'StoneTowerRuinsF', 'Greydwarf_camp'],
+    locations: ['BlackForest'],
     attacks: single([
       { dmg: { slash: 30 }, stagger: 1.34, name: 'bite' },
     ]),
@@ -383,7 +384,7 @@ export const creatures: Creature[] = [
     upgradeDistance: 2000,
     emoji: '',
     faction: 'ForestMonsters',
-    locations: ['BlackForest', 'TrollCave'],
+    locations: ['BlackForest'],
     attacks: [
       {
         rate: 1,
@@ -426,7 +427,7 @@ export const creatures: Creature[] = [
     maxLvl: 1,
     emoji: '🥦',
     faction: 'Boss',
-    locations: ['GDKing'],
+    locations: [],
     attacks: single([
       // SCREAM
       { spawn: ['Root'], number: 15, max: 30 },
@@ -453,7 +454,7 @@ export const creatures: Creature[] = [
     maxLvl: 1,
     emoji: '🥦',
     faction: 'Boss',
-    locations: ['GDKing'],
+    locations: [],
     attacks: single([
       { dmg: { blunt: 55, chop: 20, pickaxe: 20 }, name: 'poke', force: 40, toolTier: 0 }
     ]),
@@ -475,7 +476,7 @@ export const creatures: Creature[] = [
     maxLvl: 1,
     emoji: '🦠',
     faction: 'Undead',
-    locations: ['Swamp', 'SunkenCrypt'],
+    locations: ['Swamp'],
     attacks: single([{ dmg: { poison: 90 }, name: 'poison', unblockable }]),
     hp: 50,
     damageModifiers: blobDamageModifiers,
@@ -535,7 +536,7 @@ export const creatures: Creature[] = [
     maxLvl: 3,
     emoji: '🧨',
     faction: 'Demon',
-    locations: ['FireHole', 'Ashlands', 'Meteorite'],
+    locations: ['Ashlands'],
     attacks: single([{
       dmg: { blunt: 10, fire: 40 },
       name: 'fireball', stagger: 1.14, force: 30,
@@ -567,7 +568,7 @@ export const creatures: Creature[] = [
     nightOnly,
     emoji: '👻',
     faction: 'Undead',
-    locations: ['Swamp', 'SwampHut'],
+    locations: ['Swamp'],
     attacks: single([{ dmg: { slash: 60, }, name: 'slash', stagger: 2.04, force: 60 }]),
     hp: 100,
     stagger: {
@@ -598,7 +599,7 @@ export const creatures: Creature[] = [
     maxLvl: 3,
     emoji: '🧟',
     faction: 'Undead',
-    locations: ['Swamp', 'SwampRuin', 'SunkenCrypt', 'StoneTowerRuinsM'],
+    locations: ['Swamp'],
     attacks: [
       { variety: 'axe',
         rate: 3,
@@ -632,7 +633,7 @@ export const creatures: Creature[] = [
     nightOnly,
     emoji: '🧟',
     faction: 'Undead',
-    locations: ['Swamp', 'SwampRuin', 'SunkenCrypt'],
+    locations: ['Swamp'],
     attacks: single([ { dmg: { slash: 58, }, name: 'sword', stagger: 2.8, force: 60 } ]),
     hp: 200,
     stagger: {
@@ -656,7 +657,7 @@ export const creatures: Creature[] = [
     maxLvl: 1,
     emoji: '🦠',
     faction: 'Boss',
-    locations: ['Bonemass'],
+    locations: [],
     attacks: single([
       { dmg: { poison: 130 }, name: 'poison', force: 0, unblockable, undodgeable },
       { dmg: {
@@ -808,7 +809,7 @@ export const creatures: Creature[] = [
     maxLvl: 1,
     emoji: '🐉',
     faction: 'MountainMonsters',
-    locations: ['Mountain', 'DrakeNest'],
+    locations: ['Mountain'],
     attacks: single([{ dmg: { frost: 90 }, burst: 3, name: 'ice shards', force: 30, }]), // burst interval: 0.3
     hp: 100,
     damageModifiers: {
@@ -829,7 +830,7 @@ export const creatures: Creature[] = [
     maxLvl: 1,
     emoji: '🐲',
     faction: 'Boss',
-    locations: ['DragonQueen'],
+    locations: [],
     attacks: single([
       // taunt,
       { dmg: {
@@ -875,7 +876,7 @@ export const creatures: Creature[] = [
     maxLvl: 3,
     emoji: '',
     faction: 'PlainsMonsters',
-    locations: ['Plains', 'GoblinCamp', 'StoneTower', 'StoneHengeS'],
+    locations: ['Plains'],
     attacks: [
       { rate: 2, variety: 'club', attacks: [{ dmg: { blunt: 85 }, name: 'club', stagger: 2.08 }] },
       { rate: 1, variety: 'spear', attacks: [{ dmg: { pierce: 85 }, name: 'spear', stagger: 3.38 }] },
@@ -910,7 +911,7 @@ export const creatures: Creature[] = [
     maxLvl: 1,
     emoji: '',
     faction: 'PlainsMonsters',
-    locations: ['GoblinCamp'],
+    locations: [],
     attacks: single([
       { dmg: { blunt: 100 }, name: 'staff', stagger: 3.2 },
       { dmg: { blunt: 20, fire: 100 }, name: 'fireball', stagger: 3.2 },
@@ -941,7 +942,7 @@ export const creatures: Creature[] = [
     maxLvl: 3,
     emoji: '',
     faction: 'PlainsMonsters',
-    locations: ['GoblinCamp', 'StoneHengeS'],
+    locations: [],
     attacks: single([
       { dmg: {
         blunt: 130,
@@ -1022,7 +1023,7 @@ export const creatures: Creature[] = [
     maxLvl: 1,
     emoji: '🦠',
     faction: 'Undead',
-    locations: ['TarPit'],
+    locations: [],
     attacks: single([
       { dmg: { blunt: 45, poison: 50, }, name: 'stomp', force: 80, toolTier: 0 },
     ]),
@@ -1051,7 +1052,7 @@ export const creatures: Creature[] = [
     maxLvl: 1,
     emoji: '🦴',
     faction: 'Boss',
-    locations: ['GoblinKing'],
+    locations: [],
     attacks: single([
       { dmg: { // 10 meteors
         blunt: 40,

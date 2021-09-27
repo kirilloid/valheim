@@ -9,7 +9,7 @@ import { data } from '../data/itemDB';
 import { creatures } from '../data/creatures';
 import { getCraftingStationId } from '../data/building';
 import { miningMap, resourceBuildMap, resourceCraftMap } from '../data/resource-usage';
-import { locationBiomes } from '../data/location';
+import { locationBiomes, objectLocationMap } from '../data/location';
 
 import { TranslationContext, useGlobalState } from '../effects';
 import { Area, InlineObject, InlineObjectWithIcon, List, rangeBy } from './helpers';
@@ -246,11 +246,13 @@ export function GrowSection({ item }: { item: GameObject | undefined }) {
     case 'treasure':
       return null;
   }
-  const { grow } = item;
-  if (!grow) return null;
-  const respawn = item.grow?.find(g => g.respawn)?.respawn ?? 0;
+  const grow = item.grow ?? [];
+  const locations = objectLocationMap[item.id] ?? [];
+  if (!grow.length && !locations.length) return null;
+  const respawn = grow?.find(g => g.respawn)?.respawn ?? 0;
   return <>
     {item.type === 'object' ? 'Can be found in' : 'Sourced from'}
+    {' '}
     <List separator={<hr />}>{grow.map((g, i) => <dl key={i}>
       <dt>{translate('ui.locations')}</dt>
       <dd><List>{g.locations.map(loc => <Area key={loc} area={loc} />)}</List></dd>
@@ -265,6 +267,10 @@ export function GrowSection({ item }: { item: GameObject | undefined }) {
       <dt>{translate('ui.respawn')}</dt>
       <dd>{g.respawn ? `every ${days(respawn)} game days` : 'never'}</dd>
     </dl>)}</List>
+    {grow.length && locations.length ? <hr /> : null}
+    <List>{
+      locations.map(loc => <Area key={loc} area={loc} />)
+    }</List>
   </>;
 }
 

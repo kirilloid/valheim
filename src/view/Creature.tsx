@@ -9,12 +9,12 @@ import { timeI2S } from '../model/utils';
 
 import { data } from '../data/itemDB';
 import { getSummon } from '../data/resources';
+import { area, objectLocationMap } from '../data/location';
 
 import { TranslationContext, useGlobalState } from '../effects';
 import { Area, InlineObjectWithIcon, rangeBy, Resistances, shortCreatureDamage, yesNo } from './helpers';
 import { ItemIcon } from './Icon';
 import { ItemHeader } from './ItemHeader';
-import { area } from '../data/location';
 
 function NormalAttack({ attack: a, dmgScale }: { attack: NormalAttackProfile, dmgScale: number }) {
   const dmg = multiplyDamage(a.dmg, dmgScale);
@@ -46,6 +46,7 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
   const dropGlobalScale = 2 ** (level - 1);
   const [sid, snr] = getSummon(id) ?? ['', 0];
   const totalVarietyRates = creature.attacks.reduce((t, a) => t + a.rate, 0);
+  const locations = [...creature.locations, ...(objectLocationMap[creature.id] ?? [])];
   return (<>
     <ItemHeader item={creature} >
       {creature.maxLvl > 1
@@ -64,7 +65,7 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
         <dt>areal</dt>
         <dd>
           <ul style={{ padding: 0 }}>
-            {creature.locations
+            {locations
               .filter(loc => (area(loc)?.tier ?? 1000) <= spoiler)
               .map(loc => <li key={loc}><Area area={loc} /></li>)}
           </ul>
