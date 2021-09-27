@@ -24,8 +24,7 @@ const iconType = (type: GameObject['type']): IconType => {
     case 'food':
     case 'trophy':
     case 'potion':
-    case 'plant':
-    case 'destructible': // not really
+    case 'object':
     case 'treasure': // not really
       return 'resource';
     case 'ship':

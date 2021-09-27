@@ -12,7 +12,7 @@ export type EntityGroup =
   | 'metal'
   | 'ore'
   | 'rug'
-  | 'seed' | 'ship' | 'smelt' | 'stack' | 'stand'
+  | 'seedTree' | 'seedVeg' | 'ship' | 'smelt' | 'stack' | 'stand'
   | 'torch'
   | 'value'
 
@@ -90,7 +90,7 @@ export type BiomeConfig = {
   active: boolean;
   tier: number;
   locations: GameLocationId[];
-  destructibles: Destructible[];
+  destructibles: PhysicalObject[];
   creatures: Creature[];
   resources: EntityId[];
 }
@@ -113,7 +113,7 @@ export type LocationConfig = {
   minApart: number;
   altitude: [number, number];
   distance: [number, number];
-  destructibles: Destructible[];
+  destructibles: PhysicalObject[];
   creatures: Creature[];
   resources: EntityId[];
   variations: LocationVariation[];
@@ -228,25 +228,40 @@ export interface Creature extends GameObjectBase {
 
 /**
  *           hp drop place plant
- * tree    | v | v  |  v  |  v  |
- * carrot  |   | v  |     |  v  |
- * seeds   |   | v  |  v  |  v  |
- * rock    | v | v  |  v  |     |
+ * object  |   |    |  v  |     
+ * tree    | v | v  |  v  |  v  
+ * rock    | v | v  |  v  |     
+ * carrot  |   | v  |     |  v  
+ * seeds   |   | v  |  v  |  v  
  */
-export interface Mineable {
-
+export interface Destructible {
+  hp: number;
+  damageModifiers: DamageModifiers;
+  minToolTier: number;
+  parts: {
+    id: EntityId,
+    num: number,
+  }[],
 }
 
-export interface Plant extends GameObjectBase {
-  type: 'plant';
-  subtype: 'tree' | 'vegetable' | 'crop';
+export interface Plantable {
+  subtype: 'tree' | 'vegetable' | 'crop',
+  plantedWith: EntityId;
   growTime: Pair<number>;
-  growsInto: EntityId;
   cultivatedGround: boolean;
   destroyUnhealthy: boolean;
   freeSpaceRadius: number;
   biomes: Biome[];
 };
+
+export type PhysicalObject = GameObjectBase & {
+  type: 'object';
+  subtype: 'tree' | 'plant' | 'rock' | 'indestructible';
+  destructible?: Destructible;
+  drop?: GeneralDrop[];
+  grow?: ItemGrow[];
+  plant?: Plantable;
+}; 
 
 export enum CraftingStation {
   Inventory,
@@ -391,20 +406,6 @@ export interface Ship extends Transport {
 
 export interface Cart extends Transport {
   type: 'cart';
-}
-
-export interface Destructible extends GameObjectBase {
-  type: 'destructible';
-  subtype: 'tree' | 'rock' | 'misc';
-  hp: number;
-  grow: ItemGrow[];
-  damageModifiers: DamageModifiers;
-  minToolTier: number;
-  parts: {
-    id: EntityId,
-    num: number,
-  }[],
-  drop: GeneralDrop[];
 }
 
 interface GameEventSpawn {
@@ -665,4 +666,4 @@ export interface Armor extends BaseItem {
 export type Item = Resource | Valuable | Food | Potion | Weapon | Shield | Armor | Arrow | Tool;
 export type ItemSpecial = Weapon['special'] | Armor['special'] | Tool['special'];
 
-export type GameObject = Item | Piece | TreasureChest | Destructible | Ship | Cart | Creature | Plant;
+export type GameObject = Item | Piece | TreasureChest | PhysicalObject | Ship | Cart | Creature;

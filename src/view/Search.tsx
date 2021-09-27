@@ -121,8 +121,7 @@ function ShortRecipe(props: { item: GameObject }) {
   const { item } = props;
   switch (item.type) {
     case 'creature':
-    case 'destructible':
-    case 'plant':
+    case 'object':
     case 'item':
     case 'trophy':
     case 'valuable':
@@ -310,22 +309,21 @@ function SearchObject({ id, text, onClick }: { id: EntityId, text: string, onCli
           {item.value}
         </span>
       </div>
-    case 'plant':
+    case 'object':
       return <div className={className}>
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
-        <span>
-          {days(item.growTime[0]).toFixed(1)}
-          –
-          {days(item.growTime[1]).toFixed(1)}
-          {' '}
-          <Icon id="time" alt={translate('ui.time')} size={16} />
-        </span>
-      </div>
-    case 'destructible':
-      return <div className={className}>
-        <ItemIcon item={item} size={32} />
-        <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
+        {
+          item.plant
+            ? <span>
+                {days(item.plant.growTime[0]).toFixed(1)}
+                –
+                {days(item.plant.growTime[1]).toFixed(1)}
+                {' '}
+                <Icon id="time" alt={translate('ui.time')} size={16} />
+              </span>
+            : null
+        }
       </div>
     case 'treasure':
       return null

@@ -121,8 +121,8 @@ export const items: Item[] = [
       time: CRAFT_TIME,
       materials: { TrollHide: 5 },
       materialsPerLevel: { TrollHide: 2 },
-      source: { station: CraftingStation.Workbench, level: 3 },
-      upgrade: { station: CraftingStation.Workbench, level: 4 },
+      source: { station: CraftingStation.Workbench, level: 2 },
+      upgrade: { station: CraftingStation.Workbench, level: 3 },
     }
   },
   { id: 'ArmorTrollLeatherChest',
@@ -138,8 +138,8 @@ export const items: Item[] = [
       time: CRAFT_TIME,
       materials: { TrollHide: 5 },
       materialsPerLevel: { TrollHide: 2 },
-      source: { station: CraftingStation.Workbench, level: 3 },
-      upgrade: { station: CraftingStation.Workbench, level: 4 },
+      source: { station: CraftingStation.Workbench, level: 2 },
+      upgrade: { station: CraftingStation.Workbench, level: 3 },
     }
   },
   { id: 'HelmetTrollLeather',
@@ -155,8 +155,8 @@ export const items: Item[] = [
       time: CRAFT_TIME,
       materials: { TrollHide: 5, BoneFragments: 3 },
       materialsPerLevel: { TrollHide: 2, BoneFragments: 1 },
-      source: { station: CraftingStation.Workbench, level: 3 },
-      upgrade: { station: CraftingStation.Workbench, level: 4 },
+      source: { station: CraftingStation.Workbench, level: 2 },
+      upgrade: { station: CraftingStation.Workbench, level: 3 },
     }
   },
   { id: 'CapeTrollHide',
@@ -172,8 +172,8 @@ export const items: Item[] = [
       time: CRAFT_TIME,
       materials: { TrollHide: 10, BoneFragments: 10 },
       materialsPerLevel: { TrollHide: 5, BoneFragments: 5 },
-      source: { station: CraftingStation.Workbench, level: 3 },
-      upgrade: { station: CraftingStation.Workbench, level: 4 },
+      source: { station: CraftingStation.Workbench, level: 2 },
+      upgrade: { station: CraftingStation.Workbench, level: 3 },
     }
   },
 // BRONZE AGE

@@ -1,28 +1,28 @@
 import React, { useContext, useState } from 'react';
 
-import type { Destructible, EntityId, Pair, Weapon } from '../types';
+import type { Pair, PhysicalObject, Weapon } from '../types';
 import { applyDamageModifiers, getTotalDamage, getWeaponSkillFactor } from '../model/combat';
-import { destructibles as objects } from '../data/objects';
+import { objects as objects } from '../data/objects';
 import { axes, pickaxes } from '../data/weapons';
 
 import { TranslationContext } from '../effects';
 import { ItemIcon } from './Icon';
 import { assertNever } from '../model/utils';
 
-const destructibles = objects.filter(obj => obj.hp < Infinity);
+const destructibles = objects.filter(obj => obj.destructible);
 const trees = destructibles.filter(obj => obj.subtype === 'tree');
 const treeMap = Object.fromEntries(trees.map(t => [t.id, t]));
 
-function* walk(item: Destructible, mul: number): Generator<[Destructible, number]> {
+function* walk(item: PhysicalObject, mul: number): Generator<[PhysicalObject, number]> {
   yield [item, mul];
-  for (const part of item.parts) {
+  for (const part of item.destructible?.parts ?? []) {
     yield* walk(treeMap[part.id]!, part.num * mul);
   }
 }
 
 const rootTrees = Object.fromEntries(
   trees
-    .filter(tree => tree.grow.length)
+    .filter(tree => tree.grow?.length)
     .map(tree => [tree.id, [...walk(tree, 1)].filter(pair => !pair[0].id.endsWith('Stub'))])
 );
 
@@ -33,18 +33,20 @@ type MineStats = {
 
 type MineStat = 'hits' | 'stamina';
 
-function getHits(objs: [Destructible, number][], tool: Weapon, skill: number): MineStats | undefined {
+function getHits(objs: [PhysicalObject, number][], tool: Weapon, skill: number): MineStats | undefined {
   const stats: MineStats = {
     hits: [0, 0],
     stamina: 0,
   };
   for (const [obj, num] of objs) {
-    if ((tool.toolTier ?? 0) < obj.minToolTier) return;    
-    const damage = getTotalDamage(applyDamageModifiers(tool.damage[0], obj.damageModifiers));
+    const { destructible } = obj;
+    if (!destructible) continue;
+    if ((tool.toolTier ?? 0) < destructible.minToolTier) return;    
+    const damage = getTotalDamage(applyDamageModifiers(tool.damage[0], destructible.damageModifiers));
     const [min, max] = getWeaponSkillFactor(skill);
     const stamina = tool.attacks[0]?.stamina ?? 0;
-    const maxHits = Math.ceil(obj.hp / (damage * min));
-    const minHits = Math.ceil(obj.hp / (damage * max));
+    const maxHits = Math.ceil(destructible.hp / (damage * min));
+    const minHits = Math.ceil(destructible.hp / (damage * max));
     const avgHits = (minHits + maxHits) / 2;
     stats.hits[0] += minHits * num;
     stats.hits[1] += maxHits * num;

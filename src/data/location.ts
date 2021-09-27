@@ -1,6 +1,6 @@
-import type { Biome, BiomeConfig, Creature, Destructible, EntityId, GameLocationId, GeneralDrop, LocationConfig, LocationItem, LocationVariation } from '../types';
+import type { Biome, BiomeConfig, Creature, Destructible, EntityId, GameLocationId, GeneralDrop, LocationConfig, LocationItem, LocationVariation, PhysicalObject } from '../types';
 import { creatures } from './creatures';
-import { destructibles } from './objects';
+import { objects } from './objects';
 import { data } from './itemDB';
 import { resources } from './resources';
 
@@ -819,7 +819,7 @@ function addToLocation(
   loc: string,
   items: EntityId[],
   creatures: Creature[],
-  destructibles: Destructible[],
+  destructibles: PhysicalObject[],
 ) {
   if (loc in locationBiomes) {
     const gameLocation = locations.find(l => l.id === loc);
@@ -838,9 +838,10 @@ function addToLocation(
   }
 }
 
-for (const destr of destructibles) {
-  for (const loc of destr.grow.flatMap(g => g.locations)) {
-    addToLocation(loc, [], [], [destr]);
+for (const obj of objects) {
+  if (!obj.destructible) continue;
+  for (const loc of (obj.grow ?? []).flatMap(g => g.locations)) {
+    addToLocation(loc, [], [], [obj]);
   }
 }
 
@@ -866,7 +867,7 @@ function addRecursive(id: GameLocationId, items: LocationItem[]) {
     }
     const obj = data[item];
     switch (obj?.type) {
-      case 'destructible':
+      case 'object':
         addToLocation(id, [], [], [obj]);
         break;
       case 'creature':

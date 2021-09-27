@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 
 import '../css/Biome.css';
 
-import type { Destructible, GameObject, Item, TreasureChest } from '../types';
+import type { Destructible, GameObject, Item, PhysicalObject, TreasureChest } from '../types';
 import { biomes } from '../data/location';
 import { data } from '../data/itemDB';
 import { resourceCraftMap } from '../data/resource-usage';
@@ -39,9 +39,9 @@ export function Biome() {
     trophies: [] as Item[],
     food: [] as Item[],
     others: [] as (Item | TreasureChest)[],
-    rock: [] as Destructible[],
-    tree: [] as Destructible[],
-    misc: [] as Destructible[],
+    rock: [] as PhysicalObject[],
+    tree: [] as PhysicalObject[],
+    misc: [] as PhysicalObject[],
   };
   for (const res of biome.resources) {
     const item = data[res];
@@ -49,8 +49,8 @@ export function Biome() {
       console.error(`Resource '${res}' from biome '${id}' not found`);
       continue;
     }
-    if (item.type === 'piece' || item.type === 'creature' || item.type === 'plant') continue;
-    if (item.type === 'destructible') {
+    if (item.type === 'piece' || item.type === 'creature') continue;
+    if (item.type === 'object') {
       // they are not here
     } else if (item.type === 'trophy') {
       resources.trophies.push(item);
@@ -67,8 +67,15 @@ export function Biome() {
     }
   }
   for (const item of biome.destructibles) {
-    if (item.hp !== Infinity) {
-      resources[item.subtype].push(item);
+    if (item.destructible) {
+      switch (item.subtype) {
+        case 'tree':
+          resources.tree.push(item);
+          break;
+        case 'rock':
+          resources.rock.push(item);
+          break;
+      }
     }
   }
 

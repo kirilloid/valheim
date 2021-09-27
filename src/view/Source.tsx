@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import { Cart, CraftingStation, Creature, Destructible, EntityId, GameObject, Item, Pair, Piece, Plant, Ship, TreasureChest } from '../types';
+import { CraftingStation, Creature, EntityId, GameObject, Pair } from '../types';
 import { SkillType } from '../model/skills';
 import { assertNever, days, timeI2S } from '../model/utils';
 
@@ -149,8 +149,7 @@ function CraftingSection({ id }: { id: EntityId }) {
 
 export function Recipe({ item }: { item: Exclude<GameObject, Creature> }) {
   const translate = useContext(TranslationContext);
-  if (item.type === 'destructible'
-   || item.type === 'plant'
+  if (item.type === 'object'
    || item.type === 'treasure') {
     return null;
   }
@@ -242,7 +241,6 @@ export function GrowSection({ item }: { item: GameObject | undefined }) {
   switch (item.type) {
     case 'creature':
     case 'piece':
-    case 'plant':
     case 'ship':
     case 'cart':
     case 'treasure':
@@ -252,7 +250,7 @@ export function GrowSection({ item }: { item: GameObject | undefined }) {
   if (!grow) return null;
   const respawn = item.grow?.find(g => g.respawn)?.respawn ?? 0;
   return <>
-    {item.type === 'destructible' ? 'Can be found in' : 'Sourced from'}
+    {item.type === 'object' ? 'Can be found in' : 'Sourced from'}
     <List separator={<hr />}>{grow.map((g, i) => <dl key={i}>
       <dt>{translate('ui.locations')}</dt>
       <dd><List>{g.locations.map(loc => <Area key={loc} area={loc} />)}</List></dd>

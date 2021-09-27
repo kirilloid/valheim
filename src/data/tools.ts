@@ -1,6 +1,8 @@
 import { CraftingStation, Tool } from '../types';
 import { pieces } from './building';
-import { plants } from './plants';
+import { objects } from './objects';
+
+const plants = objects.filter(o => o.subtype === 'plant' || o.subtype === 'tree');
 
 export const tools: Tool[] = [
   {
