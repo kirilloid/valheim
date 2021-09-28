@@ -87,22 +87,48 @@ export function addDist(a: DropDist, b: DropDist): DropDist {
   return copy;
 }
 
-export function distributeDrop(drop: GeneralDrop): DropDist {
-  const {
-    chance = 1,
-    oneOfEach = false,
-    num: [min, max],
-    options,
-  } = drop;
-
-  if (oneOfEach) {
-    return Object.fromEntries(options.map(opt => {
-      const { item, num = [1, 1] } = opt;  
-      return [item, scale(linearDist(...num), chance)];
-    }));
+export function distributeDropNoReturn(drop: GeneralDrop): DropDist {
+  const { chance = 1, num: [min, max], options } = drop;
+  const prob = chance / (max - min + 1);
+  const numbers = new Map(options.map(op => [op, 0]));
+  function walk(currentOptions: GeneralDrop['options'], remaining: number, probability: number) {
+    const totalWeight = currentOptions.reduce((accumWeight, option) => accumWeight + (option.weight ?? 1), 0);
+    for (const option of currentOptions) {
+      const p = (option.weight ?? 1) / totalWeight;
+      numbers.set(option, numbers.get(option)! + p * probability);
+      if (remaining > 1) {
+        walk(
+          currentOptions.filter(op => op !== option),
+          remaining - 1,
+          probability * p
+        );
+      }
+    }
   }
-  
-  const totalWeight = options.reduce((w, { weight = 1 }) => w + weight, 0); 
+  for (let n = min; n <= max; n++) {
+    if (n < options.length) {
+      walk(options, n, prob);
+    } else {
+      options.forEach(option => {
+        numbers.set(option, numbers.get(option)! + prob);
+      });
+    }
+  }
+  const result: DropDist = {};
+  for (const op of options) {
+    const avgStacks = numbers.get(op) ?? 0;
+    const opNum = op.num ?? [1, 1];
+    const dist = add(linearDist(...opNum), [1], avgStacks);
+    result[op.item] = mul(result[op.item] ?? [1], dist);
+  }
+  return result;
+}
+
+export function distributeDrop(drop: GeneralDrop): DropDist {
+  if (drop.oneOfEach) return distributeDropNoReturn(drop);
+  const { chance = 1, num: [min, max], options } = drop;
+
+  const totalWeight = options.reduce((w, { weight = 1 }) => w + weight, 0);
   const result: DropDist = {};
   for (const opt of options) {
     const { item, num = [1, 1], weight = 1 } = opt;
@@ -119,24 +145,36 @@ export function distributeDrop(drop: GeneralDrop): DropDist {
   return result; 
 }
 
-export function materializeDrop(drop: GeneralDrop): SimpleDrop {
-  const {
-    chance = 1,
-    oneOfEach = false,
-    num: [min, max],
-    options,
-  } = drop;
-  
-  // FIXME: take weight into account
-  // FIXME: consider max > options.length
-  if (oneOfEach) {
-    return Object.fromEntries(options.map(opt => {
-      const { item, num = [1, 1] } = opt;  
-      const avg = chance * (num[0] + num[1]) / 2;
-      return [item, avg];
-    }));
+function materializeDropNoReturn(drop: GeneralDrop): SimpleDrop {
+  const { chance = 1, num: [min, max], options } = drop;
+  const prob = chance / (max - min + 1);
+  const result: SimpleDrop = Object.fromEntries(options.map(({ item }) => [item, 0]));
+  function walk(currentOptions: GeneralDrop['options'], remaining: number, probability: number) {
+    const totalWeight = currentOptions.reduce((accumWeight, option) => accumWeight + (option.weight ?? 1), 0);
+    for (const option of currentOptions) {
+      const p = (option.weight ?? 1) / totalWeight;
+      result[option.item] += p * probability;
+      if (remaining > 1) {
+        const restOptions = currentOptions.filter(op => op !== option);
+        walk(restOptions, remaining - 1, probability * p);
+      }
+    }
   }
-  
+  for (let n = min; n <= max; n++) {
+    if (n < options.length) {
+      walk(options, n, prob);
+    } else {
+      options.forEach(({ item }) => { result[item] += prob; });
+    }
+  }
+  return result;
+}
+
+export function materializeDrop(drop: GeneralDrop): SimpleDrop {
+  if (drop.oneOfEach) return materializeDropNoReturn(drop);
+
+  const { chance = 1, num: [min, max], options } = drop;
+
   const mul = chance * (min + max) / 2;
   const totalWeight = options.reduce((w, { weight = 1 }) => w + weight, 0); 
   return Object.fromEntries(options.map(opt => {
