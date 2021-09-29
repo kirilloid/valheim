@@ -371,7 +371,6 @@ export type Piece = BasePiece & {
   subtype: 'craft';
   craft: {
     id: CraftingStation;
-    returnsMaterials?: boolean;
     queueSize?: number;
     batchSize?: number;
     buildRange?: number;

@@ -61,7 +61,7 @@ export function getPhysicalDamage(damage: DamageProfile): number {
 }
 
 export function hpBonus({ players = 1, stars = 0 }: { players?: number, stars?: number }) {
-  return (1 + (players - 1) * 0.4) * (1 + stars);
+  return (1 + (players - 1) * 0.3) * (1 + stars);
 }
 
 export function dmgBonus({ players = 1, stars = 0 }: { players?: number, stars?: number }) {
