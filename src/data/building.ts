@@ -76,7 +76,7 @@ const ironResist: DamageModifiers = mods([0, 0, 1, 0, 1, 1, 1, 3, 3, 3]);
 const craftStationResist: DamageModifiers = mods([1, 1, 1, 1, 0, 3, 3, 0, 3, 3]);
 
 const woodStructureWear = wearStructure(400, woodResist, MaterialType.Wood);
-const darkwoodStructureWear = wearStructure(400, darkwoodResist, MaterialType.Wood);
+const darkwoodStructureWear = wearStructure(400, darkwoodResist, MaterialType.Wood, { noRoof: false });
 const woodRoofStructureWear = { ...woodStructureWear, noRoof: false };
 const stoneStructureWear = wearStructure(1500, stoneResist, MaterialType.Stone, { noRoof: false });
 

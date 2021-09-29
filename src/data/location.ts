@@ -1,4 +1,4 @@
-import type { Biome, BiomeConfig, Creature, Destructible, EntityId, GameLocationId, GeneralDrop, LocationConfig, LocationItem, LocationVariation, PhysicalObject } from '../types';
+import type { Biome, BiomeConfig, Creature, Destructible, DungeonConfig, EntityId, GameLocationId, GeneralDrop, LocationConfig, LocationItem, LocationVariation, PhysicalObject } from '../types';
 import { creatures } from './creatures';
 import { objects } from './objects';
 import { data } from './itemDB';
@@ -920,6 +920,54 @@ export const locations: LocationConfig[] = [
       ]
     },
   ]),
+];
+
+export const dungeons: DungeonConfig[] = [
+  {
+    id: 'MeadowsFarm',
+    type: 'CampRadial',
+    rooms: [20, 30],
+    maxTilt: 25,
+    radius: [18, 32],
+    perimeterSections: 10,
+    perimeterBuffer: 0,
+  },
+  {
+    id: 'MeadowsVillage',
+    type: 'CampRadial',
+    rooms: [20, 30],
+    maxTilt: 25,
+    radius: [28, 32],
+    perimeterSections: 10,
+    perimeterBuffer: 0,
+  },
+  {
+    id: 'ForestCrypt',
+    type: 'Dungeon',
+    rooms: [20, 40],
+    minRequiredRooms: 2,
+    requiredRooms: ['forestcrypt_new_BurialChamber0{1,2,3,4,5}'],
+    doorTypes: ['dungeon_forestcrypt_door'],
+    doorChance: 0.5,
+  },
+  {
+    id: 'SunkenCrypt',
+    type: 'Dungeon',
+    rooms: [20, 30],
+    minRequiredRooms: 0,
+    requiredRooms: [],
+    doorTypes: ['dungeon_sunkencrypt_irongate'],
+    doorChance: 0.3,
+  },
+  {
+    id: 'GoblinCamp',
+    type: 'CampRadial',
+    rooms: [15, 25],
+    maxTilt: 25,
+    radius: [15, 30],
+    perimeterSections: 10,
+    perimeterBuffer: 2,
+  },
 ];
 
 for (const loc of locations) {

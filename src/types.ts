@@ -93,7 +93,7 @@ export type BiomeConfig = {
   destructibles: EntityId[];
   creatures: Creature[];
   resources: EntityId[];
-}
+};
 
 export type LocationItem = { item: EntityId | LocationItem[], chance: number, number: number };
 
@@ -119,6 +119,31 @@ export type LocationConfig = {
   variations: LocationVariation[];
 };
 
+export type DungeonConfig = {
+  id: string;
+} & ({
+  type: 'Dungeon';
+  rooms: Pair<number>;
+  minRequiredRooms: number;
+  requiredRooms: string[];
+  doorTypes: EntityId[];
+  doorChance: number;
+} | {
+  type: 'CampGrid';
+  rooms: Pair<number>;
+  maxTilt: number;
+  tileWidth: number;
+  gridSize: number;
+  spawnChance: number;
+} | {
+  type: 'CampRadial';
+  rooms: Pair<number>;
+  maxTilt: number;
+  radius: Pair<number>;
+  perimeterSections: number;
+  perimeterBuffer: number;
+});
+
 export const damageModifiersValues: Record<DamageModifier, number> = {
   normal: 1,
   resistant: 0.5,
@@ -130,7 +155,7 @@ export const damageModifiersValues: Record<DamageModifier, number> = {
 };
 
 export type Effect = {
-  id: string;
+  id: EntityId;
   tier: number;
   special?: 'Tailwind';
   time?: number;
@@ -222,7 +247,7 @@ export interface Creature extends GameObjectBase {
   attacks: AttackVariety[];
   damageModifiers: DamageModifiers;
   drop: DropEntry[];
-  tame?: { fedTime: number; tameTime: number; commandable: boolean; eats: string[] };
+  tame?: { fedTime: number; tameTime: number; commandable: boolean; eats: EntityId[] };
   pregnancy?: { points: number; time: number; chance: number; grow: number; };
 }
 
