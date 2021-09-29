@@ -23,7 +23,7 @@ export function ItemHeader({ item, children }: { item: GameObject, children?: Re
     {group ? <div>See also: <List>{
       group
         .filter(e => e !== item)
-        .map(e => <InlineObject id={e.id} />)
+        .map(e => <InlineObject key={e.id} id={e.id} />)
     }</List></div> : null}
   </>;
 }

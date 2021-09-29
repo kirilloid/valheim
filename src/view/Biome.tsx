@@ -68,7 +68,7 @@ export function Biome() {
   }
   for (const item of biome.destructibles) {
     const obj = data[item];
-    if (obj?.type === 'object' && obj.destructible) {
+    if (obj?.type === 'object') {
       switch (obj.subtype) {
         case 'tree':
           resources.tree.push(obj);
@@ -76,6 +76,8 @@ export function Biome() {
         case 'rock':
           resources.rock.push(obj);
           break;
+        default:
+          resources.misc.push(obj);
       }
     }
   }

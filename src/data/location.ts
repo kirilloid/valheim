@@ -459,7 +459,7 @@ export const locations: LocationConfig[] = [
         locItem('Vegvisir', 0.3), // Vegvisir_Bonemass
         locItem('TreasureChest_swamp', 0.251),
         locItem('Draugr', 0.5, 2),
-        locItem('Draugr_Elite', 0.321),
+        locItem('DraugrElite', 0.321),
         locItem('Spawner_DragurPile', 0.321),
         locItem('Crow', 1, 2),
       ],
@@ -471,7 +471,7 @@ export const locations: LocationConfig[] = [
         locItem('Vegvisir', 0.3), // Vegvisir_Bonemass
         locItem('TreasureChest_swamp', 0.251),
         locItem('Draugr', 0.5, 2),
-        locItem('Draugr_Elite', 0.321),
+        locItem('DraugrElite', 0.321),
         locItem('Spawner_DragurPile', 0.321),
         locItem('piece_groundtorch_green'),
         locItem('Crow', 1, 2),
@@ -543,7 +543,7 @@ export const locations: LocationConfig[] = [
     subtype: '1',
     quantity: 25,
     items: [
-      locItem('Draugr_Elite', 0.321, 2),
+      locItem('DraugrElite', 0.321, 2),
       locItem('piece_groundtorch_green', 1, 1),
     ],
   }]),

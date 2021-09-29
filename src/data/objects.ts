@@ -1249,7 +1249,7 @@ export const objects: PhysicalObject[] = [
   {
     id: 'Leviathan',
     type: 'object',
-    subtype: 'indestructible',
+    subtype: 'rock',
     tier: 3,
     grow: itemGrow({
       locations: ['Ocean'],
@@ -1257,8 +1257,13 @@ export const objects: PhysicalObject[] = [
       onSurface: true,
       num: [0, 0.01],
     }),
-    // parts: [{ id: 'Barnacle', num: 21 }],
-    // drop: [],
+    destructible: {
+      hp: 0,
+      minToolTier: 0,
+      damageModifiers: chopOnly,
+      parts: [{ id: 'Barnacle', num: 21 }],
+    },
+    drop: [],
   },
   {
     id: 'Barnacle',

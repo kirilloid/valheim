@@ -132,14 +132,14 @@ export function distributeDrop(drop: GeneralDrop): DropDist {
   const result: DropDist = {};
   for (const opt of options) {
     const { item, num = [1, 1], weight = 1 } = opt;
-    const dist = add(linearDist(...num), [1], weight / totalWeight * chance);
+    const dist = add(linearDist(...num), [1], weight / totalWeight);
     let curr = power(dist, min);
     const opts = [curr];
     for (let p = min; p < max; p++) {
       curr = mul(curr, dist);
       opts.push(curr);
     }
-    result[item] = scale(sum(opts), 1 / (max - min + 1));
+    result[item] = add(scale(sum(opts), 1 / (max - min + 1)), [1], chance);
   };
 
   return result; 

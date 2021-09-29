@@ -70,7 +70,7 @@ function Plant({ plant }: { plant: T.Plantable }) {
     <h2>{translate(`ui.plant`)}</h2>
     <dl>
       <dt>planted in</dt>
-      <dd><List>{biomes.map(b => <Area area={b} />)}</List></dd>
+      <dd><List>{biomes.map(b => <Area key={b} area={b} />)}</List></dd>
       <dt>grow time</dt>
       <dd>{rangeBy(growTime, timeI2S)}</dd>
     </dl>
