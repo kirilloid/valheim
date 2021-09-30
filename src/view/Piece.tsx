@@ -4,7 +4,7 @@ import { ItemType, MaterialType, Piece as TPiece } from '../types';
 
 import { getCraftingStationId, getStructuralIntegrity, pieces } from '../data/building';
 import { stationsMap } from '../data/resource-usage';
-import { assertNever, GAME_DAY, timeI2S } from '../model/utils';
+import { assertNever, days, timeI2S } from '../model/utils';
 
 import { TranslationContext } from '../effects';
 import { InlineObjectWithIcon, Resistances, yesNo } from './helpers';
@@ -21,7 +21,7 @@ function PieceSpecific({ item }: { item: TPiece }) {
         <dt>fuel type</dt><dd><InlineObjectWithIcon id={fuel} /></dd>
         <dt>capacity</dt><dd>{capacity}</dd>
         <dt>burn time</dt><dd>{timeI2S(burnTime)}</dd>
-        <dt>total burn time</dt><dd>{timeI2S(totalTime)} = {(totalTime / GAME_DAY).toPrecision(2)} days</dd>
+        <dt>total burn time</dt><dd>{timeI2S(totalTime)} = {days(totalTime).toPrecision(2)} days</dd>
         <dt>min height to cover</dt><dd>{minHeightAbove}m</dd>
         <dt>smoke</dt><dd>{yesNo(smoke)}</dd>
         <dt>fireworks</dt><dd>{yesNo(fireworks)}</dd>

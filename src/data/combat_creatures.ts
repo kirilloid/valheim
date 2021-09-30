@@ -1,6 +1,6 @@
 import { Biome, Creature } from '../types';
 import { creatures } from './creatures';
-import { locationToBiome } from './location';
+import { locationToBiome, objectLocationMap } from './location';
 
 export const groupedCreatures: Record<Biome, Creature[]> = {
   Meadows: [],
@@ -16,8 +16,8 @@ export const groupedCreatures: Record<Biome, Creature[]> = {
 
 for (const creature of creatures) {
   if (creature.hp === 1) continue;
-  for (const loc of creature.locations) {
-    const biome = locationToBiome(loc);
+  const biomes = [...creature.locations, ...(objectLocationMap[creature.id] ?? []).map(locationToBiome)];
+  for (const biome of biomes) {
     const group = groupedCreatures[biome];
     if (group && !group.includes(creature)) {
       group.push(creature);

@@ -173,7 +173,7 @@ export type Effect = {
   xpModifier?: number;
 };
 
-export type DamageProfile = Partial<Record<DamageType, number>>;
+export type DamageProfile = Record<DamageType, number>;
 export type NormalAttackProfile = {
   dmg: DamageProfile;
   burst?: number;
@@ -671,7 +671,7 @@ export interface Shield extends BaseItem {
   parryForce: number | Pair<number>;
   parryBonus: number;
   skill: SkillType.Blocking;
-  damage?: DamageProfile;
+  damage?: Pair<DamageProfile>;
   knockback?: number;
   backstab?: number;
   durability: Pair<number>;

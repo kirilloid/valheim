@@ -1,5 +1,6 @@
 import { AttackAnimation, CraftingStation, Shield, Weapon } from '../types';
 import { SkillType } from '../model/skills';
+import { dmg } from '../model/game';
 
 const CRAFT_TIME = 4;
 const disabled = true;
@@ -41,7 +42,7 @@ export const items: (Weapon | Shield)[] = [
     parryForce: 0,
     parryBonus: 1.5,
     skill: SkillType.Unarmed,
-    damage: [{ blunt: 5 }, {}],
+    damage: [dmg({ blunt: 5 }), dmg({})],
     knockback: 40,
     backstab: 4,
     attacks: [{
@@ -75,7 +76,7 @@ export const items: (Weapon | Shield)[] = [
     parryForce: [20, 5],
     parryBonus: 2,
     skill: SkillType.Clubs,
-    damage: [{ blunt: 12 }, { blunt: 6 }],
+    damage: [dmg({ blunt: 12 }), dmg({ blunt: 6 })],
     knockback: 30,
     backstab: 3,
     attacks: [{
@@ -110,8 +111,8 @@ export const items: (Weapon | Shield)[] = [
     skill: SkillType.Axes,
     toolTier: 0,
     damage: [
-      { slash: 15, chop: 20 },
-      { slash: 5, chop: 3 },
+      dmg({ slash: 15, chop: 20 }),
+      dmg({ slash: 5, chop: 3 }),
     ],
     knockback: 50,
     backstab: 3,
@@ -146,7 +147,7 @@ export const items: (Weapon | Shield)[] = [
     parryForce: [20, 5],
     parryBonus: 2,
     skill: SkillType.Clubs,
-    damage: [{ blunt: 4, fire: 15 }, {}],
+    damage: [dmg({ blunt: 4, fire: 15 }), dmg({})],
     knockback: 30,
     backstab: 3,
     attacks: [{
@@ -183,8 +184,8 @@ export const items: (Weapon | Shield)[] = [
     skill: SkillType.Axes,
     toolTier: 1,
     damage: [
-      { slash: 20, chop: 30 },
-      { slash: 5, chop: 3 },
+      dmg({ slash: 20, chop: 30 }),
+      dmg({ slash: 5, chop: 3 }),
     ],
     knockback: 50,
     backstab: 3,
@@ -219,8 +220,8 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 4,
     skill: SkillType.Knives,
     damage: [
-      { slash: 5, pierce: 5 },
-      { slash: 1, pierce: 1 },
+      dmg({ slash: 5, pierce: 5 }),
+      dmg({ slash: 1, pierce: 1 }),
     ],
     knockback: 10,
     backstab: 6,
@@ -263,7 +264,7 @@ export const items: (Weapon | Shield)[] = [
     parryForce: [20, 5],
     parryBonus: 2,
     skill: SkillType.Spears,
-    damage: [{ pierce: 20 }, { pierce: 6 }],
+    damage: [dmg({ pierce: 20 }), dmg({ pierce: 6 })],
     knockback: 20,
     backstab: 3,
     attacks: [{
@@ -306,8 +307,8 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     skill: SkillType.Clubs,
     damage: [
-      { blunt: 20, pierce: 5 },
-      { blunt: 6 }
+      dmg({ blunt: 20, pierce: 5 }),
+      dmg({ blunt: 6 }),
     ],
     knockback: 150,
     backstab: 2,
@@ -342,7 +343,7 @@ export const items: (Weapon | Shield)[] = [
     parryForce: 0,
     parryBonus: 1.5,
     skill: SkillType.Bows,
-    damage: [{ pierce: 22 }, { pierce: 3 }],
+    damage: [dmg({ pierce: 22 }), dmg({ pierce: 3 })],
     knockback: 0,
     backstab: 3,
     attacks: [{
@@ -379,7 +380,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     skill: SkillType.Pickaxes,
     toolTier: 0,
-    damage: [{ pierce: 15, pickaxe: 15 }, {}],
+    damage: [dmg({ pierce: 15, pickaxe: 15 }), dmg({})],
     knockback: 50,
     backstab: 3,
     attacks: [{
@@ -413,7 +414,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     skill: SkillType.Pickaxes,
     toolTier: 0,
-    damage: [{ pierce: 18, pickaxe: 18 }, {}],
+    damage: [dmg({ pierce: 18, pickaxe: 18 }), dmg({})],
     knockback: 50,
     backstab: 3,
     attacks: [{
@@ -494,8 +495,8 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 4,
     skill: SkillType.Knives,
     damage: [
-      { slash: 12, pierce: 12 },
-      { slash: 1, pierce: 1 }
+      dmg({ slash: 12, pierce: 12 }),
+      dmg({ slash: 1, pierce: 1 }),
     ],
     knockback: 10,
     backstab: 6,
@@ -537,7 +538,7 @@ export const items: (Weapon | Shield)[] = [
     parryForce: [40, 5],
     parryBonus: 2,
     skill: SkillType.Polearms,
-    damage: [{ pierce: 45 }, { pierce: 6 }],
+    damage: [dmg({ pierce: 45 }), dmg({ pierce: 6 })],
     knockback: 30,
     backstab: 3,
     attacks: [{
@@ -580,8 +581,8 @@ export const items: (Weapon | Shield)[] = [
     skill: SkillType.Axes,
     toolTier: 2,
     damage: [
-      { slash: 40, chop: 40 },
-      { slash: 5, chop: 3 },
+      dmg({ slash: 40, chop: 40 }),
+      dmg({ slash: 5, chop: 3 }),
     ],
     knockback: 50,
     backstab: 3,
@@ -616,7 +617,7 @@ export const items: (Weapon | Shield)[] = [
     parryForce: [30, 5],
     parryBonus: 2,
     skill: SkillType.Clubs,
-    damage: [{ blunt: 35 }, { blunt: 6 }],
+    damage: [dmg({ blunt: 35 }), dmg({ blunt: 6 })],
     knockback: 80,
     backstab: 3,
     attacks: [{
@@ -658,7 +659,7 @@ export const items: (Weapon | Shield)[] = [
     parryForce: [20, 5],
     parryBonus: 2,
     skill: SkillType.Spears,
-    damage: [{ pierce: 35 }, { pierce: 6 }],
+    damage: [dmg({ pierce: 35 }), dmg({ pierce: 6 })],
     knockback: 20,
     backstab: 3,
     attacks: [{
@@ -699,7 +700,7 @@ export const items: (Weapon | Shield)[] = [
     parryForce: [20, 5],
     parryBonus: 2,
     skill: SkillType.Swords,
-    damage: [{ slash: 35 }, { slash: 6 }],
+    damage: [dmg({ slash: 35 }), dmg({ slash: 6 })],
     knockback: 40,
     backstab: 3,
     attacks: [{
@@ -742,8 +743,8 @@ export const items: (Weapon | Shield)[] = [
     skill: SkillType.Pickaxes,
     toolTier: 1,
     damage: [
-      { pierce: 25, pickaxe: 25 },
-      { pierce: 5, pickaxe: 4 },
+      dmg({ pierce: 25, pickaxe: 25 }),
+      dmg({ pierce: 5, pickaxe: 4 }),
     ],
     knockback: 50,
     backstab: 3,
@@ -778,7 +779,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 1.5,
     floating: true,
     skill: SkillType.Bows,
-    damage: [{ pierce: 32 }, { pierce: 3 }],
+    damage: [dmg({ pierce: 32 }), dmg({ pierce: 3 })],
     knockback: 5,
     backstab: 3,
     attacks: [{
@@ -834,7 +835,7 @@ export const items: (Weapon | Shield)[] = [
     moveSpeed: -0.2,
     block: [32, 6],
     parryForce: [100, 5],
-    parryBonus: 1,
+    parryBonus: 0,
     skill: SkillType.Blocking,
     durability: [200, 50],
     recipe: {
@@ -859,7 +860,7 @@ export const items: (Weapon | Shield)[] = [
     parryForce: 0,
     parryBonus: 1.5,
     skill: null,
-    damage: [{ blunt: 5, poison: 40 }, {}],
+    damage: [dmg({ blunt: 5, poison: 40 }), dmg({})],
     knockback: 40,
     backstab: 4, // from effect
     // radius: 4, ttl: 10, interval: 1
@@ -894,8 +895,8 @@ export const items: (Weapon | Shield)[] = [
     skill: SkillType.Axes,
     toolTier: 3,
     damage: [
-      { slash: 70, chop: 40 },
-      { slash: 6, chop: 2.5 },
+      dmg({ slash: 70, chop: 40 }),
+      dmg({ slash: 6, chop: 2.5 }),
     ],
     knockback: 70,
     backstab: 3,
@@ -939,7 +940,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     skill: SkillType.Swords,
     toolTier: 0,
-    damage: [{ slash: 55 }, { slash: 6 }],
+    damage: [dmg({ slash: 55 }), dmg({ slash: 6 })],
     knockback: 40,
     backstab: 3,
     attacks: [{
@@ -982,8 +983,8 @@ export const items: (Weapon | Shield)[] = [
     skill: SkillType.Axes,
     toolTier: 3,
     damage: [
-      { slash: 60, chop: 50 },
-      { slash: 5, chop: 3 },
+      dmg({ slash: 60, chop: 50 }),
+      dmg({ slash: 5, chop: 3 }),
     ],
     knockback: 50,
     backstab: 3,
@@ -1017,7 +1018,7 @@ export const items: (Weapon | Shield)[] = [
     parryForce: [50, 10],
     parryBonus: 2,
     skill: SkillType.Clubs,
-    damage: [{ blunt: 55 }, { blunt: 6 }],
+    damage: [dmg({ blunt: 55 }), dmg({ blunt: 6 })],
     knockback: 200,
     backstab: 2,
     attacks: [{
@@ -1052,7 +1053,7 @@ export const items: (Weapon | Shield)[] = [
     parryForce: [30, 5],
     parryBonus: 2,
     skill: SkillType.Clubs,
-    damage: [{ blunt: 55 }, { blunt: 6 }],
+    damage: [dmg({ blunt: 55 }), dmg({ blunt: 6 })],
     knockback: 90,
     backstab: 3,
     attacks: [{
@@ -1094,7 +1095,7 @@ export const items: (Weapon | Shield)[] = [
     parryForce: [20, 5],
     parryBonus: 2,
     skill: SkillType.Spears,
-    damage: [{ pierce: 55 }, { pierce: 6 }],
+    damage: [dmg({ pierce: 55 }), dmg({ pierce: 6 })],
     knockback: 20,
     backstab: 3,
     attacks: [{
@@ -1137,8 +1138,8 @@ export const items: (Weapon | Shield)[] = [
     skill: SkillType.Pickaxes,
     toolTier: 2,
     damage: [
-      { pierce: 33, pickaxe: 33 },
-      { pierce: 5, pickaxe: 5 },
+      dmg({ pierce: 33, pickaxe: 33 }),
+      dmg({ pierce: 5, pickaxe: 5 }),
     ],
     knockback: 50,
     backstab: 3,
@@ -1172,7 +1173,7 @@ export const items: (Weapon | Shield)[] = [
     parryForce: [40, 5],
     parryBonus: 2,
     skill: SkillType.Polearms,
-    damage: [{ pierce: 65 }, { pierce: 6 }],
+    damage: [dmg({ pierce: 65 }), dmg({ pierce: 6 })],
     knockback: 30,
     backstab: 3,
     attacks: [{
@@ -1214,7 +1215,7 @@ export const items: (Weapon | Shield)[] = [
     parryForce: 0,
     parryBonus: 1.5,
     skill: SkillType.Bows,
-    damage: [{ pierce: 42 }, { pierce: 3 }],
+    damage: [dmg({ pierce: 42 }), dmg({ pierce: 3 })],
     knockback: 10,
     backstab: 3,
     attacks: [{
@@ -1250,7 +1251,7 @@ export const items: (Weapon | Shield)[] = [
     parryForce: [40, 5],
     parryBonus: 1.5,
     skill: SkillType.Blocking,
-    damage: { blunt: 10 },
+    damage: [dmg({ blunt: 10 }), dmg({})],
     knockback: 50,
     backstab: 4,
     durability: [200, 50],
@@ -1274,7 +1275,7 @@ export const items: (Weapon | Shield)[] = [
     moveSpeed: -0.2,
     block: [52, 6],
     parryForce: [100, 5],
-    parryBonus: 1,
+    parryBonus: 0,
     skill: SkillType.Blocking,
     durability: [200, 50],
     knockback: 40,
@@ -1326,7 +1327,7 @@ export const items: (Weapon | Shield)[] = [
     parryForce: [100, 5],
     parryBonus: 0,
     skill: SkillType.Blocking,
-    damage: { blunt: 10 },
+    damage: [dmg({ blunt: 10 }), dmg({})],
     damageModifiers: { pierce: 'resistant' },
     durability: [250, 50],
     knockback: 50,
@@ -1355,8 +1356,8 @@ export const items: (Weapon | Shield)[] = [
     skill: SkillType.Axes,
     toolTier: 3,
     damage: [
-      { slash: 90, chop: 50, spirit: 30 },
-      { slash: 6, chop: 2.5 }
+      dmg({ slash: 90, chop: 50, spirit: 30 }),
+      dmg({ slash: 6, chop: 2.5 }),
     ],
     knockback: 70,
     backstab: 3,
@@ -1400,8 +1401,8 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     skill: SkillType.Swords,
     damage: [
-      { slash: 75, spirit: 30 },
-      { slash: 6, spirit: 5 },
+      dmg({ slash: 75, spirit: 30 }),
+      dmg({ slash: 6, spirit: 5 }),
     ],
     knockback: 40,
     backstab: 3,
@@ -1444,7 +1445,7 @@ export const items: (Weapon | Shield)[] = [
     parryForce: [20, 5],
     parryBonus: 2,
     skill: SkillType.Spears,
-    damage: [{ pierce: 75 }, { pierce: 6 }],
+    damage: [dmg({ pierce: 75 }), dmg({ pierce: 6 })],
     knockback: 20,
     backstab: 3,
     attacks: [{
@@ -1486,8 +1487,8 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     skill: SkillType.Clubs,
     damage: [
-      { blunt: 35, frost: 40, spirit: 20 },
-      { frost: 6 },
+      dmg({ blunt: 35, frost: 40, spirit: 20 }),
+      dmg({ frost: 6 }),
     ],
     knockback: 120,
     backstab: 3,
@@ -1531,7 +1532,7 @@ export const items: (Weapon | Shield)[] = [
     parryForce: [20, 5],
     parryBonus: 2,
     skill: SkillType.Spears,
-    damage: [{ pierce: 10 }, {}],
+    damage: [dmg({ pierce: 10 }), dmg({})],
     knockback: 20,
     backstab: 1,
     attacks: [{
@@ -1565,8 +1566,8 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 4,
     skill: SkillType.Knives,
     damage: [
-      { slash: 20, pierce: 20 },
-      { slash: 1, pierce: 1 },
+      dmg({ slash: 20, pierce: 20 }),
+      dmg({ slash: 1, pierce: 1 }),
     ],
     knockback: 10,
     backstab: 6,
@@ -1610,8 +1611,8 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 4,
     skill: SkillType.Knives,
     damage: [
-      { slash: 25, pierce: 25, spirit: 12 },
-      { slash: 1, pierce: 1 },
+      dmg({ slash: 25, pierce: 25, spirit: 12 }),
+      dmg({ slash: 1, pierce: 1 }),
     ],
     knockback: 10,
     backstab: 6,
@@ -1655,8 +1656,8 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 1.5,
     skill: SkillType.Bows,
     damage: [
-      { pierce: 47, poison: 5 }, 
-      { pierce: 3, poison: 5 },
+      dmg({ pierce: 47, poison: 5 }),
+      dmg({ pierce: 3, poison: 5 }),
     ],
     knockback: 20,
     backstab: 3,
@@ -1693,7 +1694,7 @@ export const items: (Weapon | Shield)[] = [
     parryForce: [40, 5],
     parryBonus: 1.5,
     skill: SkillType.Blocking,
-    damage: { blunt: 10 },
+    damage: [dmg({ blunt: 10 }), dmg({})],
     knockback: 50,
     backstab: 4,
     durability: [200, 50],
@@ -1719,7 +1720,7 @@ export const items: (Weapon | Shield)[] = [
     parryForce: [40, 5],
     parryBonus: 3,
     skill: SkillType.Polearms,
-    damage: [{ pierce: 105 }, { pierce: 6 }],
+    damage: [dmg({ pierce: 105 }), dmg({ pierce: 6 })],
     knockback: 30,
     backstab: 3,
     attacks: [{
@@ -1762,8 +1763,8 @@ export const items: (Weapon | Shield)[] = [
     skill: SkillType.Axes,
     toolTier: 4,
     damage: [
-      { slash: 100, chop: 60 },
-      { slash: 5, chop: 3 },
+      dmg({ slash: 100, chop: 60 }),
+      dmg({ slash: 5, chop: 3 }),
     ],
     knockback: 60,
     backstab: 3,
@@ -1798,8 +1799,8 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 4,
     skill: SkillType.Knives,
     damage: [
-      { slash: 34, pierce: 34 },
-      { slash: 1, pierce: 1 },
+      dmg({ slash: 34, pierce: 34 }),
+      dmg({ slash: 1, pierce: 1 }),
     ],
     knockback: 10,
     backstab: 6,
@@ -1841,7 +1842,7 @@ export const items: (Weapon | Shield)[] = [
     parryForce: [20, 5],
     parryBonus: 2,
     skill: SkillType.Swords,
-    damage: [{ slash: 95 }, { slash: 6 }],
+    damage: [dmg({ slash: 95 }), dmg({ slash: 6 })],
     knockback: 40,
     backstab: 3,
     attacks: [{
@@ -1884,8 +1885,8 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     skill: SkillType.Clubs,
     damage: [
-      { blunt: 50, pierce: 45 },
-      { pierce: 6 },
+      dmg({ blunt: 50, pierce: 45 }),
+      dmg({ pierce: 6 }),
     ],
     knockback: 90,
     backstab: 3,
@@ -1928,7 +1929,7 @@ export const items: (Weapon | Shield)[] = [
     parryForce: [50, 5],
     parryBonus: 1.5,
     skill: SkillType.Blocking,
-    damage: { blunt: 10 },
+    damage: [dmg({ blunt: 10 }), dmg({})],
     knockback: 50,
     backstab: 4,
     durability: [200, 50],
@@ -1954,7 +1955,7 @@ export const items: (Weapon | Shield)[] = [
     parryForce: [150, 5],
     parryBonus: 0,
     skill: SkillType.Blocking,
-    damage: { blunt: 10 },
+    damage: [dmg({ blunt: 10 }), dmg({})],
     knockback: 50,
     backstab: 4,
     durability: [200, 50],
@@ -1983,8 +1984,8 @@ export const items: (Weapon | Shield)[] = [
     skill: SkillType.Swords,
     toolTier: 0,
     damage: [
-      { slash: 55, fire: 30 },
-      { slash: 5, fire: 6 },
+      dmg({ slash: 55, fire: 30 }),
+      dmg({ slash: 5, fire: 6 }),
     ],
     knockback: 40,
     backstab: 3,
@@ -2044,7 +2045,7 @@ export const items: (Weapon | Shield)[] = [
     moveSpeed: -0.2,
     block: [35, 6],
     parryForce: 30,
-    parryBonus: 1,
+    parryBonus: 0,
     skill: SkillType.Blocking,
     knockback: 40,
     backstab: 4,
@@ -2072,12 +2073,12 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     skill: SkillType.Swords,
     toolTier: 10,
-    damage: [{
+    damage: [dmg({
       slash: 10000,
       chop: 10000,
       pickaxe: 10000,
-    }, {
-    }],
+    }), dmg({
+    })],
     knockback: 40,
     backstab: 3,
     attacks: [{
@@ -2111,7 +2112,7 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2,
     skill: SkillType.Clubs,
     toolTier: 10,
-    damage: [{ /*damage: 99999, */ }, { blunt: 6 }],
+    damage: [dmg({ /*damage: 99999, */ }), dmg({ blunt: 6 })],
     knockback: 40,
     backstab: 3,
     attacks: [{

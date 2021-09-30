@@ -7,7 +7,8 @@ import type { Biome, Pair, Creature as CreatureT } from '../types';
 import { getInitialState, serializeState } from '../model/def_calc.url';
 import { actionCreators, reducer } from '../model/def_calc.reducer';
 import { allItems, shields } from '../model/def_calc.items';
-import { isNotNull, MAX_PLAYERS } from '../model/utils';
+import { isNotNull } from '../model/utils';
+import { MAX_PLAYERS } from '../model/game';
 
 import { groupedCreatures } from '../data/combat_creatures';
 
@@ -35,10 +36,6 @@ function Result({ stats, showBlock }: { stats: AttackPlayerStats; showBlock: boo
   const translate = useContext(TranslationContext);
   const { instant, overTime } = stats;
   return <dl>
-    {showBlock && <>
-      <dt>{translate('ui.blockChance')}</dt>
-      <dd>{showNumber(stats.blockChance.avg * 100)}%</dd>
-    </>}
     {instant.avg ? <>
       <dt>{translate('ui.damage')}</dt>
       <dd>{statsResult(instant)}</dd>
@@ -55,6 +52,14 @@ function Result({ stats, showBlock }: { stats: AttackPlayerStats; showBlock: boo
         max: instant.max + overTime.max,
       })}</dd>
     </> : null}
+    {<>
+      <dt>{translate('ui.stagger')}</dt>
+      <dd>{statsResult(stats.stagger)}</dd>
+    </>}
+    {showBlock && <>
+      <dt>{translate('ui.stamina')}</dt>
+      <dd>{statsResult(stats.stamina)}</dd>
+    </>}
   </dl>
 }
 
@@ -313,14 +318,14 @@ export function DefenseCalc() {
   const block = shield?.item
     ? applyLevel(shield.item.block, shield.level) * (1 + 0.005 * shield.skill)
     : 0;
-  const perfectBlock = block * (shield?.item.parryBonus ?? 1);
+  const perfectBlock = block * (shield?.item.parryBonus ?? 0);
   const attacks = creature.attacks[variety]!.attacks.filter(isNormalAttackProfile);
   const resistItems = state.resTypes
     .map(rt => allItems.get(rt)?.damageModifiers)
     .filter(isNotNull);
 
-  const getStats = (block: number) => attacks
-    .map(a => attackPlayer(multiplyDamage(a.dmg, bonus), state.isWet, resistItems, state.armor, block))
+  const getStats = (block: number, isParry: boolean) => attacks
+    .map(a => attackPlayer(multiplyDamage(a.dmg, bonus), state.isWet, resistItems, shield?.item.damageModifiers, state.armor, block, isParry))
     .reduce(addAttackPlayerStats, emptyAttackPlayerStats());
 
   return (<>
@@ -350,14 +355,14 @@ export function DefenseCalc() {
       <div className="CombatCalc__Results">
         <h2>Results</h2>
         <h3>No shield</h3>
-        <Result stats={getStats(0)} showBlock={false} />
+        <Result stats={getStats(0, false)} showBlock={false} />
         {block > 0 && !attacks.every(a => a.unblockable) ? <>
           <h3>Block</h3>
-          <Result stats={getStats(block)} showBlock={true} />
+          <Result stats={getStats(block, false)} showBlock={true} />
         </> : null}
-        {perfectBlock !== block && !attacks.every(a => a.unblockable) ? <>
+        {perfectBlock && !attacks.every(a => a.unblockable) ? <>
           <h3>Parry</h3>
-          <Result stats={getStats(perfectBlock)} showBlock={true} />
+          <Result stats={getStats(perfectBlock, true)} showBlock={true} />
         </> : null}
       </div>
     </div>

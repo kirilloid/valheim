@@ -4,7 +4,8 @@ import { useHistory, useParams } from 'react-router-dom';
 import '../css/FoodPlanner.css';
 
 import type { Biome, Food, GameObject, Item, SimpleDrop } from '../types';
-import { BASE_HEALTH, BASE_STAMINA, days, isNotNull, MAX_PLAYERS, groupBy, mapValues } from '../model/utils';
+import { days, isNotNull, groupBy, mapValues } from '../model/utils';
+import { BASE_HEALTH, BASE_STAMINA, MAX_PLAYERS } from '../model/game';
 import { addDrop } from '../model/dist';
 
 import { resources } from '../data/resources';

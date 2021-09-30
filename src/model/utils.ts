@@ -1,3 +1,5 @@
+import { GAME_DAY } from './game';
+
 export const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(value, max));
 export const clamp01 = (value: number) => clamp(value, 0, 1);
 export const lerp = (a: number, b: number, t: number) => a + (b - a) * clamp01(t);
@@ -29,11 +31,6 @@ export const timeI2S = (seconds: number) => {
     String(seconds % 60).padStart(2, '0'),
   ].join(':');
 };
-
-export const GAME_DAY = 1800;
-export const BASE_HEALTH = 25;
-export const BASE_STAMINA = 50;
-export const MAX_PLAYERS = 10;
 
 export const days = (seconds: number) => seconds / GAME_DAY;
 

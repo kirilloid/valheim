@@ -1,4 +1,14 @@
-import type { Biome, BiomeConfig, Creature, Destructible, DungeonConfig, EntityId, GameLocationId, GeneralDrop, LocationConfig, LocationItem, LocationVariation, PhysicalObject } from '../types';
+import type {
+  Biome,
+  BiomeConfig,
+  Creature,
+  DungeonConfig,
+  EntityId,
+  GameLocationId,
+  LocationConfig,
+  LocationItem,
+  LocationVariation,
+} from '../types';
 import { creatures } from './creatures';
 import { objects } from './objects';
 import { data } from './itemDB';
