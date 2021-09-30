@@ -3,7 +3,7 @@ import { useParams, useHistory } from 'react-router-dom';
 
 import '../css/Combat.css';
 
-import type { Biome, Pair, Creature as CreatureT } from '../types';
+import type * as T from '../types';
 import { getInitialState, serializeState } from '../model/def_calc.url';
 import { actionCreators, reducer } from '../model/def_calc.reducer';
 import { allItems, shields } from '../model/def_calc.items';
@@ -14,16 +14,16 @@ import { groupedCreatures } from '../data/combat_creatures';
 
 import { TranslationContext } from '../effects/translation.effect';
 import { useDebounceEffect } from '../effects/debounce.effect';
-import { Icon, ItemIcon, SkillIcon } from './Icon';
+import { EffectIcon, Icon, ItemIcon, SkillIcon } from './Icon';
 import { addAttackPlayerStats, attackPlayer, AttackPlayerStats, dmgBonus, emptyAttackPlayerStats, isNormalAttackProfile, multiplyDamage, ShieldConfig } from '../model/combat';
-import { InlineObjectWithIcon, List, showNumber } from './helpers';
+import { List, showNumber } from './helpers';
 import { useGlobalState } from '../effects';
 
 type OnChange<T extends HTMLElement> = (e: React.ChangeEvent<T>) => void;
 type OnChangeI = OnChange<HTMLInputElement>;
 type OnChangeS = OnChange<HTMLSelectElement>;
 
-function applyLevel(baseValue: number | Pair<number>, level: number) {
+function applyLevel(baseValue: number | T.Pair<number>, level: number) {
   if (typeof baseValue === 'number') return baseValue;
   return baseValue[0] + baseValue[1] * (level - 1);
 }
@@ -63,7 +63,7 @@ function Result({ stats, showBlock }: { stats: AttackPlayerStats; showBlock: boo
   </dl>
 }
 
-function Creature({ creature, biome, onChange }: { creature: CreatureT; biome: string; onChange: OnChangeS }) {
+function Creature({ creature, biome, onChange }: { creature: T.Creature; biome: string; onChange: OnChangeS }) {
   const translate = useContext(TranslationContext);
   return <div className="row">
     <select onChange={onChange} value={creature.id}>
@@ -92,7 +92,7 @@ function CreatureStars({ stars, max, onChange }: { stars: number; max: number; o
   </div>;
 }
 
-function CreatureAttackVar({ creature, variety, onChange }: { creature: CreatureT, variety: number, onChange: OnChangeI }) {
+function CreatureAttackVar({ creature, variety, onChange }: { creature: T.Creature, variety: number, onChange: OnChangeI }) {
   return <div className="row" key="variants">
     {creature.attacks.map((a, i) => {
       return <React.Fragment key={a.variety}>
@@ -248,6 +248,7 @@ function Armor({ armor, onChange }: { armor: number; onChange: OnChangeI; }) {
 
 function Items({ resTypes, onChange }: { resTypes: string[], onChange: (item: string) => OnChangeI }) {
   const [spoiler] = useGlobalState('spoiler');
+  const translate = useContext(TranslationContext);
   return <>
     {[...allItems.entries()]
       .filter(([, { items }]) => items.some(i => i.tier <= spoiler))
@@ -261,7 +262,15 @@ function Items({ resTypes, onChange }: { resTypes: string[], onChange: (item: st
           <List separator=" / ">
             {items
               .filter(item => item.tier <= spoiler)
-              .map(item => <InlineObjectWithIcon key={item.id} id={item.id} nobr />)}
+              .map(item => <span style={{ display: 'inline-block' }}>
+                {item.type === 'effect'
+                  ? <EffectIcon id={item.id} size={32} />
+                  : <ItemIcon item={item} size={32} />}
+                {' '}
+                {item.type === 'effect'
+                  ? translate(`ui.effect.${item.id}`)
+                  : translate(item.id)}
+              </span>)}
           </List>
         </label>
       </div>)}
@@ -294,11 +303,10 @@ export function DefenseCalc() {
     changeLevel,
     changeSkill,
     changeArmor,
-    changeIsWet,
     changeResType,
   } = actionCreators;
   
-  const onCreatureChange = (e: React.ChangeEvent<HTMLSelectElement>) => dispatch(changeCreature(e.target.value, (e.target.selectedOptions[0]?.parentElement as HTMLOptGroupElement).label as Biome));
+  const onCreatureChange = (e: React.ChangeEvent<HTMLSelectElement>) => dispatch(changeCreature(e.target.value, (e.target.selectedOptions[0]?.parentElement as HTMLOptGroupElement).label as T.Biome));
   const onStarsChange = (e: React.ChangeEvent<HTMLInputElement>) => dispatch(changeStars(Number(e.target.value)));
   const onVarietyChange = (e: React.ChangeEvent<HTMLInputElement>) => dispatch(changeVariety(Number(e.target.value)));
   
@@ -307,7 +315,6 @@ export function DefenseCalc() {
   const onLevelChange = (e: React.ChangeEvent<HTMLInputElement>) => dispatch(changeLevel(Number(e.target.value)));
   const onSkillChange = (e: React.ChangeEvent<HTMLInputElement>) => dispatch(changeSkill(Number(e.target.value)));
   const onArmorChange = (e: React.ChangeEvent<HTMLInputElement>) => dispatch(changeArmor(Number(e.target.value)));
-  const onWetChange = (e: React.ChangeEvent<HTMLInputElement>) => dispatch(changeIsWet(e.target.checked));
   const onItemChange = (resType: string) => (e: React.ChangeEvent<HTMLInputElement>) => dispatch(changeResType(resType, e.target.checked));
   const scale = {
     players: state.players,
@@ -324,8 +331,8 @@ export function DefenseCalc() {
     .map(rt => allItems.get(rt)?.damageModifiers)
     .filter(isNotNull);
 
-  const getStats = (block: number, isParry: boolean) => attacks
-    .map(a => attackPlayer(multiplyDamage(a.dmg, bonus), state.isWet, resistItems, shield?.item.damageModifiers, state.armor, block, isParry))
+  const getStats = (item: T.Shield | undefined, block: number, isParry: boolean) => attacks
+    .map(a => attackPlayer(multiplyDamage(a.dmg, bonus), resistItems, item?.damageModifiers, state.armor, block, isParry))
     .reduce(addAttackPlayerStats, emptyAttackPlayerStats());
 
   return (<>
@@ -343,26 +350,26 @@ export function DefenseCalc() {
             {translate('ui.player')}
           </h2>
         </div>
-        <Wet wet={state.isWet} onChange={onWetChange} />
         <Players players={state.players} onChange={onPlayersChange} />
         <div className="Weapon">
           <Shield shield={state.shield} onShieldChange={onShieldChange} onLevelChange={onLevelChange} />
           <Skill shield={state.shield} onChange={onSkillChange} />
           <Armor armor={state.armor} onChange={onArmorChange} />
         </div>
+        <h3>{translate('ui.effects')}</h3>
         <Items resTypes={state.resTypes} onChange={onItemChange} />
       </section>
       <div className="CombatCalc__Results">
         <h2>Results</h2>
         <h3>No shield</h3>
-        <Result stats={getStats(0, false)} showBlock={false} />
+        <Result stats={getStats(undefined, 0, false)} showBlock={false} />
         {block > 0 && !attacks.every(a => a.unblockable) ? <>
           <h3>Block</h3>
-          <Result stats={getStats(block, false)} showBlock={true} />
+          <Result stats={getStats(shield?.item, block, false)} showBlock={true} />
         </> : null}
         {perfectBlock && !attacks.every(a => a.unblockable) ? <>
           <h3>Parry</h3>
-          <Result stats={getStats(perfectBlock, true)} showBlock={true} />
+          <Result stats={getStats(shield?.item, perfectBlock, true)} showBlock={true} />
         </> : null}
       </div>
     </div>

@@ -1,4 +1,4 @@
-import type { DamageModifiers, Item, Resource, Shield } from '../types';
+import type { DamageModifiers, Effect, Item, Resource, Shield } from '../types';
 
 import { items as armors } from '../data/armors';
 import { effects } from '../data/effects';
@@ -16,9 +16,9 @@ function resistHash(mods: Partial<DamageModifiers>) {
     .map(([type, mod]) => `${type}:${mod}`)
     .join('-');
 }
-export const allItems = new Map<string, { damageModifiers: Partial<DamageModifiers>; items: Item[] }>();
+export const allItems = new Map<string, { damageModifiers: Partial<DamageModifiers>; items: (Item | Effect)[] }>();
 
-function addMod(item: Item, damageModifiers?: Partial<DamageModifiers>) {
+function addMod(item: Item | Effect, damageModifiers?: Partial<DamageModifiers>) {
   if (!damageModifiers) return;
   const hash = resistHash(damageModifiers);
   const el = allItems.get(hash) ?? { damageModifiers, items: [] };
@@ -31,19 +31,17 @@ function addToItems(item: Item & { damageModifiers?: Partial<DamageModifiers> })
   addMod(item, damageModifiers);
 }
 
-function addPower(item: Resource) {
-  const { power } = item;
-  if (!power) return;
-  const effect = effects.find(eff => eff.id === power);
-  if (!effect) return;
+function addEffect(effect: Effect) {
   const { damageModifiers } = effect;
-  addMod(item, damageModifiers);
+  addMod(effect, damageModifiers);
 }
 
 for (const r of resources) {
   if (r.type === 'potion') addToItems(r);
-  if (r.type === 'trophy') addPower(r);
 }
 for (const a of armors) {
   if (a.type === 'armor') addToItems(a);
+}
+for (const e of effects) {
+  addEffect(e);
 }

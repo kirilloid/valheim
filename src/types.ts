@@ -155,6 +155,7 @@ export const damageModifiersValues: Record<DamageModifier, number> = {
 };
 
 export type Effect = {
+  type: 'effect',
   id: EntityId;
   tier: number;
   special?: 'Tailwind';
@@ -171,6 +172,7 @@ export type Effect = {
   healthRegen?: number;
   staminaRegen?: number;
   xpModifier?: number;
+  moveSpeed?: number
 };
 
 export type DamageProfile = Record<DamageType, number>;
@@ -231,6 +233,13 @@ export interface GeneralDrop {
 
 export type SimpleDrop = Record<EntityId, number>;
 
+export const TOLERATE = {
+  WATER: 1,
+  FIRE: 2,
+  SMOKE: 4,
+  TAR: 8,
+};
+
 export interface Creature extends GameObjectBase {
   type: 'creature';
   emoji: string;
@@ -239,6 +248,7 @@ export interface Creature extends GameObjectBase {
   nightOnly?: true;
   faction: Faction;
   locations: Biome[];
+  tolerate: number;
   hp: number;
   stagger?: {
     factor: number;

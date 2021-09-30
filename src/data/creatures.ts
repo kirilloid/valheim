@@ -1,5 +1,5 @@
 import { dmg } from '../model/game';
-import { AttackProfile, AttackVariety, Creature, DamageModifiers, dropEntry, dropTrophy } from '../types';
+import { AttackProfile, AttackVariety, Creature, DamageModifiers, TOLERATE, dropEntry, dropTrophy } from '../types';
 
 const defaultDmgModifiers: DamageModifiers = {
   blunt: 'normal',
@@ -74,6 +74,7 @@ export const creatures: Creature[] = [
     faction: 'ForestMonsters',
     locations: ['Meadows', 'BlackForest'],
     attacks: [],
+    tolerate: TOLERATE.WATER,
     hp: 10,
     damageModifiers: animalDmgModifiers,
     drop: [
@@ -93,6 +94,7 @@ export const creatures: Creature[] = [
     faction: 'ForestMonsters',
     locations: ['Meadows', 'BlackForest', 'Plains', 'Ocean'],
     attacks: [],
+    tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     hp: 1,
     damageModifiers: animalDmgModifiers,
     drop: [
@@ -108,6 +110,7 @@ export const creatures: Creature[] = [
     faction: 'ForestMonsters',
     locations: ['Meadows'],
     attacks: single([{ dmg: dmg({ slash: 5 }), stagger: 1.94, name: 'bite' }]),
+    tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     hp: 20,
     stagger: {
       factor: 0.3,
@@ -129,6 +132,7 @@ export const creatures: Creature[] = [
     faction: 'ForestMonsters',
     locations: ['Meadows'],
     attacks: single([{ dmg: dmg({ slash: 6 }), stagger: 1.66, name: 'bite' }]),
+    tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     hp: 5,
     stagger: {
       factor: 0.5,
@@ -149,6 +153,7 @@ export const creatures: Creature[] = [
     faction: 'ForestMonsters',
     locations: ['Meadows', 'BlackForest', 'Plains', 'Ocean'],
     attacks: [],
+    tolerate: TOLERATE.WATER,
     hp: 1,
     damageModifiers: animalDmgModifiers,
     drop: [dropEntry('FishRaw')],
@@ -164,6 +169,7 @@ export const creatures: Creature[] = [
     faction: 'ForestMonsters',
     locations: ['Meadows'],
     attacks: single([{ dmg: dmg({ blunt: 10 }), stagger: 1.24, name: 'tusks' }]),
+    tolerate: TOLERATE.WATER,
     hp: 10,
     stagger: {
       factor: 0.5,
@@ -194,6 +200,7 @@ export const creatures: Creature[] = [
       { dmg: dmg({ lightning: 15 }), name: 'pew-pew', force: 200 },
       { dmg: dmg({ lightning: 20 }), name: 'stomp', force: 100 },
     ]),
+    tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     hp: 500,
     damageModifiers: animalDmgModifiers,
     drop: [
@@ -214,6 +221,7 @@ export const creatures: Creature[] = [
     faction: 'ForestMonsters',
     locations: ['BlackForest'],
     attacks: [],
+    tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     hp: 1,
     damageModifiers: animalDmgModifiers,
     drop: [
@@ -230,9 +238,9 @@ export const creatures: Creature[] = [
     locations: ['Swamp'],
     attacks: [
       { rate: 4, variety: 'sword', attacks: [{ dmg: dmg({ slash: 25 }), stagger: 2.48, name: 'sword' }] },
-      // { variety: 'mace', attacks: [{ dmg: dmg({ blunt: 25 }), stagger: 2.48, name: 'mace' }] },
       { rate: 1, variety: 'bow', attacks: [{ dmg: dmg({ pierce: 20 }), stagger: 2.48, name: 'bow' }] },
     ],
+    tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     hp: 40,
     stagger: {
       factor: 0.5,
@@ -257,6 +265,7 @@ export const creatures: Creature[] = [
       stagger: 3.96, 
       name: 'mace',
     }]),
+    tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     hp: 100,
     stagger: {
       factor: 0.5,
@@ -277,6 +286,7 @@ export const creatures: Creature[] = [
     faction: 'Undead',
     locations: [],
     attacks: single([ { dmg: dmg({ slash: 25 }), stagger: 1.64, name: 'slash' } ]),
+    tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     hp: 60,
     stagger: {
       factor: 0.5,
@@ -305,6 +315,7 @@ export const creatures: Creature[] = [
       { dmg: dmg({ slash: 14 }), stagger: 1.94, name: 'hit' },
       { dmg: dmg({ blunt: 10 }), stagger: 1.94, name: 'stone' },
     ]),
+    tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     hp: 40,
     stagger: {
       factor: 0.3,
@@ -333,6 +344,7 @@ export const creatures: Creature[] = [
       { dmg: dmg({ poison: 30 }), name: 'poison breath' },
       { dmg: dmg({ slash: 14 }), stagger: 1.12, name: 'slash' },
     ]),
+    tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     hp: 60,
     stagger: {
       factor: 0.33,
@@ -361,6 +373,7 @@ export const creatures: Creature[] = [
     attacks: single([
       { dmg: dmg({ slash: 30 }), stagger: 1.34, name: 'bite' },
     ]),
+    tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     hp: 150,
     stagger: {
       factor: 0.5,
@@ -387,7 +400,7 @@ export const creatures: Creature[] = [
     locations: ['BlackForest'],
     attacks: [
       {
-        rate: 1,
+        rate: 2,
         variety: 'unarmed',
         attacks: [
           { dmg: dmg({ blunt: 60, chop: 100, pickaxe: 40 }), name: '1-hand hit', stagger: 4.4, force: 100, toolTier: 2 },
@@ -403,6 +416,7 @@ export const creatures: Creature[] = [
         ],
       },
     ],
+    tolerate: TOLERATE.WATER,
     hp: 600,
     stagger: {
       factor: 0.3,
@@ -434,6 +448,7 @@ export const creatures: Creature[] = [
       { dmg: dmg({ pierce: 35, chop: 20, pickaxe: 20 }), name: 'Vine Shoot', burst: 25, toolTier: 0 },
       { dmg: dmg({ blunt: 60, chop: 1000, pickaxe: 1000 }), name: 'Stomp', force: 30, toolTier: 0 }, // area
     ]),
+    tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     hp: 2500,
     damageModifiers: {
       ...defaultDmgModifiers,
@@ -449,7 +464,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     disabled: true,
-    id: 'Root', // from the elder
+    id: 'TentaRoot', // from the elder
     tier: 2,
     maxLvl: 1,
     emoji: '🥦',
@@ -458,6 +473,7 @@ export const creatures: Creature[] = [
     attacks: single([
       { dmg: dmg({ blunt: 55, chop: 20, pickaxe: 20 }), name: 'poke', force: 40, toolTier: 0 }
     ]),
+    tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     hp: 20,
     damageModifiers: {
       ...defaultDmgModifiers,
@@ -478,6 +494,7 @@ export const creatures: Creature[] = [
     faction: 'Undead',
     locations: ['Swamp'],
     attacks: single([{ dmg: dmg({ poison: 90 }), name: 'poison', unblockable }]),
+    tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     hp: 50,
     damageModifiers: blobDamageModifiers,
     drop: [
@@ -496,6 +513,7 @@ export const creatures: Creature[] = [
     faction: 'Undead',
     locations: ['Swamp'],
     attacks: single([{ dmg: dmg({ poison: 115 }), name: 'poison', unblockable }]),
+    tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     hp: 150,
     damageModifiers: blobDamageModifiers,
     drop: [
@@ -517,6 +535,7 @@ export const creatures: Creature[] = [
       pierce: 20,
       poison: 70,
     }), name: 'bite', force: 30 }]),
+    tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     hp: 60,
     damageModifiers: {
       ...animalDmgModifiers,
@@ -541,6 +560,7 @@ export const creatures: Creature[] = [
       dmg: dmg({ blunt: 10, fire: 40 }),
       name: 'fireball', stagger: 1.14, force: 30,
     }]),
+    tolerate: TOLERATE.FIRE | TOLERATE.SMOKE,
     hp: 20,
     stagger: {
       factor: 0.5,
@@ -570,6 +590,7 @@ export const creatures: Creature[] = [
     faction: 'Undead',
     locations: ['Swamp'],
     attacks: single([{ dmg: dmg({ slash: 60, }), name: 'slash', stagger: 2.04, force: 60 }]),
+    tolerate: TOLERATE.WATER,
     hp: 100,
     stagger: {
       factor: 0.5,
@@ -610,6 +631,7 @@ export const creatures: Creature[] = [
         attacks: [{ dmg: dmg({ pierce: 48 }), name: 'bow', stagger: 2.8, force: 18 }],
       },
     ],
+    tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     hp: 100,
     stagger: {
       factor: 0.5,
@@ -635,6 +657,7 @@ export const creatures: Creature[] = [
     faction: 'Undead',
     locations: ['Swamp'],
     attacks: single([ { dmg: dmg({ slash: 58, }), name: 'sword', stagger: 2.8, force: 60 } ]),
+    tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     hp: 200,
     stagger: {
       factor: 0.5,
@@ -668,6 +691,7 @@ export const creatures: Creature[] = [
       }), name: 'punch', force: 100, toolTier: 0 },
       { spawn: ['Skeleton', 'Blob'], number: 4, max: 8, }
     ]),
+    tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     hp: 5000,
 
     damageModifiers: {
@@ -697,6 +721,7 @@ export const creatures: Creature[] = [
     attacks: single([
       { dmg: dmg({ slash: 70 }), name: 'bite', stagger: 4.8, force: 30 }, // 3 different animations, same stats
     ]),
+    tolerate: TOLERATE.WATER,
     hp: 80,
     damageModifiers: animalDmgModifiers,
     stagger: {
@@ -728,12 +753,17 @@ export const creatures: Creature[] = [
       { dmg: dmg({ slash: 85 }), name: 'hit', stagger: 1.12, force: 60 },
       { dmg: dmg({ slash: 95 }), name: 'jump', stagger: 1.32, force: 100 },
     ]),
-    hp: 150,
+    tolerate: TOLERATE.WATER,
+    hp: 300,
     stagger: {
       factor: 0.5,
       time: 1.12,
     },
-    damageModifiers: animalDmgModifiers,
+    damageModifiers: {
+      ...defaultDmgModifiers,
+      fire: 'weak',
+      poison: 'resistant',
+    },
     drop: [
       dropEntry('WolfFang'),
       dropTrophy('TrophyFenring', 0.1),
@@ -780,18 +810,21 @@ export const creatures: Creature[] = [
         ],
       },
     ], 
+    tolerate: TOLERATE.WATER | TOLERATE.FIRE | TOLERATE.SMOKE,
     hp: 800,
     stagger: {
       factor: 0.33,
       time: 0.98,
     },
     damageModifiers: {
-      ...defaultDmgModifiers,
+      blunt: 'normal',
       slash: 'resistant',
       pierce: 'resistant',
+      chop: 'ignore',
       pickaxe: 'veryWeak',
       fire: 'immune',
       frost: 'immune',
+      lightning: 'normal',
       poison: 'immune',
       spirit: 'immune',
     },
@@ -811,6 +844,7 @@ export const creatures: Creature[] = [
     faction: 'MountainMonsters',
     locations: ['Mountain'],
     attacks: single([{ dmg: dmg({ frost: 90 }), burst: 3, name: 'ice shards', force: 30, }]), // burst interval: 0.3
+    tolerate: TOLERATE.WATER,
     hp: 100,
     damageModifiers: {
       ...animalDmgModifiers,
@@ -855,6 +889,7 @@ export const creatures: Creature[] = [
         frost: 200,
       }), name: 'breath', force: 40, toolTier: 3 },
     ]),
+    tolerate: TOLERATE.WATER,
     hp: 7500,
 
     damageModifiers: {
@@ -882,10 +917,8 @@ export const creatures: Creature[] = [
       { rate: 1, variety: 'spear', attacks: [{ dmg: dmg({ pierce: 85 }), name: 'spear', stagger: 3.38 }] },
       { rate: 2, variety: 'sword', attacks: [{ dmg: dmg({ slash: 85 }), name: 'sword', stagger: 2.08 }] },
       { rate: 1, variety: 'torch', attacks: [{ dmg: dmg({ blunt: 45, fire: 45 }), name: 'torch', stagger: 2.08 }] },
-      // vs 26 arm 24.3-37.6
-      // vs 52 arm 18.6-28.2
-      // vs 52 arm & FR 12.5-21.4
     ],
+    tolerate: TOLERATE.WATER,
     hp: 175,
     stagger: {
       factor: 0.3,
@@ -899,7 +932,6 @@ export const creatures: Creature[] = [
     ],
     // weapon: 2 club, 1 spear, 2 sword, 1 torch
     // shield: 1 wood, 2 <null>
-    // tolerate: water
     // alertRange: 20,
     // maxChase: 300,
   },
@@ -922,6 +954,7 @@ export const creatures: Creature[] = [
     // vs 26 arm 10.9-15.7
     // vs 52 arm 6.5-11.1
     // vs 52 arm + FR 3.8-6.7 (instantly + 5x over time halved due to FR)
+    tolerate: TOLERATE.WATER,
     hp: 100,
     stagger: {
       factor: 0.3,
@@ -956,6 +989,7 @@ export const creatures: Creature[] = [
       }), name: 'rageattack', stagger: 2.88, force: 70, toolTier: 2 },
       // taunt
     ]),
+    tolerate: TOLERATE.WATER,
     hp: 800,
     stagger: {
       factor: 0.3,
@@ -979,6 +1013,7 @@ export const creatures: Creature[] = [
     faction: 'PlainsMonsters',
     locations: ['Plains'],
     attacks: single([{ dmg: dmg({ pierce: 90 }), name: 'bite' }]),
+    tolerate: TOLERATE.WATER,
     hp: 10,
     damageModifiers: animalDmgModifiers,
     drop: [
@@ -999,6 +1034,7 @@ export const creatures: Creature[] = [
       { dmg: dmg({ slash: 130 }), name: 'bite', force: 150 },
       { dmg: dmg({ blunt: 120, chop: 100, pickaxe: 100, }), name: 'stomp', force: 100, toolTier: 0 },
     ]),
+    tolerate: TOLERATE.WATER,
     hp: 1000,
     stagger: {
       factor: 0.3,
@@ -1027,6 +1063,7 @@ export const creatures: Creature[] = [
     attacks: single([
       { dmg: dmg({ blunt: 45, poison: 50, }), name: 'stomp', force: 80, toolTier: 0 },
     ]),
+    tolerate: TOLERATE.WATER | TOLERATE.SMOKE | TOLERATE.TAR,
     hp: 100,
     damageModifiers: {
       blunt: 'weak',
@@ -1074,6 +1111,7 @@ export const creatures: Creature[] = [
       }), name: 'nova', force: 100, toolTier: 2, unblockable },
       // Taunt
     ]),
+    tolerate: TOLERATE.WATER,
     hp: 10000,
 
     damageModifiers: {
@@ -1103,6 +1141,7 @@ export const creatures: Creature[] = [
       },
       // taunt
     ]),
+    tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     hp: 400,
     damageModifiers: {
       ...animalDmgModifiers,

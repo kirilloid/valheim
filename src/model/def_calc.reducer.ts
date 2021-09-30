@@ -19,7 +19,6 @@ export interface State {
     skill: number;
   };
   armor: number;
-  isWet: boolean;
   resTypes: string[];
 }
 
@@ -47,9 +46,6 @@ const changeLevel = (level: number) => ({ type: CHANGE_LEVEL, level });
 const CHANGE_ARMOR = 'CHANGE_ARMOR' as const;
 const changeArmor = (armor: number) => ({ type: CHANGE_ARMOR, armor });
 
-const CHANGE_IS_WET = 'CHANGE_IS_WET' as const;
-const changeIsWet = (isWet: boolean) => ({ type: CHANGE_IS_WET, isWet });
-
 const CHANGE_RES_TYPE = 'CHANGE_RES_TYPE' as const;
 const changeResType = (resType: string, toggle: boolean) => ({ type: CHANGE_RES_TYPE, resType, toggle });
 
@@ -62,7 +58,6 @@ export const actionCreators = {
   changeSkill,
   changeLevel,
   changeArmor,
-  changeIsWet,
   changeResType,
 };
 
@@ -89,10 +84,6 @@ export function reducer(state: State, action: Action): State {
     case CHANGE_PLAYERS: {
       const { players } = action;
       return { ...state, players };
-    }
-    case CHANGE_IS_WET: {
-      const { isWet } = action;
-      return { ...state, isWet };
     }
     case CHANGE_RES_TYPE: {
       const { resType, toggle } = action;

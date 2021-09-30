@@ -12,6 +12,7 @@ import { Index } from './view/Index';
 import { GameObject } from './view/GameObject';
 import { Location } from './view/Location';
 import { Biome } from './view/Biome';
+import { Effect } from './view/Effect';
 import { Info } from './view/Info';
 import { AttackCalc } from './view/AtkCalc';
 import { DefenseCalc } from './view/DefCalc';
@@ -35,6 +36,7 @@ function App() {
             <Route path="/obj/:id" children={<GameObject />} />
             <Route path="/loc/:id" children={<Location />} />
             <Route path="/biome/:id" children={<Biome />} />
+            <Route path="/effect/:id" children={<Effect />} />
             <Route path="/attack/:params" children={<AttackCalc />} />
             <Route path="/attack" children={<AttackCalc />} />
             <Route path="/defense/:params" children={<DefenseCalc />} />

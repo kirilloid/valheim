@@ -204,7 +204,7 @@ export function FoodPlanner() {
         .map((biome, idx) => {
           const tier = idx + 1;
           return <React.Fragment key={biome}>
-            <div className="FoodPresets__cell FoodPresets__biome">{runeTranslate({ tier, id: `ui.biome.${biome}` })}</div>
+            <div className="FoodPresets__cell FoodPresets__biome">{runeTranslate({ tier, type: 'biome', id: `ui.biome.${biome}` })}</div>
             {Object.entries(bestTypes).map(([key, fn]) => {
               const bestFood = bestFoods(tier, fn);
               return <div className="FoodPresets__cell FoodPresets__button" key={key}>

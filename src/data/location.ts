@@ -62,7 +62,6 @@ function loc(
     maxDistance = 10000,
   }: {
     type?: LocationConfig['type'],
-    boss?: EntityId,
     minAlt?: number,
     maxAlt?: number,
     minApart?: number,
@@ -267,8 +266,10 @@ export const locations: LocationConfig[] = [
   }]),
   loc(
     1, 'Eikthyrnir', ['Meadows'],
-    { type: 'altar', boss: 'Eikthyr', maxDistance: 1000 },
-    [{ subtype: '', quantity: 3, items: [], }],
+    { type: 'altar', maxDistance: 1000 },
+    [{ subtype: '', quantity: 3, items: [
+      locItem('Eikthyr'),
+    ], }],
   ),
   // BLACK FOREST
   loc(2, 'Crypt', ['BlackForest'], { type: 'dungeon', minApart: 128, }, [
@@ -448,8 +449,10 @@ export const locations: LocationConfig[] = [
   loc(2, 'Vendor_BlackForest', ['BlackForest'], {}, [{ subtype: '', quantity: 10, items: [locItem('Haldor')] }]),
   loc(
     2, 'GDKing', ['BlackForest'],
-    { type: 'altar', boss: 'gd_king', minDistance: 1000, maxDistance: 7000 },
-    [{ subtype: '', quantity: 4, items: [] }],
+    { type: 'altar', minDistance: 1000, maxDistance: 7000 },
+    [{ subtype: '', quantity: 4, items: [
+      locItem('gd_king'),
+    ] }],
   ),
   // swamp
   loc(3, 'Grave', ['Swamp'], {}, [{
@@ -591,7 +594,9 @@ export const locations: LocationConfig[] = [
   loc(3, 'Runestone_Swamps', ['Swamp'], { type: 'runestone', minApart: 128 },
     [{ subtype: '', quantity: 100, items: [] }]), // 12 random texts
   loc(3, 'Bonemass', ['Swamp'], { minDistance: 2000, minApart: 3000 }, [{
-    subtype: '', quantity: 5, items: [],
+    subtype: '', quantity: 5, items: [
+      locItem('Bonemass'),
+    ],
   }]),
   // mountain
   loc(4, 'DrakeNest', ['Mountain'], { minApart: 100, minAlt: 100 }, [{
@@ -696,8 +701,10 @@ export const locations: LocationConfig[] = [
   ]), // 13 random texts
   loc(
     4, 'DragonQueen', ['Mountain'],
-    { type: 'altar', boss: 'DragonQueen', minApart: 3000, maxDistance: 8000, minAlt: 150, maxAlt: 500 },
-    [{ subtype: '', quantity: 3, items: [], }]
+    { type: 'altar', minApart: 3000, maxDistance: 8000, minAlt: 150, maxAlt: 500 },
+    [{ subtype: '', quantity: 3, items: [
+      locItem('Dragon'),
+    ], }]
   ),
   // plains
   loc(5, 'GoblinCamp', ['Plains'], { minApart: 250 }, [{
@@ -853,8 +860,10 @@ export const locations: LocationConfig[] = [
   ]),
   loc(
     5, 'GoblinKing', ['Plains'],
-    { type: 'altar', boss: 'GoblinKing', minApart: 3000 },
-    [{ subtype: '', quantity: 4, items: [] }],
+    { type: 'altar', minApart: 3000 },
+    [{ subtype: '', quantity: 4, items: [
+      locItem('GoblinKing'),
+    ] }],
   ),
   // Ashlands
   loc(7, 'Meteorite', ['Ashlands'], {}, [{

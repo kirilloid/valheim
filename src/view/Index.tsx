@@ -24,7 +24,7 @@ export function Index() {
       <h2>{translate('ui.biomes')}</h2>
       <ul>
         {biomes.map(({ id, tier }) => <li key={id}>
-          <Link to={`/biome/${id}`}>{runeTranslate({ tier, id: `ui.biome.${id}` })}</Link>
+          <Link to={`/biome/${id}`}>{runeTranslate({ tier, type: 'biome', id: `ui.biome.${id}` })}</Link>
         </li>)}
       </ul>
     </section>

@@ -7,6 +7,7 @@ import { events } from '../data/events';
 import { preloadLanguage } from '../effects';
 import { read } from '../effects/globalState.effect';
 import { getDefaultUserLanguage } from '../effects/translation.effect';
+import { effects } from '../data/effects';
 
 type PrefixTree<T> = {
   children: Map<string, PrefixTree<T>>;
@@ -39,7 +40,7 @@ const treeNode = <T>(): PrefixTree<T> => ({
 });
 
 export type SearchEntry = {
-  type: 'obj' | 'loc' | 'biome' | 'page' | 'event';
+  type: 'obj' | 'loc' | 'biome' | 'page' | 'event' | 'effect';
   path: string;
   id: string;
   tier: number;
@@ -199,6 +200,7 @@ preloadLanguage(lang).then(dict => {
   addArray(biomes, 'biome', '/biome/', dict, id => `ui.biome.${id}`, 'ui.biome');
   addObjects(dict);
   addArray(events, 'event', '/event/', dict, id => id, 'ui.event ui.page.events.tags');
+  addArray(effects, 'effect', '/effect/', dict, id => `ui.effect.${id}`, 'ui.effect');
 });
 
 const emptyResults: SearchEntry[] = [];

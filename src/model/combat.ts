@@ -342,7 +342,6 @@ export type AttackPlayerStats = {
 
 export function attackPlayer(
   damage: DamageProfile,
-  isWet: boolean,
   resists: Partial<DamageModifiers>[],
   shieldResist: Partial<DamageModifiers> | undefined,
   armor: number,
@@ -351,8 +350,7 @@ export function attackPlayer(
 ): AttackPlayerStats {
   // TODO: optimize calculations
   const ITERATIONS = 100;
-  const mods = resists.reduce(modifyResistances, playerDamageModifiers);
-  const damageModifiers = isWet ? wetModifyResistances(mods) : mods;
+  const damageModifiers = resists.reduce(modifyResistances, playerDamageModifiers);
   const shieldMod = { ...defaultDamageModifiers, ...shieldResist };
   const skillMin = 0.75;
   const skillMax = 1;

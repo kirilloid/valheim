@@ -13,10 +13,11 @@ import { data } from '../data/itemDB';
 import { getCraftingStationId } from '../data/building';
 import { events } from '../data/events';
 import { biomes, locations } from '../data/location';
+import { effects } from '../data/effects';
 
 import { TranslationContext, Translator, useGlobalState } from '../effects';
 import { averageAttacksDamage, findDropChanceFromCreature, Materials, ShortWeaponDamage } from './helpers';
-import { Icon, ItemIcon, SkillIcon } from './Icon';
+import { EffectIcon, Icon, ItemIcon, SkillIcon } from './Icon';
 
 function first(val: number | [number, number]) {
   if (typeof val === 'number') return val;
@@ -86,6 +87,7 @@ function renderItem(entry: SearchEntry, text: string, translate: Translator, onC
     case 'loc': return <SearchLocation entry={entry} text={text} onClick={onClick} />;
     case 'biome': return <SearchBiome id={entry.id} text={text} onClick={onClick} />;
     case 'event': return <SearchEvent id={entry.id} text={text} onClick={onClick} />;
+    case 'effect': return <SearchEffect id={entry.id} text={text} onClick={onClick} />;
     default: return assertNever(entry.type);
   }
 }
@@ -105,7 +107,7 @@ function SearchLocation({ entry, text, onClick }: { entry: SearchEntry, text: st
   </div>;
 }
 
-function SearchBiome({ id, text, onClick }: { id: EntityId, text: string, onClick: React.MouseEventHandler }) {
+function SearchBiome({ id, text, onClick }: BaseSearchItemProps) {
   const biome = biomes.find(b => b.id === id);
   return biome 
     ? <Link to={`/biome/${id}`} onClick={onClick}>{text}</Link>
@@ -156,7 +158,13 @@ function ShortRecipe(props: { item: GameObject }) {
   }
 }
 
-function SearchEvent({ id, text, onClick }: { id: EntityId, text: string, onClick: React.MouseEventHandler }) {
+type BaseSearchItemProps = {
+  id: EntityId;
+  text: string;
+  onClick: React.MouseEventHandler;
+};
+
+function SearchEvent({ id, text, onClick }: BaseSearchItemProps) {
   const translate = useContext(TranslationContext);
   const event = events.find(e => e.id === id);
   return event ? <div className="SearchItem">
@@ -172,7 +180,16 @@ function SearchEvent({ id, text, onClick }: { id: EntityId, text: string, onClic
   </div> : null;
 }
 
-function SearchObject({ id, text, onClick }: { id: EntityId, text: string, onClick: React.MouseEventHandler }) {
+function SearchEffect({ id, text, onClick }: BaseSearchItemProps) {
+  const effect = effects.find(e => e.id === id);
+  return effect ? <div className="SearchItem">
+    <EffectIcon id={effect.id} size={32} />
+    {' '}
+    <Link to={`/effect/${id}`} onClick={onClick}>{text}</Link>
+  </div> : null;
+}
+
+function SearchObject({ id, text, onClick }: BaseSearchItemProps) {
   const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
   const item = data[id];

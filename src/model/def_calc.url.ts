@@ -35,14 +35,13 @@ function serializeShield(shield: ShieldConfig | undefined): string {
 
 export function serializeState(state: State): string {
   const enemy = serializeEnemy(state.enemy);
-  const wet = state.isWet ? '-wet' : '';
   const armor = state.armor ? `-armor:${state.armor}` : '';
   const shield = serializeShield(state.shield);
   const players = state.players > 1 ? `-players:${state.players}` : '';
   const resTypes = state.resTypes.length > 0
     ? `-items:${state.resTypes.map(hash => allItems.get(hash)?.items[0]?.id).filter(isNotNull).join(',')}`
     : '';
-  return `${enemy}-vs${wet}${armor}${shield}${players}${resTypes}`;
+  return `${enemy}-vs${armor}${shield}${players}${resTypes}`;
 }
 
 function parseEnemy(url?: string): State['enemy'] {
@@ -74,9 +73,9 @@ function parseShield(url?: string): ShieldConfig | undefined {
 }
 
 export function getInitialState(params?: string): State {
-  const match = params?.match(/(.*)-vs(-wet)?(?:-armor:(\d+))?(.*)?(?:-players:(\d+))?(-items:([\w,]+)?)?/);
+  const match = params?.match(/(.*)-vs(?:-armor:(\d+))?(.*)?(?:-players:(\d+))?(-items:([\w,]+)?)?/);
   if (match != null) {
-    const [, enemy, wet, armor = '0', shield, players = '1', items = ''] = match;
+    const [, enemy, armor = '0', shield, players = '1', items = ''] = match;
     const itemIds = new Set<string | undefined>(items ? items.split('') : []);
     const resTypes = [];
     for (let [resType, { items }] of allItems.entries()) {
@@ -87,7 +86,6 @@ export function getInitialState(params?: string): State {
     return {
       enemy: parseEnemy(enemy),
       players: +players,
-      isWet: !!wet,
       shield: parseShield(shield),
       armor: +armor,
       resTypes,
@@ -96,7 +94,6 @@ export function getInitialState(params?: string): State {
   return {
     enemy: defaultEnemy,
     players: 1,
-    isWet: false,
     shield: defaultShield,
     armor: 0,
     resTypes: [],

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import '../css/Creature.css';
 
-import { Creature as TCreature, NormalAttackProfile, SpawnAttackProfile } from '../types';
+import { Creature as TCreature, NormalAttackProfile, SpawnAttackProfile, TOLERATE } from '../types';
 import { dmgBonus, hpBonus, multiplyDamage } from '../model/combat';
 import { timeI2S } from '../model/utils';
 
@@ -85,7 +85,13 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
       </dl>
       <h3>{translate('ui.damageModifiers')}</h3>
       <dl>
-      <Resistances mods={creature.damageModifiers} />
+        <Resistances mods={creature.damageModifiers} />
+        {creature.tolerate & TOLERATE.WATER ? <><dt>water</dt><dd>vulnerable</dd></> : null}
+        {creature.tolerate & TOLERATE.SMOKE ? null : <><dt>smoke</dt><dd>vulnerable</dd></>}
+        {creature.tolerate & TOLERATE.TAR ? <>
+          <dt><Link to="/effect/Tarred">{translate('Tar')}</Link></dt>
+          <dd>immune</dd>
+        </> : null}
       </dl>
       {creature.attacks.length ? <div className="Creature__Attacks">
         <h3>{translate('ui.attacks')}</h3>

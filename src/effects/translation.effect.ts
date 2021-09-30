@@ -16,7 +16,7 @@ type Dictionary<T = string> = Record<string, T>;
 const langCache: Dictionary<Promise<Dictionary>> = {};
 
 export type Translator = (key: string, ...extraArgs: (string | number)[]) => string;
-export type RuneTranslator = (object: { tier: number, id: string }, ...extraArgs: (string | number)[]) => string;
+export type RuneTranslator = (object: { tier: number, type: string, id: string }, ...extraArgs: (string | number)[]) => string;
 
 export function preloadLanguage(userLang: string): Promise<Dictionary> {
   return langCache[userLang]
@@ -62,9 +62,9 @@ export function runeText(str: string): string {
 export function useRuneTranslate(): RuneTranslator {
   const translate = useContext(TranslationContext);
   const [spoiler] = useGlobalState('spoiler');
-  return useCallback(({ tier, id } : { tier: number, id: string }) => {
+  return useCallback(({ tier, type, id } : { tier: number, type: string, id: string }) => {
     return tier > spoiler
       ? runeText(id)
-      : translate(id);
+      : translate(type === 'effect' ? `ui.effect.${id}` : id);
   }, [translate, spoiler]);
 }

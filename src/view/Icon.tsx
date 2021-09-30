@@ -3,7 +3,7 @@ import { SkillType } from '../model/skills';
 import { assertNever } from '../model/utils';
 import { TranslationContext, useGlobalState } from '../effects';
 
-import type { GameObject } from '../types';
+import type { EntityId, GameObject } from '../types';
 
 type IconType = 'armor' | 'arrow' | 'creature' | 'weapon' | 'piece' | 'skills' | 'resource' | 'icon' | 'transport';
 
@@ -69,6 +69,15 @@ type ItemIconProps = {
   className?: string;
 }
 
+export function EffectIcon(props: { id: EntityId; size?: number }) {
+  const { id, size = 32 } = props;
+  const path = `/icons/effect/${id}`;
+  return <picture>
+    <source srcSet={`${path}.webp`} type="image/webp" />
+    <img className="icon" src={`${path}.png`} width={size} height={size} />
+  </picture>;
+}
+
 export function ItemIcon(props: ItemIconProps) {
   const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
@@ -94,7 +103,7 @@ export function ItemIcon(props: ItemIconProps) {
     />
   }
   const path = iconPath(item);
-  return <picture key={id}>
+  return <picture>
     <source srcSet={`${path}.webp`} type="image/webp" />
     <img
       className={'icon ' + (props.className ?? '')}
