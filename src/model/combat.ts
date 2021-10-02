@@ -312,8 +312,8 @@ export function attackCreature(
       singleHit * skillMax * multiplier * backstabBonus,
     ],
     averageHit: [
-      (damageFixed * skillMin + overTimeTotal) * multiplier / comboTotal,
-      (damageFixed * skillMax + overTimeTotal) * multiplier / comboTotal,
+      (damageFixed * comboTotal * skillMin + overTimeTotal) * multiplier / times.length,
+      (damageFixed * comboTotal * skillMax + overTimeTotal) * multiplier / times.length,
     ],
     dpSec,
     dpSta,
