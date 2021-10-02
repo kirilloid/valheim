@@ -8,8 +8,6 @@ import { creatures } from '../data/creatures';
 
 export const shields = items.filter(i => !i.disabled && i.type === 'shield') as Shield[];
 
-export const defaultCreature = creatures.find(c => c.id === 'Greyling')!;
-
 function resistHash(mods: Partial<DamageModifiers>) {
   return Object.entries(mods)
     .sort((a, b) => a[0].localeCompare(b[0]) || a[1]!.localeCompare(b[1]!))

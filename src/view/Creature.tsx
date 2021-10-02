@@ -46,7 +46,10 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
   const dropGlobalScale = 2 ** (level - 1);
   const [sid, snr] = getSummon(id) ?? ['', 0];
   const totalVarietyRates = creature.attacks.reduce((t, a) => t + a.rate, 0);
-  const locations = [...creature.locations, ...(objectLocationMap[creature.id] ?? [])];
+  const locations = [
+    ...new Set(creature.spawners.flatMap(s => s.biomes)),
+    ...(objectLocationMap[creature.id] ?? [])
+  ];
   return (<>
     <ItemHeader item={creature} >
       {creature.maxLvl > 1

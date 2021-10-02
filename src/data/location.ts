@@ -302,7 +302,7 @@ export const locations: LocationConfig[] = [
       quantity: 200,
       items: [
         locItem('Greydwarf', 1, 5),
-        locItem('GreydwarfShaman', 1, 1),
+        locItem('Greydwarf_Shaman', 1, 1),
         locItem('Crow', 1, 2),
         /*
         locItem('stone_wall_2x1', 1, 16),
@@ -472,7 +472,7 @@ export const locations: LocationConfig[] = [
         locItem('Vegvisir', 0.3), // Vegvisir_Bonemass
         locItem('TreasureChest_swamp', 0.251),
         locItem('Draugr', 0.5, 2),
-        locItem('DraugrElite', 0.321),
+        locItem('Draugr_Elite', 0.321),
         locItem('Spawner_DragurPile', 0.321),
         locItem('Crow', 1, 2),
       ],
@@ -484,7 +484,7 @@ export const locations: LocationConfig[] = [
         locItem('Vegvisir', 0.3), // Vegvisir_Bonemass
         locItem('TreasureChest_swamp', 0.251),
         locItem('Draugr', 0.5, 2),
-        locItem('DraugrElite', 0.321),
+        locItem('Draugr_Elite', 0.321),
         locItem('Spawner_DragurPile', 0.321),
         locItem('piece_groundtorch_green'),
         locItem('Crow', 1, 2),
@@ -556,7 +556,7 @@ export const locations: LocationConfig[] = [
     subtype: '1',
     quantity: 25,
     items: [
-      locItem('DraugrElite', 0.321, 2),
+      locItem('Draugr_Elite', 0.321, 2),
       locItem('piece_groundtorch_green', 1, 1),
     ],
   }]),
@@ -1042,7 +1042,7 @@ for (const { id, grow } of resources) {
 }
 
 for (const creature of creatures) {
-  for (const loc of creature.locations) {
+  for (const loc of new Set(creature.spawners.flatMap(s => s.biomes))) {
     const items = creature.drop.map(d => d.item);
     addToLocation(loc, items, [creature], []);
   }

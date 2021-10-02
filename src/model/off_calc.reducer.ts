@@ -75,8 +75,6 @@ export const defaultWeapon: WeaponConfig = {
   arrow: arrows[1]!,
 };
 
-export const defaultCreature = creatures.find(c => c.id === 'Greyling')!;
-
 export function reducer(state: State, action: Action): State {
   switch (action.type) {
     case CHANGE_CREATURE: {

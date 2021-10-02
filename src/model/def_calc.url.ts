@@ -1,14 +1,14 @@
 import type { State } from './def_calc.reducer';
-import { allItems, defaultCreature, shields } from './def_calc.items';
+import { allItems, shields } from './def_calc.items';
 import type { ShieldConfig } from './combat';
 import { isNotNull } from './utils';
 
-import { locationToBiome } from '../data/location';
 import { creatures } from '../data/creatures';
+import { defaultCreature, creatureBiome } from '../data/combat_creatures';
 
 const defaultEnemy = {
   creature: defaultCreature,
-  biome: locationToBiome(defaultCreature.locations[0]!),
+  biome: creatureBiome(defaultCreature),
   stars: 0,
   variety: 0,
 };
@@ -53,7 +53,7 @@ function parseEnemy(url?: string): State['enemy'] {
   const variety = Math.max(creature.attacks.findIndex(a => a.variety === varietyName), 0);
   return {
     creature,
-    biome: locationToBiome(creature.locations[0]!),
+    biome: creatureBiome(creature),
     variety,
     stars: Math.min(+stars, creature.maxLvl - 1),
   }

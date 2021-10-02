@@ -1,7 +1,8 @@
 import type { WeaponConfig } from './combat';
-import { State, CombatStat, defaultCreature, defaultWeapon, enabledItems } from './off_calc.reducer';
+import { State, CombatStat, defaultWeapon, enabledItems } from './off_calc.reducer';
 import { arrows } from '../data/arrows';
 import { creatures } from '../data/creatures';
+import { defaultCreature, creatureBiome } from '../data/combat_creatures';
 import { locationToBiome } from '../data/location';
 
 function serializeWeapon(weapon: WeaponConfig): string {
@@ -43,16 +44,18 @@ export function getInitialState(params: string | undefined): State {
   
   const isWet = match[1] != null;
   const backstab = match[2] != null;
-  const [,,, creature, stat] = match;
+  const [,,, creatureId, stat] = match;
   const weaponsStr = params.slice(match[0]!.length);
   const weapons = weaponsStr.split('-or-').map(parseWeapon) ?? [];
   if (weapons.length === 0) {
     weapons.push(defaultWeapon);
   }
+  const creature = creatures.find(c => c.id === creatureId) ?? defaultCreature;
+
   return {
     weapons,
-    creature: creatures.find(c => c.id === creature) ?? defaultCreature,
-    biome: locationToBiome(defaultCreature.locations[0]!),
+    creature,
+    biome: creatureBiome(creature),
     backstab,
     isWet,
     stat: stat as CombatStat,

@@ -38,7 +38,7 @@ export const events: GameEvent[] = [
         interval: 5,
       },
       {
-        id: 'GreydwarfShaman',
+        id: 'Greydwarf_Shaman',
         max: 1,
         interval: 5,
       },

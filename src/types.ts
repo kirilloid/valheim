@@ -1,4 +1,5 @@
-import { SkillType } from "./model/skills";
+import type { EnvId } from './data/env';
+import { SkillType } from './model/skills';
 
 export type EntityId = string;
 
@@ -240,6 +241,31 @@ export const TOLERATE = {
   TAR: 8,
 };
 
+export interface SpawnerConfig {
+  tier: number;
+  biomes: Biome[];
+  biomeAreas: number;
+  // counts number of spawned in loaded zones (5x5)
+  maxSpawned: number;
+  // passed time is divided by interval and rounded down
+  interval: number;
+  // checked on every attempt
+  chance: number;
+  distance: number;
+  radius: Pair<number>; // default is [40, 80]
+  killed: EntityId | undefined;
+  envs: EnvId[];
+  groupSize: Pair<number>;
+  groupRadius: number;
+  night: boolean | undefined;
+  altitude: Pair<number>;
+  tilt: Pair<number>;
+  forest: boolean | undefined;
+  offset: number;
+  levels: Pair<number>;
+  minDistance: number;
+}
+
 export interface Creature extends GameObjectBase {
   type: 'creature';
   emoji: string;
@@ -247,7 +273,7 @@ export interface Creature extends GameObjectBase {
   upgradeDistance?: number;
   nightOnly?: true;
   faction: Faction;
-  locations: Biome[];
+  spawners: SpawnerConfig[];
   tolerate: number;
   hp: number;
   stagger?: {

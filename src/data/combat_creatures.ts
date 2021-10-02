@@ -16,7 +16,10 @@ export const groupedCreatures: Record<Biome, Creature[]> = {
 
 for (const creature of creatures) {
   if (creature.hp === 1) continue;
-  const biomes = [...creature.locations, ...(objectLocationMap[creature.id] ?? []).map(locationToBiome)];
+  const biomes = [
+    ...new Set(creature.spawners.flatMap(s => s.biomes)),
+    ...(objectLocationMap[creature.id] ?? []).map(locationToBiome)
+  ];
   for (const biome of biomes) {
     const group = groupedCreatures[biome];
     if (group && !group.includes(creature)) {
@@ -25,3 +28,5 @@ for (const creature of creatures) {
   }
 }
 
+export const defaultCreature = creatures.find(c => c.id === 'Greyling')!;
+export const creatureBiome = (creature: Creature) => creature.spawners[0]?.biomes[0] ?? locationToBiome(objectLocationMap[creature.id]?.[0]!);
