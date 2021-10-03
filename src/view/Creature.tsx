@@ -54,11 +54,11 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
   return (<>
     <ItemHeader item={creature} >
       {maxLvl(creature) > 1
-      ? <div className="Creature__Stars">
+      ? <div className="Switch Creature__Stars">
           {Array.from({ length: maxLvl(creature) }).map((_, stars) => 
             level === stars + 1
-              ? <span key={stars} className="Creature__Star Creature__Star--selected">{stars}⭐</span>
-              : <Link key={stars} className="Creature__Star" to={`/obj/${id}/${stars + 1}`} replace={true}>{stars}⭐</Link>
+              ? <span key={stars} className="Switch__Option Creature__Star Switch__Option--selected Creature__Star--selected">{stars}⭐</span>
+              : <Link key={stars} className="Switch__Option Creature__Star" to={`/obj/${id}/${stars + 1}`} replace={true}>{stars}⭐</Link>
           )}
         </div>
       : null}

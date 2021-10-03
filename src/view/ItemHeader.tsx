@@ -11,9 +11,9 @@ export function ItemHeader({ item, children }: { item: GameObject, children?: Re
   const runeTranslate = useRuneTranslate();
   const group = item.group && groups[item.group];
   return <>
-    {item.disabled && <div className="info">{translate('ui.onlyWithCheats')}</div>}
-    {item.season && <div className="info">{translate('ui.onlyInSeason', translate(`ui.onlyInSeason.${item.season}`))}</div>}
-    {item.dlc ? <div className="info">{translate('ui.onlyInDLC', item.dlc)}</div> : null}
+    {item.disabled && <div className="info" role="banner">{translate('ui.onlyWithCheats')}</div>}
+    {item.season && <div className="info" role="banner">{translate('ui.onlyInSeason', translate(`ui.onlyInSeason.${item.season}`))}</div>}
+    {item.dlc ? <div className="info" role="banner">{translate('ui.onlyInDLC', item.dlc)}</div> : null}
     <h1>
       <ItemIcon item={item} />
       {' '}

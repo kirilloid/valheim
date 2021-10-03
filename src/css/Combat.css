@@ -72,11 +72,6 @@
 .StatBar {
   font-size: 1.25em;
   border: 1px solid black;
-  background-image: url('../img/bar_gradient_40.png');
-  background-color: white;
-  background-repeat: repeat-x;
-  background-blend-mode: overlay;
-  background-size: 1px 32px;
   padding: 0 0.25em;
   box-sizing: border-box;
   white-space: nowrap;

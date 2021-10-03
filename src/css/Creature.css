@@ -1,20 +1,7 @@
 .Creature__Stars {
   font-family: sans-serif;
-  display: inline-flex;
   float: right;
   font-size: 1rem;
-}
-
-.Creature__Star {
-  padding: 4px 6px;
-}
-a.Creature__Star {
-  text-decoration: none;
-}
-
-.Creature__Star--selected {
-  font-weight: bold;
-  border-bottom: 2px solid silver;
 }
 
 .Creature__Attacks {

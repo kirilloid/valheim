@@ -8,21 +8,21 @@ const disabled = true;
 export const animations: Record<AttackAnimation, number[]> = {
   swing_pickaxe: [1.4], // verified
   spear_throw: [1.57],
-  spear_poke: [0.67],
+  spear_poke: [0.68],
   throw_bomb: [0.95],
-  knife_stab: [0.88, 0.54, 0.62], // verified sum
-  knife_secondary: [1.72], // ~1.6?
-  swing_axe: [0.73, 0.69, 1.12], // 0.56, 1.30, 2.00    4.20, 4.93, 5.46, 6.50   1.26, 2.13, 2.83, 4.00
+  knife_stab: [0.6, 0.44, 0.7],
+  knife_secondary: [1.52],
+  swing_axe: [0.78, 0.7, 1.12], // 0.56, 1.30, 2.00    4.20, 4.93, 5.46, 6.50   1.26, 2.13, 2.83, 4.00
   unarmed_attack: [0.76, 0.76],
   unarmed_kick: [1.51],
-  swing_sledge: [2.23],
-  swing_longsword: [1.02, 0.68, 0.76],
+  swing_sledge: [2.12], // 2.23
+  swing_longsword: [1.14, 0.44, 0.88],
   sword_secondary: [1.84],
   mace_secondary: [1.72],
-  battleaxe_attack: [1.82, 0.92, 0.7],
-  battleaxe_secondary: [0.94],
+  battleaxe_attack: [1.58, 0.92, 0.7],
+  battleaxe_secondary: [0.84],
   atgeir_attack: [0.84, 0.86, 1.28],
-  atgeir_secondary: [1.74],
+  atgeir_secondary: [1.54],
   bow_fire: [0.83],
 };
 // bow_aim_recoil: 21

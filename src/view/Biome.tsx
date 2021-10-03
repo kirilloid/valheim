@@ -116,15 +116,15 @@ export function Biome() {
         <h2>{translate('ui.mining')}</h2>
         <div className="multiList">
           <div>
-            <h3>unique</h3>
+            <h3>{translate('ui.mineType.miscs')}</h3>
             <ResourceList list={resources.misc} />
           </div>
           <div>
-            <h3>{translate('ui.trees')}</h3>
+            <h3>{translate('ui.mineType.trees')}</h3>
             <ResourceList list={resources.tree} />
           </div>
           <div>
-            <h3>{translate('ui.rocks')}</h3>
+            <h3>{translate('ui.mineType.rocks')}</h3>
             <ResourceList list={resources.rock} />
           </div>
         </div>

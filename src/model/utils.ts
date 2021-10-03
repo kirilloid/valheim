@@ -41,6 +41,13 @@ export const assertNever = (x: never): never => {
 
 export const isNotNull = <T>(arg: T): arg is NonNullable<T> => arg != null;
 
+export function filterValues<K extends string, T, RK extends K = K>(obj: Record<K, T>, fn: (arg: T, key: K) => boolean): Record<RK, T> {
+  return Object.fromEntries(
+    Object.entries(obj)
+      .filter(([key, val]) => [key, fn(val as T, key as K)])
+  ) as Record<RK, T>;
+}
+
 export function mapValues<K extends string, T, R = T>(obj: Record<K, T>, fn: (arg: T, key: K) => R): Record<K, R>;
 export function mapValues<K extends string, T, R = T>(obj: Partial<Record<K, T>>, fn: (arg: T, key: K) => R): Partial<Record<K, R>>;
 export function mapValues<K extends string, T, R = T>(obj: Partial<Record<K, T>>, fn: (arg: T, key: K) => R): Partial<Record<K, R>> {
@@ -50,11 +57,48 @@ export function mapValues<K extends string, T, R = T>(obj: Partial<Record<K, T>>
   ) as Record<K, R>;
 }
 
-export function groupBy<T, K extends string = string>(arr: T[], fn: (arg: T) => K): Record<K, T[]> {
-  const result = {} as Record<K, T[]>;
+export function groupBy<T, K extends string = string, R = T>(arr: T[], keyFn: (arg: T) => K, valFn: (arg: T) => R): Record<K, R[]>;
+export function groupBy<T, K extends string = string>(arr: T[], keyFn: (arg: T) => K): Record<K, T[]>;
+export function groupBy<T, K extends string = string, R = T>(
+  arr: T[],
+  keyFn: (arg: T) => K,
+  valFn?: (arg: T) => R,
+): Record<K, R[]> {
+  const result = {} as Record<K, R[]>;
   for (const el of arr) {
-    const key = fn(el);
-    (result[key] ?? (result[key] = [])).push(el);
+    const key = keyFn(el);
+    (result[key] ?? (result[key] = [])).push((valFn ? valFn(el) : el) as R);
   }
+  return result;
+}
+
+export class StatCounter {
+  _min = 1e9;
+  _max = -1e9;
+  _total = 0;
+  _num = 0;
+  add(val: number) {
+    this._min = Math.min(this._min, val);
+    this._max = Math.max(this._max, val);
+    this._total += val;
+    this._num++;
+  }
+  get min() {
+    return this._min;
+  }
+  get max() {
+    return this._max;
+  }
+  get avg() {
+    return this._total / this._num;
+  }
+}
+
+export function addStatCounters(a: StatCounter, b: StatCounter): StatCounter {
+  const result = new StatCounter();
+  result._min = Math.min(a._min, b._min);
+  result._max = Math.max(a._max, b._max);
+  result._total = a._total + b._total;
+  result._num = a._num + b._num;
   return result;
 }

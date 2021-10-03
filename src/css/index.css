@@ -79,6 +79,21 @@ label {
   cursor: default;
 }
 
+.Switch {
+  display: inline-flex;
+}
+.Switch__Option {
+  padding: 4px 6px;
+}
+a.Switch__Option {
+  text-decoration: none;
+}
+
+.Switch__Option--selected {
+  font-weight: bold;
+  border-bottom: 2px solid silver;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }

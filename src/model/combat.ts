@@ -13,10 +13,9 @@ import {
   Shield,
   Weapon,
 } from '../types';
-import { addStatCounters, StatCounter } from '../view/helpers';
 import { effects } from '../data/effects';
 import { animations } from '../data/weapons';
-import { lerp, mapValues } from './utils';
+import { addStatCounters, StatCounter, lerp, mapValues } from './utils';
 import { FRAME } from './game';
 
 function applyArmorTotal(damage: number, armor: number): number {

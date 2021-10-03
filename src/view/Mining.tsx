@@ -1,20 +1,55 @@
 import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 
-import type { EntityId, Pair, PhysicalObject, Weapon } from '../types';
+import type { DamageModifiers, EntityId, Pair, PhysicalObject, Weapon } from '../types';
 import { applyDamageModifiers, getTotalDamage, getWeaponSkillFactor } from '../model/combat';
+import { assertNever, filterValues, groupBy, mapValues } from '../model/utils';
+
 import { objects as objects } from '../data/objects';
+import { objectLocationMap } from '../data/location';
 import { axes as allAxes, pickaxes as allPickaxes } from '../data/weapons';
 
 import { TranslationContext, useGlobalState } from '../effects';
-import { ItemIcon } from './Icon';
-import { assertNever } from '../model/utils';
+import { ItemIcon, SkillIcon } from './Icon';
+import { filter } from 'lodash-es';
+import { SkillType } from '../model/skills';
 
-const destructibles = objects.filter(obj => obj.destructible);
-const objectMap = Object.fromEntries(destructibles.map(t => [t.id, t]));
+const objectMap: Record<EntityId, PhysicalObject> = {};
+const objectTypes = ['tree', 'ore', 'rock', 'misc'] as const;
+type ObjectType = typeof objectTypes[number];
 
-const trees = destructibles.filter(obj => obj.destructible?.damageModifiers.chop !== 'immune');
-const rocks = destructibles.filter(obj => obj.destructible?.damageModifiers.pickaxe !== 'immune');
+function getObjectType(obj: PhysicalObject): ObjectType | undefined {
+  switch (obj.subtype) {
+    case 'tree': return 'tree';
+    case 'ore': return 'ore';
+    case 'rock': return 'rock';
+    default: {
+      const mods = obj.destructible?.damageModifiers ?? ({} as Partial<DamageModifiers>);
+      const grouped = groupBy(Object.entries(mods), p => p[1] ?? '', p => p[0]);
+      return ((grouped.immune?.length ?? 0) >= 8) ? 'misc' : undefined;
+    }
+  }
+}
+
+const root: Record<ObjectType, Record<EntityId, [PhysicalObject, number][]>> = {
+  tree: {},
+  ore: {},
+  rock: {},
+  misc: {},
+};
+
+for (const obj of objects) {
+  if (!obj.destructible) continue;
+  objectMap[obj.id] = obj;
+}
+for (const obj of objects) {
+  if (!obj.destructible) continue;
+  if (!obj.grow?.length && !objectLocationMap[obj.id]?.length) continue;
+  const type = getObjectType(obj);
+  if (type) {
+    root[type][obj.id] = [...walk(obj, 1)];
+  }
+}
 
 function* walk(item: PhysicalObject, mul: number): Generator<[PhysicalObject, number]> {
   if (Number.isFinite(item.destructible?.hp)) {
@@ -24,18 +59,6 @@ function* walk(item: PhysicalObject, mul: number): Generator<[PhysicalObject, nu
     yield* walk(objectMap[part.id]!, part.num * mul);
   }
 }
-
-const rootTrees = Object.fromEntries(
-  trees
-    .filter(tree => tree.grow?.length)
-    .map(tree => [tree.id, [...walk(tree, 1)].filter(pair => !pair[0].id.endsWith('Stub'))])
-);
-
-const rootRocks = Object.fromEntries(
-  rocks
-    .filter(rock => rock.grow?.length)
-    .map(rock => [rock.id, [...walk(rock, 1)]])
-);
 
 type MineStats = {
   hits: Pair<number>;
@@ -68,26 +91,116 @@ function getHits(objs: [PhysicalObject, number][], tool: Weapon, skill: number):
 
 function showStat(stats: MineStats | undefined, stat: MineStat) {
   if (stats == null) return null;
+  const { hits, stamina } = stats;
   switch (stat) {
     case 'hits':
-      return `${stats.hits[0]}-${stats.hits[1]}`;
+      return hits[0] === hits[1] ? String(hits[0]) : `${hits[0]}–${hits[1]}`;
     case 'stamina':
-      return stats.stamina;
+      return stamina;
     default:
       return assertNever(stat);
   }
 }
 
-function MiningTable({ header, tools, destructibles }: { header: string; tools: Weapon[]; destructibles: Record<EntityId, [PhysicalObject, number][]> }) {
+function MiningTable({ id, tools, destructibles, skill, stat, onSetStat }: {
+  id: string;
+  tools: Weapon[];
+  destructibles: Record<EntityId, [PhysicalObject, number][]>;
+  skill: number;
+  stat: MineStat;
+  onSetStat: (stat: MineStat) => void;
+}) {
+  const translate = useContext(TranslationContext);
+  return <section>
+    <table width="100%" id={id}>
+      <thead>
+        <tr>
+          <td>
+            <select value={stat} onChange={e => onSetStat(e.target.value as MineStat)}>
+              <option value="hits">hits</option>
+              <option value="stamina">stamina</option>
+            </select>
+          </td>
+          <td>{translate('ui.healthStructure')}</td>
+          {tools.map(a => <td key={a.id}>
+            <ItemIcon item={a} size={32} />
+          </td>)}
+        </tr>
+      </thead>
+      <tbody>
+        {Object.entries(destructibles)
+          .map(([id, objs]) => <tr key={id}>
+            <td><Link to={`/obj/${id}`}>{translate(id)}</Link></td>
+            <td>{objs.reduce((totalHp, [obj, num]) => totalHp + (obj.destructible?.hp ?? 0) * num, 0)}</td>
+            {tools.map(tool => <td key={tool.id}>
+              {showStat(getHits(objs, tool, skill), stat)}
+            </td>
+            )}
+          </tr>)
+        }
+      </tbody>
+    </table>
+  </section>
+}
+
+function parseObjectType(type?: string): ObjectType {
+  return objectTypes.includes(type as ObjectType)
+    ? type as ObjectType
+    : 'tree';
+}
+ 
+function parseMiningStat(stat?: string): MineStat {
+  switch (stat) {
+    case 'hits':
+    case 'stamina':
+      return stat;
+    default:
+      return 'hits';
+  }
+}
+
+export function Mining() {
   const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
+  const history = useHistory();
+  const { objectType: urlObjectType, stat: urlStat } = useParams<{ objectType?: string, stat?: string }>();
+  const objectType = parseObjectType(urlObjectType);
   const [skill, setSkill] = useState(0);
-  const [stat, setStat] = useState<MineStat>('stamina');
-  const availableTools = tools.filter(a => a.tier <= spoiler);
-  return <section>
-    <h2>{header}</h2>
+  const [stat, setStat] = useState<MineStat>(parseMiningStat(urlStat));
+  const path = `/mining/${objectType}/${stat}`;
+  if (history.location.pathname !== path) {
+    history.replace(path);
+  }
+  const destructibles = Object.fromEntries(objectTypes.map(type => [type, {}])) as typeof root;
+  for (const type of objectTypes) {
+    const copy: typeof root[ObjectType] = {};
+    for (const [key, objs] of Object.entries(root[type])) {
+      const newObjs = objs.filter(pair => pair[0].tier <= spoiler);
+      if (newObjs.length) copy[key] = newObjs;
+    }
+    destructibles[type] = copy;
+  }
+  return (<>
+    <h1>{translate('ui.mining')}</h1>
+    <div className="Switch" role="tablist">
+      {objectTypes
+        .filter(type => Object.keys(destructibles[type]).length)
+        .map(type => objectType === type
+          ? <span key={type} className="Switch__Option Switch__Option--selected"
+              role="tab" aria-selected="true" aria-controls={type}>
+              {translate(`ui.mineType.${type}s`)}
+            </span>
+          : <Link key={type} className="Switch__Option" to={`/mining/${type}/${stat}`}
+              role="tab" aria-selected="false">
+              {translate(`ui.mineType.${type}s`)}
+            </Link>
+        )
+      }
+    </div>
     <div>
       <label>
+        <SkillIcon skill={objectType === 'tree' ? SkillType.WoodCutting : SkillType.Pickaxes} useAlt />
+        {' '}
         {translate('ui.skill')}:
         {' '}
         <input type="range"
@@ -99,38 +212,13 @@ function MiningTable({ header, tools, destructibles }: { header: string; tools: 
           style={{ width: '3em' }} />
       </label>
     </div>
-    <table width="100%">
-      <thead>
-        <tr>
-          <td>
-            <select value={stat} onChange={e => setStat(e.target.value as MineStat)}>
-              <option value="hits">hits</option>
-              <option value="stamina">stamina</option>
-            </select>
-          </td>
-          {availableTools.map(a => <td key={a.id}>
-            <ItemIcon item={a} size={32} />
-          </td>)}
-        </tr>
-      </thead>
-      <tbody>
-        {Object.entries(destructibles).map(([id, objs]) => <tr key={id}>
-          <td><Link to={`/obj/${id}`}>{translate(id)}</Link></td>
-          {availableTools.map(a => <td key={a.id}>
-            {showStat(getHits(objs, a, skill), stat)}
-          </td>
-          )}
-        </tr>)}
-      </tbody>
-    </table>
-  </section>
-}
-
-export function Mining() {
-  const translate = useContext(TranslationContext);
-  return (<>
-    <h1>{translate('ui.mining')}</h1>
-    <MiningTable header={translate('ui.trees')} tools={allAxes} destructibles={rootTrees} />
-    <MiningTable header={translate('ui.rocks')} tools={allPickaxes} destructibles={rootRocks} />
+    <MiningTable
+      id={objectType}
+      tools={(objectType === 'tree' ? allAxes : allPickaxes).filter(a => a.tier <= spoiler)}
+      destructibles={destructibles[objectType]}
+      skill={skill}
+      stat={stat}
+      onSetStat={setStat}
+    />
   </>);
 }

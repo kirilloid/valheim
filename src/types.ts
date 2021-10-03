@@ -316,7 +316,7 @@ export interface Plantable {
 
 export type PhysicalObject = GameObjectBase & {
   type: 'object';
-  subtype: 'tree' | 'plant' | 'rock' | 'indestructible';
+  subtype: 'tree' | 'plant' | 'rock' | 'ore' | 'indestructible' | 'misc';
   destructible?: Destructible;
   drop?: GeneralDrop[];
   grow?: ItemGrow[];
