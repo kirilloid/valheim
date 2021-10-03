@@ -55,7 +55,6 @@ const loxDamageModifiers: DamageModifiers = {
   spirit: 'immune',
 };
 
-const nightOnly = true;
 const unblockable = true;
 const undodgeable = true;
 
@@ -71,7 +70,7 @@ function spawner(config: {
   interval: number;
   chance: number;
   distance?: number;
-  radius?: Pair<number>; // default is [40, 80]
+  radius?: Pair<number>;
   killed?: EntityId;
   envs?: EnvId[];
   groupSize?: Pair<number>;
@@ -103,6 +102,10 @@ function spawner(config: {
   };
 }
 
+export const maxLvl = (creature: Creature) => {
+  return creature.spawners.reduce((l, s) => Math.max(l, s.levels[1]), 1);
+};
+
 export const creatures: Creature[] = [
 // MEADOWS
   {
@@ -110,7 +113,6 @@ export const creatures: Creature[] = [
     id: 'Deer',
     tags: ['animal'],
     tier: 1,
-    maxLvl: 3,
     emoji: '🦌',
     faction: 'ForestMonsters',
     spawners: [spawner({
@@ -141,7 +143,6 @@ export const creatures: Creature[] = [
     id: 'Seagal',
     tags: ['fly'],
     tier: 1,
-    maxLvl: 1,
     emoji: '🦆',
     faction: 'ForestMonsters',
     spawners: [spawner({
@@ -167,7 +168,6 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Greyling',
     tier: 1,
-    maxLvl: 1,
     emoji: '🐀',
     faction: 'ForestMonsters',
     spawners: [spawner({
@@ -197,7 +197,6 @@ export const creatures: Creature[] = [
     id: 'Neck',
     tags: ['animal'],
     tier: 1,
-    maxLvl: 3,
     upgradeDistance: 800,
     emoji: '🦎',
     faction: 'ForestMonsters',
@@ -242,7 +241,6 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Fish',
     tier: 1,
-    maxLvl: 3,
     emoji: '🐟',
     faction: 'ForestMonsters',
     spawners: [spawner({
@@ -300,7 +298,6 @@ export const creatures: Creature[] = [
     id: 'Boar',
     tags: ['animal'],
     tier: 1,
-    maxLvl: 3,
     upgradeDistance: 800,
     emoji: '🐗',
     faction: 'ForestMonsters',
@@ -339,7 +336,6 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Eikthyr',
     tier: 1,
-    maxLvl: 1,
     emoji: '🦌',
     faction: 'Boss',
     spawners: [],
@@ -363,7 +359,6 @@ export const creatures: Creature[] = [
     id: 'Crow',
     tags: ['fly'],
     tier: 2,
-    maxLvl: 1,
     emoji: '🐦',
     faction: 'ForestMonsters',
     spawners: [],
@@ -379,7 +374,6 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Skeleton',
     tier: 2,
-    maxLvl: 3,
     emoji: '💀',
     faction: 'Undead',
     spawners: [spawner({
@@ -422,7 +416,6 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Skeleton_Poison', // Rancid Remains
     tier: 2,
-    maxLvl: 3,
     emoji: '☠️',
     faction: 'Undead',
     spawners: [],
@@ -447,7 +440,6 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Ghost',
     tier: 2,
-    maxLvl: 1,
     emoji: '👻',
     faction: 'Undead',
     spawners: [],
@@ -473,7 +465,6 @@ export const creatures: Creature[] = [
     group: 'gray',
     id: 'Greydwarf',
     tier: 2,
-    maxLvl: 3,
     emoji: '',
     faction: 'ForestMonsters',
     spawners: [spawner({
@@ -540,8 +531,6 @@ export const creatures: Creature[] = [
     group: 'gray',
     id: 'Greydwarf_Shaman',
     tier: 2,
-    maxLvl: 3,
-    nightOnly,
     emoji: '',
     faction: 'ForestMonsters',
     spawners: [spawner({
@@ -579,7 +568,6 @@ export const creatures: Creature[] = [
     group: 'gray',
     id: 'Greydwarf_Elite',
     tier: 2,
-    maxLvl: 3,
     upgradeDistance: 2000,
     emoji: '',
     faction: 'ForestMonsters',
@@ -626,7 +614,6 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Troll',
     tier: 2,
-    maxLvl: 3,
     upgradeDistance: 2000,
     emoji: '',
     faction: 'ForestMonsters',
@@ -678,7 +665,6 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'gd_king', // the elder
     tier: 2,
-    maxLvl: 1,
     emoji: '🥦',
     faction: 'Boss',
     spawners: [],
@@ -706,7 +692,6 @@ export const creatures: Creature[] = [
     disabled: true,
     id: 'TentaRoot', // from the elder
     tier: 2,
-    maxLvl: 1,
     emoji: '🥦',
     faction: 'Boss',
     spawners: [],
@@ -729,7 +714,6 @@ export const creatures: Creature[] = [
     group: 'blob',
     id: 'Blob',
     tier: 3,
-    maxLvl: 1,
     emoji: '🦠',
     faction: 'Undead',
     spawners: [spawner({
@@ -758,8 +742,6 @@ export const creatures: Creature[] = [
     group: 'blob',
     id: 'BlobElite',
     tier: 3,
-    maxLvl: 1,
-    nightOnly,
     emoji: '🦠',
     faction: 'Undead',
     spawners: [spawner({
@@ -789,7 +771,6 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Leech',
     tier: 3,
-    maxLvl: 3,
     emoji: '🧛',
     faction: 'Undead',
     spawners: [spawner({
@@ -823,7 +804,6 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Surtling',
     tier: 3,
-    maxLvl: 3,
     emoji: '🧨',
     faction: 'Demon',
     spawners: [spawner({
@@ -863,8 +843,6 @@ export const creatures: Creature[] = [
     id: 'Wraith',
     tags: ['fly'],
     tier: 3,
-    maxLvl: 1,
-    nightOnly,
     emoji: '👻',
     faction: 'Undead',
     spawners: [spawner({
@@ -908,7 +886,6 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Draugr',
     tier: 3,
-    maxLvl: 3,
     emoji: '🧟',
     faction: 'Undead',
     spawners: [spawner({
@@ -961,8 +938,6 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Draugr_Elite',
     tier: 3,
-    maxLvl: 1,
-    nightOnly,
     emoji: '🧟',
     faction: 'Undead',
     spawners: [spawner({
@@ -998,7 +973,6 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Bonemass',
     tier: 3,
-    maxLvl: 1,
     emoji: '🦠',
     faction: 'Boss',
     spawners: [],
@@ -1035,7 +1009,6 @@ export const creatures: Creature[] = [
     id: 'Wolf',
     tags: ['animal'],
     tier: 4,
-    maxLvl: 3,
     emoji: '🐺',
     faction: 'MountainMonsters',
     spawners: [spawner({
@@ -1090,8 +1063,6 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Fenring',
     tier: 4,
-    maxLvl: 1,
-    nightOnly,
     emoji: '🐺',
     faction: 'MountainMonsters',
     spawners: [spawner({
@@ -1129,7 +1100,6 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'StoneGolem',
     tier: 4,
-    maxLvl: 1,
     emoji: '🗿',
     faction: 'ForestMonsters',
     spawners: [spawner({
@@ -1206,7 +1176,6 @@ export const creatures: Creature[] = [
     id: 'Hatchling', // drake
     tags: ['animal', 'fly'],
     tier: 4,
-    maxLvl: 1,
     emoji: '🐉',
     faction: 'MountainMonsters',
     spawners: [spawner({
@@ -1241,7 +1210,6 @@ export const creatures: Creature[] = [
     id: 'Dragon',
     tags: ['fly'],
     tier: 4,
-    maxLvl: 1,
     emoji: '🐲',
     faction: 'Boss',
     spawners: [],
@@ -1288,7 +1256,6 @@ export const creatures: Creature[] = [
     group: 'goblin',
     id: 'Goblin', // Fulling
     tier: 5,
-    maxLvl: 3,
     emoji: '',
     faction: 'PlainsMonsters',
     spawners: [spawner({
@@ -1348,7 +1315,6 @@ export const creatures: Creature[] = [
     group: 'goblin',
     id: 'GoblinShaman', // Fulling
     tier: 5,
-    maxLvl: 1,
     emoji: '',
     faction: 'PlainsMonsters',
     spawners: [spawner({
@@ -1390,7 +1356,6 @@ export const creatures: Creature[] = [
     group: 'goblin',
     id: 'GoblinBrute', // Berserk
     tier: 5,
-    maxLvl: 3,
     emoji: '',
     faction: 'PlainsMonsters',
     spawners: [],
@@ -1426,7 +1391,6 @@ export const creatures: Creature[] = [
     id: 'Deathsquito',
     tags: ['fly'],
     tier: 5,
-    maxLvl: 1,
     emoji: '🦟',
     faction: 'PlainsMonsters',
     spawners: [spawner({
@@ -1456,7 +1420,6 @@ export const creatures: Creature[] = [
     id: 'Lox',
     tags: ['animal'],
     tier: 5,
-    maxLvl: 1,
     emoji: '🐂',
     faction: 'PlainsMonsters',
     spawners: [spawner({
@@ -1496,7 +1459,6 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'BlobTar',
     tier: 5,
-    maxLvl: 1,
     emoji: '🦠',
     faction: 'Undead',
     spawners: [],
@@ -1526,7 +1488,6 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'GoblinKing',
     tier: 5,
-    maxLvl: 1,
     emoji: '🦴',
     faction: 'Boss',
     spawners: [],
@@ -1571,7 +1532,6 @@ export const creatures: Creature[] = [
     id: 'Serpent',
     tags: ['animal'],
     tier: 2,
-    maxLvl: 1,
     emoji: '🐍',
     faction: 'SeaMonsters',
     spawners: [spawner({

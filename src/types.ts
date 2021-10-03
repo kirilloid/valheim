@@ -251,8 +251,9 @@ export interface SpawnerConfig {
   interval: number;
   // checked on every attempt
   chance: number;
+  // radius to check for closest
   distance: number;
-  radius: Pair<number>; // default is [40, 80]
+  radius: Pair<number>;
   killed: EntityId | undefined;
   envs: EnvId[];
   groupSize: Pair<number>;
@@ -269,9 +270,7 @@ export interface SpawnerConfig {
 export interface Creature extends GameObjectBase {
   type: 'creature';
   emoji: string;
-  maxLvl: number;
   upgradeDistance?: number;
-  nightOnly?: true;
   faction: Faction;
   spawners: SpawnerConfig[];
   tolerate: number;

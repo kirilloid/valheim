@@ -542,6 +542,35 @@ export const objects: PhysicalObject[] = [
     },
   }),
   {
+    id: 'stubbe',
+    type: 'object',
+    subtype: 'tree',
+    tier: 1,
+    grow: itemGrow({
+      locations: ['BlackForest', 'Mistlands'],
+      altitude: [0, 1000],
+      tilt: [0, 20],
+      num: [15, 15],
+    }, {
+      locations: ['Swamp'],
+      altitude: [0, 1000],
+      tilt: [0, 20],
+      num: [4, 4],
+    }, {
+      locations: ['Meadows'],
+      altitude: [0, 1000],
+      tilt: [0, 20],
+      num: [1, 3],
+    }),
+    destructible: {
+      hp: 40,
+      damageModifiers: chopOnly,
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('Wood', 3, 4)],
+  },
+  {
     type: 'object',
     subtype: 'tree',
     id: 'FirTree_oldLog',
@@ -569,38 +598,6 @@ export const objects: PhysicalObject[] = [
       parts: [],
     },
     drop: [singleDrop('Wood', 5, 7)],
-  },
-  {
-    type: 'object',
-    subtype: 'tree',
-    id: 'FirTree_small',
-    group: 'fir',
-    tier: 0,
-    grow: itemGrow({
-      locations: ['BlackForest'],
-      altitude: [0.5, 1000],
-      tilt: [0, 30],
-      num: [90, 90], // two entries: 60+30
-    }, {
-      locations: ['Mountain'],
-      altitude: [0, 280],
-      tilt: [0, 30],
-      num: [30, 30],
-    }),
-    destructible: {
-      hp: 40,
-      damageModifiers: chopOnly,
-      minToolTier: 0,
-      parts: [],
-    },
-    drop: [{
-      num: [4, 5],
-      options: [
-        { weight: 10, item: 'Wood' },
-        { weight: 1, item: 'FirCone' },
-        { weight: 1, item: 'Resin' },
-      ],
-    }],
   },
   ...tree({
     id: ['FirTree', 'FirTree_Stub', 'FirTree_log', 'FirTree_log_half'],
@@ -636,6 +633,104 @@ export const objects: PhysicalObject[] = [
       destroyUnhealthy: true,
       freeSpaceRadius: 2,
       biomes: ['Meadows', 'BlackForest', 'Mountain', 'Plains'],
+    },
+  }),
+  {
+    type: 'object',
+    subtype: 'tree',
+    id: 'FirTree_small',
+    group: 'fir',
+    tier: 0,
+    grow: itemGrow({
+      locations: ['BlackForest'],
+      altitude: [0.5, 1000],
+      tilt: [0, 30],
+      num: [90, 90], // two entries: 60+30
+    }, {
+      locations: ['Mountain'],
+      altitude: [0, 280],
+      tilt: [0, 30],
+      num: [30, 30],
+    }),
+    destructible: {
+      hp: 40,
+      damageModifiers: chopOnly,
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [{
+      num: [4, 5],
+      options: [
+        { weight: 10, item: 'Wood' },
+        { weight: 1, item: 'FirCone' },
+        { weight: 1, item: 'Resin' },
+      ],
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'tree',
+    id: 'FirTree_small_dead',
+    group: 'fir',
+    tier: 0,
+    grow: itemGrow({
+      locations: ['Swamp'],
+      altitude: [0.5, 1000],
+      tilt: [0, 25],
+      num: [60, 60],
+    }, {
+      locations: ['Mistlands'],
+      altitude: [0, 1000],
+      tilt: [0, 30],
+      num: [30, 30],
+    }),
+    destructible: {
+      hp: 40,
+      damageModifiers: chopOnly,
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('Wood', 4, 5)],
+  },
+  ...tree({
+    id: ['Pinetree_01', 'Pinetree_01_Stub', 'Pinetree_log', 'PineTree_log_half'],
+    tier: 2,
+    minToolTier: 0,
+    grow: itemGrow({
+      locations: ['BlackForest'],
+      altitude: [0.1, 1000],
+      tilt: [0, 30],
+      num: [60, 60],
+    }, {
+      locations: ['Mistlands'],
+      altitude: [0.1, 1000],
+      tilt: [0, 30],
+      num: [5, 5],
+    }),
+    hp: [120, 60, 40],
+    drop: [{
+      chance: 0.5,
+      num: [1, 2],
+      options: [
+        { weight: 4, item: 'Resin' },
+        { weight: 1, item: 'Feathers' },
+        { weight: 4, item: 'PineCone' },
+      ],
+    }, {
+      num: [15, 15],
+      options: [
+        { item: 'Wood' },
+        { item: 'RoundLog' },
+      ],
+    }],
+    plant: {
+      subtype: 'tree',
+      plantedWith: 'PineCone',
+      growTime: [3000, 5000],
+      cultivatedGround: false,
+      destroyUnhealthy: true,
+      freeSpaceRadius: 2,
+      biomes: ['Meadows', 'BlackForest', 'Plains'],
     },
   }),
   ...tree({
@@ -741,47 +836,6 @@ export const objects: PhysicalObject[] = [
       cultivatedGround: false,
       destroyUnhealthy: true,
       freeSpaceRadius: 3,
-      biomes: ['Meadows', 'BlackForest', 'Plains'],
-    },
-  }),
-  ...tree({
-    id: ['Pinetree_01', 'Pinetree_01_Stub', 'Pinetree_log', 'PineTree_log_half'],
-    tier: 2,
-    minToolTier: 0,
-    grow: itemGrow({
-      locations: ['BlackForest'],
-      altitude: [0.1, 1000],
-      tilt: [0, 30],
-      num: [60, 60],
-    }, {
-      locations: ['Mistlands'],
-      altitude: [0.1, 1000],
-      tilt: [0, 30],
-      num: [5, 5],
-    }),
-    hp: [120, 60, 40],
-    drop: [{
-      chance: 0.5,
-      num: [1, 2],
-      options: [
-        { weight: 4, item: 'Resin' },
-        { weight: 1, item: 'Feathers' },
-        { weight: 4, item: 'PineCone' },
-      ],
-    }, {
-      num: [15, 15],
-      options: [
-        { item: 'Wood' },
-        { item: 'RoundLog' },
-      ],
-    }],
-    plant: {
-      subtype: 'tree',
-      plantedWith: 'PineCone',
-      growTime: [3000, 5000],
-      cultivatedGround: false,
-      destroyUnhealthy: true,
-      freeSpaceRadius: 2,
       biomes: ['Meadows', 'BlackForest', 'Plains'],
     },
   }),
@@ -1218,35 +1272,6 @@ export const objects: PhysicalObject[] = [
     drop: singleDrop('Stone', 1, 3),
   }),
   {
-    id: 'stubbe',
-    type: 'object',
-    subtype: 'tree',
-    tier: 1,
-    grow: itemGrow({
-      locations: ['BlackForest', 'Mistlands'],
-      altitude: [0, 1000],
-      tilt: [0, 20],
-      num: [15, 15],
-    }, {
-      locations: ['Swamp'],
-      altitude: [0, 1000],
-      tilt: [0, 20],
-      num: [4, 4],
-    }, {
-      locations: ['Meadows'],
-      altitude: [0, 1000],
-      tilt: [0, 20],
-      num: [1, 3],
-    }),
-    destructible: {
-      hp: 40,
-      damageModifiers: chopOnly,
-      minToolTier: 0,
-      parts: [],
-    },
-    drop: [singleDrop('Wood', 3, 4)],
-  },
-  {
     id: 'Leviathan',
     type: 'object',
     subtype: 'rock',
@@ -1260,7 +1285,7 @@ export const objects: PhysicalObject[] = [
     destructible: {
       hp: 0,
       minToolTier: 0,
-      damageModifiers: chopOnly,
+      damageModifiers: pickOnly,
       parts: [{ id: 'Barnacle', num: 21 }],
     },
     drop: [],
@@ -1306,31 +1331,6 @@ export const objects: PhysicalObject[] = [
     }),
   },
   // MISTLANDS
-  {
-    type: 'object',
-    subtype: 'tree',
-    id: 'FirTree_small_dead',
-    group: 'fir',
-    tier: 0,
-    grow: itemGrow({
-      locations: ['Swamp'],
-      altitude: [0.5, 1000],
-      tilt: [0, 25],
-      num: [60, 60],
-    }, {
-      locations: ['Mistlands'],
-      altitude: [0, 1000],
-      tilt: [0, 30],
-      num: [30, 30],
-    }),
-    destructible: {
-      hp: 40,
-      damageModifiers: chopOnly,
-      minToolTier: 0,
-      parts: [],
-    },
-    drop: [singleDrop('Wood', 4, 5)],
-  },
   {
     id: 'vertical_web',
     type: 'object',

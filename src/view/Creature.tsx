@@ -10,6 +10,7 @@ import { timeI2S } from '../model/utils';
 import { data } from '../data/itemDB';
 import { getSummon } from '../data/resources';
 import { area, objectLocationMap } from '../data/location';
+import { maxLvl } from '../data/creatures';
 
 import { TranslationContext, useGlobalState } from '../effects';
 import { Area, InlineObjectWithIcon, rangeBy, Resistances, shortCreatureDamage, yesNo } from './helpers';
@@ -52,9 +53,9 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
   ];
   return (<>
     <ItemHeader item={creature} >
-      {creature.maxLvl > 1
+      {maxLvl(creature) > 1
       ? <div className="Creature__Stars">
-          {Array.from({ length: creature.maxLvl }).map((_, stars) => 
+          {Array.from({ length: maxLvl(creature) }).map((_, stars) => 
             level === stars + 1
               ? <span key={stars} className="Creature__Star Creature__Star--selected">{stars}⭐</span>
               : <Link key={stars} className="Creature__Star" to={`/obj/${id}/${stars + 1}`} replace={true}>{stars}⭐</Link>
@@ -89,7 +90,7 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
       <h3>{translate('ui.damageModifiers')}</h3>
       <dl>
         <Resistances mods={creature.damageModifiers} />
-        {creature.tolerate & TOLERATE.WATER ? <><dt>water</dt><dd>vulnerable</dd></> : null}
+        {creature.tolerate & TOLERATE.WATER ? null : <><dt>water</dt><dd>vulnerable</dd></>}
         {creature.tolerate & TOLERATE.SMOKE ? null : <><dt>smoke</dt><dd>vulnerable</dd></>}
         {creature.tolerate & TOLERATE.TAR ? <>
           <dt><Link to="/effect/Tarred">{translate('Tar')}</Link></dt>

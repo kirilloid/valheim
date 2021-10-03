@@ -3,7 +3,7 @@ import { allItems, shields } from './def_calc.items';
 import type { ShieldConfig } from './combat';
 import { isNotNull } from './utils';
 
-import { creatures } from '../data/creatures';
+import { creatures, maxLvl } from '../data/creatures';
 import { defaultCreature, creatureBiome } from '../data/combat_creatures';
 
 const defaultEnemy = {
@@ -55,7 +55,7 @@ function parseEnemy(url?: string): State['enemy'] {
     creature,
     biome: creatureBiome(creature),
     variety,
-    stars: Math.min(+stars, creature.maxLvl - 1),
+    stars: Math.min(+stars, maxLvl(creature) - 1),
   }
 }
 

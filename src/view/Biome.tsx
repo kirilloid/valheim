@@ -3,8 +3,9 @@ import { Link, useParams } from 'react-router-dom';
 
 import '../css/Biome.css';
 
-import type { Destructible, GameObject, Item, PhysicalObject, TreasureChest } from '../types';
+import type { GameObject, Item, PhysicalObject, TreasureChest } from '../types';
 import { biomes } from '../data/location';
+import { maxLvl } from '../data/creatures';
 import { data } from '../data/itemDB';
 import { resourceCraftMap } from '../data/resource-usage';
 
@@ -147,7 +148,7 @@ export function Biome() {
               <td><Link to={`/obj/${c.id}`}>{translate(c.id)}</Link></td>
               <td className="value">{c.hp}</td>
               <td className="value">{averageAttacksDamage(c) || '—'}</td>
-              <td className="value">{yesNo(c.maxLvl > 1)}</td>
+              <td className="value">{yesNo(maxLvl(c) > 1)}</td>
             </tr>)}
           </tbody>
         </table>

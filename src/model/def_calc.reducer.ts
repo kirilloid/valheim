@@ -2,7 +2,7 @@ import type { Biome, Creature, EntityId, Shield } from '../types';
 import { shields } from './def_calc.items';
 import { assertNever } from './utils';
 
-import { creatures } from '../data/creatures';
+import { creatures, maxLvl } from '../data/creatures';
 
 export interface State {
   enemy: {
@@ -70,7 +70,7 @@ export function reducer(state: State, action: Action): State {
       const { id, biome } = action;
       const creature = creatures.find(c => c.id === id);
       if (creature == null) return state;
-      const stars = Math.min(creature.maxLvl - 1, state.enemy.stars);
+      const stars = Math.min(maxLvl(creature) - 1, state.enemy.stars);
       return { ...state, enemy: { creature, biome, variety: 0, stars } };
     }
     case CHANGE_STARS: {

@@ -10,6 +10,7 @@ import { allItems, shields } from '../model/def_calc.items';
 import { isNotNull } from '../model/utils';
 import { MAX_PLAYERS } from '../model/game';
 
+import { maxLvl } from '../data/creatures';
 import { groupedCreatures } from '../data/combat_creatures';
 
 import { TranslationContext } from '../effects/translation.effect';
@@ -318,7 +319,7 @@ export function DefenseCalc() {
   const onItemChange = (resType: string) => (e: React.ChangeEvent<HTMLInputElement>) => dispatch(changeResType(resType, e.target.checked));
   const scale = {
     players: state.players,
-    stars: Math.min(stars, creature.maxLvl - 1),
+    stars: Math.min(stars, maxLvl(creature) - 1),
   };
   const bonus = dmgBonus(scale);
 
@@ -341,7 +342,7 @@ export function DefenseCalc() {
       <section className="CombatCalc__Creature">
         <h2>{translate('ui.creature')}</h2>
         <Creature creature={creature} biome={biome} onChange={onCreatureChange} />
-        {creature.maxLvl > 1 && <CreatureStars max={creature.maxLvl} stars={stars} onChange={onStarsChange} />}
+        {maxLvl(creature) > 1 && <CreatureStars max={maxLvl(creature)} stars={stars} onChange={onStarsChange} />}
         {creature.attacks.length > 1 && <CreatureAttackVar creature={creature} variety={variety} onChange={onVarietyChange} />}
       </section>
       <section className="CombatCalc__Player">
