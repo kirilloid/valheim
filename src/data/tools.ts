@@ -49,7 +49,7 @@ export const tools: Tool[] = [
     tier: 2,
     weight: 0.3,
     maxLvl: 1,
-    durability: [100, 50],
+    durability: [200, 50],
     produces: [],
     recipe: {
       type: 'craft_upg',

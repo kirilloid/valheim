@@ -753,11 +753,12 @@ export const objects: PhysicalObject[] = [
     ),
     hp: [80, 60, 60],
     drop: [{
-      chance: 0.3,
-      num: [1, 2],
+      chance: 0.5,
+      num: [2, 2],
       options: [
-        { weight: 2, item: 'Resin' },
-        { weight: 1, item: 'BirchSeeds' },
+        { weight: 1, item: 'Resin', num: [1, 2] },
+        { weight: 1, item: 'Feathers', num: [1, 2] },
+        { weight: 2, item: 'BirchSeeds', num: [1, 2] },
       ],
     }, {
       num: [10, 10],
@@ -802,11 +803,12 @@ export const objects: PhysicalObject[] = [
       },
     ),
     drop: [{
-      chance: 0.3,
-      num: [1, 1],
+      chance: 0.5,
+      num: [1, 2],
       options: [
-        { weight: 2, item: 'Resin' },
-        { weight: 1, item: 'BirchSeeds' },
+        { weight: 1, item: 'Resin', num: [1, 2] },
+        { weight: 1, item: 'Feathers', num: [1, 2] },
+        { weight: 2, item: 'BirchSeeds', num: [1, 2] },
       ],
     }],
   },
@@ -823,9 +825,13 @@ export const objects: PhysicalObject[] = [
     }),
     hp: [200, 160, 140],
     drop: [{
-      chance: 0.1,
-      num: [1, 1],
-      options: [{ item: 'Acorn' }]
+      chance: 0.5,
+      num: [2, 3],
+      options: [
+        { item: 'Resin', num: [2, 4] },
+        { item: 'Acorn', num: [2, 3] },
+        { item: 'Feathers', num: [2, 3], weight: 0.5 },
+      ]
     }, {
       num: [25, 25],
       options: [
