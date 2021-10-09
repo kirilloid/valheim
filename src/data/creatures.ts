@@ -1441,7 +1441,7 @@ export const creatures: Creature[] = [
     hp: 1000,
     stagger: {
       factor: 0.3,
-      time: NaN,
+      time: 3.16,
     },
     damageModifiers: loxDamageModifiers,
     drop: [

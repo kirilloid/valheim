@@ -9,6 +9,9 @@ import type {
   LocationItem,
   LocationVariation,
 } from '../types';
+
+import { locItem } from '../model/game';
+
 import { creatures } from './creatures';
 import { objects } from './objects';
 import { data } from './itemDB';
@@ -85,10 +88,6 @@ function loc(
     resources: [],
     variations,
   };
-}
-
-function locItem(item: EntityId | LocationItem[], chance: number = 1, number: number = 1): LocationItem {
-  return { item, chance, number };
 }
 
 export const locations: LocationConfig[] = [

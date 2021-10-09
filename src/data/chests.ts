@@ -169,6 +169,21 @@ export const chests: TreasureChest[] = [
   },
   {
     type: 'treasure',
+    id: 'Pickable_SunkenCryptRandom',
+    tier: 3,
+    drop: {
+      num: [1, 1],
+      options: [
+        { item: 'Coins', num: [5, 30] },
+        { item: 'Ruby', num: [1, 2] },
+        { item: 'Amber', num: [3, 10] },
+        { item: 'AmberPearl', num: [2, 5] },
+        { item: 'WitheredBone', num: [1, 1], weight: 2 },
+      ]
+    },
+  },
+  {
+    type: 'treasure',
     id: 'TreasureChest_mountains',
     tier: 4,
     drop: {

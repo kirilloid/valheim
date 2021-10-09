@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 
 import { ItemType, MaterialType, Piece as TPiece } from '../types';
 
@@ -48,7 +49,7 @@ function PieceSpecific({ item }: { item: TPiece }) {
     case 'craft_ext': {
       const { id, distance, requiresFire, requiresRoof } = item.extends;
       return (<dl>
-        <dt>{translate('ui.crafting.extends')}</dt><dd>{translate(getCraftingStationId(id))}</dd>
+        <dt>{translate('ui.crafting.extends')}</dt><dd><InlineObjectWithIcon id={getCraftingStationId(id)} /></dd>
         <dt>{translate('ui.crafting.needsFire')}</dt><dd>{yesNo(requiresFire)}</dd>
         <dt>{translate('ui.crafting.needsRoof')}</dt><dd>{yesNo(requiresRoof)}</dd>
         <dt>max distance</dt><dd>{distance}m</dd>
@@ -126,11 +127,11 @@ export function Piece({ item }: { item: TPiece }) {
         <dl>
           <dt>{translate('ui.healthStructure')}</dt><dd>{hp}</dd>
           <Resistances mods={damageModifiers} />
-          <dt>base</dt><dd>{yesNo(item.base)}</dd>
+          <dt>base <Link to="/info/base">ℹ️</Link></dt><dd>{yesNo(item.base)}</dd>
           <dt>{translate('ui.pieceTarget')}</dt><dd>{translate(`ui.pieceTarget.${target}`)}</dd>
           <dt>degrades w/o roof</dt><dd>{yesNo(noRoof)}</dd>
           {specialReqs.length ? <><dt>specific</dt><dd>{specialReqs.join(', ')}</dd></> : null}
-          {requiredSpace ? <><dt>required space</dt><dd>{requiredSpace}</dd></> : null}
+          {requiredSpace ? <><dt>required space</dt><dd>{requiredSpace}m</dd></> : null}
           {size ? <><dt>size</dt><dd>{size.filter(Boolean).join('×')}</dd></> : null}
         </dl>
       </section>

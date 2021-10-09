@@ -75,17 +75,12 @@ export function multiplyDamage(damage: DamageProfile, mul: number): DamageProfil
   return mapValues(damage, value => value * mul);
 }
 
-export function getPhysicalDamage(damage: DamageProfile): number {
-  const { blunt = 0, pierce = 0, slash = 0 } = damage;
-  return blunt + pierce + slash;
-}
-
 export function hpBonus({ players = 1, stars = 0 }: { players?: number, stars?: number }) {
-  return (1 + (players - 1) * 0.3) * (1 + stars);
+  return (1 + (Math.min(players, 5) - 1) * 0.3) * (1 + stars);
 }
 
 export function dmgBonus({ players = 1, stars = 0 }: { players?: number, stars?: number }) {
-  return (1 + (players - 1) * 0.04) * (1 + stars * 0.5);
+  return (1 + (Math.min(players, 5) - 1) * 0.04) * (1 + stars * 0.5);
 }
 
 export function applyDamageModifiers(damage: DamageProfile, modifiers: DamageModifiers): DamageProfile {
@@ -147,7 +142,7 @@ export function doAttack(
     const blockableDamage = getTotalBlockableDamage(afterShieldRes);
     const afterDamage = getTotalBlockableDamage(afterBlock);
     const blockedDamage = blockableDamage - afterDamage;
-    stamina += BLOCK_STAMINA_DRAIN * (isParry ? 1 : (blockedDamage / block))
+    stamina += BLOCK_STAMINA_DRAIN * (isParry ? 2 : (blockedDamage / block))
     stagger += getTotalStaggerDamage(afterBlock);
   }
   const afterRes = applyDamageModifiers(afterBlock, modifiers);

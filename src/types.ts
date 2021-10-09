@@ -129,14 +129,14 @@ export type DungeonConfig = {
   requiredRooms: string[];
   doorTypes: EntityId[];
   doorChance: number;
-} | {
+} /*| {
   type: 'CampGrid';
   rooms: Pair<number>;
   maxTilt: number;
   tileWidth: number;
   gridSize: number;
   spawnChance: number;
-} | {
+}*/ | {
   type: 'CampRadial';
   rooms: Pair<number>;
   maxTilt: number;

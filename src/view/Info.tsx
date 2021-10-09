@@ -26,6 +26,15 @@ const infos: Record<string, Article> = {
         text: `Backstab is actually not about attacking from behind. Instead this bonus is applied when attacking unaware opponent. Awareness is signaled by presence of an exclamation mark near opponent name. This effect cannot happen more than once per 5 minutes.`,
       }
     ],
+  },
+  base: {
+    header: 'base',
+    sections: [
+      {
+        header: 'base',
+        text: `Some structures prevent spawn, but having effect from 3 of them will allow [/events](events) to happen`,
+      },
+    ],
   }
 }
 
@@ -70,7 +79,7 @@ function replaceAllWidgets(input: string): ReactChildren {
   result = replaceWidgets(
     result,
     /\[(.+?)\]\((.+?)\)/g,
-    (_: string, path: string) => <Link to={path}></Link>,
+    (_: string, path: string, text: string) => <Link to={path}>{text}</Link>,
   );
   return result;
 }

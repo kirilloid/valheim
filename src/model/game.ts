@@ -1,4 +1,4 @@
-import type { DamageProfile, EntityId, GeneralDrop } from '../types';
+import type { DamageProfile, EntityId, GeneralDrop, LocationItem } from '../types';
 
 export const FRAME = 1 / 50;
 export const GAME_DAY = 1800;
@@ -10,6 +10,10 @@ export const singleDrop = (item: EntityId, min: number = 1, max: number = 1): Ge
   num: [min, max],
   options: [{ item }]
 });
+
+export const locItem = (item: EntityId | LocationItem[], chance: number = 1, number: number = 1): LocationItem => {
+  return { item, chance, number };
+};
 
 export const dmg = (damage: Partial<DamageProfile>): DamageProfile => {
   return {
