@@ -3,7 +3,6 @@ import { State, CombatStat, defaultWeapon, enabledItems } from './off_calc.reduc
 import { arrows } from '../data/arrows';
 import { creatures } from '../data/creatures';
 import { defaultCreature, creatureBiome } from '../data/combat_creatures';
-import { locationToBiome } from '../data/location';
 
 function serializeWeapon(weapon: WeaponConfig): string {
   const levelPart = weapon.level === weapon.item.maxLvl ? '' : `-${weapon.level}`;

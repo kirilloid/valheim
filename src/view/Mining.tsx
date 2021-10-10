@@ -3,15 +3,14 @@ import { Link, useHistory, useParams } from 'react-router-dom';
 
 import type { DamageModifiers, EntityId, Pair, PhysicalObject, Weapon } from '../types';
 import { applyDamageModifiers, getTotalDamage, getWeaponSkillFactor } from '../model/combat';
-import { assertNever, filterValues, groupBy, mapValues } from '../model/utils';
+import { assertNever, groupBy } from '../model/utils';
 
-import { objects as objects } from '../data/objects';
+import { objects } from '../data/objects';
 import { objectLocationMap } from '../data/location';
 import { axes as allAxes, pickaxes as allPickaxes } from '../data/weapons';
 
 import { TranslationContext, useGlobalState } from '../effects';
 import { ItemIcon, SkillIcon } from './Icon';
-import { filter } from 'lodash-es';
 import { SkillType } from '../model/skills';
 
 const objectMap: Record<EntityId, PhysicalObject> = {};

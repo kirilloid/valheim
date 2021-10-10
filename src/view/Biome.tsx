@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 
 import '../css/Biome.css';
 
-import type { GameObject, Item, PhysicalObject, TreasureChest } from '../types';
+import type { EntityId, GameObject, Item, PhysicalObject, TreasureChest } from '../types';
 import { biomes } from '../data/location';
 import { maxLvl } from '../data/creatures';
 import { data } from '../data/itemDB';
@@ -21,6 +21,25 @@ function ResourceList(props: { list: GameObject[] }) {
       <InlineObjectWithIcon id={item.id} />
     </li>)}
   </ul>
+}
+
+function isFoodOrUsedForFood(item: Item) {
+  const visited = new Set<EntityId>();
+  const queue = [item];
+  let idx = 0;
+  while (idx < queue.length) {
+    const next = queue[idx++]!;
+    if (next.type === 'food') return true;
+    visited.add(next.id);
+    for (const item of resourceCraftMap[next.id] ?? []) {
+      const { id } = item;
+      if (!visited.has(id)) {
+        queue.push(item);
+        visited.add(id);
+      }
+    }
+  }
+  return false;
 }
 
 export function Biome() {
@@ -57,11 +76,7 @@ export function Biome() {
       resources.trophies.push(item);
     } else if (item.type === 'ship' || item.type === 'cart') {
       // skip them
-    } else if ((item.type === 'food'
-            || resourceCraftMap[item.id]?.some(v => v.type === 'food'
-            || resourceCraftMap[v.id]?.some(v2 => v2.type === 'food'))
-            && item.type !== 'treasure')
-    ) {
+    } else if (item.type !== 'treasure' && isFoodOrUsedForFood(item)) {
       resources.food.push(item);
     } else {
       resources.others.push(item);

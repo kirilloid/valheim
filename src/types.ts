@@ -1,4 +1,6 @@
 import type { EnvId } from './data/env';
+import { DungeonRoomsConfig } from './data/rooms';
+import { DropDist } from './model/dist';
 import { SkillType } from './model/skills';
 
 export type EntityId = string;
@@ -102,6 +104,7 @@ export type LocationVariation = {
   subtype: string,
   quantity: number,
   items: LocationItem[],
+  dungeon?: DungeonRoomsConfig,
 };
 
 export type LocationConfig = {
@@ -114,13 +117,13 @@ export type LocationConfig = {
   minApart: number;
   altitude: [number, number];
   distance: [number, number];
-  destructibles: EntityId[];
-  creatures: Creature[];
-  resources: EntityId[];
+  destructibles: DropDist;
+  creatures: DropDist;
+  resources: DropDist;
   variations: LocationVariation[];
 };
 
-export type DungeonConfig = {
+export type DungeonGenConfig = {
   id: string;
 } & ({
   type: 'Dungeon';

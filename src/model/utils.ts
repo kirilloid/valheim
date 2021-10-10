@@ -41,6 +41,13 @@ export const assertNever = (x: never): never => {
 
 export const isNotNull = <T>(arg: T): arg is NonNullable<T> => arg != null;
 
+export const isEmpty = (arg: Record<string, any>) => {
+  for (var _ in arg) {
+    return false;
+  }
+  return true;
+};
+
 export function filterValues<K extends string, T, RK extends K = K>(obj: Record<K, T>, fn: (arg: T, key: K) => boolean): Record<RK, T> {
   return Object.fromEntries(
     Object.entries(obj)

@@ -1,15 +1,15 @@
 import { GeneralDrop } from '../types';
-import { add, mul, power, average, percentile, distributeDrop, DropDist, addDist } from './dist';
+import { weightedAdd, mul, power, average, percentile, distributeDrop, powerDist, DropDist, addDist } from './dist';
 
 describe('add', () => {
   test('add <', () => {
-    expect(add([], [1])).toEqual([0.5]);
+    expect(weightedAdd([], [1])).toEqual([0.5]);
   });
   test('add >', () => {
-    expect(add([1], [])).toEqual([0.5]);
+    expect(weightedAdd([1], [])).toEqual([0.5]);
   });
   test('add =', () => {
-    expect(add([1], [1])).toEqual([1]);
+    expect(weightedAdd([1], [1])).toEqual([1]);
   });
 });
 
@@ -83,6 +83,11 @@ describe('drop', () => {
       bar: [0, 1, 2],
       baz: [0, 1],
     });
+  });
+
+  test('powerDist', () => {
+    expect(powerDist([0.5, 0.5], [0, 0.5, 0.5]))
+      .toEqual([0.375, 0.5, 0.125]);
   });
 
   describe('distributeDrop', () => {

@@ -6,7 +6,7 @@ export const BASE_HEALTH = 25;
 export const BASE_STAMINA = 50;
 export const MAX_PLAYERS = 10;
 
-export const singleDrop = (item: EntityId, min: number = 1, max: number = 1): GeneralDrop => ({
+export const singleDrop = (item: EntityId, min: number = 1, max: number = min): GeneralDrop => ({
   num: [min, max],
   options: [{ item }]
 });

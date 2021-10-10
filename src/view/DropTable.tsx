@@ -1,11 +1,15 @@
 import React from 'react';
 
 import type { GeneralDrop } from '../types';
-import { addDist, average, distributeDrop, DropDist, percentile } from '../model/dist';
+import { average, DropDist, percentile, gatherDrop } from '../model/dist';
 import { InlineObjectWithIcon, rangeBy } from './helpers';
 
 export function DropTable({ drops }: { drops: GeneralDrop[] }) {
-  const items = drops.reduce<DropDist>((a, d) => addDist(a, distributeDrop(d)), {});
+  const items = gatherDrop(drops);
+  return <DropStats items={items} />
+}
+
+export function DropStats({ items }: { items: DropDist }) {
   return <ul>
     {Object.entries(items).map(([id, num]) => {
       const avg = average(num);

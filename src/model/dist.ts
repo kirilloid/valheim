@@ -1,9 +1,10 @@
 import type { EntityId, GeneralDrop, SimpleDrop } from '../types';
+import { mapValues } from './utils';
 
 export type Distribution = number[];
 export type DropDist = Record<EntityId, Distribution>;
 
-export function add(a: Distribution, b: Distribution, p: number = 0.5, q: number = 1 - p): Distribution {
+export function weightedAdd(a: Distribution, b: Distribution, p: number = 0.5, q: number = 1 - p): Distribution {
   if (b.length > a.length) {
     [b, a] = [a, b];
     [q, p] = [p, q];
@@ -76,15 +77,42 @@ function linearDist(min: number, max: number): Distribution {
 }
 
 export function addDist(a: DropDist, b: DropDist): DropDist {
-  const copy = { ...a };
+  const c = { ...a };
+  mergeDist(c, b);
+  return c;
+}
+
+export function mergeDist(a: DropDist, b: DropDist): void {
   for (const [key, val] of Object.entries(b)) {
-    if (key in copy) {
-      copy[key] = mul(copy[key]!, val);
+    if (key in a) {
+      a[key] = mul(a[key]!, val);
     } else {
-      copy[key] = val;
+      a[key] = val;
     }
   }
-  return copy;
+}
+
+export function sumDist(xs: DropDist[]): DropDist {
+  const keys = new Set(xs.flatMap(x => Object.keys(x)));
+  const result: DropDist = {};
+  for (const key of keys) {
+    result[key] = sum(xs.map(x => x[key] ?? []));
+  }
+  return result;
+}
+
+export function powerDist(base: Distribution, pow: Distribution): Distribution {
+  let total: Distribution[] = [];
+  let current = [1];
+  for (const p of pow) {
+    total.push(scale(current, p));
+    current = mul(current, base);
+  }
+  return sum(total);
+}
+
+export function scaleDist(a: DropDist, m: number) {
+  return mapValues(a, v => scale(v, m));
 }
 
 export function distributeDropNoReturn(drop: GeneralDrop): DropDist {
@@ -118,10 +146,18 @@ export function distributeDropNoReturn(drop: GeneralDrop): DropDist {
   for (const op of options) {
     const avgStacks = numbers.get(op) ?? 0;
     const opNum = op.num ?? [1, 1];
-    const dist = add(linearDist(...opNum), [1], avgStacks);
+    const dist = weightedAdd(linearDist(...opNum), [1], avgStacks);
     result[op.item] = mul(result[op.item] ?? [1], dist);
   }
   return result;
+}
+
+export function gatherDrop(drops: GeneralDrop[]): DropDist {
+  const items: DropDist = {};
+  for (const drop of drops) {
+    mergeDist(items, distributeDrop(drop));
+  }
+  return items;
 }
 
 export function distributeDrop(drop: GeneralDrop): DropDist {
@@ -132,14 +168,14 @@ export function distributeDrop(drop: GeneralDrop): DropDist {
   const result: DropDist = {};
   for (const opt of options) {
     const { item, num = [1, 1], weight = 1 } = opt;
-    const dist = add(linearDist(...num), [1], weight / totalWeight);
+    const dist = weightedAdd(linearDist(...num), [1], weight / totalWeight);
     let curr = power(dist, min);
     const opts = [curr];
     for (let p = min; p < max; p++) {
       curr = mul(curr, dist);
       opts.push(curr);
     }
-    result[item] = add(scale(sum(opts), 1 / (max - min + 1)), [1], chance);
+    result[item] = weightedAdd(scale(sum(opts), 1 / (max - min + 1)), [1], chance);
   };
 
   return result; 

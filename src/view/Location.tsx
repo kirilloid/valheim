@@ -1,10 +1,12 @@
 import React, { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { isEmpty } from '../model/utils';
 import { locations } from '../data/location';
 
 import { TranslationContext } from '../effects';
-import { Area, InlineObjectWithIcon, List, rangeBy } from './helpers';
+import { Area, List, rangeBy } from './helpers';
+import { DropStats } from './DropTable';
 
 export function Location() {
   const { id } = useParams<{ id: string }>();
@@ -25,7 +27,7 @@ export function Location() {
       <section>
         <dl>
           <dt>{translate('ui.biome')}</dt>
-          <dd><List>{biomes.map(biome => <Area area={biome} />)}</List></dd>
+          <dd><List>{biomes.map(biome => <Area area={biome} key={biome} />)}</List></dd>
           <dt>{translate('ui.locationType')}</dt>
           <dd>{translate(`ui.locationType.${loc.type}`)}</dd>
           <dt>{translate('ui.altitude')}</dt>
@@ -37,39 +39,18 @@ export function Location() {
             <dd><InlineObjectWithIcon id={vegvisir.boss} />, {vegvisir.chance * 100}% chance</dd>
           </> : null*/}
         </dl>
-        {loc.creatures.length
-        ? <>
-            <h2>{translate('ui.creatures')}</h2>
-            <ul>{loc.creatures.map(c =>
-              <li key={c.id}>
-                <InlineObjectWithIcon id={c.id} size={32} />
-              </li>
-            )}
-            </ul>
-          </>
-        : null}
-        {loc.resources.length
-        ? <>
-            <h2>{translate('ui.resources')}</h2>
-            <ul>{loc.resources.map(id =>
-              <li key={id}>
-                <InlineObjectWithIcon id={id} size={32} />
-              </li>
-            )}
-            </ul>
-          </>
-        : null}
-        {loc.destructibles.length
-        ? <>
-            <h2>{translate('ui.objects')}</h2>
-            <ul>{loc.destructibles.map(id =>
-              <li key={id}>
-                <InlineObjectWithIcon id={id} size={32} />
-              </li>
-            )}
-            </ul>
-          </>
-        : null}
+        {!isEmpty(loc.creatures) && <>
+          <h2>{translate('ui.creatures')}</h2>
+          <DropStats items={loc.creatures} />
+        </>}
+        {!isEmpty(loc.resources) && <>
+          <h2>{translate('ui.resources')}</h2>
+          <DropStats items={loc.resources} />
+        </>}
+        {!isEmpty(loc.destructibles) && <>
+          <h2>{translate('ui.objects')}</h2>
+          <DropStats items={loc.destructibles} />
+        </>}
       </section>
     </>
   );

@@ -327,7 +327,7 @@ export const items: Item[] = [
     recipe: {
       type: 'craft_upg',
       time: CRAFT_TIME,
-      materials: { Silver: 20, WolfPelt: 2, DrakeTrophy: 2 },
+      materials: { Silver: 20, WolfPelt: 2, TrophyHatchling: 2 },
       materialsPerLevel: { Silver: 5 },
       source: { station: CraftingStation.Forge, level: 2 },
       upgrade: { station: CraftingStation.Forge, level: 3 },
@@ -345,7 +345,7 @@ export const items: Item[] = [
     recipe: {
       type: 'craft_upg',
       time: CRAFT_TIME,
-      materials: { Silver: 4, WolfPelt: 6, WolfTrophy: 1 },
+      materials: { Silver: 4, WolfPelt: 6, TrophyWolf: 1 },
       materialsPerLevel: { Silver: 2, WolfPelt: 4 },
       source: { station: CraftingStation.Workbench, level: 2 },
       upgrade: { station: CraftingStation.Workbench, level: 3 },

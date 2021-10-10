@@ -72,8 +72,6 @@ const emptyDrop: GeneralDrop = {
   options: [],
 };
 
-const emptyGrow: ItemGrow[] = [];
-
 function tree({
   id: [baseId, stubId, logId, logHalfId],
   group,
@@ -125,7 +123,7 @@ function tree({
         minToolTier,
         parts: [],
       },
-      drop: [singleDrop('Wood', 2, 2)],
+      drop: [singleDrop('Wood', 2)],
       grow: [],
     },
     {
@@ -206,7 +204,7 @@ function treeSimpler({
         minToolTier,
         parts: [],
       },
-      drop: [singleDrop('Wood', 2, 2)],
+      drop: [singleDrop('Wood', 2)],
       grow: [],
     },
     {
@@ -332,7 +330,7 @@ export const objects: PhysicalObject[] = [
       freeSpaceRadius: 0.5,
       biomes: ['Meadows', 'BlackForest', 'Plains'],
     },
-    drop: [singleDrop('Carrot', 3, 3)],
+    drop: [singleDrop('Carrot', 3)],
   },
   {
     id: 'SeedCarrot',
@@ -348,7 +346,7 @@ export const objects: PhysicalObject[] = [
       freeSpaceRadius: 0.5,
       biomes: ['Meadows', 'BlackForest', 'Plains'],
     },
-    drop: [singleDrop('CarrotSeeds', 3, 3)],
+    drop: [singleDrop('CarrotSeeds', 3)],
   },
   {
     id: 'sapling_turnip',
@@ -364,7 +362,7 @@ export const objects: PhysicalObject[] = [
       freeSpaceRadius: 0.5,
       biomes: ['Meadows', 'BlackForest', 'Swamp', 'Plains'],
     },
-    drop: [singleDrop('Turnip', 3, 3)],
+    drop: [singleDrop('Turnip', 3)],
   },
   {
     id: 'SeedTurnip',
@@ -380,7 +378,7 @@ export const objects: PhysicalObject[] = [
       freeSpaceRadius: 0.5,
       biomes: ['Meadows', 'BlackForest', 'Swamp', 'Plains'],
     },
-    drop: [singleDrop('TurnipSeeds', 3, 3)],
+    drop: [singleDrop('TurnipSeeds', 3)],
   },
   {
     id: 'sapling_onion',
@@ -396,7 +394,7 @@ export const objects: PhysicalObject[] = [
       freeSpaceRadius: 0.5,
       biomes: ['Meadows', 'BlackForest', 'Plains'],
     },
-    drop: [singleDrop('Onion', 3, 3)],
+    drop: [singleDrop('Onion', 3)],
   },
   {
     id: 'SeedOnion',
@@ -412,7 +410,7 @@ export const objects: PhysicalObject[] = [
       freeSpaceRadius: 0.5,
       biomes: ['Meadows', 'BlackForest', 'Plains'],
     },
-    drop: [singleDrop('OnionSeeds', 3, 3)],
+    drop: [singleDrop('OnionSeeds', 3)],
   },
   {
     id: 'sapling_barley',
@@ -428,7 +426,7 @@ export const objects: PhysicalObject[] = [
       freeSpaceRadius: 0.5,
       biomes: ['Plains'],
     },
-    drop: [singleDrop('Barley', 2, 2)],
+    drop: [singleDrop('Barley', 2)],
   },
   {
     id: 'sapling_flax',
@@ -444,7 +442,7 @@ export const objects: PhysicalObject[] = [
       freeSpaceRadius: 0.5,
       biomes: ['Plains'],
     },
-    drop: [singleDrop('Flax', 2, 2)],
+    drop: [singleDrop('Flax', 2)],
   },
   ...rock({
     id: ['rock4_coast', 'rock4_coast_frac'],
@@ -534,7 +532,7 @@ export const objects: PhysicalObject[] = [
         { weight: 1, item: 'Feathers', num: [1, 2] },
         { weight: 1, item: 'Resin', num: [1, 2] },
       ]
-    }, singleDrop('Wood', 10, 10)],
+    }, singleDrop('Wood', 10)],
     plant: {
       subtype: 'tree',
       plantedWith: 'BeechSeeds',
@@ -628,7 +626,7 @@ export const objects: PhysicalObject[] = [
         { weight: 1, item: 'Feathers' },
         { weight: 1, item: 'Resin' },
       ]
-    }, singleDrop('Wood', 10, 10)],
+    }, singleDrop('Wood', 10)],
     plant: {
       subtype: 'tree',
       plantedWith: 'FirCone',
@@ -1285,6 +1283,22 @@ export const objects: PhysicalObject[] = [
     children: 194,
     drop: singleDrop('Stone', 1, 3),
   }),
+  {
+    id: 'Pickable_TarBig',
+    type: 'object',
+    subtype: 'misc',
+    tier: 5,
+    grow: [],
+    drop: [singleDrop('Tar', 15)],
+  },
+  {
+    id: 'Pickable_Tar',
+    type: 'object',
+    subtype: 'misc',
+    tier: 5,
+    grow: [],
+    drop: [singleDrop('Tar', 4)],
+  },
   {
     id: 'Leviathan',
     type: 'object',

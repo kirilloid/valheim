@@ -128,17 +128,6 @@ function Players({ players, onChange }: { players: number; onChange: OnChangeI }
   </div>;
 }
 
-function Wet({ wet, onChange }: { wet: boolean; onChange: OnChangeI }) {
-  const translate = useContext(TranslationContext);
-  return <div className="row">
-    <input id="wet" type="checkbox" checked={wet} onChange={onChange} />
-    <label htmlFor="wet">
-      {' '}
-      {translate('ui.wet')}
-    </label>
-  </div>
-}
-
 function Shield({ shield, onShieldChange, onLevelChange } : {
   shield: ShieldConfig | undefined;
   onShieldChange: OnChangeS;

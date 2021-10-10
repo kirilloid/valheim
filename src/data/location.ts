@@ -2,7 +2,7 @@ import type {
   Biome,
   BiomeConfig,
   Creature,
-  DungeonConfig,
+  DungeonGenConfig,
   EntityId,
   GameLocationId,
   LocationConfig,
@@ -11,11 +11,13 @@ import type {
 } from '../types';
 
 import { locItem } from '../model/game';
+import { DungeonRoomsConfig, forestcrypt, sunkencrypt } from '../data/rooms';
 
-import { creatures } from './creatures';
-import { objects } from './objects';
+import { fullDestructible, objects } from './objects';
 import { data } from './itemDB';
 import { resources } from './resources';
+import { weightedAdd, distributeDrop, Distribution, DropDist, mergeDist, power, powerDist, scaleDist, sum, sumDist, gatherDrop } from '../model/dist';
+import { mapValues } from '../model/utils';
 
 export const locationBiomes: Record<GameLocationId, Biome> = {};
 
@@ -44,6 +46,8 @@ export const biomes: BiomeConfig[] = [
   biome('Ashlands', 7, false),
   biome('DeepNorth', 8, false),
 ];
+
+const biomeMap = Object.fromEntries(biomes.map(b => [b.id, b])) as Record<Biome, BiomeConfig>;
 
 export const biomeTiers = Object.fromEntries(biomes.map(b => [b.id as Biome, b.tier]));
 
@@ -83,9 +87,9 @@ function loc(
     minApart,
     altitude: [minAlt, maxAlt],
     distance: [minDistance, maxDistance],
-    destructibles: [],
-    creatures: [],
-    resources: [],
+    destructibles: {},
+    creatures: {},
+    resources: {},
     variations,
   };
 }
@@ -277,12 +281,9 @@ export const locations: LocationConfig[] = [
       subtype: '234',
       quantity: 200 * 3,
       items: [
-        locItem('TreasureChest_forestcrypt', 0.2, 10),
-        locItem('Pickable_ForestCryptRandom', 0.5, 30),
-        locItem('Skeleton_Poison', 0.3, 1),
-        locItem('Ghost', 0.5, 3),
-        locItem('Vegvisir', 0.5), // Vegvisir_GDKing
+        locItem('Skeleton', 1, 3),
       ],
+      dungeon: forestcrypt, 
     }
   ]),
   loc(2, 'Greydwarf_camp', ['BlackForest'], { minApart: 128, }, [
@@ -342,7 +343,7 @@ export const locations: LocationConfig[] = [
         locItem('Crow', 1, 2),
         // lvl1
         locItem([
-          locItem('BeeHive', 0.281),
+          locItem('beehive', 0.281),
           locItem('TreasureChest_blackforest'),
           locItem('Greydwarf', 0.5),
           locItem('Greydwarf_Elite', 0.5),
@@ -435,7 +436,7 @@ export const locations: LocationConfig[] = [
         locItem('BoneFragments', 0.66, 3),
         locItem('Troll', 0.33, 1),
         // growing
-        locItem('YellowMushroom', 0.5, 12),
+        locItem('MushroomYellow', 0.5, 12),
         locItem([
           locItem('TreasureChest_trollcave', 0.75, 2),
           locItem('Troll', 1, 1),
@@ -578,17 +579,13 @@ export const locations: LocationConfig[] = [
   loc(3, 'SunkenCrypt', ['Swamp'], { type: 'dungeon', minApart: 64, minAlt: 0, maxAlt: 2, }, [{
     subtype: '4',
     quantity: 400,
+    // exterior
     items: [
-      // exterior
       locItem('Draugr', 0.3, 1),
       locItem('BlobElite', 0.3, 1),
       locItem('piece_groundtorch_green', 1, 2),
-      // interior
-      locItem('TreasureChest_sunkencrypt', 0.2, 4),
-      locItem('Blob', 0.4, 10),
-      locItem('Draugr', 0.4, 15),
-      locItem('Vegvisir', 0.2, 2), // Vegvisir_Bonemass
     ],
+    dungeon: sunkencrypt,
   }]),
   loc(3, 'Runestone_Swamps', ['Swamp'], { type: 'runestone', minApart: 128 },
     [{ subtype: '', quantity: 100, items: [] }]), // 12 random texts
@@ -940,7 +937,7 @@ export const locations: LocationConfig[] = [
   ]),
 ];
 
-export const dungeons: DungeonConfig[] = [
+export const dungeons: DungeonGenConfig[] = [
   {
     id: 'MeadowsFarm',
     type: 'CampRadial',
@@ -1011,22 +1008,6 @@ function addToBiome(
   }
 }
 
-function addToLocation(
-  loc: GameLocationId,
-  items: EntityId[],
-  creatures: Creature[],
-  destructibles: EntityId[],
-) {
-  const gameLocation = locations.find(l => l.id === loc);
-  if (gameLocation != null) {
-    gameLocation.resources.push(...items);
-    gameLocation.creatures.push(...creatures);
-    gameLocation.destructibles.push(...destructibles);
-  }
-  const biomeId = locationToBiome(loc);
-  addToBiome(biomeId, items, creatures, destructibles);
-}
-
 for (const obj of objects) {
   for (const loc of (obj.grow ?? []).flatMap(g => g.locations)) {
     addToBiome(loc, [], [], [obj.id]);
@@ -1040,60 +1021,102 @@ for (const { id, grow } of resources) {
   }
 }
 
-for (const creature of creatures) {
-  for (const loc of new Set(creature.spawners.flatMap(s => s.biomes))) {
-    const items = creature.drop.map(d => d.item);
-    addToLocation(loc, items, [creature], []);
+export const objectLocationMap: Record<EntityId, GameLocationId[]> = {};
+
+function collectItems(items: LocationItem[]): DropDist {
+  const result: DropDist = {};
+  for (const { item, number, chance } of items) {
+    const baseDist = typeof item !== 'string'
+      ? collectItems(item)
+      : { [item]: [0, 1] } ;
+    const dist = mapValues(baseDist, v => power(weightedAdd(v, [1], chance), number));
+    mergeDist(result, dist);
+  }
+  return result;
+}
+
+function collectDungeon(config: DungeonRoomsConfig): DropDist {
+  const allRooms = [config.entrances, config.rooms, config.caps].flat();
+  const result: DropDist = {};
+  for (const room of allRooms) {
+    const base = collectItems(room.items);
+    for (const [item, dist] of Object.entries(base)) {
+      const total = powerDist(dist, room.dist);
+      result[item] = sum([result[item] ?? [], total]);
+    }
+  }
+  return result;
+}
+
+function addToDist(drop: DropDist, item: EntityId, dist: Distribution): void {
+  drop[item] = sum([drop[item] ?? [], dist]);
+}
+
+function addToBiomes<T>(biomes: Biome[], reader: (biome: BiomeConfig) => T[], item: T) {
+  for (const b of biomes) {
+    reader(biomeMap[b]).push(item);
   }
 }
 
-export const objectLocationMap: Record<EntityId, GameLocationId[]> = {};
-
-function addRecursive(id: GameLocationId, items: LocationItem[]) {
-  function addItem(item: EntityId) {
-    (objectLocationMap[item] ?? (objectLocationMap[item] = [])).push(id);
-  }
-  for (const { item, number, chance } of items) {
-    if (typeof item !== 'string') {
-      addRecursive(id, item);
+function addToLocation(loc: LocationConfig, drop: DropDist) {
+  for (const [item, dist] of Object.entries(drop)) {
+    const obj = data[item];
+    if (obj == null) {
+      console.error(`Prefab '${item}' exists in location '${loc.id}', but wasn't found in objectDB`);
       continue;
     }
-    const obj = data[item];
-    switch (obj?.type) {
+    (objectLocationMap[item] ?? (objectLocationMap[item] = [])).push(loc.id);
+    switch (obj.type) {
       case 'object':
-        addItem(item);
-        addToLocation(id, [], [], [item]);
+      case 'piece':
+        addToDist(loc.destructibles, item, dist);
+        addToBiomes(loc.biomes, b => b.destructibles, item);
+        if (item === 'Vegvisir') {
+          loc.tags?.push('vegvisir');
+        }
         break;
       case 'creature':
-        addItem(item);
-        addToLocation(id, [], [obj], []);
+        addToDist(loc.creatures, item, dist);
+        addToBiomes(loc.biomes, b => b.creatures, obj);
         break;
       case 'treasure':
-        for (const dropEntry of obj.drop.options) {
-          addItem(dropEntry.item);
+        const items = distributeDrop(obj.drop);
+        for (const [tItem, tDist] of Object.entries(items)) {
+          addToDist(loc.resources, tItem, powerDist(tDist, dist));
+          addToBiomes(loc.biomes, b => b.resources, item);
         }
-        addItem(item);
-        addToLocation(id, [item], [], []);
-        break;
-      case undefined:
+        addToDist(loc.destructibles, item, dist);
+        // addToBiomes(loc.biomes, b => b.resources, item);
         break;
       default:
-        addItem(item);
-        addToLocation(id, [item], [], []);
+        addToDist(loc.resources, item, dist);
+        addToBiomes(loc.biomes, b => b.resources, item);
+    }
+    if (obj.type === 'object') {
+      if (obj.destructible) {
+        const drops = fullDestructible(obj)?.drop ?? [];
+        const items = gatherDrop(drops);
+        for (const [tItem, tDist] of Object.entries(items)) {
+          addToDist(loc.resources, tItem, powerDist(tDist, dist));
+          addToBiomes(loc.biomes, b => b.resources, item);
+        }
+      }
     }
   }
 }
 
 for (const loc of locations) {
+  let total: DropDist[] = [];
   for (const variant of loc.variations) {
-    addRecursive(loc.id, variant.items);
+    const varDrop = collectItems(variant.items);
+    const { dungeon } = variant;
+    if (dungeon) {
+      mergeDist(varDrop, collectDungeon(dungeon));
+    }
+    const variantShare = variant.quantity / loc.quantity;
+    total.push(scaleDist(varDrop, variantShare));
   }
-  loc.resources = [...new Set(loc.resources)];
-  loc.creatures = [...new Set(loc.creatures)];
-  loc.destructibles = [...new Set(loc.destructibles)];
-  if (loc.variations.some(v => v.items.some(i => String(i.item).startsWith('Vegvisir')))) {
-    loc.tags = ['vegvisir'];
-  }
+  addToLocation(loc, sumDist(total));
 }
 
 for (const biome of biomes) {

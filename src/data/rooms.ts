@@ -3,7 +3,7 @@ import type { LocationItem } from '../types';
 import { locItem } from '../model/game';
 import { Distribution } from '../model/dist';
 
-type DungeonConfig = {
+export type DungeonRoomsConfig = {
   type: 'dungeon';
   entrances: RoomConfig[];
   rooms: RoomConfig[];
@@ -382,7 +382,7 @@ export const woodfarm: CampConfig = {
   ],
 };
 
-export const forestcrypt: DungeonConfig = {
+export const forestcrypt: DungeonRoomsConfig = {
   type: 'dungeon',
   entrances: [{
     id: 'entrance_large',
@@ -407,7 +407,7 @@ export const forestcrypt: DungeonConfig = {
         locItem('piece_groundtorch_wood', 0.44),
         locItem('TreasureChest_forestcrypt'),
       ],
-      dist: [0, 0.268, 0.292, 0.177, 0.086, 0.039, 0.012, 0.007, 0.001],
+      dist: [0.118, 0.268, 0.292, 0.177, 0.086, 0.039, 0.012, 0.007, 0.001],
     },
     {
       id: 'Corridor1',
@@ -430,7 +430,7 @@ export const forestcrypt: DungeonConfig = {
         locItem('Skeleton', 0.33),
         locItem('MushroomYellow', 0.2, 5),
       ],
-      dist: [0, 0.278, 0.28, 0.167, 0.103, 0.033, 0.023, 0.003, 0.005],
+      dist: [0.108, 0.278, 0.28, 0.167, 0.103, 0.033, 0.023, 0.003, 0.005],
     },
     {
       id: 'Corridor3',
@@ -443,7 +443,7 @@ export const forestcrypt: DungeonConfig = {
         locItem('MushroomYellow', 0.2, 9),
         locItem('Pickable_ForestCryptRandom', 0.5, 2),
       ],
-      dist: [0, 0.264, 0.305, 0.172, 0.083, 0.021, 0.017, 0.004, 0.001],
+      dist: [0.133, 0.264, 0.305, 0.172, 0.083, 0.021, 0.017, 0.004, 0.001],
     },
     {
       id: 'Bend1',
@@ -454,7 +454,7 @@ export const forestcrypt: DungeonConfig = {
       items: [
         locItem('MushroomYellow', 0.2, 6),
       ],
-      dist: [0, 0.208, 0.265, 0.237, 0.122, 0.055, 0.016, 0.005, 0.004, 0.001],
+      dist: [0.087, 0.208, 0.265, 0.237, 0.122, 0.055, 0.016, 0.005, 0.004, 0.001],
     },
     {
       id: 'Bend2',
@@ -466,7 +466,7 @@ export const forestcrypt: DungeonConfig = {
         locItem('Skeleton', 0.33),
         locItem('MushroomYellow', 0.2, 6),
       ],
-      dist: [0, 0.331, 0.124, 0.037, 0.004, 0.002, 0.001],
+      dist: [0.501, 0.331, 0.124, 0.037, 0.004, 0.002, 0.001],
     },
     {
       id: 'Stairs1',
@@ -475,7 +475,7 @@ export const forestcrypt: DungeonConfig = {
       weight: 1,
       connections: 2,
       items: [],
-      dist: [0, 0.318, 0.125, 0.028, 0.011, 0.003],
+      dist: [0.515, 0.318, 0.125, 0.028, 0.011, 0.003],
     },
     {
       id: 'room_16',
@@ -488,7 +488,7 @@ export const forestcrypt: DungeonConfig = {
         locItem([locItem('Skeleton', 1, 3)], 0.779),
         locItem('MushroomYellow', 0.2, 13),
       ],
-      dist: [0, 0.318, 0.284, 0.149, 0.052, 0.013, 0.004, 0.001],
+      dist: [0.179, 0.318, 0.284, 0.149, 0.052, 0.013, 0.004, 0.001],
     },
     {
       id: 'Chasm01',
@@ -502,7 +502,7 @@ export const forestcrypt: DungeonConfig = {
         locItem('MushroomYellow', 0.2, 17),
         locItem('piece_groundtorch_wood', 0.5),
       ],
-      dist: [0, 0.273, 0.07, 0.01, 0.005, 0, 0.001, 0.001],
+      dist: [0.640, 0.273, 0.07, 0.01, 0.005, 0, 0.001, 0.001],
     },
     {
       id: 'BurialChamber01',
@@ -519,7 +519,7 @@ export const forestcrypt: DungeonConfig = {
         locItem('SurtlingCore', 0.754, 2), // .757 + .751
         locItem('SurtlingCore', 0.55, 2),
       ],
-      dist: [0, 0.486, 0.141, 0.019, 0.003, 0.002],
+      dist: [0.349, 0.486, 0.141, 0.019, 0.003, 0.002],
     },
     {
       id: 'BurialChamber02',
@@ -545,7 +545,7 @@ export const forestcrypt: DungeonConfig = {
         locItem('SurtlingCore', 0.504),
         locItem('TreasureChest_forestcrypt'),
       ],
-      dist: [0, 0.421, 0.102, 0.018],
+      dist: [0.459, 0.421, 0.102, 0.018],
     },
     {
       id: 'Burialchamber03',
@@ -564,7 +564,7 @@ export const forestcrypt: DungeonConfig = {
         locItem('BonePileSpawner'),
         locItem('Skeleton_Poison', 0.25),
       ],
-      dist: [0, 0.375, 0.203, 0.068, 0.016, 0.006, 0.002],
+      dist: [0.330, 0.375, 0.203, 0.068, 0.016, 0.006, 0.002],
     },
     {
       id: 'Burialchamber04',
@@ -584,7 +584,7 @@ export const forestcrypt: DungeonConfig = {
         locItem('Pickable_ForestCryptRandom', 0.5, 7),
         locItem('TreasureChest_forestcrypt'),
       ],
-      dist: [0, 0.378, 0.21, 0.061, 0.027, 0.003, 0.001],
+      dist: [0.320, 0.378, 0.21, 0.061, 0.027, 0.003, 0.001],
     },
     {
       id: 'Burialchamber05',
@@ -603,7 +603,7 @@ export const forestcrypt: DungeonConfig = {
         locItem('Pickable_ForestCryptRandom', 0.5, 6),
         locItem('TreasureChest_forestcrypt'),
       ],
-      dist: [0, 0.369, 0.152, 0.041, 0.012, 0.001],
+      dist: [0.425, 0.369, 0.152, 0.041, 0.012, 0.001],
     },
   ],
   caps: [
@@ -613,7 +613,7 @@ export const forestcrypt: DungeonConfig = {
       weight: 1,
       connections: 1,
       items: [],
-      dist: [0, 0.343, 0.185, 0.047, 0.017, 0.003, 0.001, 0.001],
+      dist: [0.403, 0.343, 0.185, 0.047, 0.017, 0.003, 0.001, 0.001],
     },
     {
       id: 'EndCap2',
@@ -623,7 +623,7 @@ export const forestcrypt: DungeonConfig = {
       items: [
         locItem('MushroomYellow', 0.2, 5),
       ],
-      dist: [0, 0.01, 0.026, 0.055, 0.112, 0.154, 0.157, 0.146, 0.125, 0.079, 0.048, 0.03, 0.022, 0.013, 0.01, 0.005, 0.004, 0.001, 0.001],
+      dist: [0.02, 0.01, 0.026, 0.055, 0.112, 0.154, 0.157, 0.146, 0.125, 0.079, 0.048, 0.03, 0.022, 0.013, 0.01, 0.005, 0.004, 0.001, 0.001],
     },
     {
       id: 'EndCap3',
@@ -634,7 +634,7 @@ export const forestcrypt: DungeonConfig = {
         locItem('BoneFragments', 0.33),
         locItem('SurtlingCore', 0.33),
       ],
-      dist: [0, 0.006, 0.029, 0.048, 0.114, 0.124, 0.155, 0.142, 0.115, 0.093, 0.073, 0.04, 0.028, 0.012, 0.007, 0.008, 0.002, 0.002, 0, 0.001],
+      dist: [0.001, 0.006, 0.029, 0.048, 0.114, 0.124, 0.155, 0.142, 0.115, 0.093, 0.073, 0.04, 0.028, 0.012, 0.007, 0.008, 0.002, 0.002, 0, 0.001],
     },
   ],
 };
@@ -646,12 +646,12 @@ const ROOM_ENEMIES = locItem([
 ]);
 
 const ROOM_LOOT = locItem([
-  locItem('PickableSunkenCryptRandom', 0.5, 4),
+  locItem('Pickable_SunkenCryptRandom', 0.5, 4),
   locItem('TreasureChest_sunkencrypt', 0.9),
   locItem('piece_groundtorch_green', 0.5, 4),
 ]);
 
-export const sunkencrypt: DungeonConfig = {
+export const sunkencrypt: DungeonRoomsConfig = {
   type: 'dungeon',
   entrances: [
     {
@@ -678,7 +678,7 @@ export const sunkencrypt: DungeonConfig = {
         locItem('Vegvisir', 0.4),
         locItem('TreasureChest_sunkencrypt', 0.5, 3),
       ],
-      dist: [0, 0.44, 0.19, 0.1, 0.06],
+      dist: [0.21, 0.44, 0.19, 0.1, 0.06],
     },
     {
       id: 'Corridor2',
@@ -691,7 +691,7 @@ export const sunkencrypt: DungeonConfig = {
         locItem('MushroomYellow', 0.5, 6),
         locItem('mudpile2', 0.6, 2),
       ],
-      dist: [0, 0.44, 0.21, 0.12, 0.02],
+      dist: [0.21, 0.44, 0.21, 0.12, 0.02],
     },
     {
       id: 'Corridor3',
@@ -701,7 +701,7 @@ export const sunkencrypt: DungeonConfig = {
       items: [
         locItem('piece_groundtorch_green', 0.5, 2),
       ],
-      dist: [0, 0.22, 0.22, 0.21, 0.12, 0.06, 0.01, 0.01, 0.01],
+      dist: [0.14, 0.22, 0.22, 0.21, 0.12, 0.06, 0.01, 0.01, 0.01],
     },
     {
       id: 'Corridor4',
@@ -714,7 +714,7 @@ export const sunkencrypt: DungeonConfig = {
         locItem('Blob', 0.5),
         locItem('piece_groundtorch_green', 0.5, 1),
       ],
-      dist: [0, 0.3, 0.26, 0.15, 0.07, 0.03, 0.02],
+      dist: [0.17, 0.3, 0.26, 0.15, 0.07, 0.03, 0.02],
     },
     {
       id: 'Corridor5',
@@ -726,7 +726,7 @@ export const sunkencrypt: DungeonConfig = {
         locItem('Blob', 0.5, 2),
         locItem('piece_groundtorch_green', 0.5, 2),
       ],
-      dist: [0, 0.22, 0.13, 0.27, 0.13, 0.03, 0.03],
+      dist: [0.19, 0.22, 0.13, 0.27, 0.13, 0.03, 0.03],
     },
     {
       id: 'Stair1',
@@ -737,7 +737,7 @@ export const sunkencrypt: DungeonConfig = {
         locItem('mudpile2', 0.6, 2),
         locItem('piece_groundtorch_green', 0.5, 4),
       ],
-      dist: [0, 0.29, 0.26, 0.14, 0.04, 0.01],
+      dist: [0.26, 0.29, 0.26, 0.14, 0.04, 0.01],
     },
     {
       id: 'Room1',
@@ -750,7 +750,7 @@ export const sunkencrypt: DungeonConfig = {
         ROOM_LOOT,
         locItem('MushroomYellow', 0.5, 8),
       ],
-      dist: [0, 0.29, 0.24, 0.06, 0.07],
+      dist: [0.34, 0.29, 0.24, 0.06, 0.07],
     },
     {
       id: 'Room2',
@@ -764,7 +764,7 @@ export const sunkencrypt: DungeonConfig = {
         ROOM_LOOT,
         locItem('MushroomYellow', 0.5, 8),
       ],
-      dist: [0, 0.31, 0.22, 0.12, 0.04, 0, 0.01],
+      dist: [0.30, 0.31, 0.22, 0.12, 0.04, 0, 0.01],
     },
     {
       id: 'Room3',
@@ -778,7 +778,7 @@ export const sunkencrypt: DungeonConfig = {
         ROOM_LOOT,
         locItem('MushroomYellow', 0.5, 8),
       ],
-      dist: [0, 0.37, 0.24, 0.1, 0.04],
+      dist: [0.25, 0.37, 0.24, 0.1, 0.04],
     },
     {
       id: 'Room4',
@@ -791,7 +791,7 @@ export const sunkencrypt: DungeonConfig = {
         ROOM_LOOT,
         locItem('MushroomYellow', 0.5, 8),
       ],
-      dist: [0, 0.24, 0.23, 0.15, 0.1, 0.03, 0.01, 0, 0.02],
+      dist: [0.22, 0.24, 0.23, 0.15, 0.1, 0.03, 0.01, 0, 0.02],
     },
   ],
   caps: [
@@ -803,7 +803,7 @@ export const sunkencrypt: DungeonConfig = {
       items: [
         locItem('MushroomYellow', 0.5, 5),
       ],
-      dist: [0, 0.14, 0.15, 0.19, 0.12, 0.09, 0.07, 0.03, 0.05],
+      dist: [0.16, 0.14, 0.15, 0.19, 0.12, 0.09, 0.07, 0.03, 0.05],
     },
     {
       id: 'Endcap2',
@@ -811,10 +811,10 @@ export const sunkencrypt: DungeonConfig = {
       weight: 0.5,
       connections: 1,
       items: [
-        locItem('PickableSunkenCryptRandom', 0.5),
+        locItem('Pickable_SunkenCryptRandom', 0.5),
         locItem('MushroomYellow', 0.5, 4),
       ],
-      dist: [0, 0.11, 0.2, 0.22, 0.18, 0.09, 0.05, 0.04, 0.02, 0.02],
+      dist: [0.07, 0.11, 0.2, 0.22, 0.18, 0.09, 0.05, 0.04, 0.02, 0.02],
     },
     {
       id: 'Endcap3',
@@ -830,7 +830,7 @@ export const sunkencrypt: DungeonConfig = {
       weight: 0.5,
       connections: 1, // water
       items: [],
-      dist: [0, 0.41, 0.13, 0.07, 0.02],
+      dist: [0.37, 0.41, 0.13, 0.07, 0.02],
     },
     {
       id: 'EndcapWater2',
@@ -838,7 +838,7 @@ export const sunkencrypt: DungeonConfig = {
       weight: 0.5,
       connections: 1, // water
       items: [],
-      dist: [0, 0.37, 0.13, 0.05],
+      dist: [0,45, 0.37, 0.13, 0.05],
     },
   ],
 };

@@ -1,4 +1,4 @@
-import { Item, CraftingStation, EntityId, Resource, ItemGrow, itemGrow } from '../types';
+import { Item, CraftingStation, EntityId, Resource, itemGrow } from '../types';
 
 const CAULDRON_TIME = 3;
 const FORGE_TIME = 2;

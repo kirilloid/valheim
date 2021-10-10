@@ -4,7 +4,6 @@ import type * as T from '../types';
 import { timeI2S } from '../model/utils';
 import { axes, pickaxes } from '../data/weapons';
 import { fullDestructible } from '../data/objects';
-import { objectLocationMap } from '../data/location';
 
 import { TranslationContext } from '../effects';
 import { Area, InlineObjectWithIcon, List, rangeBy, Resistances } from './helpers';
