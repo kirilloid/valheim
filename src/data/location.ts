@@ -16,7 +16,7 @@ import { DungeonRoomsConfig, forestcrypt, sunkencrypt } from '../data/rooms';
 import { fullDestructible, objects } from './objects';
 import { data } from './itemDB';
 import { resources } from './resources';
-import { weightedAdd, distributeDrop, Distribution, DropDist, mergeDist, power, powerDist, scaleDist, sum, sumDist, gatherDrop } from '../model/dist';
+import { weightedAdd, distributeDrop, Distribution, DropDist, mergeDist, power, powerDist, scaleDist, sum, sumDist, gatherDrop, mul } from '../model/dist';
 import { mapValues } from '../model/utils';
 
 export const locationBiomes: Record<GameLocationId, Biome> = {};
@@ -1042,7 +1042,7 @@ function collectDungeon(config: DungeonRoomsConfig): DropDist {
     const base = collectItems(room.items);
     for (const [item, dist] of Object.entries(base)) {
       const total = powerDist(dist, room.dist);
-      result[item] = sum([result[item] ?? [], total]);
+      result[item] = mul(result[item] ?? [1], total);
     }
   }
   return result;
