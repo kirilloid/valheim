@@ -1036,9 +1036,8 @@ function collectItems(items: LocationItem[]): DropDist {
 }
 
 function collectDungeon(config: DungeonRoomsConfig): DropDist {
-  const allRooms = [config.entrances, config.rooms, config.caps].flat();
   const result: DropDist = {};
-  for (const room of allRooms) {
+  for (const room of config.rooms) {
     const base = collectItems(room.items);
     for (const [item, dist] of Object.entries(base)) {
       const total = powerDist(dist, room.dist);
@@ -1065,14 +1064,13 @@ function addToLocation(loc: LocationConfig, drop: DropDist) {
       console.error(`Prefab '${item}' exists in location '${loc.id}', but wasn't found in objectDB`);
       continue;
     }
-    (objectLocationMap[item] ?? (objectLocationMap[item] = [])).push(loc.id);
     switch (obj.type) {
       case 'object':
       case 'piece':
         addToDist(loc.destructibles, item, dist);
         addToBiomes(loc.biomes, b => b.destructibles, item);
         if (item === 'Vegvisir') {
-          loc.tags?.push('vegvisir');
+          (loc.tags ?? (loc.tags = [])).push('vegvisir');
         }
         break;
       case 'creature':
@@ -1105,19 +1103,36 @@ function addToLocation(loc: LocationConfig, drop: DropDist) {
   }
 }
 
-for (const loc of locations) {
-  let total: DropDist[] = [];
-  for (const variant of loc.variations) {
-    const varDrop = collectItems(variant.items);
-    const { dungeon } = variant;
-    if (dungeon) {
-      mergeDist(varDrop, collectDungeon(dungeon));
-    }
-    const variantShare = variant.quantity / loc.quantity;
-    total.push(scaleDist(varDrop, variantShare));
-  }
-  addToLocation(loc, sumDist(total));
+function addToMap(id: GameLocationId, item: EntityId): void {
+  (objectLocationMap[item] ?? (objectLocationMap[item] = [])).push(id);
 }
+
+function addToMapRec(id: GameLocationId, { item }: LocationItem): void {
+  if (typeof item === 'string') {
+    addToMap(id, item);
+  } else {
+    item.forEach(child => addToMapRec(id, child));
+  }
+}
+
+const start = performance.now();
+
+for (const loc of locations) {
+  for (const { items, dungeon } of loc.variations) {
+    for (const item of items) {
+      addToMapRec(loc.id, item);
+    }
+    if (!dungeon) continue;
+    for (const { items } of dungeon.rooms) {
+      for (const item of items) {
+        addToMapRec(loc.id, item);
+      }
+    }
+  }
+}
+
+const dt = performance.now() - start;
+console.log(`All locations t = ${Math.round(dt)}ms`);
 
 for (const biome of biomes) {
   biome.resources = [...new Set(biome.resources)]
@@ -1129,4 +1144,26 @@ for (const biome of biomes) {
 
 for (const id in objectLocationMap) {
   objectLocationMap[id] = [...new Set(objectLocationMap[id])];
+}
+
+const computedLocations = new Set<GameLocationId>();
+
+export function getLocationDetails(id: GameLocationId): LocationConfig | undefined {
+  const loc = locations.find(loc => loc.id === id);
+  const total: DropDist[] = [];
+  if (loc == null) return undefined;
+  if (!computedLocations.has(id)) {
+    for (const variant of loc.variations) {
+      const varDrop = collectItems(variant.items);
+      const { dungeon } = variant;
+      if (dungeon) {
+        mergeDist(varDrop, collectDungeon(dungeon));
+      }
+      const variantShare = variant.quantity / loc.quantity;
+      total.push(scaleDist(varDrop, variantShare));
+    }
+    addToLocation(loc, sumDist(total));
+    computedLocations.add(id);
+  }
+  return loc;
 }

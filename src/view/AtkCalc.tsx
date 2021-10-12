@@ -260,7 +260,7 @@ export function AttackCalc() {
               .filter(([gBiome]) => (biomeTiers[gBiome] ?? 0) <= spoiler)
               .map(([gBiome, group]) => group.length ? (
                   <optgroup key={gBiome} label={gBiome}>
-                    {group.map(c => <option
+                    {group.map(c => <option key={c.id}
                       value={c.id}
                       selected={creature === c && biome === gBiome}
                     >{runeTranslate(c)}</option>)}

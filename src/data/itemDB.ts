@@ -8,7 +8,7 @@ import { pieces } from './building';
 import { creatures } from './creatures';
 import { ships, carts } from './transport';
 import { objects } from './objects';
-import { chests } from './chests';
+import { treasures } from './treasures';
 
 export const data: Record<string, GameObject> = {};
 
@@ -32,7 +32,7 @@ for (const coll of [
   pieces,
   ships,
   carts,
-  chests,
+  treasures,
   objects,
   resources,
 ]) {

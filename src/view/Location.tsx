@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { isEmpty } from '../model/utils';
-import { locations } from '../data/location';
+import { getLocationDetails } from '../data/location';
 
 import { TranslationContext } from '../effects';
 import { Area, List, rangeBy } from './helpers';
@@ -12,7 +12,7 @@ export function Location() {
   const { id } = useParams<{ id: string }>();
   const translate = useContext(TranslationContext);
 
-  const loc = locations.find(l => l.id === id);
+  const loc = getLocationDetails(id);
   if (loc == null) {
     return <div className="error">
       Location "{id}" not found

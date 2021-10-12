@@ -92,6 +92,7 @@ export const tools: Tool[] = [
   },
   {
     id: 'Chisel',
+    disabled: true,
     type: 'tool',
     special: 'build',
     tier: 3,

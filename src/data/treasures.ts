@@ -2,7 +2,7 @@ import type { TreasureChest } from '../types';
 
 const oneOfEach = true;
 
-export const chests: TreasureChest[] = [
+export const treasures: TreasureChest[] = [
   {
     type: 'treasure',
     id: 'Pickable_DolmenTreasure',

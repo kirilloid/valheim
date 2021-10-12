@@ -5,9 +5,7 @@ import { Distribution } from '../model/dist';
 
 export type DungeonRoomsConfig = {
   type: 'dungeon';
-  entrances: RoomConfig[];
   rooms: RoomConfig[];
-  caps: RoomConfig[];
 };
 
 type CampConfig = {
@@ -18,6 +16,7 @@ type CampConfig = {
 
 type RoomConfig = {
   id: string;
+  type: 'start' | 'middle' | 'end';
   size: [number, number, number];
   minPlaceOrder?: number;
   weight: number;
@@ -384,19 +383,21 @@ export const woodfarm: CampConfig = {
 
 export const forestcrypt: DungeonRoomsConfig = {
   type: 'dungeon',
-  entrances: [{
-    id: 'entrance_large',
-    size: [12, 12, 20],
-    weight: 1,
-    connections: 3,
-    items: [
-      locItem('MushroomYellow', 0.2, 12),
-    ],
-    dist: [0, 1],
-  }],
   rooms: [
     {
+      id: 'entrance_large',
+      type: 'start',
+      size: [12, 12, 20],
+      weight: 1,
+      connections: 3,
+      items: [
+        locItem('MushroomYellow', 0.2, 12),
+      ],
+      dist: [0, 1],
+    },
+    {
       id: 'room1',
+      type: 'middle',
       size: [8, 6, 8],
       minPlaceOrder: 2,
       weight: 1,
@@ -411,6 +412,7 @@ export const forestcrypt: DungeonRoomsConfig = {
     },
     {
       id: 'Corridor1',
+      type: 'middle',
       size: [6, 5, 10],
       weight: 1,
       connections: 3,
@@ -422,6 +424,7 @@ export const forestcrypt: DungeonRoomsConfig = {
     },
     {
       id: 'Corridor2',
+      type: 'middle',
       size: [6, 5, 10],
       minPlaceOrder: 2,
       weight: 1,
@@ -434,6 +437,7 @@ export const forestcrypt: DungeonRoomsConfig = {
     },
     {
       id: 'Corridor3',
+      type: 'middle',
       size: [8, 5, 10],
       minPlaceOrder: 2,
       weight: 1,
@@ -447,6 +451,7 @@ export const forestcrypt: DungeonRoomsConfig = {
     },
     {
       id: 'Bend1',
+      type: 'middle',
       size: [6, 5, 6],
       minPlaceOrder: 4,
       weight: 1,
@@ -458,6 +463,7 @@ export const forestcrypt: DungeonRoomsConfig = {
     },
     {
       id: 'Bend2',
+      type: 'middle',
       size: [8, 5, 6],
       minPlaceOrder: 4,
       weight: 1,
@@ -470,6 +476,7 @@ export const forestcrypt: DungeonRoomsConfig = {
     },
     {
       id: 'Stairs1',
+      type: 'middle',
       size: [4, 10, 8],
       minPlaceOrder: 4,
       weight: 1,
@@ -479,6 +486,7 @@ export const forestcrypt: DungeonRoomsConfig = {
     },
     {
       id: 'room_16',
+      type: 'middle',
       size: [16, 8, 16],
       minPlaceOrder: 2,
       weight: 1,
@@ -492,6 +500,7 @@ export const forestcrypt: DungeonRoomsConfig = {
     },
     {
       id: 'Chasm01',
+      type: 'middle',
       size: [12, 16, 12],
       minPlaceOrder: 4,
       weight: 1,
@@ -506,6 +515,7 @@ export const forestcrypt: DungeonRoomsConfig = {
     },
     {
       id: 'BurialChamber01',
+      type: 'middle',
       size: [6, 6, 18],
       minPlaceOrder: 3,
       weight: 1,
@@ -523,6 +533,7 @@ export const forestcrypt: DungeonRoomsConfig = {
     },
     {
       id: 'BurialChamber02',
+      type: 'middle',
       size: [6, 6, 18],
       minPlaceOrder: 3,
       weight: 1,
@@ -549,6 +560,7 @@ export const forestcrypt: DungeonRoomsConfig = {
     },
     {
       id: 'Burialchamber03',
+      type: 'middle',
       size: [16, 6, 8],
       minPlaceOrder: 3,
       weight: 1,
@@ -568,6 +580,7 @@ export const forestcrypt: DungeonRoomsConfig = {
     },
     {
       id: 'Burialchamber04',
+      type: 'middle',
       size: [16, 6, 8],
       minPlaceOrder: 3,
       weight: 1,
@@ -588,6 +601,7 @@ export const forestcrypt: DungeonRoomsConfig = {
     },
     {
       id: 'Burialchamber05',
+      type: 'middle',
       size: [16, 6, 16],
       minPlaceOrder: 3,
       weight: 1,
@@ -605,10 +619,9 @@ export const forestcrypt: DungeonRoomsConfig = {
       ],
       dist: [0.425, 0.369, 0.152, 0.041, 0.012, 0.001],
     },
-  ],
-  caps: [
     {
       id: 'EndCap', // lower priority
+      type: 'end',
       size: [2, 4, 0],
       weight: 1,
       connections: 1,
@@ -617,6 +630,7 @@ export const forestcrypt: DungeonRoomsConfig = {
     },
     {
       id: 'EndCap2',
+      type: 'end',
       size: [2, 4, 2],
       weight: 1,
       connections: 1,
@@ -627,6 +641,7 @@ export const forestcrypt: DungeonRoomsConfig = {
     },
     {
       id: 'EndCap3',
+      type: 'end',
       size: [2, 4, 2],
       weight: 1,
       connections: 1,
@@ -653,9 +668,10 @@ const ROOM_LOOT = locItem([
 
 export const sunkencrypt: DungeonRoomsConfig = {
   type: 'dungeon',
-  entrances: [
+  rooms: [
     {
       id: 'Start1',
+      type: 'start',
       size: [8, 10, 14],
       weight: 1,
       connections: 3,
@@ -665,10 +681,9 @@ export const sunkencrypt: DungeonRoomsConfig = {
       ],
       dist: [0, 1],
     },
-  ],
-  rooms: [
     {
       id: 'Corridor1',
+      type: 'middle',
       size: [12, 10, 10],
       weight: 5,
       connections: 2,
@@ -682,6 +697,7 @@ export const sunkencrypt: DungeonRoomsConfig = {
     },
     {
       id: 'Corridor2',
+      type: 'middle',
       size: [12, 10, 8],
       weight: 0.5,
       connections: 2,
@@ -695,6 +711,7 @@ export const sunkencrypt: DungeonRoomsConfig = {
     },
     {
       id: 'Corridor3',
+      type: 'middle',
       size: [12, 10, 8],
       weight: 0.5,
       connections: 2, // water + ''
@@ -705,6 +722,7 @@ export const sunkencrypt: DungeonRoomsConfig = {
     },
     {
       id: 'Corridor4',
+      type: 'middle',
       size: [12, 10, 8],
       weight: 1,
       connections: 3,
@@ -718,6 +736,7 @@ export const sunkencrypt: DungeonRoomsConfig = {
     },
     {
       id: 'Corridor5',
+      type: 'middle',
       size: [12, 10, 8],
       weight: 1,
       connections: 4,
@@ -730,6 +749,7 @@ export const sunkencrypt: DungeonRoomsConfig = {
     },
     {
       id: 'Stair1',
+      type: 'middle',
       size: [16, 16, 8],
       weight: 2,
       connections: 4,
@@ -741,6 +761,7 @@ export const sunkencrypt: DungeonRoomsConfig = {
     },
     {
       id: 'Room1',
+      type: 'middle',
       size: [12, 10, 12],
       weight: 1,
       connections: 4,
@@ -754,6 +775,7 @@ export const sunkencrypt: DungeonRoomsConfig = {
     },
     {
       id: 'Room2',
+      type: 'middle',
       size: [12, 10, 12],
       weight: 1,
       connections: 3,
@@ -768,6 +790,7 @@ export const sunkencrypt: DungeonRoomsConfig = {
     },
     {
       id: 'Room3',
+      type: 'middle',
       size: [12, 10, 12],
       weight: 1,
       connections: 2,
@@ -782,6 +805,7 @@ export const sunkencrypt: DungeonRoomsConfig = {
     },
     {
       id: 'Room4',
+      type: 'middle',
       size: [12, 10, 12],
       weight: 1,
       connections: 2, // water + ''
@@ -793,10 +817,9 @@ export const sunkencrypt: DungeonRoomsConfig = {
       ],
       dist: [0.22, 0.24, 0.23, 0.15, 0.1, 0.03, 0.01, 0, 0.02],
     },
-  ],
-  caps: [
     {
       id: 'Endcap1',
+      type: 'end',
       size: [4, 10, 4],
       weight: 0.5,
       connections: 1,
@@ -807,6 +830,7 @@ export const sunkencrypt: DungeonRoomsConfig = {
     },
     {
       id: 'Endcap2',
+      type: 'end',
       size: [4, 10, 4],
       weight: 0.5,
       connections: 1,
@@ -818,6 +842,7 @@ export const sunkencrypt: DungeonRoomsConfig = {
     },
     {
       id: 'Endcap3',
+      type: 'end',
       size: [4, 10, 4],
       weight: 0.5,
       connections: 1,
@@ -826,6 +851,7 @@ export const sunkencrypt: DungeonRoomsConfig = {
     },
     {
       id: 'EndcapWater1',
+      type: 'end',
       size: [0, 10, 4],
       weight: 0.5,
       connections: 1, // water
@@ -834,6 +860,7 @@ export const sunkencrypt: DungeonRoomsConfig = {
     },
     {
       id: 'EndcapWater2',
+      type: 'end',
       size: [4, 10, 4],
       weight: 0.5,
       connections: 1, // water
