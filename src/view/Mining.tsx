@@ -206,7 +206,7 @@ export function Mining() {
           min="0" max="100" value={skill} onChange={e => setSkill(+e.target.value)}
           style={{ verticalAlign: 'middle', width: '190px' }} />
         {' '}
-        <input type="number" pattern="[0-9]*" inputMode="numeric"
+        <input type="number" inputMode="numeric" pattern="[0-9]*"
           min="0" max="100" value={skill} onChange={e => setSkill(+e.target.value)}
           style={{ width: '3em' }} />
       </label>

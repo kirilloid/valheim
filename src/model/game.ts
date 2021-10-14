@@ -2,6 +2,10 @@ import type { DamageProfile, EntityId, GeneralDrop, LocationItem } from '../type
 
 export const FRAME = 1 / 50;
 export const GAME_DAY = 1800;
+export const INTRO_DURATION = 2040;
+export const WIND_PERIOD = 125;
+export const WEATHER_PERIOD = 666;
+
 export const BASE_HEALTH = 25;
 export const BASE_STAMINA = 50;
 export const MAX_PLAYERS = 10;

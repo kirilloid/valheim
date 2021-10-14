@@ -18,6 +18,7 @@ import { AttackCalc } from './view/AtkCalc';
 import { DefenseCalc } from './view/DefCalc';
 import { ComfortTable } from './view/ComfortTable';
 import { GameEvent, GameEventTable } from './view/Event';
+import { Weather } from './view/Weather';
 import { FoodTable } from './view/FoodTable';
 import { FoodPlanner } from './view/FoodPlanner';
 import { Mining } from './view/Mining';
@@ -50,6 +51,7 @@ function App() {
             <Route path="/food-planner" children={<FoodPlanner />} />
             <Route path="/event/:id" children={<GameEvent />} />
             <Route path="/events" children={<GameEventTable />} />
+            <Route path="/weather" children={<Weather />} />
             <Route path="/mining/:objectType/:stat" children={<Mining />} />
             <Route path="/mining/:objectType" children={<Mining />} />
             <Route path="/mining" children={<Mining />} />
