@@ -1,8 +1,10 @@
 import type { DamageProfile, EntityId, GeneralDrop, LocationItem } from '../types';
+import type { EnvId } from '../data/env';
 
 export const FRAME = 1 / 50;
 export const GAME_DAY = 1800;
 export const INTRO_DURATION = 2040;
+export const INTRO_WEATHER: EnvId = 'ThunderStorm';
 export const WIND_PERIOD = 125;
 export const WEATHER_PERIOD = 666;
 

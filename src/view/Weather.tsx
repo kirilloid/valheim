@@ -1,17 +1,19 @@
 import React, { useContext, useState } from 'react';
 
 import type { Biome } from '../types';
-import { GAME_DAY, INTRO_DURATION, WEATHER_PERIOD, WIND_PERIOD } from '../model/game';
+import { GAME_DAY, INTRO_DURATION, WEATHER_PERIOD, WIND_PERIOD, INTRO_WEATHER } from '../model/game';
 import { createRNG } from '../model/random';
 
-import { envSetup, envStates, introWeather, WeatherBalance } from '../data/env';
+import { EnvId, envSetup, envStates, WeatherBalance } from '../data/env';
 import { biomes } from '../data/location';
 
 import { TranslationContext } from '../effects';
 import { showNumber } from './helpers';
 import { Icon } from './Icon';
+import { assertNever, clamp01, lerp, timeI2S } from '../model/utils';
+import { take } from '../model/iter';
 
-const getWeather = (weathers: WeatherBalance, roll: number) => {
+const rollWeather = (weathers: WeatherBalance, roll: number) => {
   const totalWeight = weathers.reduce((weight, weather) => weight + weather[1], 0);
   const randomWeight = totalWeight * roll;
   let sum = 0;
@@ -43,27 +45,118 @@ const getGlobalWind = (time: number): Wind => {
   addOctave(time, 2, wind);
   addOctave(time, 4, wind);
   addOctave(time, 8, wind);
-  wind.intensity = Math.min(1, Math.max(0, wind.intensity));
+  wind.intensity = clamp01(wind.intensity);
   wind.angle = (wind.angle * 180 / Math.PI) % 360;
-  // while (wind.angle > 180) wind.angle -= 360;
   return wind;
 };
-
-const secondsToTime = (secs: number): string => {
-  if (secs <= INTRO_DURATION) return "Intro";
-  secs = secs % GAME_DAY;
-  const realSecs = secs * 24 * 3600 / GAME_DAY;
-  const hours = Math.floor(realSecs / 3600);
-  const minutes = Math.floor((realSecs - 3600 * hours) / 60);
-  return hours.toString().padStart(2, "0") + ":" + minutes.toString().padStart(2, "0");
-};
-
-const getBiome = (biome: Biome, weatherPeriod: number): WeatherBalance => biome === 'Meadows' && weatherPeriod < 3 ? introWeather : envSetup[biome]; 
 
 const getRng = (seed: number) => {
   const rng = createRNG(seed);
   return rng.randomRange();
 };
+
+function getWeatherAt(biome: Biome, index: number): EnvId {
+  if (index < INTRO_DURATION / WEATHER_PERIOD) return INTRO_WEATHER;
+  return rollWeather(envSetup[biome], getRng(index));
+}
+
+type WeatherEvent = {
+  type: 'day';
+  time: number;
+  day: number;
+} | {
+  type: 'sunrise' | 'sunset';
+  time: number;
+} | {
+  type: 'wind';
+  time: number;
+  angle: number;
+  intensity: number;
+} | {
+  type: 'weather';
+  time: number;
+  weather: EnvId;
+};
+
+function* dailyGen(): Generator<WeatherEvent> {
+  let day = 0;
+  while (true) {
+    yield {
+      type: 'day',
+      time: day * GAME_DAY,
+      day: day + 1,
+    };
+    yield {
+      type: 'sunrise',
+      time: (day + 0.15) * GAME_DAY,
+    };
+    yield {
+      type: 'sunset',
+      time: (day + 0.85) * GAME_DAY,
+    };
+    day++;
+  }
+}
+
+function* windGen(biome: Biome): Generator<WeatherEvent> {
+  let windIndex = 0;
+  while (true) {
+    const time = windIndex * WIND_PERIOD;
+    const { angle, intensity } = getGlobalWind(time);
+    const env = getWeatherAt(biome, Math.floor(time / WEATHER_PERIOD));
+    const [windMin, windMax] = envStates[env].wind;
+    yield {
+      type: 'wind',
+      time,
+      angle,
+      intensity: lerp(windMin, windMax, intensity),
+    };
+    windIndex++;
+  }
+}
+
+function* envGen(biome: Biome): Generator<WeatherEvent> {
+  yield {
+    type: 'weather',
+    time: 0,
+    weather: INTRO_WEATHER,
+  };
+  let index = Math.floor(INTRO_DURATION / WEATHER_PERIOD);
+  yield {
+    type: 'weather',
+    time: INTRO_DURATION,
+    weather: getWeatherAt(biome, index),
+  };
+  while (true) {
+    index++;
+    yield {
+      type: 'weather',
+      time: index * WEATHER_PERIOD,
+      weather: getWeatherAt(biome, index),
+    };
+  }
+}
+
+function *combineGens(g1: Generator<WeatherEvent>, g2: Generator<WeatherEvent>): Generator<WeatherEvent> {
+  let v1 = g1.next();
+  let v2 = g2.next();
+  while (!v1.done && !v2.done) {
+    if (v1.done) yield v2.value;
+    if (v2.done) yield v1.value;
+    if (v1.value.time <= v2.value.time) {
+      yield v1.value;
+      v1 = g1.next();
+    } else {
+      yield v2.value;
+      v2 = g2.next();
+    }
+  }
+}
+
+function* fullGen(biome: Biome): Generator<WeatherEvent> {
+  const weather = combineGens(envGen(biome), windGen(biome));
+  return combineGens(dailyGen(), weather);
+}
 
 const formatWindDirection = (angle: number): string => {
   const index = Math.round((angle + 360) % 360 / 22.5);
@@ -85,90 +178,57 @@ const ArrowIcon = ({ angle }: { angle: number }) => (
 
 const formatPercent = (value: number) => showNumber(100 * value) + "%";
 
-type WindEntry = { time: string, elements: (JSX.Element | string)[] };
-
-function ForecastWind({ biome, day }: { biome: Biome, day: number }) {
-  const startTime = Math.max(INTRO_DURATION - WIND_PERIOD, day * GAME_DAY);
-  const endTime = (day + 1) * GAME_DAY;
-  let index = 1;
-  const entries: WindEntry[] = [];
-
-  for (let time = startTime; time < endTime; index++) {
-    const dayHeaderIndex = day === 1 ? 2 : 1;
-    const header = index === dayHeaderIndex
-      ? "Day " + day
-      : secondsToTime(time);
-    const entry: WindEntry = {
-      time: header,
-      elements: []
-    };
-    const windPeriod = Math.floor(time / WIND_PERIOD);
-    const wind = getGlobalWind(time);
-    const weatherPeriod = Math.floor(time / WEATHER_PERIOD);
-    const weatherRoll = getRng(weatherPeriod);
-    entry.elements.push(<ArrowIcon angle={wind.angle} />);
-    entry.elements.push(`${Math.round(wind.angle)}\u00B0`);
-    entry.elements.push(formatWindDirection(wind.angle));
-    // addCell("wind_degrees", wind.angle.toFixed(0) + "&deg;");
-    entry.elements.push(<Icon id="wind" size={32} alt="" />);
-    const weather = getWeather(getBiome(biome, weatherPeriod), weatherRoll);
-    const env = envStates.find(env => env.id === weather);
-    let intensity = 'n/a';
-    if (env) {
-      const [windMin, windMax] = env.wind;
-      const biomeIntensity = windMin + (windMax - windMin) * wind.intensity;
-      intensity = formatPercent(biomeIntensity);
-    }
-    entry.elements.push(<span>{intensity}</span>);
-    if (time < INTRO_DURATION && biome === 'Meadows') {
-      time = INTRO_DURATION;
-    } else {
-      time = Math.min((windPeriod + 1) * WIND_PERIOD, (weatherPeriod + 1) * WEATHER_PERIOD);
-    }
-    entries.push(entry);
+function WindEvent({ event }: { event: WeatherEvent & { type: 'wind' } }) {
+  return <span>
+    <ArrowIcon angle={event.angle} />
+    {' '}
+    {Math.round(event.angle)}&deg;
+    {' '}
+    {formatWindDirection(event.angle)}
+    {' '}
+    <Icon id="wind" size={32} alt="" />
+    {' '}
+    {formatPercent(event.intensity)}
+  </span>
   }
-  return <dl>
-    {entries.map(({ time, elements }, i) => <React.Fragment key={i}>
-      <dt>{time}</dt>
-      <dd>{elements}</dd>
-    </React.Fragment>)}
-  </dl>
-};
 
-function ForecastWeather({ biome, day } : { biome: Biome, day: number }) {
-  const startTime = Math.max(INTRO_DURATION - WEATHER_PERIOD, day * GAME_DAY);
-  const endTime = (day + 1) * GAME_DAY;
-  let index = 1;
-  const entries: { time: string, weather: string }[] = [];
-  for (let time = startTime; time < endTime; index++) {
-    const weatherPeriod = Math.floor(time / WEATHER_PERIOD);
-    const roll = getRng(weatherPeriod);
-    const dayHeaderIndex = day === 1 ? 2 : 1;
-    const header = index === dayHeaderIndex
-      ? "Day " + day
-      : secondsToTime(time);
-    const weather = getWeather(getBiome(biome, weatherPeriod), roll);
-    const emoji = envStates.find(e => e.id === weather)?.emoji ?? '?';
-    entries.push({ time: header, weather: `${emoji} ${weather}` });
-    if (time < INTRO_DURATION && biome === 'Meadows') {
-      time = INTRO_DURATION;
-    } else {
-      time = (weatherPeriod + 1) * WEATHER_PERIOD;
-    }
+function ForecastEvent({ event }: { event: WeatherEvent }) {
+  switch (event.type) {
+    case 'day':
+      return <span>Day {event.day}</span>;
+    case 'sunrise':
+      return <span>Sunrise</span>
+    case 'sunset':
+      return <span>Sunset</span>
+    case 'weather':
+      return <span>{event.weather}</span>
+    case 'wind':
+      return <WindEvent event={event} />
+    default:
+      return assertNever(event);
   }
-  return <dl>
-    {entries.map(({ time, weather }, i) => <React.Fragment key={i}>
-      <dt>{time}</dt>
-      <dd>{weather}</dd>
-    </React.Fragment>)}
-  </dl>
+}
+
+const ROW_HEIGHT = 24;
+
+function Forecast({ events }: { events: WeatherEvent[] }) {
+  return <div style={{ position: 'relative', overflowY: 'auto', flexGrow: 1 }}>
+    {events.map((e, i) => {
+      <div key={i} style={{ position: 'absolute', top: `${ROW_HEIGHT * i}px`, height: `${ROW_HEIGHT}px`, display: 'flex' }}>
+        <span style={{ width: `100px` }}>{timeI2S((e.time % GAME_DAY) / GAME_DAY * 24 * 60)}</span>
+        <ForecastEvent event={e} />
+      </div>
+    })}
+  </div>
 };
 
 export function Weather() {
   const translate = useContext(TranslationContext);
   const [day, setDay] = useState(1);
   const [biome, setBiome] = useState<Biome>('Meadows');
-  return <>
+  const gen = fullGen(biome);
+  const events = [...take(30, gen)];
+  return <div style={{ display: 'flex', flexDirection: 'column' }}>
     <h1>{translate('ui.page.weather')}</h1>
     <section>
       <label>
@@ -186,9 +246,6 @@ export function Weather() {
         </select>
       </label>
     </section>
-    <h2>weather</h2>
-    <ForecastWeather biome={biome} day={day} />
-    <h2>wind</h2>
-    <ForecastWind biome={biome} day={day} />
-  </>
+    <Forecast events={events} />
+  </div>
 }
