@@ -8,6 +8,7 @@ export const treasures: TreasureChest[] = [
     id: 'Pickable_DolmenTreasure',
     tier: 0,
     drop: {
+      offByOneBug: false,
       num: [1, 1],
       options: [
         { item: 'Coins', num: [2, 15] },
@@ -21,6 +22,7 @@ export const treasures: TreasureChest[] = [
     id: 'TreasureChest_Meadows',
     tier: 1,
     drop: {
+      offByOneBug: false,
       num: [2, 3],
       options: [
         { item: 'Feathers', num: [1, 3], },
@@ -37,6 +39,7 @@ export const treasures: TreasureChest[] = [
     id: 'TreasureChest_meadows_buried',
     tier: 4,
     drop: {
+      offByOneBug: false,
       oneOfEach,
       num: [2, 3],
       options: [
@@ -53,6 +56,7 @@ export const treasures: TreasureChest[] = [
     id: 'shipwreck_karve_chest',
     tier: 2,
     drop: {
+      offByOneBug: false,
       oneOfEach,
       num: [1, 4],
       options: [
@@ -68,6 +72,7 @@ export const treasures: TreasureChest[] = [
     tier: 2,
     // damageModifiers: mod([1,1,1,1,1,1,1,3,3,3]),
     drop: {
+      offByOneBug: false,
       oneOfEach,
       num: [2, 3],
       options: [
@@ -83,6 +88,7 @@ export const treasures: TreasureChest[] = [
     id: 'TreasureChest_forestcrypt',
     tier: 2,
     drop: {
+      offByOneBug: false,
       oneOfEach,
       num: [2, 4],
       options: [
@@ -99,6 +105,7 @@ export const treasures: TreasureChest[] = [
     id: 'TreasureChest_trollcave',
     tier: 2,
     drop: {
+      offByOneBug: false,
       oneOfEach,
       num: [3, 5],
       options: [
@@ -117,6 +124,7 @@ export const treasures: TreasureChest[] = [
     id: 'Pickable_ForestCryptRandom',
     tier: 2,
     drop: {
+      offByOneBug: false,
       num: [1, 1],
       options: [
         { item: 'Coins', num: [5, 20] },
@@ -131,6 +139,7 @@ export const treasures: TreasureChest[] = [
     id: 'TreasureChest_swamp',
     tier: 3,
     drop: {
+      offByOneBug: false,
       oneOfEach,
       num: [2, 3],
       options: [
@@ -151,6 +160,7 @@ export const treasures: TreasureChest[] = [
     id: 'TreasureChest_sunkencrypt',
     tier: 3,
     drop: {
+      offByOneBug: false,
       oneOfEach,
       num: [2, 3],
       options: [
@@ -172,6 +182,7 @@ export const treasures: TreasureChest[] = [
     id: 'Pickable_SunkenCryptRandom',
     tier: 3,
     drop: {
+      offByOneBug: false,
       num: [1, 1],
       options: [
         { item: 'Coins', num: [5, 30] },
@@ -187,6 +198,7 @@ export const treasures: TreasureChest[] = [
     id: 'TreasureChest_mountains',
     tier: 4,
     drop: {
+      offByOneBug: false,
       oneOfEach,
       num: [2, 4],
       options: [
@@ -205,6 +217,7 @@ export const treasures: TreasureChest[] = [
     id: 'TreasureChest_heath',
     tier: 5,
     drop: {
+      offByOneBug: false,
       oneOfEach,
       num: [2, 3],
       options: [
@@ -221,6 +234,7 @@ export const treasures: TreasureChest[] = [
     tier: 5,
     id: 'TreasureChest_heath_stone',
     drop: {
+      offByOneBug: false,
       oneOfEach,
       num: [2, 4],
       options: [

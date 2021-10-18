@@ -229,9 +229,10 @@ export const dropTrophy = (item: EntityId, chance: number) => {
 };
 
 export interface GeneralDrop {
-  chance?: number,
-  oneOfEach?: boolean,
-  num: Pair<number>,
+  offByOneBug?: boolean;
+  chance?: number;
+  oneOfEach?: boolean;
+  num: Pair<number>;
   options: { item: EntityId, num?: Pair<number>, weight?: number }[];
 }
 

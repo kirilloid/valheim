@@ -526,7 +526,8 @@ export const forestcrypt: DungeonRoomsConfig = {
         locItem('piece_groundtorch_wood', 0.5),
         locItem('BoneFragments', 0.5, 4),
         locItem('Pickable_ForestCryptRandom', 0.5, 4),
-        locItem('SurtlingCore', 0.754, 2), // .757 + .751
+        locItem('SurtlingCore', 0.757),
+        locItem('SurtlingCore', 0.751),
         locItem('SurtlingCore', 0.55, 2),
       ],
       dist: [0.349, 0.486, 0.141, 0.019, 0.003, 0.002],

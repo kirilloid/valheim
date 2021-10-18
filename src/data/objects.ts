@@ -745,7 +745,7 @@ export const objects: PhysicalObject[] = [
         locations: ['Meadows'],
         altitude: [0.2, 1000],
         tilt: [0, 30],
-        num: [5, 8], // type1: 5-5, type2: 0-3 
+        num: [5, 8], // type1: 5-5, type2: 0-3
         inForest: [0, 1.15],
       },
     ),
@@ -915,7 +915,7 @@ export const objects: PhysicalObject[] = [
       offset: -2,
     }),
     hp: 50,
-    children: 132,
+    children: 130,
     drop: {
       num: [2, 4],
       options: [
@@ -1255,7 +1255,7 @@ export const objects: PhysicalObject[] = [
       num: [4, 10],
     }),
     hp: 50,
-    children: 122,
+    children: 120,
     drop: singleDrop('Stone', 4, 8),
   }),
   ...rock({

@@ -116,8 +116,9 @@ export function scaleDist(a: DropDist, m: number) {
 }
 
 export function distributeDropNoReturn(drop: GeneralDrop): DropDist {
-  const { chance = 1, num: [min, max], options } = drop;
-  const prob = chance / (max - min + 1);
+  const { offByOneBug = true, chance = 1, num: [min, max], options } = drop;
+  const total = offByOneBug ? Math.max(max - min, 1) : (max - min + 1);
+  const prob = chance / total;
   const numbers = new Map(options.map(op => [op, 0]));
   function walk(currentOptions: GeneralDrop['options'], remaining: number, probability: number) {
     const totalWeight = currentOptions.reduce((accumWeight, option) => accumWeight + (option.weight ?? 1), 0);
@@ -162,20 +163,21 @@ export function gatherDrop(drops: GeneralDrop[]): DropDist {
 
 export function distributeDrop(drop: GeneralDrop): DropDist {
   if (drop.oneOfEach) return distributeDropNoReturn(drop);
-  const { chance = 1, num: [min, max], options } = drop;
+  const { offByOneBug = true, chance = 1, num: [minTotal, maxTotal], options } = drop;
 
   const totalWeight = options.reduce((w, { weight = 1 }) => w + weight, 0);
   const result: DropDist = {};
   for (const opt of options) {
-    const { item, num = [1, 1], weight = 1 } = opt;
-    const dist = weightedAdd(linearDist(...num), [1], weight / totalWeight);
-    let curr = power(dist, min);
+    const { item, num: [min, max] = [1, 1], weight = 1 } = opt;
+    const linear = linearDist(min, offByOneBug ? Math.max(max - 1, min) : max);
+    const dist = weightedAdd(linear, [1], weight / totalWeight);
+    let curr = power(dist, minTotal);
     const opts = [curr];
-    for (let p = min; p < max; p++) {
+    for (let p = minTotal; p < maxTotal; p++) {
       curr = mul(curr, dist);
       opts.push(curr);
     }
-    result[item] = weightedAdd(scale(sum(opts), 1 / (max - min + 1)), [1], chance);
+    result[item] = weightedAdd(scale(sum(opts), 1 / (maxTotal - minTotal + 1)), [1], chance);
   };
 
   return result; 
