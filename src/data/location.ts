@@ -23,11 +23,12 @@ export const locationBiomes: Record<GameLocationId, Biome> = {};
 
 export const locationToBiome = (loc: GameLocationId | Biome) => (locationBiomes[loc as GameLocationId] ?? loc) as Biome;
 
-function biome(id: Biome, tier: number, active: boolean) {
+function biome(emoji: string, id: Biome, tier: number, active: boolean) {
   return {
     id,
-    tier,
     active,
+    tier,
+    emoji,
     destructibles: [],
     creatures: [],
     locations: [],
@@ -36,15 +37,15 @@ function biome(id: Biome, tier: number, active: boolean) {
 }
 
 export const biomes: BiomeConfig[] = [
-  biome('Meadows', 1, true),
-  biome('BlackForest', 2, true),
-  biome('Swamp', 3, true),
-  biome('Mountain', 4, true),
-  biome('Plains', 5, true),
-  biome('Ocean', 3, true),
-  biome('Mistlands', 6, false),
-  biome('Ashlands', 7, false),
-  biome('DeepNorth', 8, false),
+  biome('⛳', 'Meadows', 1, true),
+  biome('🌲', 'BlackForest', 2, true),
+  biome('🐸', 'Swamp', 3, true),
+  biome('⛰️', 'Mountain', 4, true),
+  biome('🍂', 'Plains', 5, true),
+  biome('🌊', 'Ocean', 3, true),
+  biome('🕷️', 'Mistlands', 6, false),
+  biome('✨', 'Ashlands', 7, false),
+  biome('🧊', 'DeepNorth', 8, false),
 ];
 
 const biomeMap = Object.fromEntries(biomes.map(b => [b.id, b])) as Record<Biome, BiomeConfig>;

@@ -6,35 +6,33 @@
 
 .Weather__controls {
   position: sticky;
-  top: 0px;
+  top: 0;
   background: white;
   z-index: 1;
-  padding-top: 8px;
+  padding: 8px 0;
+}
+
+.Weather__control > * {
+  vertical-align: middle;
 }
 
 .Weather__header {
   position: sticky;
-  top: 32px;
+  top: 40px;
+  padding-bottom: 8px;
   background: white;
   z-index: 1;
   display: flex;
   font-weight: bold;
   flex-direction: row;
 }
+
 .Weather__biome {
   flex-basis: 0;
   flex-grow: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.Weather__control {
-  margin-bottom: 0.5rem;
-}
-
-.Weather__control > * {
-  vertical-align: middle;
 }
 
 .Weather__Event {
@@ -45,8 +43,10 @@
 }
 
 .Weather__time {
-  width: 60px;
+  width: 50px;
+  padding: 0 1%;
   text-align: center;
+  flex-shrink: 0;
 }
 
 .Weather__time--day {
@@ -58,53 +58,76 @@
 }
 
 .Weather__details {
-  padding: 0 10px;
   flex-grow: 1;
+  display: flex;
 }
 
-.Weather--Clear,
-.Weather--Heath_clear {
+.Weather__details > * {
+  flex-grow: 0;
+  width: calc(100% / 7);
+}
+
+.Weather__type {
+  overflow: hidden;
+  word-break: break-all;
+}
+
+.Weather__type--Clear,
+.Weather__type--Heath_clear {
   background: rgba(255, 255, 0, 0.2);
 }
-.Weather--Twilight_Clear {
+.Weather__type--Twilight_Clear {
   background: rgba(255, 255, 128, 0.2);
 }
-.Weather--Misty {
+.Weather__type--Misty {
   background: rgba(128, 128, 128, 0.2);
 }
-.Weather--DeepForest_Mist {
+.Weather__type--DeepForest_Mist {
   background: rgba(192, 192, 255, 0.2);
 }
-.Weather--Darklands_dark,
-.Weather--Crypt,
-.Weather--SunkenCrypt {
+.Weather__type--Darklands_dark,
+.Weather__type--Crypt,
+.Weather__type--SunkenCrypt {
   background: rgba(0, 0, 0, 0.2);
 }
-.Weather--GDKing,
-.Weather--Eikthyr,
-.Weather--GoblinKing,
-.Weather--Bonemass,
-.Weather--Moder {
+.Weather__type--GDKing,
+.Weather__type--Eikthyr,
+.Weather__type--GoblinKing,
+.Weather__type--Bonemass,
+.Weather__type--Moder {
   background: rgba(255, 0, 192, 0.2);
 }
-.Weather--LightRain {
+.Weather__type--LightRain {
   background: rgba(192, 192, 255, 0.2);
 }
-.Weather--Rain {
+.Weather__type--Rain {
   background: rgba(128, 128, 192, 0.2);
 }
-.Weather--ThunderStorm {
+.Weather__type--ThunderStorm {
   background: rgba(64, 64, 128, 0.2);
 }
-.Weather--SwampRain {
+.Weather__type--SwampRain {
   background: rgba(0, 128, 0, 0.2);
 }
-.Weather--Ashrain {
+.Weather__type--Ashrain {
   background: rgba(255, 192, 0, 0.2);
 }
-.Weather--Snow,
-.Weather--Twilight_Snow,
-.Weather--Twilight_SnowStorm,
-.Weather--SnowStorm {
+.Weather__type--Snow,
+.Weather__type--Twilight_Snow,
+.Weather__type--Twilight_SnowStorm,
+.Weather__type--SnowStorm {
   background: rgba(255, 255, 255, 0.2);
+}
+
+.Weather__type,
+.Weather__biome {
+  text-align: center;
+}
+
+@media screen and (max-width: 639px) {
+  .Weather__description { display: none; }
+}
+
+@media screen and (max-width: 959px) {
+  .Weather__full-description { display: none; }
 }

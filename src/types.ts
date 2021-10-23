@@ -92,6 +92,7 @@ export type BiomeConfig = {
   id: Biome;
   active: boolean;
   tier: number;
+  emoji: string;
   locations: GameLocationId[];
   destructibles: EntityId[];
   creatures: Creature[];

@@ -1,20 +1,19 @@
 import React, { useContext, useLayoutEffect, useRef, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import '../css/Weather.css';
 
-import type { Biome } from '../types';
 import { GAME_DAY, INTRO_DURATION, WEATHER_PERIOD, WIND_PERIOD, INTRO_WEATHER } from '../model/game';
 import { createRNG } from '../model/random';
+import { assertNever, clamp01, lerp, timeI2S } from '../model/utils';
+import { combineGens, dropWhile } from '../model/iter';
 
 import { EnvId, envSetup, envStates, WeatherBalance } from '../data/env';
 import { biomes } from '../data/location';
+import { biome } from '../data/emoji';
 
 import { TranslationContext, useDebounceEffect } from '../effects';
-import { showNumber } from './helpers';
 import { Icon } from './Icon';
-import { assertNever, clamp01, lerp, timeI2S } from '../model/utils';
-import { combineGens, dropWhile } from '../model/iter';
 
 const biomeIds = biomes
   .sort((a, b) => a.tier - b.tier)
@@ -63,9 +62,10 @@ const getRng = (seed: number) => {
   return rng.randomRange();
 };
 
-function getWeatherAt(biome: Biome, index: number): EnvId {
-  if (index < INTRO_DURATION / WEATHER_PERIOD) return INTRO_WEATHER;
-  return rollWeather(envSetup[biome], getRng(index));
+function getWeathersAt(index: number): EnvId[] {
+  if (index < INTRO_DURATION / WEATHER_PERIOD) return biomeIds.map(() => INTRO_WEATHER);
+  const rng = getRng(index);
+  return biomeIds.map(biome => rollWeather(envSetup[biome], rng));
 }
 
 type WeatherEvent = {
@@ -79,11 +79,13 @@ type WeatherEvent = {
   type: 'wind';
   time: number;
   angle: number;
-  intensity: number;
+  absolute: number;
+  intensity: number[];
+  weathers: EnvId[];
 } | {
   type: 'weather';
   time: number;
-  weather: EnvId;
+  weathers: EnvId[];
 };
 
 const SUNRISE = 0.15 * GAME_DAY;
@@ -111,41 +113,45 @@ function* dailyGen(): WeatherGen {
   }
 }
 
-function* windGen(biome: Biome): WeatherGen {
+function* windGen(): WeatherGen {
   let windIndex = 0;
   while (true) {
     const time = windIndex * WIND_PERIOD;
     const { angle, intensity } = getGlobalWind(time);
-    const env = getWeatherAt(biome, Math.floor(time / WEATHER_PERIOD));
-    const [windMin, windMax] = envStates[env].wind;
+    const weathers = getWeathersAt(Math.floor(time / WEATHER_PERIOD));
     yield {
       type: 'wind',
       time,
       angle,
-      intensity: lerp(windMin, windMax, intensity),
+      absolute: intensity,
+      intensity: weathers.map(env => {
+        const [windMin, windMax] = envStates[env].wind;
+        return lerp(windMin, windMax, intensity);
+      }),
+      weathers, 
     };
     windIndex++;
   }
 }
 
-function* envGen(biome: Biome): WeatherGen {
+function* envGen(): WeatherGen {
   yield {
     type: 'weather',
     time: 0,
-    weather: INTRO_WEATHER,
+    weathers: biomeIds.map(() => INTRO_WEATHER),
   };
   let index = Math.floor(INTRO_DURATION / WEATHER_PERIOD);
   yield {
     type: 'weather',
     time: INTRO_DURATION,
-    weather: getWeatherAt(biome, index),
+    weathers: getWeathersAt(index),
   };
   while (true) {
     index++;
     yield {
       type: 'weather',
       time: index * WEATHER_PERIOD,
-      weather: getWeatherAt(biome, index),
+      weathers: getWeathersAt(index),
     };
   }
 }
@@ -154,8 +160,8 @@ function eventCompare(e1: WeatherEvent, e2: WeatherEvent) {
   return e1.time - e2.time;
 }
 
-function* fullGen(biome: Biome): WeatherGen {
-  const weather = combineGens(envGen(biome), windGen(biome), eventCompare);
+function* fullGen(): WeatherGen {
+  const weather = combineGens(envGen(), windGen(), eventCompare);
   yield* combineGens(dailyGen(), weather, eventCompare);
 }
 
@@ -177,21 +183,41 @@ const ArrowIcon = ({ angle }: { angle: number }) => (
   </svg>
 );
 
-const formatPercent = (value: number) => showNumber(100 * value) + "%";
+const isDay = (time: number) => {
+  const dayTime = time % GAME_DAY;
+  return dayTime >= SUNRISE && dayTime < SUNSET;
+};
+
+const showClearMoon = (str: string, time: number) => {
+  if (isDay(time)) return str;
+  if (str !== '☀️') return str;
+  return '🌕'; 
+};
+
+const formatPercent = (value: number) => Math.round(100 * value) + "%";
 
 function WindEvent({ event }: { event: WeatherEvent & { type: 'wind' } }) {
-  return <span>
-    <ArrowIcon angle={event.angle} />
-    {' '}
-    {Math.round(event.angle)}&deg;
-    {' '}
-    {formatWindDirection(event.angle)}
-    {' '}
-    <Icon id="wind" size={32} alt="" />
-    {' '}
-    {formatPercent(event.intensity)}
-  </span>
-  }
+  return <>
+    <span>
+      <ArrowIcon angle={event.angle} />
+      <span className="Weather__description">
+        {' '}
+        {Math.round(event.angle)}&deg;
+      </span>
+      <span className="Weather__full-description">
+        {' '}
+        {formatWindDirection(event.angle)}
+      </span>
+    </span>
+    {biomeIds.map((_, i) => <span key={i} className={`Weather__type Weather__type--${event.weathers[i]}`}>
+      <span className="Weather__description">
+        <Icon id="wind" size={32} alt="" />
+        {' '}
+      </span>
+      {formatPercent(event.intensity[i]!)}
+    </span>)}
+  </>;
+}
 
 function ForecastEvent({ event }: { event: WeatherEvent }) {
   const translate = useContext(TranslationContext);
@@ -199,11 +225,20 @@ function ForecastEvent({ event }: { event: WeatherEvent }) {
     case 'day':
       return <strong>Day {event.day}</strong>;
     case 'sunrise':
-      return <>Sunrise</>;
+      return <span>Sunrise</span>;
     case 'sunset':
-      return <>Sunset</>
+      return <span>Sunset</span>
     case 'weather':
-      return <>{envStates[event.weather].emoji} {translate(`ui.weather.${event.weather}`)}</>;
+      return <>
+        <span>
+          <span className="Weather__description">weather</span>
+        </span>
+      {
+        event.weathers.map((weather, i) => <span key={i} className={`Weather__type Weather__type--${weather}`}>
+          <span className="Weather__emoji">{showClearMoon(envStates[weather].emoji, event.time)}</span>
+          <span className="Weather__description">{' '}{translate(`ui.weather.${weather}`)}</span>
+        </span>)
+      }</>;
     case 'wind':
       return <WindEvent event={event} />
     default:
@@ -213,7 +248,7 @@ function ForecastEvent({ event }: { event: WeatherEvent }) {
 
 const HEADER_HEIGHT = 80;
 const EVENTS_OFFSET_HEIGHT = HEADER_HEIGHT 
-  + 32 // controls
+  + 40 // controls
   + 32 // table header
 const ROW_HEIGHT = 32;
 const VIEWPORT_ROWS = 60;
@@ -229,17 +264,13 @@ function parseDay(day: string = '1'): number {
   return num;
 }
 
-function parseBiome(biome?: string): Biome {
-  return biomeIds.find(id => id === biome) ?? biomeIds[0]!;
-}
-
 class BiomeGen {
   private _generator: Iterator<WeatherEvent>;
   private _events: WeatherEvent[] = [];
   private _dayIndices: number[] = [];
 
-  constructor(biome: Biome) {
-    this._generator = dropWhile(e => e.time < GAME_DAY, fullGen(biome))[Symbol.iterator]();
+  constructor() {
+    this._generator = dropWhile(e => e.time < GAME_DAY, fullGen())[Symbol.iterator]();
   }
 
   private generateItem() {
@@ -284,27 +315,21 @@ class BiomeGen {
   }
 }
 
-const biomeGens = new Map(
-  biomeIds.map(id => [id, new BiomeGen(id)])
-);
+const gen = new BiomeGen();
 
 export function Weather() {
   const translate = useContext(TranslationContext);
-  const params = useParams<{ day?: string; biome?: string; }>();
-  const history = useHistory();
-  const [biome, setBiome] = useState<Biome>(parseBiome(params.biome));
-  const dayRef = useRef(1);
-  const gen = biomeGens.get(biome);
-  if (!gen?.events.length) {
-    gen?.addMore(VIEWPORT_ROWS);
+  const history = useHistory();  
+  const dayRef = useRef(parseDay(history.location.hash.replace(/^#/, '')));
+  if (!gen.events.length) {
+    gen.addMore(VIEWPORT_ROWS);
   }
   const events = gen?.events ?? [];
   const [scroll, setScroll] = useState(0);
   
-  useDebounceEffect({ biome, day: dayRef.current }, (state) => {
-    const path = `/weather/${state.biome}#${state.day}`;
-    if (history.location.pathname + history.location.hash !== path) {
-      history.replace(path);
+  useDebounceEffect(dayRef.current, (day) => {
+    if (history.location.hash !== `#${day}`) {
+      history.replace(`/weather#${day}`);
     }
   }, 500);
 
@@ -342,7 +367,9 @@ export function Weather() {
 
   function goToDay(day: number) {
     if (!gen) return;
-    if (day > MAX_DAY) return;
+    if (day > MAX_DAY) {
+      dayRef.current = day = MAX_DAY;
+    };
     const rowIdx = gen.getToDay(day);
     gen.ensureGenerated(rowIdx + VIEWPORT_ROWS);
     if (rowIdx == null) return;
@@ -352,11 +379,6 @@ export function Weather() {
       const { current } = ref;
       if (current) current.scrollTop = rowIdx * ROW_HEIGHT + HEADER_HEIGHT;
     }, 10);
-  }
-
-  function changeBiome(newBiome: Biome) {
-    biomeGens.get(newBiome)?.ensureGenerated(gen?.events.length ?? 0);
-    setBiome(newBiome);
   }
 
   return <div ref={ref} className="Weather">
@@ -391,41 +413,16 @@ export function Weather() {
         {' '}
         <input type="button" className="btn btn--sm btn--primary" value="&gt;" onClick={() => goToDay(dayRef.current + 1)} />
       </div>
-      <div className="Weather__control">
-        <label htmlFor="biome">{translate('ui.biome')}</label>          
-        {' '}
-        <input type="button" className="btn btn--sm btn--primary" value="&lt;" disabled={biomeIds[0] === biome} onClick={() => {
-          const index = biomeIds.indexOf(biome);
-          if (index >= 1) {
-            changeBiome(biomeIds[index - 1]!);
-          };
-        }} />
-        {' '}
-        <select id="biome" value={biome} onChange={e => {
-          changeBiome(e.target.value as Biome);
-        }}>
-          {biomeIds.map(id => <option key={id} value={id}>{translate(`ui.biome.${id}`)}</option>)}
-        </select>
-        {' '}
-        <input type="button" className="btn btn--sm btn--primary" value="&gt;" disabled={biomeIds[biomeIds.length - 1] === biome} onClick={() => {
-          const index = biomeIds.indexOf(biome);
-          if (index < biomeIds.length - 1) {
-            changeBiome(biomeIds[index + 1]!);
-          };
-        }} />
-      </div>
     </div>
-    {/* <div className="Weather__header">
+    <div className="Weather__header">
       <div className="Weather__time">{translate('ui.time')}</div>
+      <div className="Weather__biome"></div>
       {biomeIds.map(id => <div key={id} className="Weather__biome">
+        {biome[id]}
         {translate(`ui.biome.${id}`)}
       </div>)}
-    </div> */}
+    </div>
     {events.slice(startIndex, endIndex).map((e, i) => {
-      const index = Math.floor(e.time / WEATHER_PERIOD);
-      const weatherType = getWeatherAt(biome, index);
-      const dayTime = e.time % GAME_DAY;
-      const isDay = dayTime >= SUNRISE && dayTime < SUNSET;
       return <div
         key={(i + startIndex) % VIEWPORT_ROWS}
         className="Weather__Event"
@@ -433,10 +430,10 @@ export function Weather() {
           top: `${ROW_HEIGHT * (i + startIndex) + EVENTS_OFFSET_HEIGHT}px`,
           height: `${ROW_HEIGHT}px`,
         }}>
-        <span className={`Weather__time Weather__time--${isDay ? 'day' : 'night'}`}>
+        <span className={`Weather__time Weather__time--${isDay(e.time) ? 'day' : 'night'}`}>
           {timeI2S(Math.round((e.time % GAME_DAY) / GAME_DAY * 24 * 60))}
         </span>
-        <span className={`Weather__details Weather--${weatherType}`}>
+        <span className="Weather__details">
           <ForecastEvent event={e} />
         </span>
       </div>
