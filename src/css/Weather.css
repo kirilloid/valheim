@@ -1,29 +1,40 @@
 .Weather {
-  display: flex;
-  flex-direction: column;
+  position: relative;
+  overflow-y: scroll;
   flex-grow: 1;
 }
 
 .Weather__controls {
+  position: sticky;
+  top: 0px;
+  background: white;
+  z-index: 1;
+  padding-top: 8px;
+}
+
+.Weather__header {
+  position: sticky;
+  top: 32px;
+  background: white;
+  z-index: 1;
   display: flex;
-  flex-direction: column;
+  font-weight: bold;
+  flex-direction: row;
+}
+.Weather__biome {
+  flex-basis: 0;
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .Weather__control {
   margin-bottom: 0.5rem;
 }
 
-@media screen and (min-width: 640px) {
-  .Weather__controls {
-    flex-direction: row;
-    justify-content: space-between;
-  }
-}
-
-.Weather__Forecast {
-  position: relative;
-  overflow-y: scroll;
-  flex-grow: 1;
+.Weather__control > * {
+  vertical-align: middle;
 }
 
 .Weather__Event {

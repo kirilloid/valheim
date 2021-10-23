@@ -1,4 +1,4 @@
-import { combineGens, take } from './iter';
+import { combineGens, dropWhile, take } from './iter';
 
 describe('take', () => {
   const data = [1, 2];
@@ -87,4 +87,14 @@ describe('combineGens', () => {
     const gen = combineGens(one(), one(), numCompare);
     expect([...gen]).toEqual([1, 1]);
   });
+});
+
+describe('dropWhile', () => {
+  function* naturals() {
+    let n = 0;
+    while (true) yield ++n;
+  };
+  expect([...take(5, dropWhile(n => n <= 5, naturals()))]).toEqual([
+    6, 7, 8, 9, 10,
+  ]);
 });
