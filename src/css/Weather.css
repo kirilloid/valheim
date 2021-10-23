@@ -1,0 +1,99 @@
+.Weather {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.Weather__controls {
+  display: flex;
+  flex-direction: column;
+}
+
+.Weather__control {
+  margin-bottom: 0.5rem;
+}
+
+@media screen and (min-width: 640px) {
+  .Weather__controls {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.Weather__Forecast {
+  position: relative;
+  overflow-y: scroll;
+  flex-grow: 1;
+}
+
+.Weather__Event {
+  position: absolute;
+  display: flex;
+  width: 100%;
+  line-height: 32px;
+}
+
+.Weather__time {
+  width: 60px;
+  text-align: center;
+}
+
+.Weather__time--day {
+  background: rgba(255, 255, 0, 0.2);
+}
+
+.Weather__time--night {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.Weather__details {
+  padding: 0 10px;
+  flex-grow: 1;
+}
+
+.Weather--Clear,
+.Weather--Heath_clear {
+  background: rgba(255, 255, 0, 0.2);
+}
+.Weather--Twilight_Clear {
+  background: rgba(255, 255, 128, 0.2);
+}
+.Weather--Misty {
+  background: rgba(128, 128, 128, 0.2);
+}
+.Weather--DeepForest_Mist {
+  background: rgba(192, 192, 255, 0.2);
+}
+.Weather--Darklands_dark,
+.Weather--Crypt,
+.Weather--SunkenCrypt {
+  background: rgba(0, 0, 0, 0.2);
+}
+.Weather--GDKing,
+.Weather--Eikthyr,
+.Weather--GoblinKing,
+.Weather--Bonemass,
+.Weather--Moder {
+  background: rgba(255, 0, 192, 0.2);
+}
+.Weather--LightRain {
+  background: rgba(192, 192, 255, 0.2);
+}
+.Weather--Rain {
+  background: rgba(128, 128, 192, 0.2);
+}
+.Weather--ThunderStorm {
+  background: rgba(64, 64, 128, 0.2);
+}
+.Weather--SwampRain {
+  background: rgba(0, 128, 0, 0.2);
+}
+.Weather--Ashrain {
+  background: rgba(255, 192, 0, 0.2);
+}
+.Weather--Snow,
+.Weather--Twilight_Snow,
+.Weather--Twilight_SnowStorm,
+.Weather--SnowStorm {
+  background: rgba(255, 255, 255, 0.2);
+}

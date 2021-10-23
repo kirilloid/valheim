@@ -13,7 +13,7 @@ export const envStates = {
   'Misty': { emoji: '🌫️', wind: [0.1, 0.3], light: [1, 1], flags: COLD_NIGHT },
   'Darklands_dark': { emoji: '☁️', wind: [0.1, 0.6], light: [0, 1], flags: COLD | DARK },
   'Heath_clear': { emoji: '☀️', wind: [0.4, 0.8], light: [1, 1.5], flags: COLD_NIGHT },
-  'DeepForest_Mist': { emoji: '🌫️', wind: [0.1, 0.6], light: [1.2, 1.5], flags: COLD_NIGHT },
+  'DeepForest_Mist': { emoji: '☀️', wind: [0.1, 0.6], light: [1.2, 1.5], flags: COLD_NIGHT },
   'GDKing': { emoji: '🟣', wind: [0.1, 0.3], light: [1.4, 1.5], flags: COLD_NIGHT },
   'Rain': { emoji: '🌧️', wind: [0.5, 1], light: [0.5, 0.77], flags: COLD_NIGHT | RAIN },
   'LightRain': { emoji: '🌦️', wind: [0.1, 0.6], light: [0.8, 0.9], flags: COLD_NIGHT | RAIN },

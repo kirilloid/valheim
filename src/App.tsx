@@ -51,6 +51,7 @@ function App() {
             <Route path="/food-planner" children={<FoodPlanner />} />
             <Route path="/event/:id" children={<GameEvent />} />
             <Route path="/events" children={<GameEventTable />} />
+            <Route path="/weather/:biome/:day" children={<Weather />} />
             <Route path="/weather" children={<Weather />} />
             <Route path="/mining/:objectType/:stat" children={<Mining />} />
             <Route path="/mining/:objectType" children={<Mining />} />
