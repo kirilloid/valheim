@@ -118,7 +118,7 @@ function* windGen(): WeatherGen {
   while (true) {
     const time = windIndex * WIND_PERIOD;
     const { angle, intensity } = getGlobalWind(time);
-    const weathers = getWeathersAt(Math.floor(time / WEATHER_PERIOD));
+    const weathers = getWeathersAt(time / WEATHER_PERIOD);
     yield {
       type: 'wind',
       time,
@@ -135,16 +135,17 @@ function* windGen(): WeatherGen {
 }
 
 function* envGen(): WeatherGen {
+  let introPeriods = Math.floor(INTRO_DURATION / WEATHER_PERIOD);
+  let index = introPeriods;
   yield {
     type: 'weather',
-    time: 0,
+    time: GAME_DAY,
     weathers: biomeIds.map(() => INTRO_WEATHER),
-  };
-  let index = Math.floor(INTRO_DURATION / WEATHER_PERIOD);
+  };  
   yield {
     type: 'weather',
     time: INTRO_DURATION,
-    weathers: getWeathersAt(index),
+    weathers: getWeathersAt(INTRO_DURATION / WEATHER_PERIOD),
   };
   while (true) {
     index++;
