@@ -39,7 +39,7 @@ export type EnvId = keyof ES;
 export type WeatherBalance = [EnvId, number][];
 
 export const envSetup: Record<Biome, WeatherBalance> = {
-  Meadows: [['Clear', 25], ['LightRain', 1], ['Rain', 1], ['Misty', 1], ['ThunderStorm', 1]],
+  Meadows: [['Clear', 25], ['Rain', 1], ['Misty', 1], ['ThunderStorm', 1], ['LightRain', 1]],
   BlackForest: [['DeepForest_Mist', 20], ['Rain', 1], ['Misty', 1], ['ThunderStorm', 1]],
   Swamp: [['SwampRain', 1]],
   Mountain: [['SnowStorm', 1], ['Snow', 5]],
@@ -47,17 +47,5 @@ export const envSetup: Record<Biome, WeatherBalance> = {
   Plains: [['Heath_clear', 5], ['Misty', 1], ['LightRain', 1]],
   Ashlands: [['Ashrain', 1]],
   Mistlands: [['Darklands_dark', 1]],
-  Ocean: [['Clear', 10], ['LightRain', 1], ['Rain', 1], ['Misty', 1], ['ThunderStorm', 1]],
-};
-
-const avgWind = {
-  Meadows: 0.378,
-  BlackForest: 0.385,
-  Swamp: 0.2,
-  Mountain: 0.442,
-  DeepNorth: 0.538,
-  Plains: 0.507,
-  Ashlands: 0.3,
-  Mistlands: 0.35,
-  Ocean: 0.407,
+  Ocean: [['Rain', 1], ['LightRain', 1], ['Misty', 1], ['Clear', 10], ['ThunderStorm', 1]],
 };
