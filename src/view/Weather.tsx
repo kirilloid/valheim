@@ -439,6 +439,7 @@ export function Weather() {
         </span>
       </div>
     })}
-    <div style={{ position: 'absolute', top: `${events.length * ROW_HEIGHT + EVENTS_OFFSET_HEIGHT}px`, width: '100%', height: '1px' }}> </div>
+    <div className="Weather__tombstone"
+      style={{ top: `${events.length * ROW_HEIGHT + EVENTS_OFFSET_HEIGHT}px` }}> </div>
   </div>
 }

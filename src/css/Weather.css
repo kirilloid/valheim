@@ -124,6 +124,12 @@
   text-align: center;
 }
 
+.Weather__tombstone {
+  position: absolute;
+  width: 100%;
+  height: 1px;
+}
+
 @media screen and (max-width: 639px) {
   .Weather__description { display: none; }
 }
