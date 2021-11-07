@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import '../css/Weather.css';
 
 import { GAME_DAY, INTRO_DURATION, WEATHER_PERIOD, WIND_PERIOD, INTRO_WEATHER } from '../model/game';
-import { createRNG } from '../model/random';
+import { Random } from '../model/random';
 import { assertNever, clamp01, lerp, timeI2S } from '../model/utils';
 import { combineGens, dropWhile } from '../model/iter';
 
@@ -36,11 +36,13 @@ type Wind = {
   intensity: number;
 };
 
+const random = new Random(0);
+
 const addOctave = (time: number, octave: number, wind: Wind): void => {
   const period = Math.floor(time / (WIND_PERIOD * 8 / octave));
-  const rng = createRNG(period);
-  wind.angle += rng.random() * 2 * Math.PI / octave;
-  wind.intensity += (rng.random() - 0.5) / octave;
+  random.init(period);
+  wind.angle += random.random() * 2 * Math.PI / octave;
+  wind.intensity += (random.random() - 0.5) / octave;
 };
 
 const getGlobalWind = (time: number): Wind => {
@@ -57,14 +59,10 @@ const getGlobalWind = (time: number): Wind => {
   return wind;
 };
 
-const getRng = (seed: number) => {
-  const rng = createRNG(seed);
-  return rng.randomRange();
-};
-
 function getWeathersAt(index: number): EnvId[] {
   if (index < INTRO_DURATION / WEATHER_PERIOD) return biomeIds.map(() => INTRO_WEATHER);
-  const rng = getRng(index);
+  random.init(index);
+  const rng = random.range(0, 1);
   return biomeIds.map(biome => rollWeather(envSetup[biome], rng));
 }
 

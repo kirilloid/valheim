@@ -4,6 +4,21 @@ export const clamp = (value: number, min: number, max: number) => Math.max(min, 
 export const clamp01 = (value: number) => clamp(value, 0, 1);
 export const lerp = (a: number, b: number, t: number) => a + (b - a) * clamp01(t);
 export const lerpStep = (l: number, h: number, v: number) => clamp01((v - l) / (h - l));
+export const smoothStep = (pMin: number, pMax: number, pX: number) => {
+  const num = clamp01(((pX - pMin) / (pMax - pMin)));
+  return (num * num * (3.0 - 2.0 * num));
+};
+
+export function stableHashCode(str: string): number {
+  let a = 5381;
+  let b = a;
+  for (let index = 0; index < str.length; index += 2) {
+    a = (a << 5) + a ^ str.charCodeAt(index);
+    if (index == str.length - 1) break;
+    b = (b << 5) + b ^ str.charCodeAt(index + 1);
+  }
+  return a + Math.imul(b, 1566083941);
+}
 
 export type Vector3 = { x: number, y: number, z: number };
 export const add = (a: Vector3, b: Vector3) => ({ x: a.x + b.x, y: a.y + b.y, z: a.z + b.z });

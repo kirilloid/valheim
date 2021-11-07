@@ -24,6 +24,7 @@ import { FoodPlanner } from './view/FoodPlanner';
 import { Mining } from './view/Mining';
 // import { Weapons } from './view/Weapons';
 import { TranslationContext, useTranslation } from './effects';
+import { World } from './view/World';
 
 function App() {
   const translate = useTranslation();
@@ -55,6 +56,7 @@ function App() {
             <Route path="/mining/:objectType/:stat" children={<Mining />} />
             <Route path="/mining/:objectType" children={<Mining />} />
             <Route path="/mining" children={<Mining />} />
+            <Route path="/world" children={<World />} />
             {/* <Route path="/weapons" children={<Weapons />} /> */}
             <Route path="/info/:id" children={<Info />} />
           </Switch>
