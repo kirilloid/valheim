@@ -22,6 +22,7 @@ import { Weather } from './view/Weather';
 import { FoodTable } from './view/FoodTable';
 import { FoodPlanner } from './view/FoodPlanner';
 import { Mining } from './view/Mining';
+import { Player } from './view/Player';
 // import { Weapons } from './view/Weapons';
 import { TranslationContext, useTranslation } from './effects';
 import { World } from './view/World';
@@ -39,6 +40,8 @@ function App() {
             <Route path="/obj/:id" children={<GameObject />} />
             <Route path="/loc/:id" children={<Location />} />
             <Route path="/biome/:id" children={<Biome />} />
+            <Route path="/event/:id" children={<GameEvent />} />
+            <Route path="/events" children={<GameEventTable />} />
             <Route path="/effect/:id" children={<Effect />} />
             <Route path="/attack/:params" children={<AttackCalc />} />
             <Route path="/attack" children={<AttackCalc />} />
@@ -50,14 +53,13 @@ function App() {
             <Route path="/food-nutrition" children={<FoodTable />} />
             <Route path="/food-planner/:params" children={<FoodPlanner />} />
             <Route path="/food-planner" children={<FoodPlanner />} />
-            <Route path="/event/:id" children={<GameEvent />} />
-            <Route path="/events" children={<GameEventTable />} />
             <Route path="/weather" children={<Weather />} />
             <Route path="/mining/:objectType/:stat" children={<Mining />} />
             <Route path="/mining/:objectType" children={<Mining />} />
             <Route path="/mining" children={<Mining />} />
             <Route path="/world" children={<World />} />
             {/* <Route path="/weapons" children={<Weapons />} /> */}
+            <Route path="/player" children={<Player />} />
             <Route path="/info/:id" children={<Info />} />
           </Switch>
         </Router>

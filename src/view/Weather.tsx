@@ -165,7 +165,7 @@ function* fullGen(): WeatherGen {
 }
 
 const formatWindDirection = (angle: number): string => {
-  const index = Math.round((angle + 360) % 360 / 22.5);
+  const index = Math.round((angle + 540) % 360 / 22.5);
   return ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N'][index] ?? "???";
 };
 
@@ -334,6 +334,7 @@ export function Weather() {
 
   const ref = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const length = events.length;
 
   useLayoutEffect(() => {
     gen?.ensureGenerated(VIEWPORT_ROWS);
@@ -350,7 +351,7 @@ export function Weather() {
       if (inputRef.current) {
         inputRef.current.value = String(day);
       }
-      if (rowIdx + VIEWPORT_ROWS > events.length) gen?.addMore(VIEWPORT_ROWS);
+      if (rowIdx + VIEWPORT_ROWS > length) gen?.addMore(VIEWPORT_ROWS);
       const newScroll = Math.floor(rowIdx / CHUNK_SIZE) * CHUNK_SIZE;
       setScroll(newScroll);
     };
@@ -358,10 +359,10 @@ export function Weather() {
     return () => {
       el.removeEventListener('scroll', scroll, { capture: false });
     };
-  }, [ref, gen, setScroll]);
+  }, [ref, gen, setScroll, length]);
 
   const startIndex = Math.max(scroll - CHUNK_SIZE, 0);
-  const endIndex = Math.min(startIndex + VIEWPORT_ROWS, events.length - 1);
+  const endIndex = Math.min(startIndex + VIEWPORT_ROWS, length - 1);
   console.log('render');
 
   function goToDay(day: number) {

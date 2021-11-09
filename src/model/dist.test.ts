@@ -115,6 +115,7 @@ describe('drop', () => {
       const drop: GeneralDrop = {
         num: [1, 2],
         oneOfEach: true,
+        offByOneBug: false,
         options: [
           { item: 'foo' },
           { item: 'bar' },
@@ -136,6 +137,7 @@ describe('drop', () => {
       const drop: GeneralDrop = {
         num: [1, 1],
         oneOfEach: true,
+        offByOneBug: false,
         options: [
           { item: 'foo', weight: 5 },
           { item: 'bar', weight: 2 },
@@ -152,6 +154,7 @@ describe('drop', () => {
       const drop: GeneralDrop = {
         num: [1, 2],
         oneOfEach: true,
+        offByOneBug: false,
         options: [
           { item: 'bar', weight: 5 },
           { item: 'baz', weight: 2 },
@@ -167,6 +170,7 @@ describe('drop', () => {
       const drop: GeneralDrop = {
         num: [1, 3],
         oneOfEach: true,
+        offByOneBug: false,
         options: [
           { item: 'bar', weight: 5 },
           { item: 'baz', weight: 2 },
@@ -182,6 +186,7 @@ describe('drop', () => {
       const drop: GeneralDrop = {
         num: [1, 4],
         oneOfEach: true,
+        offByOneBug: false,
         options: [
           { item: 'bar', weight: 5 },
           { item: 'baz', weight: 2 },
@@ -197,6 +202,7 @@ describe('drop', () => {
       const drop: GeneralDrop = {
         num: [1, 2],
         oneOfEach: true,
+        offByOneBug: false,
         options: [
           { item: 'bar', weight: 5 },
           { item: 'foo', weight: 2 },

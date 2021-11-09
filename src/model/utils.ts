@@ -1,5 +1,7 @@
 import { GAME_DAY } from './game';
 
+// copied from .net
+
 export const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(value, max));
 export const clamp01 = (value: number) => clamp(value, 0, 1);
 export const lerp = (a: number, b: number, t: number) => a + (b - a) * clamp01(t);
@@ -14,7 +16,7 @@ export function stableHashCode(str: string): number {
   let b = a;
   for (let index = 0; index < str.length; index += 2) {
     a = (a << 5) + a ^ str.charCodeAt(index);
-    if (index == str.length - 1) break;
+    if (index === str.length - 1) break;
     b = (b << 5) + b ^ str.charCodeAt(index + 1);
   }
   return a + Math.imul(b, 1566083941);
@@ -29,6 +31,11 @@ export const norm = (a: Vector3, scale = 1) => {
 };
 export const mul = (a: Vector3, m: number) => {
   return { x: a.x * m, y: a.y * m, z: a.z * m };
+};
+
+export type Vector2i = {
+  x: number;
+  y: number;
 };
 
 export const timeI2S = (seconds: number) => {
@@ -52,7 +59,7 @@ export const days = (seconds: number) => seconds / GAME_DAY;
 export const assertNever = (x: never): never => {
   console.error('unexpected value: %s', x);
   return undefined as never;
-}
+};
 
 export const isNotNull = <T>(arg: T): arg is NonNullable<T> => arg != null;
 
