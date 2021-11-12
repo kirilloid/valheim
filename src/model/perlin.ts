@@ -4,17 +4,17 @@ function fade(t: number): number {
   return t ** 3 * (t * (t * 6 - 15) + 10);
 }
 
-function grad(hash: number, x: number, y: number, z: number): number {
+function grad(hash: number, x: number, y: number): number {
   const h = hash & 15;
   const u = h < 8 ? x : y;
   let v;
   
   if (h < 4) v = y;
-  else if (h == 12 || h == 14) v = x;
-  else v = z;
+  else if (h === 12 || h === 14) v = x;
+  else v = 0;
   
-  return ((h & 1) === 0 ? u : -u)
-      +  ((h & 2) === 0 ? v : -v);
+  return (h & 1 ? -u : u)
+      +  (h & 2 ? -v : v);
 }
 
 // Hash lookup table as defined by Ken Perlin.
@@ -33,67 +33,35 @@ const p = new Uint8Array([ 151,160,137,91,90,15,
   138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180
 ]);
 
-const repeat = 0;
-
-function inc(num: number): number {
-  num++;
-  if (repeat > 0) num %= repeat;
-  return num;
-}
-
 export function perlinNoise(x: number, y: number, scale: number): number {
-  x *= scale;
-  y *= scale;
-  const z = 0;
-  if (repeat > 0) {                    // If we have any repeat on, change the coordinates to their "local" repetitions
-    x %= repeat;
-    y %= repeat;
-    // z %= repeat;
-  }
-
-  const xi = Math.floor(x) & 255;      // Calculate the "unit cube" that the point asked will be located in
-  const yi = Math.floor(y) & 255;      // The left bound is ( |_x_|,|_y_|,|_z_| ) and the right bound is that
-  const zi = Math.floor(z) & 255;      // plus 1.  Next we calculate the location (from 0.0 to 1.0) in that cube.
+  x = Math.abs(x * scale);
+  y = Math.abs(y * scale);
+  const xi = Math.floor(x) & 255;
+  const yi = Math.floor(y) & 255;
   const xf = x - Math.floor(x);
   const yf = y - Math.floor(y);
-  const zf = z - Math.floor(z);
+  const A = p[xi  ]! + yi;
+  const B = p[xi+1]! + yi;
+  const AA = p[A]!, AB = p[A+1]!;
+  const BA = p[B]!, BB = p[B+1]!;
 
-  const aaa = p[p[p[    xi ]!+    yi ]!+    zi ]!;
-  const aba = p[p[p[    xi ]!+inc(yi)]!+    zi ]!;
-  const aab = p[p[p[    xi ]!+    yi ]!+inc(zi)]!;
-  const abb = p[p[p[    xi ]!+inc(yi)]!+inc(zi)]!;
-  const baa = p[p[p[inc(xi)]!+    yi ]!+    zi ]!;
-  const bba = p[p[p[inc(xi)]!+inc(yi)]!+    zi ]!;
-  const bab = p[p[p[inc(xi)]!+    yi ]!+inc(zi)]!;
-  const bbb = p[p[p[inc(xi)]!+inc(yi)]!+inc(zi)]!;
 
   const u = fade(xf);
   const v = fade(yf);
-  const w = fade(zf);
 
-  let x1 = lerp(
-    grad (aaa, xf  , yf  , zf),        // The gradient function calculates the dot product between a pseudorandom
-    grad (baa, xf-1, yf  , zf),        // gradient vector and the vector from the input coordinate to the 8
-    u,
+  const result = lerp(
+    lerp(
+      grad(p[AA]!, x  , y  ), 
+      grad(p[BA]!, x-1, y  ),
+      u,
+    ),
+    lerp(
+      grad(p[AB]!, x  , y-1), 
+      grad(p[BB]!, x-1, y-1),
+      u,
+    ),
+    v,
   );
-                                       // surrounding points in its unit cube.
-  let x2 = lerp(
-    grad (aba, xf  , yf-1, zf),        // This is all then lerped together as a sort of weighted average based on the faded (u,v,w)
-    grad (bba, xf-1, yf-1, zf),        // values we made earlier.
-    u,
-  );
-  const y1 = lerp(x1, x2, v);
-  x1 = lerp(
-    grad (aab, xf  , yf  , zf-1),
-    grad (bab, xf-1, yf  , zf-1),
-    u,
-  );
-  x2 = lerp(
-    grad (abb, xf  , yf-1, zf-1),
-    grad (bbb, xf-1, yf-1, zf-1),
-    u,
-  );
-  const y2 = lerp(x1, x2, v);
-  return (lerp(y1, y2, w) + 1) / 2;    // For convenience we bind the result to 0 - 1 (theoretical min/max before is [-1, 1])
+  return (result + 0.69) / 1.483;
 }
 
