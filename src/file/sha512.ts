@@ -192,7 +192,7 @@ class Sha512 {
       this.blocks = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     }
 
-    if (bits == 384) {
+    if (bits === 384) {
       this.h0h = 0xCBBB9D5D;
       this.h0l = 0xC1059ED8;
       this.h1h = 0x629A292A;
@@ -209,7 +209,7 @@ class Sha512 {
       this.h6l = 0x64F98FA7;
       this.h7h = 0x47B5481D;
       this.h7l = 0xBEFA4FA4;
-    } else if (bits == 256) {
+    } else if (bits === 256) {
       this.h0h = 0x22312194;
       this.h0l = 0xFC2BF72C;
       this.h1h = 0x9F555FA3;
@@ -226,7 +226,7 @@ class Sha512 {
       this.h6l = 0x2C85B8AA;
       this.h7h = 0x0EB72DDC;
       this.h7l = 0x81C52CA2;
-    } else if (bits == 224) {
+    } else if (bits === 224) {
       this.h0h = 0x8C3D37C8;
       this.h0l = 0x19544DA2;
       this.h1h = 0x73E19966;
@@ -355,7 +355,7 @@ class Sha512 {
       blocks[25] = blocks[26] = blocks[27] = blocks[28] =
       blocks[29] = blocks[30] = blocks[31] = blocks[32] = 0;
     }
-    blocks[30] = this.hBytes << 3 | this.bytes >>> 29;
+    blocks[30] = (this.hBytes << 3) | (this.bytes >>> 29);
     blocks[31] = this.bytes << 3;
     this.hash();
   }
@@ -373,12 +373,12 @@ class Sha512 {
       t1h = blocks[j - 30]!;
       t1l = blocks[j - 29]!;
       s0h = ((t1h >>> 1) | (t1l << 31)) ^ ((t1h >>> 8) | (t1l << 24)) ^ (t1h >>> 7);
-      s0l = ((t1l >>> 1) | (t1h << 31)) ^ ((t1l >>> 8) | (t1h << 24)) ^ ((t1l >>> 7) | t1h << 25);
+      s0l = ((t1l >>> 1) | (t1h << 31)) ^ ((t1l >>> 8) | (t1h << 24)) ^ ((t1l >>> 7) | (t1h << 25));
 
       t1h = blocks[j - 4]!;
       t1l = blocks[j - 3]!;
       s1h = ((t1h >>> 19) | (t1l << 13)) ^ ((t1l >>> 29) | (t1h << 3)) ^ (t1h >>> 6);
-      s1l = ((t1l >>> 19) | (t1h << 13)) ^ ((t1h >>> 29) | (t1l << 3)) ^ ((t1l >>> 6) | t1h << 26);
+      s1l = ((t1l >>> 19) | (t1h << 13)) ^ ((t1h >>> 29) | (t1l << 3)) ^ ((t1l >>> 6) | (t1h << 26));
 
       t1h = blocks[j - 32]!;
       t1l = blocks[j - 31]!;
@@ -729,7 +729,7 @@ class Sha512 {
         HEX_CHARS[(h5l >> 12) & 0x0F] + HEX_CHARS[(h5l >> 8) & 0x0F] +
         HEX_CHARS[(h5l >> 4) & 0x0F] + HEX_CHARS[h5l & 0x0F];
     }
-    if (bits == 512) {
+    if (bits === 512) {
       hex += HEX_CHARS[(h6h >> 28) & 0x0F]! + HEX_CHARS[(h6h >> 24) & 0x0F] +
         HEX_CHARS[(h6h >> 20) & 0x0F] + HEX_CHARS[(h6h >> 16) & 0x0F] +
         HEX_CHARS[(h6h >> 12) & 0x0F] + HEX_CHARS[(h6h >> 8) & 0x0F] +
@@ -784,7 +784,7 @@ class Sha512 {
         (h5l >> 24) & 0xFF, (h5l >> 16) & 0xFF, (h5l >> 8) & 0xFF, h5l & 0xFF
       );
     }
-    if (bits == 512) {
+    if (bits === 512) {
       arr.push(
         (h6h >> 24) & 0xFF, (h6h >> 16) & 0xFF, (h6h >> 8) & 0xFF, h6h & 0xFF,
         (h6l >> 24) & 0xFF, (h6l >> 16) & 0xFF, (h6l >> 8) & 0xFF, h6l & 0xFF,
@@ -822,7 +822,7 @@ class Sha512 {
       dataView.setUint32(40, this.h5h);
       dataView.setUint32(44, this.h5l);
     }
-    if (bits == 512) {
+    if (bits === 512) {
       dataView.setUint32(48, this.h6h);
       dataView.setUint32(52, this.h6l);
       dataView.setUint32(56, this.h7h);

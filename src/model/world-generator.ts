@@ -1,6 +1,6 @@
 import { Random } from './random';
 import { clamp01, lerp, lerpStep, smoothStep, stableHashCode } from './utils';
-import { perlinNoise } from './perlin';
+import { perlinNoise, fbm } from './perlin';
 
 const INT_MIN_VAL = 1 << 31;
 const INT_MAX_VAL = ((1 << 31) >>> 0) - 1;
@@ -64,6 +64,102 @@ type River = {
   curveWavelength: number;
 };
 
+class PointMap {
+  private bucketSize: number;
+  private bucketNr: number;
+  private buckets: number[][][];
+  private size: number;
+  constructor(maxRange: number) {
+    this.bucketSize = maxRange;
+    this.bucketNr = Math.ceil(20000 / maxRange);
+    this.buckets = Array.from({ length: this.bucketNr }, () => Array.from({ length: this.bucketNr }, () => []));
+    this.size = 0;
+  }
+
+  private cc(val: number): number {
+    return Math.floor((val + 10000) / this.bucketSize);
+  }
+
+  private getBucket(point: Vector2): number[] {
+    const { x, y } = point;
+    return this.buckets[this.cc(y)]![this.cc(x)]!;
+  }
+
+  private updatePointIndex(point: Vector2, indexFrom: number, indexTo: number): void {
+    const bucket = this.getBucket(point);
+    const indexInBucket = bucket.indexOf(indexFrom);
+    if (indexInBucket !== -1) {
+      bucket[indexInBucket] = indexTo;
+    }
+  }
+
+  private removePointIndex(point: Vector2, index: number): void {
+    const bucket = this.getBucket(point);
+    const indexInBucket = bucket.indexOf(index);
+    if (indexInBucket === -1) return; // ERRROR!
+    if (indexInBucket === bucket.length - 1) {
+      bucket.pop();
+    } else {
+      bucket[indexInBucket] = bucket.pop()!;
+    }
+  }
+
+  public add(point: Vector2): void {
+    this.getBucket(point).push(this.size++);
+  }
+
+  public merge(points: Vector2[]): Vector2[] {
+    const vector2List: Vector2[] = [];
+    points.forEach(this.add, this);
+    let startIndex = 0;
+    while (startIndex < points.length) {
+      let p = points[startIndex++]!;
+      while (startIndex < points.length) {
+        const closest = this.findClosest(points, p, startIndex);
+        if (closest === -1) break;
+        p = p.mid(points[closest]!);
+        const endIdx = points.length - 1;
+        if (closest === endIdx) {
+          this.removePointIndex(points.pop()!, endIdx);  
+        } else {
+          this.removePointIndex(points[closest]!, closest);
+          points[closest] = points.pop()!;
+          this.updatePointIndex(points[closest]!, endIdx, closest);
+        }
+      }
+      vector2List.push(p);
+    }
+    return vector2List;
+  }
+
+  private findClosest(points: Vector2[], p: Vector2, minIndex: number): number {
+    // walk through others in order
+    const hashX = this.cc(p.x);
+    const hashY = this.cc(p.y);
+    const indices = [];
+    for (let by = Math.max(hashY - 1, 0); by <= Math.min(hashY + 1, this.bucketNr - 1); by++) {
+      for (let bx = Math.max(hashX - 1, 0); bx <= Math.min(hashX + 1, this.bucketNr - 1); bx++) {
+        indices.push(...this.buckets[by]![bx]!);
+      }
+    }
+
+    let bestIndex = -1;
+    let bestDistance = 99999.0;
+    for (const index of indices) {
+      const point = points[index]!;
+      if (index < minIndex) continue;
+      if (point === p) continue;
+      const distance = Math.hypot(p.x - point.x, p.y - point.y);
+      if (distance >= this.bucketSize) continue;
+      if (distance < bestDistance
+      || (distance === bestDistance && index < bestIndex)) {
+        bestIndex = index;
+        bestDistance = distance;
+      }
+    }
+    return bestIndex;
+  }
+}
 
 export class WorldGenerator {
   private _random: Random;
@@ -124,38 +220,8 @@ export class WorldGenerator {
   }
 
   private mergePoints(points: Vector2[], range: number): Vector2[] {
-    const vector2List: Vector2[] = [];
-    let startIndex = 0;
-    while (startIndex < points.length) {
-      let p = points[startIndex++]!;
-      while (startIndex < points.length) {
-        const index = this.findClosest(points, p, range, startIndex);
-        if (index === points.length - 1) {
-
-        }
-        if (index === -1) break;
-        p = p.mid(points[index]!);
-        points[index] = points[points.length - 1]!;
-        points.pop();
-      }
-      vector2List.push(p);
-    }
-    return vector2List;
-  }
-
-  private findClosest(points: Vector2[], p: Vector2, maxDistance: number, startIndex: number): number {
-    let bestIndex = -1;
-    let bestDistance = 99999.0;
-    for (let index = startIndex; index < points.length; index++) {
-      const point = points[index]!
-      if (point === p) continue;
-      const distance = Math.hypot(p.x - point.x, p.y - point.y);
-      if (distance < maxDistance && distance < bestDistance) {
-        bestIndex = index;
-        bestDistance = distance;
-      }
-    }
-    return bestIndex;
+    const pointMap = new PointMap(range);
+    return pointMap.merge(points);
   }
 
   private placeStreams(): River[] {
@@ -490,19 +556,19 @@ export class WorldGenerator {
       return baseHeight > 0.4 ? Biome.Mountain : Biome.DeepNorth;
     if (baseHeight > 0.4)
       return Biome.Mountain;
-    if (perlinNoise(this.offset0 + wx, this.offset0 + wy, 0.001) > 0.6
+    if (perlinNoise((this.offset0 + wx) * 0.001, (this.offset0 + wy) * 0.001) > 0.6
       && magnitude > 2000 && magnitude < 8000
       && baseHeight > 0.05 && baseHeight < 0.25)
       return Biome.Swamp;
-    if (perlinNoise(this.offset4 + wx, this.offset4 + wy, 0.001) > 0.5
+    if (perlinNoise((this.offset4 + wx) * 0.001, (this.offset4 + wy) * 0.001) > 0.5
       && magnitude > 6000 + num
       && magnitude < 10000)
       return Biome.Mistlands;
-    if (perlinNoise(this.offset1 + wx, this.offset1 + wy, 0.001) > 0.4
+    if (perlinNoise((this.offset1 + wx) * 0.001, (this.offset1 + wy) * 0.001) > 0.4
       && magnitude > 3000 + num
       && magnitude < 8000)
       return Biome.Plains;
-    return perlinNoise(this.offset2 + wx, this.offset2 + wy, 0.001) > 0.4
+    return perlinNoise((this.offset2 + wx) * 0.001, (this.offset2 + wy) * 0.001) > 0.4
       && magnitude > 600 + num
       && (magnitude < 6000 || magnitude > 5000 + num)
         ? Biome.BlackForest
@@ -517,15 +583,15 @@ export class WorldGenerator {
     const distance = Math.hypot(wx, wy);
     wx += 100000 + this.offset0;
     wy += 100000 + this.offset1;
-    const base = perlinNoise(wx, wy, 0.002) * perlinNoise(wx, wy, 0.0015);
-    const base2 = base + perlinNoise(wx, wy, 0.002) * perlinNoise(wx, wy, 0.003) * base * 0.9;
-    let result = (base2 + perlinNoise(wx, wy, 0.005) * perlinNoise(wx, wy, 0.01) * 0.5 * base2 - 0.07)
+    const base = perlinNoise(wx * 0.001, wy * 0.001) * perlinNoise(wx * 0.0015, wy * 0.0015);
+    const base2 = base + perlinNoise(wx * 0.002, wy * 0.002) * perlinNoise(wx * 0.003, wy * 0.003) * base * 0.9;
+    let result = (base2 + perlinNoise(wx * 0.005, wy * 0.005) * perlinNoise(wx * 0.01, wy * 0.01) * 0.5 * base2 - 0.07)
       * (1 - (1 - lerpStep(
         0.02,
         0.12,
         Math.abs(
-          perlinNoise(wx + 246, wy + 302.46, 0.0005) -
-          perlinNoise(wx + 642, wy + 462, 0.0005)
+          perlinNoise(wx * 0.0005 + 0.123, wy * 0.0005 + 0.15123) -
+          perlinNoise(wx * 0.0005 + 0.321, wy * 0.0005 + 0.231)
         )
       )) * smoothStep(744, 1000, distance));
     if (distance > 10000) {
@@ -594,65 +660,65 @@ export class WorldGenerator {
     const wx = wx1 + 100000;
     const wy = wy1 + 100000;
     const baseHeight = 0.137;
-    const base = perlinNoise(wx, wy, 0.04) * perlinNoise(wx, wy, 0.08);
+    const base = perlinNoise(wx * 0.04, wy * 0.04) * perlinNoise(wx * 0.08, wy * 0.08);
     const h = baseHeight + base * 0.03;
     return this.addRivers(wx1, wy1, h)
-      + perlinNoise(wx, wy, 0.1) * 0.01
-      + perlinNoise(wx, wy, 0.4) * 0.003;
+      + perlinNoise(wx * 0.1, wy * 0.1) * 0.01
+      + perlinNoise(wx * 0.4, wy * 0.4) * 0.003;
   }
 
   private getMeadowsHeight(wx1: number, wy1: number): number {
     const baseHeight = this.getBaseHeight(wx1, wy1);
     const wx = wx1 + 100000 + this.offset3;
     const wy = wy1 + 100000 + this.offset3;
-    const base = perlinNoise(wx, wy, 0.01) * perlinNoise(wx, wy, 0.02);
-    const base2 = base + perlinNoise(wx, wy, 0.05) * perlinNoise(wx, wy, 0.1) * base * 0.5;
+    const base = perlinNoise(wx * 0.01, wy * 0.01) * perlinNoise(wx * 0.02, wy * 0.02);
+    const base2 = base + perlinNoise(wx * 0.05, wy * 0.05) * perlinNoise(wx * 0.1, wy * 0.1) * base * 0.5;
     let h = baseHeight + base2 * 0.1;
     const num3 = h - 0.15;
     const num4 = clamp01(baseHeight / 0.4);
     if (num3 > 0) h -= (num3 * (1 - num4) * 0.75);
     return this.addRivers(wx1, wy1, h)
-      + perlinNoise(wx, wy, 0.1) * 0.01
-      + perlinNoise(wx, wy, 0.4) * 0.003;
+      + perlinNoise(wx * 0.1, wy * 0.1) * 0.01
+      + perlinNoise(wx * 0.4, wy * 0.4) * 0.003;
   }
 
   private getForestHeight(wx1: number, wy1: number): number {
     const baseHeight = this.getBaseHeight(wx1, wy1);
     const wx2 = wx1 + 100000 + this.offset3;
     const wy2 = wy1 + 100000 + this.offset3;
-    const base = perlinNoise(wx2, wy2, 0.01) * perlinNoise(wx2, wy2, 0.02);
-    const base2 = base + perlinNoise(wx2, wy2, 0.05) * perlinNoise(wx2, wy2, 0.1) * base * 0.5;
+    const base = perlinNoise(wx2 * 0.01, wy2 * 0.01) * perlinNoise(wx2 * 0.02, wy2 * 0.02);
+    const base2 = base + perlinNoise(wx2 * 0.05, wy2 * 0.05) * perlinNoise(wx2 * 0.1, wy2 * 0.1) * base * 0.5;
     const h = baseHeight + base2 * 0.1;
     return this.addRivers(wx1, wy1, h)
-      + perlinNoise(wx2, wy2, 0.1) * 0.01
-      + perlinNoise(wx2, wy2, 0.4) * 0.003;
+      + perlinNoise(wx2 * 0.1, wy2 * 0.1) * 0.01
+      + perlinNoise(wx2 * 0.4, wy2 * 0.4) * 0.003;
   }
 
   private getPlainsHeight(wx1: number, wy1: number): number {
     const wx2 = wx1 + 100000 + this.offset3;
     const wy2 = wy1 + 100000 + this.offset3;
     const baseHeight = this.getBaseHeight(wx1, wy1);
-    const base = perlinNoise(wx2, wy2, 0.01) * perlinNoise(wx2, wy2, 0.02);
-    const base2 = base + perlinNoise(wx2, wy2, 0.05) * perlinNoise(wx2, wy2, 0.1) * base * 0.5;
+    const base = perlinNoise(wx2 * 0.01, wy2 * 0.01) * perlinNoise(wx2 * 0.02, wy2 * 0.02);
+    const base2 = base + perlinNoise(wx2 * 0.05, wy2 * 0.05) * perlinNoise(wx2 * 0.1, wy2 * 0.1) * base * 0.5;
     let h = baseHeight + base2 * 0.1;
     const num3 = h - 0.15;
     const num4 = clamp01(baseHeight / 0.4);
     if (num3 > 0) h -= (num3 * (1 - num4) * 0.75);
     return this.addRivers(wx1, wy1, h)
-      + perlinNoise(wx2, wy2, 0.1) * 0.01
-      + perlinNoise(wx2, wy2, 0.4) * 0.003;
+      + perlinNoise(wx2 * 0.1, wy2 * 0.1) * 0.01
+      + perlinNoise(wx2 * 0.4, wy2 * 0.4) * 0.003;
   }
 
   private getAshlandsHeight(wx1: number, wy1: number): number {
     const wx2 = wx1 + 100000 + this.offset3;
     const wy2 = wy1 + 100000 + this.offset3;
     const baseHeight = this.getBaseHeight(wx1, wy1);
-    const base = perlinNoise(wx2, wy2, 0.01) * perlinNoise(wx2, wy2, 0.02);
-    const base2 = base + perlinNoise(wx2, wy2, 0.05) * perlinNoise(wx2, wy2, 0.1) * base * 0.5;
+    const base = perlinNoise(wx2 * 0.01, wy2 * 0.01) * perlinNoise(wx2 * 0.02, wy2 * 0.02);
+    const base2 = base + perlinNoise(wx2 * 0.05, wy2 * 0.05) * perlinNoise(wx2 * 0.1, wy2 * 0.1) * base * 0.5;
     const h = baseHeight + base2 * 0.1
       + 0.1
-      + perlinNoise(wx2, wy2, 0.1) * 0.01
-      + perlinNoise(wx2, wy2, 0.4) * 0.003;
+      + perlinNoise(wx2 * 0.1, wy2 * 0.1) * 0.01
+      + perlinNoise(wx2 * 0.4, wy2 * 0.4) * 0.003;
     return this.addRivers(wx1, wy1, h);
   }
 
@@ -662,13 +728,13 @@ export class WorldGenerator {
     const baseHeight = this.getBaseHeight(wx1, wy1);
     const baseHeight2 = (2 * baseHeight - 0.4);
     const tilt = this.baseHeightTilt(wx1, wy1);
-    const base = perlinNoise(wx2, wy2, 0.01) * perlinNoise(wx2, wy2, 0.02);
-    const base2 = base + perlinNoise(wx2, wy2, 0.05) * perlinNoise(wx2, wy2, 0.1) * base * 0.5;
+    const base = perlinNoise(wx2 * 0.01, wy2 * 0.01) * perlinNoise(wx2 * 0.02, wy2 * 0.02);
+    const base2 = base + perlinNoise(wx2 * 0.05, wy2 * 0.05) * perlinNoise(wx2 * 0.1, wy2 * 0.1) * base * 0.5;
     const h = baseHeight2 + base2 * 0.2;
     return this.addRivers(wx1, wy1, h)
-      + perlinNoise(wx2, wy2, 0.1) * 0.01
-      + perlinNoise(wx2, wy2, 0.4) * 0.003
-      + perlinNoise(wx2, wy2, 0.2) * 2 * tilt;
+      + perlinNoise(wx2 * 0.1, wy2 * 0.1) * 0.01
+      + perlinNoise(wx2 * 0.4, wy2 * 0.4) * 0.003
+      + perlinNoise(wx2 * 0.2, wy2 * 0.2) * 2 * tilt;
   }
 
   private getDeepNorthHeight(wx1: number, wy1: number): number {
@@ -676,16 +742,20 @@ export class WorldGenerator {
     const wy2 = wy1 + 100000 + this.offset3;
     const baseHeight = this.getBaseHeight(wx1, wy1);
     const num2 = baseHeight + Math.max(0.0, baseHeight - 0.4);
-    const base = perlinNoise(wx2, wy2, 0.01) * perlinNoise(wx2, wy2, 0.02);
-    const base2 = base + (perlinNoise(wx2, wy2, 0.05) * perlinNoise(wx2, wy2, 0.1) * base * 0.5);
+    const base = perlinNoise(wx2 * 0.01, wy2 * 0.01) * perlinNoise(wx2 * 0.02, wy2 * 0.02);
+    const base2 = base + (perlinNoise(wx2 * 0.05, wy2 * 0.05) * perlinNoise(wx2 * 0.1, wy2 * 0.1) * base * 0.5);
     const h = num2 + base2 * 0.2;
     return this.addRivers(wx1, wy1, h * 1.2)
-      + perlinNoise(wx2, wy2, 0.1) * 0.01
-      + perlinNoise(wx2, wy2, 0.4) * 0.003;
+      + perlinNoise(wx2 * 0.1, wy2 * 0.1) * 0.01
+      + perlinNoise(wx2 * 0.4, wy2 * 0.4) * 0.003;
   }
 
   private getOceanHeight(wx: number, wy: number): number {
     return this.getBaseHeight(wx, wy);
+  }
+
+  public getForestFactor(wx: number, wy: number): number {
+    return fbm(wx * 0.004, wy * 0.004);
   }
 
   private baseHeightTilt(wx: number, wy: number): number {

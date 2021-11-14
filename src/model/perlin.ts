@@ -30,24 +30,24 @@ const p = new Uint8Array([ 151,160,137,91,90,15,
   129,22,39,253, 19,98,108,110,79,113,224,232,178,185, 112,104,218,246,97,228,
   251,34,242,193,238,210,144,12,191,179,162,241, 81,51,145,235,249,14,239,107,
   49,192,214, 31,181,199,106,157,184, 84,204,176,115,121,50,45,127, 4,150,254,
-  138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180
+  138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180,151,
 ]);
 
-export function perlinNoise(x: number, y: number, scale: number): number {
-  x = Math.abs(x * scale);
-  y = Math.abs(y * scale);
+export function perlinNoise(x: number, y: number): number {
+  x = Math.abs(x);
+  y = Math.abs(y);
   const xi = Math.floor(x) & 255;
   const yi = Math.floor(y) & 255;
-  const xf = x - Math.floor(x);
-  const yf = y - Math.floor(y);
-  const A = p[xi  ]! + yi;
-  const B = p[xi+1]! + yi;
+  x -= Math.floor(x);
+  y -= Math.floor(y);
+  const A = (p[xi  ]! + yi) & 255;
+  const B = (p[xi+1]! + yi) & 255;
   const AA = p[A]!, AB = p[A+1]!;
   const BA = p[B]!, BB = p[B+1]!;
 
 
-  const u = fade(xf);
-  const v = fade(yf);
+  const u = x ** 3 * (x * (x * 6 - 15) + 10);
+  const v = y ** 3 * (y * (y * 6 - 15) + 10);
 
   const result = lerp(
     lerp(
@@ -65,3 +65,18 @@ export function perlinNoise(x: number, y: number, scale: number): number {
   return (result + 0.69) / 1.483;
 }
 
+export function fbm(x: number, y: number) {
+  const octaves = 3;
+  const lacunarity = 1.6;
+  const gain = 0.7;
+  let result = 0;
+  let mul = 1;
+  // Vector2 vector2 = p;
+  for (let index = 0; index < octaves; ++index) {
+    result += mul * perlinNoise(x, y);
+    mul *= gain;
+    x *= lacunarity;
+    y *= lacunarity;
+  }
+  return result;
+}
