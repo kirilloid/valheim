@@ -187,13 +187,13 @@ export class WorldGenerator {
     const numSeed: number = stableHashCode(seed);
     this._random = new Random(numSeed);
     
-    this.offset0 = this._random.range(-10000, 10000);
-    this.offset1 = this._random.range(-10000, 10000);
-    this.offset2 = this._random.range(-10000, 10000);
-    this.offset3 = this._random.range(-10000, 10000);
-    this.riverSeed = this._random.range(INT_MIN_VAL, INT_MAX_VAL);
-    this.streamSeed = this._random.range(INT_MIN_VAL, INT_MAX_VAL);
-    this.offset4 = this._random.range(-10000, 10000);
+    this.offset0 = this._random.rangeInt(-10000, 10000);
+    this.offset1 = this._random.rangeInt(-10000, 10000);
+    this.offset2 = this._random.rangeInt(-10000, 10000);
+    this.offset3 = this._random.rangeInt(-10000, 10000);
+    this.riverSeed = this._random.rangeInt(INT_MIN_VAL, INT_MAX_VAL);
+    this.streamSeed = this._random.rangeInt(INT_MIN_VAL, INT_MAX_VAL);
+    this.offset4 = this._random.rangeInt(-10000, 10000);
     this.pregenerate();
   }
 
@@ -265,7 +265,7 @@ export class WorldGenerator {
   ): Vector2 | undefined {
     for (let index = 0; index < iterations; ++index) {
       const num2 = lerp(maxLength, minLength, (index + 1) / iterations);
-      const f = this._random.range(0, Math.PI * 2);
+      const f = this._random.rangeFloat(0, Math.PI * 2);
       const vector2 = start.add(new Vector2(Math.sin(f), Math.cos(f)).mul(num2));
       const height = this.getHeight(vector2.x, vector2.y);
       if (height > minHeight && height < maxHeight) {
@@ -280,8 +280,8 @@ export class WorldGenerator {
     maxHeight: number,
   ): Vector2 | undefined {
     for (let index = 0; index < iterations; ++index) {
-      const x = this._random.range(-10000, 10000);
-      const y = this._random.range(-10000, 10000);
+      const x = this._random.rangeFloat(-10000, 10000);
+      const y = this._random.rangeFloat(-10000, 10000);
       const height = this.getHeight(x, y);
       if (minHeight < height && height < maxHeight) {
         return new Vector2(x, y);
@@ -305,8 +305,8 @@ export class WorldGenerator {
       if (randomRiverEnd !== -1) {
         const p0 = vector2;
         const p1 = this._lakes[randomRiverEnd]!;
-        const widthMax = this._random.range(60, 100);
-        const widthMin = this._random.range(60, widthMax);
+        const widthMax = this._random.rangeFloat(60, 100);
+        const widthMin = this._random.rangeFloat(60, widthMax);
         const length = p0.distance(p1);
         rivers.push({
           p0,
@@ -403,7 +403,7 @@ export class WorldGenerator {
       for (let num3 = 0.0; num3 <= num2; num3 += width8) {
         const f = num3 / river.curveWavelength;
         const num4 = Math.sin(f) * Math.sin(f * 0.63412) * Math.sin(f * 0.33412) * river.curveWidth;
-        const r = this._random.range(river.widthMin, river.widthMax);
+        const r = this._random.rangeFloat(river.widthMin, river.widthMax);
         const p = river.p0.add(normalized.mul(num3)).add(vector2.mul(num4));
         this.addRiverPoint(riverPoints, p, r, river);
       }

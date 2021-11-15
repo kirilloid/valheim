@@ -32,7 +32,7 @@ async function drawSeedOnto(world: WorldGenerator, imageData: ImageData, size: n
         if (height < 28 && biome !== Biome.Ocean) {
           // const c = Math.round(128 * height / 30);
           // putRgb(x, y, [c, c, c + 127]);
-          putRgb(x, y, [102, 102, 255]);
+          putRgb(x, y, [128, 128, 255]);
         } else {
           putRgb(x, y, biomeColors[biome]);
         }

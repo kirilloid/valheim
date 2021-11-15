@@ -62,7 +62,7 @@ const getGlobalWind = (time: number): Wind => {
 function getWeathersAt(index: number): EnvId[] {
   if (index < INTRO_DURATION / WEATHER_PERIOD) return biomeIds.map(() => INTRO_WEATHER);
   random.init(index);
-  const rng = random.range(0, 1);
+  const rng = random.rangeFloat(0, 1);
   return biomeIds.map(biome => rollWeather(envSetup[biome], rng));
 }
 

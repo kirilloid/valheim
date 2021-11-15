@@ -17,21 +17,18 @@ export class Random {
 
   public init(seed: number) {
     const a = seed >>> 0;
-    const b = (Math.imul(a, 1812433253) + 1);
-    const c = (Math.imul(b, 1812433253) + 1);
-    const d = (Math.imul(c, 1812433253) + 1);
+    const b = (Math.imul(a, 1812433253) + 1) >>> 0;
+    const c = (Math.imul(b, 1812433253) + 1) >>> 0;
+    const d = (Math.imul(c, 1812433253) + 1) >>> 0;
     return (this.state = { a, b, c, d });
   }
   
   private next() {
-    const t1 = this.state.a ^ (this.state.a << 11);
-    const t2 = t1 ^ (t1 >>> 8);
-    this.state = {
-      a: this.state.b,
-      b: this.state.c,
-      c: this.state.d,
-      d: this.state.d ^ (this.state.d >>> 19) ^ t2,
-    };
+    const t = this.state.a ^ (this.state.a << 11);
+    this.state.a = this.state.b;
+    this.state.b = this.state.c;
+    this.state.c = this.state.d;
+    this.state.d = this.state.d ^ (this.state.d >>> 19) ^ t ^ (t >>> 8);
     return this.state.d;
   };
 
@@ -54,8 +51,12 @@ export class Random {
   }
 
   // In Unity, random range uses 1.0 - value for some reason.
-  public range(min: number, max: number) {
+  public rangeFloat(min: number, max: number) {
     return max - this.random() * (max - min);
+  }
+
+  public rangeInt(min: number, max: number) {
+    return min + (this.next() >>> 0) % (max - min)
   }
 };
   
