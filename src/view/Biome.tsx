@@ -11,8 +11,8 @@ import { resourceCraftMap } from '../data/resource-usage';
 
 import { TranslationContext } from '../effects';
 import { averageAttacksDamage, InlineObjectWithIcon, yesNo } from './helpers';
-import { ItemIcon } from './Icon';
-import { SpoilerAlert } from './Spoiler';
+import { ItemIcon } from './parts/Icon';
+import { SpoilerAlert } from './parts/Spoiler';
 
 function ResourceList(props: { list: GameObject[] }) {
   const { list } = props;

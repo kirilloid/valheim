@@ -17,7 +17,7 @@ import { effects } from '../data/effects';
 
 import { TranslationContext, Translator, useGlobalState } from '../effects';
 import { averageAttacksDamage, findDropChanceFromCreature, Materials, ShortWeaponDamage } from './helpers';
-import { EffectIcon, Icon, ItemIcon, SkillIcon } from './Icon';
+import { EffectIcon, Icon, ItemIcon, SkillIcon } from './parts/Icon';
 
 function first(val: number | [number, number]) {
   if (typeof val === 'number') return val;

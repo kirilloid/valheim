@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 
-import { Icon } from './Icon';
+import { Icon } from './parts/Icon';
 
 type Article = {
   header: string;

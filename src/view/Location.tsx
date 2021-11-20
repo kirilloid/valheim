@@ -6,7 +6,7 @@ import { getLocationDetails } from '../data/location';
 
 import { TranslationContext } from '../effects';
 import { Area, List, rangeBy } from './helpers';
-import { DropStats } from './DropTable';
+import { DropStats } from './parts/DropTable';
 
 export function Location() {
   const { id } = useParams<{ id: string }>();

@@ -19,7 +19,7 @@ import { data } from '../data/itemDB';
 import { creatures } from '../data/creatures';
 
 import { TranslationContext, Translator, useRuneTranslate } from '../effects';
-import { ItemIcon, SkillIcon } from './Icon';
+import { ItemIcon, SkillIcon } from './parts/Icon';
 
 export function durability(values: [number, number], level?: number): string | number {
   if (values[0] === Infinity) return '—';
@@ -233,4 +233,23 @@ export function Switch({ children, className }: { children: (JSX.Element | strin
   return <div className={`Switch ${className ?? ''}`}>
     {children.map(c => <span className="Switch__Option">{c}</span>)}
   </div>
+}
+
+export function downloadFile(buffer: ArrayBuffer, name: string) {
+  // Create a link and set the URL using `createObjectURL`
+  const link = document.createElement('a');
+  link.style.display = 'none';
+  link.href = URL.createObjectURL(new Blob([buffer]));
+  link.download = name;
+
+  // It needs to be added to the DOM so it can be clicked
+  document.body.appendChild(link);
+  link.click();
+
+  // To make this work on Firefox we need to wait
+  // a little while before removing it.
+  setTimeout(() => {
+    URL.revokeObjectURL(link.href);
+    link.remove();
+  }, 0);
 }

@@ -7,25 +7,25 @@ import {
 
 import './css/App.css';
 
-import { TopBar } from './view/TopBar';
-import { Index } from './view/Index';
-import { GameObject } from './view/GameObject';
+import { TopBar } from './view/parts/TopBar';
+import { Index } from './view/pages/Index';
+import { GameObject } from './view/objects/GameObject';
 import { Location } from './view/Location';
 import { Biome } from './view/Biome';
-import { Effect } from './view/Effect';
+import { Effect } from './view/objects/Effect';
 import { Info } from './view/Info';
-import { AttackCalc } from './view/AtkCalc';
-import { DefenseCalc } from './view/DefCalc';
-import { ComfortTable } from './view/ComfortTable';
-import { GameEvent, GameEventTable } from './view/Event';
-import { Weather } from './view/Weather';
-import { FoodTable } from './view/FoodTable';
-import { FoodPlanner } from './view/FoodPlanner';
-import { Mining } from './view/Mining';
-import { Player } from './view/Player';
+import { AttackCalc } from './view/pages/AtkCalc';
+import { DefenseCalc } from './view/pages/DefCalc';
+import { ComfortTable } from './view/pages/ComfortTable';
+import { GameEvent, GameEventTable } from './view/pages/Event';
+import { Weather } from './view/pages/Weather';
+import { FoodTable } from './view/pages/FoodTable';
+import { FoodPlanner } from './view/pages/FoodPlanner';
+import { Mining } from './view/pages/Mining';
+import { PlayerEditor } from './view/player';
 // import { Weapons } from './view/Weapons';
 import { TranslationContext, useTranslation } from './effects';
-import { World } from './view/World';
+import { WorldGenerator } from './view/pages/WorldGenerator';
 
 function App() {
   const translate = useTranslation();
@@ -57,9 +57,9 @@ function App() {
             <Route path="/mining/:objectType/:stat" children={<Mining />} />
             <Route path="/mining/:objectType" children={<Mining />} />
             <Route path="/mining" children={<Mining />} />
-            <Route path="/world" children={<World />} />
+            <Route path="/world-gen" children={<WorldGenerator />} />
             {/* <Route path="/weapons" children={<Weapons />} /> */}
-            <Route path="/player" children={<Player />} />
+            <Route path="/player-edit" children={<PlayerEditor />} />
             <Route path="/info/:id" children={<Info />} />
           </Switch>
         </Router>
