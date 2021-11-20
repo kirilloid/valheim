@@ -22,6 +22,7 @@ import { Weather } from './view/pages/Weather';
 import { FoodTable } from './view/pages/FoodTable';
 import { FoodPlanner } from './view/pages/FoodPlanner';
 import { Mining } from './view/pages/Mining';
+import { WorldEditor } from './view/world';
 import { PlayerEditor } from './view/player';
 // import { Weapons } from './view/Weapons';
 import { TranslationContext, useTranslation } from './effects';
@@ -59,6 +60,7 @@ function App() {
             <Route path="/mining" children={<Mining />} />
             <Route path="/world-gen" children={<WorldGenerator />} />
             {/* <Route path="/weapons" children={<Weapons />} /> */}
+            <Route path="/world-edit" children={<WorldEditor />} />
             <Route path="/player-edit" children={<PlayerEditor />} />
             <Route path="/info/:id" children={<Info />} />
           </Switch>

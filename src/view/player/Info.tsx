@@ -1,6 +1,7 @@
 import React from 'react';
 
-import type { Player, ValueProps } from './types';
+import type { Player } from './types';
+import type { ValueProps } from '../parts/types';
 import { Worlds } from './Worlds';
 import { Appearance } from './Appearance';
 import { Inventory } from './Inventory';

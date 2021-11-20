@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { readMapData } from '../../file/Player';
-
-import type { MapData as TMapData, Player, ValueProps } from './types';
+import type { ValueProps } from '../parts/types';
+import type { MapData as TMapData, Player } from './types';
 
 const mapDataCache = new Map<BigInt, TMapData>();
 

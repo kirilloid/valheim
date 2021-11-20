@@ -1,6 +1,6 @@
 import { inflate, deflate } from 'pako';
 
-import type { Vector3 } from '../model/utils';
+import type { Quaternion, Vector2i, Vector3 } from '../model/utils';
 
 /*
 type ToObject<Format extends PackageEntry[]> = {
@@ -43,8 +43,8 @@ export class PackageReader {
     return result;
   }
 
-  public readFloat(): number {
-    const result = this.view.getFloat32(this.offset, true);
+  public readUInt(): number {
+    const result = this.view.getUint32(this.offset, true);
     this.offset += 4;
     return result;
   }
@@ -55,11 +55,37 @@ export class PackageReader {
     return result;
   }
 
+  public readFloat(): number {
+    const result = this.view.getFloat32(this.offset, true);
+    this.offset += 4;
+    return result;
+  }
+
+  public readDouble(): number {
+    const result = this.view.getFloat64(this.offset, true);
+    this.offset += 8;
+    return result;
+  }
+
+  public readVector2i(): Vector2i {
+    const x = this.readInt();
+    const y = this.readInt();
+    return { x, y };
+  }
+
   public readVector3(): Vector3 {
     const x = this.readFloat();
     const y = this.readFloat();
     const z = this.readFloat();
     return { x, y, z };
+  }
+
+  public readQuaternion(): Quaternion {
+    const x = this.readFloat();
+    const y = this.readFloat();
+    const z = this.readFloat();
+    const w = this.readFloat();
+    return { x, y, z, w };
   }
 
   public readString(): string {
@@ -114,6 +140,21 @@ export class PackageReader {
     if (!has) return undefined;
     return reader.call(this);
   }
+
+  public readIfSmallMap<K, V>(
+    keyReader: (this: PackageReader) => K,
+    valueReader: (this: PackageReader) => V,
+  ): Map<K, V> | undefined {
+    const length = this.readByte();
+    if (length === 0) return;
+    const result = new Map<K, V>();
+    for (let i = 0; i < length; i++) {
+      const key = keyReader.call(this);
+      const value = valueReader.call(this);
+      result.set(key, value);
+    }
+    return result;
+  }
 }
 
 export class PackageWriter {
@@ -156,9 +197,9 @@ export class PackageWriter {
     this.offset += 4;
   }
 
-  public writeFloat(value: number): void {
+  public writeUInt(value: number): void {
     this.ensureSpace(4);
-    this.view.setFloat32(this.offset, value, true);
+    this.view.setUint32(this.offset, value, true);
     this.offset += 4;
   }
 
@@ -168,11 +209,39 @@ export class PackageWriter {
     this.offset += 8;
   }
 
+  public writeFloat(value: number): void {
+    this.ensureSpace(4);
+    this.view.setFloat32(this.offset, value, true);
+    this.offset += 4;
+  }
+
+  public writeDouble(value: number): void {
+    this.ensureSpace(8);
+    this.view.setFloat64(this.offset, value, true);
+    this.offset += 8;
+  }
+
+  public writeVector2i(value: Vector2i): void {
+    this.ensureSpace(8);
+    this.view.setInt32(this.offset, value.x, true);
+    this.view.setInt32(this.offset += 4, value.y, true);
+    this.offset += 4;
+  }
+
   public writeVector3(value: Vector3): void {
     this.ensureSpace(12);
     this.view.setFloat32(this.offset, value.x, true);
     this.view.setFloat32(this.offset += 4, value.y, true);
     this.view.setFloat32(this.offset += 4, value.z, true);
+    this.offset += 4;
+  }
+
+  public writeQuaternion(value: Quaternion): void {
+    this.ensureSpace(16);
+    this.view.setFloat32(this.offset, value.x, true);
+    this.view.setFloat32(this.offset += 4, value.y, true);
+    this.view.setFloat32(this.offset += 4, value.z, true);
+    this.view.setFloat32(this.offset += 4, value.w, true);
     this.offset += 4;
   }
 
@@ -233,6 +302,24 @@ export class PackageWriter {
     } else {
       this.writeBool(true);
       writer.call(this, value);
+    }
+  }
+
+  public writeIfSmallMap<K, V>(
+    keyWriter: (this: PackageWriter, value: K) => void,
+    valueWriter: (this: PackageWriter, value: V) => void,
+    values: Map<K, V> | undefined,
+  ): void {
+    if (values == null) {
+      this.writeByte(0);
+      return;  
+    }
+    const length = values.size;
+    // TODO: support writeChar maybe in UT8
+    this.writeByte(length);
+    for (const [key, value] of values) {
+      keyWriter.call(this, key);
+      valueWriter.call(this, value);
     }
   }
 

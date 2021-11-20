@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
 
 import type { Vector3 } from '../../model/utils';
-import type { PlayerData, ValueProps } from './types';
+import type { PlayerData } from './types';
 
 import { TranslationContext } from '../../effects';
+import { ValueProps } from '../parts/types';
 
 function Color({ value, onChange }: ValueProps<Vector3>) {
   const { x, y, z } = value;

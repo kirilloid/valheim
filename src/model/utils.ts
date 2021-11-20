@@ -38,6 +38,13 @@ export type Vector2i = {
   y: number;
 };
 
+export type Quaternion = {
+  x: number;
+  y: number;
+  z: number;
+  w: number;
+};
+
 export const timeI2S = (seconds: number) => {
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);

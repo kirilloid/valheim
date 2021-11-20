@@ -1,11 +1,8 @@
 import { lerp } from './utils';
 
-function fade(t: number): number {
-  return t ** 3 * (t * (t * 6 - 15) + 10);
-}
-
 function grad(hash: number, x: number, y: number): number {
   const h = hash & 15;
+  return gradXTable[h]! * x + gradYTable[h]! * y;
   const u = h < 8 ? x : y;
   let v;
   
@@ -16,6 +13,9 @@ function grad(hash: number, x: number, y: number): number {
   return (h & 1 ? -u : u)
       +  (h & 2 ? -v : v);
 }
+
+const gradXTable = new Float32Array([1,-1, 1,-1, 1,-1, 1,-1, 0, 0, 0, 0, 1, 0,-1, 0]);
+const gradYTable = new Float32Array([1, 1,-1,-1, 0, 0, 0, 0, 1,-1, 1,-1, 1,-1, 1,-1]);
 
 // Hash lookup table as defined by Ken Perlin.
 const p = new Uint8Array([ 151,160,137,91,90,15,
