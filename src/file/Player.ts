@@ -1,6 +1,8 @@
-import type { Vector2i, Vector3 } from '../model/utils';
+import type { Vector3 } from '../model/utils';
 import { SkillType } from '../model/skills';
+
 import { PackageReader, PackageWriter } from './Package';
+import * as Inventory from './Inventory';
 import { sha512 } from './sha512';
 import { data as itemDB } from '../data/itemDB';
 
@@ -31,21 +33,6 @@ enum PinType {
 
 export type SkillData = Map<SkillType, { level: number, accumulator: number }>;
 
-export type Inventory = {
-  version: number;
-  items: {
-    id: string;
-    stack: number;
-    durability: number;
-    gridPos: Vector2i;
-    equiped: boolean;
-    quality: number;
-    variant: number;
-    crafterID: bigint;
-    crafterName: string;
-  }[];
-}
-
 type FoodData = {
   id: string;
   time: number;
@@ -60,7 +47,7 @@ export type PlayerData = {
   timeSinceDeath: number;
   guardianPower: string;
   guardianPowerCooldown: number;
-  inventory: Inventory;
+  inventory: Inventory.Data;
   knownRecipes: string[];
   knownStations: Map<string, number>;
   knownMaterials: string[];
@@ -285,49 +272,6 @@ function writePlayer(player: Player): Uint8Array {
   return writer.flush();
 }
 
-function readInventory(pkg: PackageReader): Inventory {
-  const version = pkg.readInt();
-  const length = pkg.readInt();
-  const inventory: Inventory = {
-    version,
-    items: [],
-  }
-  for (let index = 0; index < length; ++index) {
-    const id = pkg.readString();
-    const stack = pkg.readInt();
-    const durability = pkg.readFloat();
-    const x = pkg.readInt();
-    const y = pkg.readInt();
-    const gridPos = { x, y };
-    const equiped = pkg.readBool();
-    const quality = version >= 101 ? pkg.readInt() : 1;
-    const variant = version >= 102 ? pkg.readInt() : 0;
-    const crafterID = version >= 103 ? pkg.readLong() : BigInt(0);
-    const crafterName = version >= 103 ? pkg.readString() : "";
-    if (id !== '') {
-      inventory.items.push({ id, stack, durability, gridPos, equiped, quality, variant, crafterID, crafterName });
-    }
-  }
-  return inventory;
-}
-
-function writeInventory(pkg: PackageWriter, inventory: Inventory): void {
-  pkg.writeInt(inventory.version);
-  pkg.writeInt(inventory.items.length);
-  for (const itemData of inventory.items) {
-    pkg.writeString(itemData.id);
-    pkg.writeInt(itemData.stack);
-    pkg.writeFloat(itemData.durability);
-    pkg.writeInt(itemData.gridPos.x);
-    pkg.writeInt(itemData.gridPos.y);
-    pkg.writeBool(itemData.equiped);
-    pkg.writeInt(itemData.quality);
-    pkg.writeInt(itemData.variant);
-    pkg.writeLong(itemData.crafterID);
-    pkg.writeString(itemData.crafterName);
-  }
-}
-
 function readSkills(pkg: PackageReader) {
   const version = pkg.readInt();
   let size = pkg.readInt();
@@ -402,7 +346,7 @@ function readPlayerData(data: Uint8Array): PlayerData {
     pkg.readLong();
     pkg.readInt();
   }
-  const inventory = readInventory(pkg);
+  const inventory = Inventory.read(pkg);
   const knownRecipes = pkg.readArray(pkg.readString);
   const knownStations = version >= 15
     ? pkg.readMap(
@@ -462,7 +406,7 @@ function writePlayerData(data: PlayerData) {
   if (data.version >= 20) writer.writeFloat(data.timeSinceDeath);
   if (data.version >= 23) writer.writeString(data.guardianPower);
   if (data.version >= 24) writer.writeFloat(data.guardianPowerCooldown);
-  writeInventory(writer, data.inventory);
+  Inventory.write(writer, data.inventory);
   writer.writeArray(writer.writeString, data.knownRecipes);
   if (data.version >= 15) {
     writer.writeMap(writer.writeString, writer.writeInt, data.knownStations);

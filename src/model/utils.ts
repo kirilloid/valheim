@@ -22,6 +22,23 @@ export function stableHashCode(str: string): number {
   return a + Math.imul(b, 1566083941);
 }
 
+const crcTable = new Uint32Array(256);
+for (let n = 0; n < 256; n++) {
+  let c = n;
+  for (let k = 0; k < 8; k++) {
+    c = ((c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1));
+  }
+  crcTable[n] = c;
+}
+
+export function crc32(str: string) {
+  let crc = 0 ^ (-1);
+  for (var i = 0; i < str.length; i++ ) {
+    crc = (crc >>> 8) ^ crcTable[(crc ^ str.charCodeAt(i)) & 0xFF]!;
+  }
+  return (crc ^ (-1)) >>> 0;
+};
+
 export type Vector3 = { x: number, y: number, z: number };
 export const add = (a: Vector3, b: Vector3) => ({ x: a.x + b.x, y: a.y + b.y, z: a.z + b.z });
 export const magnitude = (a: Vector3): number => Math.hypot(a.x, a.y, a.z);
