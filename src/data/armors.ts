@@ -45,7 +45,7 @@ export const items: Item[] = [
     armor: [2, 2],
     weight: 5,
     maxLvl: 4,
-    durability: [400, 50],
+    durability: [400, 100],
     moveSpeed: 0,
     recipe: {
       type: 'craft_upg',
@@ -62,7 +62,7 @@ export const items: Item[] = [
     armor: [2, 2],
     weight: 1,
     maxLvl: 4,
-    durability: [400, 50],
+    durability: [400, 100],
     moveSpeed: 0,
     recipe: {
       type: 'craft_upg',
@@ -79,7 +79,7 @@ export const items: Item[] = [
     armor: [2, 2],
     weight: 1,
     maxLvl: 4,
-    durability: [400, 50],
+    durability: [400, 100],
     moveSpeed: 0,
     recipe: {
       type: 'craft_upg',

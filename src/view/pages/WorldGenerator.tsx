@@ -2,39 +2,34 @@ import React, { useLayoutEffect, useRef, useState } from 'react';
 import { Biome, WorldGenerator as WorldGen } from '../../model/world-generator';
 
 const biomeColors = [
-  [145, 167, 91], // Meadows
-  [52, 94, 59], // Black forest
-  [163, 113, 87], // Swamp
-  [255, 255, 255], // Mountain
-  [199, 199, 49], // Plains
-  [0, 0, 153], // Ocean
-  [52, 52, 52], // Mistlands
-  [255, 0, 0], // Ashlands
-  [255, 255, 255], // Deep North
+  0xff5ba791, // Meadows
+  0xff3b5e34, // Black forest
+  0xff5771a3, // Swamp
+  0xffffffff, // Mountain
+  0xff31c7c7, // Plains
+  0xff990000, // Ocean
+  0xff343434, // Mistlands
+  0xff0000ff, // Ashlands
+  0xffffffff, // Deep North
 ] as const;
 
 async function drawSeedOnto(world: WorldGen, imageData: ImageData, size: number, onProgress: (progress: number) => void) {
-  function putRgb(x: number, y: number, rgb: readonly [number, number, number]): void {
-    imageData.data[(size * y + x) * 4 + 0] = rgb[0];
-    imageData.data[(size * y + x) * 4 + 1] = rgb[1];
-    imageData.data[(size * y + x) * 4 + 2] = rgb[2];
-    imageData.data[(size * y + x) * 4 + 3] = 255;
-  }
+  const pixels = new Uint32Array(imageData.data.buffer);
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
       const worldX = (2 * x / size - 1) * 10500;
       const worldY = (1 - 2 * y / size) * 10500;
       if (worldX ** 2 + worldY ** 2 > 10500 ** 2) {
-        putRgb(x, y, [0, 0, 0]); // dark space
+        pixels[size * y + x] = 0; // dark space
       } else {
         const biome = world.getBiome(worldX, worldY);
         const height = world.getHeight(worldX, worldY);
         if (height < 28 && biome !== Biome.Ocean) {
           // const c = Math.round(128 * height / 30);
           // putRgb(x, y, [c, c, c + 127]);
-          putRgb(x, y, [128, 128, 255]);
+          pixels[size * y + x] = 0xFFFF8080;
         } else {
-          putRgb(x, y, biomeColors[biome]);
+          pixels[size * y + x] = biomeColors[biome];
         }
       }
     }
@@ -48,7 +43,7 @@ async function drawSeedOnto(world: WorldGen, imageData: ImageData, size: number,
 
 const WorldMap = React.memo((props: { seed: string }) => {
   const { seed } = props;
-  const SIZE = 640;
+  const SIZE = 960;
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [progress, setProgress] = useState(0);
   const MAX_SCALE = 5;

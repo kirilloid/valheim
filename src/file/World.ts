@@ -35,7 +35,7 @@ export type ZDO = {
   ints?: Map<number, number>; // int -> int
   longs?: Map<number, bigint>; // int -> long
   strings?: Map<number, string>; // int -> string
-  byteArrays?: Map<number, Uint8Array>; // int -> string
+  byteArrays?: Map<number, Uint8Array>; // int -> byte[]
 }
 
 export type ZDOData = {

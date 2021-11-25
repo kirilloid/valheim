@@ -5,34 +5,43 @@ import { ValueProps } from './types';
 
 type Props<T> = {
   defaultFileName: string;
+  extension: string;
   reader: (buffer: ArrayBuffer) => T;
   writer: (data: T) => Uint8Array;
-  Child: React.FC<ValueProps<T>>;
+  Child: React.FC<ValueProps<T> & { fileName: string }>;
 };
 
 export function FileEditor<T>(props: Props<T>) {
   const [state, setState] = useState<T | null>(null);
   const [fileName, setFileName] = useState(props.defaultFileName);
   const [changed, setChanged] = useState(false);
+  const [dragging, setDragging] = useState(false);
+  const ext = props.extension;
   const onDrop = useCallback((event: React.DragEvent<HTMLDivElement>) => {
-    // Prevent default behavior (Prevent file from being opened)
     event.preventDefault();
-    // Use DataTransfer interface to access the file(s)
-    for (const file of event.dataTransfer?.files ?? []) {
+    setDragging(false);
+    const files = (event.dataTransfer?.files ?? []);
+    for (const file of files) {
+      if (!file.name.endsWith(`.${ext}`) && !file.name.endsWith(`.${ext}.old`)) continue;
       file.arrayBuffer().then(buffer => {
         setFileName(file.name);
         setState(props.reader(buffer));
         setChanged(false);
       });
-      break;
+      return;
     }
-  }, [setState]);
+  }, [setState, ext]);
 
   const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
+    setDragging(true);
   }, []);
 
-  return <div style={{ flex: '1 0 auto' }} onDrop={onDrop} onDragOver={onDragOver}>
+  const onDragLeave = useCallback(() => {
+    setDragging(false);
+  }, []);
+
+  return <div className={`drop${dragging ? ' drop--over' : ''}`} onDrop={onDrop} onDragOver={onDragOver} onDragLeave={onDragLeave}>
     {state == null
       ? "Drag a file here"
       : <>
@@ -43,6 +52,7 @@ export function FileEditor<T>(props: Props<T>) {
           }}>Save &amp; Download</button>
           <br />
           <props.Child value={state}
+            fileName={fileName}
             onChange={v => {
               setState(v);
               setChanged(true);

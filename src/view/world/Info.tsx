@@ -15,19 +15,17 @@ function showTime(time: number) {
   return `Day ${day} @ ${timeStr}`;
 }
 
-export function WorldInfo(props: ValueProps<WorldData>) {
-  const { netTime, randEvent, zdo } = props.value;
+export function WorldInfo(props: ValueProps<WorldData> & { fileName: string }) {
+  const { netTime, randEvent, zdo, version, zoneSystem } = props.value;
   return <div>
     <h1>World</h1>
-    <h2>Passed</h2>
+    <p>{props.fileName} (v{version})</p>
+    <h2>Time</h2>
     <dl>
-      <dt>time</dt><dd>{showTime(netTime)}</dd>
+      <dt>world time</dt><dd>{showTime(netTime)}</dd>
+      {randEvent != null && <RandomEvents value={randEvent} />}
     </dl>
     <h2>Game objects</h2>
     <ZdoData value={zdo} />
-    {randEvent != null && <>
-      <h2>Random events</h2>
-      <RandomEvents value={randEvent} />
-    </>}
   </div>
 }

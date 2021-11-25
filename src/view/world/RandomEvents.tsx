@@ -8,14 +8,14 @@ import type { RandEventData } from './types';
 export function RandomEvents({ value }: { value: RandEventData }) {
   const translate = useContext(TranslationContext);
   if (!value.name) {
-    return <dl>
+    return <>
       <dt>timer</dt><dd>{value.eventTimer}</dd>
-    </dl>
+    </>
   };
-  return <dl>
+  return <>
     <dt>timer</dt><dd>{value.eventTimer}</dd>
     <dt>happening</dt><dd><Link to={`/events/${value.name}`}>{translate(value.name)}</Link></dd>
     <dt>where</dt><dd>{value.pos!.x} / {value.pos!.z}</dd>
     <dt>remaining</dt><dd>{value.time}</dd>
-  </dl>
+  </>
 }

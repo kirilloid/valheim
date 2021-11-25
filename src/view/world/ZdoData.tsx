@@ -1,131 +1,26 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useLayoutEffect, useRef, useState } from 'react';
 
-import { prefabNames } from '../../data/prefabs';
-import { TranslationContext } from '../../effects';
-import { crc32, stableHashCode } from '../../model/utils';
-// import type { ValueProps } from '../parts/types';
 import type { ZDOData, ZDO } from './types';
+import { data } from '../../data/itemDB';
+import { TranslationContext } from '../../effects';
+import { Biome } from '../../types';
+import { WORLD_SIZE } from '../../model/game';
+import { getId, keys, objects } from '../../data/zdo';
+// import type { ValueProps } from '../parts/types';
 
-const buildHashMap = (values: string[]) => new Map(values.map(key => [stableHashCode(key), key]));
 
-const hashToIdMap = buildHashMap(prefabNames);
-const getId = (map: Map<number, string>, hash: number): string => map.get(hash) ?? `!unknown_${(hash >>> 0).toString(16).padStart(8, '0')}`;
-
-const specialKeys = buildHashMap([
-  // BaseAI
-  'huntplayer', 'spawnpoint', 'patrolPoint', 'patrol', 'spawntime', 'lastWorldTime', 'haveTarget', 'alert',
-  // Bed
-  'owner', 'ownerName',
-  // Beehive
-  'product', 'level',
-  // Character
-  'max_health', 'noise', 'level', 'tiltrot', 'BodyVelocity',
-  // Container
-  'addedDefaultItems', 'InUse', 'items',
-  // CookingStation
-  'StartTime', 'fuel', 'slot0', 'slotstatus0', 'slot1', 'slotstatus1', 'slot2', 'slotstatus2', 'slot3', 'slotstatus3', 'slot4', 'slotstatus4',
-  // Corpse
-  'timeOfDeath',
-  // CreatureSpawner
-  'alive_time', 'spawn_id',
-  // Door
-  'state',
-  // DropItem
-  'SpawnTime',
-  // DungeonGenerator
-  'rooms', 'room<num>', 'room<num>_pos', 'room<num>_rot',
-  // Fermenter
-  'Content', 'StartTime',
-  // Fireplace
-  'fuel', 'lastTime',
-  // Fisth
-  'spawnpoint',
-  // FishingFloat
-  'RodOwner', 'CatchID',
-  // Human
-  'IsBlocking',
-  // ItemDrop
-  'durability', 'stack', 'quality', 'variant', 'crafterID', 'crafterName',
-  // ItemStand
-  'item',
-  // Leviathan
-  'submerged',
-  // LiquidVolumne
-  'LiquidData',
-  // LocationProxy
-  'location', 'seed',
-  // LootSpawner
-  'spawn_time',
-  // MapTable
-  'data',
-  // MineRock
-  'Health<num>',
-  // MineRock5
-  'health', // base64 float array
-  // MonsterAI
-  'DespawnInDay', 'EventCreature', 'sleeping',
-  // Pickable
-  'picked', 'picked_time',
-  // PickableItem
-  'itemPrefab', 'itemStack',
-  // Piece
-  'creator',
-  // Plant
-  'plantTime',
-  // Player
-  'Stealth', 'stamina', 'emoteID', 'emote', 'emote_oneshot', 'baseValue',
-  // PrivateArea
-  'permitted', 'pu_id<num>', 'pu_name<num>',
-  // Procreation
-  'lovePoints', 'pregnant',
-  // Ragdoll
-  'Hue', 'Saturation', 'Value', 'InitVel', 'drops', 'drop_hash<num>', 'drop_amount<num>',
-  // RandomAnimation
-  '<name>', 'RA_<name>',
-  // RandomFlyingBird
-  'spawnpoint', 'landed',
-  // Saddle
-  'user', 'stamina',
-  // SE_Man
-  'seAttrib',
-  // Ship
-  'rudder', 'forward',
-  // ShipConstructor
-  'spawntime', 'done',
-  // Sign
-  'text',
-  // Spawner
-  '<b_|e_><creature><num>',
-  // Smelter
-  'accTime', 'bakeTimer', 'SpawnAmount', 'SpawnOre', 'queued', 'item<num>',
-  // Tameable
-  'TameTimeLeft', 'HaveSaddle', 'TamedName', 'TameLastFeeding',
-  // Teleport
-  'target',
-  // TerrainCompiler
-  'TCData',
-  // Tombstone
-  'timeOfDeath', 'SpawnPoint',
-  // TreeBase
-  'health',
-  // VisEquipment
-  'ModelIndex', 'SkinColor', 'HairColor',
-  'LeftItem', 'LeftItemVariant', 'LeftBackItem', 'LeftBackItemVariant',
-  'RightBackItem', 'ChestItem', 'LegItem', 'HelmetItem',
-  'ShoulderItem', 'ShoulderItemVariant',
-  'BeardItem', 'HairItem', 'UtilityItem', 
-  // WearNTear
-  'health', 'support',
-  // ZNetView
-  'scale',
-  // ZSyncTransform
-  'vel', 'scale', 'body_vel', 'body_avel', 'relPos', 'attachJoint', 'parentID',
-]);
-
-for (const name of ['alert', 'inWater', 'onGround', 'encumbered', 'flying', 'sleeping', 'equipping', 'blocking', 'crouching', 'intro', 'forward_speed', 'sideway_speed', 'turn_speed', 'statei', 'statef', 'flapping', 'crafting']) {
-  const hash = (crc32(name) + 438569) & 0xFFFFFFFF;
-  specialKeys.set(hash, name);
-}
+const biomeColors: Record<Biome, number> = {
+  Meadows: 0xff5ba791,
+  BlackForest: 0xff3b5e34,
+  Swamp: 0xff5771a3,
+  Mountain: 0xffffffff,
+  Plains: 0xff31c7c7,
+  Ocean: 0xff990000,
+  Mistlands: 0xff343434,
+  Ashlands: 0xff0000ff,
+  DeepNorth: 0xffffffff,
+};
+const blueWater = 0xFFFF8080;
 
 export function ZdoSpecialData<T>(props: { data?: Map<number, T>, stringify: (value: T) => string }) {
   if (props == null) return null;
@@ -133,7 +28,7 @@ export function ZdoSpecialData<T>(props: { data?: Map<number, T>, stringify: (va
   if (!data) return null;
   return <>{[...data.entries()]
     .map(([key, value]) => <React.Fragment key={key}>
-      <dt>{getId(specialKeys, key)}</dt><dd>{stringify(value)}</dd>
+      <dt>{getId(keys, key)}</dt><dd>{stringify(value)}</dd>
     </React.Fragment>)
   }</>;
 }
@@ -143,8 +38,10 @@ export function ZdoData({ value: { zdos } }: { value: ZDOData }) {
   const zdoGroups = new Map<string, ZDO[]>();
   const [currentId, setCurrentId] = useState('');
   const [index, setIndex] = useState(0);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
   for (const zdo of zdos) {
-    const id = getId(hashToIdMap, zdo.prefab);
+    const id = getId(objects, zdo.prefab);
     if (zdoGroups.has(id)) {
       zdoGroups.get(id)!.push(zdo);
     } else {
@@ -154,7 +51,43 @@ export function ZdoData({ value: { zdos } }: { value: ZDOData }) {
   const currentItems = zdoGroups.get(currentId) ?? [];
   const currentItem = currentItems[index];
 
+  const SIZE = 320;
+  useLayoutEffect(() => {
+    const canvas = canvasRef.current;
+    if (canvas == null) return;
+    const ctx = canvas.getContext('2d');
+    if (ctx == null) return;
+    ctx.fillStyle = '#ccc';
+    ctx.fillRect(0, 0, SIZE, SIZE);
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.arc(SIZE / 2, SIZE / 2, SIZE / 2, 0, 2 * Math.PI);
+    ctx.fill();
+    const imageData = ctx.getImageData(0, 0, SIZE, SIZE);
+    const pixels = new Uint32Array(imageData.data.buffer);
+
+    for (const zdo of zdos) {
+      const x = Math.round(zdo.position.x / WORLD_SIZE * SIZE + SIZE / 2);
+      const y = Math.round(zdo.position.z / WORLD_SIZE * SIZE + SIZE / 2);
+      const id = objects.get(zdo.prefab);
+      if (id == null) continue;
+      if (id === 'Fish3' || zdo.position.y < 20) {
+        pixels[y * SIZE + x] = biomeColors.Ocean;
+      } else if (id === 'Fish2' || id === 'Fish1' || zdo.position.y < 28) {
+        pixels[y * SIZE + x] = blueWater;
+      }
+      const obj = data[id];
+      if (obj == null) continue;
+      if ('grow' in obj && obj.grow?.length === 1 && obj.grow[0]!.locations.length === 1) {
+        const loc = obj.grow[0]!.locations[0]!;
+        pixels[y * SIZE + x] = biomeColors[loc];
+      }
+    }
+    ctx.putImageData(imageData, 0, 0);
+  }, [zdos]);
+
   return <>
+    <canvas width={SIZE} height={SIZE} ref={canvasRef} style={{ float: 'right' }} />
     <select onChange={e => {
       setCurrentId(e.target.value);
       setIndex(0);
@@ -179,7 +112,7 @@ export function ZdoData({ value: { zdos } }: { value: ZDOData }) {
       <dt>position</dt><dd>{currentItem.position.x} / {currentItem.position.z}</dd>
       <dt>sector</dt><dd>{currentItem.sector.x} / {currentItem.sector.y}</dd>
       <ZdoSpecialData data={currentItem.floats} stringify={String} />
-      <ZdoSpecialData data={currentItem.vec3} stringify={v => `${v.x.toFixed(3)} / ${v.z.toFixed(3)}`} />
+      <ZdoSpecialData data={currentItem.vec3} stringify={v => `${v.x.toFixed(3)} / ${v.y.toFixed(3)} / ${v.z.toFixed(3)}`} />
       <ZdoSpecialData data={currentItem.quats} stringify={v =>
         `x: ${v.x.toFixed(3)}, y: ${v.y.toFixed(3)}, z: ${v.z.toFixed(3)}, w: ${v.w.toFixed(3)}`} />
       <ZdoSpecialData data={currentItem.ints} stringify={String} />

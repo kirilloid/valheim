@@ -19,7 +19,7 @@ export function stableHashCode(str: string): number {
     if (index === str.length - 1) break;
     b = (b << 5) + b ^ str.charCodeAt(index + 1);
   }
-  return a + Math.imul(b, 1566083941);
+  return (a + Math.imul(b, 1566083941)) | 0;
 }
 
 const crcTable = new Uint32Array(256);

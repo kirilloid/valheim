@@ -8,7 +8,7 @@ import { Inventory } from './Inventory';
 import { Skills } from './Skills';
 import { Stats } from './Stats';
 
-export function PlayerInfo({ value: player, onChange } : ValueProps<Player>) {
+export function PlayerInfo({ value: player, onChange } : ValueProps<Player> & { fileName: string }) {
   return <section>
     <h1>{player.playerName}</h1>
     <h2>Worlds ({player.worlds.size})</h2>

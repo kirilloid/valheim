@@ -177,3 +177,11 @@ option.spoiler {
     justify-content: flex-end;
   }    
 }
+
+.drop {
+  flex: 1 0 auto;
+}
+
+.drop--over {
+  border: 1px dashed gray;
+}

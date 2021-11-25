@@ -547,12 +547,12 @@ export class WorldGenerator {
   public getBiome(wx: number, wy: number): Biome {
     const magnitude = Math.hypot(wx, wy);
     const baseHeight = this.getBaseHeight(wx, wy);
-    const num = this.worldAngle(wx, wy) * 100;
-    if (Math.hypot(wx, wy - 4000) > 12000.0 + num)
+    const angle = this.worldAngle(wx, wy) * 100;
+    if (Math.hypot(wx, wy - 4000) > 12000.0 + angle)
       return Biome.Ashlands;
     if (baseHeight <= 0.02)
       return Biome.Ocean;
-    if (Math.hypot(wx, wy + 4000) > 12000.0 + num)
+    if (Math.hypot(wx, wy + 4000) > 12000.0 + angle)
       return baseHeight > 0.4 ? Biome.Mountain : Biome.DeepNorth;
     if (baseHeight > 0.4)
       return Biome.Mountain;
@@ -561,16 +561,17 @@ export class WorldGenerator {
       && baseHeight > 0.05 && baseHeight < 0.25)
       return Biome.Swamp;
     if (perlinNoise((this.offset4 + wx) * 0.001, (this.offset4 + wy) * 0.001) > 0.5
-      && magnitude > 6000 + num
+      && magnitude > 6000 + angle
       && magnitude < 10000)
       return Biome.Mistlands;
     if (perlinNoise((this.offset1 + wx) * 0.001, (this.offset1 + wy) * 0.001) > 0.4
-      && magnitude > 3000 + num
+      && magnitude > 3000 + angle
       && magnitude < 8000)
       return Biome.Plains;
-    return perlinNoise((this.offset2 + wx) * 0.001, (this.offset2 + wy) * 0.001) > 0.4
-      && magnitude > 600 + num
-      && (magnitude < 6000 || magnitude > 5000 + num)
+    return (perlinNoise((this.offset2 + wx) * 0.001, (this.offset2 + wy) * 0.001) > 0.4
+      && magnitude > 600 + angle
+      && magnitude < 6000)
+      || magnitude > 5000 + angle
         ? Biome.BlackForest
         : Biome.Meadows;
     }

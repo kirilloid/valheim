@@ -7,6 +7,7 @@ export const INTRO_DURATION = 2040;
 export const INTRO_WEATHER: EnvId = 'ThunderStorm';
 export const WIND_PERIOD = 125;
 export const WEATHER_PERIOD = 666;
+export const WORLD_SIZE = 21000;
 
 export const BASE_HEALTH = 25;
 export const BASE_STAMINA = 50;
