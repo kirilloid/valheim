@@ -102,8 +102,11 @@ export const keys = buildHashMap([
   'health',
   // VisEquipment
   'ModelIndex', 'SkinColor', 'HairColor',
-  'LeftItem', 'LeftItemVariant', 'LeftBackItem', 'LeftBackItemVariant',
-  'RightBackItem', 'ChestItem', 'LegItem', 'HelmetItem',
+  'RightItem', 'RightItemVariant',
+  'RightBackItem', 'RightBackItemVariant',
+  'LeftItem', 'LeftItemVariant',
+  'LeftBackItem', 'LeftBackItemVariant',
+  'ChestItem', 'LegItem', 'HelmetItem',
   'ShoulderItem', 'ShoulderItemVariant',
   'BeardItem', 'HairItem', 'UtilityItem', 
   // WearNTear

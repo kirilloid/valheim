@@ -8,7 +8,6 @@ import { WORLD_SIZE } from '../../model/game';
 import { getId, keys, objects } from '../../data/zdo';
 // import type { ValueProps } from '../parts/types';
 
-
 const biomeColors: Record<Biome, number> = {
   Meadows: 0xff5ba791,
   BlackForest: 0xff3b5e34,
