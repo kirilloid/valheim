@@ -209,6 +209,7 @@ export const resources: Item[] = [
   // SWAMP
   { type: 'item', id: 'Ooze', tier: 3, weight: 0.5, stack: 50 },
   { type: 'item', id: 'Guck', tier: 3, weight: 0.5, stack: 50 },
+  { type: 'item', id: 'Root', tier: 3, weight: 0.3, stack: 50 },
   { type: 'item', id: 'Chain', emoji: '⛓️', tier: 3, weight: 2, stack: 50 },
   { type: 'item', id: 'Bloodbag', emoji: '🩸', tier: 3, weight: 0.5, stack: 50 },
   { type: 'item', id: 'Turnip', tier: 3, emoji: '🍆', weight: 0.3, stack: 50, tags: ['plant', 'vegetable'] },
@@ -258,6 +259,7 @@ export const resources: Item[] = [
   { type: 'trophy', id: 'TrophyDraugr', emoji: '🧟', tier: 3, weight: 2, stack: 20 },
   { type: 'trophy', id: 'TrophyDraugrElite', emoji: '🧟', tier: 3, weight: 2, stack: 20 },
   { type: 'trophy', id: 'TrophyWraith', emoji: '👻', tier: 3, weight: 1, stack: 20 },
+  { type: 'trophy', id: 'TrophyAbomination', emoji: '🥦', tier: 3, weight: 4, stack: 20 },
   { type: 'trophy', id: 'TrophyBonemass', emoji: '🦠', tier: 4, weight: 2, stack: 20, floating: true, power: 'GP_Bonemass' },
 // OCEAN
   { type: 'item', id: 'Chitin', tier: 2, weight: 2, stack: 50 },
