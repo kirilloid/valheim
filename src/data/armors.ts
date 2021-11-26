@@ -260,7 +260,7 @@ export const items: Item[] = [
       type: 'craft_upg',
       time: CRAFT_TIME,
       materials: { Root: 10, ElderBark: 10, DeerHide: 2 },
-      materialsPerLevel: { Root: 2, ElderBark: 2 },
+      materialsPerLevel: { Root: 2, ElderBark: 5 },
       source: { station: CraftingStation.Workbench, level: 2 },
       upgrade: { station: CraftingStation.Workbench, level: 3 },
     }
