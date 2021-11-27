@@ -29,13 +29,13 @@ export type ZDO = {
   sector: Vector2i;
   position: Vector3;
   rotation: Quaternion;
-  floats?: Map<number, number>; // int -> float
-  vec3?: Map<number, Vector3>; // int -> Vector3
-  quats?: Map<number, Quaternion>; // int -> Quaternion
-  ints?: Map<number, number>; // int -> int
-  longs?: Map<number, bigint>; // int -> long
-  strings?: Map<number, string>; // int -> string
-  byteArrays?: Map<number, Uint8Array>; // int -> byte[]
+  floats: Map<number, number>; // int -> float
+  vec3: Map<number, Vector3>; // int -> Vector3
+  quats: Map<number, Quaternion>; // int -> Quaternion
+  ints: Map<number, number>; // int -> int
+  longs: Map<number, bigint>; // int -> long
+  strings: Map<number, string>; // int -> string
+  byteArrays: Map<number, Uint8Array>; // int -> byte[]
 }
 
 export type ZDOData = {
@@ -91,13 +91,13 @@ function readZdo(buffer: ArrayBuffer, version: number): Omit<ZDO, 'id'> {
   const position = pkg.readVector3();
   const rotation = pkg.readQuaternion();
 
-  const floats = pkg.readIfSmallMap(pkg.readInt, pkg.readFloat);
-  const vec3 = pkg.readIfSmallMap(pkg.readInt, pkg.readVector3);
-  const quats = pkg.readIfSmallMap(pkg.readInt, pkg.readQuaternion);
-  const ints = pkg.readIfSmallMap(pkg.readInt, pkg.readInt);
-  const longs = pkg.readIfSmallMap(pkg.readInt, pkg.readLong);
-  const strings = pkg.readIfSmallMap(pkg.readInt, pkg.readString);
-  const byteArrays = version >= 27 ? pkg.readIfSmallMap(pkg.readInt, pkg.readByteArray) : undefined;
+  const floats = pkg.readIfSmallMap(pkg.readInt, pkg.readFloat) ?? new Map<number, number>();
+  const vec3 = pkg.readIfSmallMap(pkg.readInt, pkg.readVector3) ?? new Map<number, Vector3>();
+  const quats = pkg.readIfSmallMap(pkg.readInt, pkg.readQuaternion) ?? new Map<number, Quaternion>();
+  const ints = pkg.readIfSmallMap(pkg.readInt, pkg.readInt) ?? new Map<number, number>();
+  const longs = pkg.readIfSmallMap(pkg.readInt, pkg.readLong) ?? new Map<number, bigint>();
+  const strings = pkg.readIfSmallMap(pkg.readInt, pkg.readString) ?? new Map<number, string>();
+  const byteArrays = version >= 27 && pkg.readIfSmallMap(pkg.readInt, pkg.readByteArray) || new Map<number, Uint8Array>();
   if (version < 17) {
     prefab = ints?.get(stableHashCode('prefab')) ?? 0;
   }

@@ -37,6 +37,12 @@ export class PackageReader {
     return this.view.getUint8(this.offset++);
   }
 
+  public readShort(): number {
+    const result = this.view.getInt16(this.offset, true);
+    this.offset += 2;
+    return result;
+  }
+
   public readInt(): number {
     const result = this.view.getInt32(this.offset, true);
     this.offset += 4;
@@ -191,6 +197,12 @@ export class PackageWriter {
     this.view.setUint8(this.offset++, value & 0xFF);
   }
 
+  public writeShort(value: number): void {
+    this.ensureSpace(2);
+    this.view.setInt16(this.offset, value, true);
+    this.offset += 2;
+  }
+
   public writeInt(value: number): void {
     this.ensureSpace(4);
     this.view.setInt32(this.offset, value, true);
@@ -275,11 +287,11 @@ export class PackageWriter {
     this.writeByteArray(gzipped);
   }
 
-  public writeArray<T>(writer: (this: PackageWriter, value: T) => void, values: T[]): void {
+  public writeArray<T>(writer: (this: PackageWriter, value: T) => void, values: ArrayLike<T>): void {
     const length = values.length;
     this.writeInt(length);
-    for (const value of values) {
-      writer.call(this, value);
+    for (let i = 0; i < values.length; i++) {
+      writer.call(this, values[i]!);
     }
   }
 
