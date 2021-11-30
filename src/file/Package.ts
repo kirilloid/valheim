@@ -12,9 +12,10 @@ export class PackageReader {
   private offset: number = 0;
   private bytes: Uint8Array;
   private view: DataView;
-  constructor(buffer: ArrayBuffer) {
-    this.bytes = new Uint8Array(buffer);
-    this.view = new DataView(buffer);
+  constructor(bytes: Uint8Array) {
+    this.bytes = bytes;
+    this.offset = bytes.byteOffset;
+    this.view = new DataView(bytes.buffer);
   }
 
   private read7BitInt(): number {
@@ -99,14 +100,14 @@ export class PackageReader {
     const start = this.offset;
     const end = this.offset += length;
     const decoder = new TextDecoder();
-    return decoder.decode(this.bytes.buffer.slice(start, end));
+    return decoder.decode(this.bytes.subarray(start, end));
   }
 
   public readByteArray(): Uint8Array {
     const length = this.readInt();
     const start = this.offset;
     const end = this.offset += length;
-    return this.bytes.slice(start, end);
+    return this.bytes.subarray(start, end);
   }
 
   public readGzipped(): Uint8Array {

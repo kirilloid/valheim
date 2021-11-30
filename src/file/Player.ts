@@ -99,12 +99,12 @@ export type Player = {
   playerData?: PlayerData;
 };
 
-export function readMapData(buffer: ArrayBuffer): MapData {
-  let reader = new PackageReader(buffer);
+export function readMapData(data: Uint8Array): MapData {
+  let reader = new PackageReader(data);
   const version = reader.readInt();
   if (version >= 7) {
     // unpack gzip
-    reader = new PackageReader(reader.readGzipped().buffer);
+    reader = new PackageReader(reader.readGzipped());
   }
   const tileSize = reader.readInt();
   const byteSize = tileSize ** 2 / 8;
@@ -206,8 +206,8 @@ function writeCustomPoint(pkg: PackageWriter, point?: Vector3): void {
   pkg.writeVector3(point ?? { x: 0, y: 0, z: 0 });
 }
 
-export function readPlayer(buffer: ArrayBuffer): Player {
-  const reader = new PackageReader(buffer);
+export function readPlayer(bytes: Uint8Array): Player {
+  const reader = new PackageReader(bytes);
   const version = reader.readInt();
   const kills = version >= 28 ? reader.readInt() : 0;
   const deaths = version >= 28 ? reader.readInt() : 0;
@@ -333,7 +333,7 @@ function readFoods(pkg: PackageReader, version: number): FoodData[] {
 }
 
 function readPlayerData(data: Uint8Array): PlayerData {
-  const pkg = new PackageReader(data.buffer);
+  const pkg = new PackageReader(data);
   const version = pkg.readInt();
   const maxHealth = version >= 7 ? pkg.readFloat() : NaN;
   const health = pkg.readFloat();
@@ -442,15 +442,15 @@ function writePlayerData(data: PlayerData) {
   return writer.flush();
 }
 
-export function read(buffer: ArrayBuffer) {
-  const reader = new PackageReader(buffer);
+export function read(bytes: Uint8Array) {
+  const reader = new PackageReader(bytes);
   const data = reader.readByteArray();
   const hash = reader.readByteArray();
   const computed = new Uint8Array(sha512.arrayBuffer(data.buffer));
   if (computed.some((v, i) => v !== hash[i])) {
     throw new RangeError("Incorrect hash");
   }
-  return readPlayer(data.buffer);
+  return readPlayer(data);
 }
 
 export function write(player: Player) {

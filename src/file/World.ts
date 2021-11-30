@@ -74,8 +74,8 @@ export type WorldData = {
   randEvent?: RandEventData;
 }
 
-function readZdo(buffer: ArrayBuffer, version: number): Omit<ZDO, 'id'> {
-  const pkg = new PackageReader(buffer);
+function readZdo(bytes: Uint8Array, version: number): Omit<ZDO, 'id'> {
+  const pkg = new PackageReader(bytes);
   const ownerRevision = pkg.readUInt();
   const dataRevision = pkg.readUInt();
   const persistent = pkg.readBool();
@@ -159,8 +159,7 @@ function readZDOData(reader: PackageReader, version: number): ZDOData {
       userId: reader.readLong(),
       id: reader.readUInt(),
     };
-    // FIXME do not copy, read into
-    const zdo = readZdo(reader.readByteArray().buffer, version);
+    const zdo = readZdo(reader.readByteArray(), version);
     zdos.push({ id, ...zdo });
   }
   const deadZdos = reader.readMap(function () {
@@ -257,8 +256,8 @@ function writeRandEvent(writer: PackageWriter, version: number, event: RandEvent
   writer.writeVector3(event.pos!);
 }
 
-export function read(buffer: ArrayBuffer): WorldData {
-  let reader = new PackageReader(buffer);
+export function read(bytes: Uint8Array): WorldData {
+  let reader = new PackageReader(bytes);
   const version = reader.readInt();
   const netTime = version >= 4 ? reader.readDouble() : NaN;
   const zdo = readZDOData(reader, version);

@@ -13,8 +13,8 @@ export type Data = {
   paintMask: ImageData;
 };
 
-export function read(byteArray: Uint8Array): Data {
-  const pkg = new PackageReader(byteArray.buffer);
+export function read(bytes: Uint8Array): Data {
+  const pkg = new PackageReader(bytes);
   const data = pkg.readGzipped();
   const zpackage = new PackageReader(data);
   const version = zpackage.readInt();

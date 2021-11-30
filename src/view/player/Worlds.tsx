@@ -49,7 +49,7 @@ export function Worlds({ value: worlds } : ValueProps<Player['worlds']>) {
     }
     const mapDataPacked = world?.mapData;
     if (mapDataPacked == null) return;
-    const mapDataUnpacked = readMapData(mapDataPacked.buffer);
+    const mapDataUnpacked = readMapData(mapDataPacked);
     mapDataCache.set(hash, mapDataUnpacked);
     setMapData(mapDataUnpacked);
   }, [worlds, hash])

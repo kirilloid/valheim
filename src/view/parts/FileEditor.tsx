@@ -6,7 +6,7 @@ import { ValueProps } from './types';
 type Props<T> = {
   defaultFileName: string;
   extension: string;
-  reader: (buffer: ArrayBuffer) => T;
+  reader: (bytes: Uint8Array) => T;
   writer: (data: T) => Uint8Array;
   Child: React.FC<ValueProps<T> & { fileName: string }>;
 };
@@ -25,7 +25,7 @@ export function FileEditor<T>(props: Props<T>) {
       if (!file.name.endsWith(`.${ext}`) && !file.name.endsWith(`.${ext}.old`)) continue;
       file.arrayBuffer().then(buffer => {
         setFileName(file.name);
-        setState(props.reader(buffer));
+        setState(props.reader(new Uint8Array(buffer)));
         setChanged(false);
       });
       return;
