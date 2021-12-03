@@ -27,7 +27,7 @@ export class PackageReader {
       offset += 7;
       if (!(byteVal & 0x80)) return value;
     }
-    throw new RangeError("Unterminated 7-bit encoding");
+    throw new RangeError("Unbounded 7-bit encoding");
   }
 
   public readBool(): boolean {

@@ -43,6 +43,7 @@ export type ZDOData = {
   nextUid: number; // uint
   zdos: ZDO[];
   deadZdos: Map<ZDOID, bigint>;
+  corruptedZdos: number;
 };
 
 export type ZoneSystemData = {
@@ -159,8 +160,10 @@ function readZDOData(reader: PackageReader, version: number): ZDOData {
       userId: reader.readLong(),
       id: reader.readUInt(),
     };
-    const zdo = readZdo(reader.readByteArray(), version);
-    zdos.push({ id, ...zdo });
+    try {
+      const zdo = readZdo(reader.readByteArray(), version);
+      zdos.push({ id, ...zdo });
+    } catch {}
   }
   const deadZdos = reader.readMap(function () {
     const userId = this.readLong();
@@ -172,6 +175,7 @@ function readZDOData(reader: PackageReader, version: number): ZDOData {
     nextUid,
     zdos,
     deadZdos,
+    corruptedZdos: zdoLength - zdos.length,
   };
 }
 
@@ -225,7 +229,7 @@ function writeZoneSystem(writer: PackageWriter, version: number, zoneSystem: Zon
   writer.writeArray(function (loc) {
     this.writeString(loc.name);
     this.writeVector3(loc.pos);
-    this.writeBool(loc.generated);
+    if (version >= 19) this.writeBool(loc.generated);
   }, zoneSystem.locationInstances!);
 }
 
@@ -237,9 +241,6 @@ function readRandEvent(reader: PackageReader, version: number): RandEventData {
   const name = reader.readString();
   const time = reader.readFloat();
   const pos = reader.readVector3();
-  const event = events.find(e => e.id === name);
-  // do we need that check?
-  if (event == null) return result;
   return {
     ...result,
     name,

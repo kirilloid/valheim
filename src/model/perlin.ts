@@ -45,7 +45,6 @@ export function perlinNoise(x: number, y: number): number {
   const AA = p[A]!, AB = p[A+1]!;
   const BA = p[B]!, BB = p[B+1]!;
 
-
   const u = x ** 3 * (x * (x * 6 - 15) + 10);
   const v = y ** 3 * (y * (y * 6 - 15) + 10);
 
