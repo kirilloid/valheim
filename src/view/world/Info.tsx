@@ -19,8 +19,8 @@ function showTime(time: number) {
 export function WorldInfo({ value, onChange, fileName }: ValueProps<WorldData> & { fileName: string }) {
   const { netTime, randEvent, zdo, version, zoneSystem } = value;
   const [corrupted, setCorrupted] = useState(0);
-  if (zdo.corruptedZdos !== corrupted) {
-    setCorrupted(zdo.corruptedZdos);
+  if (zdo.corruptions.length !== corrupted) {
+    setCorrupted(zdo.corruptions.length);
     onChange(value);
   }
   return <div>
@@ -35,7 +35,7 @@ export function WorldInfo({ value, onChange, fileName }: ValueProps<WorldData> &
       <ZoneSystem value={zoneSystem} onChange={zoneSystem => onChange({ ...value, zoneSystem })} />
     </>}
     <h2>Game objects</h2>
-    {zdo.corruptedZdos > 0 && <div className="error">Corrupted: {corrupted}</div>}
+    {corrupted > 0 && <div className="error">Corrupted: {corrupted}</div>}
     <ZdoData value={zdo} />
   </div>
 }

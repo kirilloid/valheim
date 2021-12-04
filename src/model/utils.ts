@@ -155,3 +155,8 @@ export function addStatCounters(a: StatCounter, b: StatCounter): StatCounter {
   result._num = a._num + b._num;
   return result;
 }
+
+export function getMemUsage(): number {
+  const mem = (performance as any).memory?.totalJSHeapSize ?? 0;
+  return mem / 1024 ** 2;
+}

@@ -18,20 +18,12 @@ export class PackageReader {
     this.view = new DataView(bytes.buffer);
   }
 
-  private read7BitInt(): number {
-    let value = 0;
-    let offset = 0;
-    while (offset < 35) {
-      const byteVal = this.view.getUint8(this.offset++);
-      value |= (byteVal & 0x7f) << offset;
-      offset += 7;
-      if (!(byteVal & 0x80)) return value;
-    }
-    throw new RangeError("Unbounded 7-bit encoding");
+  public getOffset(): number {
+    return this.offset;
   }
 
   public readBool(): boolean {
-    return !!this.view.getUint8(this.offset++);
+    return this.view.getUint8(this.offset++) > 0;
   }
 
   public readByte(): number {
@@ -95,6 +87,47 @@ export class PackageReader {
     return { x, y, z, w };
   }
 
+  public readChar(): number {
+    const offset = this.offset;
+    let first = this.readByte();
+    // 0xxxxxxx
+    if ((first & 0x80) === 0) return first;
+
+    if ((first & 0xE0) == 0xC0) { // 110xxxxx 10xxxxxx
+      first &= 0x1F;
+      const second = this.readByte() & 0x3F;
+      return (first << 6) | second;
+    }
+    // 1110xxxx 10xxxxxx 10xxxxxx
+    if ((first & 0xF0) === 0xE0) {
+      first &= 0x0F;
+      const second = this.readByte() & 0x3F;
+      const third = this.readByte() & 0x3F;
+      return (first << 12) | (second << 6) | third;
+    }
+    // 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+    if ((first & 0xF8) === 0xF0) {
+      first &= 0x07;
+      const second = this.readByte() & 0x3F;
+      const third = this.readByte() & 0x3F;
+      const fourth = this.readByte() & 0x3F;
+      return (first << 18) | (second << 12) | (third << 6) | fourth;
+    }
+    throw new RangeError(`Invalid UTF-8 character at offset ${offset}`);
+  }
+
+  private read7BitInt(): number {
+    let value = 0;
+    let offset = 0;
+    while (offset < 35) {
+      const byteVal = this.view.getUint8(this.offset++);
+      value |= (byteVal & 0x7f) << offset;
+      offset += 7;
+      if (!(byteVal & 0x80)) return value;
+    }
+    throw new RangeError("Unbounded 7-bit encoding");
+  }
+
   public readString(): string {
     const length = this.read7BitInt();
     const start = this.offset;
@@ -152,7 +185,7 @@ export class PackageReader {
     keyReader: (this: PackageReader) => K,
     valueReader: (this: PackageReader) => V,
   ): Map<K, V> | undefined {
-    const length = this.readByte();
+    const length = this.readChar();
     if (length === 0) return;
     const result = new Map<K, V>();
     for (let i = 0; i < length; i++) {
@@ -258,6 +291,32 @@ export class PackageWriter {
     this.offset += 4;
   }
 
+  public writeChar(value: number): void {
+    if (value <= 0x7F) { // 7 bits
+      this.writeByte(value);
+      return;
+    }
+    if (value <= 0x7FF) { // 11 bits
+      this.writeByte((value >> 6) | 0xC0);
+      this.writeByte((value & 0x3F) | 0x80);
+      return;
+    }
+    if (value <= 0xFFFF) { // 16 bits
+      this.writeByte((value >> 12) & 0x0F | 0xE0);
+      this.writeByte((value >> 6) & 0x3F | 0x80);
+      this.writeByte((value & 0x3F) | 0x80);
+      return;
+    }
+    if (value <= 0x1FFFFF) { // 21 bits
+      this.writeByte((value >> 18) & 0x07 | 0xF0);
+      this.writeByte((value >> 12) & 0x3F | 0x80);
+      this.writeByte((value >> 6) & 0x3F | 0x80);
+      this.writeByte((value & 0x3F) | 0x80);
+      return;
+    }
+    throw new RangeError(`UTF-8 character with code ${value}`);
+  }
+
   private write7BitInt(value: number): void {
     while (value >= 128) {
       this.writeByte((value & 0x7F) | 0x80);
@@ -274,12 +333,17 @@ export class PackageWriter {
     this.offset += encoded.written ?? 0;
   }
 
-  public writeByteArray(value: Uint8Array): void {
+  public writeBytes(value: Uint8Array): void {
     const length = value.byteLength;
-    this.writeInt(length);
     this.ensureSpace(length);
     this.bytes.set(value, this.offset);
     this.offset += length;
+  }
+
+  public writeByteArray(value: Uint8Array): void {
+    const length = value.length;
+    this.writeInt(length);
+    this.writeBytes(value);
   }
 
   public writeGzipped(value: Uint8Array): void {
@@ -328,8 +392,7 @@ export class PackageWriter {
       return;  
     }
     const length = values.size;
-    // TODO: support writeChar maybe in UT8
-    this.writeByte(length);
+    this.writeChar(length);
     for (const [key, value] of values) {
       keyWriter.call(this, key);
       valueWriter.call(this, value);

@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import { getMemUsage } from '../../model/utils';
 import { downloadFile } from '../helpers';
 
 import { ValueProps } from './types';
@@ -23,9 +24,12 @@ export function FileEditor<T>(props: Props<T>) {
     const files = (event.dataTransfer?.files ?? []);
     for (const file of files) {
       if (!file.name.endsWith(`.${ext}`) && !file.name.endsWith(`.${ext}.old`)) continue;
+      const mem1 = getMemUsage();
       file.arrayBuffer().then(buffer => {
         setFileName(file.name);
         setState(props.reader(new Uint8Array(buffer)));
+        const mem2 = getMemUsage();
+        console.info(`Memory consumed: ${(mem2 - mem1).toPrecision(3)} MB`);
         setChanged(false);
       });
       return;

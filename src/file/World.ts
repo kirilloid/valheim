@@ -1,49 +1,16 @@
-import { Quaternion, stableHashCode, Vector2i, Vector3 } from '../model/utils';
+import type { ZDO, ZDOID, ZDOCorruption } from './types';
+import type { Vector2i, Vector3 } from '../model/utils';
 import { PackageReader, PackageWriter } from './Package';
-import { events } from '../data/events';
-
-type ZDOID = {
-  userId: bigint; // long
-  id: number; // uint
-}
-
-enum ZDOObjectType {
-  Default,
-  Prioritized,
-  Solid,
-  Terrain,
-};
-
-export type ZDO = {
-  id: ZDOID;
-  ownerRevision: number;
-  dataRevision: number;
-  persistent: boolean;
-  owner: bigint;
-  // ms timestamp?
-  timeCreated: bigint;
-  pgwVersion: number;
-  type: ZDOObjectType;
-  distant: boolean;
-  prefab: number;
-  sector: Vector2i;
-  position: Vector3;
-  rotation: Quaternion;
-  floats: Map<number, number>; // int -> float
-  vec3: Map<number, Vector3>; // int -> Vector3
-  quats: Map<number, Quaternion>; // int -> Quaternion
-  ints: Map<number, number>; // int -> int
-  longs: Map<number, bigint>; // int -> long
-  strings: Map<number, string>; // int -> string
-  byteArrays: Map<number, Uint8Array>; // int -> byte[]
-}
+import { readZdo } from './zdo/mmap';
+import { setVersion } from './zdo/offset';
+import { errorToMistake } from './zdo/check';
 
 export type ZDOData = {
   myid: bigint; // long
   nextUid: number; // uint
   zdos: ZDO[];
   deadZdos: Map<ZDOID, bigint>;
-  corruptedZdos: number;
+  corruptions: ZDOCorruption[];
 };
 
 export type ZoneSystemData = {
@@ -75,95 +42,23 @@ export type WorldData = {
   randEvent?: RandEventData;
 }
 
-function readZdo(bytes: Uint8Array, version: number): Omit<ZDO, 'id'> {
-  const pkg = new PackageReader(bytes);
-  const ownerRevision = pkg.readUInt();
-  const dataRevision = pkg.readUInt();
-  const persistent = pkg.readBool();
-  const owner = pkg.readLong();
-  const timeCreated = pkg.readLong();
-  const pgwVersion = pkg.readInt();
-  if (version >= 16 && version < 24)
-    pkg.readInt();
-  const type = version >= 23 ? pkg.readByte() : 0;
-  const distant = version >= 22 ? pkg.readBool() : false;
-  let prefab = version >= 17 ? pkg.readInt() : 0;
-  const sector = pkg.readVector2i();
-  const position = pkg.readVector3();
-  const rotation = pkg.readQuaternion();
-
-  const floats = pkg.readIfSmallMap(pkg.readInt, pkg.readFloat) ?? new Map<number, number>();
-  const vec3 = pkg.readIfSmallMap(pkg.readInt, pkg.readVector3) ?? new Map<number, Vector3>();
-  const quats = pkg.readIfSmallMap(pkg.readInt, pkg.readQuaternion) ?? new Map<number, Quaternion>();
-  const ints = pkg.readIfSmallMap(pkg.readInt, pkg.readInt) ?? new Map<number, number>();
-  const longs = pkg.readIfSmallMap(pkg.readInt, pkg.readLong) ?? new Map<number, bigint>();
-  const strings = pkg.readIfSmallMap(pkg.readInt, pkg.readString) ?? new Map<number, string>();
-  const byteArrays = version >= 27 && pkg.readIfSmallMap(pkg.readInt, pkg.readByteArray) || new Map<number, Uint8Array>();
-  if (version < 17) {
-    prefab = ints?.get(stableHashCode('prefab')) ?? 0;
-  }
-  return {
-    ownerRevision,
-    dataRevision,
-    persistent,
-    owner,
-    timeCreated,
-    pgwVersion,
-    type,
-    distant,
-    prefab,
-    sector,
-    position,
-    rotation,
-    floats,
-    vec3,
-    quats,
-    ints,
-    longs,
-    strings,
-    byteArrays,
-  };
-}
-
-function writeZdo(zdo: ZDO): Uint8Array {
-  const pkg = new PackageWriter();
-  pkg.writeUInt(zdo.ownerRevision);
-  pkg.writeUInt(zdo.dataRevision);
-  pkg.writeBool(zdo.persistent);
-  pkg.writeLong(zdo.owner);
-  pkg.writeLong(zdo.timeCreated);
-  pkg.writeInt(zdo.pgwVersion);
-  pkg.writeByte(zdo.type);
-  pkg.writeBool(zdo.distant);
-  pkg.writeInt(zdo.prefab);
-  pkg.writeInt(zdo.sector.x);
-  pkg.writeInt(zdo.sector.y);
-  pkg.writeVector3(zdo.position);
-  pkg.writeQuaternion(zdo.rotation);
-  pkg.writeIfSmallMap(pkg.writeInt, pkg.writeFloat, zdo.floats);
-  pkg.writeIfSmallMap(pkg.writeInt, pkg.writeVector3, zdo.vec3);
-  pkg.writeIfSmallMap(pkg.writeInt, pkg.writeQuaternion, zdo.quats);
-  pkg.writeIfSmallMap(pkg.writeInt, pkg.writeInt, zdo.ints);
-  pkg.writeIfSmallMap(pkg.writeInt, pkg.writeLong, zdo.longs);
-  pkg.writeIfSmallMap(pkg.writeInt, pkg.writeString, zdo.strings);
-  pkg.writeIfSmallMap(pkg.writeInt, pkg.writeByteArray, zdo.byteArrays);
-  return pkg.flush();
-}
-
 function readZDOData(reader: PackageReader, version: number): ZDOData {
   const myid = reader.readLong();
   const nextUid = reader.readUInt();
   const zdos: ZDO[] = [];
   const zdoLength = reader.readInt();
+  const corruptions = [];
+  setVersion(version);
   for (let i = 0; i < zdoLength; i++) {
-    const id = {
-      userId: reader.readLong(),
-      id: reader.readUInt(),
-    };
+    const offset = reader.getOffset();
     try {
-      const zdo = readZdo(reader.readByteArray(), version);
-      zdos.push({ id, ...zdo });
-    } catch {}
+      const zdo = readZdo(reader, version);
+      zdos.push(zdo);
+    } catch (e) {
+      const mistake = errorToMistake(e);
+      
+      corruptions.push({ offset, mistake });
+    }
   }
   const deadZdos = reader.readMap(function () {
     const userId = this.readLong();
@@ -175,7 +70,7 @@ function readZDOData(reader: PackageReader, version: number): ZDOData {
     nextUid,
     zdos,
     deadZdos,
-    corruptedZdos: zdoLength - zdos.length,
+    corruptions,
   };
 }
 
@@ -184,9 +79,7 @@ function writeZDOData(writer: PackageWriter, zdoData: ZDOData): void {
   writer.writeUInt(zdoData.nextUid);
   writer.writeInt(zdoData.zdos.length);
   for (const zdo of zdoData.zdos) {
-    writer.writeLong(zdo.id.userId);
-    writer.writeUInt(zdo.id.id);
-    writer.writeByteArray(writeZdo(zdo));
+    zdo.save(writer);
   }
   writer.writeMap(function (key: ZDOID) {
     this.writeLong(key.userId);

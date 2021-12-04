@@ -1,6 +1,6 @@
 import React from 'react';
 
-import type { ZDO } from '../file/World';
+import type { ZDO } from '../file/types';
 
 import * as Inventory from '../file/Inventory';
 import * as LiquidData from '../file/LiquidData';

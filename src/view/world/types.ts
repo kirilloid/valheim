@@ -1,1 +1,2 @@
-export type { RandEventData, WorldData, ZDOData, ZDO, ZoneSystemData } from '../../file/World';
+export type { RandEventData, WorldData, ZDOData, ZoneSystemData } from '../../file/World';
+export type { ZDO } from '../../file/types'; 
