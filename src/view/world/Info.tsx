@@ -36,6 +36,6 @@ export function WorldInfo({ value, onChange, fileName }: ValueProps<WorldData> &
     </>}
     <h2>Game objects</h2>
     {corrupted > 0 && <div className="error">Corrupted: {corrupted}</div>}
-    <ZdoData value={zdo} />
+    <ZdoData value={zdo} onChange={zdo => onChange({ ...value, zdo })} />
   </div>
 }

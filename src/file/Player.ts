@@ -14,23 +14,6 @@ type World = {
   mapData?: Uint8Array;
 };
 
-enum PinType {
-  Icon0,
-  Icon1,
-  Icon2,
-  Icon3,
-  Death,
-  Bed,
-  Icon4,
-  Shout,
-  None,
-  Boss,
-  Player,
-  RandomEvent,
-  Ping,
-  EventArea,
-};
-
 export type SkillData = Map<SkillType, { level: number, accumulator: number }>;
 
 type FoodData = {
@@ -66,24 +49,6 @@ export type PlayerData = {
   skillData?: SkillData;
 };
 
-type MapPin = {
-  name: string;
-  pos: Vector3;
-  type: PinType;
-  crossed: boolean;
-  ownerID: bigint;
-}
-
-export type MapData = {
-  version: number;
-  tileSize: number;
-  // these are packed boolean arrays
-  explored: Uint8Array;
-  exploredOthers: Uint8Array;
-  pins: MapPin[];
-  sharePosition: boolean;
-};
-
 export type Player = {
   version: number;
   stats: {
@@ -99,102 +64,6 @@ export type Player = {
   playerData?: PlayerData;
 };
 
-export function readMapData(data: Uint8Array): MapData {
-  let reader = new PackageReader(data);
-  const version = reader.readInt();
-  if (version >= 7) {
-    // unpack gzip
-    reader = new PackageReader(reader.readGzipped());
-  }
-  const tileSize = reader.readInt();
-  const byteSize = tileSize ** 2 / 8;
-  const explored = new Uint8Array(byteSize);
-  for (let index = 0; index < byteSize; ++index) {
-    let byte = 0;
-    for (let bit = 0; bit < 8; ++bit) byte |= reader.readByte() << bit;
-    explored[index] = byte;
-  }
-  const exploredOthers = new Uint8Array(byteSize);
-  if (version >= 5) {
-    for (let index = 0; index < byteSize; ++index) {
-      let byte = 0;
-      for (let bit = 0; bit < 8; ++bit) byte |= reader.readByte() << bit;
-      exploredOthers[index] = byte;
-    }
-  }
-  const pins: MapPin[] = [];
-  if (version >= 2) {
-    const pinsNumber = reader.readInt();
-    for (let index = 0; index < pinsNumber; ++index) {
-      const name = reader.readString();
-      const pos = reader.readVector3();
-      const type = reader.readInt();
-      const crossed = version >= 3 && reader.readBool();
-      const ownerID = version >= 6 ? reader.readLong() : BigInt(0);
-      pins.push({
-        name,
-        crossed,
-        ownerID,
-        pos,
-        type,
-      });
-    }
-  }
-  const sharePosition = version >= 4 && reader.readBool();
-  return {
-    version,
-    tileSize,
-    explored,
-    exploredOthers,
-    pins,
-    sharePosition,
-  }
-}
-
-export function writeMapData({
-  version,
-  tileSize,
-  explored,
-  exploredOthers,
-  pins,
-  sharePosition,
-}: MapData): Uint8Array {
-  let writer = new PackageWriter();
-  writer.writeInt(version);
-  writer.writeInt(tileSize);
-  const byteSize = tileSize ** 2 / 8;
-  for (let index = 0; index < byteSize; ++index) {
-    for (let bit = 0; bit < 8; ++bit) {
-      writer.writeByte((explored[index]! >> bit) & 1);
-    }
-  }
-  if (version >= 5) {
-    for (let index = 0; index < byteSize; ++index) {
-      for (let bit = 0; bit < 8; ++bit) {
-        writer.writeByte((exploredOthers[index]! >> bit) & 1);
-      }
-    }
-  }
-  if (version >= 2) {
-    writer.writeInt(pins.length);
-    for (const { name, pos, type, crossed, ownerID } of pins) {
-      writer.writeString(name);
-      writer.writeVector3(pos);
-      writer.writeInt(type);
-      if (version >= 3) writer.writeBool(crossed);
-      if (version >= 6) writer.writeLong(ownerID);
-    }
-  }
-  if (version >= 4) writer.writeBool(sharePosition);
-  if (version < 7) {
-    return writer.flush();
-  }
-  const gzipped = new PackageWriter();
-  gzipped.writeInt(version);
-  gzipped.writeGzipped(writer.flush());
-  return gzipped.flush();
-}
-
 function readCustomPoint(reader: PackageReader) {
   const haveCustomPoint = reader.readBool();
   const customPoint = reader.readVector3();
@@ -206,7 +75,7 @@ function writeCustomPoint(pkg: PackageWriter, point?: Vector3): void {
   pkg.writeVector3(point ?? { x: 0, y: 0, z: 0 });
 }
 
-export function readPlayer(bytes: Uint8Array): Player {
+async function readPlayer(bytes: Uint8Array, onProgress?: (v: number) => void): Promise<Player> {
   const reader = new PackageReader(bytes);
   const version = reader.readInt();
   const kills = version >= 28 ? reader.readInt() : 0;
@@ -442,7 +311,7 @@ function writePlayerData(data: PlayerData) {
   return writer.flush();
 }
 
-export function read(bytes: Uint8Array) {
+export function read(bytes: Uint8Array, onProgress?: (v: number) => void): Promise<Player> {
   const reader = new PackageReader(bytes);
   const data = reader.readByteArray();
   const hash = reader.readByteArray();
@@ -450,7 +319,7 @@ export function read(bytes: Uint8Array) {
   if (computed.some((v, i) => v !== hash[i])) {
     throw new RangeError("Incorrect hash");
   }
-  return readPlayer(data);
+  return Promise.resolve(readPlayer(data, onProgress));
 }
 
 export function write(player: Player) {

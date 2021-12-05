@@ -1,7 +1,8 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { readMapData } from '../../file/Player';
+
 import type { ValueProps } from '../parts/types';
 import type { MapData as TMapData, Player } from './types';
+import { read } from '../../file/MapData';
 
 const mapDataCache = new Map<BigInt, TMapData>();
 
@@ -49,7 +50,7 @@ export function Worlds({ value: worlds } : ValueProps<Player['worlds']>) {
     }
     const mapDataPacked = world?.mapData;
     if (mapDataPacked == null) return;
-    const mapDataUnpacked = readMapData(mapDataPacked);
+    const mapDataUnpacked = read(mapDataPacked);
     mapDataCache.set(hash, mapDataUnpacked);
     setMapData(mapDataUnpacked);
   }, [worlds, hash])

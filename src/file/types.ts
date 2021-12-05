@@ -4,7 +4,15 @@ import type { PackageWriter } from './Package';
 export type ZDOID = {
   userId: bigint; // long
   id: number; // uint
-}
+};
+
+export type ZDOData = {
+  myid: bigint; // long
+  nextUid: number; // uint
+  zdos: ZDO[];
+  deadZdos: Map<ZDOID, bigint>;
+  corruptions: ZDOCorruption[];
+};
 
 enum ZDOObjectType {
   Default,

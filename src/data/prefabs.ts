@@ -1,5 +1,5 @@
 export const prefabNames: string[] = [
-    '_Console', '_TerrainCompiler',
+    '_Console', '_TerrainCompiler', '_ZoneCtrl',
 
     'acacitree', 'Acorn', 'Amber', 'AmberPearl', 'ancientbarkspear_projectile', 'AncientSeed', 'aoe_nova', 'ArmorBronzeChest', 'ArmorBronzeLegs', 'ArmorIronChest', 'ArmorIronLegs', 'ArmorLeatherChest', 'ArmorLeatherLegs', 'ArmorPaddedCuirass', 'ArmorPaddedGreaves', 'ArmorRagsChest', 'ArmorRagsLegs', 'ArmorTrollLeatherChest', 'ArmorTrollLeatherLegs', 'ArmorWolfChest', 'ArmorWolfLegs', 'ArrowBronze', 'ArrowFire', 'ArrowFlint', 'ArrowFrost', 'ArrowIron', 'ArrowNeedle', 'ArrowObsidian', 'ArrowPoison', 'ArrowSilver', 'ArrowWood', 'AtgeirBlackmetal', 'AtgeirBronze', 'AtgeirIron', 'AxeBlackMetal', 'AxeBronze', 'AxeFlint', 'AxeIron', 'AxeStone',
 

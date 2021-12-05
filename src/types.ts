@@ -5,6 +5,23 @@ import { SkillType } from './model/skills';
 
 export type EntityId = string;
 
+export type GameComponent = 
+| 'BaseAI' | 'Bed' | 'Beehive'
+| 'Chair' | 'Character' | 'Container' | 'CookingStation' | 'Corpse' | 'CraftingStation' | 'CraftingStationExtension' | 'CreatureSpawner'
+| 'Destructible' | 'Door' | 'DungeonGenerator'
+| 'Fermenter' | 'Fireplace' | 'Fish' | 'FishingFloat'
+| 'Humanoid'
+| 'ItemDrop' | 'ItemStand' // also boss stones & parts of some altars
+| 'Leviathan' | 'LiquidVolume' /* TarLiquid */ | 'LocationProxy' /* ~ */ // | 'LootSpawner' // lootspawner_pineforest
+| 'MapTable' | 'MineRock' | 'MineRock5' | 'MonsterAI'
+| 'Pickable' | 'PickableItem' | 'Piece' | 'Plant' | 'Player' | 'PrivateArea' | 'Procreation'
+| 'Ragdoll' | 'RandomAnimation' | 'RandomFlyingBird' | 'Runestone' /* boss stones */
+| 'Saddle' | 'SEMan' | 'Ship' | 'ShipConstructor' | 'Sign' | 'Smelter'
+| 'Tameable' | 'TeleportWorld' | 'TerrainComp' | 'Tombstone' | 'TreeBase' | 'TreeLog'
+| 'Vagon' | 'Vegvisir' | 'VisEquipment'
+| 'WearNTear' | 'Windmill'
+| 'ZNetView' | 'ZSyncTransform'
+
 export type EntityGroup =
   | 'banner' | 'bed' | 'beech' | 'berry' | 'birch' | 'bird' | 'blob'
   | 'chair' | 'chest' | 'cook'
@@ -110,6 +127,7 @@ export type LocationVariation = {
 
 export type LocationConfig = {
   id: GameLocationId;
+  components?: GameComponent[];
   tier: number;
   tags?: string[];
   biomes: Biome[];
@@ -274,6 +292,7 @@ export interface SpawnerConfig {
 
 export interface Creature extends GameObjectBase {
   type: 'creature';
+  components: GameComponent[];
   emoji: string;
   upgradeDistance?: number;
   faction: Faction;
@@ -319,13 +338,21 @@ export interface Plantable {
   biomes: Biome[];
 };
 
+export interface SpawnArea {
+  levelUpChance: number;
+  maxNear: number;
+  interval: number;
+  prefabs: { prefab: EntityId, weight: number, level: Pair<number> }[],
+};
+
 export type PhysicalObject = GameObjectBase & {
   type: 'object';
   subtype: 'tree' | 'plant' | 'rock' | 'ore' | 'indestructible' | 'misc';
-  destructible?: Destructible;
+  Destructible?: Destructible;
   drop?: GeneralDrop[];
   grow?: ItemGrow[];
   plant?: Plantable;
+  SpawnArea?: SpawnArea;
 }; 
 
 export enum CraftingStation {
@@ -495,6 +522,7 @@ export interface GameEvent {
 interface GameObjectBase {
   id: EntityId;
   group?: EntityGroup;
+  components?: GameComponent[];
   tags?: string[];
   dlc?: 'beta';
   disabled?: true;

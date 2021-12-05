@@ -595,3 +595,8 @@ export const items: Item[] = [
   GoblinLoin                  ???
    */
 ];
+
+for (const item of items) {
+  if (item.components == null) item.components = [];
+  item.components.push('ItemDrop');
+}

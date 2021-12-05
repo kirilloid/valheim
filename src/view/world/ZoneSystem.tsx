@@ -36,7 +36,7 @@ function Keys({ value, onChange }: ValueProps<string[]>) {
     input.value = '';
   } */
   return <ul>
-    {baseKeys.map(([key, id]) => <li>
+    {baseKeys.map(([key, id]) => <li key={key}>
       <input type="checkbox" checked={value.includes(key)} onChange={e => onChange(toggleItem(value, key, e.target.checked))} />
       {translate(id)}
       <ItemIcon item={data[id]} />

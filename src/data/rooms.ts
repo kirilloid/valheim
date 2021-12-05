@@ -5,11 +5,13 @@ import { Distribution } from '../model/dist';
 
 export type DungeonRoomsConfig = {
   type: 'dungeon';
+  prefix: string,
   rooms: RoomConfig[];
 };
 
-type CampConfig = {
+export type CampConfig = {
   type: 'camp';
+  prefix: string,
   inner: CamplaceConfig[];
   perimeter: CamplaceConfig[];
 };
@@ -35,6 +37,7 @@ type CamplaceConfig = {
 
 export const gobvill: CampConfig = {
   type: 'camp',
+  prefix: 'gobvill_',
   perimeter: [
     {
       id: 'guardtower',
@@ -235,6 +238,7 @@ export const gobvill: CampConfig = {
 
 export const woodfarm: CampConfig = {
   type: 'camp',
+  prefix: `woodfarm_`,
   perimeter: [
     {
       id: 'outhouse',
@@ -383,6 +387,7 @@ export const woodfarm: CampConfig = {
 
 export const forestcrypt: DungeonRoomsConfig = {
   type: 'dungeon',
+  prefix: 'forestcrypt_',
   rooms: [
     {
       id: 'entrance_large',
@@ -669,6 +674,7 @@ const ROOM_LOOT = locItem([
 
 export const sunkencrypt: DungeonRoomsConfig = {
   type: 'dungeon',
+  prefix: 'sunkencrypt_new_',
   rooms: [
     {
       id: 'Start1',

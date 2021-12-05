@@ -1,3 +1,5 @@
+import { inflate, deflate } from 'pako';
+
 import type { Vector3 } from '../model/utils';
 import { PackageReader, PackageWriter } from './Package';
 
@@ -14,17 +16,16 @@ export type Data = {
 };
 
 export function read(bytes: Uint8Array): Data {
-  const pkg = new PackageReader(bytes);
-  const data = pkg.readGzipped();
+  const data = inflate(bytes);
   const zpackage = new PackageReader(data);
   const version = zpackage.readInt();
   const operations = zpackage.readInt();
   const lastOpPoint = zpackage.readVector3();
   const lastOpRadius = zpackage.readFloat();
   const heightSize = zpackage.readInt();
-  const modifiedHeight = new Int8Array(heightSize ** 2);
-  const levelDelta = new Float32Array(heightSize ** 2);
-  const smoothDelta = new Float32Array(heightSize ** 2);
+  const modifiedHeight = new Int8Array(heightSize);
+  const levelDelta = new Float32Array(heightSize);
+  const smoothDelta = new Float32Array(heightSize);
   for (let index = 0; index < heightSize; ++index) {
     const modified = zpackage.readBool();
     modifiedHeight[index] = modified ? 1 : 0;
@@ -32,8 +33,9 @@ export function read(bytes: Uint8Array): Data {
     smoothDelta[index] = modified ? zpackage.readFloat() : 0;
   }
   const paintSize = zpackage.readInt();
-  const modifiedPaint = new Int8Array(paintSize ** 2);
-  const paintMask = new ImageData(paintSize, paintSize);
+  const modifiedPaint = new Int8Array(paintSize);
+  const side = Math.round(Math.sqrt(paintSize));
+  const paintMask = new ImageData(side, side);
   for (let index = 0; index < paintSize; ++index) {
     const modified = zpackage.readBool();
     modifiedPaint[index] = modified ? 1 : 0;
@@ -82,7 +84,5 @@ export function write(tcData: Data): Uint8Array {
       zpackage.writeFloat(tcData.paintMask.data[index * 4 + 3]! / 255);
     }
   }
-  const pkg = new PackageWriter();
-  pkg.writeGzipped(zpackage.flush());
-  return pkg.flush();
+  return deflate(zpackage.flush(), { level: 1 });
 }

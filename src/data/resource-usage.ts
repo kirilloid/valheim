@@ -72,7 +72,7 @@ carts.forEach(c => addToMap(resourceBuildMap, c));
 const parents: Record<EntityId, PhysicalObject> = {};
 
 for (const d of objects) {
-  for (const c of d.destructible?.parts ?? []) {
+  for (const c of d.Destructible?.parts ?? []) {
     parents[c.id] = d;
   }
 }

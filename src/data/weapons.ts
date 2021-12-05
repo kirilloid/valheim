@@ -2128,6 +2128,11 @@ export const items: (Weapon | Shield)[] = [
   },
 ];
 
+for (const item of items) {
+  if (item.components == null) item.components = [];
+  item.components.push('ItemDrop');
+}
+
 const enabledWeapons = items.filter(w => !w.disabled && w.type === 'weapon') as Weapon[]; 
 export const axes = enabledWeapons.filter(w => w.damage[0].chop);
 export const pickaxes = enabledWeapons.filter(w => w.damage[0].pickaxe);

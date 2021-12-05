@@ -1,17 +1,8 @@
-import type { ZDO, ZDOID, ZDOCorruption } from './types';
-import type { Vector2i, Vector3 } from '../model/utils';
+import type { ZDO, ZDOData, ZDOID } from './types';
 import { PackageReader, PackageWriter } from './Package';
-import { readZdo } from './zdo/mmap';
-import { setVersion } from './zdo/offset';
-import { errorToMistake } from './zdo/check';
 
-export type ZDOData = {
-  myid: bigint; // long
-  nextUid: number; // uint
-  zdos: ZDO[];
-  deadZdos: Map<ZDOID, bigint>;
-  corruptions: ZDOCorruption[];
-};
+import { Vector2i, Vector3, wait } from '../model/utils';
+import { readZdoMmap, setVersion, errorToMistake } from './zdo';
 
 export type ZoneSystemData = {
   generatedZones: Vector2i[];
@@ -42,7 +33,7 @@ export type WorldData = {
   randEvent?: RandEventData;
 }
 
-function readZDOData(reader: PackageReader, version: number): ZDOData {
+async function readZDOData(reader: PackageReader, version: number, onProgress?: (v: number) => void): Promise<ZDOData> {
   const myid = reader.readLong();
   const nextUid = reader.readUInt();
   const zdos: ZDO[] = [];
@@ -51,12 +42,15 @@ function readZDOData(reader: PackageReader, version: number): ZDOData {
   setVersion(version);
   for (let i = 0; i < zdoLength; i++) {
     const offset = reader.getOffset();
+    if (i % 1000 === 0) {
+      onProgress?.(reader.getProgress())
+      await wait(10);
+    }
     try {
-      const zdo = readZdo(reader, version);
+      const zdo = readZdoMmap(reader, version);
       zdos.push(zdo);
     } catch (e) {
       const mistake = errorToMistake(e);
-      
       corruptions.push({ offset, mistake });
     }
   }
@@ -150,11 +144,11 @@ function writeRandEvent(writer: PackageWriter, version: number, event: RandEvent
   writer.writeVector3(event.pos!);
 }
 
-export function read(bytes: Uint8Array): WorldData {
+export async function read(bytes: Uint8Array, onProgress?: (v: number) => void): Promise<WorldData> {
   let reader = new PackageReader(bytes);
   const version = reader.readInt();
   const netTime = version >= 4 ? reader.readDouble() : NaN;
-  const zdo = readZDOData(reader, version);
+  const zdo = await readZDOData(reader, version, onProgress);
   const zoneSystem = version >= 12 ? readZoneSystem(reader, version) : undefined;
   const randEvent = version >= 15 ? readRandEvent(reader, version) : undefined;
   return {

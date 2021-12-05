@@ -111,6 +111,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Deer',
+    components: ['Character'],
     tags: ['animal'],
     tier: 1,
     emoji: '🦌',
@@ -141,6 +142,7 @@ export const creatures: Creature[] = [
     type: 'creature',
     group: 'bird',
     id: 'Seagal',
+    components: ['RandomFlyingBird'],
     tags: ['fly'],
     tier: 1,
     emoji: '🦆',
@@ -167,6 +169,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Greyling',
+    components: ['BaseAI', 'Humanoid', 'MonsterAI'],
     tier: 1,
     emoji: '🐀',
     faction: 'ForestMonsters',
@@ -195,6 +198,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Neck',
+    components: ['BaseAI', 'Humanoid', 'MonsterAI'],
     tags: ['animal'],
     tier: 1,
     upgradeDistance: 800,
@@ -240,6 +244,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Fish',
+    components: ['Fish'],
     tier: 1,
     emoji: '🐟',
     faction: 'ForestMonsters',
@@ -296,6 +301,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Boar',
+    components: ['BaseAI', 'Humanoid', 'MonsterAI', 'Procreation', 'Tameable'],
     tags: ['animal'],
     tier: 1,
     upgradeDistance: 800,
@@ -335,6 +341,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Eikthyr',
+    components: ['BaseAI', 'Humanoid', 'MonsterAI'],
     tier: 1,
     emoji: '🦌',
     faction: 'Boss',
@@ -357,6 +364,7 @@ export const creatures: Creature[] = [
     type: 'creature',
     group: 'bird',
     id: 'Crow',
+    components: ['RandomFlyingBird'],
     tags: ['fly'],
     tier: 2,
     emoji: '🐦',
@@ -373,6 +381,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Skeleton',
+    components: ['BaseAI', 'Humanoid', 'MonsterAI', 'VisEquipment'],
     tier: 2,
     emoji: '💀',
     faction: 'Undead',
@@ -415,6 +424,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Skeleton_Poison', // Rancid Remains
+    components: ['BaseAI', 'Humanoid', 'MonsterAI', 'VisEquipment'],
     tier: 2,
     emoji: '☠️',
     faction: 'Undead',
@@ -439,6 +449,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Ghost',
+    components: ['BaseAI', 'Humanoid', 'MonsterAI', 'VisEquipment'],
     tier: 2,
     emoji: '👻',
     faction: 'Undead',
@@ -464,6 +475,7 @@ export const creatures: Creature[] = [
     type: 'creature',
     group: 'gray',
     id: 'Greydwarf',
+    components: ['BaseAI', 'Humanoid', 'MonsterAI'],
     tier: 2,
     emoji: '',
     faction: 'ForestMonsters',
@@ -530,6 +542,7 @@ export const creatures: Creature[] = [
     type: 'creature',
     group: 'gray',
     id: 'Greydwarf_Shaman',
+    components: ['BaseAI', 'Humanoid', 'MonsterAI'],
     tier: 2,
     emoji: '',
     faction: 'ForestMonsters',
@@ -567,6 +580,7 @@ export const creatures: Creature[] = [
     type: 'creature',
     group: 'gray',
     id: 'Greydwarf_Elite',
+    components: ['BaseAI', 'Humanoid', 'MonsterAI'],
     tier: 2,
     upgradeDistance: 2000,
     emoji: '',
@@ -613,6 +627,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Troll',
+    components: ['BaseAI', 'Humanoid', 'MonsterAI', 'VisEquipment'],
     tier: 2,
     upgradeDistance: 2000,
     emoji: '',
@@ -664,6 +679,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'gd_king', // the elder
+    components: ['BaseAI', 'Humanoid', 'MonsterAI'],
     tier: 2,
     emoji: '🥦',
     faction: 'Boss',
@@ -691,6 +707,7 @@ export const creatures: Creature[] = [
     type: 'creature',
     disabled: true,
     id: 'TentaRoot', // from the elder
+    components: ['BaseAI', 'Humanoid', 'MonsterAI'],
     tier: 2,
     emoji: '🥦',
     faction: 'Boss',
@@ -713,6 +730,7 @@ export const creatures: Creature[] = [
     type: 'creature',
     group: 'blob',
     id: 'Blob',
+    components: ['BaseAI', 'Humanoid', 'MonsterAI'],
     tier: 3,
     emoji: '🦠',
     faction: 'Undead',
@@ -741,6 +759,7 @@ export const creatures: Creature[] = [
     type: 'creature',
     group: 'blob',
     id: 'BlobElite',
+    components: ['BaseAI', 'Humanoid', 'MonsterAI'],
     tier: 3,
     emoji: '🦠',
     faction: 'Undead',
@@ -770,6 +789,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Leech',
+    components: ['BaseAI', 'Humanoid', 'MonsterAI'],
     tier: 3,
     emoji: '🧛',
     faction: 'Undead',
@@ -803,6 +823,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Surtling',
+    components: ['BaseAI', 'Humanoid', 'MonsterAI'],
     tier: 3,
     emoji: '🧨',
     faction: 'Demon',
@@ -841,6 +862,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Wraith',
+    components: ['BaseAI', 'Humanoid', 'MonsterAI'],
     tags: ['fly'],
     tier: 3,
     emoji: '👻',
@@ -885,6 +907,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Draugr',
+    components: ['BaseAI', 'Humanoid', 'MonsterAI', 'VisEquipment'],
     tier: 3,
     emoji: '🧟',
     faction: 'Undead',
@@ -937,6 +960,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Draugr_Elite',
+    components: ['BaseAI', 'Humanoid', 'MonsterAI', 'VisEquipment'],
     tier: 3,
     emoji: '🧟',
     faction: 'Undead',
@@ -972,6 +996,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Abomination',
+    components: ['BaseAI', 'Humanoid', 'MonsterAI', 'VisEquipment'],
     tier: 3,
     emoji: '🥦',
     faction: 'Undead',
@@ -1017,6 +1042,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Bonemass',
+    components: ['BaseAI', 'Humanoid', 'MonsterAI', 'VisEquipment'],
     tier: 3,
     emoji: '🦠',
     faction: 'Boss',
@@ -1052,6 +1078,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Wolf',
+    components: ['BaseAI', 'Humanoid', 'MonsterAI', 'Procreation', 'Tameable'],
     tags: ['animal'],
     tier: 4,
     emoji: '🐺',
@@ -1107,6 +1134,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Fenring',
+    components: ['BaseAI', 'Humanoid', 'MonsterAI'],
     tier: 4,
     emoji: '🐺',
     faction: 'MountainMonsters',
@@ -1144,6 +1172,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'StoneGolem',
+    components: ['BaseAI', 'Humanoid', 'MonsterAI', 'VisEquipment'],
     tier: 4,
     emoji: '🗿',
     faction: 'ForestMonsters',
@@ -1219,6 +1248,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Hatchling', // drake
+    components: ['BaseAI', 'Humanoid', 'MonsterAI'],
     tags: ['animal', 'fly'],
     tier: 4,
     emoji: '🐉',
@@ -1253,6 +1283,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Dragon',
+    components: ['BaseAI', 'Humanoid', 'MonsterAI'],
     tags: ['fly'],
     tier: 4,
     emoji: '🐲',
@@ -1300,6 +1331,7 @@ export const creatures: Creature[] = [
     type: 'creature',
     group: 'goblin',
     id: 'Goblin', // Fulling
+    components: ['BaseAI', 'Humanoid', 'MonsterAI', 'VisEquipment'],
     tier: 5,
     emoji: '',
     faction: 'PlainsMonsters',
@@ -1359,6 +1391,7 @@ export const creatures: Creature[] = [
     type: 'creature',
     group: 'goblin',
     id: 'GoblinShaman', // Fulling
+    components: ['BaseAI', 'Humanoid', 'MonsterAI', 'VisEquipment'],
     tier: 5,
     emoji: '',
     faction: 'PlainsMonsters',
@@ -1400,6 +1433,7 @@ export const creatures: Creature[] = [
     type: 'creature',
     group: 'goblin',
     id: 'GoblinBrute', // Berserk
+    components: ['BaseAI', 'Humanoid', 'MonsterAI', 'VisEquipment'],
     tier: 5,
     emoji: '',
     faction: 'PlainsMonsters',
@@ -1434,6 +1468,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Deathsquito',
+    components: ['BaseAI', 'Humanoid', 'MonsterAI'],
     tags: ['fly'],
     tier: 5,
     emoji: '🦟',
@@ -1463,6 +1498,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Lox',
+    components: ['BaseAI', 'Humanoid', 'MonsterAI', 'Procreation', 'Saddle', 'Tameable'],
     tags: ['animal'],
     tier: 5,
     emoji: '🐂',
@@ -1503,6 +1539,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'BlobTar',
+    components: ['BaseAI', 'Humanoid', 'MonsterAI'],
     tier: 5,
     emoji: '🦠',
     faction: 'Undead',
@@ -1532,6 +1569,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'GoblinKing',
+    components: ['BaseAI', 'Humanoid', 'MonsterAI'],
     tier: 5,
     emoji: '🦴',
     faction: 'Boss',
@@ -1575,6 +1613,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Serpent',
+    components: ['BaseAI', 'Humanoid', 'MonsterAI'],
     tags: ['animal'],
     tier: 2,
     emoji: '🐍',

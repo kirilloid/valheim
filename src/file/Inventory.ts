@@ -8,7 +8,7 @@ export type Data = {
     stack: number;
     durability: number;
     gridPos: Vector2i;
-    equiped: boolean;
+    equipped: boolean;
     quality: number;
     variant: number;
     crafterID: bigint;
@@ -28,13 +28,13 @@ export function read(pkg: PackageReader): Data {
     const stack = pkg.readInt();
     const durability = pkg.readFloat();
     const gridPos = pkg.readVector2i();
-    const equiped = pkg.readBool();
+    const equipped = pkg.readBool();
     const quality = version >= 101 ? pkg.readInt() : 1;
     const variant = version >= 102 ? pkg.readInt() : 0;
     const crafterID = version >= 103 ? pkg.readLong() : BigInt(0);
     const crafterName = version >= 103 ? pkg.readString() : "";
     if (id !== '') {
-      inventory.items.push({ id, stack, durability, gridPos, equiped, quality, variant, crafterID, crafterName });
+      inventory.items.push({ id, stack, durability, gridPos, equipped, quality, variant, crafterID, crafterName });
     }
   }
   return inventory;
@@ -48,7 +48,7 @@ export function write(pkg: PackageWriter, inventory: Data): void {
     pkg.writeInt(itemData.stack);
     pkg.writeFloat(itemData.durability);
     pkg.writeVector2i(itemData.gridPos);
-    pkg.writeBool(itemData.equiped);
+    pkg.writeBool(itemData.equipped);
     pkg.writeInt(itemData.quality);
     pkg.writeInt(itemData.variant);
     pkg.writeLong(itemData.crafterID);

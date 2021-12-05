@@ -235,11 +235,11 @@ export function Switch({ children, className }: { children: (JSX.Element | strin
   </div>
 }
 
-export function downloadFile(buffer: ArrayBuffer, name: string) {
+export function downloadFile(array: ArrayBufferView, name: string) {
   // Create a link and set the URL using `createObjectURL`
   const link = document.createElement('a');
   link.style.display = 'none';
-  link.href = URL.createObjectURL(new Blob([buffer]));
+  link.href = URL.createObjectURL(new Blob([array]));
   link.download = name;
 
   // It needs to be added to the DOM so it can be clicked

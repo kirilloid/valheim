@@ -1,3 +1,4 @@
+import { deflate, inflate } from 'pako';
 import { PackageReader, PackageWriter } from './Package';
 
 export type Data = {
@@ -7,8 +8,7 @@ export type Data = {
 };
 
 export function read(zbytes: Uint8Array): Data {
-  const zpkg = new PackageReader(zbytes);
-  const bytes = zpkg.readGzipped();
+  const bytes = inflate(zbytes);
   const pkg = new PackageReader(bytes);
   // read
   const version = pkg.readInt();
@@ -31,8 +31,5 @@ export function write(data: Data): Uint8Array {
     pkg.writeShort(depth);
   }
   pkg.writeFloat(data.total);
-  // compress
-  const zpkg = new PackageWriter();
-  zpkg.writeGzipped(pkg.flush());
-  return zpkg.flush();
+  return deflate(pkg.flush(), { level: 1 })
 }

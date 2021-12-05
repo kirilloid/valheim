@@ -84,7 +84,7 @@ export function PhysicalObject({ item }: { item: T.PhysicalObject }) {
       <ItemHeader item={item} />
       <Grow item={item} />
       {item.plant && <Plant plant={item.plant} />}
-      {full?.destructible && <Destructible item={full.destructible} />}
+      {full?.Destructible && <Destructible item={full.Destructible} />}
       {item.drop && <Drop drop={item.drop} />}
     </>
   );

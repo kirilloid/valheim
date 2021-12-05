@@ -36,7 +36,7 @@ export function crc32(str: string) {
   for (var i = 0; i < str.length; i++ ) {
     crc = (crc >>> 8) ^ crcTable[(crc ^ str.charCodeAt(i)) & 0xFF]!;
   }
-  return (crc ^ (-1)) >>> 0;
+  return (crc ^ (-1)) | 0;
 };
 
 export type Vector3 = { x: number, y: number, z: number };
@@ -154,6 +154,10 @@ export function addStatCounters(a: StatCounter, b: StatCounter): StatCounter {
   result._total = a._total + b._total;
   result._num = a._num + b._num;
   return result;
+}
+
+export async function wait(time: number) {
+  return new Promise(resolve => setTimeout(resolve, time));
 }
 
 export function getMemUsage(): number {

@@ -51,6 +51,19 @@ const greydwarfNestModifiers: DamageModifiers = {
   spirit: 'ignore',
 };
 
+const draugrPileModifiers: DamageModifiers = {
+  blunt: 'normal',
+  slash: 'normal',
+  pierce: 'resistant',
+  chop: 'normal',
+  pickaxe: 'ignore',
+  fire: 'resistant',
+  frost: 'normal',
+  lightning: 'normal',
+  poison: 'immune',
+  spirit: 'weak',
+};
+
 const chopOnly: DamageModifiers = {
   ...allImmune,
   chop: 'normal',
@@ -97,9 +110,10 @@ function tree({
       subtype: 'tree',
       tags: ['plant', 'tree'],
       id: baseId,
+      components: ['TreeBase'],
       group,
       tier,
-      destructible: {
+      Destructible: {
         hp: baseHp,
         damageModifiers: chopOnly,
         minToolTier,
@@ -117,7 +131,7 @@ function tree({
       subtype: 'tree',
       id: stubId,
       tier,
-      destructible: {
+      Destructible: {
         hp: 80,
         damageModifiers: chopOnly,
         minToolTier,
@@ -130,8 +144,9 @@ function tree({
       type: 'object',
       subtype: 'tree',
       id: logId,
+      components: ['TreeLog'],
       tier,
-      destructible: {
+      Destructible: {
         hp: logHp,
         damageModifiers: chopOnly,
         minToolTier,
@@ -146,8 +161,9 @@ function tree({
       type: 'object',
       subtype: 'tree',
       id: logHalfId,
+      components: ['TreeLog'],
       tier,
-      destructible: {
+      Destructible: {
         hp: logHalfHp,
         damageModifiers: chopOnly,
         minToolTier,
@@ -180,9 +196,10 @@ function treeSimpler({
       subtype: 'tree',
       tags: ['plant', 'tree'],
       id: baseId,
+      components: ['TreeBase'],
       tier,
       grow,
-      destructible: {
+      Destructible: {
         hp: baseHp,
         damageModifiers: chopOnly,
         minToolTier,
@@ -198,7 +215,7 @@ function treeSimpler({
       subtype: 'tree',
       id: stubId,
       tier,
-      destructible: {
+      Destructible: {
         hp: 80,
         damageModifiers: chopOnly,
         minToolTier,
@@ -211,8 +228,9 @@ function treeSimpler({
       type: 'object',
       subtype: 'tree',
       id: logId,
+      components: ['TreeLog'],
       tier,
-      destructible: {
+      Destructible: {
         hp: logHp,
         damageModifiers: chopOnly,
         minToolTier,
@@ -250,7 +268,7 @@ function rock({
       id: baseId,
       tier,
       grow,
-      destructible: {
+      Destructible: {
         hp: 1,
         damageModifiers: pickOnly,
         minToolTier,
@@ -262,8 +280,9 @@ function rock({
       type: 'object',
       subtype: 'rock',
       id: fracId,
+      components: ['MineRock5'],
       tier,
-      destructible: {
+      Destructible: {
         hp: fracHp,
         damageModifiers: pickOnly,
         minToolTier,
@@ -279,10 +298,10 @@ export function fullDestructible(obj: PhysicalObject | undefined): PhysicalObjec
   if (obj == null) return undefined;
   const cached = cacheMap.get(obj);
   if (cached != null) return cached;
-  if (!obj.destructible) return undefined;
+  if (!obj.Destructible) return undefined;
 
   const result: PhysicalObject & {
-    destructible: Destructible;
+    Destructible: Destructible;
     drop: GeneralDrop[];
     grow: ItemGrow[];
   } = {
@@ -290,23 +309,23 @@ export function fullDestructible(obj: PhysicalObject | undefined): PhysicalObjec
     tier: obj.tier,
     type: 'object',
     subtype: obj.subtype,
-    destructible: {
-      hp: obj.destructible.hp,
+    Destructible: {
+      hp: obj.Destructible.hp,
       parts: [],
-      damageModifiers: obj.destructible.damageModifiers,
-      minToolTier: obj.destructible.minToolTier,
+      damageModifiers: obj.Destructible.damageModifiers,
+      minToolTier: obj.Destructible.minToolTier,
     },
     drop: obj.drop ?? [],
     grow: obj.grow ?? [],
   };
 
-  for (const { id, num } of obj.destructible.parts) {
+  for (const { id, num } of obj.Destructible.parts) {
     const child = objects.find(d => d.id === id);
     const destrChild = fullDestructible(child);
     if (destrChild == null) continue;
-    const hp = destrChild.destructible?.hp ?? 0;
+    const hp = destrChild.Destructible?.hp ?? 0;
     if (isFinite(hp)) {
-      result.destructible.hp += hp * num;
+      result.Destructible.hp += hp * num;
     }
     result.drop.push(...(destrChild.drop ?? []).map(d => ({ ...d, num: [d.num[0] * num, d.num[1] * num] as [number, number] })));
   }
@@ -317,10 +336,11 @@ export function fullDestructible(obj: PhysicalObject | undefined): PhysicalObjec
 
 export const objects: PhysicalObject[] = [
   {
-    id: 'sapling_carrot',
-    tier: 2,
     type: 'object',
     subtype: 'plant',
+    id: 'sapling_carrot',
+    components: ['Pickable', 'Plant'],
+    tier: 2,
     plant: {
       subtype: 'vegetable',
       plantedWith: 'CarrotSeeds',
@@ -333,10 +353,11 @@ export const objects: PhysicalObject[] = [
     drop: [singleDrop('Carrot', 3)],
   },
   {
-    id: 'SeedCarrot',
-    tier: 2,
     type: 'object',
     subtype: 'plant',
+    id: 'SeedCarrot',
+    components: ['Pickable', 'Plant'],
+    tier: 2,
     plant: {
       subtype: 'vegetable',
       plantedWith: 'Carrot',
@@ -349,10 +370,11 @@ export const objects: PhysicalObject[] = [
     drop: [singleDrop('CarrotSeeds', 3)],
   },
   {
-    id: 'sapling_turnip',
-    tier: 3,
     type: 'object',
     subtype: 'plant',
+    id: 'sapling_turnip',
+    components: ['Pickable', 'Plant'],
+    tier: 3,
     plant: {
       subtype: 'vegetable',
       plantedWith: 'TurnipSeeds',
@@ -365,10 +387,11 @@ export const objects: PhysicalObject[] = [
     drop: [singleDrop('Turnip', 3)],
   },
   {
-    id: 'SeedTurnip',
-    tier: 3,
     type: 'object',
     subtype: 'plant',
+    id: 'SeedTurnip',
+    components: ['Pickable', 'Plant'],
+    tier: 3,
     plant: {
       subtype: 'vegetable',
       plantedWith: 'Turnip',
@@ -381,10 +404,11 @@ export const objects: PhysicalObject[] = [
     drop: [singleDrop('TurnipSeeds', 3)],
   },
   {
-    id: 'sapling_onion',
-    tier: 4,
     type: 'object',
     subtype: 'plant',
+    id: 'sapling_onion',
+    components: ['Pickable', 'Plant'],
+    tier: 4,
     plant: {
       subtype: 'vegetable',
       plantedWith: 'OnionSeeds',
@@ -397,10 +421,11 @@ export const objects: PhysicalObject[] = [
     drop: [singleDrop('Onion', 3)],
   },
   {
-    id: 'SeedOnion',
-    tier: 4,
     type: 'object',
     subtype: 'plant',
+    id: 'SeedOnion',
+    components: ['Pickable', 'Plant'],
+    tier: 4,
     plant: {
       subtype: 'vegetable',
       plantedWith: 'Onion',
@@ -413,10 +438,11 @@ export const objects: PhysicalObject[] = [
     drop: [singleDrop('OnionSeeds', 3)],
   },
   {
-    id: 'sapling_barley',
-    tier: 5,
     type: 'object',
     subtype: 'plant',
+    id: 'sapling_barley',
+    components: ['Pickable', 'Plant'],
+    tier: 5,
     plant: {
       subtype: 'crop',
       plantedWith: 'Barley',
@@ -429,10 +455,11 @@ export const objects: PhysicalObject[] = [
     drop: [singleDrop('Barley', 2)],
   },
   {
-    id: 'sapling_flax',
-    tier: 5,
     type: 'object',
     subtype: 'plant',
+    id: 'sapling_flax',
+    components: ['Pickable', 'Plant'],
+    tier: 5,
     plant: {
       subtype: 'crop',
       plantedWith: 'Flax',
@@ -462,7 +489,7 @@ export const objects: PhysicalObject[] = [
     subtype: 'misc',
     id: 'beehive',
     tier: 1,
-    destructible: {
+    Destructible: {
       hp: 50,
       // idle: 4 poison, 3 radius, every second
       // on hit: 10 poison, 4 radius, every second, 5 seconds
@@ -497,7 +524,7 @@ export const objects: PhysicalObject[] = [
       // num: 100, inForest: [1.1, 1.15]
       inForest: [0, 1.15],
     }),
-    destructible: {
+    Destructible: {
       hp: 20,
       damageModifiers: allNormal, // ???
       minToolTier: 0,
@@ -544,9 +571,9 @@ export const objects: PhysicalObject[] = [
     },
   }),
   {
-    id: 'stubbe',
     type: 'object',
     subtype: 'tree',
+    id: 'stubbe',
     tier: 1,
     grow: itemGrow({
       locations: ['BlackForest', 'Mistlands'],
@@ -564,7 +591,7 @@ export const objects: PhysicalObject[] = [
       tilt: [0, 20],
       num: [1, 3],
     }),
-    destructible: {
+    Destructible: {
       hp: 40,
       damageModifiers: chopOnly,
       minToolTier: 0,
@@ -593,7 +620,7 @@ export const objects: PhysicalObject[] = [
       tilt: [0, 25],
       num: [6, 6],
     }),
-    destructible: {
+    Destructible: {
       hp: 40,
       damageModifiers: chopOnly,
       minToolTier: 0,
@@ -654,7 +681,7 @@ export const objects: PhysicalObject[] = [
       tilt: [0, 30],
       num: [30, 30],
     }),
-    destructible: {
+    Destructible: {
       hp: 40,
       damageModifiers: chopOnly,
       minToolTier: 0,
@@ -686,7 +713,7 @@ export const objects: PhysicalObject[] = [
       tilt: [0, 30],
       num: [30, 30],
     }),
-    destructible: {
+    Destructible: {
       hp: 40,
       damageModifiers: chopOnly,
       minToolTier: 0,
@@ -777,12 +804,12 @@ export const objects: PhysicalObject[] = [
   }),
   {
     // tags: ['plant', 'tree'],
-    tier: 2,
     type: 'object',
     subtype: 'tree',
     id: 'Birch1_aut',
+    tier: 2,
     group: 'birch',
-    destructible: {
+    Destructible: {
       hp: 80,
       damageModifiers: chopOnly,
       minToolTier: 2,
@@ -867,9 +894,9 @@ export const objects: PhysicalObject[] = [
     }],
   }),
   {
-    id: 'SwampTree2',
-    subtype: 'indestructible',
     type: 'object',
+    subtype: 'indestructible',
+    id: 'SwampTree2',
     tier: 3,
     grow: itemGrow({
       locations: ['Swamp'],
@@ -879,10 +906,10 @@ export const objects: PhysicalObject[] = [
     }),
   },
   {
-    tier: 3,
-    id: 'SwampTree2_log',
-    subtype: 'indestructible',
     type: 'object',
+    subtype: 'indestructible',
+    id: 'SwampTree2_log',
+    tier: 3,
     grow: itemGrow({
       locations: ['Swamp'],
       altitude: [-0.5, 1000],
@@ -925,11 +952,11 @@ export const objects: PhysicalObject[] = [
     },
   }),
   {
-    id: 'MineRock_Tin',
     type: 'object',
     subtype: 'ore',
+    id: 'MineRock_Tin',
     tier: 2,
-    destructible: {
+    Destructible: {
       minToolTier: 0,
       hp: 30,
       damageModifiers: pickOnly,
@@ -947,11 +974,11 @@ export const objects: PhysicalObject[] = [
     }],
   },
   {
-    id: 'Greydwarf_Root',
     type: 'object',
     subtype: 'misc',
+    id: 'Greydwarf_Root',
     tier: 2,
-    destructible: {
+    Destructible: {
       minToolTier: 0,
       hp: 100,
       damageModifiers: greydwarfNestModifiers,
@@ -962,34 +989,69 @@ export const objects: PhysicalObject[] = [
       options: [{ item: 'Wood' }, { item: 'Resin' }],
     }],
   },
-  /*
-  levelUpChance: 0.15
-  maxNear: 3
-  interval: 10
-  greydwarf 5
-  greydwarf_elite 1
-  greydwarf_shaman 1
-  */
   {
-    id: 'Spawner_GreydwarfNest',
     type: 'object',
     subtype: 'misc',
+    id: 'Spawner_GreydwarfNest',
     tier: 2,
     grow: [],
-    destructible: {
+    Destructible: {
       minToolTier: 0,
       hp: 100,
       damageModifiers: greydwarfNestModifiers,
       parts: [],
     },
     drop: [singleDrop('AncientSeed')],
+    SpawnArea: {
+      levelUpChance: 0.15,
+      maxNear: 3,
+      interval: 10,
+      prefabs: [
+        { prefab: 'Greydwarf', weight: 5, level: [1, 3] },
+        { prefab: 'Greydwarf_Elite', weight: 1, level: [1, 3] },
+        { prefab: 'Greydwarf_Shaman', weight: 1, level: [1, 3] },
+      ],
+    },
   },
   {
-    id: 'barrel',
     type: 'object',
     subtype: 'misc',
+    id: 'BonePileSpawner',
     tier: 2,
-    destructible: {
+    grow: [],
+    Destructible: {
+      minToolTier: 0,
+      hp: 50,
+      damageModifiers: {
+        blunt: 'weak',
+        slash: 'normal',
+        pierce: 'normal',
+        chop: 'immune',
+        pickaxe: 'immune',
+        fire: 'normal',
+        frost: 'normal',
+        lightning: 'normal',
+        poison: 'normal',
+        spirit: 'normal',
+      },
+      parts: [],
+    },
+    drop: [singleDrop('AncientSeed')],
+    SpawnArea: {
+      levelUpChance: 0.15,
+      maxNear: 2,
+      interval: 10,
+      prefabs: [
+        { prefab: 'Skeleton', weight: 1, level: [1, 3] },
+      ],
+    },
+  },
+  {
+    type: 'object',
+    subtype: 'misc',
+    id: 'barrel',
+    tier: 2,
+    Destructible: {
       minToolTier: 0,
       hp: 10,
       damageModifiers: mods([0, 0, 1, 2, 0, 0, 0, 0, 3, 3]),
@@ -1012,9 +1074,9 @@ export const objects: PhysicalObject[] = [
   },
   // SWAMP
   {
-    id: 'StatueEvil',
     type: 'object',
     subtype: 'indestructible',
+    id: 'StatueEvil',
     tier: 3,
     grow: itemGrow({
       locations: ['Swamp'],
@@ -1062,12 +1124,12 @@ export const objects: PhysicalObject[] = [
     },
   }),
   {
-    id: 'GuckSack_small',
     type: 'object',
     subtype: 'misc',
+    id: 'GuckSack_small',
     tier: 3,
     grow: [],
-    destructible: {
+    Destructible: {
       hp: 30,
       damageModifiers: chopPickOnly,
       minToolTier: 0,
@@ -1076,12 +1138,12 @@ export const objects: PhysicalObject[] = [
     drop: [singleDrop('Guck', 1, 2)],
   },
   {
-    id: 'GuckSack',
     type: 'object',
     subtype: 'misc',
+    id: 'GuckSack',
     tier: 3,
     grow: [],
-    destructible: {
+    Destructible: {
       hp: 30,
       damageModifiers: chopPickOnly,
       minToolTier: 0,
@@ -1090,16 +1152,16 @@ export const objects: PhysicalObject[] = [
     drop: [singleDrop('Guck', 4, 7)],
   },
   {
-    id: 'Rock_4_plains',
     type: 'object',
     subtype: 'rock',
+    id: 'Rock_4_plains',
     tier: 1,
     grow: itemGrow({
       locations: ['Plains'],
       altitude: [-10, 1000],
       num: [5, 30],
     }),
-    destructible: {
+    Destructible: {
       hp: 30,
       damageModifiers: pickOnly,
       minToolTier: 0,
@@ -1108,9 +1170,9 @@ export const objects: PhysicalObject[] = [
     drop: [singleDrop('Stone', 3, 6)],
   },
   {
-    id: 'Rock_4',
     type: 'object',
     subtype: 'rock',
+    id: 'Rock_4',
     tier: 1,
     grow: itemGrow({
       locations: ['BlackForest', 'Mistlands'],
@@ -1126,7 +1188,7 @@ export const objects: PhysicalObject[] = [
       altitude: [-1000, 1000],
       num: [0, 20],
     }),
-    destructible: {
+    Destructible: {
       hp: 30,
       damageModifiers: pickOnly,
       minToolTier: 0,
@@ -1153,14 +1215,39 @@ export const objects: PhysicalObject[] = [
     hp: 15,
     drop: singleDrop('Stone', 3, 6),
   }),
+  {
+    type: 'object',
+    subtype: 'misc',
+    id: 'Spawner_DraugrPile',
+    tier: 2,
+    grow: [],
+    Destructible: {
+      minToolTier: 0,
+      hp: 100,
+      damageModifiers: draugrPileModifiers,
+      parts: [],
+    },
+    drop: [singleDrop('AncientSeed')],
+    SpawnArea: {
+      levelUpChance: 0.15,
+      maxNear: 2,
+      interval: 5,
+      prefabs: [
+        { prefab: 'Draugr', weight: 4, level: [1, 3] },
+        { prefab: 'Draugr_NoArcher', weight: 1, level: [1, 3] },
+        { prefab: 'Draugr_Elite', weight: 2, level: [1, 3] },
+      ],
+    },
+  },
+
   // MOUNTAIN
   {
-    id: 'marker',
     type: 'object',
     subtype: 'rock',
+    id: 'marker',
     tier: 4,
     grow: [],
-    destructible: {
+    Destructible: {
       hp: 30,
       damageModifiers: { ...pickOnly, lightning: 'normal' },
       minToolTier: 0,
@@ -1169,16 +1256,16 @@ export const objects: PhysicalObject[] = [
     drop: [singleDrop('Stone', 3, 6)],
   },
   {
-    id: 'MineRock_Obsidian',
     type: 'object',
     subtype: 'misc',
+    id: 'MineRock_Obsidian',
     tier: 4,
     grow: itemGrow({
       locations: ['Mountain'],
       altitude: [100, 1000],
       num: [10, 15],
     }),
-    destructible: {
+    Destructible: {
       hp: 30,
       damageModifiers: pickOnly,
       minToolTier: 2,
@@ -1284,25 +1371,28 @@ export const objects: PhysicalObject[] = [
     drop: singleDrop('Stone', 1, 3),
   }),
   {
-    id: 'Pickable_TarBig',
     type: 'object',
     subtype: 'misc',
+    id: 'Pickable_TarBig',
+    components: ['Pickable'],
     tier: 5,
     grow: [],
     drop: [singleDrop('Tar', 15)],
   },
   {
-    id: 'Pickable_Tar',
     type: 'object',
     subtype: 'misc',
+    id: 'Pickable_Tar',
+    components: ['Pickable'],
     tier: 5,
     grow: [],
     drop: [singleDrop('Tar', 4)],
   },
   {
-    id: 'Leviathan',
     type: 'object',
     subtype: 'misc',
+    id: 'Leviathan',
+    components: ['Leviathan'],
     tier: 3,
     grow: itemGrow({
       locations: ['Ocean'],
@@ -1310,7 +1400,7 @@ export const objects: PhysicalObject[] = [
       onSurface: true,
       num: [0, 0.01],
     }),
-    destructible: {
+    Destructible: {
       hp: 0,
       minToolTier: 0,
       damageModifiers: pickOnly,
@@ -1319,12 +1409,13 @@ export const objects: PhysicalObject[] = [
     drop: [],
   },
   {
-    id: 'Barnacle',
     type: 'object',
     subtype: 'misc',
+    id: 'Barnacle',
+    components: ['MineRock'],
     tier: 3,
     grow: [],
-    destructible: {
+    Destructible: {
       hp: 40,
       damageModifiers: pickOnly,
       minToolTier: 0,
@@ -1334,9 +1425,9 @@ export const objects: PhysicalObject[] = [
   },
   // DEEP NORTHH
   {
-    id: 'ice1',
     type: 'object',
     subtype: 'indestructible',
+    id: 'ice1',
     tier: 6,
     grow: itemGrow({
       locations: ['DeepNorth'],
@@ -1346,9 +1437,9 @@ export const objects: PhysicalObject[] = [
     }),
   },
   {
-    id: 'ice_rock1',
     type: 'object',
     subtype: 'indestructible',
+    id: 'ice_rock1',
     tier: 6,
     grow: itemGrow({
       locations: ['DeepNorth'],
@@ -1360,9 +1451,9 @@ export const objects: PhysicalObject[] = [
   },
   // MISTLANDS
   {
+    type: 'object',
+    subtype: 'indestructible',
     id: 'vertical_web',
-    type: 'object',
-    subtype: 'indestructible',
     tier: 6,
     grow: itemGrow({
       locations: ['Mistlands'],
@@ -1371,9 +1462,9 @@ export const objects: PhysicalObject[] = [
     }),
   },
   {
+    type: 'object',
+    subtype: 'indestructible',
     id: 'horizontal_web',
-    type: 'object',
-    subtype: 'indestructible',
     tier: 6,
     grow: itemGrow({
       locations: ['Mistlands'],
@@ -1382,9 +1473,9 @@ export const objects: PhysicalObject[] = [
     }),
   },
   {
-    id: 'tunnel_web',
     type: 'object',
     subtype: 'indestructible',
+    id: 'tunnel_web',
     tier: 6,
     grow: itemGrow({
       locations: ['Mistlands'],
@@ -1393,9 +1484,9 @@ export const objects: PhysicalObject[] = [
     }),
   },
   {
-    id: 'Skull1',
     type: 'object',
     subtype: 'indestructible',
+    id: 'Skull1',
     tier: 6,
     grow: itemGrow({
       locations: ['Mistlands'],
@@ -1404,9 +1495,9 @@ export const objects: PhysicalObject[] = [
     }),
   },
   {
-    id: 'Skull2',
     type: 'object',
     subtype: 'indestructible',
+    id: 'Skull2',
     tier: 6,
     grow: itemGrow({
       locations: ['Mistlands'],
@@ -1418,8 +1509,9 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'ore',
     id: 'MineRock_Meteorite',
+    components: ['MineRock'],
     tier: 7,
-    destructible: {
+    Destructible: {
       hp: 60,
       damageModifiers: pickOnly,
       minToolTier: 2,
@@ -1438,9 +1530,17 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'indestructible',
     id: 'Vegvisir',
+    components: ['Vegvisir'],
     tier: 0,
   },
 ];
+
+for (const obj of objects) {
+  if (obj.subtype !== 'indestructible') {
+    if (!obj.components) obj.components = [];
+  }
+}
+
 // SwampTree2_Darkland, HugeRoot1
 
 /*

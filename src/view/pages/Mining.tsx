@@ -23,7 +23,7 @@ function getObjectType(obj: PhysicalObject): ObjectType | undefined {
     case 'ore': return 'ore';
     case 'rock': return 'rock';
     default: {
-      const mods = obj.destructible?.damageModifiers ?? ({} as Partial<DamageModifiers>);
+      const mods = obj.Destructible?.damageModifiers ?? ({} as Partial<DamageModifiers>);
       const grouped = groupBy(Object.entries(mods), p => p[1] ?? '', p => p[0]);
       return ((grouped.immune?.length ?? 0) >= 8) ? 'misc' : undefined;
     }
@@ -38,11 +38,11 @@ const root: Record<ObjectType, Record<EntityId, [PhysicalObject, number][]>> = {
 };
 
 for (const obj of objects) {
-  if (!obj.destructible) continue;
+  if (!obj.Destructible) continue;
   objectMap[obj.id] = obj;
 }
 for (const obj of objects) {
-  if (!obj.destructible) continue;
+  if (!obj.Destructible) continue;
   if (!obj.grow?.length && !objectLocationMap[obj.id]?.length) continue;
   const type = getObjectType(obj);
   if (type) {
@@ -51,10 +51,10 @@ for (const obj of objects) {
 }
 
 function* walk(item: PhysicalObject, mul: number): Generator<[PhysicalObject, number]> {
-  if (Number.isFinite(item.destructible?.hp)) {
+  if (Number.isFinite(item.Destructible?.hp)) {
     yield [item, mul];
   }
-  for (const part of item.destructible?.parts ?? []) {
+  for (const part of item.Destructible?.parts ?? []) {
     yield* walk(objectMap[part.id]!, part.num * mul);
   }
 }
@@ -72,14 +72,14 @@ function getHits(objs: [PhysicalObject, number][], tool: Weapon, skill: number):
     stamina: 0,
   };
   for (const [obj, num] of objs) {
-    const { destructible } = obj;
-    if (!destructible) continue;
-    if ((tool.toolTier ?? 0) < destructible.minToolTier) return;    
-    const damage = getTotalDamage(applyDamageModifiers(tool.damage[0], destructible.damageModifiers));
+    const { Destructible } = obj;
+    if (!Destructible) continue;
+    if ((tool.toolTier ?? 0) < Destructible.minToolTier) return;    
+    const damage = getTotalDamage(applyDamageModifiers(tool.damage[0], Destructible.damageModifiers));
     const [min, max] = getWeaponSkillFactor(skill);
     const stamina = tool.attacks[0]?.stamina ?? 0;
-    const maxHits = Math.ceil(destructible.hp / (damage * min));
-    const minHits = Math.ceil(destructible.hp / (damage * max));
+    const maxHits = Math.ceil(Destructible.hp / (damage * min));
+    const minHits = Math.ceil(Destructible.hp / (damage * max));
     const avgHits = (minHits + maxHits) / 2;
     stats.hits[0] += minHits * num;
     stats.hits[1] += maxHits * num;
@@ -130,7 +130,7 @@ function MiningTable({ id, tools, destructibles, skill, stat, onSetStat }: {
         {Object.entries(destructibles)
           .map(([id, objs]) => <tr key={id}>
             <td><Link to={`/obj/${id}`}>{translate(id)}</Link></td>
-            <td>{objs.reduce((totalHp, [obj, num]) => totalHp + (obj.destructible?.hp ?? 0) * num, 0)}</td>
+            <td>{objs.reduce((totalHp, [obj, num]) => totalHp + (obj.Destructible?.hp ?? 0) * num, 0)}</td>
             {tools.map(tool => <td key={tool.id}>
               {showStat(getHits(objs, tool, skill), stat)}
             </td>

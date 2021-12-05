@@ -18,6 +18,7 @@ export const ships: Ship[] = [
     type: 'ship',
     group: 'ship',
     id: 'Raft',
+    components: ['Container', 'Ship'],
     tier: 1,
     emoji: '',
     wear: {
@@ -58,6 +59,7 @@ export const ships: Ship[] = [
     type: 'ship',
     group: 'ship',
     id: 'Karve',
+    components: ['Container', 'Ship'],
     tier: 2,
     emoji: '⛵',
     wear: {
@@ -103,6 +105,7 @@ export const ships: Ship[] = [
     type: 'ship',
     group: 'ship',
     id: 'VikingShip',
+    components: ['Container', 'Ship'],
     tier: 3,
     emoji: '🚢',
     wear: {
@@ -148,6 +151,7 @@ export const ships: Ship[] = [
     type: 'ship',
     group: 'ship',
     id: 'TrailerShip',
+    components: ['Container'],
     tier: 4,
     wear: {
       hp: 1000,
@@ -195,6 +199,7 @@ export const carts: Cart[] = [
   {
     type: 'cart',
     id: 'Cart',
+    components: ['Container', 'Vagon'],
     tier: 1,
     emoji: '',
     wear: {

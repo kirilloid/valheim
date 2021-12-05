@@ -4,6 +4,7 @@ import type {
   Creature,
   DungeonGenConfig,
   EntityId,
+  GameComponent,
   GameLocationId,
   LocationConfig,
   LocationItem,
@@ -63,6 +64,7 @@ function loc(
   biomes: Biome[],
   {
     type = 'misc',
+    components,
     minAlt = 1,
     maxAlt = 1000,
     minApart = 0,
@@ -70,6 +72,7 @@ function loc(
     maxDistance = 10000,
   }: {
     type?: LocationConfig['type'],
+    components?: GameComponent[],
     minAlt?: number,
     maxAlt?: number,
     minApart?: number,
@@ -78,9 +81,13 @@ function loc(
   },
   variations: LocationVariation[],
 ): LocationConfig {
+  if (type === 'runestone') {
+    components = ['Runestone'];
+  }
   const totalQuantity = variations.reduce((a, v) => a + v.quantity, 0);
   return {
     id,
+    components,
     tier,
     biomes,
     quantity: totalQuantity,
@@ -276,7 +283,7 @@ export const locations: LocationConfig[] = [
     ], }],
   ),
   // BLACK FOREST
-  loc(2, 'Crypt', ['BlackForest'], { type: 'dungeon', minApart: 128, }, [
+  loc(2, 'Crypt', ['BlackForest'], { type: 'dungeon', components: ['DungeonGenerator'], minApart: 128, }, [
     {
       // 3 types of entrances, everything the same inside
       subtype: '234',
@@ -577,7 +584,7 @@ export const locations: LocationConfig[] = [
       ]  
     }
   ]),
-  loc(3, 'SunkenCrypt', ['Swamp'], { type: 'dungeon', minApart: 64, minAlt: 0, maxAlt: 2, }, [{
+  loc(3, 'SunkenCrypt', ['Swamp'], { type: 'dungeon', components: ['DungeonGenerator'], minApart: 64, minAlt: 0, maxAlt: 2, }, [{
     subtype: '4',
     quantity: 400,
     // exterior
@@ -1092,7 +1099,7 @@ function addToLocation(loc: LocationConfig, drop: DropDist) {
         addToBiomes(loc.biomes, b => b.resources, item);
     }
     if (obj.type === 'object') {
-      if (obj.destructible) {
+      if (obj.Destructible) {
         const drops = fullDestructible(obj)?.drop ?? [];
         const items = gatherDrop(drops);
         for (const [tItem, tDist] of Object.entries(items)) {

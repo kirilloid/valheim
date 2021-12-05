@@ -17,7 +17,7 @@ export function Inventory({ inventory } : { inventory: TInventory }) {
         top: y * 70 + 3,
         width: 64,
         height: 64,
-        backgroundColor: invItem.equiped ? '#5D97CC' : 'transparent',
+        backgroundColor: invItem.equipped ? '#5D97CC' : 'transparent',
       }}>
         <div style={{ position: 'absolute', left: 2, top: 2, filter: 'brightness(0) blur(2px) opacity(0.75)' }}>
           <ItemIcon item={item} size={64} />

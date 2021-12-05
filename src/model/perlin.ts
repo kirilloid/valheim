@@ -40,8 +40,8 @@ export function perlinNoise(x: number, y: number): number {
   const yi = Math.floor(y) & 255;
   x -= Math.floor(x);
   y -= Math.floor(y);
-  const A = (p[xi  ]! + yi) & 255;
-  const B = (p[xi+1]! + yi) & 255;
+  const A = (p[xi  ]! + yi) & 0xFF;
+  const B = (p[xi+1]! + yi) & 0xFF;
   const AA = p[A]!, AB = p[A+1]!;
   const BA = p[B]!, BB = p[B+1]!;
 

@@ -40,3 +40,11 @@ for (const coll of [
 }
 
 (window as any).objectDB = data;
+
+data.LocationProxy = { components: ['LocationProxy'] } as GameObject;
+data._TerrainCompiler = { components: ['TerrainComp'] } as GameObject;
+data.DG_ForestCrypt = 
+data.DG_GoblinCamp =
+data.DG_MeadowsFarm =
+data.DG_MeadowsVillage =
+data.DG_SunkenCrypt = { components: ['DungeonGenerator'] } as GameObject;

@@ -1,4 +1,5 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
+import { wait } from '../../model/utils';
 import { Biome, WorldGenerator as WorldGen } from '../../model/world-generator';
 
 const biomeColors = [
@@ -35,7 +36,7 @@ async function drawSeedOnto(world: WorldGen, imageData: ImageData, size: number,
     }
     onProgress(y);
     if (y % 10 === 0) {
-      await new Promise(resolve => setTimeout(resolve, 10));
+      await wait(10);
     }
   }
   onProgress(size);

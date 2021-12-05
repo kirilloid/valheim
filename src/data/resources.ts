@@ -121,7 +121,7 @@ export const resources: Item[] = [
   { type: 'item', id: 'GreydwarfEye', tier: 2, weight: 0.2, stack: 50 },
   { type: 'item', id: 'Pukeberries', tier: 2, weight: 0.1, stack: 50 },
   { type: 'item', id: 'BoneFragments', emoji: '🦴', tier: 2, weight: 0.5, stack: 50 },
-  { type: 'item', id: 'SurtlingCore', emoji: '🟥', tier: 2, weight: 5, stack: 10 },
+  { type: 'item', id: 'SurtlingCore', emoji: '🟥', tier: 2, weight: 5, stack: 10 }, // Pickable
   { type: 'item', id: 'AncientSeed', emoji: '🌰', tier: 2, weight: 1, stack: 50, summon: ['gd_king', 3] },
   { type: 'item', group: 'lumber', id: 'RoundLog', tier: 2, weight: 2, stack: 50 },
   { type: 'item', group: 'hide', id: 'TrollHide', tier: 2, weight: 2, stack: 20 },
@@ -390,7 +390,7 @@ export const resources: Item[] = [
     recipe: { type: 'craft_one', time: FERMENT_TIME, materials: { Barley: 10, Cloudberry: 10 },
               source: { station: CraftingStation.Fermenter }, number: 6 },
   },
-  { type: 'item', id: 'Tar', emoji: '⚫', tier: 5, weight: 2, stack: 50 },
+  { type: 'item', id: 'Tar', emoji: '⚫', tier: 5, weight: 2, stack: 50 }, // Pickable
   { type: 'item', id: 'Needle', emoji: '🪡', tier: 5, weight: 0.5, stack: 50 },
   { type: 'item', group: 'ore', id: 'BlackMetalScrap', tier: 5, weight: 10, stack: 30, teleportable: false },
   { type: 'item', group: 'metal', id: 'BlackMetal', tier: 5, weight: 12, stack: 30, teleportable: false, tags: ['metal'],
@@ -417,6 +417,12 @@ export const resources: Item[] = [
               source: { station: CraftingStation.BlastFurnace }, number: 1 },
   },
 ];
+for (const item of resources) {
+  item.components = ['ItemDrop', 'ZSyncTransform'];
+  if ('grow' in item) {
+    item.components.push('Pickable');
+  }
+}
 
 const summonMap: Partial<Record<EntityId, Resource['summon']>> = {};
 resources.forEach(r => {

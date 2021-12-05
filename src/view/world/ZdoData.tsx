@@ -1,12 +1,14 @@
 import React, { useContext, useLayoutEffect, useRef, useState } from 'react';
 
+import type { Biome } from '../../types';
+import type { ValueProps } from '../parts/types';
 import type { ZDOData, ZDO } from './types';
-import { data } from '../../data/itemDB';
-import { TranslationContext } from '../../effects';
-import { Biome } from '../../types';
+
 import { WORLD_SIZE } from '../../model/game';
+import { data } from '../../data/itemDB';
 import { getId, keys, objects } from '../../data/zdo';
-// import type { ValueProps } from '../parts/types';
+import { InterfaceFields } from './ZDOProps';
+import { TranslationContext } from '../../effects';
 
 const biomeColors: Record<Biome, number> = {
   Meadows: 0xff5ba791,
@@ -32,7 +34,8 @@ export function ZdoSpecialData<T>(props: { data?: Map<number, T>, stringify: (va
   }</>;
 }
 
-export function ZdoData({ value: { zdos } }: { value: ZDOData }) {
+export function ZdoData(props: ValueProps<ZDOData>) {
+  const { zdos } = props.value;
   const translate = useContext(TranslationContext);
   const zdoGroups = new Map<string, ZDO[]>();
   const [currentId, setCurrentId] = useState('');
@@ -85,6 +88,8 @@ export function ZdoData({ value: { zdos } }: { value: ZDOData }) {
     ctx.putImageData(imageData, 0, 0);
   }, [zdos]);
 
+  const components = data[currentId]?.components?.flatMap(cmp => InterfaceFields[cmp] ?? []) ?? [];
+
   return <>
     <canvas width={SIZE} height={SIZE} ref={canvasRef} style={{ float: 'right' }} />
     <select onChange={e => {
@@ -107,16 +112,21 @@ export function ZdoData({ value: { zdos } }: { value: ZDOData }) {
         </option>)}
       </select><br />
     </>}
-    {currentItem != null && <dl>
+    {currentItem != null && <><dl>
       <dt>position</dt><dd>{currentItem.position.x} / {currentItem.position.z}</dd>
       <dt>sector</dt><dd>{currentItem.sector.x} / {currentItem.sector.y}</dd>
+      {components.map(C => <C zdo={currentItem} />)}
+      </dl>
+      <hr />
+      <dl>
       <ZdoSpecialData data={currentItem.floats} stringify={String} />
       <ZdoSpecialData data={currentItem.vec3} stringify={v => `${v.x.toFixed(3)} / ${v.y.toFixed(3)} / ${v.z.toFixed(3)}`} />
       <ZdoSpecialData data={currentItem.quats} stringify={v =>
         `x: ${v.x.toFixed(3)}, y: ${v.y.toFixed(3)}, z: ${v.z.toFixed(3)}, w: ${v.w.toFixed(3)}`} />
       <ZdoSpecialData data={currentItem.ints} stringify={String} />
+      <ZdoSpecialData data={currentItem.longs} stringify={String} />
       <ZdoSpecialData data={currentItem.strings} stringify={String} />
       <ZdoSpecialData data={currentItem.byteArrays} stringify={arr => ([] as number[]).map.call(arr, v => v.toString(16).padStart(2, '0')).join('')} />
-    </dl>}
+    </dl></>}
   </>;
 }

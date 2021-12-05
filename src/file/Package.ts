@@ -1,15 +1,7 @@
-import { inflate, deflate } from 'pako';
-
 import type { Quaternion, Vector2i, Vector3 } from '../model/utils';
 
-/*
-type ToObject<Format extends PackageEntry[]> = {
-  [K in keyof Format]: 
-}
-*/
-
 export class PackageReader {
-  private offset: number = 0;
+  private offset: number;
   private bytes: Uint8Array;
   private view: DataView;
   constructor(bytes: Uint8Array) {
@@ -20,6 +12,12 @@ export class PackageReader {
 
   public getOffset(): number {
     return this.offset;
+  }
+
+  public getProgress(): number {
+    const start = this.bytes.byteOffset;
+    const end = start + this.bytes.byteLength;
+    return (this.offset - start) / (end - start);
   }
 
   public readBool(): boolean {
@@ -93,7 +91,7 @@ export class PackageReader {
     // 0xxxxxxx
     if ((first & 0x80) === 0) return first;
 
-    if ((first & 0xE0) == 0xC0) { // 110xxxxx 10xxxxxx
+    if ((first & 0xE0) === 0xC0) { // 110xxxxx 10xxxxxx
       first &= 0x1F;
       const second = this.readByte() & 0x3F;
       return (first << 6) | second;
@@ -138,14 +136,10 @@ export class PackageReader {
 
   public readByteArray(): Uint8Array {
     const length = this.readInt();
+    const base = this.bytes.byteOffset;
     const start = this.offset;
     const end = this.offset += length;
-    return this.bytes.subarray(start, end);
-  }
-
-  public readGzipped(): Uint8Array {
-    const gzipped = this.readByteArray();
-    return inflate(gzipped);
+    return this.bytes.subarray(start - base, end - base);
   }
 
   public skipBytes(n: number): void {
@@ -302,16 +296,16 @@ export class PackageWriter {
       return;
     }
     if (value <= 0xFFFF) { // 16 bits
-      this.writeByte((value >> 12) & 0x0F | 0xE0);
-      this.writeByte((value >> 6) & 0x3F | 0x80);
-      this.writeByte((value & 0x3F) | 0x80);
+      this.writeByte(((value >> 12) & 0x0F) | 0xE0);
+      this.writeByte(((value >> 6) & 0x3F) | 0x80);
+      this.writeByte(((value >> 0) & 0x3F) | 0x80);
       return;
     }
     if (value <= 0x1FFFFF) { // 21 bits
-      this.writeByte((value >> 18) & 0x07 | 0xF0);
-      this.writeByte((value >> 12) & 0x3F | 0x80);
-      this.writeByte((value >> 6) & 0x3F | 0x80);
-      this.writeByte((value & 0x3F) | 0x80);
+      this.writeByte(((value >> 18) & 0x07) | 0xF0);
+      this.writeByte(((value >> 12) & 0x3F) | 0x80);
+      this.writeByte(((value >> 6) & 0x3F) | 0x80);
+      this.writeByte(((value >> 0) & 0x3F) | 0x80);
       return;
     }
     throw new RangeError(`UTF-8 character with code ${value}`);
@@ -344,12 +338,6 @@ export class PackageWriter {
     const length = value.length;
     this.writeInt(length);
     this.writeBytes(value);
-  }
-
-  public writeGzipped(value: Uint8Array): void {
-    const gzipped = deflate(value, { level: 1 });
-    this.writeInt(gzipped.length);
-    this.writeByteArray(gzipped);
   }
 
   public writeArray<T>(writer: (this: PackageWriter, value: T) => void, values: ArrayLike<T>): void {
