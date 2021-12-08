@@ -25,7 +25,7 @@ function toggleItem<T>(array: T[], value: T, add: boolean): T[] {
 
 function Keys({ value, onChange }: ValueProps<string[]>) {
   const translate = useContext(TranslationContext);
-  const inputRef = useRef<HTMLInputElement>(null);
+  // const inputRef = useRef<HTMLInputElement>(null);
   /* function addValue() {
     const input = inputRef.current;
     if (input == null) return;
@@ -55,7 +55,6 @@ function Keys({ value, onChange }: ValueProps<string[]>) {
 
 export function ZoneSystem({ value, onChange }: ValueProps<ZoneSystemData>) {
   return <>
-    <h2>Milestones</h2>
     <Wiki article="Global Keys" />
     <Keys value={value.globalKeys} onChange={globalKeys => onChange({ ...value, globalKeys })} />
   </>

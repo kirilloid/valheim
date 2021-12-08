@@ -1,3 +1,4 @@
+import { decode, encodeInto } from '../model/utf8';
 import type { Quaternion, Vector2i, Vector3 } from '../model/utils';
 
 export class PackageReader {
@@ -128,10 +129,10 @@ export class PackageReader {
 
   public readString(): string {
     const length = this.read7BitInt();
+    const base = this.bytes.byteOffset;
     const start = this.offset;
     const end = this.offset += length;
-    const decoder = new TextDecoder();
-    return decoder.decode(this.bytes.subarray(start, end));
+    return decode(this.bytes.subarray(start - base, end - base));
   }
 
   public readByteArray(): Uint8Array {
@@ -196,8 +197,8 @@ export class PackageWriter {
   private buffer: ArrayBuffer;
   private bytes: Uint8Array;
   private view: DataView;
-  constructor() {
-    this.buffer = new ArrayBuffer(16);
+  constructor(sizeHint: number = 16) {
+    this.buffer = new ArrayBuffer(sizeHint);
     this.bytes = new Uint8Array(this.buffer);
     this.view = new DataView(this.buffer);
   }
@@ -321,9 +322,8 @@ export class PackageWriter {
 
   public writeString(value: string): void {
     this.write7BitInt(value.length);
-    const encoder = new TextEncoder();
     this.ensureSpace(value.length * 3);
-    const encoded = encoder.encodeInto(value, this.bytes.subarray(this.offset));
+    const encoded = encodeInto(value, this.bytes.subarray(this.offset));
     this.offset += encoded.written ?? 0;
   }
 

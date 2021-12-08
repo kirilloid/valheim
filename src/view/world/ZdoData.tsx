@@ -1,4 +1,5 @@
 import React, { useContext, useLayoutEffect, useRef, useState } from 'react';
+import { defaultMemoize } from 'reselect';
 
 import type { Biome } from '../../types';
 import type { ValueProps } from '../parts/types';
@@ -34,14 +35,8 @@ export function ZdoSpecialData<T>(props: { data?: Map<number, T>, stringify: (va
   }</>;
 }
 
-export function ZdoData(props: ValueProps<ZDOData>) {
-  const { zdos } = props.value;
-  const translate = useContext(TranslationContext);
+const getGroups = defaultMemoize((zdos: ZDO[]) => {
   const zdoGroups = new Map<string, ZDO[]>();
-  const [currentId, setCurrentId] = useState('');
-  const [index, setIndex] = useState(0);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
   for (const zdo of zdos) {
     const id = getId(objects, zdo.prefab);
     if (zdoGroups.has(id)) {
@@ -50,6 +45,17 @@ export function ZdoData(props: ValueProps<ZDOData>) {
       zdoGroups.set(id, [zdo]);
     }
   }
+  return zdoGroups;
+});
+
+export function ZdoData(props: ValueProps<ZDOData>) {
+  const { zdos } = props.value;
+  const translate = useContext(TranslationContext);
+  const [currentId, setCurrentId] = useState('');
+  const [index, setIndex] = useState(0);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  const zdoGroups = getGroups(zdos);
   const currentItems = zdoGroups.get(currentId) ?? [];
   const currentItem = currentItems[index];
 
@@ -59,9 +65,9 @@ export function ZdoData(props: ValueProps<ZDOData>) {
     if (canvas == null) return;
     const ctx = canvas.getContext('2d');
     if (ctx == null) return;
-    ctx.fillStyle = '#ccc';
-    ctx.fillRect(0, 0, SIZE, SIZE);
     ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, SIZE, SIZE);
+    ctx.fillStyle = '#ccc';
     ctx.beginPath();
     ctx.arc(SIZE / 2, SIZE / 2, SIZE / 2, 0, 2 * Math.PI);
     ctx.fill();
@@ -91,7 +97,7 @@ export function ZdoData(props: ValueProps<ZDOData>) {
   const components = data[currentId]?.components?.flatMap(cmp => InterfaceFields[cmp] ?? []) ?? [];
 
   return <>
-    <canvas width={SIZE} height={SIZE} ref={canvasRef} style={{ float: 'right' }} />
+    <canvas width={SIZE} height={SIZE} ref={canvasRef} style={{ float: 'right', maxWidth: '100%', width: '320px' }} />
     <select onChange={e => {
       setCurrentId(e.target.value);
       setIndex(0);

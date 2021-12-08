@@ -20,7 +20,7 @@ export const treasures: TreasureChest[] = [
   },
   {
     type: 'treasure',
-    id: 'TreasureChest_Meadows',
+    id: 'TreasureChest_meadows',
     components: ['Container'],
     tier: 1,
     drop: {

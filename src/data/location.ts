@@ -130,7 +130,7 @@ export const locations: LocationConfig[] = [
       quantity: 20,
       items: [
         locItem('beehive', 0.25),
-        locItem('TreasureChest_Meadows', 0.5),
+        locItem('TreasureChest_meadows', 0.5),
       ],
     },
     {
@@ -138,7 +138,7 @@ export const locations: LocationConfig[] = [
       quantity: 20,
       items: [
         locItem('beehive', 0.25),
-        locItem('TreasureChest_Meadows', 0.5),
+        locItem('TreasureChest_meadows', 0.5),
       ],
     },
     {
@@ -167,7 +167,7 @@ export const locations: LocationConfig[] = [
       quantity: 20,
       items: [
         locItem('beehive', 0.25),
-        locItem('TreasureChest_Meadows', 1),
+        locItem('TreasureChest_meadows', 1),
       ],
     },
     {
@@ -175,7 +175,7 @@ export const locations: LocationConfig[] = [
       quantity: 20,
       items: [
         locItem('beehive', 0.25),
-        locItem('TreasureChest_Meadows', 0.5),
+        locItem('TreasureChest_meadows', 0.5),
       ],
     },
     {
@@ -188,7 +188,7 @@ export const locations: LocationConfig[] = [
       quantity: 20,
       items: [
         locItem('beehive', 0.25),
-        locItem('TreasureChest_Meadows', 0.5),
+        locItem('TreasureChest_meadows', 0.5),
       ],
     },
     {
@@ -196,7 +196,7 @@ export const locations: LocationConfig[] = [
       quantity: 20,
       items: [
         locItem('beehive', 0.25),
-        locItem('TreasureChest_Meadows', 0.5),
+        locItem('TreasureChest_meadows', 0.5),
       ],
     },
     {
@@ -204,14 +204,14 @@ export const locations: LocationConfig[] = [
       quantity: 20,
       items: [
         locItem('beehive', 0.25),
-        locItem('TreasureChest_Meadows', 0.5),
+        locItem('TreasureChest_meadows', 0.5),
       ],
     },
     {
       subtype: '12',
       quantity: 20,
       items: [
-        locItem('TreasureChest_Meadows', 0.5),
+        locItem('TreasureChest_meadows', 0.5),
       ],
     },
     {
@@ -219,7 +219,7 @@ export const locations: LocationConfig[] = [
       quantity: 20,
       items: [
         locItem('beehive', 0.25),
-        locItem('TreasureChest_Meadows', 0.5),
+        locItem('TreasureChest_meadows', 0.5),
       ],
     },
     {
@@ -227,7 +227,7 @@ export const locations: LocationConfig[] = [
       quantity: 20,
       items: [
         locItem('beehive', 0.25),
-        locItem('TreasureChest_Meadows', 0.5),
+        locItem('TreasureChest_meadows', 0.5),
       ],
     },
     {
@@ -235,7 +235,7 @@ export const locations: LocationConfig[] = [
       quantity: 20,
       items: [
         locItem('beehive', 0.25),
-        locItem('TreasureChest_Meadows', 0.5),
+        locItem('TreasureChest_meadows', 0.5),
       ],
     },
   ]),

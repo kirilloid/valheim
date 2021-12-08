@@ -24,12 +24,12 @@ abstract class FixedBinMap<V> implements Map<number, V> {
 
   protected getIndices(): Map<number, number> {
     if (this.indices != null) return this.indices;
-    const offsets = new Map();
+    const indices = new Map();
     for (let i = 0; i < this.initialSize; i++) {
       const key = this.readKey(i);
-      offsets.set(key, i);
+      indices.set(key, i);
     }
-    return this.indices = offsets;
+    return this.indices = indices;
   }
 
   clear(): void {
@@ -39,12 +39,14 @@ abstract class FixedBinMap<V> implements Map<number, V> {
   }
 
   delete(key: number): boolean {
-    this.changedSize = true;
+    let deleted = false
     if (this.newValues == null) {
-      return this.getIndices().delete(key);
+      deleted = this.getIndices().delete(key);
     } else {
-      return this.getIndices().delete(key) || this.newValues.delete(key);
+      deleted = this.getIndices().delete(key) || this.newValues.delete(key);
     }
+    if (deleted) this.changedSize = true;
+    return deleted;
   }
 
   forEach(callbackfn: (value: V, key: number, map: Map<number, V>) => void): void {
@@ -55,21 +57,22 @@ abstract class FixedBinMap<V> implements Map<number, V> {
         callbackfn(value, key, this);
       }
     } else {
-      for (const [key, index] of this.getIndices()) {
-        const value = this.readValue(index);
+      for (const [key, value] of this.entries()) {
         callbackfn(value, key, this);
       }
     }
   }
 
   get(key: number): V | undefined {
-    const offset = this.getIndices().get(key);
-    if (offset === undefined) return undefined;
-    return this.readValue(offset);
+    const index = this.getIndices().get(key);
+    if (index === undefined) {
+      return this.newValues?.get(key);
+    }
+    return this.readValue(index);
   }
 
   has(key: number): boolean {
-    return this.getIndices().has(key);
+    return this.getIndices().has(key) || (this.newValues?.has(key) ?? false);
   }
 
   set(key: number, value: V): this {
@@ -77,6 +80,7 @@ abstract class FixedBinMap<V> implements Map<number, V> {
     if (offset !== undefined) {
       this.writeValue(offset, value);
     } else {
+      this.changedSize = true;
       if (this.newValues === null) this.newValues = new Map();
       this.newValues.set(key, value); 
     }
@@ -128,6 +132,12 @@ abstract class FixedBinMap<V> implements Map<number, V> {
   }
 
   save(writer: PackageWriter) {
+    if (!this.changedSize) {
+      const offset = this.view.byteOffset - this.sizeOffset;
+      const bytes = new Uint8Array(this.view.buffer, offset, this.byteSize);
+      writer.writeBytes(bytes);
+      return;
+    }
     writer.writeChar(this.size);
     for (const [key, value] of this.entries()) {
       this.saveKeyValue(writer, key, value);

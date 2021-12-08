@@ -356,7 +356,7 @@
     "Flametal.tags": "metal",
 
     "Pickable_DolmenTreasure": "Dolmen treasure",
-    "TreasureChest_Meadows": "Treasure chest (meadows houses)",
+    "TreasureChest_meadows": "Treasure chest (meadows houses)",
     "TreasureChest_meadows_buried": "Treasure chest (Buried)",
     "shipwreck_karve_chest": "Treasure chest (shipwreck)",
     "TreasureChest_blackforest": "Treasure chest (black forest)",
@@ -486,7 +486,7 @@
     "stone_arch": "Stone arch",
     "stone_floor_2x2": "Stone floor 2x2",
     "stone_floor": "Stone floor 4x4",
-    "iron_gate": "Iron gate",
+    "iron_grate": "Iron gate",
     "stone_stair": "Stone stair",
     "iron_floor_1x1": "Cage floor 1x1",
     "iron_floor_2x2": "Cage floor 2x2",

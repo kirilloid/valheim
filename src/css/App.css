@@ -178,10 +178,78 @@ option.spoiler {
   }    
 }
 
+.Tabs {
+  display: flex;
+  flex-direction: column;
+}
+
+.Tab {
+  font-size: 1.25em;
+  line-height: 1.5rem;
+  padding: 0.25rem;
+  color: #666;
+  cursor: pointer;
+  border-left: 2px solid transparent;
+}
+
+.Tab:hover {
+  color: #000;
+}
+
+.Tab--selected {
+  color: #000;
+  cursor: initial;
+  border-color: #000;
+}
+
+.Tabs__content {
+  border-left: 2px solid;
+  padding-inline: 0.25rem;
+}
+
+@media screen and (min-width: 640px) {
+  .Tabs {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .Tab {
+    border-left: none;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .Tab--selected {
+    border-bottom: 2px solid #000;
+  }
+
+  .Tabs__content {
+    border: none;
+    padding: 0;
+    width: 100%;
+    order: 100;
+    margin: 0.5rem 0 0;
+  }
+}
+
 .drop {
   flex: 1 0 auto;
+  position: relative;
 }
 
 .drop--over {
   border: 1px dashed gray;
+}
+
+.FileEditor__controls {
+  position: absolute;
+  right: 0;
+  top: 2rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.FileEditor--disabled {
+  opacity: 0.5;
+  filter: grayscale(1);
+  pointer-events: none;
 }

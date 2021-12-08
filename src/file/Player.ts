@@ -75,14 +75,20 @@ function writeCustomPoint(pkg: PackageWriter, point?: Vector3): void {
   pkg.writeVector3(point ?? { x: 0, y: 0, z: 0 });
 }
 
-async function readPlayer(bytes: Uint8Array, onProgress?: (v: number) => void): Promise<Player> {
+function* readPlayer(bytes: Uint8Array): Generator<number, Player> {
   const reader = new PackageReader(bytes);
   const version = reader.readInt();
-  const kills = version >= 28 ? reader.readInt() : 0;
-  const deaths = version >= 28 ? reader.readInt() : 0;
-  const crafts = version >= 28 ? reader.readInt() : 0;
-  const builds = version >= 28 ? reader.readInt() : 0;
-  const stats = { kills, deaths, crafts, builds };
+  const stats = version >= 28 ? {
+    kills: reader.readInt(),
+    deaths: reader.readInt(),
+    crafts: reader.readInt(),
+    builds: reader.readInt(),
+  } : {
+    kills: 0,
+    deaths: 0,
+    crafts: 0,
+    builds: 0,
+  }
   const worldsNumber = reader.readInt();
   const worlds = new Map<bigint, World>();
   for (let i = 0; i < worldsNumber; i++) {
@@ -99,11 +105,13 @@ async function readPlayer(bytes: Uint8Array, onProgress?: (v: number) => void): 
       homePoint,
       mapData,
     });
+    yield i / worldsNumber;
   }
   const playerName = reader.readString();
   const playerID = reader.readLong();
   const startSeed = reader.readString();
   const playerData = reader.readIf(reader.readByteArray);
+
   return {
     version,
     stats,
@@ -115,8 +123,12 @@ async function readPlayer(bytes: Uint8Array, onProgress?: (v: number) => void): 
   };
 }
 
-function writePlayer(player: Player): Uint8Array {
-  const writer = new PackageWriter();
+function* writePlayer(
+  player: Player,
+  writer: PackageWriter,
+) {
+  const total = player.worlds.size + 1;
+  let current = 0;
   writer.writeInt(player.version);
   if (player.version >= 28) {
     writer.writeInt(player.stats.kills);
@@ -132,13 +144,14 @@ function writePlayer(player: Player): Uint8Array {
     if (player.version >= 30) writeCustomPoint(writer, world.deathPoint);
     writer.writeVector3(world.homePoint);
     if (player.version >= 29) writer.writeIf(writer.writeByteArray, world.mapData);
+    yield (current++ / total * 0.8);
   }
   writer.writeString(player.playerName);
   writer.writeLong(player.playerID);
   writer.writeString(player.startSeed);
   const playerData = player.playerData && writePlayerData(player.playerData);
   writer.writeIf(writer.writeByteArray, playerData);
-  return writer.flush();
+  yield 0.9;
 }
 
 function readSkills(pkg: PackageReader) {
@@ -265,7 +278,7 @@ function readPlayerData(data: Uint8Array): PlayerData {
   };
 }
 
-function writePlayerData(data: PlayerData) {
+function writePlayerData(data: PlayerData): Uint8Array {
   const writer = new PackageWriter();
   writer.writeInt(data.version);
   if (data.version >= 7) writer.writeFloat(data.maxHealth);
@@ -311,22 +324,27 @@ function writePlayerData(data: PlayerData) {
   return writer.flush();
 }
 
-export function read(bytes: Uint8Array, onProgress?: (v: number) => void): Promise<Player> {
+export function* read(bytes: Uint8Array): Generator<number, Player> {
   const reader = new PackageReader(bytes);
   const data = reader.readByteArray();
   const hash = reader.readByteArray();
   const computed = new Uint8Array(sha512.arrayBuffer(data.buffer));
-  if (computed.some((v, i) => v !== hash[i])) {
-    throw new RangeError("Incorrect hash");
-  }
-  return Promise.resolve(readPlayer(data, onProgress));
+  // if (computed.some((v, i) => v !== hash[i])) {
+  //   throw new RangeError("Incorrect hash");
+  // }
+  return yield* readPlayer(data);
 }
 
-export function write(player: Player) {
-  const data = writePlayer(player);
-  const writer = new PackageWriter();
-  writer.writeByteArray(data);
+export function* write(
+  player: Player,
+  sizeHint: number = 10e6,
+): Generator<number, Uint8Array> {
+  const writer = new PackageWriter(sizeHint);
+  yield* writePlayer(player, writer);
+  const data = writer.flush();
+  const pkg = new PackageWriter(data.length + 512 / 8);
+  pkg.writeByteArray(data);
   const hash = sha512.arrayBuffer(data.buffer);
-  writer.writeByteArray(new Uint8Array(hash));
-  return writer.flush();
+  pkg.writeByteArray(new Uint8Array(hash));
+  return pkg.flush();
 }

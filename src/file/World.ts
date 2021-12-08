@@ -1,7 +1,7 @@
-import type { ZDO, ZDOData, ZDOID } from './types';
+import type { ZDO, ZDOCorruption, ZDOData, ZDOID } from './types';
 import { PackageReader, PackageWriter } from './Package';
 
-import { Vector2i, Vector3, wait } from '../model/utils';
+import { Vector2i, Vector3 } from '../model/utils';
 import { readZdoMmap, setVersion, errorToMistake } from './zdo';
 
 export type ZoneSystemData = {
@@ -33,25 +33,24 @@ export type WorldData = {
   randEvent?: RandEventData;
 }
 
-async function readZDOData(reader: PackageReader, version: number, onProgress?: (v: number) => void): Promise<ZDOData> {
+function* readZDOData(reader: PackageReader, version: number): Generator<number, ZDOData> {
   const myid = reader.readLong();
   const nextUid = reader.readUInt();
   const zdos: ZDO[] = [];
   const zdoLength = reader.readInt();
-  const corruptions = [];
+  const corruptions: ZDOCorruption[] = [];
   setVersion(version);
   for (let i = 0; i < zdoLength; i++) {
     const offset = reader.getOffset();
     if (i % 1000 === 0) {
-      onProgress?.(reader.getProgress())
-      await wait(10);
+      yield reader.getProgress();
     }
     try {
       const zdo = readZdoMmap(reader, version);
       zdos.push(zdo);
     } catch (e) {
       const mistake = errorToMistake(e);
-      corruptions.push({ offset, mistake });
+      corruptions.push({ mistake, offset, index: i });
     }
   }
   const deadZdos = reader.readMap(function () {
@@ -65,14 +64,16 @@ async function readZDOData(reader: PackageReader, version: number, onProgress?: 
     zdos,
     deadZdos,
     corruptions,
+    _checked: false,
   };
 }
 
-function writeZDOData(writer: PackageWriter, zdoData: ZDOData): void {
+function* writeZDOData(writer: PackageWriter, zdoData: ZDOData): Generator<number, void> {
   writer.writeLong(zdoData.myid);
   writer.writeUInt(zdoData.nextUid);
   writer.writeInt(zdoData.zdos.length);
-  for (const zdo of zdoData.zdos) {
+  for (const [i, zdo] of zdoData.zdos.entries()) {
+    if (i % 1000 === 0) yield i / zdoData.zdos.length;
     zdo.save(writer);
   }
   writer.writeMap(function (key: ZDOID) {
@@ -144,11 +145,11 @@ function writeRandEvent(writer: PackageWriter, version: number, event: RandEvent
   writer.writeVector3(event.pos!);
 }
 
-export async function read(bytes: Uint8Array, onProgress?: (v: number) => void): Promise<WorldData> {
+export function* read(bytes: Uint8Array): Generator<number, WorldData> {
   let reader = new PackageReader(bytes);
   const version = reader.readInt();
   const netTime = version >= 4 ? reader.readDouble() : NaN;
-  const zdo = await readZDOData(reader, version, onProgress);
+  const zdo = yield* readZDOData(reader, version);
   const zoneSystem = version >= 12 ? readZoneSystem(reader, version) : undefined;
   const randEvent = version >= 15 ? readRandEvent(reader, version) : undefined;
   return {
@@ -160,17 +161,17 @@ export async function read(bytes: Uint8Array, onProgress?: (v: number) => void):
   };
 }
 
-export function write({
+export function* write({
   version,
   netTime,
   zdo,
   zoneSystem,
   randEvent,
-}: WorldData): Uint8Array {
+}: WorldData): Generator<number, Uint8Array> {
   let writer = new PackageWriter();
   writer.writeInt(version);
   if (version >= 4) writer.writeDouble(netTime);
-  writeZDOData(writer, zdo);
+  yield* writeZDOData(writer, zdo);
   if (version >= 12) writeZoneSystem(writer, version, zoneSystem!);
   if (version >= 15) writeRandEvent(writer, version, randEvent!);
   return writer.flush();

@@ -378,7 +378,7 @@
     "stone_arch": "piece_stonearch",
     "stone_floor_2x2": "piece_stonefloor2x2",
     "stone_floor": "piece_stonefloor4x4",
-    "iron_gate": "piece_irongate",
+    "iron_grate": "piece_irongate",
     "stone_stair": "piece_stonestair",
     "iron_floor_1x1": "piece_ironfloorSmall",
     "iron_floor_2x2": "piece_ironfloor",

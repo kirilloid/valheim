@@ -1,6 +1,6 @@
 import React, { useContext, useLayoutEffect, useRef } from 'react';
 
-import type { GameComponent } from '../../types';
+import type { GameComponent, Piece } from '../../types';
 import type { ZDO } from './types';
 import { crc32, groupBy, stableHashCode as strHash } from '../../model/utils';
 
@@ -14,7 +14,9 @@ import { Color } from '../ColorEditor';
 import { roomHashes } from '../../data/roomHashes';
 import { locations } from '../../data/location';
 import { objects } from '../../data/zdo';
-// import { Inventory } from '../player/Inventory';
+import { data } from '../../data/itemDB';
+import { getStructuralIntegrity } from '../../data/building';
+
 const locationHashes = new Map<number, string>();
 for (const loc of locations) {
   for (const variation of loc.variations) {
@@ -55,13 +57,19 @@ const stringComp = (key: string) => ({ zdo }: { zdo: ZDO }) => {
   </React.Fragment>;
 };
 
-const floatComp = (key: string) => {
+const floatComp = (key: string, defaultReader?: (zdo: ZDO) => number) => {
   const hash = strHash(key);
   return ({ zdo }: { zdo: ZDO }) => {
+    const defaultValue = defaultReader ? defaultReader(zdo) : 0;
     const value = zdo.floats.get(hash) ?? '';
     return <React.Fragment key={key}>
       <dt>{key}</dt>
-      <dd><input type="number" value={value} onChange={e => zdo.floats.set(hash, Number(e.target.value))} /></dd>
+      <dd>
+        <input type="number"
+          placeholder={String(defaultValue)}
+          value={value}
+          onChange={e => zdo.floats.set(hash, Number(e.target.value))} />
+      </dd>
     </React.Fragment>;
   };
 };
@@ -271,6 +279,37 @@ function SmelterQueueComp({ zdo }: { zdo: ZDO }) {
   </React.Fragment>;
 }
 
+const HEALTH_HASH = strHash('health');
+const SUPPORT_HASH = strHash('support');
+function WearNTearComp({ zdo }: { zdo: ZDO }) {
+  const id = objects.get(zdo.prefab);
+  const pieceWear = id != null ? (data[id] as Piece | undefined)?.wear : undefined;
+  const floats = zdo.floats;
+  const material = pieceWear?.materialType;
+  const support = material != null ? getStructuralIntegrity(material) : undefined;
+  const maxHp = pieceWear?.hp ?? 100;
+  return <React.Fragment key="WearNTear">
+    <dt>health</dt>
+    <dd>
+      <input type="number"
+        min="0"
+        max={maxHp}
+        placeholder={String(maxHp)}
+        value={floats.get(HEALTH_HASH)}
+        onChange={e => floats.set(HEALTH_HASH, Number(e.target.value))} />
+    </dd>
+    {support != null && <dt>support</dt>}
+    {support != null && <dd>
+      <input type="number"
+        min={support.minSupport}
+        max={support.maxSupport}
+        placeholder={String(support.maxSupport)}
+        value={floats.get(SUPPORT_HASH)}
+        onChange={e => floats.set(SUPPORT_HASH, Number(e.target.value))} />
+    </dd>}
+  </React.Fragment>
+}
+
 export const InterfaceFields: Partial<Record<GameComponent, React.ComponentType<{ zdo: ZDO }>[]>> = {
   BaseAI: [
     boolComp('huntplayer'),
@@ -424,7 +463,7 @@ export const InterfaceFields: Partial<Record<GameComponent, React.ComponentType<
     stringComp('HairItem'),
     hashedItemComp('UtilityItem'),
   ],
-  WearNTear: [floatComp('health'), floatComp('support')],
+  WearNTear: [WearNTearComp],
   ZNetView: [vectorComp('scale')],
   ZSyncTransform: [
     vectorComp('vel'),

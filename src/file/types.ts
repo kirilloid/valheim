@@ -12,6 +12,7 @@ export type ZDOData = {
   zdos: ZDO[];
   deadZdos: Map<ZDOID, bigint>;
   corruptions: ZDOCorruption[];
+  _checked: boolean;
 };
 
 enum ZDOObjectType {
@@ -26,6 +27,7 @@ export enum Mistake {
   CoordinatesInconsistent,
   CoordinatesTooFar,
   TimeInFuture,
+  ContainerStuck,
   UnreadData,
   UTFException,
   RangeException,
@@ -43,7 +45,8 @@ export enum MistakeLevel {
 export type ZDOCorruption = {
   mistake: Mistake;
   offset: number;
-}
+  index: number;
+};
 
 export interface ZDO {
   id: ZDOID;

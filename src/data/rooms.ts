@@ -324,7 +324,7 @@ export const woodfarm: CampConfig = {
       size: [15, 8, 15],
       weight: 6,
       items: [
-        locItem('TreasureChest_Meadows'),
+        locItem('TreasureChest_meadows'),
         locItem('Beehive', 0.2),
       ],
       dist: [],
@@ -334,7 +334,7 @@ export const woodfarm: CampConfig = {
       size: [15, 8, 17],
       weight: 4,
       items: [
-        locItem('TreasureChest_Meadows', 0.9),
+        locItem('TreasureChest_meadows', 0.9),
         locItem('Beehive', 0.2),
       ],
       dist: [],

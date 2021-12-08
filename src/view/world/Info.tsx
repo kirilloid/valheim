@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import type { ValueProps } from '../parts/types';
+import type { EditorProps } from '../parts/types';
 import type { WorldData } from './types';
 import { GAME_DAY } from '../../model/game';
-
 import { timeI2S } from '../../model/utils';
+
+import { FileInfo } from '../parts/FileInfo';
+import { Tabs } from '../parts/Tabs';
+
 import { RandomEvents } from './RandomEvents';
 import { ZoneSystem } from './ZoneSystem';
+import { CorruptionManager } from './CorruptionManager';
 import { ZdoData } from './ZdoData';
 
 function showTime(time: number) {
@@ -16,26 +20,33 @@ function showTime(time: number) {
   return `Day ${day} @ ${timeStr}`;
 }
 
-export function WorldInfo({ value, onChange, fileName }: ValueProps<WorldData> & { fileName: string }) {
+export function WorldInfo({ value, onChange, file, disabled }: EditorProps<WorldData>) {
   const { netTime, randEvent, zdo, version, zoneSystem } = value;
-  const [corrupted, setCorrupted] = useState(0);
-  if (zdo.corruptions.length !== corrupted) {
-    setCorrupted(zdo.corruptions.length);
-    onChange(value);
-  }
-  return <div>
-    <h1>World</h1>
-    <p>{fileName} (v{version})</p>
-    <h2>Time</h2>
-    <dl>
+  const tabs = [{
+    title: 'File',
+    renderer: () => <FileInfo file={file} version={version} />,
+  }, {
+    title: 'Time',
+    renderer: () => <dl>
       <dt>world time</dt><dd>{showTime(netTime)}</dd>
       {randEvent != null && <RandomEvents value={randEvent} />}
     </dl>
-    {zoneSystem != null && <>
-      <ZoneSystem value={zoneSystem} onChange={zoneSystem => onChange({ ...value, zoneSystem })} />
-    </>}
-    <h2>Game objects</h2>
-    {corrupted > 0 && <div className="error">Corrupted: {corrupted}</div>}
-    <ZdoData value={zdo} onChange={zdo => onChange({ ...value, zdo })} />
-  </div>
+  }];
+  if (zoneSystem != null) {
+    tabs.push({
+      title: 'Progress',
+      renderer: () => <ZoneSystem value={zoneSystem} onChange={zoneSystem => onChange({ ...value, zoneSystem })} />
+    });
+  }
+  tabs.push({
+    title: 'Objects',
+    renderer: () => <ZdoData value={zdo} onChange={zdo => onChange({ ...value, zdo })} />
+  }, {
+    title: 'Recovery',
+    renderer: () => <CorruptionManager value={value} onChange={onChange} />
+  });
+  return <section className={disabled ? 'FileEditor--disabled' : ''}>
+    <h1>World</h1>
+    <Tabs tabs={tabs} selected={1} />
+  </section>
 }

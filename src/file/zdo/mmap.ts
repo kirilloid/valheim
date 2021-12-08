@@ -165,6 +165,7 @@ class ZdoMmapView implements ZDO {
   get byteArrays() {
     if (this._byteArrays === null) {
       if (this.version < 27) return this._byteArrays = new Map();
+      this.offsetStrings = this.longs.byteSize + this.offsetLongs;
       const pkg = new PackageReader(this.bytes.subarray(this.offsetStrings));
       this._strings = pkg.readIfSmallMap(pkg.readInt, pkg.readString) ?? new Map<number, string>();
       this._byteArrays = pkg.readIfSmallMap(pkg.readInt, pkg.readByteArray) ?? new Map<number, Uint8Array>();
@@ -207,13 +208,14 @@ class ZdoMmapView implements ZDO {
       pkg.writeBytes(this.bytes.subarray(this.offsetStrings));
       return pkg.flush();
     }
-    pkg.writeMap(pkg.writeInt, pkg.writeString, this._strings);
+    pkg.writeIfSmallMap(pkg.writeInt, pkg.writeString, this._strings);
     // byte arrays
+    if (this.version < 27) return pkg.flush();
     if (this._byteArrays === null) {
       pkg.writeBytes(this.bytes.subarray(this.offsetByteArrays));
       return pkg.flush();
     }
-    pkg.writeMap(pkg.writeInt, pkg.writeByteArray, this._byteArrays);
+    pkg.writeIfSmallMap(pkg.writeInt, pkg.writeByteArray, this._byteArrays);
     return pkg.flush();
   }
 

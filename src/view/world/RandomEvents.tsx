@@ -1,19 +1,24 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import { TranslationContext } from '../../effects';
-// import type { ValueProps } from '../parts/types';
 import type { RandEventData } from './types';
+import { EVENT_PERIOD } from '../../model/game';
+import { timeI2S } from '../../model/utils';
+import { TranslationContext } from '../../effects';
+
+function showTime(time: number) {
+  return timeI2S(EVENT_PERIOD - Math.round(time));
+}
 
 export function RandomEvents({ value }: { value: RandEventData }) {
   const translate = useContext(TranslationContext);
   if (!value.name) {
     return <>
-      <dt>timer</dt><dd>{value.eventTimer}</dd>
+      <dt>timer</dt><dd>{showTime(value.eventTimer)} till next event</dd>
     </>
   };
   return <>
-    <dt>timer</dt><dd>{value.eventTimer}</dd>
+    <dt>timer</dt><dd>{showTime(value.eventTimer)} till next event</dd>
     <dt>happening</dt><dd><Link to={`/events/${value.name}`}>{translate(value.name)}</Link></dd>
     <dt>where</dt><dd>{value.pos!.x} / {value.pos!.z}</dd>
     <dt>remaining</dt><dd>{value.time}</dd>

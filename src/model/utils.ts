@@ -101,26 +101,28 @@ export function filterValues<K extends string, T, RK extends K = K>(obj: Record<
   ) as Record<RK, T>;
 }
 
-export function mapValues<K extends string, T, R = T>(obj: Record<K, T>, fn: (arg: T, key: K) => R): Record<K, R>;
-export function mapValues<K extends string, T, R = T>(obj: Partial<Record<K, T>>, fn: (arg: T, key: K) => R): Partial<Record<K, R>>;
-export function mapValues<K extends string, T, R = T>(obj: Partial<Record<K, T>>, fn: (arg: T, key: K) => R): Partial<Record<K, R>> {
+export function mapValues<K extends string | number, T, R = T>(obj: Record<K, T>, fn: (arg: T, key: K) => R): Record<K, R>;
+export function mapValues<K extends string | number, T, R = T>(obj: Partial<Record<K, T>>, fn: (arg: T, key: K) => R): Partial<Record<K, R>>;
+export function mapValues<K extends string | number, T, R = T>(obj: Partial<Record<K, T>>, fn: (arg: T, key: K) => R): Partial<Record<K, R>> {
   return Object.fromEntries(
     Object.entries(obj)
       .map(([key, val]) => [key, fn(val as T, key as K)])
   ) as Record<K, R>;
 }
 
-export function groupBy<T, K extends string = string, R = T>(arr: T[], keyFn: (arg: T) => K, valFn: (arg: T) => R): Record<K, R[]>;
-export function groupBy<T, K extends string = string>(arr: T[], keyFn: (arg: T) => K): Record<K, T[]>;
-export function groupBy<T, K extends string = string, R = T>(
+export function groupBy<T, R>(arr: T[], keyFn: (arg: T) => string, valFn: (arg: T) => R): Record<string, R[]>;
+export function groupBy<T, K extends string | number = string, R = T>(arr: T[], keyFn: (arg: T) => K, valFn: (arg: T) => R): Partial<Record<K, R[]>>;
+export function groupBy<T>(arr: T[], keyFn: (arg: T) => string): Record<string, T[]>;
+export function groupBy<T, K extends string | number = string>(arr: T[], keyFn: (arg: T) => K): Partial<Record<K, T[]>>;
+export function groupBy<T, K extends string | number = string, R = T>(
   arr: T[],
   keyFn: (arg: T) => K,
   valFn?: (arg: T) => R,
-): Record<K, R[]> {
-  const result = {} as Record<K, R[]>;
+): Partial<Record<K, R[]>> {
+  const result: Partial<Record<K, R[]>> = {};
   for (const el of arr) {
     const key = keyFn(el);
-    (result[key] ?? (result[key] = [])).push((valFn ? valFn(el) : el) as R);
+    (result[key] ?? (result[key] = [] as R[])).push((valFn ? valFn(el) : el) as R);
   }
   return result;
 }
@@ -163,4 +165,19 @@ export async function wait(time: number) {
 export function getMemUsage(): number {
   const mem = (performance as any).memory?.totalJSHeapSize ?? 0;
   return mem / 1024 ** 2;
+}
+
+export function runGenerator<T>(
+  gen: Generator<number, T, void>,
+  onProgress: (progress: number) => void,
+): Promise<T> {
+  return new Promise(resolve => function recursive() {
+    const iter = gen.next();
+    if (iter.done) {
+      resolve(iter.value);
+    } else {
+      setTimeout(recursive, 10);
+      onProgress(iter.value);
+    }
+  }());
 }

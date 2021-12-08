@@ -341,7 +341,7 @@
     "Flametal": "Огнеметалл",
 
     "Pickable_DolmenTreasure": "Сокровища в дольменах",
-    "TreasureChest_Meadows": "Сундук сокровищ (meadows houses)",
+    "TreasureChest_meadows": "Сундук сокровищ (meadows houses)",
     "TreasureChest_meadows_buried": "Сундук сокровищ (закопанный)",
     "shipwreck_karve_chest": "Сундук сокровищ (корабль)",
     "TreasureChest_blackforest": "Сундук сокровищ (чёрный лес)",
@@ -467,7 +467,7 @@
     "stone_arch": "Каменная арка",
     "stone_floor_2x2": "Каменный пол 2x2",
     "stone_floor": "Каменный пол 4x4",
-    "iron_gate": "Железные ворота",
+    "iron_grate": "Железные ворота",
     "stone_stair": "Каменная лестница",
     "iron_floor_1x1": "Решетчатый пол 1x1",
     "iron_floor_2x2": "Решетчатый пол 2x2",

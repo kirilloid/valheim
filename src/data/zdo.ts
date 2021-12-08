@@ -115,6 +115,8 @@ export const keys = buildHashMap([
   'scale',
   // ZSyncTransform
   'vel', 'scale', 'body_vel', 'body_avel', 'relPos', 'attachJoint', 'parentID',
+  // EpicLoot.BountyTarget
+  'BountyID', 'BountyData', 'MonsterID', 'IsAdd', 'BountyTargetName',
 ]);
 
 for (const name of ['alert', 'inWater', 'onGround', 'encumbered', 'flying', 'sleeping', 'equipping', 'blocking', 'crouching', 'intro', 'forward_speed', 'sideway_speed', 'turn_speed', 'statei', 'statef', 'flapping', 'crafting']) {
