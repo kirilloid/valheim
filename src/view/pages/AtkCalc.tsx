@@ -1,5 +1,6 @@
 import React, { useContext, useReducer, useState } from 'react';
 import { Link, useParams, useHistory } from 'react-router-dom';
+import classNames from 'classnames';
 
 import '../../css/Combat.css';
 
@@ -28,10 +29,6 @@ interface SameWeaponConfig {
   arrow: boolean;
 }
 
-function sameClass(isSame: boolean) {
-  return isSame ? 'weapon__item weapon__item--same' : 'weapon__item';
-}
-
 function WeaponBlock(props: {
   weapon: WeaponConfig;
   index: number;
@@ -51,13 +48,21 @@ function WeaponBlock(props: {
   return <div className="Weapon">
     <div className="row weapon">
 
-      <div className={`weapon__label ${sameClass(same.item && same.level)}`}>
+      <div className={classNames(
+        'weapon__label',
+        'weapon__item',
+        { 'weapon__item--same': same.item && same.level },
+      )}>
         <label htmlFor={`weapon${index}`}>
           {translate('ui.itemType.weapon')}
         </label>
         <ItemIcon item={item} size={24} />
       </div>
-      <div className={`weapon__input-primary ${sameClass(same.item)}`}>
+      <div className={classNames(
+        'weapon__input-primary',
+        'weapon__item',
+        { 'weapon__item--same': same.item },
+      )}>
         <select id={`weapon${index}`}
           className="BigInput"
           onChange={e => dispatch(changeWeapon(index, e.target.value, smart))}
@@ -76,7 +81,11 @@ function WeaponBlock(props: {
             </optgroup>))}
         </select>
       </div>
-      {item.maxLvl > 1 && <div className={`weapon__input-secondary ${sameClass(same.level)}`}>
+      {item.maxLvl > 1 && <div className={classNames(
+        'weapon__input-secondary',
+        'weapon__item',
+        { 'weapon__item--same': same.level },
+      )}>
         <input type="number" inputMode="numeric" pattern="[0-9]*"
           min="1" max={item.maxLvl} value={level}
           onChange={e => dispatch(changeLevel(index, Number(e.target.value)))}
@@ -86,13 +95,21 @@ function WeaponBlock(props: {
     </div>
     {item.slot === 'bow' &&
     <div className="row weapon">
-      <div className={`weapon__label ${sameClass(same.arrow)}`}>
+      <div className={classNames(
+        'weapon__label',
+        'weapon__item',
+        { 'weapon__item--same': same.arrow },
+      )}>
         <label htmlFor={`arrow${index}`}>
           {translate('ui.itemType.arrow')}
         </label>
         <ItemIcon item={arrow} size={24} />
       </div>
-      <div className={`weapon__input-primary ${sameClass(same.arrow)}`}>
+      <div className={classNames(
+        'weapon__input-primary',
+        'weapon__item',
+        { 'weapon__item--same': same.arrow },
+      )}>
         <select id={`arrow${index}`}
           className="BigInput"
           onChange={e => dispatch(changeArrow(index, e.target.value))} value={arrow.id}>
@@ -105,11 +122,19 @@ function WeaponBlock(props: {
       </div>
     </div>}
     {item.skill && <div className="row weapon">
-      <div className={`weapon__label ${sameClass(same.skillType)}`}>
+      <div className={classNames(
+        'weapon__label',
+        'weapon__item',
+        { 'weapon__item--same': same.skillType },
+      )}>
         <label htmlFor={`skill${index}`}>{translate('ui.skill')}</label>
         <SkillIcon skill={item.skill} useAlt size={24} />
       </div>
-      <div className={`weapon__input-primary ${sameClass(same.skillLevel)}`}>
+      <div className={classNames(
+        'weapon__input-primary',
+        'weapon__item',
+        { 'weapon__item--same': same.skillLevel },
+      )}>
         <datalist id="skill">
           <option value="0" />
           <option value="10" />
@@ -129,7 +154,11 @@ function WeaponBlock(props: {
           onChange={e => dispatch(changeSkill(index, Number(e.target.value), smart))}
           list="skill" />
       </div>
-      <div className={`weapon__input-secondary ${sameClass(same.skillLevel)}`}>
+      <div className={classNames(
+        'weapon__input-secondary',
+        'weapon__item',
+        { 'weapon__item--same': same.skillLevel },
+      )}>
         <input type="number" inputMode="numeric" pattern="[0-9]*"
           min="0" max="100" value={skill}
           onChange={e => dispatch(changeSkill(index, Number(e.target.value), smart))}

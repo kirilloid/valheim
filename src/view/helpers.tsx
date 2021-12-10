@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import classNames from 'classnames';
 
 import {
   Biome,
@@ -230,7 +231,7 @@ export function Area({ area }: { area: Biome | GameLocationId }) {
 }
 
 export function Switch({ children, className }: { children: (JSX.Element | string)[]; className?: string }) {
-  return <div className={`Switch ${className ?? ''}`}>
+  return <div className={classNames('Switch', className ?? '')}>
     {children.map(c => <span className="Switch__Option">{c}</span>)}
   </div>
 }

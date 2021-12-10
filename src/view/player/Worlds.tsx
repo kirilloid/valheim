@@ -34,6 +34,8 @@ function MapData({ mapData }: { mapData: TMapData }) {
     {' '}
     map pins: {mapData.pins.length ?? '—'}
     <br/>
+    explored:
+    <br/>
     <canvas ref={r => canvasRef.current = r} width={SIZE} height={SIZE} />
   </>
 }

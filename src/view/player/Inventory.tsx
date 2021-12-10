@@ -1,41 +1,40 @@
+import React from 'react';
+import classNames from 'classnames';
+
 import type { Item } from '../../types';
 import type { Inventory as TInventory } from './types';
+
+import '../../css/Inventory.css';
 
 import { data } from '../../data/itemDB';
 
 import { ItemIcon } from '../parts/Icon';
 
 export function Inventory({ inventory } : { inventory: TInventory }) {
-  return <div style={{ position: 'relative', width: 560, height: 280, backgroundColor: '#503A2B' }}>
+  return <div className="Inventory">
     {inventory.items.map(invItem => {
       const item = data[invItem.id] as Item | undefined;
       const { x, y } = invItem.gridPos;
       if (item == null) return null;
-      return <div key={`${x}_${y}`} style={{
-        position: 'absolute',
-        left: x * 70 + 3,
-        top: y * 70 + 3,
-        width: 64,
-        height: 64,
-        backgroundColor: invItem.equipped ? '#5D97CC' : 'transparent',
-      }}>
-        <div style={{ position: 'absolute', left: 2, top: 2, filter: 'brightness(0) blur(2px) opacity(0.75)' }}>
+      return <div key={`${x}_${y}`} className={classNames('Inventory__Item', { 'Inventory__Item--equipped': invItem.equipped })}
+        style={{
+          left: x * 69 + 22,
+          top: y * 69 + 16,
+        }}>
+        <div className="InvItem__Icon InvItem__Icon--shadow">
           <ItemIcon item={item} size={64} />
         </div>
-        <div style={{ position: 'absolute', left: 0, top: 0 }}>
+        <div className="InvItem__Icon">
           <ItemIcon item={item} size={64} />
         </div>
-        {(item.maxLvl ?? 1) > 1 && <div className="text-outline"
-            style={{ position: 'absolute', right: 4, top: 0, color: 'orange' }}>
+        {(item.maxLvl ?? 1) > 1 && <div className="InvItem__quality text-outline">
           {invItem.quality}
         </div>}
-        {(item.stack ?? 1) > 1 && <div className="text-outline"
-            style={{ position: 'absolute', left: 4, right: 4, bottom: 0, color: 'white', textAlign: 'center' }}>
+        {(item.stack ?? 1) > 1 && <div className="InvItem__stack text-outline">
           {invItem.stack}/{item.stack}
         </div>}
-        {'durability' in item && item.durability[0] !== Infinity && <div
-            style={{ position: 'absolute', left: 4, right: 4, bottom: 4, height: 4, background: '#0008' }}>
-          <div style={{ height: '100%', width: `${Math.round(56 * invItem.durability / (item.durability[0] + item.durability[1] * invItem.quality))}px`, backgroundColor: 'white' }}></div>
+        {'durability' in item && item.durability[0] !== Infinity && <div className="InvItem__durability">
+          <div className="InvItem__durability-value" style={{ width: Math.round(56 * invItem.durability / (item.durability[0] + item.durability[1] * invItem.quality)) }}></div>
         </div>}
       </div>
     })}

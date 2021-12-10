@@ -97,14 +97,22 @@ function addArray<T extends { id: string; tier?: number; tags?: string[] }>(
 }
 
 export const pages = [
-  { id: 'attack' },
-  { id: 'defense' },
-  { id: 'events' },
-  { id: 'food-nutrition' },
-  { id: 'food-planner' },
-  { id: 'comfort' },
-  { id: 'mining' },
-  { id: 'weather' },
+  { id: 'attack', category: 'fight' },
+  { id: 'defense', category: 'fight' },
+  { id: 'events', category: 'fight' },
+
+  { id: 'food-nutrition', category: 'eat' },
+  { id: 'food-planner', category: 'eat' },
+
+  { id: 'comfort', category: 'live' },
+  // { id: 'build', category: 'build' },
+  { id: 'mining', category: 'gather' },
+
+  { id: 'weather', category: 'plan' },
+  { id: 'world-gen', category: 'plan', beta: true },
+
+  { id: 'player-edit', category: 'edit', beta: true },
+  { id: 'world-edit', category: 'edit', beta: true },
 ];
 
 function addObjects(dict: Record<string, string>) {

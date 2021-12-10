@@ -328,10 +328,10 @@ export function* read(bytes: Uint8Array): Generator<number, Player> {
   const reader = new PackageReader(bytes);
   const data = reader.readByteArray();
   const hash = reader.readByteArray();
-  const computed = new Uint8Array(sha512.arrayBuffer(data.buffer));
-  // if (computed.some((v, i) => v !== hash[i])) {
-  //   throw new RangeError("Incorrect hash");
-  // }
+  const computed = new Uint8Array(sha512.arrayBuffer(data));
+  if (computed.some((v, i) => v !== hash[i])) {
+    throw new RangeError("Incorrect hash");
+  }
   return yield* readPlayer(data);
 }
 
@@ -344,7 +344,7 @@ export function* write(
   const data = writer.flush();
   const pkg = new PackageWriter(data.length + 512 / 8);
   pkg.writeByteArray(data);
-  const hash = sha512.arrayBuffer(data.buffer);
+  const hash = sha512.arrayBuffer(data);
   pkg.writeByteArray(new Uint8Array(hash));
   return pkg.flush();
 }

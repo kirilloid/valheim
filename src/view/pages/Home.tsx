@@ -1,0 +1,41 @@
+import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
+
+import '../../css/Home.css';
+
+import { pages } from '../../model/search';
+import { biomes } from '../../data/location';
+
+import { TranslationContext, useRuneTranslate } from '../../effects';
+import { groupBy } from '../../model/utils';
+
+const pageGroups = groupBy(pages, p => p.category);
+
+export function Home() {
+  const translate = useContext(TranslationContext);
+  const runeTranslate = useRuneTranslate();
+  return <div>
+    <h1>{translate('ui.index.utils')}</h1>
+    <p>{translate('ui.index.description')}</p>
+    <div className="Home">
+      <section className="Home__Biomes">
+        <h2>{translate('ui.biomes')}</h2>
+        <ul>
+          {biomes.map(({ id, tier }) => <li key={id}>
+            <Link to={`/biome/${id}`}>{runeTranslate({ tier, type: 'biome', id: `ui.biome.${id}` })}</Link>
+          </li>)}
+        </ul>
+      </section>
+      <section className="Home__Calculators">
+        {Object.entries(pageGroups).map(([name, group]) => <div key={name}>
+          <h2>{name}</h2>
+          <ul>{group.map(({ id, beta }) => <li key={id}>
+            <Link to={`/${id}`}>{translate(`ui.page.${id}`)}</Link>
+            {beta ? <> &beta;</> : null}
+          </li>)}
+        </ul>
+        </div>)}
+      </section>
+    </div>
+  </div>
+}

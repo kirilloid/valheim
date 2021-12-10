@@ -1,0 +1,62 @@
+.Inventory {
+  position: relative;
+  width: 590px;
+  height: 308px;
+  background-image: url('../img/inventory@2x.png');
+  background-size: 590px 308px;
+  /* background-color: #503A2B; */
+}
+
+.Inventory__Item {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  background-color: #0004;
+  border-radius: 4px;
+}
+
+.Inventory__Item--equipped {
+  background-color: #5D97CC;
+}
+
+.InvItem__Icon {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.InvItem__Icon--shadow {
+  left: 2px;
+  top: 2px;
+  filter: brightness(0) blur(2px) opacity(0.75);
+}
+
+.InvItem__quality {
+  position: absolute;
+  right: 4px;
+  top: 0;
+  color: orange;
+}
+
+.InvItem__stack {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  bottom: 0;
+  color: white;
+  text-align: center;
+}
+
+.InvItem__durability {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  height: 4px;
+  background: #0008;
+}
+
+.InvItem__durability-value {
+  height: 100%;
+  background-color: white;
+}

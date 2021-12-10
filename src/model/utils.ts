@@ -163,7 +163,7 @@ export async function wait(time: number) {
 }
 
 export function getMemUsage(): number {
-  const mem = (performance as any).memory?.totalJSHeapSize ?? 0;
+  const mem = (performance as any).memory?.usedJSHeapSize ?? 0;
   return mem / 1024 ** 2;
 }
 

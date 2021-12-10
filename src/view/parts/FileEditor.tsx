@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import classNames from 'classnames';
 
 import type { Reader, Writer, EditorProps } from './types';
 
@@ -14,7 +15,8 @@ type Props<T> = {
 };
 
 type FileState<T> =
-| { state: 'empty' }
+| { state: 'empty', message?: string }
+| { state: 'picking', files: File[] }
 | { state: 'reading', file: File, progress: number }
 | { state: 'done', file: File, value: T, changed: boolean }
 | { state: 'saving', file: File, value: T, progress: number };
@@ -24,21 +26,37 @@ export function FileEditor<T>(props: Props<T>) {
   const [dragging, setDragging] = useState(false);
   const ext = props.extension;
 
+  async function processFile(file: File) {
+    const buffer = await file.arrayBuffer();
+    setState({ state: 'reading', file, progress: 0 });
+    const value = await runGenerator(
+      props.reader(new Uint8Array(buffer)),
+      progress => setState({ state: 'reading', file, progress })
+    );
+    setState({ state: 'done', file, value, changed: false });
+    const mem = getMemUsage();
+    console.info(`Memory used: ${mem.toPrecision(3)} MB`);
+  }
+
   const processFiles = useCallback(async (files: FileList | null) => {
-    if (files == null) return;
-    for (const file of files) {
-      if (!file.name.endsWith(`.${ext}`) && !file.name.endsWith(`.${ext}.old`)) continue;
-      const mem1 = getMemUsage();
-      const buffer = await file.arrayBuffer();
-      setState({ state: 'reading', file, progress: 0 });
-      const value = await runGenerator(
-        props.reader(new Uint8Array(buffer)),
-        progress => setState({ state: 'reading', file, progress })
-      );
-      setState({ state: 'done', file, value, changed: false });
-      const mem2 = getMemUsage();
-      console.info(`Memory consumed: ${(mem2 - mem1).toPrecision(3)} MB`);
-      return;
+    if (files == null) {
+      return setState({ state: 'empty', message: "No file was selected" });
+    }
+    const allFiles = [...files];
+    const matchingFiles = allFiles.filter(
+      file => file.name.endsWith(`.${ext}`)
+           || file.name.endsWith(`.${ext}.old`)
+    );
+    if (matchingFiles.length > 1) return setState({ state: 'picking', files: matchingFiles });
+    if (matchingFiles.length === 1) return processFile(matchingFiles[0]!);
+    if (allFiles.length === 0) return setState({ state: 'empty', message: "No file was selected" });
+    if (!window.confirm("The file(s) you provided, doesn't have proper extension. Reading wrong file might crash this browser tab.\nDo you want to proceed?")) {
+      return setState({ state: 'empty' });
+    }
+    if (allFiles.length === 1) {
+      processFile(allFiles[0]!);
+    } else {
+      setState({ state: 'picking', files: allFiles });
     }
   }, []);
 
@@ -59,13 +77,14 @@ export function FileEditor<T>(props: Props<T>) {
 
   const onChange = useCallback((value: T) => {
     setState(
-      state => state.state === 'empty'
+      state => state.state === 'empty' || state.state === 'picking'
       ? state
       : { state: 'done', file: state.file, value, changed: true }
     )
   }, [setState]);
 
-  return <div className={`drop${dragging ? ' drop--over' : ''}`} onDrop={onDrop} onDragOver={onDragOver} onDragLeave={onDragLeave}>
+  return <div className={classNames('drop', { 'drop--over': dragging })}
+    onDrop={onDrop} onDragOver={onDragOver} onDragLeave={onDragLeave}>
     {function () {
       switch (state.state) {
         case 'empty':
@@ -75,6 +94,14 @@ export function FileEditor<T>(props: Props<T>) {
               accept={`.${ext},.${ext}.old`}
               onChange={e => processFiles(e.target.files)} /></p>
             <p>Your files are stored in <code>C:\Users\%username%\AppData\LocalLow\IronGate\Valheim\</code></p>
+          </>
+        case 'picking':
+          return <>
+            <div>Several files cannot be opened at once (in one tab), select one to proceed</div>
+            <ul>{state.files.map((f, i) => <li key={i}>
+              <button type="button" className="btn btn--secondary" onClick={() => processFile(f)}>{f.name}</button>
+            </li>)}</ul>
+            <input type="button" className="btn btn--danger" onClick={() => setState({ state: 'empty' })} value="cancel" />
           </>
         case 'reading':
           return <>

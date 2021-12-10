@@ -53,7 +53,7 @@ export const prefabNames: string[] = [
     'Hair1', 'Hair2', 'Hair3', 'Hair4', 'Hair5', 'Hair6', 'Hair7', 'Hair8', 'Hair9', 'Hair10', 'Hair11', 'Hair12', 'Hair13', 'Hair14', 'HairNone', 'Haldor', 
     'Hammer', 'HardAntler', 'Hatchling', 'hatchling_cold_projectile', 'Hatchling_ragdoll', 'hatchling_spit_cold', 'HealthUpgrade_Bonemass', 'HealthUpgrade_GDKing', 'hearth', 'HeathRockPillar', 'HeathRockPillar_frac', 'HelmetBronze', 'HelmetDrake', 'HelmetDverger', 'HelmetIron', 'HelmetLeather', 'HelmetOdin', 'HelmetPadded', 'HelmetTrollLeather', 'HelmetYule', 'highstone', 'highstone_frac', 'Hoe', 'Honey', 'horizontal_web', 'HugeRoot1', 'HugeStone1',
 
-    'ice_rock1', 'ice_rock1_frac', 'ice1', 'IceBlocker', 'imp_fireball_attack', 'Imp_fireball_projectile', 'incinerator', 'instanced_forest_groundcover', 'instanced_forest_groundcover_brown', 'instanced_heathflower', 'instanced_heathgrass', 'instanced_meadowsgrass', 'instanced_meadowsgrass_short', 'instanced_ormbunke', 'instanced_shrub', 'instanced_small_rock1', 'instanced_swamp_grass', 'instanced_swamp_ormbunke', 'instanced_vass', 'instanced_waterlilies', 'Iron', 'iron_floor_1x1', 'iron_floor_2x2', 'iron_gate', 'iron_wall_1x1', 'iron_wall_2x2', 'IronNails', 'IronOre', 'IronScrap', 'itemstand', 'itemstandh',
+    'ice_rock1', 'ice_rock1_frac', 'ice1', 'IceBlocker', 'imp_fireball_attack', 'Imp_fireball_projectile', 'incinerator', 'instanced_forest_groundcover', 'instanced_forest_groundcover_brown', 'instanced_heathflower', 'instanced_heathgrass', 'instanced_meadowsgrass', 'instanced_meadowsgrass_short', 'instanced_ormbunke', 'instanced_shrub', 'instanced_small_rock1', 'instanced_swamp_grass', 'instanced_swamp_ormbunke', 'instanced_vass', 'instanced_waterlilies', 'Iron', 'iron_floor_1x1', 'iron_floor_2x2', 'iron_grate', 'iron_wall_1x1', 'iron_wall_2x2', 'IronNails', 'IronOre', 'IronScrap', 'itemstand', 'itemstandh',
 
     'Karve', 'KnifeBlackMetal', 'KnifeButcher', 'KnifeChitin', 'KnifeCopper', 'KnifeFlint', 'KnifeSilver',
 
@@ -142,4 +142,39 @@ export const prefabNames: string[] = [
     'Wraith', 'wraith_melee',
 
     'YagluthDrop', 'YmirRemains',
+
+    // ChickenBoo
+    'ChickenBoo', 'chicklet', 'cooked_chicken', 'fried_egg', 'boiled_egg', 'raw_egg', 'raw_chicken', 'chickensombrero', 'helmet', 
+
+    // EpicLoot
+    'BountyTarget',
+    'ForestToken',
+    'ShardRare', 'ShardEpic', 'ShardLegendary', 'ShardMagic',
+    'DustRare', 'DustEpic', 'DustLegendary', 'DustMagic',
+    'ReagentRare', 'ReagentEpic', 'ReagentLegendary', 'ReagentMagic',
+    'EssenceRare', 'EssenceEpic', 'EssenceLegendary', 'EssenceMagic',
+    'RunestoneRare', 'RunestoneEpic', 'RunestoneLegendary', 'RunestoneMagic',
+    // OdinArchitect
+    'odin_hammer',
+    'wooden_gate_1', 'wooden_window_small', 'wooden_window_big', 'wooden_fence_1', 'wooden_fence_1_gate', 'wooden_fence_2', 'wooden_fence_2_gate',
+    'thin_wood_beam_1', 'thin_wood_beam_2', 'thin_wood_pole_1', 'thin_wood_pole_2',
+    'wooden_drawbridge_1', 'wooden_arch_1',
+    'refined_stakewall_1', 'refined_stakewall_2', 'refined_sharpstakes',
+    'surtling_lantern_1', 'surtling_lantern_2', 'surtling_lantern_3', 'surtling_lantern_4', 'surtling_lantern_5',
+    'stone_beam_short', 'stone_beam_long', 'stone_pole_short', 'stone_pole_long', 'stone_window_small', 'stone_window_big', 'stone_arch_1', 'stone_arch_2_small', 'stone_table_1', 'stone_throne_1',
+    'stonewall_hardrock_1x1', 'stonewall_hardrock_2x1', 'stonewall_hardrock_4x2', 'stonewall_hardrock_pillar', 'stonewall_hardrock_stairs', 'stonewall_hardrock_arch', 'big_pillar',
+    'iron_dragon', 'iron_gate_small', 'iron_gate_big',
+    'piece_woodbeam_25_thin', 'piece_woodbeam_45_thin', 'piece_ironbeam_25_thin', 'piece_ironbeam_45_thin', 'piece_crystalbeam_25_thin', 'piece_crystalbeam_45_thin',
+    'iron_beam_short', 'iron_beam_long', 'iron_pole_short', 'iron_pole_long',
+    'rae_crystal_beam_short', 'rae_crystal_beam_long', 'rae_crystal_pole_short', 'rae_crystal_pole_long',
+    'thin_iron_beam_1', 'thin_iron_beam_2', 'thin_iron_pole_1', 'thin_iron_pole_2',
+    'thin_rae_crystal_beam_1', 'thin_rae_crystal_beam_2', 'thin_rae_crystal_pole_1', 'thin_rae_crystal_pole_2',
+    'stone_floor_1_new',
+    'rae_woodwall_half',
+    'rae_woodwall_1', 'rae_woodwall_2', 'rae_woodwall_3', 'rae_woodwall_4',
+    'rae_woodwall_1_half', 'rae_woodwall_2_half', 'rae_woodwall_3_half', 'rae_woodwall_4_half',
+    'rae_darkwood_gate_crystal', 'rae_darkwood_gate_iron', 'rae_bigcrystal_w', 'rae_crystal_floorslab',
+    'rae_darkwood_iron_raven', 'rae_darkwood_iron_wolf', 'rae_irondeco_fence_2', 'rae_darkwooddeco_fence', 'rae_irondeco_fence', 'rae_darkwood_arch_1',
+    'piece_woodgate_iron', 'piece_woodgate_darkwood', 'piece_woodgate_crystal', 'rae_hidden_door', 'food_smelter',
+    'rae_bird_house', 'rae_fish_trap', 'rae_compost', 'rae_elevator',
 ];

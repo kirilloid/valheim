@@ -1,0 +1,20 @@
+.Home {
+  display: flex;
+  flex-direction: column;
+}
+
+@media screen and (min-width: 400px) {
+  .Home {
+    flex-direction: row;
+  }  
+}
+
+.Home__Biomes {
+  flex: 1 0 160px;
+}
+
+.Home__Calculators {
+  flex: 4 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 200px));
+}

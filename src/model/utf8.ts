@@ -5,8 +5,8 @@ if (typeof global.TextEncoder !== 'undefined') {
   // browser
   const encoder = new TextEncoder();
   const decoder = new TextDecoder();
-  encodeInto = encoder.encodeInto;
-  decode = decoder.decode;
+  encodeInto = encoder.encodeInto.bind(encoder);
+  decode = decoder.decode.bind(decoder);
 } else {
   // node
   encodeInto = (source: string, destination: Uint8Array) => {

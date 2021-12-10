@@ -9,25 +9,45 @@ import { Appearance } from './Appearance';
 import { Inventory } from './Inventory';
 import { Skills } from './Skills';
 import { Stats } from './Stats';
+import { Tabs } from '../parts/Tabs';
 
 export function PlayerInfo({ value: player, onChange, file, disabled } : EditorProps<Player>) {
+  const tabs = [
+    {
+      title: 'File',
+      renderer: () => <FileInfo version={player.version} file={file} />
+    },
+    {
+      title: `Worlds (${player.worlds.size})`,
+      renderer: () => <Worlds value={player.worlds} onChange={worlds => onChange({ ...player, worlds })} />
+    },
+  ];
+  const { playerData } = player;
+  if (playerData) {
+    tabs.push({
+      title: 'Appearance',
+      renderer: () => <Appearance value={playerData} onChange={playerData => onChange({ ...player, playerData })} />,
+    });
+    tabs.push({
+      title: 'Inventory',
+      renderer: () => <Inventory inventory={playerData.inventory} />,
+    });
+    const { skillData } = playerData;
+    if (skillData) {
+      tabs.push({
+        title: 'Skills',
+        renderer: () => <Skills skillData={skillData} />,
+      });
+      <h2>Skills</h2>
+    }
+    tabs.push({
+      title: 'Stats',
+      renderer: () => <Stats stats={player.stats} />,
+    });
+  }
+
   return <section className={disabled ? 'FileEditor--disabled' : ''}>
     <h1>{player.playerName}</h1>
-    <h2>File</h2>
-    <FileInfo version={player.version} file={file} />
-    <h2>Worlds ({player.worlds.size})</h2>
-    <Worlds value={player.worlds} onChange={worlds => onChange({ ...player, worlds })} />
-    {player.playerData && <>
-      <h2>Appearance</h2>
-      <Appearance value={player.playerData} onChange={playerData => onChange({ ...player, playerData })} />
-      <h2>Inventory</h2>
-      <Inventory inventory={player.playerData.inventory} />
-      {player.playerData.skillData && <>
-        <h2>Skills</h2>
-        <Skills skillData={player.playerData.skillData} />
-      </>}
-    </>}
-    <h2>Stats</h2>
-    <Stats stats={player.stats} />
+    <Tabs tabs={tabs} selected={2} />
   </section>
 }

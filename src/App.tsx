@@ -8,7 +8,7 @@ import {
 import './css/App.css';
 
 import { TopBar } from './view/parts/TopBar';
-import { Index } from './view/pages/Index';
+import { Home } from './view/pages/Home';
 import { GameObject } from './view/objects/GameObject';
 import { Location } from './view/Location';
 import { Biome } from './view/Biome';
@@ -36,7 +36,7 @@ function App() {
         <Router>
           <TopBar />
           <Switch>
-            <Route path="/" exact children={<Index />} />
+            <Route path="/" exact children={<Home />} />
             <Route path="/obj/:id/:level" children={<GameObject />} />
             <Route path="/obj/:id" children={<GameObject />} />
             <Route path="/loc/:id" children={<Location />} />

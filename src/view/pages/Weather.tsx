@@ -1,5 +1,6 @@
 import React, { useContext, useLayoutEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import classNames from 'classnames';
 
 import '../../css/Weather.css';
 
@@ -208,7 +209,7 @@ function WindEvent({ event }: { event: WeatherEvent & { type: 'wind' } }) {
         {formatWindDirection(event.angle)}
       </span>
     </span>
-    {biomeIds.map((_, i) => <span key={i} className={`Weather__type Weather__type--${event.weathers[i]}`}>
+    {biomeIds.map((_, i) => <span key={i} className={classNames('Weather__type', `Weather__type--${event.weathers[i]}`)}>
       <span className="Weather__description">
         <Icon id="wind" size={32} alt="" />
         {' '}
@@ -233,7 +234,7 @@ function ForecastEvent({ event }: { event: WeatherEvent }) {
           <span className="Weather__description">weather</span>
         </span>
       {
-        event.weathers.map((weather, i) => <span key={i} className={`Weather__type Weather__type--${weather}`}>
+        event.weathers.map((weather, i) => <span key={i} className={classNames('Weather__type', `Weather__type--${weather}`)}>
           <span className="Weather__emoji">{showClearMoon(envStates[weather].emoji, event.time)}</span>
           <span className="Weather__description">{' '}{translate(`ui.weather.${weather}`)}</span>
         </span>)
@@ -430,7 +431,10 @@ export function Weather() {
           top: `${ROW_HEIGHT * (i + startIndex) + EVENTS_OFFSET_HEIGHT}px`,
           height: `${ROW_HEIGHT}px`,
         }}>
-        <span className={`Weather__time Weather__time--${isDay(e.time) ? 'day' : 'night'}`}>
+        <span className={classNames(
+          'Weather__time',
+          `Weather__time--${isDay(e.time) ? 'day' : 'night'}`,
+        )}>
           {timeI2S(Math.round((e.time % GAME_DAY) / GAME_DAY * 24 * 60))}
         </span>
         <span className="Weather__details">

@@ -73,7 +73,7 @@ type HashMethod = {
   arrayBuffer: ArrayBuffer;
 }
 type BITS = 512 | 384 | 256 | 224;
-type InputMessage = string | number[] | ArrayBuffer;
+type InputMessage = string | number[] | ArrayBuffer | Uint8Array;
 
 var blocks: number[] = [];
 
@@ -131,6 +131,8 @@ function parseInput(message: unknown): string | Uint8Array | number[] {
   if (typeof message === 'object') {
     if (message === null) {
       throw new Error(INPUT_ERROR);
+    } else if (message.constructor === Uint8Array) {
+      return message;
     } else if (message.constructor === ArrayBuffer) {
       return new Uint8Array(message);
     } else if (!Array.isArray(message)) {

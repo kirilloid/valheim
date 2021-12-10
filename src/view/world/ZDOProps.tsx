@@ -333,11 +333,23 @@ export const InterfaceFields: Partial<Record<GameComponent, React.ComponentType<
     enumComp('level', [[1, '0*'], [2, '1*'], [3, '2*']]),
     // quaternionComp('tiltrot'),
     vectorComp('BodyVelocity'),
+    /* EpicLoot
+      string BountyData
+      string BountyID
+      string MonsterID
+      string BountyTarget
+      string BountyTargetName
+    */
   ],
   Container: [
     boolComp('addedDefaultItems', { readonly }),
     // boolComp('InUse'),
     ItemsComp,
+    /* EpicLoot:
+      bool 'TreasureMapChest.HasBeenFound'
+      string 'TreasureMapChest.Biome'
+      int 'TreasureMapChest.Interval'
+    */
   ],
   CookingStation: [
     timeComp('StartTime'),
@@ -368,7 +380,7 @@ export const InterfaceFields: Partial<Record<GameComponent, React.ComponentType<
     intComp('quality'),
     intComp('variant'),
     idComp('crafterID'),
-    stringComp('crafterName'),
+    stringComp('crafterName'), // <|extended data from EpicLoot|>
   ],
   ItemStand: [stringComp('item')],
   Leviathan: [boolComp('submerged', { hashFn: crc32 })],

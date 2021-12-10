@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import classNames from 'classnames';
 
 export function Tabs({ tabs, selected }: {
   tabs: {
@@ -12,7 +13,7 @@ export function Tabs({ tabs, selected }: {
     <nav className="Tabs">
       {tabs.map(({ title, renderer }, i) => <React.Fragment key={i}>
         <span
-          className={`Tab${i === index ? ' Tab--selected' : ''}`}
+          className={classNames('Tab', { 'Tab--selected': i === index })}
           onClick={() => setIndex(i)}>
           {title}
         </span>
