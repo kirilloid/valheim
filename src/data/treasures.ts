@@ -57,6 +57,7 @@ export const treasures: TreasureChest[] = [
   {
     type: 'treasure',
     id: 'shipwreck_karve_chest',
+    components: ['Container'],
     tier: 2,
     drop: {
       offByOneBug: false,

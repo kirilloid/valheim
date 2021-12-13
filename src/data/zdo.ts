@@ -67,7 +67,7 @@ export const keys = buildHashMap([
   // Player
   'Stealth', 'stamina', 'emoteID', 'emote', 'emote_oneshot', 'baseValue',
   // PrivateArea
-  'permitted', 'pu_id<num>', 'pu_name<num>',
+  'permitted', 'pu_id<num>', 'pu_name<num>', 'creatorName', 'enabled',
   // Procreation
   'lovePoints', 'pregnant',
   // Ragdoll

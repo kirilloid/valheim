@@ -1,14 +1,14 @@
 import React, { useContext, useLayoutEffect, useRef, useState } from 'react';
 import { defaultMemoize } from 'reselect';
 
-import type { Biome } from '../../types';
+import type { Biome, GameComponent } from '../../types';
 import type { ValueProps } from '../parts/types';
 import type { ZDOData, ZDO } from './types';
 
 import { WORLD_SIZE } from '../../model/game';
-import { data } from '../../data/itemDB';
+import { data, extraData } from '../../data/itemDB';
 import { getId, keys, objects } from '../../data/zdo';
-import { InterfaceFields } from './ZDOProps';
+import { InterfaceFields } from './zdo-props';
 import { TranslationContext } from '../../effects';
 
 const biomeColors: Record<Biome, number> = {
@@ -48,11 +48,41 @@ const getGroups = defaultMemoize((zdos: ZDO[]) => {
   return zdoGroups;
 });
 
+function getComponents(id: string | undefined): GameComponent[] {
+  if (id == null) return [];
+  return extraData[id] ?? data[id]?.components ?? [];
+}
+
+const ItemEditor = React.memo(({ zdo, onChange }: { zdo: ZDO, onChange: (value: ZDO) => void, version: number }) => {
+  const currentId = objects.get(zdo.prefab);
+  const eComponents = getComponents(currentId);
+  const components = eComponents.flatMap(cmp => InterfaceFields[cmp] ?? []);
+  return <>
+    <dl>
+      <dt>position</dt><dd>{zdo.position.x} / {zdo.position.z}</dd>
+      <dt>sector</dt><dd>{zdo.sector.x} / {zdo.sector.y}</dd>
+      {components.map(C => <C value={zdo} onChange={onChange} />)}
+    </dl>
+    <hr />
+      <dl>
+      <ZdoSpecialData data={zdo.floats} stringify={String} />
+      <ZdoSpecialData data={zdo.vec3} stringify={v => `${v.x.toFixed(3)} / ${v.y.toFixed(3)} / ${v.z.toFixed(3)}`} />
+      <ZdoSpecialData data={zdo.quats} stringify={v =>
+        `x: ${v.x.toFixed(3)}, y: ${v.y.toFixed(3)}, z: ${v.z.toFixed(3)}, w: ${v.w.toFixed(3)}`} />
+      <ZdoSpecialData data={zdo.ints} stringify={String} />
+      <ZdoSpecialData data={zdo.longs} stringify={String} />
+      <ZdoSpecialData data={zdo.strings} stringify={String} />
+      <ZdoSpecialData data={zdo.byteArrays} stringify={arr => ([] as number[]).map.call(arr, v => v.toString(16).padStart(2, '0')).join('')} />
+    </dl>
+  </>
+});
+
 export function ZdoData(props: ValueProps<ZDOData>) {
   const { zdos } = props.value;
   const translate = useContext(TranslationContext);
   const [currentId, setCurrentId] = useState('');
   const [index, setIndex] = useState(0);
+  const [version, setVersion] = useState(0);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const zdoGroups = getGroups(zdos);
@@ -94,13 +124,12 @@ export function ZdoData(props: ValueProps<ZDOData>) {
     ctx.putImageData(imageData, 0, 0);
   }, [zdos]);
 
-  const components = data[currentId]?.components?.flatMap(cmp => InterfaceFields[cmp] ?? []) ?? [];
-
   return <>
     <canvas width={SIZE} height={SIZE} ref={canvasRef} style={{ float: 'right', maxWidth: '100%', width: '320px' }} />
     <select onChange={e => {
       setCurrentId(e.target.value);
       setIndex(0);
+      setVersion(0);
     }} value={currentId}>
       <option value="">All ({zdos.length})</option>
       {[...zdoGroups.entries()]
@@ -110,29 +139,24 @@ export function ZdoData(props: ValueProps<ZDOData>) {
         </option>)}
     </select><br/>
     {currentId !== "" && <>
+      {currentItems.length > 1000 && <><em>Only first 1000 objects are shown</em><br/></>}
       <select onChange={e => {
         setIndex(+e.target.value);
+        setVersion(0);
       }} value={index}>
-        {currentItems.map((item, idx) => <option key={idx} value={idx}>
+        {currentItems.slice(0, 1000).map((item, idx) => <option key={idx} value={idx}>
           {item.position.x.toFixed(3)} / {item.position.z.toFixed(3)}
         </option>)}
-      </select><br />
+      </select>
+      <br />
     </>}
-    {currentItem != null && <><dl>
-      <dt>position</dt><dd>{currentItem.position.x} / {currentItem.position.z}</dd>
-      <dt>sector</dt><dd>{currentItem.sector.x} / {currentItem.sector.y}</dd>
-      {components.map(C => <C zdo={currentItem} />)}
-      </dl>
-      <hr />
-      <dl>
-      <ZdoSpecialData data={currentItem.floats} stringify={String} />
-      <ZdoSpecialData data={currentItem.vec3} stringify={v => `${v.x.toFixed(3)} / ${v.y.toFixed(3)} / ${v.z.toFixed(3)}`} />
-      <ZdoSpecialData data={currentItem.quats} stringify={v =>
-        `x: ${v.x.toFixed(3)}, y: ${v.y.toFixed(3)}, z: ${v.z.toFixed(3)}, w: ${v.w.toFixed(3)}`} />
-      <ZdoSpecialData data={currentItem.ints} stringify={String} />
-      <ZdoSpecialData data={currentItem.longs} stringify={String} />
-      <ZdoSpecialData data={currentItem.strings} stringify={String} />
-      <ZdoSpecialData data={currentItem.byteArrays} stringify={arr => ([] as number[]).map.call(arr, v => v.toString(16).padStart(2, '0')).join('')} />
-    </dl></>}
+    {currentItem != null && <ItemEditor
+      zdo={currentItem}
+      version={version}
+      onChange={() => {
+        setVersion(version + 1);
+        props.onChange(props.value);
+      }}
+    />}
   </>;
 }

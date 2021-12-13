@@ -130,6 +130,7 @@ function tree({
       type: 'object',
       subtype: 'tree',
       id: stubId,
+      components: ['Destructible'],
       tier,
       Destructible: {
         hp: 80,
@@ -214,6 +215,7 @@ function treeSimpler({
       type: 'object',
       subtype: 'tree',
       id: stubId,
+      components: ['Destructible'],
       tier,
       Destructible: {
         hp: 80,
@@ -487,7 +489,8 @@ export const objects: PhysicalObject[] = [
   {
     type: 'object',
     subtype: 'misc',
-    id: 'beehive',
+    id: 'Beehive',
+    components: ['Destructible'],
     tier: 1,
     Destructible: {
       hp: 50,

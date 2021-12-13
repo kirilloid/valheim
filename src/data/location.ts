@@ -58,6 +58,8 @@ export function area(id: Biome | GameLocationId): BiomeConfig | LocationConfig |
       ?? locations.find(l => l.id === id)
 }
 
+// 1813954435, 1813954436, 1049915951, -516167990
+
 function loc(
   tier: number,
   id: GameLocationId,
