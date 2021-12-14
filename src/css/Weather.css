@@ -7,7 +7,7 @@
 .Weather__controls {
   position: sticky;
   top: 0;
-  background: white;
+  background: var(--color-background);
   z-index: 1;
   padding: 8px 0;
 }
@@ -20,10 +20,9 @@
   position: sticky;
   top: 40px;
   padding-bottom: 8px;
-  background: white;
+  background: var(--color-background);
   z-index: 1;
   display: flex;
-  font-weight: bold;
   flex-direction: row;
 }
 
@@ -65,6 +64,16 @@
 .Weather__details > * {
   flex-grow: 0;
   width: calc(100% / 7);
+}
+
+.Weather__details > :first-child {
+  text-align: center;
+}
+
+.Weather__details > :only-child {
+  text-align: initial;
+  width: 100%;
+  padding: 0 0.5rem;
 }
 
 .Weather__type {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -25,11 +25,15 @@ import { Mining } from './view/pages/Mining';
 import { WorldEditor } from './view/world';
 import { PlayerEditor } from './view/player';
 // import { Weapons } from './view/Weapons';
-import { TranslationContext, useTranslation } from './effects';
+import { TranslationContext, useGlobalState, useTranslation } from './effects';
 import { WorldGenerator } from './view/pages/WorldGenerator';
 
 function App() {
   const translate = useTranslation();
+  const [theme] = useGlobalState('theme');
+  useLayoutEffect(() => {
+    document.documentElement.className = `theme--${theme}`;
+  }, [theme]);
   return (
     <div className="App">
       <TranslationContext.Provider value={translate}>

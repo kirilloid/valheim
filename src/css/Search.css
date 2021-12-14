@@ -22,7 +22,7 @@
   margin: 0;
   position: absolute;
   width: 100%;
-  background: white;
+  background: var(--color-background);
   left: -0.5em;
   outline: 1px solid;
   font-feature-settings: "tnum" 1;
@@ -34,6 +34,7 @@
 }
 .SearchResults .active {
   background: #bde4ff;
+  color: #000; /* for dark theme */
 }
 
 .SearchItem {

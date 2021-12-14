@@ -13,6 +13,7 @@ function Settings() {
   const translate = useContext(TranslationContext);
   const { lang, setLang } = useLanguage();
   const [spoiler, setSpoiler] = useGlobalState('spoiler');
+  const [theme, setTheme] = useGlobalState('theme');
   const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
     function callback(e: KeyboardEvent) {
@@ -48,6 +49,12 @@ function Settings() {
           <dd className="Dialog__row"><select id="spoiler" value={spoiler} onChange={e => setSpoiler(Number(e.target.value))}>
             {biomes.map(biome => <option key={biome.id} value={biome.tier}>{translate(`ui.biome.${biome.id}`)}</option>)}
             <option key="all" value={999}>All</option>
+          </select></dd>
+          <dt className="Dialog__row"><label htmlFor="theme">theme</label></dt>
+          <dd className="Dialog__row"><select id="theme" value={theme} onChange={e => setTheme(e.target.value as any)}>
+            <option value="system">system</option>
+            <option value="light">light</option>
+            <option value="dark">dark</option>
           </select></dd>
         </dl>
       </div>

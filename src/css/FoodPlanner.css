@@ -22,6 +22,7 @@
 .FoodPresets__button > button {
   width: 100%;
   padding: 0;
+  height: auto;
 }
 
 .FoodPresets__button img {

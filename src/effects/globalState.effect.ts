@@ -4,6 +4,7 @@ type GlobalKeys =
   | 'aggregate' // to sum total resources for item levels or not
   | 'spoiler' // spoiler levels
   | 'language' // currently selected & loaded language
+  | 'theme' // theme
 ;
 
 export function read<T>(name: string, defaultValue: T): T {
@@ -26,12 +27,14 @@ const globalKeysDefaultValue = {
   aggregate: false as boolean,
   spoiler: 0 as number,
   language: undefined as string | undefined,
+  theme: 'system' as 'system' | 'light' | 'dark',
 } as const;
 
 const listeners: Record<GlobalKeys, Function[]> = {
   aggregate: [],
   spoiler: [],
   language: [],
+  theme: [],
 };
 
 type GK = typeof globalKeysDefaultValue;
