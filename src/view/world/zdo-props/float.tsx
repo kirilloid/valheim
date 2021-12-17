@@ -6,20 +6,21 @@ import type { ZDO } from '../types';
 import { stableHashCode } from '../../../model/utils';
 
 type ExtrasProps = {
-  readonly?: boolean;
+  readOnly?: boolean;
   min?: number;
   max?: number;
 };
 
 export const floatComp = (key: string, extraProps: ExtrasProps = {}) => {
   const hash = stableHashCode(key);
-  return ({ value: zdo, onChange }: ValueProps<ZDO>) => {
+  return ({ value: zdo, onChange, max }: ValueProps<ZDO> & { max?: number }) => {
     const defaultValue = 0;
     const value = zdo.floats.get(hash) ?? '';
     return <React.Fragment key={key}>
       <dt>{key}</dt>
       <dd>
         <input type="number"
+          max={max}
           {...extraProps}
           placeholder={String(defaultValue)}
           value={value}

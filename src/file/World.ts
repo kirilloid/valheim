@@ -42,7 +42,7 @@ function* readZDOData(reader: PackageReader, version: number): Generator<number,
   setVersion(version);
   for (let i = 0; i < zdoLength; i++) {
     const offset = reader.getOffset();
-    if (i % 1000 === 0) {
+    if ((i & 0x7FFF) === 0) {
       yield reader.getProgress();
     }
     try {
@@ -73,7 +73,7 @@ function* writeZDOData(writer: PackageWriter, zdoData: ZDOData): Generator<numbe
   writer.writeUInt(zdoData.nextUid);
   writer.writeInt(zdoData.zdos.length);
   for (const [i, zdo] of zdoData.zdos.entries()) {
-    if (i % 1000 === 0) yield i / zdoData.zdos.length;
+    if ((i & 0x7FFF) === 0) yield i / zdoData.zdos.length;
     zdo.save(writer);
   }
   writer.writeMap(function (key: ZDOID) {

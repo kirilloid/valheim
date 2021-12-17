@@ -35,7 +35,10 @@ export function FileEditor<T>(props: Props<T>) {
     );
     setState({ state: 'done', file, value, changed: false });
     const mem = getMemUsage();
-    console.info(`Memory used: ${mem.toPrecision(3)} MB`);
+    const memStr = mem >= 512
+      ? (mem / 1024).toPrecision(3) + ' GB'
+      : mem.toPrecision(3) + ' MB';
+    console.info('Memory used: ' + memStr);
   }
 
   const processFiles = useCallback(async (files: FileList | null) => {
@@ -49,7 +52,10 @@ export function FileEditor<T>(props: Props<T>) {
     );
     if (matchingFiles.length > 1) return setState({ state: 'picking', files: matchingFiles });
     if (matchingFiles.length === 1) return processFile(matchingFiles[0]!);
-    if (allFiles.length === 0) return setState({ state: 'empty', message: "No file was selected" });
+    if (allFiles.length === 0) {
+      if (state.state === 'done') return;
+      return setState({ state: 'empty', message: "No file was selected" });
+    }
     if (!window.confirm("The file(s) you provided, doesn't have proper extension. Reading wrong file might crash this browser tab.\nDo you want to proceed?")) {
       return setState({ state: 'empty' });
     }
@@ -58,13 +64,13 @@ export function FileEditor<T>(props: Props<T>) {
     } else {
       setState({ state: 'picking', files: allFiles });
     }
-  }, []);
+  }, [ext, processFile]);
 
   const onDrop = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     setDragging(false);
     processFiles(event.dataTransfer.files);
-  }, [setState, ext]);
+  }, [setState, ext, processFiles]);
 
   const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();

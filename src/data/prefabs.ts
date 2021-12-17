@@ -134,7 +134,7 @@ export const prefabNames: string[] = [
     'TrophyBlob', 'TrophyBoar', 'TrophyBonemass', 'TrophyDeathsquito', 'TrophyDeer', 'TrophyDragonQueen', 'TrophyDraugr', 'TrophyDraugrFem', 'TrophyDraugrElite', 'TrophyEikthyr', 'TrophyFenring', 'TrophyForestTroll', 'TrophyFrostTroll', 'TrophyGoblin', 'TrophyGoblinBrute', 'TrophyGoblinKing', 'TrophyGoblinShaman', 'TrophyGreydwarf', 'TrophyGreydwarfBrute', 'TrophyGreydwarfShaman', 'TrophyGrowth', 'TrophyHatchling', 'TrophyLeech', 'TrophyLox', 'TrophyNeck', 'TrophySGolem', 'TrophySerpent', 'TrophySkeleton', 'TrophySkeletonPoison', 'TrophySurtling', 'TrophyTheElder', 'TrophyWolf', 'TrophyWraith',
     'tunnel_web', 'turf_roof', 'turf_roof_top', 'turf_roof_wall', 'Turnip', 'TurnipSeeds', 'TurnipStew',
     
-    'Valkyrie', 'VegvisirShard_Bonemass', 'vertical_web', 'VikingShip', 'vines',
+    'Valkyrie', 'VegvisirShard_Bonemass', 'vertical_web', 'vfx_edge_clouds', 'vfx_swamp_mist', 'VikingShip', 'vines',
 
     'Waystone', 'widestone', 'widestone_frac', 'windmill', 'Wishbone', 'WitheredBone',
     'Wolf', 'Wolf_Attack1', 'Wolf_Attack2', 'Wolf_Attack3', 'Wolf_cub', 'Wolf_Ragdoll', 'WolfFang', 'WolfJerky', 'WolfMeat', 'WolfMeatSkewer', 'WolfPelt',

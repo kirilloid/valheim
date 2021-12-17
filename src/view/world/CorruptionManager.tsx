@@ -11,7 +11,7 @@ import { MistakeLevels } from '../../file/zdo/check';
 function* checkZdos(data: WorldData): Generator<number, WorldData, void> {
   const mistakes: ZDOCorruption[] = [];
   for (const [index, zdo] of data.zdo.zdos.entries()) {
-    if (index % 1000 === 0) yield index;
+    if ((index & 0x3FFF) === 0) yield index;
     const { mistake, offset } = check(data, zdo);
     if (mistake !== Mistake.None) {
       mistakes.push({ mistake, offset, index });

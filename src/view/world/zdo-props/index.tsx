@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 import type { GameComponent } from '../../../types';
 import type { ValueProps } from '../../parts/types';
@@ -25,8 +25,10 @@ import { TerrainComp } from './terrain';
 import { timeComp } from './time';
 import { vectorComp } from './vector';
 import { WearNTearComp } from './wear-n-tear';
+import { ItemPropsComp } from './item-props';
+import { LiquidComp } from './liquid';
 
-const readonly = true;
+const readOnly = true;
 
 export const InterfaceFields: Partial<Record<GameComponent, React.ComponentType<ValueProps<ZDO>>[]>> = {
   BaseAI: [
@@ -60,7 +62,7 @@ export const InterfaceFields: Partial<Record<GameComponent, React.ComponentType<
     */
   ],
   Container: [
-    boolComp('addedDefaultItems', { readonly }),
+    boolComp('addedDefaultItems', { readOnly }),
     // boolComp('InUse'),
     ItemsComp,
     /* EpicLoot:
@@ -93,17 +95,14 @@ export const InterfaceFields: Partial<Record<GameComponent, React.ComponentType<
   Humanoid: [boolComp('IsBlocking')],
   ItemDrop: [
     timeComp('SpawnTime'),
-    floatComp('durability'),
-    intComp('stack'),
-    intComp('quality'),
-    intComp('variant'),
+    ItemPropsComp,
     idComp('crafterID'),
     stringComp('crafterName'), // <|extended data from EpicLoot|>
   ],
   ItemStand: [stringComp('item')],
   Leviathan: [boolComp('submerged', { hashFn: crc32 })],
-  // LiquidVolume: [liquidProp('LiquidData')],
-  LocationProxy: [hashedLocationComp('location'), intComp('seed', { readonly })],
+  LiquidVolume: [LiquidComp],
+  LocationProxy: [hashedLocationComp('location'), intComp('seed', { readOnly })],
   // LootSpawner: [timeComp('spawn_time'),],
   MapTable: [MapTable],
   MineRock: [floatComp('Health'), floatComp('Health0')],
@@ -130,7 +129,7 @@ export const InterfaceFields: Partial<Record<GameComponent, React.ComponentType<
     boolComp('wakeup'),
     boolComp('dead'),
     boolComp('dodgeinv'),
-    intComp('baseValue', { readonly }),
+    intComp('baseValue', { readOnly }),
     boolComp('pvp'),
   ],
   PrivateArea: [PrivateAreaComp],
@@ -178,7 +177,7 @@ export const InterfaceFields: Partial<Record<GameComponent, React.ComponentType<
   TreeBase: [floatComp('health')],
   TreeLog: [floatComp('health')],
   VisEquipment: [
-    intComp('ModelIndex', { readonly }),
+    intComp('ModelIndex', { readOnly }),
     colorComp('SkinColor'),
     colorComp('HairColor'),
     hashedItemComp('RightItem'), // intComp('RightItemVariant'),

@@ -544,7 +544,7 @@ interface ItemGrowConfig {
   respawn?: number;
 }
 
-export type ItemGrow = Required<ItemGrowConfig>
+export type ItemGrow = Required<ItemGrowConfig>;
 
 export function itemGrow(...grows: ItemGrowConfig[]): ItemGrow[] {
   return grows.map(grow => ({
@@ -563,6 +563,7 @@ export function itemGrow(...grows: ItemGrowConfig[]): ItemGrow[] {
 interface BaseItem extends GameObjectBase {
   stack?: number;
   maxLvl?: number;
+  variants?: number;
   weight: number;
   floating?: true;
   teleportable?: false;

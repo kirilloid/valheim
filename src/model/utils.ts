@@ -176,7 +176,7 @@ export function runGenerator<T>(
     if (iter.done) {
       resolve(iter.value);
     } else {
-      setTimeout(recursive, 10);
+      setTimeout(recursive, 3);
       onProgress(iter.value);
     }
   }());

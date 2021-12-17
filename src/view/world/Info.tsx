@@ -11,7 +11,7 @@ import { Tabs } from '../parts/Tabs';
 import { RandomEvents } from './RandomEvents';
 import { ZoneSystem } from './ZoneSystem';
 import { CorruptionManager } from './CorruptionManager';
-import { ZdoData } from './ZdoData';
+import { ZdoData } from './zdo-data';
 
 function showTime(time: number) {
   const day = Math.floor(time / GAME_DAY);

@@ -92,7 +92,7 @@ export function ItemIcon(props: ItemIconProps) {
       height={size}
     />;
   }
-  const { type, id } = item;
+  const { id } = item;
   if (item.tier > spoiler) {
     return <img
       className="icon"

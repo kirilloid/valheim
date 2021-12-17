@@ -360,7 +360,7 @@ export function Weather() {
     return () => {
       el.removeEventListener('scroll', scroll, { capture: false });
     };
-  }, [ref, gen, setScroll, length]);
+  }, [ref, setScroll, length]);
 
   const startIndex = Math.max(scroll - CHUNK_SIZE, 0);
   const endIndex = Math.min(startIndex + VIEWPORT_ROWS, length - 1);

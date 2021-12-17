@@ -17,7 +17,7 @@ export function ItemsComp({ value: zdo }: ValueProps<ZDO>) {
   const items = value ? Inventory.read(readBase64(value)).items : [];
   return <React.Fragment key="items">
     <dt>items</dt>
-    <dd><ul>{items.map(item => <li>
+    <dd><ul>{items.map((item, i) => <li key={i}>
       {item.stack}&times; {translate(item.id)}
     </li>)}</ul></dd>
   </React.Fragment>;

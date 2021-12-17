@@ -460,6 +460,7 @@ export const items: Item[] = [
   { id: 'CapeLinen',
     tier: 5,
     type: 'armor', slot: 'shoulders',
+    variants: 5,
     armor: [1, 1],
     weight: 4,
     maxLvl: 4,
