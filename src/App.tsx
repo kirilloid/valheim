@@ -17,7 +17,7 @@ import { Info } from './view/Info';
 import { AttackCalc } from './view/pages/AtkCalc';
 import { DefenseCalc } from './view/pages/DefCalc';
 import { ComfortTable } from './view/pages/ComfortTable';
-import { GameEvent, GameEventTable } from './view/pages/Event';
+import { GameEvent, GameEventFilterTable } from './view/pages/Event';
 import { Weather } from './view/pages/Weather';
 import { FoodTable } from './view/pages/FoodTable';
 import { FoodPlanner } from './view/pages/FoodPlanner';
@@ -46,7 +46,7 @@ function App() {
             <Route path="/loc/:id" children={<Location />} />
             <Route path="/biome/:id" children={<Biome />} />
             <Route path="/event/:id" children={<GameEvent />} />
-            <Route path="/events" children={<GameEventTable />} />
+            <Route path="/events" children={<GameEventFilterTable />} />
             <Route path="/effect/:id" children={<Effect />} />
             <Route path="/attack/:params" children={<AttackCalc />} />
             <Route path="/attack" children={<AttackCalc />} />

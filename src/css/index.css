@@ -74,8 +74,10 @@ select, input, button {
   border: 1px solid #888;
 }
 
-input[type='checkbox'] {
+input[type='checkbox'],
+input[type='radio'] {
   height: auto;
+  width: 1rem;
 }
 
 label {
