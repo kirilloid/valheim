@@ -15,7 +15,6 @@ class ZdoMmapView implements ZDO {
   private offsetInts = 0;
   private offsetLongs = 0;
   private offsetStrings = 0;
-  private offsetByteArrays = 0;
   _floats: FloatBinMap | null = null;
   _vec3: Vector3BinMap | null = null;
   _quats: QuaternionBinMap | null = null;
@@ -181,41 +180,43 @@ class ZdoMmapView implements ZDO {
     this._floats.save(pkg);
     // vec3
     if (this._vec3 === null) {
+      this.offsetVec3 = this.floats.byteSize + this.offsetFloats;
       pkg.writeBytes(this.bytes.subarray(this.offsetVec3));
       return pkg.flush();
     }
     this._vec3.save(pkg);
     // quats
     if (this._quats === null) {
+      this.offsetQuats = this.vec3.byteSize + this.offsetVec3;
       pkg.writeBytes(this.bytes.subarray(this.offsetQuats));
       return pkg.flush();
     }
     this._quats.save(pkg);
     // ints
     if (this._ints === null) {
+      this.offsetInts = this.quats.byteSize + this.offsetQuats;
       pkg.writeBytes(this.bytes.subarray(this.offsetInts));
       return pkg.flush();
     }
     this._ints.save(pkg);
     // longs
     if (this._longs === null) {
+      this.offsetLongs = this.ints.byteSize + this.offsetInts;
       pkg.writeBytes(this.bytes.subarray(this.offsetLongs));
       return pkg.flush();
     }
     this._longs.save(pkg);
     // strings
     if (this._strings === null) {
+      this.offsetStrings = this.longs.byteSize + this.offsetLongs;
       pkg.writeBytes(this.bytes.subarray(this.offsetStrings));
       return pkg.flush();
     }
     pkg.writeIfSmallMap(pkg.writeInt, pkg.writeString, this._strings);
     // byte arrays
-    if (this.version < 27) return pkg.flush();
-    if (this._byteArrays === null) {
-      pkg.writeBytes(this.bytes.subarray(this.offsetByteArrays));
-      return pkg.flush();
+    if (this.version >= 27) {
+      pkg.writeIfSmallMap(pkg.writeInt, pkg.writeByteArray, this.byteArrays);
     }
-    pkg.writeIfSmallMap(pkg.writeInt, pkg.writeByteArray, this._byteArrays);
     return pkg.flush();
   }
 
