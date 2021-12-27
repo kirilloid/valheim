@@ -1,4 +1,4 @@
-import { decode, encodeInto } from '../model/utf8';
+import { decode, encode } from '../model/utf8';
 import type { Quaternion, Vector2i, Vector3 } from '../model/utils';
 
 export class PackageReader {
@@ -321,10 +321,9 @@ export class PackageWriter {
   }
 
   public writeString(value: string): void {
-    this.write7BitInt(value.length);
-    this.ensureSpace(value.length * 3);
-    const encoded = encodeInto(value, this.bytes.subarray(this.offset));
-    this.offset += encoded.written ?? 0;
+    const encoded = encode(value);
+    this.write7BitInt(encoded.byteLength);
+    this.writeBytes(encoded);
   }
 
   public writeBytes(value: Uint8Array): void {
