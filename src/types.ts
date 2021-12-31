@@ -298,11 +298,27 @@ export interface Creature extends GameObjectBase {
   faction: Faction;
   spawners: SpawnerConfig[];
   tolerate: number;
+  speed: {
+    // m_speed || m_flySlowSpeed
+    walk: number;
+    // m_runSpeed || m_flyFastSpeed
+    run: number;
+    // m_swimSpeed
+    swim: number;
+  };
+  turnSpeed: {
+    // m_turnSpeed || m_flyTurnSpeed
+    walk: number;
+    // m_runTurnSpeed || m_flyTurnSpeed
+    run: number;
+    // m_swimTurnSpeed
+    swim: number;
+  };
   hp: number;
-  stagger?: {
+  stagger: {
     factor: number;
     time: number;
-  };
+  } | null;
   attacks: AttackVariety[];
   damageModifiers: DamageModifiers;
   drop: DropEntry[];

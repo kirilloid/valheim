@@ -130,7 +130,18 @@ export const creatures: Creature[] = [
     })],
     attacks: [],
     tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 1.5,
+      run: 7,
+      swim: 2,
+    },
+    turnSpeed: {
+      walk: 80,
+      run: 200,
+      swim: 80,
+    },
     hp: 10,
+    stagger: null,
     damageModifiers: animalDmgModifiers,
     drop: [
       dropEntry('DeerMeat', { min: 2, max: 2 }),
@@ -160,7 +171,18 @@ export const creatures: Creature[] = [
     })],
     attacks: [],
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
+    speed: {
+      walk: 0,
+      run: 15,
+      swim: 0,
+    },
+    turnSpeed: {
+      walk: 0,
+      run: 60,
+      swim: 0,
+    },
     hp: 1,
+    stagger: null,
     damageModifiers: animalDmgModifiers,
     drop: [
       dropEntry('Feathers', { min: 3, max: 3 }),
@@ -185,6 +207,16 @@ export const creatures: Creature[] = [
     // ['Meadows'],
     attacks: single([{ dmg: dmg({ slash: 5 }), stagger: 1.94, name: 'bite' }]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
+    speed: {
+      walk: 0,
+      run: 0,
+      swim: 0,
+    },
+    turnSpeed: {
+      walk: 0,
+      run: 0,
+      swim: 0,
+    },
     hp: 20,
     stagger: {
       factor: 0.3,
@@ -230,6 +262,16 @@ export const creatures: Creature[] = [
     })],
     attacks: single([{ dmg: dmg({ slash: 6 }), stagger: 1.66, name: 'bite' }]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
+    speed: {
+      walk: 1,
+      run: 5,
+      swim: 2,
+    },
+    turnSpeed: {
+      walk: 200,
+      run: 200,
+      swim: 400,
+    },
     hp: 5,
     stagger: {
       factor: 0.5,
@@ -294,7 +336,18 @@ export const creatures: Creature[] = [
     // 'Meadows', 'BlackForest', 'Plains', 'Ocean'
     attacks: [],
     tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 0,
+      run: 0,
+      swim: 3, // 3, 5, 10
+    },
+    turnSpeed: {
+      walk: 0,
+      run: 0,
+      swim: 100, // 100, 100, 80
+    },
     hp: 1,
+    stagger: null,
     damageModifiers: animalDmgModifiers,
     drop: [dropEntry('FishRaw')],
   },
@@ -321,6 +374,16 @@ export const creatures: Creature[] = [
     })],
     attacks: single([{ dmg: dmg({ blunt: 10 }), stagger: 1.24, name: 'tusks' }]),
     tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 1.5,
+      run: 8,
+      swim: 2,
+    },
+    turnSpeed: {
+      walk: 100,
+      run: 200,
+      swim: 100,
+    },
     hp: 10,
     stagger: {
       factor: 0.5,
@@ -352,7 +415,18 @@ export const creatures: Creature[] = [
       { dmg: dmg({ lightning: 20 }), name: 'stomp', force: 100 },
     ]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
+    speed: {
+      walk: 2,
+      run: 8,
+      swim: 4,
+    },
+    turnSpeed: {
+      walk: 100,
+      run: 100,
+      swim: 50,
+    },
     hp: 500,
+    stagger: null,
     damageModifiers: animalDmgModifiers,
     drop: [
       dropEntry('HardAntler', { min: 3, max: 3 }),
@@ -372,7 +446,18 @@ export const creatures: Creature[] = [
     spawners: [],
     attacks: [],
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
+    speed: {
+      walk: 0,
+      run: 15,
+      swim: 0,
+    },
+    turnSpeed: {
+      walk: 0,
+      run: 60,
+      swim: 0,
+    },
     hp: 1,
+    stagger: null,
     damageModifiers: animalDmgModifiers,
     drop: [
       dropEntry('Feathers', { min: 3, max: 3 }),
@@ -410,6 +495,16 @@ export const creatures: Creature[] = [
       { rate: 1, variety: 'bow', attacks: [{ dmg: dmg({ pierce: 20 }), stagger: 2.48, name: 'bow' }] },
     ],
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
+    speed: {
+      walk: 1,
+      run: 4,
+      swim: 1,
+    },
+    turnSpeed: {
+      walk: 300,
+      run: 300,
+      swim: 300,
+    },
     hp: 40,
     stagger: {
       factor: 0.5,
@@ -435,6 +530,16 @@ export const creatures: Creature[] = [
       name: 'mace',
     }]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
+    speed: {
+      walk: 1,
+      run: 4,
+      swim: 1,
+    },
+    turnSpeed: {
+      walk: 300,
+      run: 300,
+      swim: 300,
+    },
     hp: 100,
     stagger: {
       factor: 0.5,
@@ -456,6 +561,16 @@ export const creatures: Creature[] = [
     spawners: [],
     attacks: single([ { dmg: dmg({ slash: 25 }), stagger: 1.64, name: 'slash' } ]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
+    speed: {
+      walk: 1,
+      run: 4,
+      swim: 1,
+    },
+    turnSpeed: {
+      walk: 300,
+      run: 300,
+      swim: 300,
+    },
     hp: 60,
     stagger: {
       factor: 0.5,
@@ -524,6 +639,16 @@ export const creatures: Creature[] = [
       { dmg: dmg({ blunt: 10 }), stagger: 1.94, name: 'stone' },
     ]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
+    speed: {
+      walk: 2,
+      run: 6,
+      swim: 1.5,
+    },
+    turnSpeed: {
+      walk: 200,
+      run: 200,
+      swim: 200,
+    },
     hp: 40,
     stagger: {
       factor: 0.3,
@@ -561,6 +686,16 @@ export const creatures: Creature[] = [
       { dmg: dmg({ slash: 14 }), stagger: 1.12, name: 'slash' },
     ]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
+    speed: {
+      walk: 2,
+      run: 4,
+      swim: 1.5,
+    },
+    turnSpeed: {
+      walk: 200,
+      run: 200,
+      swim: 200,
+    },
     hp: 60,
     stagger: {
       factor: 0.33,
@@ -609,6 +744,16 @@ export const creatures: Creature[] = [
       { dmg: dmg({ slash: 30 }), stagger: 1.34, name: 'bite' },
     ]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
+    speed: {
+      walk: 2,
+      run: 5,
+      swim: 1,
+    },
+    turnSpeed: {
+      walk: 200,
+      run: 200,
+      swim: 200,
+    },
     hp: 150,
     stagger: {
       factor: 0.5,
@@ -659,6 +804,16 @@ export const creatures: Creature[] = [
       },
     ],
     tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 3,
+      run: 6,
+      swim: 1.5,
+    },
+    turnSpeed: {
+      walk: 100,
+      run: 250,
+      swim: 100,
+    },
     hp: 600,
     stagger: {
       factor: 0.3,
@@ -686,12 +841,23 @@ export const creatures: Creature[] = [
     spawners: [],
     attacks: single([
       // SCREAM
-      { spawn: ['Root'], number: 15, max: 30 },
+      { spawn: ['TentaRoot'], number: 15, max: 30 },
       { dmg: dmg({ pierce: 35, chop: 20, pickaxe: 20 }), name: 'Vine Shoot', burst: 25, toolTier: 0 },
       { dmg: dmg({ blunt: 60, chop: 1000, pickaxe: 1000 }), name: 'Stomp', force: 30, toolTier: 0 }, // area
     ]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
+    speed: {
+      walk: 3,
+      run: 6,
+      swim: 1.5,
+    },
+    turnSpeed: {
+      walk: 100,
+      run: 200,
+      swim: 100,
+    },
     hp: 2500,
+    stagger: null,
     damageModifiers: {
       ...defaultDmgModifiers,
       fire: 'veryWeak',
@@ -716,7 +882,18 @@ export const creatures: Creature[] = [
       { dmg: dmg({ blunt: 55, chop: 20, pickaxe: 20 }), name: 'poke', force: 40, toolTier: 0 }
     ]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
+    speed: {
+      walk: 0,
+      run: 0,
+      swim: 0,
+    },
+    turnSpeed: {
+      walk: 200,
+      run: 200,
+      swim: 200,
+    },
     hp: 20,
+    stagger: null,
     damageModifiers: {
       ...defaultDmgModifiers,
       fire: 'weak',
@@ -748,7 +925,18 @@ export const creatures: Creature[] = [
     })],
     attacks: single([{ dmg: dmg({ poison: 90 }), name: 'poison', unblockable }]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
+    speed: {
+      walk: 1,
+      run: 2,
+      swim: 2,
+    },
+    turnSpeed: {
+      walk: 100,
+      run: 100,
+      swim: 100,
+    },
     hp: 50,
+    stagger: null,
     damageModifiers: blobDamageModifiers,
     drop: [
       dropEntry('Ooze', { min: 1, max: 2 }),
@@ -777,7 +965,18 @@ export const creatures: Creature[] = [
     })],
     attacks: single([{ dmg: dmg({ poison: 115 }), name: 'poison', unblockable }]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
+    speed: {
+      walk: 1,
+      run: 2,
+      swim: 2,
+    },
+    turnSpeed: {
+      walk: 100,
+      run: 100,
+      swim: 100,
+    },
     hp: 150,
+    stagger: null,
     damageModifiers: blobDamageModifiers,
     drop: [
       dropEntry('Ooze', { min: 2, max: 3 }),
@@ -808,7 +1007,18 @@ export const creatures: Creature[] = [
       poison: 70,
     }), name: 'bite', force: 30 }]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
+    speed: {
+      walk: 2,
+      run: 2,
+      swim: 3,
+    },
+    turnSpeed: {
+      walk: 50,
+      run: 50,
+      swim: 150,
+    },
     hp: 60,
+    stagger: null,
     damageModifiers: {
       ...animalDmgModifiers,
       fire: 'immune',
@@ -841,6 +1051,16 @@ export const creatures: Creature[] = [
       name: 'fireball', stagger: 1.14, force: 30,
     }]),
     tolerate: TOLERATE.FIRE | TOLERATE.SMOKE,
+    speed: {
+      walk: 2,
+      run: 6,
+      swim: 2,
+    },
+    turnSpeed: {
+      walk: 400,
+      run: 400,
+      swim: 400,
+    },
     hp: 20,
     stagger: {
       factor: 0.5,
@@ -882,6 +1102,16 @@ export const creatures: Creature[] = [
     })],
     attacks: single([{ dmg: dmg({ slash: 60, }), name: 'slash', stagger: 2.04, force: 60 }]),
     tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 2.5,
+      run: 5,
+      swim: 1,
+    },
+    turnSpeed: {
+      walk: 200,
+      run: 200,
+      swim: 200,
+    },
     hp: 100,
     stagger: {
       factor: 0.5,
@@ -942,6 +1172,16 @@ export const creatures: Creature[] = [
       },
     ],
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
+    speed: {
+      walk: 1,
+      run: 5,
+      swim: 1,
+    },
+    turnSpeed: {
+      walk: 300,
+      run: 300,
+      swim: 300,
+    },
     hp: 100,
     stagger: {
       factor: 0.5,
@@ -978,6 +1218,16 @@ export const creatures: Creature[] = [
     })],
     attacks: single([ { dmg: dmg({ slash: 58, }), name: 'sword', stagger: 2.8, force: 60 } ]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
+    speed: {
+      walk: 1,
+      run: 6,
+      swim: 1,
+    },
+    turnSpeed: {
+      walk: 300,
+      run: 300,
+      swim: 300,
+    },
     hp: 200,
     stagger: {
       factor: 0.5,
@@ -1017,6 +1267,16 @@ export const creatures: Creature[] = [
       { dmg: dmg({ blunt: 80, chop: 100, pickaxe: 60 }), name: 'stub', stagger: 2, force: 130, toolTier: 2 },
     ]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
+    speed: {
+      walk: 2,
+      run: 5,
+      swim: 3,
+    },
+    turnSpeed: {
+      walk: 20,
+      run: 60,
+      swim: 45,
+    },
     hp: 800,
     stagger: {
       factor: 0.33,
@@ -1058,8 +1318,18 @@ export const creatures: Creature[] = [
       { spawn: ['Skeleton', 'Blob'], number: 4, max: 8, }
     ]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
+    speed: {
+      walk: 2,
+      run: 4,
+      swim: 2,
+    },
+    turnSpeed: {
+      walk: 50,
+      run: 100,
+      swim: 50,
+    },
     hp: 5000,
-
+    stagger: null,
     damageModifiers: {
       ...defaultDmgModifiers,
       blunt: 'weak',
@@ -1113,6 +1383,16 @@ export const creatures: Creature[] = [
       { dmg: dmg({ slash: 70 }), name: 'bite', stagger: 4.8, force: 30 }, // 3 different animations, same stats
     ]),
     tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 1.5,
+      run: 8,
+      swim: 2,
+    },
+    turnSpeed: {
+      walk: 100,
+      run: 200,
+      swim: 100,
+    },
     hp: 80,
     damageModifiers: animalDmgModifiers,
     stagger: {
@@ -1154,6 +1434,16 @@ export const creatures: Creature[] = [
       { dmg: dmg({ slash: 95 }), name: 'jump', stagger: 1.32, force: 100 },
     ]),
     tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 1.5,
+      run: 7,
+      swim: 2,
+    },
+    turnSpeed: {
+      walk: 200,
+      run: 200,
+      swim: 200,
+    },
     hp: 300,
     stagger: {
       factor: 0.5,
@@ -1222,6 +1512,16 @@ export const creatures: Creature[] = [
       },
     ], 
     tolerate: TOLERATE.WATER | TOLERATE.FIRE | TOLERATE.SMOKE,
+    speed: {
+      walk: 2,
+      run: 4,
+      swim: 1.5,
+    },
+    turnSpeed: {
+      walk: 100,
+      run: 150,
+      swim: 100,
+    },
     hp: 800,
     stagger: {
       factor: 0.33,
@@ -1269,7 +1569,18 @@ export const creatures: Creature[] = [
     })],
     attacks: single([{ dmg: dmg({ frost: 90 }), burst: 3, name: 'ice shards', force: 30, }]), // burst interval: 0.3
     tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 4,
+      run: 12,
+      swim: 1,
+    },
+    turnSpeed: {
+      walk: 100,
+      run: 100,
+      swim: 100,
+    },
     hp: 100,
+    stagger: null,
     damageModifiers: {
       ...animalDmgModifiers,
       fire: 'weak',
@@ -1314,8 +1625,18 @@ export const creatures: Creature[] = [
       }), name: 'breath', force: 40, toolTier: 3 },
     ]),
     tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 4, // 10
+      run: 6, // 20
+      swim: 4,
+    },
+    turnSpeed: {
+      walk: 60, // 80
+      run: 60, // 80
+      swim: 60,
+    },
     hp: 7500,
-
+    stagger: null,
     damageModifiers: {
       ...animalDmgModifiers,
       fire: 'weak',
@@ -1371,6 +1692,16 @@ export const creatures: Creature[] = [
       { rate: 1, variety: 'torch', attacks: [{ dmg: dmg({ blunt: 45, fire: 45 }), name: 'torch', stagger: 2.08 }] },
     ],
     tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 2,
+      run: 6,
+      swim: 1.5,
+    },
+    turnSpeed: {
+      walk: 200,
+      run: 200,
+      swim: 200,
+    },
     hp: 175,
     stagger: {
       factor: 0.3,
@@ -1417,6 +1748,16 @@ export const creatures: Creature[] = [
     // vs 52 arm 6.5-11.1
     // vs 52 arm + FR 3.8-6.7 (instantly + 5x over time halved due to FR)
     tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 1,
+      run: 2,
+      swim: 1.5,
+    },
+    turnSpeed: {
+      walk: 200,
+      run: 200,
+      swim: 200,
+    },
     hp: 100,
     stagger: {
       factor: 0.3,
@@ -1452,6 +1793,16 @@ export const creatures: Creature[] = [
       // taunt
     ]),
     tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 2,
+      run: 5,
+      swim: 1.5,
+    },
+    turnSpeed: {
+      walk: 150,
+      run: 300,
+      swim: 150,
+    },
     hp: 800,
     stagger: {
       factor: 0.3,
@@ -1488,7 +1839,18 @@ export const creatures: Creature[] = [
     })],
     attacks: single([{ dmg: dmg({ pierce: 90 }), name: 'bite' }]),
     tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 5,
+      run: 12,
+      swim: 1,
+    },
+    turnSpeed: {
+      walk: 500,
+      run: 500,
+      swim: 500,
+    },
     hp: 10,
+    stagger: null,
     damageModifiers: animalDmgModifiers,
     drop: [
       dropEntry('Needle', { scale: false }),
@@ -1519,6 +1881,16 @@ export const creatures: Creature[] = [
       { dmg: dmg({ blunt: 120, chop: 100, pickaxe: 100, }), name: 'stomp', force: 100, toolTier: 0 },
     ]),
     tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 2,
+      run: 6,
+      swim: 3,
+    },
+    turnSpeed: {
+      walk: 70,
+      run: 100,
+      swim: 50,
+    },
     hp: 1000,
     stagger: {
       factor: 0.3,
@@ -1548,7 +1920,18 @@ export const creatures: Creature[] = [
       { dmg: dmg({ blunt: 45, poison: 50, }), name: 'stomp', force: 80, toolTier: 0 },
     ]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE | TOLERATE.TAR,
+    speed: {
+      walk: 1,
+      run: 3,
+      swim: 4,
+    },
+    turnSpeed: {
+      walk: 100,
+      run: 100,
+      swim: 100,
+    },
     hp: 100,
+    stagger: null,
     damageModifiers: {
       blunt: 'weak',
       slash: 'resistant',
@@ -1596,8 +1979,18 @@ export const creatures: Creature[] = [
       // Taunt
     ]),
     tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 2,
+      run: 4,
+      swim: 1.5,
+    },
+    turnSpeed: {
+      walk: 50,
+      run: 50,
+      swim: 50,
+    },
     hp: 10000,
-
+    stagger: null,
     damageModifiers: {
       ...defaultDmgModifiers,
       pierce: 'veryResistant',
@@ -1648,7 +2041,18 @@ export const creatures: Creature[] = [
       // taunt
     ]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
+    speed: {
+      walk: 4,
+      run: 4,
+      swim: 10,
+    },
+    turnSpeed: {
+      walk: 20,
+      run: 20,
+      swim: 100,
+    },
     hp: 400,
+    stagger: null,
     damageModifiers: {
       ...animalDmgModifiers,
       fire: 'immune',

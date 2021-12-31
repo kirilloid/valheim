@@ -80,6 +80,8 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
         <dt>{translate('ui.summonedWith')}</dt>
         <dd><InlineObjectWithIcon id={sid} size={16} /> ×{snr}</dd>
       </> : null}
+      <dt>{translate('ui.speed')}</dt>
+      <dd>{creature.speed.run}</dd>
       <dt>{translate('ui.health')}</dt>
       <dd>{creature.hp * hpBonus(scale)}</dd>
       <dt>{translate('ui.stagger')}</dt>
