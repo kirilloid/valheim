@@ -1,0 +1,23 @@
+.SkillBar {
+  width: 200px;
+  height: 32px;
+  position: relative;
+  background-color: gray;
+}
+
+.SkillBar__level {
+  height: 24px;
+  background-color: '#cc0'; 
+}
+
+.SkillBar__value {
+  position: absolute;
+  inset: 0 0 auto 0;
+  text-align: center;
+  color: white;
+}
+
+.SkillBar__sublevel {
+  height: 8px;
+  background-color: #f80;
+}

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { ChangeEvent, useCallback, useContext, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import '../../css/Events.css';
@@ -96,10 +96,27 @@ const biomes: Biome[] = ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains'
 export function GameEventFilterTable() {
   const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
+
   const [state, setState] = useState({
     biome: 'Meadows' as Biome,
     kills: Object.fromEntries(kills.map(k => [k, false])),
   });
+
+  const onKillChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    const { id, checked } = event.target;
+    setState(state => ({
+      biome: state.biome,
+      kills: { ...state.kills, [id]: checked },
+    }));
+  }, [setState]);
+
+  const onBiomeChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setState(state => ({
+      biome: event.target.id as Biome,
+      kills: state.kills,
+    }));
+  }, [setState]);
+
   return (
     <>
       <h1>
@@ -110,10 +127,7 @@ export function GameEventFilterTable() {
           <header>kills</header>
           <ul>
             {kills.map(id => <li key={id}>
-              <input id={id} type="checkbox" checked={state.kills[id]} onChange={e => setState({
-                biome: state.biome,
-                kills: { ...state.kills, [id]: e.target.checked },
-              })} />
+              <input id={id} type="checkbox" checked={state.kills[id]} onChange={onKillChange} />
               <label htmlFor={id}>{translate(id)}</label>
             </li>)}
           </ul>
@@ -122,10 +136,7 @@ export function GameEventFilterTable() {
           <header>biome</header>
           <ul>
             {biomes.map(id => <li key={id}>
-              <input id={id} type="radio" name="biome" checked={state.biome === id} onChange={() => setState({
-                biome: id,
-                kills: state.kills,
-              })} />
+              <input id={id} type="radio" name="biome" checked={state.biome === id} onChange={onBiomeChange} />
               <label htmlFor={id}>{translate(`ui.biome.${id}`)}</label>
             </li>)}
           </ul>          
@@ -150,9 +161,9 @@ export function GameEventFilterTable() {
                 .map(e => <tr key={e.id}>
                   <td><Link to={`/event/${e.id}`}>{translate(e.id)}</Link></td>
                   <td>{timeI2S(e.duration)}</td>
-                  <td><List>{e.spawns.map(s => <React.Fragment key={s.id}>
+                  <td><List>{e.spawns.map(s => <span className="nobr" key={s.id}>
                     {creature(s.id, e.tier <= spoiler)}×{s.max}
-                  </React.Fragment>)}</List></td>
+                  </span>)}</List></td>
                   <td>{yesNo(e.base)}</td>
                 </tr>)}
             </tbody>

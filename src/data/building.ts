@@ -1254,7 +1254,7 @@ export const pieces: Piece[] = [
     wear: woodStructureWear,
     recipe: woodStructureRecipe(2),
   },
-  { id: 'wood_wall_roof_45_updsidedown',
+  { id: 'wood_wall_roof_45_upsidedown',
     base: false,
     type: 'piece',
     subtype: 'structure',
@@ -2110,7 +2110,7 @@ export const pieces: Piece[] = [
       ItemType.Trophie,
       ItemType.Misc,
       ItemType.Consumable,
-    ], // ['weapon', 'tool', 'shield', 'armor/head', 'trophy', 'resource', 'food', 'potion']
+    ], // ['weapon', 'tool', 'shield', 'armor/head', 'trophy', 'resource']
     tier: 2,
     piece: { target: 'none', water: false, onlyOnFlat, size: [0.25, 0.25, 0] },
     wear: { ...woodRoofStructureWear, hp: 50 },

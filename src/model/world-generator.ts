@@ -1,6 +1,7 @@
-import { Random } from './random';
-import { clamp01, lerp, lerpStep, smoothStep, stableHashCode } from './utils';
+import { random } from './random';
+import { clamp01, lerp, lerpStep, smoothStep, Vector3 } from './utils';
 import { perlinNoise, fbm } from './perlin';
+import { WORLD_RADIUS, ZONE_SIZE } from './game';
 
 const INT_MIN_VAL = 1 << 31;
 const INT_MAX_VAL = ((1 << 31) >>> 0) - 1;
@@ -144,17 +145,17 @@ class PointMap {
     }
 
     let bestIndex = -1;
-    let bestDistance = 99999.0;
+    let bestDistance2 = 99999.0 ** 2;
     for (const index of indices) {
       const point = points[index]!;
       if (index < minIndex) continue;
       if (point === p) continue;
-      const distance = Math.hypot(p.x - point.x, p.y - point.y);
-      if (distance >= this.bucketSize) continue;
-      if (distance < bestDistance
-      || (distance === bestDistance && index < bestIndex)) {
+      const distance2 = (p.x - point.x) ** 2 + (p.y - point.y) ** 2;
+      if (distance2 >= this.bucketSize * this.bucketSize) continue;
+      if (distance2 < bestDistance2
+      || (distance2 === bestDistance2 && index < bestIndex)) {
         bestIndex = index;
-        bestDistance = distance;
+        bestDistance2 = distance2;
       }
     }
     return bestIndex;
@@ -162,8 +163,6 @@ class PointMap {
 }
 
 export class WorldGenerator {
-  private _random: Random;
-
   offset0: number;
   offset1: number;
   offset2: number;
@@ -183,30 +182,69 @@ export class WorldGenerator {
 
   private readonly minMountainDistance = 1000;
 
-  constructor(seed: string) {
-    const numSeed: number = stableHashCode(seed);
-    this._random = new Random(numSeed);
+  private _biomeAreas = new Uint8Array(313 * 313);
+
+  constructor(seed: number) {
+    const state = random.getState();
+    random.init(seed);
     
-    this.offset0 = this._random.rangeInt(-10000, 10000);
-    this.offset1 = this._random.rangeInt(-10000, 10000);
-    this.offset2 = this._random.rangeInt(-10000, 10000);
-    this.offset3 = this._random.rangeInt(-10000, 10000);
-    this.riverSeed = this._random.rangeInt(INT_MIN_VAL, INT_MAX_VAL);
-    this.streamSeed = this._random.rangeInt(INT_MIN_VAL, INT_MAX_VAL);
-    this.offset4 = this._random.rangeInt(-10000, 10000);
+    this.offset0 = random.rangeInt(-10000, 10000);
+    this.offset1 = random.rangeInt(-10000, 10000);
+    this.offset2 = random.rangeInt(-10000, 10000);
+    this.offset3 = random.rangeInt(-10000, 10000);
+    this.riverSeed = random.rangeInt(INT_MIN_VAL, INT_MAX_VAL);
+    this.streamSeed = random.rangeInt(INT_MIN_VAL, INT_MAX_VAL);
+    this.offset4 = random.rangeInt(-10000, 10000);
     this.pregenerate();
+    random.setState(state);
   }
 
   private pregenerate(): void {
     this.findMountainsAndLakes();
     this._rivers = this.placeRivers();
     this._streams = this.placeStreams();
+    this._calculateBiomeAreas();
+  }
+
+  private _calculateBiomeAreas() {
+    const time = Date.now();
+    const OUTER_SIZE_2 = Math.ceil((10000 / ZONE_SIZE + Math.sqrt(2)) ** 2);
+    const INNER_SIZE_2 = Math.ceil((10000 / ZONE_SIZE) ** 2);
+    const biomes = new Uint8Array(315 * 315);
+    for (let y = -157; y <= 157; y++) {
+      for (let x = -157; x <= 157; x++) {
+        if (x * x + y * y > OUTER_SIZE_2) continue;
+        biomes[(y + 157) * 315 + x + 157] = this.getBiome(x * 64, y * 64);
+      }
+    }
+    for (let y = -156; y <= 156; y++) {
+      for (let x = -156; x <= 156; x++) {
+        if (x * x + y * y > INNER_SIZE_2) continue;
+        const pos = (y + 157) * 315 + x + 157;
+        const DY = 315;
+        const DX = 1;
+        const adjacentBiomes = new Set([
+          biomes[pos],
+          biomes[pos - DX - DY],
+          biomes[pos + DX - DY],
+          biomes[pos + DX + DY],
+          biomes[pos - DX + DY],
+          biomes[pos - DX],
+          biomes[pos + DX],
+          biomes[pos - DY],
+          biomes[pos + DY],
+        ])
+        this._biomeAreas[(y + 156) * 313 + x + 156] =
+          adjacentBiomes.size === 1 ? BiomeArea.Median : BiomeArea.Edge;
+      }
+    }
+    // console.info(`Pre-calculated biome areas in ${Date.now() - time}ms`);
   }
 
   private findMountainsAndLakes(): void {
     for (let y = -10000; y <= 10000; y += 128) {
       for (let x = -10000; x <= 10000; x += 128) {
-        if (Math.hypot(x, y) > 10000) continue;
+        if (x * x + y * y > 100e6) continue;
         const baseHeight = this.getBaseHeight(x, y);
         if (baseHeight > 0.45) {
           this._mountains.push(new Vector2(x, y));
@@ -225,7 +263,7 @@ export class WorldGenerator {
   }
 
   private placeStreams(): River[] {
-    const state = this._random.getState();
+    const state = random.getState();
     const rivers: River[] = [];
     // DateTime now = DateTime.Now;
     for (let index = 0; index < 3000; ++index) {
@@ -251,7 +289,7 @@ export class WorldGenerator {
       }
     }
     this.renderRivers(rivers);
-    this._random.setState(state);
+    random.setState(state);
     return rivers;
   }
 
@@ -265,7 +303,7 @@ export class WorldGenerator {
   ): Vector2 | undefined {
     for (let index = 0; index < iterations; ++index) {
       const num2 = lerp(maxLength, minLength, (index + 1) / iterations);
-      const f = this._random.rangeFloat(0, Math.PI * 2);
+      const f = random.rangeFloat(0, Math.PI * 2);
       const vector2 = start.add(new Vector2(Math.sin(f), Math.cos(f)).mul(num2));
       const height = this.getHeight(vector2.x, vector2.y);
       if (height > minHeight && height < maxHeight) {
@@ -280,8 +318,8 @@ export class WorldGenerator {
     maxHeight: number,
   ): Vector2 | undefined {
     for (let index = 0; index < iterations; ++index) {
-      const x = this._random.rangeFloat(-10000, 10000);
-      const y = this._random.rangeFloat(-10000, 10000);
+      const x = random.rangeFloat(-10000, 10000);
+      const y = random.rangeFloat(-10000, 10000);
       const height = this.getHeight(x, y);
       if (minHeight < height && height < maxHeight) {
         return new Vector2(x, y);
@@ -290,8 +328,8 @@ export class WorldGenerator {
   }
 
   private placeRivers(): River[] {
-    const state = this._random.getState();
-    this._random.init(this.riverSeed);
+    const state = random.getState();
+    random.init(this.riverSeed);
     // DateTime now = DateTime.Now;
     const rivers: River[] = [];
     const vector2List = [...this._lakes];
@@ -305,8 +343,8 @@ export class WorldGenerator {
       if (randomRiverEnd !== -1) {
         const p0 = vector2;
         const p1 = this._lakes[randomRiverEnd]!;
-        const widthMax = this._random.rangeFloat(60, 100);
-        const widthMin = this._random.rangeFloat(60, widthMax);
+        const widthMax = random.rangeFloat(60, 100);
+        const widthMin = random.rangeFloat(60, widthMax);
         const length = p0.distance(p1);
         rivers.push({
           p0,
@@ -323,7 +361,7 @@ export class WorldGenerator {
     }
     this.renderRivers(rivers);
     // TimeSpan timeSpan = DateTime.Now - now;
-    this._random.setState(state);
+    random.setState(state);
     return rivers;
   }
 
@@ -366,7 +404,7 @@ export class WorldGenerator {
         indexList.push(index);
       }
     }
-    return indexList.length === 0 ? -1 : this._random.element(indexList);
+    return indexList.length === 0 ? -1 : random.element(indexList);
   }
 
   private haveRiver1(rivers: River[], point: Vector2): boolean {
@@ -403,7 +441,7 @@ export class WorldGenerator {
       for (let num3 = 0.0; num3 <= num2; num3 += width8) {
         const f = num3 / river.curveWavelength;
         const num4 = Math.sin(f) * Math.sin(f * 0.63412) * Math.sin(f * 0.33412) * river.curveWidth;
-        const r = this._random.rangeFloat(river.widthMin, river.widthMax);
+        const r = random.rangeFloat(river.widthMin, river.widthMax);
         const p = river.p0.add(normalized.mul(num3)).add(vector2.mul(num4));
         this.addRiverPoint(riverPoints, p, r, river);
       }
@@ -528,50 +566,37 @@ export class WorldGenerator {
   }
 
   public getBiomeArea(x: number, y: number): BiomeArea {
-    const biomes = new Set([
-      this.getBiome(x,      y),
-      this.getBiome(x - 64, y - 64),
-      this.getBiome(x + 64, y - 64),
-      this.getBiome(x + 64, y + 64),
-      this.getBiome(x - 64, y + 64),
-      this.getBiome(x - 64, y),
-      this.getBiome(x + 64, y),
-      this.getBiome(x,      y - 64),
-      this.getBiome(x,      y + 64),
-    ])
-    return biomes.size === 1
-      ? BiomeArea.Median
-      : BiomeArea.Edge;
+    return this._biomeAreas[(y + 156) * 313 + x + 156]!;
   }
 
   public getBiome(wx: number, wy: number): Biome {
-    const magnitude = Math.hypot(wx, wy);
+    const magnitude2 = wx * wx + wy * wy;
     const baseHeight = this.getBaseHeight(wx, wy);
     const angle = this.worldAngle(wx, wy) * 100;
-    if (Math.hypot(wx, wy - 4000) > 12000.0 + angle)
+    if (wx * wx + (wy - 4000) ** 2 > (12e3 + angle) ** 2)
       return Biome.Ashlands;
     if (baseHeight <= 0.02)
       return Biome.Ocean;
-    if (Math.hypot(wx, wy + 4000) > 12000.0 + angle)
+    if (wx * wx + (wy + 4000) ** 2 > (12e3 + angle) ** 2)
       return baseHeight > 0.4 ? Biome.Mountain : Biome.DeepNorth;
     if (baseHeight > 0.4)
       return Biome.Mountain;
     if (perlinNoise((this.offset0 + wx) * 0.001, (this.offset0 + wy) * 0.001) > 0.6
-      && magnitude > 2000 && magnitude < 8000
+      && magnitude2 > 2e3 ** 2 && magnitude2 < 8e3 ** 2
       && baseHeight > 0.05 && baseHeight < 0.25)
       return Biome.Swamp;
     if (perlinNoise((this.offset4 + wx) * 0.001, (this.offset4 + wy) * 0.001) > 0.5
-      && magnitude > 6000 + angle
-      && magnitude < 10000)
+      && magnitude2 > (6e3 + angle) ** 2
+      && magnitude2 < 10e3 ** 2)
       return Biome.Mistlands;
     if (perlinNoise((this.offset1 + wx) * 0.001, (this.offset1 + wy) * 0.001) > 0.4
-      && magnitude > 3000 + angle
-      && magnitude < 8000)
+      && magnitude2 > (3e3 + angle) ** 2
+      && magnitude2 < 8e3 ** 2)
       return Biome.Plains;
     return (perlinNoise((this.offset2 + wx) * 0.001, (this.offset2 + wy) * 0.001) > 0.4
-      && magnitude > 600 + angle
-      && magnitude < 6000)
-      || magnitude > 5000 + angle
+      && magnitude2 > (600 + angle) ** 2
+      && magnitude2 < 6e3 ** 2)
+      || magnitude2 > (5e3 + angle) ** 2
         ? Biome.BlackForest
         : Biome.Meadows;
     }
@@ -596,11 +621,11 @@ export class WorldGenerator {
         )
       )) * smoothStep(744, 1000, distance));
     if (distance > 10000) {
-      const t1 = lerpStep(10000, 10500, distance);
+      const t1 = lerpStep(10000, WORLD_RADIUS, distance);
       result = lerp(result, -0.2, t1);
       let l = 10490;
       if (distance > l) {
-        const t2 = lerpStep(l, 10500, distance);
+        const t2 = lerpStep(l, WORLD_RADIUS, distance);
         result = lerp(result, -2, t2);
       }
     }
@@ -757,6 +782,21 @@ export class WorldGenerator {
 
   public getForestFactor(wx: number, wy: number): number {
     return fbm(wx * 0.004, wy * 0.004);
+  }
+
+  public getTerrainDelta(center: Vector3, radius: number): number {
+    let probes = 10;
+    let maxHeight = -999999;
+    let minHeight = +999999;
+    for (let probe = 0; probe < probes; ++probe) {
+      const { x, y } = random.insideUnitCircle();
+      const wx = center.x + x * radius;
+      const wy = center.z + y * radius;
+      const height = this.getHeight(wx, wy);
+      if (height < minHeight) minHeight = height;
+      if (height > maxHeight) maxHeight = height;
+    }
+    return maxHeight - minHeight;
   }
 
   private baseHeightTilt(wx: number, wy: number): number {

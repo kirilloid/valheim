@@ -1,8 +1,9 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext } from 'react';
 
 import type { ValueProps } from '../parts/types';
 import type { ZoneSystemData } from './types';
 
+import { toggleItem } from '../../model/utils';
 import { data } from '../../data/itemDB';
 
 import { TranslationContext } from '../../effects';
@@ -19,10 +20,6 @@ const baseKeys = [
   ['defeated_goblinking', 'GoblinKing'],
 ] as const;
 
-function toggleItem<T>(array: T[], value: T, add: boolean): T[] {
-  return add ? array.concat(value) : array.filter(v => v !== value);
-}
-
 function Keys({ value, onChange }: ValueProps<string[]>) {
   const translate = useContext(TranslationContext);
   // const inputRef = useRef<HTMLInputElement>(null);
@@ -35,27 +32,35 @@ function Keys({ value, onChange }: ValueProps<string[]>) {
     }
     input.value = '';
   } */
-  return <ul>
-    {baseKeys.map(([key, id]) => <li key={key}>
-      <input type="checkbox" checked={value.includes(key)} onChange={e => onChange(toggleItem(value, key, e.target.checked))} />
-      {translate(id)}
-      <ItemIcon item={data[id]} />
-    </li>)}
-    {/* {value.map(key => baseKeys.find(pair => pair[0] === key)
-      ? null
-      : <li key={key}>
-          <input type="button" value="×" onClick={() => onChange(toggleItem(value, key, false))} />
-          {key}
-        </li>
-    )}
-    <input type="text" ref={inputRef} onKeyDown={e => e.key === 'Enter' && addValue()} />
-    <input type="button" value="+" onClick={addValue} /> */}
-  </ul>
+  return <>
+    <ul>
+      {baseKeys.map(([key, id]) => <li key={key}>
+        <label>
+          <input type="checkbox" checked={value.includes(key)} onChange={e => onChange(toggleItem(value, key, e.target.checked))} />
+          <ItemIcon item={data[id]} />
+          {translate(id)}
+        </label>
+      </li>)}
+      {/* {value.map(key => baseKeys.find(pair => pair[0] === key)
+        ? null
+        : <li key={key}>
+            <input type="button" value="×" onClick={() => onChange(toggleItem(value, key, false))} />
+            {key}
+          </li>
+      )}
+      <input type="text" ref={inputRef} onKeyDown={e => e.key === 'Enter' && addValue()} />
+      <input type="button" value="+" onClick={addValue} /> */}
+    </ul>
+  </>
 }
 
 export function ZoneSystem({ value, onChange }: ValueProps<ZoneSystemData>) {
-  return <>
-    <Wiki article="Global Keys" />
+  return <div className="WorldEdit__Keys">
+    <h2>Key kills</h2>
     <Keys value={value.globalKeys} onChange={globalKeys => onChange({ ...value, globalKeys })} />
-  </>
+    <p>
+      This mean actual kills in this world rather than having a trophy.
+      See <Wiki article="Global Keys" /> for more details.
+    </p>
+  </div>
 }

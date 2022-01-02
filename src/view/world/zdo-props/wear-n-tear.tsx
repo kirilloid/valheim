@@ -33,17 +33,19 @@ export function WearNTearComp({ value: zdo, onChange }: ValueProps<ZDO>) {
           onChange(zdo);
         }} />
     </dd>
-    {support != null && <dt>support</dt>}
-    {support != null && <dd>
-      <input type="number"
-        min={support.minSupport}
-        max={support.maxSupport}
-        placeholder={String(support.maxSupport)}
-        value={floats.get(SUPPORT_HASH) ?? ''}
-        onChange={e => {
-          floats.set(SUPPORT_HASH, Number(e.target.value));
-          onChange(zdo);
-        }} />
-    </dd>}
+    {support != null && <>
+      <dt>support</dt>
+      <dd>
+        <input type="number"
+          min={support.minSupport}
+          max={support.maxSupport}
+          placeholder={String(support.maxSupport)}
+          value={floats.get(SUPPORT_HASH) ?? ''}
+          onChange={e => {
+            floats.set(SUPPORT_HASH, Number(e.target.value));
+            onChange(zdo);
+          }} />
+      </dd>
+    </>}
   </React.Fragment>
 }

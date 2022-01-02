@@ -8,7 +8,7 @@ const mapDataCache = new Map<BigInt, TMapData>();
 
 function MapData({ mapData }: { mapData: TMapData }) {
   const SIZE = 512;
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   useLayoutEffect(() => {
     const ctx = canvasRef.current?.getContext('2d');
     if (ctx == null) return;
@@ -36,7 +36,7 @@ function MapData({ mapData }: { mapData: TMapData }) {
     <br/>
     explored:
     <br/>
-    <canvas ref={r => canvasRef.current = r} width={SIZE} height={SIZE} />
+    <canvas ref={canvasRef} width={SIZE} height={SIZE} />
   </>
 }
 

@@ -10,7 +10,11 @@ import {
   mods,
   PhysicalObject,
   Plantable,
+  Structure,
 } from '../types';
+import { pickables } from './pickable';
+
+const oneOfEach = true;
 
 const allNormal: DamageModifiers = {
   blunt: 'normal',
@@ -93,7 +97,7 @@ function tree({
   grow,
   hp: [baseHp, logHp, logHalfHp],
   drop: [baseDrop, chunkDrop],
-  plant,
+  Plant,
 }: {
   id: [EntityId, EntityId, EntityId, EntityId];
   group?: EntityGroup;
@@ -102,7 +106,7 @@ function tree({
   grow: ItemGrow[];
   hp: [number, number, number];
   drop: [GeneralDrop, GeneralDrop];
-  plant?: Plantable;
+  Plant?: Plantable;
 }): PhysicalObject[] {
   return [
     {
@@ -124,7 +128,7 @@ function tree({
       },
       drop: [baseDrop],
       grow,
-      plant,
+      Plant,
     },
     {
       type: 'object',
@@ -253,6 +257,7 @@ function rock({
   children,
   hp: fracHp,
   drop: fracDrop,
+  Beacon,
 }: {
   subtype?: PhysicalObject['subtype'],
   id: [EntityId, EntityId];
@@ -262,6 +267,7 @@ function rock({
   children: number;
   hp: number;
   drop: GeneralDrop;
+  Beacon?: number;
 }): PhysicalObject[] {
   return [
     {
@@ -277,6 +283,7 @@ function rock({
         parts: [{ id: fracId, num: children }],
       },
       drop: [],
+      Beacon,
     },
     {
       type: 'object',
@@ -334,16 +341,317 @@ export function fullDestructible(obj: PhysicalObject | undefined): PhysicalObjec
   
   cacheMap.set(obj, result);
   return result;
-} 
+}
+
+const treasures: PhysicalObject[] = [
+  {
+    type: 'object',
+    subtype: 'treasure',
+    id: 'Pickable_DolmenTreasure',
+    components: ['PickableItem'],
+    tier: 0,
+    drop: [{
+      offByOneBug: false,
+      num: [1, 1],
+      options: [
+        { item: 'Coins', num: [2, 15] },
+        { item: 'AmberPearl', num: [1, 3] },
+        { item: 'Amber', num: [1, 5] },
+      ],
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
+    id: 'TreasureChest_meadows',
+    components: ['Container'],
+    tier: 1,
+    drop: [{
+      offByOneBug: false,
+      num: [2, 3],
+      options: [
+        { item: 'Feathers', num: [1, 3], },
+        { item: 'Coins', num: [5, 15], },
+        { item: 'Amber', num: [1, 1], },
+        { item: 'ArrowFlint', num: [10, 20], },
+        { item: 'Torch', num: [1, 1], },
+        { item: 'Flint', num: [2, 4], },
+      ],
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
+    id: 'TreasureChest_meadows_buried',
+    components: ['Container', 'Beacon'],
+    tier: 4,
+    drop: [{
+      offByOneBug: false,
+      oneOfEach,
+      num: [2, 3],
+      options: [
+        { item: 'ArrowFire', num: [10, 15], },
+        { item: 'Coins', num: [20, 50], },
+        { item: 'Ruby', num: [1, 3], },
+        { item: 'AmberPearl', num: [1, 2], },
+        { item: 'SilverNecklace', num: [1, 1], },
+      ],
+    }],
+    Beacon: 40,
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
+    id: 'shipwreck_karve_chest',
+    components: ['Container'],
+    tier: 2,
+    drop: [{
+      offByOneBug: false,
+      oneOfEach,
+      num: [1, 4],
+      options: [
+        { item: 'Coins', num: [50, 100], weight: 5 },
+        { item: 'AmberPearl', num: [1, 10], weight: 2 },
+        { item: 'Ruby', num: [1, 2], },
+      ],
+    }],  
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
+    id: 'TreasureChest_blackforest',
+    components: ['Container'],
+    tier: 2,
+    // damageModifiers: mod([1,1,1,1,1,1,1,3,3,3]),
+    drop: [{
+      offByOneBug: false,
+      oneOfEach,
+      num: [2, 3],
+      options: [
+        { item: 'Feathers', num: [2, 4], },
+        { item: 'ArrowFlint', num: [5, 10], },
+        { item: 'Coins', num: [5, 30], },
+        { item: 'Amber', num: [1, 2], },
+      ],
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
+    id: 'TreasureChest_forestcrypt',
+    components: ['Container'],
+    tier: 2,
+    drop: [{
+      offByOneBug: false,
+      oneOfEach,
+      num: [2, 4],
+      options: [
+        { item: 'Feathers', num: [1, 10], },
+        { item: 'ArrowFlint', num: [5, 10], },
+        { item: 'Ruby', num: [1, 2], },
+        { item: 'Coins', num: [10, 30], },
+        { item: 'Amber', num: [1, 3], },
+      ],
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
+    id: 'TreasureChest_trollcave',
+    components: ['Container'],
+    tier: 2,
+    drop: [{
+      offByOneBug: false,
+      oneOfEach,
+      num: [3, 5],
+      options: [
+        { item: 'Wood', num: [10, 30], },
+        { item: 'Stone', num: [10, 30], },
+        { item: 'Ruby', num: [1, 2], },
+        { item: 'Coins', num: [20, 50], },
+        { item: 'DeerHide', num: [2, 4], },
+        { item: 'BoneFragments', num: [10, 15], },
+        { item: 'LeatherScraps', num: [3, 5], },
+      ],
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
+    id: 'Pickable_ForestCryptRandom',
+    components: ['PickableItem'],
+    tier: 2,
+    drop: [{
+      offByOneBug: false,
+      num: [1, 1],
+      options: [
+        { item: 'Coins', num: [5, 20] },
+        { item: 'Ruby', num: [1, 2] },
+        { item: 'Amber', num: [1, 5] },
+        { item: 'AmberPearl', num: [1, 3] },
+      ]
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
+    id: 'TreasureChest_swamp',
+    components: ['Container'],
+    tier: 3,
+    drop: [{
+      offByOneBug: false,
+      oneOfEach,
+      num: [2, 3],
+      options: [
+        { item: 'WitheredBone', num: [1, 1], weight: 0.5, },
+        { item: 'ArrowIron', num: [10, 15], },
+        { item: 'ArrowPoison', num: [10, 15], },
+        { item: 'Coins', num: [20, 60], },
+        { item: 'Amber', num: [1, 5], },
+        { item: 'AmberPearl', num: [1, 3], },
+        { item: 'Ruby', num: [1, 3], },
+        { item: 'Chain', num: [1, 1], },
+        { item: 'ElderBark', num: [20, 30], },
+      ],
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
+    id: 'TreasureChest_sunkencrypt',
+    components: ['Container'],
+    tier: 3,
+    drop: [{
+      offByOneBug: false,
+      oneOfEach,
+      num: [2, 3],
+      options: [
+        { item: 'WitheredBone', num: [1, 1], weight: 0.5, },
+        { item: 'ArrowIron', num: [10, 15], },
+        { item: 'ArrowPoison', num: [10, 15], },
+        { item: 'Coins', num: [20, 60], },
+        { item: 'Amber', num: [1, 5], },
+        { item: 'AmberPearl', num: [1, 3], },
+        { item: 'Ruby', num: [1, 3], },
+        { item: 'Chain', num: [1, 3], },
+        { item: 'ElderBark', num: [20, 30], },
+        { item: 'IronScrap', num: [10, 20], weight: 2 },
+      ],
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
+    id: 'Pickable_SunkenCryptRandom',
+    components: ['PickableItem'],
+    tier: 3,
+    drop: [{
+      offByOneBug: false,
+      num: [1, 1],
+      options: [
+        { item: 'Coins', num: [5, 30] },
+        { item: 'Ruby', num: [1, 2] },
+        { item: 'Amber', num: [3, 10] },
+        { item: 'AmberPearl', num: [2, 5] },
+        { item: 'WitheredBone', num: [1, 1], weight: 2 },
+      ]
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
+    id: 'TreasureChest_mountains',
+    components: ['Container'],
+    tier: 4,
+    drop: [{
+      offByOneBug: false,
+      oneOfEach,
+      num: [2, 4],
+      options: [
+        { item: 'OnionSeeds', num: [3, 9], },
+        { item: 'Amber', num: [1, 6], },
+        { item: 'Coins', num: [30, 55], },
+        { item: 'AmberPearl', num: [2, 5], },
+        { item: 'Ruby', num: [1, 2], },
+        { item: 'Obsidian', num: [5, 10], },
+        { item: 'ArrowFrost', num: [5, 10], },
+      ],
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
+    id: 'TreasureChest_heath',
+    components: ['Container'],
+    tier: 5,
+    drop: [{
+      offByOneBug: false,
+      oneOfEach,
+      num: [2, 3],
+      options: [
+        { item: 'Barley', num: [2, 4], weight: 0.5, },
+        { item: 'BlackMetalScrap', num: [2, 5], },
+        { item: 'Needle', num: [2, 5], },
+        { item: 'Coins', num: [10, 40], },
+        { item: 'SharpeningStone', weight: 0.1, },
+      ],
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
+    tier: 5,
+    id: 'TreasureChest_plains_stone',
+    components: ['Container'],
+    drop: [{
+      offByOneBug: false,
+      oneOfEach,
+      num: [2, 4],
+      options: [
+        { item: 'Feathers', num: [5, 10], },
+        { item: 'ArrowObsidian', num: [5, 10], },
+        { item: 'SilverNecklace', weight: 0.5 },
+        { item: 'Coins', num: [66, 99], },
+        { item: 'GoblinTotem', weight: 0.1, },
+      ],
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
+    id: 'Pickable_MountainRemains01_buried',
+    components: ['PickableItem'],
+    tier: 4,
+    drop: [{
+      offByOneBug: false,
+      oneOfEach,
+      num: [1, 2],
+      options: [
+        { item: 'SilverNecklace', weight: 0.5 },
+        { item: 'BoneFragments', num: [1, 2], weight: 2 },
+      ],
+    }],
+    Beacon: 20,
+  },
+];
 
 export const objects: PhysicalObject[] = [
+  ...pickables.map<PhysicalObject>(p => ({
+    type: 'object',
+    subtype: p.subtype,
+    id: p.id,
+    components: ['Pickable'],
+    tier: p.tier,
+    drop: [singleDrop(p.item)],
+  })),
+  ...treasures,
   {
     type: 'object',
     subtype: 'plant',
-    id: 'sapling_carrot',
+    id: 'Pickable_Carrot',
     components: ['Pickable', 'Plant'],
     tier: 2,
-    plant: {
+    Plant: {
       subtype: 'vegetable',
       plantedWith: 'CarrotSeeds',
       growTime: [4000, 5000],
@@ -357,10 +665,10 @@ export const objects: PhysicalObject[] = [
   {
     type: 'object',
     subtype: 'plant',
-    id: 'SeedCarrot',
+    id: 'Pickable_SeedCarrot',
     components: ['Pickable', 'Plant'],
     tier: 2,
-    plant: {
+    Plant: {
       subtype: 'vegetable',
       plantedWith: 'Carrot',
       growTime: [4000, 5000],
@@ -374,10 +682,10 @@ export const objects: PhysicalObject[] = [
   {
     type: 'object',
     subtype: 'plant',
-    id: 'sapling_turnip',
+    id: 'Pickable_Turnip',
     components: ['Pickable', 'Plant'],
     tier: 3,
-    plant: {
+    Plant: {
       subtype: 'vegetable',
       plantedWith: 'TurnipSeeds',
       growTime: [4000, 5000],
@@ -391,10 +699,10 @@ export const objects: PhysicalObject[] = [
   {
     type: 'object',
     subtype: 'plant',
-    id: 'SeedTurnip',
+    id: 'Pickable_SeedTurnip',
     components: ['Pickable', 'Plant'],
     tier: 3,
-    plant: {
+    Plant: {
       subtype: 'vegetable',
       plantedWith: 'Turnip',
       growTime: [4000, 5000],
@@ -408,10 +716,10 @@ export const objects: PhysicalObject[] = [
   {
     type: 'object',
     subtype: 'plant',
-    id: 'sapling_onion',
+    id: 'Pickable_Onion',
     components: ['Pickable', 'Plant'],
     tier: 4,
-    plant: {
+    Plant: {
       subtype: 'vegetable',
       plantedWith: 'OnionSeeds',
       growTime: [4000, 5000],
@@ -425,10 +733,10 @@ export const objects: PhysicalObject[] = [
   {
     type: 'object',
     subtype: 'plant',
-    id: 'SeedOnion',
+    id: 'Pickable_SeedOnion',
     components: ['Pickable', 'Plant'],
     tier: 4,
-    plant: {
+    Plant: {
       subtype: 'vegetable',
       plantedWith: 'Onion',
       growTime: [4000, 5000],
@@ -442,10 +750,10 @@ export const objects: PhysicalObject[] = [
   {
     type: 'object',
     subtype: 'plant',
-    id: 'sapling_barley',
+    id: 'Pickable_Barley',
     components: ['Pickable', 'Plant'],
     tier: 5,
-    plant: {
+    Plant: {
       subtype: 'crop',
       plantedWith: 'Barley',
       growTime: [4000, 5000],
@@ -459,10 +767,10 @@ export const objects: PhysicalObject[] = [
   {
     type: 'object',
     subtype: 'plant',
-    id: 'sapling_flax',
+    id: 'Pickable_Flax',
     components: ['Pickable', 'Plant'],
     tier: 5,
-    plant: {
+    Plant: {
       subtype: 'crop',
       plantedWith: 'Flax',
       growTime: [4000, 5000],
@@ -476,16 +784,33 @@ export const objects: PhysicalObject[] = [
   ...rock({
     id: ['rock4_coast', 'rock4_coast_frac'],
     grow: itemGrow({
+      num: [3, 3],
+      scale: [0.6, 1.2],
+      randTilt: 15,
       locations: ['Meadows', 'BlackForest', 'Ashlands', 'DeepNorth', 'Mistlands'],
       altitude: [-0.5, -30],
       abundance: 1,
-      num: [3, 3],
       group: [3, 3],
+      groupRadius: 5,
     }),
     children: 132,
     hp: 50,
     drop: singleDrop('Stone', 4, 8),
   }),
+  {
+    type: 'object',
+    subtype: 'misc',
+    id: 'vines',
+    components: ['Destructible'],
+    tier: 1,
+    Destructible: {
+      hp: 50,
+      damageModifiers: allNormal,
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('Wood')],
+  },
   {
     type: 'object',
     subtype: 'misc',
@@ -505,7 +830,7 @@ export const objects: PhysicalObject[] = [
     },
     drop: [{
       num: [2, 2],
-      oneOfEach: true,
+      oneOfEach,
       options: [
         { item: 'QueenBee' },
         { item: 'Honey', num: [1, 3] },
@@ -515,18 +840,57 @@ export const objects: PhysicalObject[] = [
   {
     type: 'object',
     subtype: 'tree',
-    id: 'beech_small',
+    id: 'Beech_small1',
     group: 'beech',
     tier: 0,
-    grow: itemGrow({
-      locations: ['Meadows'],
-      tilt: [0, 30],
-      num: [160, 200],
-      // double of 2 variations: Beech_small1, Beech_small2
-      // num: 80, inForest: [0, 1]
-      // num: 100, inForest: [1.1, 1.15]
-      inForest: [0, 1.15],
-    }),
+    grow: [
+      ...itemGrow({
+        locations: ['Meadows'],
+        tilt: [0, 30],
+        num: [80, 80],
+        inForest: [0, 1],
+      }),
+      ...itemGrow({
+        locations: ['Meadows'],
+        tilt: [0, 30],
+        num: [100, 100],
+        inForest: [1.1, 1.15]
+      }),
+    ],
+    Destructible: {
+      hp: 20,
+      damageModifiers: allNormal, // ???
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [{
+      num: [2, 3],
+      options: [
+        { weight: 5, item: 'Wood' },
+        { weight: 1, item: 'Resin', num: [1, 2] },
+      ]
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'tree',
+    id: 'Beech_small2',
+    group: 'beech',
+    tier: 0,
+    grow: [
+      ...itemGrow({
+        locations: ['Meadows'],
+        tilt: [0, 30],
+        num: [80, 80],
+        inForest: [0, 1],
+      }),
+      ...itemGrow({
+        locations: ['Meadows'],
+        tilt: [0, 30],
+        num: [100, 100],
+        inForest: [1.1, 1.15]
+      }),
+    ],
     Destructible: {
       hp: 20,
       damageModifiers: allNormal, // ???
@@ -563,7 +927,7 @@ export const objects: PhysicalObject[] = [
         { weight: 1, item: 'Resin', num: [1, 2] },
       ]
     }, singleDrop('Wood', 10)],
-    plant: {
+    Plant: {
       subtype: 'tree',
       plantedWith: 'BeechSeeds',
       growTime: [3000, 5000],
@@ -657,7 +1021,7 @@ export const objects: PhysicalObject[] = [
         { weight: 1, item: 'Resin' },
       ]
     }, singleDrop('Wood', 10)],
-    plant: {
+    Plant: {
       subtype: 'tree',
       plantedWith: 'FirCone',
       growTime: [3000, 5000],
@@ -725,7 +1089,7 @@ export const objects: PhysicalObject[] = [
     drop: [singleDrop('Wood', 4, 5)],
   },
   ...tree({
-    id: ['Pinetree_01', 'Pinetree_01_Stub', 'Pinetree_log', 'PineTree_log_half'],
+    id: ['Pinetree_01', 'Pinetree_01_Stub', 'PineTree_log', 'PineTree_log_half'],
     tier: 2,
     minToolTier: 0,
     grow: itemGrow({
@@ -755,7 +1119,7 @@ export const objects: PhysicalObject[] = [
         { item: 'RoundLog' },
       ],
     }],
-    plant: {
+    Plant: {
       subtype: 'tree',
       plantedWith: 'PineCone',
       growTime: [3000, 5000],
@@ -795,7 +1159,7 @@ export const objects: PhysicalObject[] = [
         { item: 'FineWood' },
       ],
     }],
-    plant: {
+    Plant: {
       subtype: 'tree',
       plantedWith: 'BirchSeeds',
       growTime: [5000, 7000],
@@ -867,7 +1231,7 @@ export const objects: PhysicalObject[] = [
         { item: 'FineWood' },
       ],
     }],
-    plant: {
+    Plant: {
       subtype: 'tree',
       plantedWith: 'Acorn',
       growTime: [6000, 8000],
@@ -878,7 +1242,7 @@ export const objects: PhysicalObject[] = [
     },
   }),
   ...treeSimpler({
-    id: ['SwampTree1', 'SwampTree1_Stub', 'SwampTree_log'],
+    id: ['SwampTree1', 'SwampTree1_Stub', 'SwampTree1_log'],
     tier: 3,
     minToolTier: 0,
     grow: itemGrow({
@@ -896,6 +1260,13 @@ export const objects: PhysicalObject[] = [
       ],
     }],
   }),
+  ...[1, 2, 3, 4].map<PhysicalObject>(subId => ({
+    type: 'object',
+    subtype: 'indestructible',
+    id: `RockDolmen_${subId}`,
+    tier: 1,
+    grow: [],
+  })),
   {
     type: 'object',
     subtype: 'indestructible',
@@ -919,6 +1290,46 @@ export const objects: PhysicalObject[] = [
       tilt: [0, 35],
       num: [1, 3],
     }),
+  },
+  {
+    type: 'object',
+    subtype: 'tree',
+    id: 'shrub_2',
+    tier: 2,
+    grow: [],
+  },
+  {
+    type: 'object',
+    subtype: 'tree',
+    id: 'shrub_2_heath',
+    tier: 5,
+    grow: [],
+  },
+  {
+    type: 'object',
+    subtype: 'tree',
+    id: 'Bush01',
+    tier: 1,
+    grow: [],
+  },
+  {
+    type: 'object',
+    subtype: 'tree',
+    id: 'Bush02_en',
+    tier: 1,
+    grow: itemGrow({
+      locations: ['BlackForest'],
+      tilt: [0, 30],
+      num: [1, 3],
+      group: [3, 8],
+    }),
+  },
+  {
+    type: 'object',
+    subtype: 'tree',
+    id: 'Bush01_heath',
+    tier: 5,
+    grow: [],
   },
   ...rock({
     id: ['rock4_forest', 'rock4_forest_frac'],
@@ -1039,7 +1450,6 @@ export const objects: PhysicalObject[] = [
       },
       parts: [],
     },
-    drop: [singleDrop('AncientSeed')],
     SpawnArea: {
       levelUpChance: 0.15,
       maxNear: 2,
@@ -1052,7 +1462,7 @@ export const objects: PhysicalObject[] = [
   {
     type: 'object',
     subtype: 'misc',
-    id: 'barrel',
+    id: 'barrell', // yes, double-l
     tier: 2,
     Destructible: {
       minToolTier: 0,
@@ -1061,7 +1471,7 @@ export const objects: PhysicalObject[] = [
       parts: [],
     },
     drop: [{
-      oneOfEach: true,
+      oneOfEach,
       num: [2, 3],
       options: [
         { item: 'Blueberries', num: [2, 4] },
@@ -1105,7 +1515,7 @@ export const objects: PhysicalObject[] = [
       ],
     },
   }),
-  ...rock({ // beacon: 25
+  ...rock({
     subtype: 'ore',
     id: ['mudpile_beacon', 'mudpile_frac'],
     tier: 3,
@@ -1125,6 +1535,7 @@ export const objects: PhysicalObject[] = [
         { item: 'WitheredBone' },
       ],
     },
+    Beacon: 25,
   }),
   {
     type: 'object',
@@ -1220,6 +1631,20 @@ export const objects: PhysicalObject[] = [
   }),
   {
     type: 'object',
+    subtype: 'rock',
+    id: 'Rock_7',
+    tier: 1,
+    grow: [],
+    Destructible: {
+      hp: 30,
+      damageModifiers: pickOnly,
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('Stone', 3, 6)],
+  },
+  {
+    type: 'object',
     subtype: 'misc',
     id: 'Spawner_DraugrPile',
     tier: 2,
@@ -1230,7 +1655,6 @@ export const objects: PhysicalObject[] = [
       damageModifiers: draugrPileModifiers,
       parts: [],
     },
-    drop: [singleDrop('AncientSeed')],
     SpawnArea: {
       levelUpChance: 0.15,
       maxNear: 2,
@@ -1244,10 +1668,10 @@ export const objects: PhysicalObject[] = [
   },
 
   // MOUNTAIN
-  {
+  ...[1, 2].map<PhysicalObject>(subId => ({
     type: 'object',
     subtype: 'rock',
-    id: 'marker',
+    id: `marker0${subId}`,
     tier: 4,
     grow: [],
     Destructible: {
@@ -1257,10 +1681,26 @@ export const objects: PhysicalObject[] = [
       parts: [],
     },
     drop: [singleDrop('Stone', 3, 6)],
-  },
+  })),
+  ...rock({
+    id: ['highstone', 'highstone_frac'],
+    tier: 4,
+    grow: [],
+    children: NaN,
+    hp: NaN,
+    drop: singleDrop('Stone', NaN),
+  }),
+  ...rock({
+    id: ['widestone', 'widestone_frac'],
+    tier: 4,
+    grow: [],
+    children: NaN,
+    hp: NaN,
+    drop: singleDrop('Stone', NaN),
+  }),
   {
     type: 'object',
-    subtype: 'misc',
+    subtype: 'rock',
     id: 'MineRock_Obsidian',
     tier: 4,
     grow: itemGrow({
@@ -1277,7 +1717,6 @@ export const objects: PhysicalObject[] = [
     drop: [singleDrop('Obsidian', 5, 8)],
   },
   ...rock({
-    // beacon: 50
     subtype: 'ore',
     id: ['silvervein', 'silvervein_frac'],
     tier: 4,
@@ -1299,6 +1738,7 @@ export const objects: PhysicalObject[] = [
         { item: 'SilverOre' },
       ],
     },
+    Beacon: 50,
   }),
   ...rock({
     id: ['rock1_mountain', 'rock1_mountain_frac'],
@@ -1452,7 +1892,6 @@ export const objects: PhysicalObject[] = [
       offset: -2,
     }),
   },
-  // MISTLANDS
   {
     type: 'object',
     subtype: 'indestructible',
@@ -1463,6 +1902,19 @@ export const objects: PhysicalObject[] = [
       num: [10, 10],
       tilt: [0, 30],
     }),
+  },
+  {
+    type: 'object',
+    subtype: 'rock',
+    id: 'MountainGraveStone01',
+    tier: 4,
+    grow: [],
+    Destructible: {
+      hp: 400,
+      damageModifiers: pickOnly,
+      minToolTier: 0,
+      parts: [],
+    }
   },
   {
     type: 'object',
@@ -1510,6 +1962,18 @@ export const objects: PhysicalObject[] = [
   },
   {
     type: 'object',
+    subtype: 'indestructible',
+    id: 'HugeRoot1',
+    tier: 6,
+  },
+  {
+    type: 'object',
+    subtype: 'indestructible',
+    id: 'SwampTree2_darkland',
+    tier: 6,
+  },
+  {
+    type: 'object',
     subtype: 'ore',
     id: 'MineRock_Meteorite',
     components: ['MineRock'],
@@ -1531,10 +1995,269 @@ export const objects: PhysicalObject[] = [
   },
   {
     type: 'object',
+    subtype: 'misc',
+    id: 'shipwreck_karve_bottomboards',
+    tier: 1,
+    Destructible: {
+      hp: 60,
+      damageModifiers: chopOnly,
+      minToolTier: 1,
+      parts: [],
+    },
+    drop: [singleDrop('FineWood', 3, 5)]
+  },
+  {
+    type: 'object',
+    subtype: 'misc',
+    id: 'shipwreck_karve_bow',
+    tier: 1,
+    Destructible: {
+      hp: 60,
+      damageModifiers: chopOnly,
+      minToolTier: 1,
+      parts: [],
+    },
+    drop: [singleDrop('FineWood', 3, 5)]
+  },
+  {
+    type: 'object',
+    subtype: 'misc',
+    id: 'shipwreck_karve_dragonhead',
+    tier: 1,
+    Destructible: {
+      hp: 60,
+      damageModifiers: chopOnly,
+      minToolTier: 1,
+      parts: [],
+    },
+    drop: [singleDrop('FineWood', 3, 5)]
+  },
+  {
+    type: 'object',
+    subtype: 'misc',
+    id: 'shipwreck_karve_stern',
+    tier: 1,
+    Destructible: {
+      hp: 60,
+      damageModifiers: chopOnly,
+      minToolTier: 1,
+      parts: [],
+    },
+    drop: [singleDrop('FineWood', 3, 5)]
+  },
+  {
+    type: 'object',
+    subtype: 'misc',
+    id: 'shipwreck_karve_sternpost',
+    tier: 1,
+    Destructible: {
+      hp: 60,
+      damageModifiers: chopOnly,
+      minToolTier: 1,
+      parts: [],
+    },
+    drop: [singleDrop('FineWood', 3, 5)]
+  },
+  {
+    type: 'object',
     subtype: 'indestructible',
     id: 'Vegvisir',
     components: ['Vegvisir'],
     tier: 0,
+  },
+  {
+    type: 'object',
+    subtype: 'misc',
+    id: 'lox_ribs',
+    tier: 5,
+  },
+  {
+    type: 'object',
+    subtype: 'indestructible',
+    id: 'StatueDeer',
+    tier: 1,
+  },
+  {
+    type: 'object',
+    subtype: 'indestructible',
+    id: 'StatueSeed',
+    tier: 1,
+  },
+  ...[7,8,10,11,12].map<PhysicalObject>(subId => ({
+    type: 'object',
+    subtype: 'indestructible',
+    id: `root${String(subId).padStart(2, '0')}`,
+    components: [],
+    tier: 2,
+  })),
+  // highstone, widestone
+];
+
+export const structures: Structure[] = [
+  {
+    id: 'sign_notext',
+    type: 'structure',
+    tier: 1,
+    Destructible: {
+      hp: 50,
+      damageModifiers: allNormal,
+      minToolTier: 0,
+      parts: [],
+    }
+  },
+  {
+    id: 'goblin_banner',
+    type: 'structure',
+    tier: 5,
+    Destructible: {
+      hp: 200,
+      damageModifiers: allNormal,
+      minToolTier: 0,
+      parts: [],
+    }
+  },
+  {
+    id: 'goblin_bed',
+    type: 'structure',
+    tier: 5,
+    Destructible: {
+      hp: 200,
+      damageModifiers: allNormal,
+      minToolTier: 0,
+      parts: [],
+    }
+  },
+  {
+    id: 'goblin_fence',
+    type: 'structure',
+    tier: 5,
+    Destructible: {
+      hp: 200,
+      damageModifiers: allNormal,
+      minToolTier: 0,
+      parts: [],
+    }
+  },
+  {
+    id: 'goblin_pole',
+    type: 'structure',
+    tier: 5,
+    Destructible: {
+      hp: 200,
+      damageModifiers: allNormal,
+      minToolTier: 0,
+      parts: [],
+    }
+  },
+  {
+    id: 'goblin_pole_small',
+    type: 'structure',
+    tier: 5,
+    Destructible: {
+      hp: 200,
+      damageModifiers: allNormal,
+      minToolTier: 0,
+      parts: [],
+    }
+  },
+  {
+    id: 'goblin_roof_45d',
+    type: 'structure',
+    tier: 5,
+    Destructible: {
+      hp: 200,
+      damageModifiers: allNormal,
+      minToolTier: 0,
+      parts: [],
+    }
+  },
+  {
+    id: 'goblin_roof_45d_corner',
+    type: 'structure',
+    tier: 5,
+    Destructible: {
+      hp: 200,
+      damageModifiers: allNormal,
+      minToolTier: 0,
+      parts: [],
+    }
+  },
+  {
+    id: 'goblin_roof_cap',
+    type: 'structure',
+    tier: 5,
+    Destructible: {
+      hp: 200,
+      damageModifiers: allNormal,
+      minToolTier: 0,
+      parts: [],
+    }
+  },
+  {
+    id: 'goblin_stairs',
+    type: 'structure',
+    tier: 5,
+    Destructible: {
+      hp: 200,
+      damageModifiers: allNormal,
+      minToolTier: 0,
+      parts: [],
+    }
+  },
+  {
+    id: 'goblin_stepladder',
+    type: 'structure',
+    tier: 5,
+    Destructible: {
+      hp: 200,
+      damageModifiers: allNormal,
+      minToolTier: 0,
+      parts: [],
+    }
+  },
+  {
+    id: 'goblin_totempole',
+    type: 'structure',
+    tier: 5,
+    Destructible: {
+      hp: 200,
+      damageModifiers: allNormal,
+      minToolTier: 0,
+      parts: [],
+    }
+  },
+  {
+    id: 'goblin_woodwall_1m',
+    type: 'structure',
+    tier: 5,
+    Destructible: {
+      hp: 200,
+      damageModifiers: allNormal,
+      minToolTier: 0,
+      parts: [],
+    }
+  },
+  {
+    id: 'goblin_woodwall_2m',
+    type: 'structure',
+    tier: 5,
+    Destructible: {
+      hp: 200,
+      damageModifiers: allNormal,
+      minToolTier: 0,
+      parts: [],
+    }
+  },
+  {
+    id: 'goblin_woodwall_2m_ribs',
+    type: 'structure',
+    tier: 5,
+    Destructible: {
+      hp: 200,
+      damageModifiers: allNormal,
+      minToolTier: 0,
+      parts: [],
+    }
   },
 ];
 

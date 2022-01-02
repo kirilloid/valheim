@@ -26,7 +26,7 @@ function NormalAttack({ attack: a, dmgScale }: { attack: NormalAttackProfile, dm
       {a.burst ? `×${a.burst}` : ''}
       {a.unblockable ? ', unblockable' : ''}
       {a.undodgeable ? ', undodgeable' : ''}
-      {a.stagger ? ', stagger=' + a.stagger : ', no stagger'}
+      {a.stagger ? ',\u00A0stagger=' + a.stagger : ', no stagger'}
     </dd>
   </>
 }

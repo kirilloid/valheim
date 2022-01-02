@@ -1,93 +1,87 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
-import { wait } from '../../model/utils';
-import { Biome, WorldGenerator as WorldGen } from '../../model/world-generator';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
 
-const biomeColors = [
-  0xff5ba791, // Meadows
-  0xff3b5e34, // Black forest
-  0xff5771a3, // Swamp
-  0xffffffff, // Mountain
-  0xff31c7c7, // Plains
-  0xff990000, // Ocean
-  0xff343434, // Mistlands
-  0xff0000ff, // Ashlands
-  0xffffffff, // Deep North
-] as const;
-
-async function drawSeedOnto(world: WorldGen, imageData: ImageData, size: number, onProgress: (progress: number) => void) {
-  const pixels = new Uint32Array(imageData.data.buffer);
-  for (let y = 0; y < size; y++) {
-    for (let x = 0; x < size; x++) {
-      const worldX = (2 * x / size - 1) * 10500;
-      const worldY = (1 - 2 * y / size) * 10500;
-      if (worldX ** 2 + worldY ** 2 > 10500 ** 2) {
-        pixels[size * y + x] = 0; // dark space
-      } else {
-        const biome = world.getBiome(worldX, worldY);
-        const height = world.getHeight(worldX, worldY);
-        if (height < 28 && biome !== Biome.Ocean) {
-          // const c = Math.round(128 * height / 30);
-          // putRgb(x, y, [c, c, c + 127]);
-          pixels[size * y + x] = 0xFFFF8080;
-        } else {
-          pixels[size * y + x] = biomeColors[biome];
-        }
-      }
-    }
-    onProgress(y);
-    if (y % 10 === 0) {
-      await wait(10);
-    }
-  }
-  onProgress(size);
-}
+import { WORLD_SIZE } from '../../model/game';
+import { stableHashCode } from '../../model/utils';
+import { generateZones } from '../../model/worker/generate-zones';
+import { generateTerrain } from '../../model/worker/generate-terrain';
+import { RegisteredLocation } from '../../model/zone-system';
+import { PanView } from '../parts/PanView';
 
 const WorldMap = React.memo((props: { seed: string }) => {
   const { seed } = props;
-  const SIZE = 960;
+  const SIZE = 2048;
+  function canvas2worldCoord(c: number): number {
+    return (c / SIZE - 0.5) * WORLD_SIZE;
+  }
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [progress, setProgress] = useState(0);
-  const MAX_SCALE = 5;
-  const baseSize = (SIZE / 2 ** MAX_SCALE) ** 2;
-  const totalProgress = baseSize * (4 ** (MAX_SCALE + 1) / 3);
+  const [mapProgress, setMapProgress] = useState(0);
+  const [locProgress, setLocProgress] = useState(0);
+  const [locations, setLocations] = useState<RegisteredLocation[]>([]);
+  const [zoom, setZoom] = useState(1);
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+
   useLayoutEffect(() => {
     if (seed === '') return;
     const canvas = canvasRef.current;
     if (canvas == null) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    (async function (canvas: HTMLCanvasElement) {
-      const world = new WorldGen(seed);
-      let currentProgress = 0;
-      for (let scale = MAX_SCALE; scale >= 0; scale--) {
-        const size = SIZE / (2 ** scale); 
-        const imageData = ctx.createImageData(size, size);
-        await drawSeedOnto(world, imageData, size, y => {
-          setProgress(currentProgress + y * size)
-        });
-        currentProgress += size ** 2;
-        canvas.width = size;
-        canvas.height = size;
-        ctx.putImageData(imageData, 0, 0);
-      }
-    }(canvas));
+    const numSeed = stableHashCode(seed);
+    return generateTerrain(numSeed, SIZE, 3, (data) => {
+      const array = new Uint8ClampedArray(data.buffer);
+      const imageData = new ImageData(array, data.width, data.height);
+      ctx.putImageData(imageData, data.x, data.y);
+      setMapProgress(data.progress);
+    });
   }, [seed]);
+
+  useEffect(() => {
+    if (seed === '') return;
+    const numSeed = stableHashCode(seed);
+    return generateZones(numSeed, setLocProgress, setLocations);
+  }, [seed]);
+
   return <>
-    <progress max={totalProgress} value={progress} style={{ width: '100%' }} />
-    <canvas width={SIZE} height={SIZE} ref={r => canvasRef.current = r}
-      style={{ margin: '0 auto', imageRendering: 'pixelated', width: `${SIZE}px`, height: `${SIZE}px` }} />
+    <dl className="overlay">
+      <dt>world map</dt><dd><progress max={1} value={mapProgress} style={{ width: '100%', height: 16 }} /></dd>
+      <dt>locations</dt><dd><progress max={1} value={locProgress} style={{ width: '100%', height: 16 }} /></dd>
+    </dl>
+    <div className="overlay">zoom: {Math.round(zoom * 100)}%</div>
+    <div className="overlay">position: {Math.round(canvas2worldCoord(pos.x))} / {-Math.round(canvas2worldCoord(pos.y))}</div>
+    <div style={{ position: 'absolute', top: 40, bottom: 0, left: 0, right: 0 }}>
+      <PanView maxZoom={20} onZoomChange={setZoom} onMouseMove={setPos}>
+        <canvas width={SIZE} height={SIZE} ref={r => canvasRef.current = r}
+          style={{ margin: '0 auto', imageRendering: 'pixelated', width: `${SIZE}px`, height: `${SIZE}px` }} />
+      </PanView>
+    </div>
   </>
 });
 
 export function WorldGenerator() {
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const [seed, setSeed] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+  const params = useParams<{ seed?: string }>();
+  const [seed, setSeed] = useState(params.seed ?? '');
+  const history = useHistory();
+
+  useEffect(() => {
+    const input = inputRef.current;
+    if (input != null) input.value = seed;
+  }, [seed]);
 
   return (<>
-    <div>
-      <input ref={r => inputRef.current = r} type="text" />
-      <button onClick={() => setSeed(inputRef.current?.value ?? '')}>Generate</button>
-    </div>
+    <section className="overlay">
+      <h1>World Generator</h1>
+      <input ref={inputRef} type="text" placeholder="Enter seed" />
+      <button className="btn" onClick={() => {
+        const newSeed = inputRef.current?.value ?? '';
+        const path = newSeed.length ? `/world-gen/${newSeed}` : '/world-gen';
+        if (history.location.pathname !== path) {
+          history.replace(path);
+        }
+        setSeed(newSeed);
+      }}>Generate</button>
+    </section>
     <WorldMap seed={seed} />
   </>);
 }

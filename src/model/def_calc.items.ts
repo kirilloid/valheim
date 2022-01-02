@@ -23,8 +23,11 @@ function addMod(item: Item | Effect, damageModifiers?: Partial<DamageModifiers>)
   allItems.set(hash, el);
 }
 
-function addToItems(item: Item & { damageModifiers?: Partial<DamageModifiers> }) {
-  const { damageModifiers } = item;
+function addToItems(
+  item: Item & { damageModifiers?: Partial<DamageModifiers> },
+  extraDamageModifiers?: Partial<DamageModifiers>
+) {
+  const damageModifiers = extraDamageModifiers ?? item.damageModifiers;
   addMod(item, damageModifiers);
 }
 
@@ -34,7 +37,7 @@ function addEffect(effect: Effect) {
 }
 
 for (const r of resources) {
-  if (r.type === 'potion') addToItems(r);
+  if (r.Potion != null) addToItems(r, r.Potion.damageModifiers);
 }
 for (const a of armors) {
   if (a.type === 'armor') addToItems(a);

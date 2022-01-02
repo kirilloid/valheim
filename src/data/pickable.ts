@@ -1,0 +1,98 @@
+export const pickables = [
+  {
+    id: 'Pickable_Branch',
+    tier: 0,
+    item: 'Wood',
+    subtype: 'misc',
+  },
+  {
+    id: 'Pickable_Stone',
+    tier: 0,
+    item: 'Stone',
+    subtype: 'misc',
+  },
+  {
+    id: 'RaspberryBush',
+    tier: 1,
+    item: 'Raspberry',
+    subtype: 'plant',
+  },
+  {
+    id: 'Pickable_Mushroom',
+    tier: 1,
+    item: 'Mushroom',
+    subtype: 'plant',
+  },
+  {
+    id: 'Pickable_Dandelion',
+    tier: 1,
+    item: 'Dandelion',
+    subtype: 'plant',
+  },
+  {
+    id: 'Pickable_Flint',
+    tier: 1,
+    item: 'Flint',
+    subtype: 'misc',
+  },
+  {
+    id: 'BlueberryBush',
+    tier: 2,
+    item: 'Blueberries',
+    subtype: 'plant',
+  },
+  {
+    id: 'Pickable_Thistle',
+    tier: 2,
+    item: 'Thistle',
+    subtype: 'plant',
+  },
+  {
+    id: 'Pickable_ForestCryptRemains01',
+    tier: 2,
+    item: 'BoneFragments',
+    subtype: 'misc',
+  },
+  {
+    id: 'Pickable_ForestCryptRemains02',
+    tier: 2,
+    item: 'BoneFragments',
+    subtype: 'misc',
+  },
+  {
+    id: 'Pickable_ForestCryptRemains03',
+    tier: 2,
+    item: 'BoneFragments',
+    subtype: 'misc',
+  },
+  {
+    id: 'Pickable_ForestCryptRemains04',
+    tier: 2,
+    item: 'BoneFragments',
+    subtype: 'misc',
+  },
+  {
+    id: 'Pickable_Mushroom_yellow',
+    tier: 2,
+    item: 'MushroomYellow',
+    subtype: 'plant',
+  },
+  {
+    id: 'Pickable_SurtlingCoreStand',
+    tier: 2,
+    item: 'SurtlingCore',
+    subtype: 'misc',
+  },
+  {
+    id: 'Pickable_DragonEgg',
+    tier: 4,
+    item: 'DragonEgg',
+    subtype: 'misc',
+  },
+  {
+    id: 'CloudberryBush',
+    tier: 5,
+    item: 'Cloudberry',
+    subtype: 'plant',
+  },
+] as const;

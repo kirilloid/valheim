@@ -95,4 +95,8 @@ export const arrows: Arrow[] = [
   /*{ type: 'ammo', id: 'draugr_arrow', tier: -1, weight: 1, stack: 20,
     damage: dmg({ pierce: 15 }), knockback: 35,
   },*/
-];  
+];
+
+for (const arrow of arrows) {
+  arrow.components = ['ItemDrop'];
+}

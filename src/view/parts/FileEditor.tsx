@@ -25,12 +25,13 @@ export function FileEditor<T>(props: Props<T>) {
   const [state, setState] = useState<FileState<T>>({ state: 'empty' });
   const [dragging, setDragging] = useState(false);
   const ext = props.extension;
+  const { reader } = props;
 
-  async function processFile(file: File) {
+  const processFile = useCallback(async (file: File) => {
     const buffer = await file.arrayBuffer();
     setState({ state: 'reading', file, progress: 0 });
     const value = await runGenerator(
-      props.reader(new Uint8Array(buffer)),
+      reader(new Uint8Array(buffer)),
       progress => setState({ state: 'reading', file, progress })
     );
     setState({ state: 'done', file, value, changed: false });
@@ -39,7 +40,7 @@ export function FileEditor<T>(props: Props<T>) {
       ? (mem / 1024).toPrecision(3) + ' GB'
       : mem.toPrecision(3) + ' MB';
     console.info('Memory used: ' + memStr);
-  }
+  }, [setState, reader]);
 
   const processFiles = useCallback(async (files: FileList | null) => {
     if (files == null) {
@@ -53,11 +54,13 @@ export function FileEditor<T>(props: Props<T>) {
     if (matchingFiles.length > 1) return setState({ state: 'picking', files: matchingFiles });
     if (matchingFiles.length === 1) return processFile(matchingFiles[0]!);
     if (allFiles.length === 0) {
-      if (state.state === 'done') return;
-      return setState({ state: 'empty', message: "No file was selected" });
+      return setState(state => state.state === 'done'
+        ? state
+        : { state: 'empty', message: "No file was selected" }
+      );
     }
     if (!window.confirm("The file(s) you provided, doesn't have proper extension. Reading wrong file might crash this browser tab.\nDo you want to proceed?")) {
-      return setState({ state: 'empty' });
+      return;
     }
     if (allFiles.length === 1) {
       processFile(allFiles[0]!);
@@ -70,7 +73,7 @@ export function FileEditor<T>(props: Props<T>) {
     event.preventDefault();
     setDragging(false);
     processFiles(event.dataTransfer.files);
-  }, [setState, ext, processFiles]);
+  }, [processFiles]);
 
   const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();

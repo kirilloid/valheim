@@ -1,9 +1,15 @@
 import { crc32, stableHashCode } from '../model/utils';
-import { prefabNames } from './prefabs';
+import { prefabNames, modPrefabNames } from './prefabs';
 
-const buildHashMap = (values: string[]) => new Map(values.map(key => [stableHashCode(key), key]));
+const addToHashMap = (map: Map<number, string>, values: string[]) => {
+  for (const key of values) {
+    map.set(stableHashCode(key), key);
+  }
+};
 
-export const keys = buildHashMap([
+export const keys = new Map<number, string>();
+
+addToHashMap(keys, [
   // BaseAI
   'huntplayer', 'spawnpoint', 'patrolPoint', 'patrol', 'spawntime', 'lastWorldTime', 'haveTarget', 'alert',
   // Bed
@@ -124,5 +130,9 @@ for (const name of ['alert', 'inWater', 'onGround', 'encumbered', 'flying', 'sle
   keys.set(hash, name);
 }
 
-export const objects = buildHashMap(prefabNames);
-export const getId = (map: Map<number, string>, hash: number): string => map.get(hash) ?? `!unknown_${(hash >>> 0).toString(16).padStart(8, '0')}`;
+export const objects = new Map<number, string>();
+addToHashMap(objects, prefabNames);
+for (const prefabs of Object.values(modPrefabNames)) {
+  addToHashMap(objects, prefabs);
+}
+export const getId = (map: Map<number, string>, hash: number): string => map.get(hash) ?? `_unknown_${(hash >>> 0).toString(16).padStart(8, '0')}`;

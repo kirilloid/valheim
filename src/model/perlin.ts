@@ -2,20 +2,12 @@ import { lerp } from './utils';
 
 function grad(hash: number, x: number, y: number): number {
   const h = hash & 15;
-  return gradXTable[h]! * x + gradYTable[h]! * y;
-  const u = h < 8 ? x : y;
-  let v;
-  
-  if (h < 4) v = y;
-  else if (h === 12 || h === 14) v = x;
-  else v = 0;
-  
-  return (h & 1 ? -u : u)
-      +  (h & 2 ? -v : v);
+  const result = gradXTable[h]! * x + gradYTable[h]! * y;
+  return result;
 }
 
-const gradXTable = new Float32Array([1,-1, 1,-1, 1,-1, 1,-1, 0, 0, 0, 0, 1, 0,-1, 0]);
-const gradYTable = new Float32Array([1, 1,-1,-1, 0, 0, 0, 0, 1,-1, 1,-1, 1,-1, 1,-1]);
+const gradXTable = new Float64Array([1,-1, 1,-1, 1,-1, 1,-1, 0, 0, 0, 0, 1, 0,-1, 0]);
+const gradYTable = new Float64Array([1, 1,-1,-1, 0, 0, 0, 0, 1,-1, 1,-1, 1,-1, 1,-1]);
 
 // Hash lookup table as defined by Ken Perlin.
 const p = new Uint8Array([ 151,160,137,91,90,15,
@@ -45,8 +37,8 @@ export function perlinNoise(x: number, y: number): number {
   const AA = p[A]!, AB = p[A+1]!;
   const BA = p[B]!, BB = p[B+1]!;
 
-  const u = x ** 3 * (x * (x * 6 - 15) + 10);
-  const v = y ** 3 * (y * (y * 6 - 15) + 10);
+  const u = x * x * x * (x * (x * 6 - 15) + 10);
+  const v = y * y * y * (y * (y * 6 - 15) + 10);
 
   const result = lerp(
     lerp(
@@ -61,7 +53,8 @@ export function perlinNoise(x: number, y: number): number {
     ),
     v,
   );
-  return (result + 0.69) / 1.483;
+  const adjusted = (result + 0.69) * 0.6743088334457181; // div 1.483
+  return adjusted;
 }
 
 export function fbm(x: number, y: number) {

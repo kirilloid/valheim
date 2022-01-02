@@ -58,10 +58,12 @@ function addArray<T extends { id: string; tier?: number; tags?: string[] }>(
   dict: Record<string, string>,
   dictKeyMap: (arg: string) => string,
   customTags?: string,
+  idReader?: (arg: T) => string,
 ) {
   const visited = new Set<string>();
   for (const obj of data) {
-    const { id, tier = 0 } = obj;
+    const id = idReader ? idReader(obj) : obj.id;
+    const { tier = 0 } = obj;
     // avoid duplicating locations via different parent biomes
     if (visited.has(id)) continue
     visited.add(id);
@@ -205,7 +207,7 @@ const lang = read('language', getDefaultUserLanguage());
 
 preloadLanguage(lang).then(dict => {
   addArray(pages, 'page', '/', dict, id => `ui.page.${id}`);
-  addArray(locations, 'loc', '/loc/', dict, id => `ui.location.${id}`);
+  addArray(locations, 'loc', '/loc/', dict, id => `ui.location.${id}`, '', ({ typeId }) => typeId);
   addArray(biomes, 'biome', '/biome/', dict, id => `ui.biome.${id}`, 'ui.biome');
   addObjects(dict);
   addArray(events, 'event', '/event/', dict, id => id, 'ui.event ui.page.events.tags');

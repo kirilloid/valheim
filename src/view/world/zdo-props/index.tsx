@@ -34,14 +34,18 @@ export const InterfaceFields: Partial<Record<GameComponent, React.ComponentType<
   BaseAI: [
     boolComp('huntplayer'),
     vectorComp('spawnpoint'),
-    vectorComp('patrolPoint'),
     boolComp('patrol'),
+    vectorComp('patrolPoint'),
     timeComp('spawntime'),
     timeComp('lastWorldTime'),
     boolComp('haveTarget'),
     boolComp('alert'),
   ],
-  Bed: [idComp('owner'), stringComp('ownerName')],
+  Bed: [
+    idComp('owner'),
+    stringComp('ownerName')
+  ],
+  Beacon: [],
   Beehive: [
     timeComp('lastTime'),
     intComp('level'),
@@ -50,6 +54,7 @@ export const InterfaceFields: Partial<Record<GameComponent, React.ComponentType<
   Character: [
     floatComp('max_health'),
     floatComp('noise'),
+    boolComp('tamed'),
     enumComp('level', [[1, '0*'], [2, '1*'], [3, '2*']]),
     // quaternionComp('tiltrot'),
     vectorComp('BodyVelocity'),

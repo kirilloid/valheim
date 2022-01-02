@@ -22,7 +22,7 @@
   margin: 0;
   position: absolute;
   width: 100%;
-  background: var(--color-background);
+  background: rgb(var(--color-background));
   left: -0.5em;
   outline: 1px solid;
   font-feature-settings: "tnum" 1;

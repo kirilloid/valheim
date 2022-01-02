@@ -1,3 +1,5 @@
+import type { Vector2i } from './utils';
+
 type RandomState = {
   a: number;
   b: number;
@@ -58,5 +60,16 @@ export class Random {
   public rangeInt(min: number, max: number) {
     return min + (this.next() >>> 0) % (max - min)
   }
+
+  public insideUnitCircle(): Vector2i {
+    // TODO: check that's the actual implemtntation
+    const radius = this.random();
+    const angle = this.rangeFloat(0, Math.PI * 2);
+    return {
+      x: Math.cos(angle) * radius,
+      y: Math.sin(angle) * radius,
+    };
+  }
 };
-  
+
+export const random = new Random(0);

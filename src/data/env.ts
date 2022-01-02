@@ -1,7 +1,8 @@
 import type { Biome } from "../types";
 
+const COLD_DAY = 1;
 const COLD_NIGHT = 2;
-const COLD = 3;
+const COLD = COLD_DAY | COLD_NIGHT;
 const FREEZE = 12;
 const WET = 16;
 const DARK = 32;

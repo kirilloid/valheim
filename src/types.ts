@@ -6,7 +6,7 @@ import { SkillType } from './model/skills';
 export type EntityId = string;
 
 export type GameComponent = 
-| 'BaseAI' | 'Bed' | 'Beehive'
+| 'BaseAI' | 'Beacon' | 'Bed' | 'Beehive'
 | 'Chair' | 'Character' | 'Container' | 'CookingStation' | 'Corpse' | 'CraftingStation' | 'CraftingStationExtension' | 'CreatureSpawner'
 | 'Destructible' | 'Door' | 'DungeonGenerator'
 | 'Fermenter' | 'Fireplace' | 'Fish' | 'FishingFloat'
@@ -35,12 +35,6 @@ export type EntityGroup =
   | 'seedTree' | 'seedVeg' | 'ship' | 'smelt' | 'stack' | 'stand'
   | 'torch'
   | 'value'
-
-export interface TreasureChest extends GameObjectBase {
-  type: 'treasure';
-  id: EntityId;
-  drop: GeneralDrop;
-};
 
 export type Biome =
   | 'Meadows'
@@ -118,28 +112,38 @@ export type BiomeConfig = {
 
 export type LocationItem = { item: EntityId | LocationItem[], chance: number, number: number };
 
-export type LocationVariation = {
-  subtype: string,
-  quantity: number,
-  items: LocationItem[],
-  dungeon?: DungeonRoomsConfig,
-};
-
 export type LocationConfig = {
   id: GameLocationId;
+  typeId: GameLocationId;
   components?: GameComponent[];
+  type: 'altar' | 'dungeon' | 'runestone' | 'misc';
   tier: number;
   tags?: string[];
+
+  quantity: number,
   biomes: Biome[];
-  quantity: number;
-  type: 'altar' | 'dungeon' | 'runestone' | 'misc';
+  biomeArea: number;
+  chance: number;
+  prioritized: boolean;
+  centerFirst: boolean;
+  unique: boolean;
+  group: string;
   minApart: number;
-  altitude: [number, number];
-  distance: [number, number];
+  iconAlways: boolean;
+  iconPlaced: boolean;
+  randomRotation: boolean;
+  slopeRotation: boolean;
+  terrainDelta: Pair<number>;
+  inForest: Pair<number> | null;
+  distance: Pair<number>;
+  altitude: Pair<number>;
+  radius: Pair<number>;
+
   destructibles: DropDist;
   creatures: DropDist;
   resources: DropDist;
-  variations: LocationVariation[];
+  items: LocationItem[],
+  dungeon?: DungeonRoomsConfig,
 };
 
 export type DungeonGenConfig = {
@@ -291,6 +295,7 @@ export interface SpawnerConfig {
 }
 
 export interface Creature extends GameObjectBase {
+  ragdollId: EntityId | null;
   type: 'creature';
   components: GameComponent[];
   emoji: string;
@@ -363,11 +368,12 @@ export interface SpawnArea {
 
 export type PhysicalObject = GameObjectBase & {
   type: 'object';
-  subtype: 'tree' | 'plant' | 'rock' | 'ore' | 'indestructible' | 'misc';
+  subtype: 'tree' | 'plant' | 'rock' | 'ore' | 'indestructible' | 'misc' | 'treasure';
   Destructible?: Destructible;
   drop?: GeneralDrop[];
   grow?: ItemGrow[];
-  plant?: Plantable;
+  Plant?: Plantable;
+  Beacon?: number;
   SpawnArea?: SpawnArea;
 }; 
 
@@ -425,17 +431,19 @@ export interface BasePiece extends GameObjectBase {
   }; 
 }
 
+type Wear = {
+  hp: number;
+  damageModifiers: DamageModifiers;
+  noRoof?: boolean;
+  noSupport?: boolean;
+  providesSupport?: boolean;
+  materialType?: MaterialType;
+};
+
 export type Piece = BasePiece & {
   type: 'piece';
   base: boolean;
-  wear: {
-    hp: number;
-    damageModifiers: DamageModifiers;
-    noRoof?: boolean;
-    noSupport?: boolean;
-    providesSupport?: boolean;
-    materialType?: MaterialType;
-  };
+  wear: Wear;
 } & ({
   subtype: 'fireplace';
   fireplace: {
@@ -483,6 +491,11 @@ export type Piece = BasePiece & {
   subtype: 'chest';
   space: [width: number, height: number];
 });
+
+export interface Structure extends GameObjectBase {
+  type: 'structure';
+  Destructible?: Destructible;
+}
 
 export interface Transport extends BasePiece {
   type: 'ship' | 'cart';
@@ -548,27 +561,47 @@ interface GameObjectBase {
 }
 
 interface ItemGrowConfig {
-  locations: Biome[];
-  abundance?: number;
-  altitude?: Pair<number>;
-  tilt?: Pair<number>;
-  offset?: number;
   num: Pair<number>;
+  forcePlacement?: boolean;
+  scale?: Pair<number>;
+  randTilt?: number;
+  chanceToUseGroundTilt?: number;
+  locations: Biome[];
+  biomeArea?: number;
+  blockCheck?: boolean;
+  altitude?: Pair<number>;
+  oceanDepth?: Pair<number>;
+  tilt?: Pair<number>;
+  terrainDelta?: Pair<number>;
+  terrainDeltaRadius?: number;
+  offset?: number;
   group?: Pair<number>;
+  groupRadius?: number;
   onSurface?: boolean;
   inForest?: Pair<number> | null;
   respawn?: number;
+  abundance?: number;
 }
 
 export type ItemGrow = Required<ItemGrowConfig>;
 
 export function itemGrow(...grows: ItemGrowConfig[]): ItemGrow[] {
   return grows.map(grow => ({
+    forcePlacement: false,
+    scale: [1, 1],
+    randTilt: 15,
+    chanceToUseGroundTilt: 0,
+    biomeArea: 7,
+    blockCheck: true,
     abundance: 1,
     altitude: [1, 1000],
+    oceanDepth: [0, 0],
     tilt: [0, 90],
+    terrainDelta: [0, 2],
+    terrainDeltaRadius: 0,
     offset: 0,
     group: [1, 1],
+    groupRadius: 20,
     onSurface: false,
     inForest: null,
     respawn: 0,
@@ -632,17 +665,12 @@ export interface Resource extends BaseItem {
   emoji?: string;
   summon?: [EntityId, number];
   power?: EntityId;
+  Food?: Food;
+  Potion?: Potion;
+  Value?: number;
 }
 
-export interface Valuable extends BaseItem {
-  type: 'valuable';
-  emoji: string;
-  value: number;
-}
-
-export interface Food extends BaseItem {
-  type: 'food';
-  emoji: string;
+export interface Food {
   health: number;
   stamina: number;
   duration: number;
@@ -650,9 +678,7 @@ export interface Food extends BaseItem {
   color: string;
 }
 
-export interface Potion extends BaseItem {
-  type: 'potion';
-  emoji?: string;
+export interface Potion {
   health?: [adds: number, time: number];
   stamina?: [adds: number, time: number];
   healthRegen?: number;
@@ -772,7 +798,7 @@ export interface Armor extends BaseItem {
   durability: Pair<number>;
 }
 
-export type Item = Resource | Valuable | Food | Potion | Weapon | Shield | Armor | Arrow | Tool;
+export type Item = Resource | Weapon | Shield | Armor | Arrow | Tool;
 export type ItemSpecial = Weapon['special'] | Armor['special'] | Tool['special'];
 
-export type GameObject = Item | Piece | TreasureChest | PhysicalObject | Ship | Cart | Creature;
+export type GameObject = Item | Piece | Structure | PhysicalObject | Ship | Cart | Creature;

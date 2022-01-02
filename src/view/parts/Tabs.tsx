@@ -9,7 +9,8 @@ export function Tabs({ tabs, selected }: {
   selected: number
 }) {
   const [index, setIndex] = useState(selected);
-  const cache = useRef<(JSX.Element | undefined)[]>(tabs.map(() => undefined));
+  const shown = useRef<boolean[]>(tabs.map(() => false));
+  shown.current[index] = true;
   return <>
     <nav className="Tabs">
       {tabs.map(({ title, renderer }, i) => <React.Fragment key={i}>
@@ -18,11 +19,9 @@ export function Tabs({ tabs, selected }: {
           onClick={() => setIndex(i)}>
           {title}
         </span>
-        <div className="Tabs__content" style={{ display: i === index ? '' : 'none'}}>{
-          i === index
-            ? (cache.current[index] ?? (cache.current[index] = renderer()))
-            : cache.current[i]
-        }</div>
+        <div className="Tabs__content" style={{ display: i === index ? '' : 'none'}}>
+          {shown.current[i] ? renderer() : null}
+        </div>
       </React.Fragment>)}
     </nav>
   </>;

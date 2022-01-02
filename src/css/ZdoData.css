@@ -1,0 +1,26 @@
+/* for lower width, it'd just a vertical stack */
+.ZdoData__Map {
+  display: inline-block;
+}
+
+@media screen and (min-width: 640px) {
+  .ZdoData {
+    display: grid;
+    grid-template-columns: 1fr 329px;
+  }
+  
+  .ZdoData__Map {
+    grid-row: 1;
+    grid-column: 2;
+  }
+  
+  .ZdoData__Selector {
+    grid-row: 1;
+    grid-column: 1;
+  }
+  
+  .ZdoData__Editor {
+    grid-row: 2;
+    grid-column: 1 / 3;
+  }    
+}

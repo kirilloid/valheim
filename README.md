@@ -23,3 +23,10 @@ If you want to re-use content of this repository in other projects, refer to **E
 ## Contacts
 
 Feel free to contact me (`kirilloid#8246`) on [official Valheim discord](https://discord.gg/5jKacv3nae) if you have any question regarding this project or Valheim. You can also consider topic channels, specifically `#valheim-help` or `#programming`.
+
+### TODO
+
+Mostly notes for myself
+
+- erase cartography table data
+- rename character

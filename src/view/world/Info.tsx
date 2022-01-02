@@ -10,6 +10,7 @@ import { Tabs } from '../parts/Tabs';
 
 import { RandomEvents } from './RandomEvents';
 import { ZoneSystem } from './ZoneSystem';
+import { WorldDiscovery } from './WorldDiscovery';
 import { CorruptionManager } from './CorruptionManager';
 import { ZdoData } from './zdo-data';
 
@@ -26,27 +27,25 @@ export function WorldInfo({ value, onChange, file, disabled }: EditorProps<World
     title: 'File',
     renderer: () => <FileInfo file={file} version={version} />,
   }, {
-    title: 'Time',
-    renderer: () => <dl>
-      <dt>world time</dt><dd>{showTime(netTime)}</dd>
+    title: 'Progress',
+    renderer: () => <div className="WorldEdit">
+      <div className="WorldEdit__Time">
+        <h2>world time</h2>
+        <p>{showTime(netTime)}</p>
+      </div>
       {randEvent != null && <RandomEvents value={randEvent} />}
-    </dl>
-  }];
-  if (zoneSystem != null) {
-    tabs.push({
-      title: 'Progress',
-      renderer: () => <ZoneSystem value={zoneSystem} onChange={zoneSystem => onChange({ ...value, zoneSystem })} />
-    });
-  }
-  tabs.push({
+      {zoneSystem != null && <ZoneSystem value={zoneSystem} onChange={zoneSystem => onChange({ ...value, zoneSystem })} />}
+      <WorldDiscovery value={value} />
+    </div>
+  }, {
     title: 'Objects',
     renderer: () => <ZdoData value={zdo} onChange={zdo => onChange({ ...value, zdo })} />
   }, {
     title: 'Recovery',
     renderer: () => <CorruptionManager value={value} onChange={onChange} />
-  });
+  }];
   return <section className={disabled ? 'FileEditor--disabled' : ''}>
-    <h1>World</h1>
+    <h1>{file.name} world</h1>
     <Tabs tabs={tabs} selected={1} />
   </section>
 }

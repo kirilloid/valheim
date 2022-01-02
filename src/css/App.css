@@ -135,7 +135,7 @@ option.spoiler {
   border: 1px solid gray;
   border-radius: 0.5rem;
   overflow: hidden;
-  background: var(--color-background);
+  background: rgb(var(--color-background));
   box-shadow: 0 0 1rem #0008;
 }
 
@@ -178,6 +178,8 @@ option.spoiler {
   }    
 }
 
+/* TABS */
+
 .Tabs {
   display: flex;
   flex-direction: column;
@@ -198,7 +200,7 @@ option.spoiler {
 
 .Tab--selected {
   color: var(--color-text);
-  cursor: initial;
+  cursor: default;
   border-color: var(--color-text);
 }
 
@@ -231,6 +233,8 @@ option.spoiler {
   }
 }
 
+/* FILE EDITOR */
+
 .drop {
   flex: 1 0 auto;
   position: relative;
@@ -252,4 +256,37 @@ option.spoiler {
   opacity: 0.5;
   filter: grayscale(1);
   pointer-events: none;
+}
+
+@media screen and (min-width: 640px) {
+  .WorldEdit {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }    
+}
+
+.Map__marker {
+  position: absolute;
+  outline: black solid 1px;
+  transform: scale(calc(1 / var(--scale)));
+  width: var(--marker-size);
+  height: var(--marker-size);
+  background-color: #f80;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.Map__progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 4;
+  width: 100%;
+  top: calc(50% - 8px);
+  height: 16;
+}
+
+.overlay {
+  background-color: rgba(var(--color-background), 0.75);
+  z-index: 1;
 }

@@ -13,14 +13,20 @@ function showTime(time: number) {
 export function RandomEvents({ value }: { value: RandEventData }) {
   const translate = useContext(TranslationContext);
   if (!value.name) {
-    return <>
-      <dt>timer</dt><dd>{showTime(value.eventTimer)} till next event</dd>
-    </>
+    return <div className="WorldEdit__Events">
+      <h2>Raids</h2>
+      <dl>
+        <dt>timer</dt><dd>{showTime(value.eventTimer)} till next event</dd>
+      </dl>
+    </div>
   };
-  return <>
-    <dt>timer</dt><dd>{showTime(value.eventTimer)} till next event</dd>
-    <dt>happening</dt><dd><Link to={`/events/${value.name}`}>{translate(value.name)}</Link></dd>
-    <dt>where</dt><dd>{value.pos!.x} / {value.pos!.z}</dd>
-    <dt>remaining</dt><dd>{value.time}</dd>
-  </>
+  return <div className="WorldEdit__Events">
+    <h2>Raids</h2>
+    <dl>
+      <dt>timer</dt><dd>{showTime(value.eventTimer)} till next event</dd>
+      <dt>happening</dt><dd><Link to={`/events/${value.name}`}>{translate(value.name)}</Link></dd>
+      <dt>where</dt><dd>{value.pos!.x} / {value.pos!.z}</dd>
+      <dt>remaining</dt><dd>{value.time}</dd>
+    </dl>
+  </div>;
 }

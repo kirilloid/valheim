@@ -7,10 +7,7 @@ import { tools } from './tools';
 import { pieces } from './building';
 import { creatures } from './creatures';
 import { ships, carts } from './transport';
-import { objects } from './objects';
-import { treasures } from './treasures';
-
-import { mapping } from './mapping';
+import { objects, structures } from './objects';
 
 export const data: Record<string, GameObject> = {};
 
@@ -34,27 +31,21 @@ for (const coll of [
   pieces,
   ships,
   carts,
-  treasures,
   objects,
+  structures,
   resources,
 ]) {
   addCollection(coll);
 }
 
-for (const [auxId, mainId] of mapping.entries()) {
-  const obj = data[mainId];
-  if (obj != null) data[auxId] = obj;
+if (typeof window !== 'undefined') {
+  (window as any).objectDB = data;
 }
-
-(window as any).objectDB = data;
 
 export const extraData: Record<string, GameComponent[]> = {
   LocationProxy: ['LocationProxy'],
   _TerrainCompiler: ['TerrainComp'],
   TarLiquid: ['LiquidVolume'],
-
-  BlueberryBush: ['Pickable'],
-  RaspberryBush: ['Pickable'],
 
   DG_ForestCrypt: ['DungeonGenerator'],
   DG_GoblinCamp: ['DungeonGenerator'],
@@ -129,14 +120,14 @@ export const extraData: Record<string, GameComponent[]> = {
   Spawner_Troll: ['CreatureSpawner'],
   Spawner_Wraith: ['CreatureSpawner'],
 
-  Fish1: ['Fish'],
-  Fish2: ['Fish'],
-  Fish3: ['Fish'],
   Draugr_Ranged: ['BaseAI', 'Humanoid', 'MonsterAI', 'VisEquipment'],
   GoblinArcher: ['BaseAI', 'Humanoid', 'MonsterAI', 'VisEquipment'],
   Skeleton_NoArcher: ['BaseAI', 'Humanoid', 'MonsterAI', 'VisEquipment'],
 
-  deer_ragdoll: ['Ragdoll'],
-  Greydwarf_ragdoll: ['Ragdoll'],
-  Greydwarf_Shaman_ragdoll: ['Ragdoll'],
 };
+
+for (const { ragdollId } of creatures) {
+  if (ragdollId) {
+    extraData[ragdollId] = ['Ragdoll'];
+  }
+}

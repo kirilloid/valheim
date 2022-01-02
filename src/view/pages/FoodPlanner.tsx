@@ -3,7 +3,7 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import '../../css/FoodPlanner.css';
 
-import type { Biome, Food, GameObject, Item, SimpleDrop } from '../../types';
+import type { Biome, Food, GameObject, Resource, SimpleDrop } from '../../types';
 import { days, isNotNull, groupBy, mapValues } from '../../model/utils';
 import { BASE_HEALTH, BASE_STAMINA, MAX_PLAYERS } from '../../model/game';
 import { addDrop } from '../../model/dist';
@@ -15,8 +15,10 @@ import { TranslationContext, useRuneTranslate, useDebounceEffect, useGlobalState
 import { InlineObjectWithIcon, showNumber } from '../helpers';
 import { Icon, ItemIcon } from '../parts/Icon';
 
-function isFood(item: Item): item is Food {
-  return item.type === 'food';
+type FoodItem = Resource & { Food: Food };
+
+function isFood(item: Resource): item is FoodItem {
+  return item.Food != null;
 }
 
 const foods = resources.filter(isFood);
@@ -39,23 +41,23 @@ const FoodOptions = React.memo(() => {
 
 function getItemResources(item: GameObject | undefined): SimpleDrop {
   if (item == null) return {};
-  if (item.type !== 'item' && item.type !== 'food') return { [item.id]: 1 };
+  if (item.type !== 'item') return { [item.id]: 1 };
   const { recipe } = item;
   if (recipe?.type !== 'craft_one') return { [item.id]: 1 };
   return Object.entries(recipe.materials)
     .reduce((total, [res, num]) => addDrop(total, getItemResources(data[res]), num / recipe.number), {});
 }
 
-function getFoodResourcesPerDay(food: Food | undefined): SimpleDrop {
-  if (food == null) {
+function getFoodResourcesPerDay(item: FoodItem | undefined): SimpleDrop {
+  if (item == null) {
     return {};
   }
-  const t = 1 / days(food.duration);
-  const { recipe } = food; 
+  const t = 1 / days(item.Food.duration);
+  const { recipe } = item; 
   if (recipe?.type !== 'craft_one') {
-    return { [food.id]: t };
+    return { [item.id]: t };
   }
-  return mapValues(getItemResources(food), v => v * t);
+  return mapValues(getItemResources(item), v => v * t);
 }
 
 function updateAtIndex<T extends any[]>(array: T, idx: number, val: T[number]): T {
@@ -100,20 +102,24 @@ function Radio(props: { val: number, repeat: number, setRepeat: (val: number) =>
 }
 
 const bestTypes = {
-  maxHp: (food: Food) => food.health,
-  balance: (food: Food) => food.health + food.stamina,
-  maxSta: (food: Food) => food.stamina,
+  maxHp: (item: FoodItem) => item.Food.health,
+  balance: (item: FoodItem) => item.Food.health + item.Food.stamina,
+  maxSta: (item: FoodItem) => item.Food.stamina,
 };
 
-function bestFoods(maxTier: number, useFn: (food: Food) => number): [Food, Food, Food] {
+function bestFoods(maxTier: number, useFn: (food: FoodItem) => number): [FoodItem, FoodItem, FoodItem] {
   return foods
     .filter(f => f.tier <= maxTier)
     .sort((a, b) => useFn(b) - useFn(a))
     .slice(0, 3)
-    .sort((a, b) => a.id.localeCompare(b.id)) as [Food, Food, Food];
+    .sort((a, b) => a.id.localeCompare(b.id)) as [FoodItem, FoodItem, FoodItem];
 }
 
-type Foods = [Food | undefined, Food | undefined, Food | undefined];
+type Foods = [
+  FoodItem | undefined,
+  FoodItem | undefined,
+  FoodItem | undefined,
+];
 
 type State = {
   foods: [string, string, string];
@@ -185,7 +191,7 @@ export function FoodPlanner() {
   const totalFood = Object.fromEntries(
     selectedFoods
       .filter(isNotNull)
-      .map(f => [f.id, 1 / days(f.duration)])
+      .map(f => [f.id, 1 / days(f.Food.duration)])
   );
   const mul = (nightEat ? 1 : 0.7) * players * daysDuration * repeat;
 
@@ -235,16 +241,16 @@ export function FoodPlanner() {
         {[0, 1, 2].map(idx => <tr>
           <td><ItemIcon key={idx} item={selectedFoods[idx]} className={(selectedFoods[idx]?.tier ?? 0) > spoiler ? 'spoiler' : ''} /></td>
           <td className="FoodPlanner__select"><FoodSelector key={idx} state={selectedFoods} setState={setSelectedFoods} idx={idx} error={wrongFoods[idx]} /></td>
-          <td className="FoodPlanner__value">{selectedFoods[idx]?.health}</td>
-          <td className="FoodPlanner__value">{selectedFoods[idx]?.stamina}</td>
+          <td className="FoodPlanner__value">{selectedFoods[idx]?.Food.health}</td>
+          <td className="FoodPlanner__value">{selectedFoods[idx]?.Food.stamina}</td>
         </tr>)}
       </tbody>
       <tfoot>
         <tr>
           <th>&Sigma;</th>
           <th>{translate('ui.total')}</th>
-          <th className="FoodPlanner__value">{selectedFoods.reduce((a, b) => a + (b?.health ?? 0), BASE_HEALTH)}</th>
-          <th className="FoodPlanner__value">{selectedFoods.reduce((a, b) => a + (b?.stamina ?? 0), BASE_STAMINA)}</th>
+          <th className="FoodPlanner__value">{selectedFoods.reduce((a, b) => a + (b?.Food.health ?? 0), BASE_HEALTH)}</th>
+          <th className="FoodPlanner__value">{selectedFoods.reduce((a, b) => a + (b?.Food.stamina ?? 0), BASE_STAMINA)}</th>
         </tr>
       </tfoot>
     </table>

@@ -4,7 +4,7 @@ import { createSelector } from 'reselect';
 
 import '../css/Search.css';
 
-import { DamageType, EntityId, GameObject, ItemSpecial, Piece } from '../types';
+import { DamageType, EntityId, GameObject, ItemSpecial, Piece, Resource } from '../types';
 import { SkillType } from '../model/skills';
 import { assertNever, days, timeI2S } from '../model/utils';
 import { match, SearchEntry } from '../model/search';
@@ -95,7 +95,7 @@ function renderItem(entry: SearchEntry, text: string, translate: Translator, onC
 function SearchLocation({ entry, text, onClick }: { entry: SearchEntry, text: string, onClick: React.MouseEventHandler }) {
   const [spoiler] = useGlobalState('spoiler');
   const { id } = entry;
-  const loc = locations.find(l => l.id === id);
+  const loc = locations.find(l => l.typeId === id);
   if (!loc) return null;
   
   const boss = null; //loc.vegvisir?.boss;
@@ -124,20 +124,17 @@ function ShortRecipe(props: { item: GameObject }) {
   switch (item.type) {
     case 'creature':
     case 'object':
+    case 'structure':
     case 'item':
     case 'trophy':
-    case 'valuable':
-    case 'treasure':
       return null;
     case 'piece':
     case 'ship':
     case 'cart':
-    case 'food':
     case 'shield':
     case 'tool':
     case 'armor':
     case 'ammo':
-    case 'potion':
     case 'weapon': {
       const { recipe } = item;
       if (recipe == null) return null;
@@ -189,6 +186,50 @@ function SearchEffect({ id, text, onClick }: BaseSearchItemProps) {
   </div> : null;
 }
 
+function ItemExtra({ item }: { item: Resource }) {
+  const translate = useContext(TranslationContext);
+  const respawn = item.grow?.find(g => g.respawn)?.respawn ?? 0;
+  if (item.summon) return <ItemIcon item={data[item.summon[0]]} useAlt size={32} />;
+  if (respawn) return <span>{days(respawn)} <Icon id="time" alt={translate('ui.time')} size={16} /></span>;
+  if (item.Food != null) {
+    return <span>
+      <Icon id="health" alt={translate('ui.health')} size={16} />
+      {item.Food.health}
+      <Icon id="walknut" alt={translate('ui.stamina')} size={16} />
+      {item.Food.stamina}
+    </span>
+  }
+  if (item.Potion != null) { 
+    return <>
+      <span>
+        {item.Potion.health
+          ? <>
+              <Icon id="health" alt={translate('ui.health')} size={16} />
+              {item.Potion.health[0]} / {item.Potion.health[1]}s
+            </>
+          : null}
+        {item.Potion.stamina
+          ? <>
+              <Icon id="walknut" alt={translate('ui.stamina')} size={16} />
+              {item.Potion.stamina[0]} / {item.Potion.stamina[1]}s
+            </>
+          : null}
+        {item.Potion.damageModifiers
+          ? (Object.keys(item.Potion.damageModifiers) as DamageType[]).map(type => resistIcon(translate, type))
+          : null}
+      </span>
+      <ShortRecipe item={item} />
+    </>;
+  }
+  if (item.Value != null) {
+    return <span>
+      <Icon id="coin" alt={translate('Coins')} size={32} />
+      {item.Value}
+    </span>
+  }
+  return null;
+}
+
 function SearchObject({ id, text, onClick }: BaseSearchItemProps) {
   const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
@@ -218,15 +259,10 @@ function SearchObject({ id, text, onClick }: BaseSearchItemProps) {
       </div>
     }
     case 'item':
-      const respawn = item.grow?.find(g => g.respawn)?.respawn ?? 0;
       return <div className={className}>
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
-        {item.summon
-        ? <ItemIcon item={data[item.summon[0]]} useAlt size={32} />
-        : respawn
-        ? <span>{days(respawn)} <Icon id="time" alt={translate('ui.time')} size={16} /></span>
-        : null}
+        <ItemExtra item={item} />
       </div>
     case 'trophy':
       return <div className={className}>
@@ -283,73 +319,33 @@ function SearchObject({ id, text, onClick }: BaseSearchItemProps) {
         <span><ShortWeaponDamage damage={item.damage} skill={SkillType.Bows} /></span>
         <ShortRecipe item={item} />
       </div>
-    case 'food':
-      return <div className={className}>
-        <ItemIcon item={item} size={32} />
-        <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
-        <span>
-          <Icon id="health" alt={translate('ui.health')} size={16} />
-          {item.health}
-          <Icon id="walknut" alt={translate('ui.stamina')} size={16} />
-          {item.stamina}
-        </span>
-      </div>
-    case 'potion':
-      return <div className={className}>
-        <ItemIcon item={item} size={32} />
-        <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
-        <span>
-          {item.health
-            ? <>
-                <Icon id="health" alt={translate('ui.health')} size={16} />
-                {item.health[0]} / {item.health[1]}s
-              </>
-            : null}
-          {item.stamina
-            ? <>
-                <Icon id="walknut" alt={translate('ui.stamina')} size={16} />
-                {item.stamina[0]} / {item.stamina[1]}s
-              </>
-            : null}
-          {item.damageModifiers
-            ? (Object.keys(item.damageModifiers) as DamageType[]).map(type => resistIcon(translate, type))
-            : null}
-        </span>
-        <ShortRecipe item={item} />
-      </div>
-    case 'valuable':
-      return <div className={className}>
-        <ItemIcon item={item} size={32} />
-        <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
-        <span>
-          <Icon id="coin" alt={translate('Coins')} size={32} />
-          {item.value}
-        </span>
-      </div>
     case 'object':
       return <div className={className}>
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         {
-          item.plant
+          item.Plant
             ? <span>
-                {days(item.plant.growTime[0]).toFixed(1)}
+                {days(item.Plant.growTime[0]).toFixed(1)}
                 –
-                {days(item.plant.growTime[1]).toFixed(1)}
+                {days(item.Plant.growTime[1]).toFixed(1)}
                 {' '}
                 <Icon id="time" alt={translate('ui.time')} size={16} />
               </span>
             : null
         }
       </div>
-    case 'treasure':
-      return null
     case 'piece':
       return <div className={className}>
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
         {pieceExtra(item, translate)}
         <ShortRecipe item={item} />
+      </div>
+    case 'structure':
+      return  <div className={className}>
+        <ItemIcon item={item} size={32} />
+        <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
       </div>
     case 'ship':
     case 'cart':

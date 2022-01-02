@@ -7,7 +7,10 @@ export const INTRO_DURATION = 2040;
 export const INTRO_WEATHER: EnvId = 'ThunderStorm';
 export const WIND_PERIOD = 125;
 export const WEATHER_PERIOD = 666;
-export const WORLD_SIZE = 21000;
+export const WORLD_RADIUS = 10500;
+export const WORLD_SIZE = WORLD_RADIUS * 2;
+export const ZONE_SIZE = 64;
+export const WATER_LEVEL = 30;
 export const EVENT_PERIOD = 46 * 60;
 
 export const BASE_HEALTH = 25;
@@ -38,3 +41,5 @@ export const dmg = (damage: Partial<DamageProfile>): DamageProfile => {
     ...damage,
   }
 };
+
+export const xp = (lvl: number) => lvl ** 1.5 / 2 + 0.5;

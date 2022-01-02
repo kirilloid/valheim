@@ -40,7 +40,7 @@ export const ItemEditor = React.memo(({ zdo, onChange }: { zdo: ZDO, onChange: (
       <dt>position</dt><dd>{zdo.position.x.toFixed(3)} / {zdo.position.z.toFixed(3)} / {zdo.position.y.toFixed(3)}</dd>
       <dt>zone</dt><dd>{zdo.sector.x} / {zdo.sector.y}</dd>
       {eComponents.length > 0
-        ? components.map(C => <C value={zdo} onChange={onChange} />)
+        ? components.map((C, i) => <C key={i} value={zdo} onChange={onChange} />)
         : <>
           <ZdoSpecialData data={zdo.floats} stringify={String} />
           <ZdoSpecialData data={zdo.vec3} stringify={v => `${v.x.toFixed(3)} / ${v.y.toFixed(3)} / ${v.z.toFixed(3)}`} />
@@ -53,5 +53,5 @@ export const ItemEditor = React.memo(({ zdo, onChange }: { zdo: ZDO, onChange: (
         </>}
     </dl>
   </>;
-
 });
+ItemEditor.displayName = 'ItemEditor';

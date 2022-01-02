@@ -205,7 +205,8 @@ function readFoods(pkg: PackageReader, version: number): FoodData[] {
         const stamina = pkg.readFloat();
       }
     }
-    if (itemDB[id]?.type !== 'food') {
+    const obj = itemDB[id];
+    if (obj != null && 'Food' in obj) {
       // error, unknown prefab
     } else {
       result.push({ id, time });

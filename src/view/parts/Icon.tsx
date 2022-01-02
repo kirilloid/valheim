@@ -13,6 +13,8 @@ const iconType = (type: GameObject['type']): IconType => {
     case 'creature':
     case 'piece':
       return type;
+    case 'structure':
+      return 'piece';
     case 'weapon':
     case 'tool':
     case 'shield':
@@ -20,12 +22,8 @@ const iconType = (type: GameObject['type']): IconType => {
     case 'ammo':
       return 'arrow';
     case 'item':
-    case 'valuable':
-    case 'food':
     case 'trophy':
-    case 'potion':
     case 'object':
-    case 'treasure': // not really
       return 'resource';
     case 'ship':
     case 'cart':
@@ -35,7 +33,7 @@ const iconType = (type: GameObject['type']): IconType => {
 };
 
 const iconPath = (item: GameObject): string => {
-  return item.type === 'treasure'
+  return item.type === 'object' && item.subtype === 'treasure'
     ? item.id.toLowerCase().includes('chest')
       ? `/icons/piece/piece_chest_wood`
       : `/icons/resource/Coins`
@@ -74,7 +72,7 @@ export function EffectIcon(props: { id: EntityId; size?: number }) {
   const path = `/icons/effect/${id}`;
   return <picture>
     <source srcSet={`${path}.webp`} type="image/webp" />
-    <img className="icon" src={`${path}.png`} width={size} height={size} />
+    <img className="icon" src={`${path}.png`} width={size} height={size} alt="" />
   </picture>;
 }
 

@@ -9,7 +9,7 @@
   --color-warning: #ffc107; 
   --color-info: #17a2b8;
 
-  --color-background: #fff;
+  --color-background: 255, 255, 255;
   --color-text: #000;
   --color-text-light: #555;
 }
@@ -23,7 +23,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  background-color: var(--color-background);
+  background-color: rgb(var(--color-background));
   color: var(--color-text);
   /* background-image: url('../img/debug_grid_16.png'); */
 }
@@ -41,7 +41,7 @@ body {
     --color-secondary: #4F545C;
     --color-danger: #ED4245;
     --color-info: #1AAFF4;
-    --color-background: #36393F;
+    --color-background: 54, 57, 63;
     --color-text: #ddd;
     --color-text-light: #999;
   }
@@ -63,7 +63,7 @@ body {
 }
 
 select, input, button {
-  background: var(--color-background);
+  background: rgb(var(--color-background));
   color: var(--color-text);
 }
 
@@ -132,9 +132,13 @@ sub, sup {
 
 .btn:disabled {
   background-color: silver;
-  color: gray;
-  border-color: gray;
+  color: var(--color-text-light);
+  border-color: var(--color-text-light);
   cursor: default;
+}
+
+.disabled {
+  color: var(--color-text-light);
 }
 
 .Switch {
@@ -158,6 +162,10 @@ code {
 
 p {
   margin: 0.5rem 0;
+}
+
+.nobr {
+  white-space: nowrap;
 }
 
 .info {

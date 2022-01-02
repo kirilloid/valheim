@@ -1,11 +1,12 @@
-import { clamp, clamp01 } from "./utils";
-
 type Point = { x: number; y: number };
 
 export class PanViewModel {
+  private minZoom: number;
   private maxZoom: number;
+  private contentMaxZoom: number;
+  private contentMinZoom: number;
   // offset in original unscaled coordinates
-  private position: Point = { x: 0, y: 0 };
+  private position: Point = { x: 0.5, y: 0.5 };
   private dragPos: Point = { x: 0, y: 0 };
   private isDragging = false;
   private zoom: number;
@@ -16,18 +17,24 @@ export class PanViewModel {
     private outerHeight: number,
     private innerWidth: number,
     private innerHeight: number,
+    options: { maxZoom?: number, minZoom?: number } = {},
   ) {
-    this.maxZoom = Math.log2(Math.min(
+    this.contentMinZoom = 0;
+    this.contentMaxZoom = Math.log2(Math.max(
       innerWidth / outerWidth,
       innerHeight / outerHeight,
     ));
+    this.maxZoom = (options.maxZoom != null ? Math.log2(options.maxZoom) : 0) + this.contentMaxZoom;
+    this.minZoom = options.minZoom != null
+      ? Math.log2(options.minZoom)
+      : this.contentMinZoom;
     this.zoom = 0;
-    this._scale = 2 ** (this.zoom - this.maxZoom);
+    this._scale = 2 ** (this.zoom - this.contentMaxZoom);
   }
 
   private update(point: Point) {
     const oldScale = this._scale;
-    this._scale = 2 ** (this.zoom - this.maxZoom);
+    this._scale = 2 ** (this.zoom - this.contentMaxZoom);
     if (oldScale === this._scale) return;
     const { x: ox, y: oy } = point;
     // ox + x = ix * scale
@@ -45,8 +52,14 @@ export class PanViewModel {
   }
 
   public zoomOut(point: Point, log2Scale: number = 1) {
-    this.zoom = Math.max(this.zoom - log2Scale, 0);
+    this.zoom = Math.max(this.zoom - log2Scale, this.minZoom);
     this.update(point);
+  }
+
+  public getCoords(point: Point): Point {
+    const x = (point.x + this.position.x) / this._scale;
+    const y = (point.y + this.position.y) / this._scale;
+    return { x, y };
   }
 
   public startDrag(point: Point): void {
@@ -77,8 +90,10 @@ export class PanViewModel {
   public endDrag(): void {
     this.isDragging = false;
     // TODO: implement smooth overdrag
-    this.position.x = clamp(this.position.x, 0, this.xScroll); 
-    this.position.y = clamp(this.position.y, 0, this.yScroll); 
+    // const xScroll = this.xScroll;
+    // this.position.x = clamp(this.position.x, Math.min(xScroll, 0), Math.max(xScroll, 0))
+    // const yScroll = this.yScroll;
+    // this.position.y = clamp(this.position.y, Math.min(yScroll, 0), Math.max(yScroll, 0)); 
   }
 
   get x(): number {

@@ -7,7 +7,7 @@
 .Weather__controls {
   position: sticky;
   top: 0;
-  background: var(--color-background);
+  background: rgb(var(--color-background));
   z-index: 1;
   padding: 8px 0;
 }
@@ -20,7 +20,7 @@
   position: sticky;
   top: 40px;
   padding-bottom: 8px;
-  background: var(--color-background);
+  background: rgb(var(--color-background));
   z-index: 1;
   display: flex;
   flex-direction: row;

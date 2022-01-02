@@ -6,19 +6,16 @@ import { data } from '../../data/itemDB';
 
 import { Armor } from './Armor';
 import { Weapon, Shield } from './Weapon';
-import { Food } from './Food';
-import { Potion } from './Potion';
-import { Valuable } from './Valuable';
 import { Creature } from './Creature';
 import { Arrow } from './Arrow';
 import { GenericItem } from './GenericItem';
 import { Tool } from './Tool';
 import { Piece } from './Piece';
-import { Treasure } from './Treasure';
 import { Ship } from './Ship';
 import { Cart } from './Cart';
 import { PhysicalObject } from './PhysicalObject';
 import { SpoilerAlert } from '../parts/Spoiler';
+import { Structure } from './Structure';
 
 function parseLevel(level: string | undefined): number | undefined {
   if (level == null) return undefined;
@@ -49,26 +46,20 @@ function Item({ item, level }: { item: T.GameObject, level?: number }) {
       return <Weapon item={item} level={level} />
     case 'shield':
       return <Shield item={item} level={level} />
-    case 'food':
-      return <Food item={item} />
-    case 'potion':
-      return <Potion item={item} />
-    case 'valuable':
-      return <Valuable item={item} />
     case 'ammo':
       return <Arrow item={item} />
     case 'tool':
       return <Tool item={item} level={level} />
     case 'object':
       return <PhysicalObject item={item} />
+    case 'structure':
+      return <Structure item={item} />
     case 'piece':
       return <Piece item={item} />
     case 'ship':
       return <Ship item={item} />
     case 'cart':
       return <Cart item={item} />
-    case 'treasure':
-      return <Treasure item={item} />
     case 'item':
     case 'trophy':
       return <GenericItem item={item} />

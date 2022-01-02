@@ -3,7 +3,7 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import '../../css/FoodTable.css';
 
-import type { Food, Item } from '../../types';
+import type { Food, Resource } from '../../types';
 import { timeI2S } from '../../model/utils';
 import { resources } from '../../data/resources';
 
@@ -11,8 +11,10 @@ import { TranslationContext, useGlobalState } from '../../effects';
 import { InlineObject } from '../helpers';
 import { Icon, ItemIcon } from '../parts/Icon';
 
-function isFood(item: Item): item is Food {
-  return item.type === 'food';
+type FoodItem = Resource & { Food: Food };
+
+function isFood(item: Resource): item is FoodItem {
+  return item.Food != null;
 }
 
 const foods = resources.filter(isFood);
@@ -56,15 +58,15 @@ export function FoodTable() {
   const items = foods.slice();
   if (sort != null) {
     if (sort === 'total') {
-      sortBy(items, f => f.health + f.stamina, false);
+      sortBy(items, f => f.Food.health + f.Food.stamina, false);
     } else {
-      sortBy(items, f => f[sort], false);
+      sortBy(items, f => f.Food[sort], false);
     }
   }
 
   return (<>
     <h1>{translate('ui.page.food-nutrition')}</h1>
-    <table className="FoodTable" style={{ width: '100%' }}>
+    <table className="FoodTable">
       <thead>
         <tr>
           <th>icon</th>
@@ -108,15 +110,15 @@ export function FoodTable() {
         </tr>
       </thead>
       <tbody>
-      {items.filter(food => food.tier <= spoiler).map(food => {
-        return <tr key={food.id}>
-          <td><ItemIcon item={food} size={32} /></td>
-          <td><InlineObject id={food.id} className="FoodTable__extra" /></td>
-          <td className="FoodTable__value">{food.health}</td>
-          <td className="FoodTable__value">{food.stamina}</td>
-          <td className="FoodTable__value">{food.health + food.stamina}</td>
-          <td className="FoodTable__value">{timeI2S(food.duration)}</td>
-          <td className="FoodTable__value">{food.regen}</td>
+      {items.filter(item => item.tier <= spoiler).map(item => {
+        return <tr key={item.id}>
+          <td><ItemIcon item={item} size={32} /></td>
+          <td><InlineObject id={item.id} className="FoodTable__extra" /></td>
+          <td className="FoodTable__value">{item.Food.health}</td>
+          <td className="FoodTable__value">{item.Food.stamina}</td>
+          <td className="FoodTable__value">{item.Food.health + item.Food.stamina}</td>
+          <td className="FoodTable__value">{timeI2S(item.Food.duration)}</td>
+          <td className="FoodTable__value">{item.Food.regen}</td>
         </tr>
       })}
       </tbody>

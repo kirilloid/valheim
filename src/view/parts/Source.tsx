@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import { CraftingStation, Creature, EntityId, GameObject, Pair } from '../../types';
+import { CraftingStation, EntityId, GameObject, Pair } from '../../types';
 import { SkillType } from '../../model/skills';
 import { assertNever, days, timeI2S } from '../../model/utils';
 
@@ -147,13 +147,18 @@ function CraftingSection({ id }: { id: EntityId }) {
   </>
 }
 
-export function Recipe({ item }: { item: Exclude<GameObject, Creature> }) {
-  const translate = useContext(TranslationContext);
+function getRecipe(item: GameObject) {
   if (item.type === 'object'
-   || item.type === 'treasure') {
-    return null;
+   || item.type === 'creature'
+   || item.type === 'structure') {
+    return undefined;
   }
-  const { recipe } = item;
+  return item.recipe;
+}
+
+export function Recipe({ item }: { item: GameObject }) {
+  const translate = useContext(TranslationContext);
+  const recipe = getRecipe(item);
   if (recipe == null) return null;
   switch (recipe.type) {
     case 'trader':
@@ -192,10 +197,9 @@ export function Recipe({ item }: { item: Exclude<GameObject, Creature> }) {
   }
 }
 
-
 export function RecipeSection({ item }: { item: GameObject | undefined }) {
   const translate = useContext(TranslationContext);
-  return item != null && item.type !== 'creature'
+  return item != null && getRecipe(item) != null
     ? <section>
         <h2>{translate('ui.recipe')}</h2>
         <Recipe item={item} />
@@ -241,9 +245,9 @@ export function GrowSection({ item }: { item: GameObject | undefined }) {
   switch (item.type) {
     case 'creature':
     case 'piece':
+    case 'structure':
     case 'ship':
     case 'cart':
-    case 'treasure':
       return null;
   }
   const grow = item.grow ?? [];

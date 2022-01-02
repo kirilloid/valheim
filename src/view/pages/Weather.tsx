@@ -6,7 +6,7 @@ import '../../css/Weather.css';
 
 import { GAME_DAY, INTRO_DURATION, WEATHER_PERIOD, WIND_PERIOD, INTRO_WEATHER } from '../../model/game';
 import { Random } from '../../model/random';
-import { assertNever, clamp01, lerp, timeI2S } from '../../model/utils';
+import { assertNever, clamp01, lerp, nop, timeI2S } from '../../model/utils';
 import { combineGens, dropWhile } from '../../model/iter';
 
 import { EnvId, envSetup, envStates, WeatherBalance } from '../../data/env';
@@ -343,7 +343,7 @@ export function Weather() {
     if (inputRef.current) {
       inputRef.current.value = String(dayRef.current);
     }
-    if (!el || !gen) return () => {}; 
+    if (!el || !gen) return nop; 
     const scroll = () => {
       console.log('scroll');
       const rowIdx = Math.floor(el.scrollTop / ROW_HEIGHT);

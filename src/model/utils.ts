@@ -94,6 +94,8 @@ export const isEmpty = (arg: Record<string, any>) => {
   return true;
 };
 
+export function nop() {};
+
 export function filterValues<K extends string, T, RK extends K = K>(obj: Record<K, T>, fn: (arg: T, key: K) => boolean): Record<RK, T> {
   return Object.fromEntries(
     Object.entries(obj)
@@ -125,6 +127,10 @@ export function groupBy<T, K extends string | number = string, R = T>(
     (result[key] ?? (result[key] = [] as R[])).push((valFn ? valFn(el) : el) as R);
   }
   return result;
+}
+
+export function toggleItem<T>(array: T[], value: T, add: boolean): T[] {
+  return add ? array.concat(value) : array.filter(v => v !== value);
 }
 
 export class StatCounter {

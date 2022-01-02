@@ -62,6 +62,7 @@ function App() {
             <Route path="/mining/:objectType/:stat" children={<Mining />} />
             <Route path="/mining/:objectType" children={<Mining />} />
             <Route path="/mining" children={<Mining />} />
+            <Route path="/world-gen/:seed" children={<WorldGenerator />} />
             <Route path="/world-gen" children={<WorldGenerator />} />
             {/* <Route path="/weapons" children={<Weapons />} /> */}
             <Route path="/world-edit" children={<WorldEditor />} />

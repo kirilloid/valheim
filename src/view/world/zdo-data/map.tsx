@@ -4,11 +4,13 @@ import type { ZDO } from '../types';
 import type { Biome, EntityId } from '../../../types';
 
 import { WORLD_SIZE } from '../../../model/game';
-import { runGenerator, stableHashCode } from '../../../model/utils';
+import { nop, runGenerator, stableHashCode } from '../../../model/utils';
 
 import { creatures } from '../../../data/creatures';
 import { resources } from '../../../data/resources';
 import { objects } from '../../../data/objects';
+
+const HIGHLIGHT_MARKER_LIMIT = 1000;
 
 const biomeColors: Record<Biome, number> = {
   Meadows: 0xff5ba791,
@@ -59,8 +61,8 @@ const ZoneCtrlHash = stableHashCode('_ZoneCtrl');
 function useDrawMap(
   ref: React.MutableRefObject<HTMLCanvasElement | null>,
   zdos: ZDO[],
-  setProgress: (progress: number | undefined) => void,
   SIZE: number,
+  setProgress: (progress: number | undefined) => void = nop,
 ) {
   const WORLD_SIZE_HINTED = WORLD_SIZE - (WORLD_SIZE % SIZE);
   useLayoutEffect(function drawMap() {
@@ -89,7 +91,7 @@ function useDrawMap(
         let i = 0;
         for (const zdo of zdos) {
           const x = Math.round(zdo.position.x / WORLD_SIZE_HINTED * SIZE + SIZE / 2);
-          const y = Math.round(zdo.position.z / WORLD_SIZE_HINTED * SIZE + SIZE / 2);
+          const y = Math.round(SIZE / 2 - zdo.position.z / WORLD_SIZE_HINTED * SIZE);
           const color = prefabToBiomeColor.get(zdo.prefab) ?? 0;
           if (color !== 0) {
             setDot(x, y, color);
@@ -108,7 +110,7 @@ function useDrawMap(
       ctx.putImageData(imageData, 0, 0);
       setProgress(undefined);
     });
-  }, [zdos, ref, SIZE, WORLD_SIZE_HINTED]);
+  }, [zdos, ref, setProgress, SIZE, WORLD_SIZE_HINTED]);
 }
 
 function useDrawSelected(
@@ -118,12 +120,11 @@ function useDrawSelected(
 ) {
   const WORLD_SIZE_HINTED = WORLD_SIZE - (WORLD_SIZE % SIZE);
   useLayoutEffect(function drawMap() {
-    const canvas = ref.current;
-    if (canvas == null) return;
-    const ctx = canvas.getContext('2d');
-    if (ctx == null) return;
-    if (zdos == null) return;
-    ctx.clearRect(0, 0, SIZE, SIZE);
+    const ctx = ref.current?.getContext('2d');
+    if (ctx == null) return nop;
+    const clear = () => ctx.clearRect(0, 0, SIZE, SIZE);
+    if (zdos == null) return clear;
+    if (zdos.length < HIGHLIGHT_MARKER_LIMIT) return clear;
     const imageData = ctx.getImageData(0, 0, SIZE, SIZE);
     const pixels = new Uint32Array(imageData.data.buffer);
 
@@ -137,36 +138,40 @@ function useDrawSelected(
 
     for (const zdo of zdos) {
       const x = Math.round(zdo.position.x / WORLD_SIZE_HINTED * SIZE + SIZE / 2);
-      const y = Math.round(zdo.position.z / WORLD_SIZE_HINTED * SIZE + SIZE / 2);
+      const y = Math.round(SIZE / 2 - zdo.position.z / WORLD_SIZE_HINTED * SIZE);
       setDot(x, y, 0xff0080ff);
     }
 
     ctx.putImageData(imageData, 0, 0);
+    return clear;
   }, [ref, zdos, SIZE, WORLD_SIZE_HINTED]);
 }
 
-export function ZdoMap({ zdos, selected }: { zdos: ZDO[], selected?: ZDO[] }) {
-  const mainCanvasRef = useRef<HTMLCanvasElement | null>(null);
-  const selectedCanvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [progress, setProgress] = useState<number | undefined>(0);
+export function ZdoMap({ zdos, selected, markerSize, onProgress }: {
+  zdos: ZDO[],
+  selected?: ZDO[],
+  markerSize: number,
+  onProgress?: (progress?: number) => void,
+}) {
+  const terrainCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const markersCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const HI_RES = 2624;
   const MID_RES = 1312;
 
-  useDrawMap(mainCanvasRef, zdos, setProgress, MID_RES);
-  useDrawSelected(selectedCanvasRef, selected, HI_RES);
+  useDrawMap(terrainCanvasRef, zdos, MID_RES, onProgress);
+  useDrawSelected(markersCanvasRef, selected, HI_RES);
 
   return <>
-    <canvas width={MID_RES} height={MID_RES} ref={mainCanvasRef}
-      style={{ width: HI_RES, height: HI_RES }}/>
-    <canvas width={HI_RES} height={HI_RES} ref={selectedCanvasRef}
+    <canvas width={MID_RES} height={MID_RES} ref={terrainCanvasRef}
+      style={{ width: HI_RES, height: HI_RES, imageRendering: 'pixelated' }}/>
+    <canvas width={HI_RES} height={HI_RES} ref={markersCanvasRef}
       style={{ position: 'absolute', left: 0, top: 0 }} />
-    {progress != null && <progress max={zdos.length} value={progress} style={{
-      position: 'absolute',
-      left: '2%',
-      width: '96%',
-      top: '47.5%',
-      height: '5%',
-    }} />}
+    {selected != null && selected.length < HIGHLIGHT_MARKER_LIMIT && <>
+      {selected.map((zdo, i) => <div key={i} className="Map__marker" style={{
+        left: Math.round(zdo.position.x / WORLD_SIZE * HI_RES + HI_RES / 2) - markerSize / 2,
+        bottom: Math.round(zdo.position.z / WORLD_SIZE * HI_RES + HI_RES / 2) - markerSize / 2,
+      }}></div>)}
+    </>}
   </>
 }
