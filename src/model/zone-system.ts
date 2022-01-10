@@ -44,7 +44,7 @@ export class ZoneSystem {
     const now = Date.now();
     // this.CheckLocationDuplicates();
     // this.ClearNonPlacedLocations();
-    for (const [i, location] of locations.entries()) {
+    for (const [i, location] of locations.sort((a, b) => +b.prioritized - +a.prioritized).entries()) {
       if (location.quantity !== 0) {
         this.generateLocation(seed, location);
         yield (i + 1) / locations.length;
@@ -73,8 +73,9 @@ export class ZoneSystem {
     const x = zone.x * ZONE_SIZE;
     const y = zone.y * ZONE_SIZE;
     const size2 = ZONE_SIZE / 2;
-    const dx = random.rangeFloat(-size2 + locationRadius, size2 - locationRadius);
-    const dy = random.rangeFloat(-size2 + locationRadius, size2 - locationRadius);
+    const dc = size2 - locationRadius;
+    const dx = random.rangeFloat(-dc, dc);
+    const dy = random.rangeFloat(-dc, dc);
     return {
       x: x + dx,
       y: 0.0,
@@ -122,13 +123,15 @@ export class ZoneSystem {
         ++errorBiomeArea;
         continue;
       }
+      const minDistance2 = minDistance * minDistance;
+      const maxDistance2 = maxDistance * maxDistance;
       for (let index2 = 0; index2 < 20; ++index2) {
         ++attempts;
         const point = this.getRandomPointInZone(zone, locationRadius);
         const { x, z } = point;
         const magnitude2 = x * x + z * z;
-        if ((minDistance !== 0 && magnitude2 < minDistance * minDistance)
-        ||  (maxDistance !== 0 && magnitude2 > maxDistance * maxDistance)) {
+        if ((minDistance2 !== 0 && magnitude2 < minDistance2)
+        ||  (maxDistance2 !== 0 && magnitude2 > maxDistance2)) {
           ++errorCenterDistance;
           continue;
         }
@@ -153,7 +156,7 @@ export class ZoneSystem {
         const delta = this.worldGenerator.getTerrainDelta(point, location.radius[1]);
         if (delta < location.terrainDelta[0] || delta > location.terrainDelta[1])
           ++errorTerrainDelta;
-        else if (location.minApart > 0.0 && this.haveLocationInRange(location.id, location.group, point, location.minApart)) {
+        else if (location.minApart > 0 && this.haveLocationInRange(location.id, location.group, point, location.minApart)) {
           ++errorSimilar;
         } else {
           this.registerLocation(location, point, false);
@@ -194,17 +197,32 @@ export class ZoneSystem {
       return;
     }
     this._locationInstances.set(zoneId(zone), locationInstance);
+    this._prefabIndex.get(location.id)!.push(locationInstance);
+    if (location.group.length > 0) {
+      this._groupIndex.get(location.group)!.push(locationInstance);
+    }
   }
 
   private haveLocationInRange(prefabName: string, group: string, p: Vector3, radius: number): boolean {
+    const radius2 = radius * radius;
+
     const sameLocations = this._prefabIndex.get(prefabName)!;
-    const groupLocations = this._groupIndex.get(group)!;
     for (const { pos } of sameLocations) {
-      if (Math.hypot(pos.x - p.x, pos.y - p.y, pos.z - p.z) < radius) return true;
+      const dx = pos.x - p.x;
+      const dy = pos.y - p.y; // always 0 ?
+      const dz = pos.z - p.z;
+      if (dx * dx + dy * dy + dz * dz < radius2) return true;
     }
+
+    if (group === '') return false;
+    const groupLocations = this._groupIndex.get(group)!;
     for (const { pos } of groupLocations) {
-      if (Math.hypot(pos.x - p.x, pos.y - p.y, pos.z - p.z) < radius) return true;
+      const dx = pos.x - p.x;
+      const dy = pos.y - p.y; // always 0 ?
+      const dz = pos.z - p.z;
+      if (dx * dx + dy * dy + dz * dz < radius2) return true;
     }
+
     return false;
   }
 

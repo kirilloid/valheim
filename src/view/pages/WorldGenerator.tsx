@@ -1,23 +1,72 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 
-import { WORLD_SIZE } from '../../model/game';
-import { stableHashCode } from '../../model/utils';
+import { WORLD_RADIUS, WORLD_SIZE } from '../../model/game';
+import { groupBy, stableHashCode, toggleItem } from '../../model/utils';
 import { generateZones } from '../../model/worker/generate-zones';
 import { generateTerrain } from '../../model/worker/generate-terrain';
 import { RegisteredLocation } from '../../model/zone-system';
+
 import { PanView } from '../parts/PanView';
+import { TranslationContext } from '../../effects';
+
+const locationTypes: Record<string, { type: string; color: string; icon?: string; }> = {
+  StartTemple: { type: 'Spawn', color: '#fff' },
+  Eikthyrnir: { type: 'Boss', color: '#fff', icon: 'boss' },
+  GDKing: { type: 'Boss', color: '#fff', icon: 'boss' },
+  Bonemass: { type: 'Boss', color: '#fff', icon: 'boss' },
+  Dragonqueen: { type: 'Boss', color: '#fff', icon: 'boss' },
+  GoblinKing: { type: 'Boss', color: '#fff', icon: 'boss' },
+  Vendor_BlackForest: { type: 'Trader', color: '#fff', icon: 'trader' },
+  // boss stones
+  // treasure
+  // leviathan
+  Greydwarf_camp: { type: 'Greydwarf camp', color: '#fff', icon: 'house' },
+  Goblincamp: { type: 'Goblin camp', color: '#fff', icon: 'house' },
+  Crypt: { type: 'Crypt', color: '#fff', icon: 'hammer_stone' },
+  SunkenCrypt: { type: 'Sunken crypt', color: '#fff', icon: 'hammer_stone' },
+  TrollCave: { type: 'Troll cave', color: '#fff', icon: 'house' },
+  // maypole
+  // beehive
+  WoodVillage: { type: 'Draugr village', color: '#fff', icon: 'house' },
+  WoodFarm: { type: 'Village', color: '#fff', icon: 'house' },
+  DrakeNest: { type: 'Dragon egg', color: '#fff', icon: 'circle' },
+  ShipWreck: { type: 'Shipwreck', color: '#fff', icon: 'circle' },
+  InfestedTree: { type: 'Guck', color: '#fff', icon: 'circle' },
+  TarPit: { type: 'TarPit', color: '#fff', icon: 'circle' },
+  // totem poles
+};
+
+function getGroups(locations: RegisteredLocation[]) {
+  const groups: Record<string, { items: RegisteredLocation[]; color: string; icon?: string }> = {};
+  for (const loc of locations) {
+    const locType = locationTypes[loc.location.typeId];
+    if (locType == null) continue;
+    const group = groups[locType.type] ?? (groups[locType.type] = {
+      items: [],
+      color: locType.color,
+      icon: locType.icon,
+    });
+    group.items.push(loc);
+  }
+  return groups;
+}
 
 const WorldMap = React.memo((props: { seed: string }) => {
+  const translate = useContext(TranslationContext);
   const { seed } = props;
   const SIZE = 2048;
   function canvas2worldCoord(c: number): number {
     return (c / SIZE - 0.5) * WORLD_SIZE;
   }
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  function world2canvasCoord(c: number): number {
+    return (c / WORLD_SIZE + 0.5) * SIZE;
+  }
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [mapProgress, setMapProgress] = useState(0);
   const [locProgress, setLocProgress] = useState(0);
   const [locations, setLocations] = useState<RegisteredLocation[]>([]);
+  const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
   const [zoom, setZoom] = useState(1);
   const [pos, setPos] = useState({ x: 0, y: 0 });
 
@@ -42,17 +91,43 @@ const WorldMap = React.memo((props: { seed: string }) => {
     return generateZones(numSeed, setLocProgress, setLocations);
   }, [seed]);
 
+  const locGroups = getGroups(locations);
+
   return <>
     <dl className="overlay">
-      <dt>world map</dt><dd><progress max={1} value={mapProgress} style={{ width: '100%', height: 16 }} /></dd>
-      <dt>locations</dt><dd><progress max={1} value={locProgress} style={{ width: '100%', height: 16 }} /></dd>
+      <dt>terrain</dt><dd><progress max={1} value={mapProgress} style={{ width: '100%', height: 16 }} /></dd>
+      <dt>{translate('ui.locations')}</dt><dd><progress max={1} value={locProgress} style={{ width: '100%', height: 16 }} /></dd>
     </dl>
     <div className="overlay">zoom: {Math.round(zoom * 100)}%</div>
     <div className="overlay">position: {Math.round(canvas2worldCoord(pos.x))} / {-Math.round(canvas2worldCoord(pos.y))}</div>
-    <div style={{ position: 'absolute', top: 40, bottom: 0, left: 0, right: 0 }}>
+    <div className="overlay" style={{ width: 240 }}>
+      <h3>{translate('ui.locations')}</h3>
+      <ul>
+        {Object.entries(locGroups).map(([key, group]) => <li key={key}>
+          <label><input type="checkbox"
+            checked={selectedLocations.includes(key)}
+            onChange={() => setSelectedLocations(toggleItem(selectedLocations, key, !selectedLocations.includes(key)))} />{key} ({group.items.length})</label>
+        </li>)}
+      </ul>
+    </div>
+    <div className="WorldGen">
       <PanView maxZoom={20} onZoomChange={setZoom} onMouseMove={setPos}>
-        <canvas width={SIZE} height={SIZE} ref={r => canvasRef.current = r}
-          style={{ margin: '0 auto', imageRendering: 'pixelated', width: `${SIZE}px`, height: `${SIZE}px` }} />
+        <canvas className="WorldGen__Map" width={SIZE} height={SIZE} ref={canvasRef}
+          style={{ width: `${SIZE}px`, height: `${SIZE}px` }} />
+        {selectedLocations.map(key => {
+          const group = locGroups[key];
+          if (group == null) return null;
+          const typeIds = new Set(group.items.map(item => item.location.typeId));
+          return <React.Fragment key={key}>
+            {group.items.map((item, i) => <div key={i} className="WorldGen__marker text-outline" style={{
+              left: world2canvasCoord(item.pos.x),
+              bottom: world2canvasCoord(item.pos.z),
+              backgroundImage: group.icon ? `url(/icons/icon/${group.icon}_64.png)` : '',
+            }}>
+              {typeIds.size > 1 ? translate(`ui.location.${item.location.typeId}`) : ''}
+            </div>)}
+          </React.Fragment>
+        })}
       </PanView>
     </div>
   </>
@@ -72,7 +147,7 @@ export function WorldGenerator() {
   return (<>
     <section className="overlay">
       <h1>World Generator</h1>
-      <input ref={inputRef} type="text" placeholder="Enter seed" />
+      <label>Seed: <input ref={inputRef} type="text" placeholder="Enter seed" /></label>
       <button className="btn" onClick={() => {
         const newSeed = inputRef.current?.value ?? '';
         const path = newSeed.length ? `/world-gen/${newSeed}` : '/world-gen';

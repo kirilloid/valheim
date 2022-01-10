@@ -73,6 +73,7 @@ type River = {
 class PointMap {
   private bucketSize: number;
   private bucketNr: number;
+  // (x, y) -> indices
   private buckets: number[][][];
   private size: number;
   constructor(maxRange: number) {
@@ -86,8 +87,7 @@ class PointMap {
     return Math.floor((val + 10000) / this.bucketSize);
   }
 
-  private getBucket(point: Vector2): number[] {
-    const { x, y } = point;
+  private getBucket({ x, y }: Vector2): number[] {
     return this.buckets[this.cc(y)]![this.cc(x)]!;
   }
 
@@ -115,12 +115,12 @@ class PointMap {
   }
 
   public merge(points: Vector2[]): Vector2[] {
-    const vector2List: Vector2[] = [];
+    const result: Vector2[] = [];
     points.forEach(this.add, this);
     let startIndex = 0;
-    while (startIndex < points.length) {
+    while (points.length > startIndex) {
       let p = points[startIndex++]!;
-      while (startIndex < points.length) {
+      while (points.length > startIndex) {
         const closest = this.findClosest(points, p, startIndex);
         if (closest === -1) break;
         p = p.mid(points[closest]!);
@@ -133,13 +133,12 @@ class PointMap {
           this.updatePointIndex(points[closest]!, endIdx, closest);
         }
       }
-      vector2List.push(p);
+      result.push(p);
     }
-    return vector2List;
+    return result;
   }
 
   private findClosest(points: Vector2[], p: Vector2, minIndex: number): number {
-    // walk through others in order
     const hashX = this.cc(p.x);
     const hashY = this.cc(p.y);
     const indices = [];
@@ -150,13 +149,16 @@ class PointMap {
     }
 
     let bestIndex = -1;
-    let bestDistance2 = 99999.0 ** 2;
+    let bestDistance2 = 99999 ** 2;
+    const maxRange2 = this.bucketSize ** 2;
+    // indices are not necessarily sorted as in original algorithm
     for (const index of indices) {
       const point = points[index]!;
       if (index < minIndex) continue;
-      if (point === p) continue;
+      if (point.x === p.x && point.y === p.y) continue;
       const distance2 = (p.x - point.x) ** 2 + (p.y - point.y) ** 2;
-      if (distance2 >= this.bucketSize * this.bucketSize) continue;
+      if (distance2 >= maxRange2) continue;
+      // we adjust comparison so for the same distance, lower index wins
       if (distance2 < bestDistance2
       || (distance2 === bestDistance2 && index < bestIndex)) {
         bestIndex = index;
@@ -522,7 +524,8 @@ export class WorldGenerator {
   private getRiverWeight(wx: number, wy: number /*, out float weight, out float width*/): [number, number] {
     const riverGrid: Vector2 = this.getRiverGrid(wx, wy);
     // this._riverCacheLock.EnterReadLock();
-    if (riverGrid === this._cachedRiverGrid) {
+    if (riverGrid.x === this._cachedRiverGrid.x
+    &&  riverGrid.y === this._cachedRiverGrid.y) {
       if (this._cachedRiverPoints != null) {
         return this.getWeight(this._cachedRiverPoints, wx, wy);
       } else {
