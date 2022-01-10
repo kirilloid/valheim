@@ -312,7 +312,18 @@ export const creatures: Creature[] = [
     })],
     attacks: [],
     tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 0,
+      run: 0,
+      swim: 3,
+    },
+    turnSpeed: {
+      walk: 0,
+      run: 0,
+      swim: 100,
+    },
     hp: 1,
+    stagger: null,
     damageModifiers: animalDmgModifiers,
     drop: [dropEntry('FishRaw')],
   },
@@ -341,7 +352,18 @@ export const creatures: Creature[] = [
     })],
     attacks: [],
     tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 0,
+      run: 0,
+      swim: 5,
+    },
+    turnSpeed: {
+      walk: 0,
+      run: 0,
+      swim: 100,
+    },
     hp: 1,
+    stagger: null,
     damageModifiers: animalDmgModifiers,
     drop: [dropEntry('FishRaw', { min: 2, max: 2 })],
   },
@@ -373,12 +395,12 @@ export const creatures: Creature[] = [
     speed: {
       walk: 0,
       run: 0,
-      swim: 3, // 3, 5, 10
+      swim: 10,
     },
     turnSpeed: {
       walk: 0,
       run: 0,
-      swim: 100, // 100, 100, 80
+      swim: 80,
     },
     hp: 1,
     stagger: null,

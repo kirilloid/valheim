@@ -47,11 +47,6 @@ export class Random {
     return (value / 4294967295);
   };
 
-  public element<T>(arr: T[]): T {
-    const index = Math.floor(this.random() * arr.length);
-    return arr[index]!;
-  }
-
   // In Unity, random range uses 1.0 - value for some reason.
   public rangeFloat(min: number, max: number) {
     return max - this.random() * (max - min);

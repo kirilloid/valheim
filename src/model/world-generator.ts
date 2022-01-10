@@ -49,6 +49,11 @@ class Vector2 {
   distance(v: Vector2): number {
     return Math.hypot(this.x - v.x, this.y - v.y);
   }
+  equal(v: Vector2): boolean {
+    const dx = this.x - v.x;
+    const dy = this.y - v.y;
+    return dx * dx + dy * dy < 1e-10;
+  }
 }
 type RiverPoint = {
   p: Vector2;
@@ -176,7 +181,7 @@ export class WorldGenerator {
   private _rivers: River[] = [];
   private _streams: River[] = [];
 
-  _riverPoints = new Map<string, RiverPoint[]>();
+  _riverPoints = new Map<number, RiverPoint[]>();
   _cachedRiverPoints: RiverPoint[] = [];
   _cachedRiverGrid = new Vector2(-999999, -999999);
 
@@ -264,8 +269,9 @@ export class WorldGenerator {
 
   private placeStreams(): River[] {
     const state = random.getState();
+    random.init(this.streamSeed);
     const rivers: River[] = [];
-    // DateTime now = DateTime.Now;
+    // const time = Date.now();
     for (let index = 0; index < 3000; ++index) {
       let p0: Vector2 | undefined = Vector2.ZERO;
       let p1: Vector2 | undefined = Vector2.ZERO;
@@ -281,8 +287,8 @@ export class WorldGenerator {
             center: mid,
             widthMax: 20,
             widthMin: 20,
-            curveWidth: distance,
-            curveWavelength: distance,
+            curveWidth: distance / 15,
+            curveWavelength: distance / 20,
           };
           rivers.push(river);
         }
@@ -301,10 +307,12 @@ export class WorldGenerator {
     minLength: number,
     maxLength: number,
   ): Vector2 | undefined {
+    const dt = (maxLength - minLength) / iterations;
+    let t = maxLength;
     for (let index = 0; index < iterations; ++index) {
-      const num2 = lerp(maxLength, minLength, (index + 1) / iterations);
-      const f = random.rangeFloat(0, Math.PI * 2);
-      const vector2 = start.add(new Vector2(Math.sin(f), Math.cos(f)).mul(num2));
+      t -= dt;
+      const f = random.rangeFloat(0, 2 * Math.PI);
+      const vector2 = start.add(new Vector2(Math.sin(f), Math.cos(f)).mul(t));
       const height = this.getHeight(vector2.x, vector2.y);
       if (height > minHeight && height < maxHeight) {
         return vector2;
@@ -330,12 +338,11 @@ export class WorldGenerator {
   private placeRivers(): River[] {
     const state = random.getState();
     random.init(this.riverSeed);
-    // DateTime now = DateTime.Now;
+    // const time = Date.now();
     const rivers: River[] = [];
-    const vector2List = [...this._lakes];
-    while (vector2List.length > 1)
-    {
-      const vector2 = vector2List[0]!;
+    const copy = [...this._lakes];
+    while (copy.length > 1) {
+      const vector2 = copy[0]!;
       let randomRiverEnd = this.findRandomRiverEnd(rivers, this._lakes, vector2, 2000, 0.4, 128);
       if (randomRiverEnd === -1 && !this.haveRiver1(rivers, vector2)) {
         randomRiverEnd = this.findRandomRiverEnd(rivers, this._lakes, vector2, 5000, 0.4, 128);
@@ -345,22 +352,22 @@ export class WorldGenerator {
         const p1 = this._lakes[randomRiverEnd]!;
         const widthMax = random.rangeFloat(60, 100);
         const widthMin = random.rangeFloat(60, widthMax);
-        const length = p0.distance(p1);
+        const size = p0.distance(p1);
         rivers.push({
           p0,
           p1,
           center: p0.mid(p1),
           widthMin,
           widthMax,
-          curveWidth: length / 15,
-          curveWavelength: length / 20,
+          curveWidth: size / 15,
+          curveWavelength: size / 20,
         });
       } else {
-        vector2List.shift();
+        copy.shift();
       }
     }
     this.renderRivers(rivers);
-    // TimeSpan timeSpan = DateTime.Now - now;
+    // const timeSpan = Date.now() - time;
     random.setState(state);
     return rivers;
   }
@@ -398,30 +405,36 @@ export class WorldGenerator {
   ): number {
     const indexList: number[] = [];
     for (const [index, point] of points.entries()) {
-      if (!(point === p) && p.distance(point) < maxDistance
+      const distance = p.distance(point);
+      if (distance > 1e-5
+      && distance < maxDistance
       && !this.haveRiver2(rivers, p, point)
       && this.isRiverAllowed(p, point, checkStep, heightLimit)) {
         indexList.push(index);
       }
     }
-    return indexList.length === 0 ? -1 : random.element(indexList);
+    return indexList.length === 0 ? -1 : indexList[random.rangeInt(0, indexList.length)]!;
   }
 
   private haveRiver1(rivers: River[], point: Vector2): boolean {
-    return rivers.some(r => r.p0 === point || r.p1 === point);
+    return rivers.some(
+      r => r.p0.equal(point)
+        || r.p1.equal(point)
+    );
   }
 
   private haveRiver2(rivers: River[], p0: Vector2, p1: Vector2): boolean {
-    return rivers.some(r => (r.p0 === p0 && r.p1 === p1)
-                         || (r.p0 === p1 && r.p1 === p0));
+    return rivers.some(
+      r => (r.p0.equal(p0) && r.p1.equal(p1))
+        || (r.p0.equal(p1) && r.p1.equal(p0))
+    );
   }
 
   private isRiverAllowed(p0: Vector2, p1: Vector2, step: number, heightLimit: number): boolean {
     const distance = p0.distance(p1);
     const normalized = p1.sub(p0).normalized();
     let flag: boolean = true;
-    for (let num2 = step; num2 <= distance - step; num2 += step)
-    {
+    for (let num2 = step; num2 <= distance - step; num2 += step) {
       const vector2 = p0.add(normalized.mul(num2));
       const baseHeight = this.getBaseHeight(vector2.x, vector2.y);
       if (baseHeight > heightLimit) return false;
@@ -431,8 +444,8 @@ export class WorldGenerator {
   }
 
   private renderRivers(rivers: River[]): void {
-    // DateTime now = DateTime.Now;
-    const riverPoints = new Map<string, RiverPoint[]>();
+    // const time = Date.now();
+    const riverPoints = new Map<number, RiverPoint[]>();
     for (const river of rivers) {
       const width8 = river.widthMin / 8;
       const normalized = river.p1.sub(river.p0).normalized();
@@ -449,22 +462,16 @@ export class WorldGenerator {
     for (const [key, rp] of riverPoints.entries()) {
       const riverPointArray = this._riverPoints.get(key);
       if (riverPointArray != null) {
-        const riverPointList: RiverPoint[] = [...riverPointArray];
-        riverPointList.push(...rp);
-        this._riverPoints.get(key)
-        this._riverPoints.set(key, riverPointList);
-      }
-      else
-      {
-        const array: RiverPoint[] = rp;
-        this._riverPoints.set(key, array);
+        riverPointArray.push(...rp);
+      } else {
+        this._riverPoints.set(key, rp);
       }
     }
-    // TimeSpan timeSpan = DateTime.Now - now;
+    // const timeSpan = Date.now() - time;
   }
 
   private addRiverPoint(
-    riverPoints: Map<string, RiverPoint[]>,
+    riverPoints: Map<number, RiverPoint[]>,
     p: Vector2,
     r: number,
     river: River,
@@ -481,16 +488,15 @@ export class WorldGenerator {
   }
 
   private addRiverPointWithGrid(
-    riverPoints: Map<string, RiverPoint[]>,
+    riverPoints: Map<number, RiverPoint[]>,
     gridPos: Vector2,
     p: Vector2,
     r: number,
     river: River,
   ): void {
-    const { x, y } = gridPos;
-    const key = `${x}_${y}`;
+    const key = gridPos.x + (gridPos.y << 8);
     const riverPointList = riverPoints.get(key);
-    const rp = { p, w: r, w2: r ** 2 };
+    const rp = { p, w: r, w2: r * r };
     if (riverPointList != null) {
       riverPointList.push(rp);
     } else {
@@ -500,16 +506,16 @@ export class WorldGenerator {
 
   /// RIVERS
   public insideRiverGrid(grid: Vector2, p: Vector2, r: number): boolean {
-    const vector2_1 = new Vector2(grid.x * 64, grid.y * 64);
-    const vector2_2 = p.sub(vector2_1);
-    return Math.abs(vector2_2.x) < r + 32.0
-        && Math.abs(vector2_2.y) < r + 32.0;
+    const x = p.x - grid.x * 64;
+    const y = p.y - grid.y * 64;
+    return Math.abs(x) < r + 32
+        && Math.abs(y) < r + 32;
   }
 
   public getRiverGrid(wx: number, wy: number): Vector2 {
     return new Vector2(
-      Math.floor(wx / 64 + 0.5),
-      Math.floor(wy / 64 + 0.5)
+      Math.round(wx / 64),
+      Math.round(wy / 64),
     );
   }
 
@@ -525,8 +531,7 @@ export class WorldGenerator {
       // this.m_riverCacheLock.ExitReadLock();
     } else {
       // this.m_riverCacheLock.ExitReadLock();
-      const { x, y } = riverGrid;
-      const key = `${x}_${y}`;
+      const key = riverGrid.x + (riverGrid.y << 8);
       const points = this._riverPoints.get(key);
       if (points != null) {
         const result = this.getWeight(points, wx, wy);
@@ -550,14 +555,13 @@ export class WorldGenerator {
     let width = 0;
     let num1 = 0;
     let num2 = 0;
-    for (let index = 0; index < points.length; ++index) {
-      const point = points[index]!;
+    for (const point of points) {
       const f = (point.p.x - wx) ** 2 + (point.p.y - wy) ** 2;
       if (f < point.w2) {
-        const num3 = (1.0 - Math.sqrt(f) / point.w);
-        if (num3 > weight) weight = num3;
-        num1 += point.w * num3;
-        num2 += num3;
+        const num4 = (1.0 - Math.sqrt(f) / point.w);
+        if (num4 > weight) weight = num4;
+        num1 += point.w * num4;
+        num2 += num4;
       }
     }
     if (num2 <= 0.0) return [weight, width];
@@ -573,11 +577,11 @@ export class WorldGenerator {
     const magnitude2 = wx * wx + wy * wy;
     const baseHeight = this.getBaseHeight(wx, wy);
     const angle = this.worldAngle(wx, wy) * 100;
-    if (wx * wx + (wy - 4000) ** 2 > (12e3 + angle) ** 2)
+    if (wx * wx + (wy - 4000) * (wy - 4000) > (12e3 + angle) ** 2)
       return Biome.Ashlands;
     if (baseHeight <= 0.02)
       return Biome.Ocean;
-    if (wx * wx + (wy + 4000) ** 2 > (12e3 + angle) ** 2)
+    if (wx * wx + (wy + 4000) * (wy + 4000) > (12e3 + angle) ** 2)
       return baseHeight > 0.4 ? Biome.Mountain : Biome.DeepNorth;
     if (baseHeight > 0.4)
       return Biome.Mountain;
@@ -586,17 +590,17 @@ export class WorldGenerator {
       && baseHeight > 0.05 && baseHeight < 0.25)
       return Biome.Swamp;
     if (perlinNoise((this.offset4 + wx) * 0.001, (this.offset4 + wy) * 0.001) > 0.5
-      && magnitude2 > (6e3 + angle) ** 2
+      && magnitude2 > (6e3 + angle) * (6e3 + angle)
       && magnitude2 < 10e3 ** 2)
       return Biome.Mistlands;
     if (perlinNoise((this.offset1 + wx) * 0.001, (this.offset1 + wy) * 0.001) > 0.4
-      && magnitude2 > (3e3 + angle) ** 2
+      && magnitude2 > (3e3 + angle) * (3e3 + angle)
       && magnitude2 < 8e3 ** 2)
       return Biome.Plains;
     return (perlinNoise((this.offset2 + wx) * 0.001, (this.offset2 + wy) * 0.001) > 0.4
-      && magnitude2 > (600 + angle) ** 2
+      && magnitude2 > (600 + angle) * (600 + angle)
       && magnitude2 < 6e3 ** 2)
-      || magnitude2 > (5e3 + angle) ** 2
+      || magnitude2 > (5e3 + angle) * (5e3 + angle)
         ? Biome.BlackForest
         : Biome.Meadows;
     }
