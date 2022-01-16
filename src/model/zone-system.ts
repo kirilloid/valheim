@@ -4,7 +4,7 @@ import { locations } from '../data/location';
 import { LocationConfig } from '../types';
 import { Quaternion, stableHashCode, Vector2i, Vector3 } from './utils';
 import { WATER_LEVEL, ZONE_SIZE } from './game';
-import { Biome as BiomeEnum, WorldGenerator } from './world-generator';
+import { Biome as BiomeEnum, BiomeArea, WorldGenerator } from './world-generator';
 import { zoneId } from './zdo-selectors';
 import { objects } from '../data/objects';
 import { Heightmap } from './heightmap';
@@ -52,6 +52,36 @@ export class ZoneSystem {
     }
     // console.log(`Done generating locations, duration: ${Date.now() - now} ms`);
     return [...this._locationInstances.values()];
+  }
+
+  public _getLeviathans(seed: number): Vector3[] {
+    const result: Vector3[] = [];
+    const veg = objects.find(d => d.id === 'Leviathan')?.grow?.[0];
+    if (veg == null) return [];
+    const INNER_SIZE_2 = Math.ceil((10000 / ZONE_SIZE + Math.SQRT2) ** 2);
+    const prefabHash = stableHashCode('Leviathan');
+    const state = random.getState();
+    const margin = ZONE_SIZE / 2 - veg.groupRadius;
+    for (let y = -156; y <= 156; y++) {
+      for (let x = -156; x <= 156; x++) {
+        if (x * x + y * y > INNER_SIZE_2) continue;
+        if (this.worldGenerator._getZoneBiomeMask(x, y) === (1 << BiomeEnum.Ocean)) {
+          random.init(seed + x * 4271 + y * 9187 + prefabHash);
+          if (random.random() > veg.num[1]) continue;
+          const groupSize = random.rangeInt(veg.group[0], veg.group[1] + 1);
+          const p = {
+            x: x * ZONE_SIZE + random.rangeFloat(-margin, margin),
+            y: 0,
+            z: y * ZONE_SIZE + random.rangeFloat(-margin, margin),
+          };
+          p.y = this.worldGenerator.getHeight(p.x, p.z) - WATER_LEVEL;
+          if (p.y > veg.altitude[1] || p.y < veg.altitude[0]) continue;
+          result.push(p);
+        }
+      }
+    }
+    random.setState(state);
+    return result;
   }
 
   private countNrOfLocation(location: LocationConfig): number {
@@ -295,68 +325,67 @@ export class ZoneSystem {
         const flag1 = zoneVegetation.components?.includes('ZNetView');
         const minSideNormal = Math.cos(Math.PI * grow.tilt[0] / 180);
         const maxSideNormal = Math.cos(Math.PI * grow.tilt[1] / 180);
-        const num6 = ZONE_SIZE_2 - grow.groupRadius;
+        const margin = ZONE_SIZE_2 - grow.groupRadius;
         const attempts = grow.forcePlacement ? number * 50 : number;
         let placedNumber = 0;
         for (let index1 = 0; index1 < attempts; ++index1) {
           const center: Vector3 = {
-            x: random.rangeFloat(zoneCenterPos.x - num6, zoneCenterPos.x + num6),
+            x: zoneCenterPos.x + random.rangeFloat(-margin, margin),
             y: 0,
-            z: random.rangeFloat(zoneCenterPos.z - num6, zoneCenterPos.z + num6),
+            z: zoneCenterPos.z + random.rangeFloat(-margin, margin),
           };
-          const num9 = random.rangeInt(grow.group[0], grow.group[1] + 1);
+          const groupSize = random.rangeInt(grow.group[0], grow.group[1] + 1);
           let placed = false;
-          for (let index2 = 0; index2 < num9; ++index2) {
-            const p = index2 == 0 ? center : this.getRandomPointInRadius(center, grow.groupRadius);
-            const num10 = random.rangeInt(0, 360);
-            const num11 = random.rangeFloat(grow.scale[0], grow.scale[1]);
-            const x = random.rangeFloat(-grow.randTilt, grow.randTilt);
-            const z = random.rangeFloat(-grow.randTilt, grow.randTilt);
-            if (!grow.blockCheck || !this.isBlocked(p)) {
-              const {
-                normal, 
-                biome, 
-                biomeArea, 
-                hmap,
-              } = this.getGroundData(p);
-              if (grow.locations.includes(BiomeEnum[biome] as any) && (grow.biomeArea & biomeArea)) {
-                const num12 = p.y - WATER_LEVEL;
-                if (num12 >= grow.altitude[0] && num12 <= grow.altitude[1]) {
-                  if (grow.oceanDepth[0] != grow.oceanDepth[1]) {
-                    const oceanDepth = hmap?.getOceanDepth(p) ?? 0;
-                    if (oceanDepth < grow.oceanDepth[0] || oceanDepth > grow.oceanDepth[1])
-                      continue;
-                  }
-                  if (normal.y >= minSideNormal && normal.y <= maxSideNormal) {
-                    if (grow.terrainDeltaRadius > 0) {
-                      const delta = this.worldGenerator.getTerrainDelta(p, grow.terrainDeltaRadius);
-                      if (delta > grow.terrainDelta[1] || delta < grow.terrainDelta[0])
-                        continue;
-                    }
+          for (let index2 = 0; index2 < groupSize; ++index2) {
+            const p = index2 === 0 ? center : this.getRandomPointInRadius(center, grow.groupRadius);
+            const angle = random.rangeInt(0, 360);
+            const scale = random.rangeFloat(grow.scale[0], grow.scale[1]);
+            const { randTilt } = grow;
+            const x = random.rangeFloat(-randTilt, randTilt);
+            const z = random.rangeFloat(-randTilt, randTilt);
+            if (grow.blockCheck && this.isBlocked(p)) {
+              continue;
+            }
+            const { normal, biome, biomeArea, hmap } = this.getGroundData(p);
+            if (!grow.locations.includes(BiomeEnum[biome] as any)
+            ||  !(grow.biomeArea & biomeArea)) {
+              continue;
+            }
+            const altitude = p.y - WATER_LEVEL;
+            if (altitude < grow.altitude[0] || altitude > grow.altitude[1]) {
+              continue;
+            }
+            if (grow.oceanDepth[0] != grow.oceanDepth[1]) {
+              const oceanDepth = hmap?.getOceanDepth(p) ?? 0;
+              if (oceanDepth < grow.oceanDepth[0] || oceanDepth > grow.oceanDepth[1])
+                continue;
+            }
+            if (normal.y < minSideNormal || normal.y > maxSideNormal) continue;
+            if (grow.terrainDeltaRadius > 0) {
+              const delta = this.worldGenerator.getTerrainDelta(p, grow.terrainDeltaRadius);
+              if (delta > grow.terrainDelta[1] || delta < grow.terrainDelta[0])
+                continue;
+            }
 
-                    if (grow.inForest) {
-                      const forestFactor = this.worldGenerator.getForestFactor(p.x, p.z);
-                      if (forestFactor < grow.inForest[0] || forestFactor > grow.inForest[1])
-                        continue;
-                    }
+            if (grow.inForest) {
+              const forestFactor = this.worldGenerator.getForestFactor(p.x, p.z);
+              if (forestFactor < grow.inForest[0] || forestFactor > grow.inForest[1])
+                continue;
+            }
 
-                    if (!this.insideClearArea(clearAreas, p)) {
-                      if (grow.onSurface) p.y = WATER_LEVEL;
-                      p.y += grow.offset;
-                      const rotation: Quaternion = grow.chanceToUseGroundTilt <= 0.0 || random.random() > grow.chanceToUseGroundTilt
-                        // this is complete BS, but we don't use angles now
-                        ? { x, y: num10, z, w: 0 }
-                        : { ...normal, w: num10 };
-                      const veg = {
-                        id: zoneVegetation.id,
-                        pos: p,
-                        rotation
-                      };
-                      placed = true;
-                    }
-                  }
-                }
-              }
+            if (!this.insideClearArea(clearAreas, p)) {
+              if (grow.onSurface) p.y = WATER_LEVEL;
+              p.y += grow.offset;
+              const rotation: Quaternion = grow.chanceToUseGroundTilt <= 0.0 || random.random() > grow.chanceToUseGroundTilt
+                // this is complete BS, but we don't use angles now
+                ? { x, y: angle, z, w: 0 }
+                : { ...normal, w: angle };
+              const veg = {
+                id: zoneVegetation.id,
+                pos: p,
+                rotation
+              };
+              placed = true;
             }
           }
           if (placed) ++placedNumber;

@@ -1,11 +1,14 @@
 import type { RegisteredLocation } from '../../zone-system';
 import type { MessageFromWorker, MessageToWorker } from './types';
-import { assertNever } from '../../utils';
+import { assertNever, Vector3 } from '../../utils';
 
 export function generateZones(
   seed: number,
   onProgress: (progress: number) => void,
-  onComplete: (locations: RegisteredLocation[]) => void,
+  onComplete: (data: {
+    locations: RegisteredLocation[];
+    leviathans: Vector3[];
+  }) => void,
 ): () => void {
   const worker = new Worker('./worker.ts', { name: 'locations', type: 'module' });
 
@@ -21,7 +24,7 @@ export function generateZones(
         onProgress(data.progress);
         break;
       case 'data':
-        onComplete(data.locations);
+        onComplete(data);
         break;
       default:
         return assertNever(data);

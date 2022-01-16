@@ -2,11 +2,12 @@ import { random } from './random';
 import { clamp01, lerp, lerpStep, smoothStep, Vector3 } from './utils';
 import { perlinNoise, fbm } from './perlin';
 import { WORLD_RADIUS, ZONE_SIZE } from './game';
+import type { RegisteredLocation } from './zone-system';
 
 const INT_MIN_VAL = 1 << 31;
 const INT_MAX_VAL = ((1 << 31) >>> 0) - 1;
 
-enum BiomeArea {
+export enum BiomeArea {
   Edge = 1,
   Median = 2,
   Everything = 3,
@@ -189,6 +190,8 @@ export class WorldGenerator {
 
   private readonly minMountainDistance = 1000;
 
+  /** coordinates from -157 to 156, making -1/-1 top(bottom?)-left corner of center zone */
+  private _cornerBiomes = new Uint8Array(314 * 314);
   private _biomeAreas = new Uint8Array(313 * 313);
 
   constructor(seed: number) {
@@ -215,7 +218,7 @@ export class WorldGenerator {
 
   private _calculateBiomeAreas() {
     const time = Date.now();
-    const OUTER_SIZE_2 = Math.ceil((10000 / ZONE_SIZE + Math.sqrt(2)) ** 2);
+    const OUTER_SIZE_2 = Math.ceil((10000 / ZONE_SIZE + Math.SQRT2) ** 2);
     const INNER_SIZE_2 = Math.ceil((10000 / ZONE_SIZE) ** 2);
     const biomes = new Uint8Array(315 * 315);
     for (let y = -157; y <= 157; y++) {
@@ -576,6 +579,19 @@ export class WorldGenerator {
     return this._biomeAreas[(y + 156) * 313 + x + 156]!;
   }
 
+  private _getZoneBiome(x: number, y: number): number {
+    const D = (y + 157) * 314 + x + 157;
+    return this._cornerBiomes[D] || (this._cornerBiomes[D] = this.getBiome(x * 64 + 32, y * 64 + 32));
+  }
+
+  public _getZoneBiomeMask(x: number, y: number): number {
+    return 0
+      | (1 << this._getZoneBiome(x, y))
+      | (1 << this._getZoneBiome(x - 1, y))
+      | (1 << this._getZoneBiome(x, y - 1))
+      | (1 << this._getZoneBiome(x - 1, y - 1))
+  }
+
   public getBiome(wx: number, wy: number): Biome {
     const magnitude2 = wx * wx + wy * wy;
     const baseHeight = this.getBaseHeight(wx, wy);
@@ -618,15 +634,17 @@ export class WorldGenerator {
     wy += 100000 + this.offset1;
     const base = perlinNoise(wx * 0.001, wy * 0.001) * perlinNoise(wx * 0.0015, wy * 0.0015);
     const base2 = base + perlinNoise(wx * 0.002, wy * 0.002) * perlinNoise(wx * 0.003, wy * 0.003) * base * 0.9;
-    let result = (base2 + perlinNoise(wx * 0.005, wy * 0.005) * perlinNoise(wx * 0.01, wy * 0.01) * 0.5 * base2 - 0.07)
-      * (1 - (1 - lerpStep(
-        0.02,
-        0.12,
-        Math.abs(
-          perlinNoise(wx * 0.0005 + 0.123, wy * 0.0005 + 0.15123) -
-          perlinNoise(wx * 0.0005 + 0.321, wy * 0.0005 + 0.231)
-        )
-      )) * smoothStep(744, 1000, distance));
+    const value = (1 - lerpStep(
+      0.02,
+      0.12,
+      Math.abs(
+        perlinNoise(wx * 0.0005 + 0.123, wy * 0.0005 + 0.15123) -
+        perlinNoise(wx * 0.0005 + 0.321, wy * 0.0005 + 0.231)
+      )
+    ));
+    let result = (
+      base2 + perlinNoise(wx * 0.005, wy * 0.005) * perlinNoise(wx * 0.01, wy * 0.01) * 0.5 * base2 - 0.07
+    ) * (1 - value * smoothStep(744, 1000, distance));
     if (distance > 10000) {
       const t1 = lerpStep(10000, WORLD_RADIUS, distance);
       result = lerp(result, -0.2, t1);

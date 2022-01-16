@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 
-import { WORLD_RADIUS, WORLD_SIZE } from '../../model/game';
-import { groupBy, stableHashCode, toggleItem } from '../../model/utils';
+import { WORLD_SIZE } from '../../model/game';
+import { stableHashCode, toggleItem, Vector3 } from '../../model/utils';
 import { generateZones } from '../../model/worker/generate-zones';
 import { generateTerrain } from '../../model/worker/generate-terrain';
 import { RegisteredLocation } from '../../model/zone-system';
 
+import { TranslationContext, Translator } from '../../effects';
 import { PanView } from '../parts/PanView';
-import { TranslationContext } from '../../effects';
 
 const locationTypes: Record<string, { type: string; color: string; icon?: string; }> = {
   StartTemple: { type: 'Spawn', color: '#fff' },
@@ -20,7 +20,7 @@ const locationTypes: Record<string, { type: string; color: string; icon?: string
   Vendor_BlackForest: { type: 'Trader', color: '#fff', icon: 'trader' },
   // boss stones
   // treasure
-  // leviathan
+  Leviathan: { type: 'Leviathan', color: '#fff', icon: 'circle' },
   Greydwarf_camp: { type: 'Greydwarf camp', color: '#fff', icon: 'house' },
   Goblincamp: { type: 'Goblin camp', color: '#fff', icon: 'house' },
   Crypt: { type: 'Crypt', color: '#fff', icon: 'hammer_stone' },
@@ -37,9 +37,15 @@ const locationTypes: Record<string, { type: string; color: string; icon?: string
   // totem poles
 };
 
-function getGroups(locations: RegisteredLocation[]) {
-  const groups: Record<string, { items: RegisteredLocation[]; color: string; icon?: string }> = {};
-  for (const loc of locations) {
+type MapItem = {
+  pos: Vector3;
+  subtype: string;
+  title: string;
+}
+
+function getGroups(data: { locations: RegisteredLocation[]; leviathans: Vector3[] }, translate: Translator) {
+  const groups: Record<string, { items: MapItem[]; color: string; icon?: string }> = {};
+  for (const loc of data.locations) {
     const locType = locationTypes[loc.location.typeId];
     if (locType == null) continue;
     const group = groups[locType.type] ?? (groups[locType.type] = {
@@ -47,7 +53,23 @@ function getGroups(locations: RegisteredLocation[]) {
       color: locType.color,
       icon: locType.icon,
     });
-    group.items.push(loc);
+    const type = loc.location.typeId;
+    group.items.push({
+      pos: loc.pos,
+      subtype: type,
+      title: translate(`ui.location.${type}`)
+    });
+  }
+  const subtype = '';
+  const title = translate(`Leviathan`);
+  groups.Leviathan = {
+    items: data.leviathans.map(pos => ({
+      pos,
+      subtype,
+      title,
+    })),
+    color: '#fff',
+    icon: 'circle' 
   }
   return groups;
 }
@@ -65,7 +87,13 @@ const WorldMap = React.memo((props: { seed: string }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [mapProgress, setMapProgress] = useState(0);
   const [locProgress, setLocProgress] = useState(0);
-  const [locations, setLocations] = useState<RegisteredLocation[]>([]);
+  const [locations, setLocations] = useState<{
+    locations: RegisteredLocation[];
+    leviathans: Vector3[];
+  }>({
+    locations: [],
+    leviathans: [],
+  });
   const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
   const [zoom, setZoom] = useState(1);
   const [pos, setPos] = useState({ x: 0, y: 0 });
@@ -91,7 +119,7 @@ const WorldMap = React.memo((props: { seed: string }) => {
     return generateZones(numSeed, setLocProgress, setLocations);
   }, [seed]);
 
-  const locGroups = getGroups(locations);
+  const locGroups = getGroups(locations, translate);
 
   return <>
     <dl className="overlay">
@@ -117,14 +145,14 @@ const WorldMap = React.memo((props: { seed: string }) => {
         {selectedLocations.map(key => {
           const group = locGroups[key];
           if (group == null) return null;
-          const typeIds = new Set(group.items.map(item => item.location.typeId));
+          const typeIds = new Set(group.items.map(item => item.subtype));
           return <React.Fragment key={key}>
             {group.items.map((item, i) => <div key={i} className="WorldGen__marker text-outline" style={{
               left: world2canvasCoord(item.pos.x),
               bottom: world2canvasCoord(item.pos.z),
               backgroundImage: group.icon ? `url(/icons/icon/${group.icon}_64.png)` : '',
             }}>
-              {typeIds.size > 1 ? translate(`ui.location.${item.location.typeId}`) : ''}
+              {typeIds.size > 1 ? item.title : ''}
             </div>)}
           </React.Fragment>
         })}

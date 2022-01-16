@@ -28,7 +28,8 @@ async function generateZones(seed: number) {
     setProgress(item.value);
     await wait(4);
   };
-  sendMessage({ type: 'data', locations: item.value });
+  const leviathans = zone._getLeviathans(seed);
+  sendMessage({ type: 'data', locations: item.value, leviathans });
 }
 
 ctx.addEventListener('message', async (event: MessageEvent) => {

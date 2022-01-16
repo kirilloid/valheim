@@ -1,3 +1,4 @@
+import type { Vector3 } from '../../utils';
 import type { RegisteredLocation } from '../../zone-system';
 
 export type MessageFromWorker = {
@@ -6,6 +7,7 @@ export type MessageFromWorker = {
 } | {
   type: 'data';
   locations: RegisteredLocation[];
+  leviathans: Vector3[];
 };
 
 export type MessageToWorker = {

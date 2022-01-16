@@ -57,9 +57,8 @@ export class Random {
   }
 
   public insideUnitCircle(): Vector2i {
-    // TODO: check that's the actual implemtntation
-    const radius = this.random();
     const angle = this.rangeFloat(0, Math.PI * 2);
+    const radius = Math.sqrt(this.rangeFloat(0, 1));
     return {
       x: Math.cos(angle) * radius,
       y: Math.sin(angle) * radius,

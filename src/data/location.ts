@@ -72,7 +72,7 @@ function loc(
     components,
     quantity,
     biomeArea = 7,
-    chance,
+    chance = 0.15,
     prioritized = false,
     centerFirst = false,
     unique = false,
@@ -96,7 +96,7 @@ function loc(
     components?: GameComponent[],
     quantity: number,
     biomeArea?: number,
-    chance: number,
+    chance?: number,
     prioritized?: boolean,
     centerFirst?: boolean,
     unique?: boolean,
@@ -190,7 +190,7 @@ export const locations: LocationConfig[] = [
   loc(
     1, 'Eikthyrnir', ['Meadows'],
     { type: 'altar',
-      biomeArea: 2, quantity: 3, chance: 0.15, prioritized, maxDistance: 1000, radius: 10,
+      biomeArea: 2, quantity: 3, prioritized, maxDistance: 1000, radius: 10,
       items: [
         locItem('StatueDeer'),
         locItem('Eikthyr'),
@@ -200,13 +200,13 @@ export const locations: LocationConfig[] = [
   loc(
     5, 'GoblinKing', ['Plains'],
     { type: 'altar',
-      biomeArea: 2, quantity: 4, chance: 0.15, prioritized, minApart: 3000, terrainDelta: [0, 4], radius: 32,
+      biomeArea: 2, quantity: 4, prioritized, minApart: 3000, terrainDelta: [0, 4], radius: 32,
       items: [locItem('GoblinKing')]
     },
   ),
   loc(
     2, 'Greydwarf_camp1', ['BlackForest'],
-    { biomeArea: 2, quantity: 300, chance: 0.15, minApart: 128, radius: 10,
+    { biomeArea: 2, quantity: 300, minApart: 128, radius: 10,
       items: [
         locItem('Greydwarf_Root', 1, 3),        
         locItem('Spawner_GreydwarfNest'),
@@ -214,15 +214,17 @@ export const locations: LocationConfig[] = [
     },
     'Greydwarf_camp',
   ),
+  // Greydwarf_camp2: disabled
+  // Greydwarf_camp3: disabled
   loc(
     2, 'Runestone_Greydwarfs', ['BlackForest'],
     { type: 'runestone',
-      quantity: 50, chance: 0.1, group: 'Runestones', minApart: 128, maxDistance: 2000, radius: 8,
+      quantity: 25, chance: 0.1, group: 'Runestones', minApart: 128, maxDistance: 2000, radius: 8,
       items: [locItem('FirTree_oldLog', 1, 4)] }
   ),
   loc(
     3, 'Grave1', ['Swamp'],
-    { biomeArea: 6, quantity: 200, chance: 0.15, minAlt: 0.5, radius: 12.04,
+    { biomeArea: 6, quantity: 200, minAlt: 0.5, radius: 12.04,
       items: [
         locItem('TreasureChest_swamp', 0.5),
         locItem('Spawner_DraugrPile', 1, 2),
@@ -233,7 +235,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     3, 'SwampRuin1', ['Swamp'],
-    { biomeArea: 6, quantity: 50, chance: 0.15, minApart: 512, radius: 12,
+    { biomeArea: 6, quantity: 50, minApart: 512, radius: 12, minAlt: 0,
       items: [
         locItem('Vegvisir', 0.3), // Vegvisir_Bonemass
         locItem('TreasureChest_swamp', 0.251),
@@ -247,7 +249,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     3, 'SwampRuin2', ['Swamp'],
-    { biomeArea: 6, quantity: 50, chance: 0.15, minApart: 512, radius: 12,
+    { biomeArea: 6, quantity: 50, minApart: 512, radius: 12, minAlt: 0,
       items: [
         locItem('Vegvisir', 0.3), // Vegvisir_Bonemass
         locItem('TreasureChest_swamp', 0.251),
@@ -262,7 +264,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     3, 'FireHole', ['Swamp'],
-    { biomeArea: 6, quantity: 200, chance: 0.15, minAlt: 0.5, radius: 5.2,
+    { biomeArea: 6, quantity: 200, minAlt: 0.5, radius: 5.2,
       items: [
         locItem('Surtling', 1, 3), // Spawner_imp_respawn: once in 5 minutes
       ],
@@ -271,7 +273,7 @@ export const locations: LocationConfig[] = [
   loc(
     3, 'Runestone_Draugr', ['Swamp'],
     { type: 'runestone',
-      quantity: 50, biomeArea: -1, chance: 0.05, group: 'Runestones', minApart: 128, minAlt: 0.5, radius: 8,
+      quantity: 50, chance: 0.05, group: 'Runestones', minApart: 128, minAlt: 0.5, radius: 8,
       items: [
         locItem('Draugr', 1, 3),
         locItem('piece_groundtorch_green', 1, 2),
@@ -279,11 +281,14 @@ export const locations: LocationConfig[] = [
       ]  
     }
   ),
+  // Castle: disabled
+  // Fort1: disabled
+  // xmastree: disabled
   loc(
     2, 'GDKing', ['BlackForest'],
     { type: 'altar',
-      biomeArea: 6, quantity: 4, chance: 0.15, prioritized, minApart: 3000, terrainDelta: [0, 5], radius: 25,
-      minDistance: 1000, maxDistance: 7000,
+      biomeArea: 6, quantity: 4, prioritized, minApart: 3000, terrainDelta: [0, 5],
+      minDistance: 1000, maxDistance: 7000, radius: 25,
       items: [
         locItem('StatueSeed'),
         locItem('gd_king'),
@@ -293,14 +298,14 @@ export const locations: LocationConfig[] = [
   loc(
     3, 'Bonemass', ['Swamp'],
     { type: 'altar',
-      biomeArea: 6, quantity: 5, chance: 0.2, prioritized, minApart: 3000, terrainDelta: [0, 4], radius: 19.79,
-      minDistance: 2000, minAlt: 0, maxAlt: 2,
+      biomeArea: 6, quantity: 5, chance: 0.2, prioritized, minApart: 3000, terrainDelta: [0, 4],
+      minDistance: 2000, minAlt: 0, maxAlt: 2, radius: 19.79,
       items: [locItem('Bonemass')],
     }
   ),
   loc(
     7, 'Meteorite', ['Ashlands'],
-    { quantity: 500, chance: 0.1, radius: 5.2,
+    { quantity: 500, chance: 0.1, terrainDelta: [0, 4], radius: 5.2,
       items: [
         locItem('MineRock_Meteorite', 1, 15),
         locItem('Surtling', 1, 4),
@@ -318,7 +323,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     2, 'Ruin1', ['BlackForest'],
-    { quantity: 200, chance: 0.15, radius: 10.7,
+    { quantity: 200, radius: 10.7,
       items: [
         locItem('Greydwarf', 1, 5),
         locItem('Greydwarf_Shaman', 1, 1),
@@ -333,7 +338,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     2, 'Ruin2', ['BlackForest'],
-    { quantity: 200, chance: 0.15, radius: 9.89,
+    { quantity: 200, radius: 9.89,
       items: [
         locItem('Greydwarf_Elite', 0.2, 1),
         locItem('Greydwarf', 1, 5),
@@ -352,9 +357,16 @@ export const locations: LocationConfig[] = [
     },
     'RuinB',
   ),
+  // Pillar 1: disabled
+  // Pillar 2: disabled
+  // StoneHouse1: disabled
+  // StoneHouse1_heath: [quantity=0]
+  // StoneHouse2_heath: [quantity=0]
+  // StoneHouse5_heath: [quantity=0]
+  // StoneHouse2: disabled
   loc(
     2, 'StoneHouse3', ['BlackForest'],
-    { quantity: 200, chance: 0.15, radius: 6,
+    { quantity: 200, radius: 6,
       items: [
         locItem('Greydwarf'),
         locItem('TreasureChest_blackforest'),
@@ -364,16 +376,17 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     2, 'StoneHouse4', ['BlackForest'],
-    { quantity: 200, chance: 0.15, radius: 7,
+    { quantity: 200, radius: 7,
       items: [
         locItem('Greydwarf', 0.5, 2),
       ],
     },
     'StoneHouse',
   ),
+  // StoneHouse5: disabled
   loc(
     5, 'Ruin3', ['Plains'],
-    { quantity: 50, chance: 0.15, group: 'Goblintower', minApart: 512, radius: 10,
+    { quantity: 50, group: 'Goblintower', minApart: 512, radius: 10,
       items: [
         locItem('TreasureChest_heath'),
         locItem('Goblin', 1, 2),
@@ -381,6 +394,7 @@ export const locations: LocationConfig[] = [
     },
     'RuinP',
   ),
+  // GoblinCamp1: disabled
   loc(
     5, 'GoblinCamp2', ['Plains'],
     { quantity: 200, chance: 0.1, minApart: 250, randomRotation: false, minAlt: 2, radius: 20,
@@ -410,6 +424,7 @@ export const locations: LocationConfig[] = [
     },
     'StoneTower',
   ),
+  // StoneTower2: disabled
   loc(
     5, 'StoneTower3', ['Plains'],
     { quantity: 50, chance: 0.1, group: 'Goblintower', minApart: 512, radius: 14,
@@ -423,6 +438,7 @@ export const locations: LocationConfig[] = [
     },
     'StoneTower',
   ),
+  // StoneTower4: disabled
   loc(
     5, 'StoneHenge1', ['Plains'],
     { quantity: 5, chance: 0.1, group: 'Stonehenge', minApart: 1000, minAlt: 5, radius: 30,
@@ -503,7 +519,7 @@ export const locations: LocationConfig[] = [
 
   loc(
     1, 'WoodHouse1', ['Meadows'],
-    { quantity: 20, chance: 0.15, terrainDelta: [0, 4], radius: 8,
+    { quantity: 20, terrainDelta: [0, 4], radius: 8,
       items: [
         locItem('beehive', 0.25),
         locItem('TreasureChest_meadows', 0.5),
@@ -513,7 +529,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     1, 'WoodHouse2', ['Meadows'],
-    { quantity: 20, chance: 0.15, terrainDelta: [0, 4], radius: 8,
+    { quantity: 20, terrainDelta: [0, 4], radius: 8,
       items: [
         locItem('beehive', 0.25),
         locItem('TreasureChest_meadows', 0.5),
@@ -523,7 +539,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     1, 'WoodHouse3', ['Meadows'],
-    { quantity: 20, chance: 0.15, terrainDelta: [0, 4], radius: 10,
+    { quantity: 20, terrainDelta: [0, 4], radius: 10,
       items: [
         locItem('beehive', 0.25),
       ],
@@ -532,7 +548,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     1, 'WoodHouse4', ['Meadows'],
-    { quantity: 20, chance: 0.15, terrainDelta: [0, 4], radius: 8,
+    { quantity: 20, terrainDelta: [0, 4], radius: 8,
       items: [
         locItem('beehive', 0.25),
       ],
@@ -541,7 +557,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     1, 'WoodHouse5', ['Meadows'],
-    { quantity: 20, chance: 0.15, terrainDelta: [0, 4], radius: 8,
+    { quantity: 20, terrainDelta: [0, 4], radius: 8,
       items: [
         locItem('beehive', 0.25),
       ],
@@ -550,7 +566,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     1, 'WoodHouse6', ['Meadows'],
-    { quantity: 20, chance: 0.15, terrainDelta: [0, 4], radius: 8,
+    { quantity: 20, terrainDelta: [0, 4], radius: 8,
       items: [
         locItem('beehive', 0.25),
         locItem('TreasureChest_meadows', 1),
@@ -560,7 +576,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     1, 'WoodHouse7', ['Meadows'],
-    { quantity: 20, chance: 0.15, terrainDelta: [0, 4], radius: 8,
+    { quantity: 20, terrainDelta: [0, 4], radius: 8,
       items: [
         locItem('beehive', 0.25),
         locItem('TreasureChest_meadows', 0.5),
@@ -570,14 +586,14 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     1, 'WoodHouse8', ['Meadows'],
-    { quantity: 20, chance: 0.15, terrainDelta: [0, 4], radius: 8,
+    { quantity: 20, terrainDelta: [0, 4], radius: 8,
       items: [],
     },
     'WoodHouse',
   ),
   loc(
     1, 'WoodHouse9', ['Meadows'],
-    { quantity: 20, chance: 0.15, terrainDelta: [0, 4], radius: 8,
+    { quantity: 20, terrainDelta: [0, 4], radius: 8,
       items: [
         locItem('beehive', 0.25),
         locItem('TreasureChest_meadows', 0.5),
@@ -587,7 +603,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     1, 'WoodHouse10', ['Meadows'],
-    { quantity: 20, chance: 0.15, terrainDelta: [0, 4], radius: 8,
+    { quantity: 20, terrainDelta: [0, 4], radius: 8,
       items: [
         locItem('beehive', 0.25),
         locItem('TreasureChest_meadows', 0.5),
@@ -597,7 +613,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     1, 'WoodHouse11', ['Meadows'],
-    { quantity: 20, chance: 0.15, terrainDelta: [0, 4], radius: 8,
+    { quantity: 20, terrainDelta: [0, 4], radius: 8,
       items: [
         locItem('beehive', 0.25),
         locItem('TreasureChest_meadows', 0.5),
@@ -607,7 +623,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     1, 'WoodHouse12', ['Meadows'],
-    { quantity: 20, chance: 0.15, terrainDelta: [0, 4], radius: 6,
+    { quantity: 20, terrainDelta: [0, 4], radius: 6,
       items: [
         locItem('TreasureChest_meadows', 0.5),
       ],
@@ -616,7 +632,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     1, 'WoodHouse13', ['Meadows'],
-    { quantity: 20, chance: 0.15, terrainDelta: [0, 4], radius: 9,
+    { quantity: 20, terrainDelta: [0, 4], radius: 9,
       items: [
         locItem('beehive', 0.25),
         locItem('TreasureChest_meadows', 0.5),
@@ -624,44 +640,29 @@ export const locations: LocationConfig[] = [
     },
     'WoodHouse',
   ),
-/*  loc(
-    1, 'WoodHouse14', ['Meadows'],
-    { quantity: 20, chance: 0.15, terrainDelta: [0, 4],
-      items: [
-        locItem('beehive', 0.25),
-        locItem('TreasureChest_meadows', 0.5),
-      ],
-    },
-  ),
-  loc(
-    1, 'WoodHouse15', ['Meadows'],
-    { quantity: 20, chance: 0.15, terrainDelta: [0, 4],
-      items: [
-        locItem('beehive', 0.25),
-        locItem('TreasureChest_meadows', 0.5),
-      ],
-    },
-  ),*/
+  // WoodHouse 14 & 15 exists in locations scenes, but not in config, even as disabled
   loc(
     1, 'WoodFarm1', ['Meadows'],
     { components: ['DungeonGenerator'],
-      quantity: 10, chance: 0.15, group: 'woodvillage', minApart: 128, terrainDelta: [0, 4], minDistance: 500, maxDistance: 2000, radius: 32,
+      quantity: 10, group: 'woodvillage', minApart: 128, terrainDelta: [0, 4], minDistance: 500, maxDistance: 2000, radius: 32,
       items: [],
     },
     'WoodFarm',
   ),
   loc( // draugr village
     1, 'WoodVillage1', ['Meadows'],
-    { quantity: 15, chance: 0.15, group: 'woodvillage', minApart: 256, terrainDelta: [0, 4], minDistance: 2000, radius: 32,
+    { quantity: 15, group: 'woodvillage', minApart: 256, terrainDelta: [0, 4], minDistance: 2000, radius: 32,
       items: [],
     },
     'WoodVillage',
   ),
+  // TrollCave: disabled
   loc(
     2, 'TrollCave02', ['BlackForest'],
-    { type: 'dungeon', biomeArea: 2, quantity: 250, chance: 0.2, minApart: 256, randomRotation: false, radius: [12, 24],
-      slopeRotation,
-      terrainDelta: [5, 10], minAlt: 3,
+    { type: 'dungeon',
+      biomeArea: 2, quantity: 250, chance: 0.2, minApart: 256,
+      randomRotation: false, slopeRotation,
+      terrainDelta: [5, 10], minAlt: 3, radius: [24, 12],
       items: [
         // entrance
         locItem('BoneFragments', 0.66, 3),
@@ -678,10 +679,13 @@ export const locations: LocationConfig[] = [
     },
     'TrollCave',
   ),
+  // SunkenCrypt1: disabled
+  // SunkenCrypt2: disabled
+  // SunkenCrypt3: disabled
   loc(
     3, 'SunkenCrypt4', ['Swamp'], // 1,2,3 disabled
     { type: 'dungeon', components: ['DungeonGenerator'],
-      biomeArea: 2, quantity: 400, chance: 0.15, prioritized, minApart: 64, terrainDelta: [0, 4], minAlt: 0, maxAlt: 2, radius: [12, 14],
+      biomeArea: 2, quantity: 400, prioritized, minApart: 64, terrainDelta: [0, 4], minAlt: 0, maxAlt: 2, radius: [12, 14],
       // exterior
       items: [
         locItem('Draugr', 0.3, 1),
@@ -695,7 +699,7 @@ export const locations: LocationConfig[] = [
   loc(
     1, 'Dolmen01', ['Meadows', 'BlackForest'],
     // skeleton_no_archer, N, *, once 50%
-    { biomeArea: 3, quantity: 100, chance: 0.1, terrainDelta: [0, 2], radius: 8,
+    { quantity: 100, chance: 0.1, terrainDelta: [0, 2], radius: 8,
       items: [
         locItem('BoneFragments', 0.5, 1),
         locItem('Pickable_DolmenTreasure', 0.1),
@@ -707,7 +711,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     1, 'Dolmen02', ['Meadows', 'BlackForest'],
-    { biomeArea: 3, quantity: 100, chance: 0.1, terrainDelta: [0, 2], radius: 8,
+    { quantity: 100, chance: 0.1, terrainDelta: [0, 2], radius: 8,
       items: [
         locItem('BoneFragments', 0.5, 1),
         locItem('Pickable_DolmenTreasure', 0.2),
@@ -719,7 +723,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     1, 'Dolmen03', ['Meadows', 'BlackForest'],
-    { biomeArea: 3, quantity: 50, chance: 0.1, terrainDelta: [0, 2], radius: 10,
+    { quantity: 50, chance: 0.1, terrainDelta: [0, 2], radius: 10,
       items: [
         locItem('BoneFragments', 0.5, 1),
         locItem('BoneFragments', 1, 1),
@@ -735,14 +739,14 @@ export const locations: LocationConfig[] = [
     { type: 'dungeon', components: ['DungeonGenerator'],
       quantity: 200, chance: 0.1, minApart: 128, terrainDelta: [0, 2], minAlt: 3, radius: [11, 21],
       items: [locItem('Skeleton', 1, 3)],
-      dungeon: forestcrypt, 
+      dungeon: forestcrypt,
     },
     'Crypt',
   ),
   loc(
     2, 'Crypt4', ['BlackForest'],
     { type: 'dungeon', components: ['DungeonGenerator'],
-      quantity: 200, chance: 0.1, minApart: 128, terrainDelta: [0, 2], minAlt: 3, radius: [11, 21],
+      quantity: 200, chance: 0.1, minApart: 128, terrainDelta: [0, 2], radius: [11, 21],
       items: [locItem('Skeleton', 1, 3)],
       dungeon: forestcrypt, 
     },
@@ -948,7 +952,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     2, 'Vendor_BlackForest', ['BlackForest'],
-    { quantity: 10, chance: 0.1, prioritized, unique, minApart: 512, iconPlaced, terrainDelta: [0, 2], minDistance: 1500, radius: 12,
+    { biomeArea: 2, quantity: 10, chance: 0.1, prioritized, unique, minApart: 512, iconPlaced, terrainDelta: [0, 2], minDistance: 1500, radius: 12,
       items: [locItem('Haldor')]
     },
   ),
@@ -965,7 +969,9 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     4, 'Dragonqueen', ['Mountain'],
-    { type: 'altar',  quantity: 3, chance: 0.1, minApart: 3000, maxDistance: 8000, minAlt: 150, maxAlt: 500, radius: 12,
+    { type: 'altar',
+      biomeArea: 2, quantity: 3, chance: 0.1, prioritized,
+      minApart: 3000, terrainDelta: [0, 4], maxDistance: 8000, minAlt: 150, maxAlt: 500, radius: 12,
       items: [locItem('Dragon')],
     },
   ),
@@ -1036,7 +1042,7 @@ export const locations: LocationConfig[] = [
   loc(
     4, 'MountainGrave01', ['Mountain'],
     {
-      quantity: 100, chance: 0.1, terrainDelta: [0, 2], minApart: 50, minAlt: 100, radius: 3.93,
+      quantity: 100, chance: 0.1, minApart: 50, terrainDelta: [0, 2], minAlt: 100, radius: 3.93,
       items: [
         locItem('BoneFragments'),
         locItem('SilverNecklace', 0.506),
@@ -1062,7 +1068,7 @@ export const locations: LocationConfig[] = [
     },
     'MountainWell',
   ),
-  // loc(
+  // loc( // disabled
   //   2, 'MountainCave01', ['Mountain'],
   //   { quantity: 500, chance: 0.1, terrainDelta: [0, 20], minAlt: 100,
   //     items: [],
@@ -1104,6 +1110,7 @@ export const locations: LocationConfig[] = [
     },
     'ShipWreck',
   ),
+  // Hugintest: disabled
   loc(
     1, 'Runestone_Meadows', ['Meadows'],
     { type: 'runestone', quantity: 100, chance: 0.1, group: 'Runestones', minApart: 128, radius: 8,
@@ -1135,7 +1142,7 @@ export const locations: LocationConfig[] = [
     5, 'Runestone_Plains', ['Plains'],
     { type: 'runestone', quantity: 100, chance: 0.1, group: 'Runestones', minApart: 128, radius: 8, items: [] }
   ),
-  // DevHouse1
+  // DevHouse1: disabled
   loc(
     5, 'TarPit1', ['Plains'],
     { quantity: 100, biomeArea: 2, chance: 0.1, group: 'Tarpit', minApart: 128, terrainDelta: [0, 1.5], minAlt: 5, maxAlt: 60, radius: 20,
