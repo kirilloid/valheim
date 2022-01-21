@@ -1853,6 +1853,7 @@ export const creatures: Creature[] = [
     drop: [
       dropEntry('Coins', { chance: 0.25, min: 20, max: 40 }),
       dropEntry('BlackMetalScrap', { min: 1, max: 2 }),
+      dropEntry('Pukeberries', { min: 1, max: 2 }),
       dropTrophy('TrophyGoblinShaman', 0.1),
     ],
   },
