@@ -19,9 +19,12 @@ function MapData({ mapData }: { mapData: TMapData }) {
     ctx.stroke();
     const imageData = ctx.getImageData(0, 0, SIZE, SIZE);
     const { tileSize } = mapData;
+    const SIZE_2 = (SIZE / 2) ** 2;
     for (let y = 0; y < SIZE; y++) {
       for (let x = 0; x < SIZE; x++) {
-        if ((x - SIZE / 2) ** 2 + (y - SIZE / 2) ** 2 > (SIZE / 2) ** 2) continue;
+        const dx = (x - SIZE / 2);
+        const dy = (y - SIZE / 2);
+        if (dx * dx + dy * dy > SIZE_2) continue;
         const offset = (y * tileSize + x) * (tileSize / SIZE);
         const bitThey = (mapData.exploredOthers[offset >> 3]! >> (offset & 7)) & 1;
         const bitMe = (mapData.explored[offset >> 3]! >> (offset & 7)) & 1;

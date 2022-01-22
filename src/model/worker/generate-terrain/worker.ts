@@ -34,12 +34,13 @@ function generateChunk(
 ): ArrayBuffer {
   const buffer = new ArrayBuffer(4 * (canvasSize ** 2));
   const pixels = new Uint32Array(buffer);
+  const WORLD_RADIUS_2 = WORLD_RADIUS ** 2;
   for (let y = 0; y < chunkSize; y++) {
     for (let x = 0; x < chunkSize; x++) {
-      const worldX = (2 * (x + chunkSize * chunkX + 0.25) * blockSize / worldSize - 1) * WORLD_RADIUS;
-      const worldY = (1 - 2 * (y + chunkSize * chunkY + 0.25) * blockSize / worldSize) * WORLD_RADIUS;
+      const worldX = +(2 * (x + chunkSize * chunkX + 0.25) * blockSize / worldSize - 1) * WORLD_RADIUS;
+      const worldY = -(2 * (y + chunkSize * chunkY + 0.25) * blockSize / worldSize - 1) * WORLD_RADIUS;
       // dark space
-      if (worldX ** 2 + worldY ** 2 > WORLD_RADIUS ** 2) continue;
+      if (worldX * worldX + worldY * worldY > WORLD_RADIUS_2) continue;
       const biome = world.getBiome(worldX, worldY);
       const height = world.getHeight(worldX, worldY);
       const color = 

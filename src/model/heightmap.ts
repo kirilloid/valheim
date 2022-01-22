@@ -1,4 +1,4 @@
-import type { Biome, WorldGenerator } from './world-generator';
+import { Biome, BiomeArea, WorldGenerator } from './world-generator';
 import { lerp, Vector2i, Vector3 } from './utils';
 import { WATER_LEVEL, ZONE_SIZE } from './game';
 
@@ -9,7 +9,7 @@ export class Heightmap {
 
   constructor(
     private worldGenerator: WorldGenerator,
-    private point: Vector3,
+    point: Vector3,
   ) {
     const x = Math.round(point.x / ZONE_SIZE);
     const y = Math.round(point.z / ZONE_SIZE);
@@ -57,8 +57,8 @@ export class Heightmap {
     return this.cornerBiomes[bestIndex]!;
   }
 
-  getBiomeArea(): number {
-    return this.isBiomeEdge() ? 1 : 2;
+  getBiomeArea(): BiomeArea {
+    return this.isBiomeEdge() ? BiomeArea.Edge : BiomeArea.Median;
   }
 
   getOceanDepth(point: Vector3): number {

@@ -75,7 +75,7 @@ export const getSailSpeeds = (sail: Ship['sail'], sailState: Sail, windIntensity
     : getSailForce(sailState, windIntensity, windAngle);
   for (let s = 0; s < maxSeconds; s++) {
     for (let t = 1 / fixedDeltaTime; t > 0; t--) {
-      const Fx: number = (velocity ** 2) * sail.dampingForward * dampFactor;
+      const Fx: number = (velocity * velocity) * sail.dampingForward * dampFactor;
       velocity -= clamp(Fx, -1, 1);
       velocity += sailForce.z;
     }

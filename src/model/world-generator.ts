@@ -37,10 +37,6 @@ class Vector2 {
   sub(v: Vector2): Vector2 {
     return new Vector2(this.x - v.x, this.y - v.y);
   }
-  normalized(): Vector2 {
-    const length = Math.hypot(this.x, this.y);
-    return this.mul(1 / length);
-  }
   mid(v: Vector2): Vector2 {
     return new Vector2(
       (this.x + v.x) / 2,
@@ -157,7 +153,9 @@ class PointMap {
       const point = points[index]!;
       if (index < minIndex) continue;
       if (point.x === p.x && point.y === p.y) continue;
-      const distance2 = (p.x - point.x) ** 2 + (p.y - point.y) ** 2;
+      const dx = p.x - point.x;
+      const dy = p.y - point.y;
+      const distance2 = dx * dx + dy * dy;
       if (distance2 >= maxRange2) continue;
       // we adjust comparison so for the same distance, lower index wins
       if (distance2 < bestDistance2
@@ -357,15 +355,15 @@ export class WorldGenerator {
         const p1 = this._lakes[randomRiverEnd]!;
         const widthMax = random.rangeFloat(60, 100);
         const widthMin = random.rangeFloat(60, widthMax);
-        const size = p0.distance(p1);
+        const distance = p0.distance(p1);
         rivers.push({
           p0,
           p1,
           center: p0.mid(p1),
           widthMin,
           widthMax,
-          curveWidth: size / 15,
-          curveWavelength: size / 20,
+          curveWidth: distance / 15,
+          curveWavelength: distance / 20,
         });
       } else {
         copy.shift();
@@ -386,15 +384,18 @@ export class WorldGenerator {
     checkStep: number
   ): number {
     let bestIndex = -1;
-    let bestDistance = 99999;
+    let bestDistance2 = 99999 ** 2;
+    const maxDistance2 = maxDistance ** 2;
     for (const [index, point] of points.entries()) {
       if (points[index] === p) continue;
-      const distance = p.distance(point);
-      if (distance < maxDistance && distance < bestDistance
+      const dx = p.x - point.x;
+      const dy = p.y - point.y;
+      const distance2 = dx * dx + dy * dy;
+      if (distance2 < maxDistance2 && distance2 < bestDistance2
       && !this.haveRiver2(rivers, p, point)
       && this.isRiverAllowed(p, point, checkStep, heightLimit)) {
         bestIndex = index;
-        bestDistance = distance;
+        bestDistance2 = distance2;
       }
     }
     return bestIndex;
@@ -409,10 +410,13 @@ export class WorldGenerator {
     checkStep: number
   ): number {
     const indexList: number[] = [];
+    const maxDistance2 = maxDistance ** 2;
     for (const [index, point] of points.entries()) {
-      const distance = p.distance(point);
-      if (distance > 1e-5
-      && distance < maxDistance
+      const dx = p.x - point.x;
+      const dy = p.y - point.y;
+      const distance2 = dx * dx + dy * dy;
+      if (distance2 > 1e-10
+      && distance2 < maxDistance2
       && !this.haveRiver2(rivers, p, point)
       && this.isRiverAllowed(p, point, checkStep, heightLimit)) {
         indexList.push(index);
@@ -436,16 +440,18 @@ export class WorldGenerator {
   }
 
   private isRiverAllowed(p0: Vector2, p1: Vector2, step: number, heightLimit: number): boolean {
-    const distance = p0.distance(p1);
-    const normalized = p1.sub(p0).normalized();
-    let flag: boolean = true;
-    for (let num2 = step; num2 <= distance - step; num2 += step) {
-      const vector2 = p0.add(normalized.mul(num2));
+    const dx = p0.x - p1.x;
+    const dy = p0.y - p1.y;
+    const distance = Math.hypot(dx, dy);
+    const normalized = new Vector2(dx / distance, dy / distance);
+    let tooHigh = true;
+    for (let t = step; t <= distance - step; t += step) {
+      const vector2 = p0.add(normalized.mul(t));
       const baseHeight = this.getBaseHeight(vector2.x, vector2.y);
       if (baseHeight > heightLimit) return false;
-      if (baseHeight > 0.05) flag = false;
+      if (baseHeight > 0.05) tooHigh = false;
     }
-    return !flag;
+    return !tooHigh;
   }
 
   private renderRivers(rivers: River[]): void {
@@ -453,14 +459,17 @@ export class WorldGenerator {
     const riverPoints = new Map<number, RiverPoint[]>();
     for (const river of rivers) {
       const width8 = river.widthMin / 8;
-      const normalized = river.p1.sub(river.p0).normalized();
-      const vector2 = new Vector2(-normalized.y, normalized.x);
-      const num2 = river.p0.distance(river.p1);
-      for (let num3 = 0.0; num3 <= num2; num3 += width8) {
-        const f = num3 / river.curveWavelength;
-        const num4 = Math.sin(f) * Math.sin(f * 0.63412) * Math.sin(f * 0.33412) * river.curveWidth;
+      const dx = river.p0.x - river.p1.x;
+      const dy = river.p0.y - river.p1.y;
+      const distance = Math.hypot(dx, dy);
+      const tangent = new Vector2(dx / distance, dy / distance);
+      const normal = new Vector2(-tangent.y, tangent.x);
+
+      for (let step = 0.0; step <= distance; step += width8) {
+        const f = step / river.curveWavelength;
+        const wobble = Math.sin(f) * Math.sin(f * 0.63412) * Math.sin(f * 0.33412) * river.curveWidth;
         const r = random.rangeFloat(river.widthMin, river.widthMax);
-        const p = river.p0.add(normalized.mul(num3)).add(vector2.mul(num4));
+        const p = river.p0.add(tangent.mul(step)).add(normal.mul(wobble));
         this.addRiverPoint(riverPoints, p, r, river);
       }
     }
@@ -562,7 +571,9 @@ export class WorldGenerator {
     let num1 = 0;
     let num2 = 0;
     for (const point of points) {
-      const f = (point.p.x - wx) ** 2 + (point.p.y - wy) ** 2;
+      const dx = point.p.x - wx;
+      const dy = point.p.y - wy;
+      const f = dx * dx + dy * dy;
       if (f < point.w2) {
         const num4 = (1.0 - Math.sqrt(f) / point.w);
         if (num4 > weight) weight = num4;

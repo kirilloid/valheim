@@ -21,7 +21,7 @@ import { FRAME } from './game';
 function applyArmorTotal(damage: number, armor: number): number {
   return armor < damage / 2
     ? damage - armor
-    : damage ** 2 / (armor * 4);
+    : damage * damage / (armor * 4);
 }
 
 function applyArmor(damage: DamageProfile, armor: number): DamageProfile {

@@ -91,11 +91,11 @@ export class ZoneSystem {
   private getRandomZone(range: number): Vector2i {
     const max = Math.floor(range / ZONE_SIZE);
     let x, y;
+    const MAX_SIZE_2 = (10000 / ZONE_SIZE) ** 2;
     do {
       x = random.rangeInt(-max, max);
       y = random.rangeInt(-max, max);
-    }
-    while (Math.hypot(x, y) >= 10000 / ZONE_SIZE);
+    } while (x * x + y * y >= MAX_SIZE_2);
     return { x, y };
   }
 

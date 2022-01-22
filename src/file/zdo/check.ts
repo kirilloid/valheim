@@ -68,7 +68,7 @@ export function check(world: WorldData, zdo: ZDO): Omit<ZDOCorruption, 'index'> 
       };
     }
 
-    if (Math.hypot(position.x, position.z) > 11000
+    if (position.x * position.x + position.z * position.z > 11000 * 11000
     ||  position.y < -100
     || (position.y > 1000
     && Math.abs(position.y - 5000) > 100)) {

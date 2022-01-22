@@ -45,7 +45,7 @@ export function read(data: Uint8Array): Data {
     reader = new PackageReader(inflate(reader.readByteArray()));
   }
   const tileSize = reader.readInt();
-  const byteSize = tileSize ** 2 / 8;
+  const byteSize = tileSize * tileSize / 8;
   const explored = new Uint8Array(byteSize);
   for (let index = 0; index < byteSize; ++index) {
     let byte = 0;
@@ -100,7 +100,7 @@ export function write({
   let writer = new PackageWriter();
   writer.writeInt(version);
   writer.writeInt(tileSize);
-  const byteSize = tileSize ** 2 / 8;
+  const byteSize = tileSize * tileSize / 8;
   for (let index = 0; index < byteSize; ++index) {
     for (let bit = 0; bit < 8; ++bit) {
       writer.writeByte((explored[index]! >> bit) & 1);
