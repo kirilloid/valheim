@@ -268,7 +268,7 @@ option.spoiler {
 .WorldGen {
   position: absolute;
   inset: 40px 0 0 0;
-  --marker-size: 16px;
+  --marker-size: 32px;
 }
 
 .WorldGen__Map {

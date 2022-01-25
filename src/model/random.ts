@@ -44,7 +44,7 @@ export class Random {
   
   public random() {
     const value = (this.next() << 9) >>> 0;
-    return (value / 4294967295);
+    return value / 0xfffffe00; // (2 ** 32 - 2 ** 9)
   };
 
   // In Unity, random range uses 1.0 - value for some reason.

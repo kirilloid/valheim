@@ -644,14 +644,14 @@ export const locations: LocationConfig[] = [
   loc(
     1, 'WoodFarm1', ['Meadows'],
     { components: ['DungeonGenerator'],
-      quantity: 10, group: 'woodvillage', minApart: 128, terrainDelta: [0, 4], minDistance: 500, maxDistance: 2000, radius: 32,
+      quantity: 10, group: 'woodvillage', minApart: 128, terrainDelta: [0, 4], minDistance: 500, maxDistance: 2000, radius: [32, 20],
       items: [],
     },
     'WoodFarm',
   ),
   loc( // draugr village
     1, 'WoodVillage1', ['Meadows'],
-    { quantity: 15, group: 'woodvillage', minApart: 256, terrainDelta: [0, 4], minDistance: 2000, radius: 32,
+    { quantity: 15, group: 'woodvillage', minApart: 256, terrainDelta: [0, 4], minDistance: 2000, radius: [32, 20],
       items: [],
     },
     'WoodVillage',

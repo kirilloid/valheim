@@ -294,7 +294,7 @@ export const resources: Resource[] = [
   { type: 'item', id: 'Obsidian', tier: 4, weight: 2, stack: 50 },
   { type: 'item', id: 'Crystal', emoji: '💎', tier: 4, weight: 8, stack: 50 },
   { type: 'item', id: 'DragonEgg', emoji: '🥚', tier: 4, weight: 200, stack: 1,
-    floating: true, teleportable: false, summon: ['Dragon', 3],
+    floating: true, teleportable: false, summon: ['Dragon', 3], // respawn: 8 * HOUR
   },
   { type: 'trophy', id: 'TrophyWolf', tier: 4, weight: 1.5, stack: 20 },
   { type: 'trophy', id: 'TrophyFenring', tier: 4, weight: 2, stack: 20 },

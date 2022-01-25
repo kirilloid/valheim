@@ -1,7 +1,7 @@
 import React from 'react';
 
 import type { EditorProps } from '../parts/types';
-import type { WorldData } from './types';
+import type { WorldData, WorldMeta } from './types';
 import { GAME_DAY } from '../../model/game';
 import { timeI2S } from '../../model/utils';
 
@@ -19,6 +19,26 @@ function showTime(time: number) {
   const tod = Math.round(time / GAME_DAY % 1 * 24 * 60);
   const timeStr = timeI2S(tod);
   return `Day ${day} @ ${timeStr}`;
+}
+
+export function WorldMetaInfo({ value, file }: EditorProps<WorldMeta>) {
+  const { version, name, seedName, worldGenVersion } = value;
+  const tabs = [{
+    title: 'File',
+    renderer: () => <FileInfo file={file} version={version} />,
+  }, {
+    title: 'Info',
+    renderer: () => <dl>
+      <dt>version</dt><dd>{version}</dd>
+      <dt>name</dt><dd>{name}</dd>
+      <dt>seed</dt><dd>{seedName}</dd>
+      <dt>generator version</dt><dd>{worldGenVersion}</dd>
+    </dl>
+  }];
+  return <section>
+    <h1>{file.name} world</h1>
+    <Tabs tabs={tabs} selected={1} />
+  </section>
 }
 
 export function WorldInfo({ value, onChange, file, disabled }: EditorProps<WorldData>) {
