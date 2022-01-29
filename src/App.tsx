@@ -7,6 +7,8 @@ import {
 
 import './css/App.css';
 
+import { defCalc, offCalc, foodTable, foodPlanner, mining, comfort } from './state';
+
 import { TopBar } from './view/parts/TopBar';
 import { Home } from './view/pages/Home';
 import { GameObject } from './view/objects/GameObject';
@@ -49,20 +51,20 @@ function App() {
             <Route path="/event/:id" children={<GameEvent />} />
             <Route path="/events" children={<GameEventFilterTable />} />
             <Route path="/effect/:id" children={<Effect />} />
-            <Route path="/attack/:params" children={<AttackCalc />} />
-            <Route path="/attack" children={<AttackCalc />} />
-            <Route path="/defense/:params" children={<DefenseCalc />} />
-            <Route path="/defense" children={<DefenseCalc />} />
-            <Route path="/comfort/:params" children={<ComfortTable />} />
-            <Route path="/comfort" children={<ComfortTable />} />
-            <Route path="/food-nutrition/:sort" children={<FoodTable />} />
-            <Route path="/food-nutrition" children={<FoodTable />} />
-            <Route path="/food-planner/:params" children={<FoodPlanner />} />
-            <Route path="/food-planner" children={<FoodPlanner />} />
+            <Route path={`/${offCalc}/:params`} children={<AttackCalc />} />
+            <Route path={`/${offCalc}`} children={<AttackCalc />} />
+            <Route path={`/${defCalc}/:params`} children={<DefenseCalc />} />
+            <Route path={`/${defCalc}`} children={<DefenseCalc />} />
+            <Route path={`/${comfort}/:params`} children={<ComfortTable />} />
+            <Route path={`/${comfort}`} children={<ComfortTable />} />
+            <Route path={`/${foodTable}/:sort`} children={<FoodTable />} />
+            <Route path={`/${foodTable}`} children={<FoodTable />} />
+            <Route path={`/${foodPlanner}/:params`} children={<FoodPlanner />} />
+            <Route path={`/${foodPlanner}`} children={<FoodPlanner />} />
             <Route path="/weather" children={<Weather />} />
-            <Route path="/mining/:objectType/:stat" children={<Mining />} />
-            <Route path="/mining/:objectType" children={<Mining />} />
-            <Route path="/mining" children={<Mining />} />
+            <Route path={`/${mining}/:objectType/:stat`} children={<Mining />} />
+            <Route path={`/${mining}/:objectType`} children={<Mining />} />
+            <Route path={`/${mining}`} children={<Mining />} />
             <Route path="/world-gen/:seed" children={<WorldGenerator />} />
             <Route path="/world-gen" children={<WorldGenerator />} />
             {/* <Route path="/weapons" children={<Weapons />} /> */}

@@ -4,9 +4,9 @@ import { useParams, useHistory } from 'react-router-dom';
 import '../../css/Combat.css';
 
 import type * as T from '../../types';
-import { getInitialState, serializeState } from '../../model/def_calc.url';
-import { actionCreators, reducer } from '../../model/def_calc.reducer';
-import { allItems, shields } from '../../model/def_calc.items';
+import { parseState, serializeState, pageName } from '../../state/def-calc';
+import { actionCreators, reducer } from '../../state/def-calc/reducer';
+import { allItems, shields } from '../../state/def-calc/items';
 import { isNotNull } from '../../model/utils';
 import { MAX_PLAYERS } from '../../model/game';
 
@@ -271,14 +271,14 @@ export function DefenseCalc() {
   const translate = useContext(TranslationContext);
   const history = useHistory();
   const { params } = useParams<{ params?: string }>();
-  const [state, dispatch] = useReducer(reducer, getInitialState(params));
+  const [state, dispatch] = useReducer(reducer, parseState(params));
   const {
     enemy: { creature, biome, stars, variety },
     shield,
   } = state;
 
   useDebounceEffect(state, (state) => {
-    const path = `/defense/${serializeState(state)}`;
+    const path = `/${pageName}/${serializeState(state)}`;
     if (history.location.pathname !== path) {
       history.replace(path);
     }

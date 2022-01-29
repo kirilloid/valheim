@@ -1,9 +1,9 @@
-import type { DamageModifiers, Effect, Item, Shield } from '../types';
+import type { DamageModifiers, Effect, Item, Shield } from '../../types';
 
-import { items as armors } from '../data/armors';
-import { effects } from '../data/effects';
-import { resources } from '../data/resources';
-import { items } from '../data/weapons';
+import { items as armors } from '../../data/armors';
+import { effects } from '../../data/effects';
+import { resources } from '../../data/resources';
+import { items } from '../../data/weapons';
 
 export const shields = items.filter(i => !i.disabled && i.type === 'shield') as Shield[];
 

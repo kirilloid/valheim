@@ -8,6 +8,7 @@ import { preloadLanguage } from '../effects';
 import { read } from '../effects/globalState.effect';
 import { getDefaultUserLanguage } from '../effects/translation.effect';
 import { effects } from '../data/effects';
+import { comfort, defCalc, foodPlanner, foodTable, mining, offCalc } from '../state';
 
 type PrefixTree<T> = {
   children: Map<string, PrefixTree<T>>;
@@ -99,16 +100,16 @@ function addArray<T extends { id: string; tier?: number; tags?: string[] }>(
 }
 
 export const pages = [
-  { id: 'attack', category: 'fight' },
-  { id: 'defense', category: 'fight' },
+  { id: offCalc, category: 'fight' },
+  { id: defCalc, category: 'fight' },
   { id: 'events', category: 'fight' },
 
-  { id: 'food-nutrition', category: 'eat' },
-  { id: 'food-planner', category: 'eat' },
+  { id: foodTable, category: 'eat' },
+  { id: foodPlanner, category: 'eat' },
 
-  { id: 'comfort', category: 'live' },
+  { id: comfort, category: 'live' },
   // { id: 'build', category: 'build' },
-  { id: 'mining', category: 'gather' },
+  { id: mining, category: 'gather' },
 
   { id: 'weather', category: 'plan' },
   { id: 'world-gen', category: 'plan', beta: true },

@@ -1,11 +1,11 @@
-import type { Biome, Creature, EntityId, Weapon } from '../types';
-import { SkillType } from './skills';
-import type { WeaponConfig } from './combat';
-import { assertNever } from './utils';
+import type { Biome, Creature, EntityId, Weapon } from '../../types';
+import { SkillType } from '../../model/skills';
+import type { WeaponConfig } from '../../model/combat';
+import { assertNever } from '../../model/utils';
 
-import { creatures } from '../data/creatures';
-import { items } from '../data/weapons';
-import { arrows } from '../data/arrows';
+import { creatures } from '../../data/creatures';
+import { items } from '../../data/weapons';
+import { arrows } from '../../data/arrows';
 
 export const enabledItems = items.filter(i => !i.disabled && i.type === 'weapon') as Weapon[]; 
 

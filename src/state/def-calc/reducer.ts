@@ -1,8 +1,8 @@
-import type { Biome, Creature, EntityId, Shield } from '../types';
-import { shields } from './def_calc.items';
-import { assertNever } from './utils';
+import type { Biome, Creature, EntityId, Shield } from '../../types';
+import { shields } from './items';
+import { assertNever } from '../../model/utils';
 
-import { creatures, maxLvl } from '../data/creatures';
+import { creatures, maxLvl } from '../../data/creatures';
 
 export interface State {
   enemy: {

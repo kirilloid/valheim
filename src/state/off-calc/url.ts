@@ -1,8 +1,8 @@
-import type { WeaponConfig } from './combat';
-import { State, CombatStat, defaultWeapon, enabledItems } from './off_calc.reducer';
-import { arrows } from '../data/arrows';
-import { creatures } from '../data/creatures';
-import { defaultCreature, creatureBiome } from '../data/combat_creatures';
+import type { WeaponConfig } from '../../model/combat';
+import { State, CombatStat, defaultWeapon, enabledItems } from './reducer';
+import { arrows } from '../../data/arrows';
+import { creatures } from '../../data/creatures';
+import { defaultCreature, creatureBiome } from '../../data/combat_creatures';
 
 function serializeWeapon(weapon: WeaponConfig): string {
   const levelPart = weapon.level === weapon.item.maxLvl ? '' : `-${weapon.level}`;
@@ -28,7 +28,7 @@ function parseWeapon(str: string): WeaponConfig {
   };
 }
 
-export function getInitialState(params: string | undefined): State {
+export function parseState(params: string | undefined): State {
   const match = params?.match(/(wet-)?(unaware-)?(\w+)-(\w+)-/);
   if (params == null || match == null) {
     return {

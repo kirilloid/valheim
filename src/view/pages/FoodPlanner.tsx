@@ -15,6 +15,8 @@ import { TranslationContext, useRuneTranslate, useDebounceEffect, useGlobalState
 import { InlineObjectWithIcon, showNumber } from '../helpers';
 import { Icon, ItemIcon } from '../parts/Icon';
 
+import { defaultState, pageName, parseState, serializeState } from '../../state/food-planner';
+
 type FoodItem = Resource & { Food: Food };
 
 function isFood(item: Resource): item is FoodItem {
@@ -107,10 +109,10 @@ const bestTypes = {
   maxSta: (item: FoodItem) => item.Food.stamina,
 };
 
-function bestFoods(maxTier: number, useFn: (food: FoodItem) => number): [FoodItem, FoodItem, FoodItem] {
+function bestFoods(maxTier: number, benefitFn: (food: FoodItem) => number): [FoodItem, FoodItem, FoodItem] {
   return foods
     .filter(f => f.tier <= maxTier)
-    .sort((a, b) => useFn(b) - useFn(a))
+    .sort((a, b) => benefitFn(b) - benefitFn(a))
     .slice(0, 3)
     .sort((a, b) => a.id.localeCompare(b.id)) as [FoodItem, FoodItem, FoodItem];
 }
@@ -121,49 +123,13 @@ type Foods = [
   FoodItem | undefined,
 ];
 
-type State = {
-  foods: [string, string, string];
-  nightEat: boolean;
-  players: number;
-  days: number;
-  repeat: number;
-};
-
-function parseState(string: string | undefined): State {
-  const match = string?.match(/(\w+,\w+,\w+)(-night-eat)?(?:-players-(\d+))?(?:-days-(\d+))?(?:-repeat-(\d+(?:\.\d+)?))?/);
-  if (match == null) return {
-    foods: ['CookedMeat', 'Raspberry', ''],
-    nightEat: false,
-    players: 1,
-    days: 1,
-    repeat: 1,
-  };
-  const [f1 = '', f2 = '', f3 = ''] = match[1]?.split(',') ?? [];
-  return {
-    foods: [f1, f2, f3],
-    nightEat: !!match[2],
-    players: Number(match[3] ?? '1'),
-    days: Number(match[4] ?? '1'),
-    repeat: Number(match[5] ?? '1'),
-  }
-}
-
-function serializeState(state: State): string {
-  const foods = state.foods.join(',');
-  const nightEat = state.nightEat ? '-night-eat' : '';
-  const players = state.players === 1 ? '' : '-players-' + state.players;
-  const days = state.days === 1 ? '' : '-days-' + state.days;
-  const repeat = state.repeat === 1 ? '' : '-repeat-' + state.repeat;
-  return `/food-planner/${foods}${nightEat}${players}${days}${repeat}`;
-}
-
 export function FoodPlanner() {
   const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
   const runeTranslate = useRuneTranslate();
   const history = useHistory();
   const { params } = useParams<{ params?: string }>();
-  const [state, setState] = useState(parseState(params));
+  const [state, setState] = useState({ ...defaultState, ...parseState(params) });
   const {
     foods,
     nightEat,
@@ -181,9 +147,9 @@ export function FoodPlanner() {
   const wrongFoods = foods.map(id => !!id && (foodCount[id]?.length ?? 0) > 1);
 
   useDebounceEffect(state, (st) => {
-    const path = serializeState(st);
-    if (history.location.pathname !== path) {
-      history.replace(path);
+    const fullPath = `/${pageName}/${serializeState(st)}`;
+    if (history.location.pathname !== fullPath) {
+      history.replace(fullPath);
     };
   }, 100);
 

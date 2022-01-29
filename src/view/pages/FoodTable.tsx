@@ -10,6 +10,7 @@ import { resources } from '../../data/resources';
 import { TranslationContext, useGlobalState } from '../../effects';
 import { InlineObject } from '../helpers';
 import { Icon, ItemIcon } from '../parts/Icon';
+import { foodTable as pageName } from '../../state';
 
 type FoodItem = Resource & { Food: Food };
 
@@ -47,7 +48,7 @@ export function FoodTable() {
 
   const Radio = useCallback((value: SortField) => {
     return <input type="radio" name="sort" id={`sort_${value}`} checked={sort === value} value={value} onClick={() => {
-      const path = `/food-nutrition/${value}`;
+      const path = `/${pageName}/${value}`;
       if (history.location.pathname !== path) {
         history.replace(path);
       };

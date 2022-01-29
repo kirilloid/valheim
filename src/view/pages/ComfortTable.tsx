@@ -1,14 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 
 import type { ComfortGroup, Effect, Piece } from '../../types';
 import { pieces } from '../../data/building';
+import { comfort as pageName } from '../../state';
 
 import { TranslationContext, useGlobalState } from '../../effects';
 import { InlineObject, Materials } from '../helpers';
 import { ItemIcon } from '../parts/Icon';
 import { isNotNull } from '../../model/utils';
 import { effects } from '../../data/effects';
-import { useHistory, useParams } from 'react-router-dom';
 
 type Comfortable = { comfort: { value: number, group?: ComfortGroup; } };
 type ComfortablePiece = Piece & Comfortable;
@@ -67,7 +68,7 @@ export function ComfortTable() {
   const history = useHistory();
 
   useEffect(() => {
-    const path = `/comfort/${onlyBest ? 'best' : 'all'}`;
+    const path = `/${pageName}/${onlyBest ? 'best' : 'all'}`;
     if (history.location.pathname !== path) {
       history.replace(path);
     }  

@@ -4,6 +4,7 @@ import { Link, useHistory, useParams } from 'react-router-dom';
 import type { DamageModifiers, EntityId, Pair, PhysicalObject, Weapon } from '../../types';
 import { applyDamageModifiers, getTotalDamage, getWeaponSkillFactor } from '../../model/combat';
 import { assertNever, groupBy } from '../../model/utils';
+import { mining as pageName } from '../../state';
 
 import { objects } from '../../data/objects';
 import { objectLocationMap } from '../../data/location';
@@ -166,7 +167,7 @@ export function Mining() {
   const objectType = parseObjectType(urlObjectType);
   const [skill, setSkill] = useState(0);
   const [stat, setStat] = useState<MineStat>(parseMiningStat(urlStat));
-  const path = `/mining/${objectType}/${stat}`;
+  const path = `/${pageName}/${objectType}/${stat}`;
   if (history.location.pathname !== path) {
     history.replace(path);
   }

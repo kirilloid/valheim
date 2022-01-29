@@ -6,8 +6,8 @@ import '../../css/Combat.css';
 
 import type { Biome, Creature } from '../../types';
 import { attackCreature, AttackStats, WeaponConfig } from '../../model/combat';
-import { Action, actionCreators, ActionCreators, reducer, enabledItems, CombatStat } from '../../model/off_calc.reducer';
-import { getInitialState, serializeState } from '../../model/off_calc.url';
+import { Action, actionCreators, ActionCreators, reducer, enabledItems, CombatStat } from '../../state/off-calc/reducer';
+import { parseState, serializeState, pageName } from '../../state/off-calc';
 import { groupBy } from '../../model/utils';
 
 import { arrows } from '../../data/arrows';
@@ -221,7 +221,7 @@ export function AttackCalc() {
   const runeTranslate = useRuneTranslate();
   const history = useHistory();
   const { params } = useParams<{ params?: string }>();
-  const [state, dispatch] = useReducer(reducer, getInitialState(params));
+  const [state, dispatch] = useReducer(reducer, parseState(params));
   const [smart] = useState(true);
   const {
     weapons,
@@ -230,7 +230,7 @@ export function AttackCalc() {
     stat,
   } = state;
   useDebounceEffect(state, (state) => {
-    const path = `/attack/${serializeState(state)}`;
+    const path = `/${pageName}/${serializeState(state)}`;
     if (history.location.pathname !== path) {
       history.replace(path);
     }
