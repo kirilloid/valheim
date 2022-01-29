@@ -1623,7 +1623,7 @@ export const creatures: Creature[] = [
     },
     drop: [
       dropEntry('Stone', { min: 5, max: 10 }),
-      dropEntry('Crystal', { min: 3, max: 6 }),
+      dropEntry('Crystal', { min: 8, max: 12 }),
       dropTrophy('TrophySGolem', 0.05),
     ],
   },
