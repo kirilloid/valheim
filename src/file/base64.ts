@@ -1,4 +1,4 @@
-import { PackageReader } from '../../../file/Package';
+import { PackageReader } from './Package';
 
 export function readBase64(base64: string): PackageReader {
   const binaryStr = atob(base64);

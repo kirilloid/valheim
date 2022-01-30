@@ -4,12 +4,14 @@ import type { Player } from './types';
 import type { EditorProps } from '../parts/types';
 
 import { FileInfo } from '../parts/FileInfo';
+import { Tabs } from '../parts/Tabs';
+
 import { Worlds } from './Worlds';
 import { Appearance } from './Appearance';
 import { Inventory } from './Inventory';
 import { Skills } from './Skills';
 import { Stats } from './Stats';
-import { Tabs } from '../parts/Tabs';
+import { readExtraSlots } from './EquipmentAndQuickSlots';
 
 export function PlayerInfo({ value: player, onChange, file, disabled } : EditorProps<Player>) {
   const tabs = [
@@ -24,13 +26,14 @@ export function PlayerInfo({ value: player, onChange, file, disabled } : EditorP
   ];
   const { playerData } = player;
   if (playerData) {
+    const extras = readExtraSlots(playerData);
     tabs.push({
       title: 'Appearance',
       renderer: () => <Appearance value={playerData} onChange={playerData => onChange({ ...player, playerData })} />,
     });
     tabs.push({
       title: 'Inventory',
-      renderer: () => <Inventory inventory={playerData.inventory} />,
+      renderer: () => <Inventory inventory={playerData.inventory} extras={extras} />,
     });
     const { skillData } = playerData;
     if (skillData) {

@@ -7,6 +7,18 @@
   /* background-color: #503A2B; */
 }
 
+.Inventory__container {
+  --gap: 5px;
+  --width: 8;
+  --height: 4;
+  position: absolute;
+  overflow: hidden;
+  left: 22px;
+  top: 16px;
+  width: calc(var(--width) * 64px + (var(--width) - 1) * var(--gap));
+  height: calc(var(--height) * 64px + (var(--height) - 1) * var(--gap));
+}
+
 .Inventory__Item {
   position: absolute;
   width: 64px;
@@ -59,4 +71,18 @@
 .InvItem__durability-value {
   height: 100%;
   background-color: white;
+}
+
+.Inventory-extra {
+  display: inline-flex;
+  margin-inline-end: 0.5rem;
+  margin-block-end: 0.5rem;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 5px;
+}
+
+.Inventory-extra .Inventory__Item {
+  position: relative;  
 }

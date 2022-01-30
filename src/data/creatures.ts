@@ -749,6 +749,7 @@ export const creatures: Creature[] = [
       { dmg: dmg({ poison: 30 }), name: 'poison breath' },
       { dmg: dmg({ slash: 14 }), stagger: 1.12, name: 'slash' },
     ]),
+    // heals for 2.5hp/s for 4s in 4.3m radius
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     speed: {
       walk: 2,
@@ -765,7 +766,6 @@ export const creatures: Creature[] = [
       factor: 0.33,
       time: 1.12,
     },
-    // heals for 2.5hp/s for 4s in 4.3m radius
     damageModifiers: grayModifiers,
     drop: [
       dropEntry('GreydwarfEye', { chance: 0.5 }),
@@ -1769,7 +1769,9 @@ export const creatures: Creature[] = [
       groupSize: [3, 3],
       night: true,
       levels: [1, 1],
-    })], // ['Plains'],
+    })],
+    // weapon: 2 club, 1 spear, 2 sword, 1 torch
+    // shield: 1 wood, 2 <null>
     attacks: [
       { rate: 2, variety: 'club', attacks: [{ dmg: dmg({ blunt: 85 }), name: 'club', stagger: 2.08 }] },
       { rate: 1, variety: 'spear', attacks: [{ dmg: dmg({ pierce: 85 }), name: 'spear', stagger: 3.38 }] },
@@ -1798,8 +1800,6 @@ export const creatures: Creature[] = [
       dropEntry('BlackMetalScrap', { min: 1, max: 2 }),
       dropTrophy('TrophyGoblin', 0.1),
     ],
-    // weapon: 2 club, 1 spear, 2 sword, 1 torch
-    // shield: 1 wood, 2 <null>
     // alertRange: 20,
     // maxChase: 300,
   },
@@ -1828,11 +1828,6 @@ export const creatures: Creature[] = [
       { dmg: dmg({ blunt: 20, fire: 100 }), name: 'fireball', stagger: 3.2 },
     ]),
 
-    // vs 0 arm 15.1-19.7
-    // vs 0 arm & wet 15.1-18.2
-    // vs 26 arm 10.9-15.7
-    // vs 52 arm 6.5-11.1
-    // vs 52 arm + FR 3.8-6.7 (instantly + 5x over time halved due to FR)
     tolerate: TOLERATE.WATER,
     speed: {
       walk: 1,

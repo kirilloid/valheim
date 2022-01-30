@@ -14,7 +14,14 @@ export function Appearance({ value, onChange } : ValueProps<PlayerData>) {
   const translate = useContext(TranslationContext);
   return <dl>
     <dt>model</dt>
-    <dd>{MODELS[value.modelIndex]}</dd>
+    <dd>
+      <select value={value.modelIndex}
+        onChange={e => onChange({ ...value, modelIndex: +e.target.value })}>
+        {MODELS.map((name, index) =>
+          <option key={name} value={index}>{MODELS[index]}</option>
+        )}
+      </select>
+    </dd>
     <dt>{translate('char.beard')}</dt>
     <dd>
       <select value={value.beardItem}

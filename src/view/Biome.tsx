@@ -29,7 +29,7 @@ function isFoodOrUsedForFood(item: Item) {
   let idx = 0;
   while (idx < queue.length) {
     const next = queue[idx++]!;
-    if ((next as any).Food != null) return true;
+    if ((next as Resource).Food != null) return true;
     visited.add(next.id);
     for (const item of resourceCraftMap[next.id] ?? []) {
       const { id } = item;

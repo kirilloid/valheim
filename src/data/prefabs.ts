@@ -160,6 +160,7 @@ export const modPrefabNames: Record<string, string[]> = {
     'ChickenBoo', 'chicklet', 'cooked_chicken', 'fried_egg', 'boiled_egg', 'raw_egg', 'raw_chicken', 'chickensombrero', 'helmet'
   ],
   // [nexus:387]
+  // [thunderstone:RandyKnapp/EpicLoot]
   EpicLoot: [
     'BountyTarget',
     'ForestToken',
@@ -170,6 +171,7 @@ export const modPrefabNames: Record<string, string[]> = {
     'RunestoneRare', 'RunestoneEpic', 'RunestoneLegendary', 'RunestoneMagic',
   ],
   // [nexus:1174]
+  // [thunderstone:OdinPlus/OdinArchitect]
   OdinArchitect: [
     'odin_hammer',
     'wooden_gate_1', 'wooden_window_small', 'wooden_window_big', 'wooden_fence_1', 'wooden_fence_1_gate', 'wooden_fence_2', 'wooden_fence_2_gate',
@@ -313,5 +315,88 @@ export const modPrefabNames: Record<string, string[]> = {
     'v801_BowFrost',
     'v801_KnifeFrost',
     'ArrowBone', 'ArrowLightning',
+  ],
+  // [thunderstone:OdinPlus/RunicPack]
+  RunicPack: [
+    'RunicSwordRed', 'RunicSwordBlue', 'RunicSwordPurple', 'RunicSwordGreen',
+    'RunicBowdRed', 'RunicBowBlue', 'RunicBowPurple', 'RunicBowGreen',
+    'RunicAxeBlue', 'RunicAxeRed', 'RunicAxeGreen', 'RunicAxePurple',
+    'JewellGreen', 'JewellRed', 'JewellPurple', 'JewellBlue',
+    'JewellGreenS', 'JewellRedS', 'JewellPurpleS', 'JewellBlueS',
+    'ArrowRunic',
+    'CapeRunic',
+  ],
+  // [thunderstone:OdinPlus/GoodestBoy]
+  GoodestBoy: [
+    'BestestDog', 'Bestest_Pup', 'BestestStick',
+    'YummyBone', 'EvilBunny', 'BrownEvilBunny',
+  ],
+  // [thunderstone:OdinPlus/OdinHorse]
+  OdinHorse: [
+    'rae_OdinHorse', 'rae_Offspring_Normal', 'rae_SaddleHorse',
+  ],
+  // [thunderstone:OdinPlus/OdinBanners]
+  OdinBanners: [
+    'rae_ob_banner_1', 'rae_ob_banner_1_big',
+    'rae_ob_banner_2', 'rae_ob_banner_2_big',
+    'rae_ob_banner_3', 'rae_ob_banner_3_big',
+    'rae_ob_banner_4', 'rae_ob_banner_4_big',
+    'rae_ob_banner_5', 'rae_ob_banner_5_big',
+    'rae_ob_banner_6', 'rae_ob_banner_6_big',
+    'rae_ob_banner_7', 'rae_ob_banner_7_big',
+    'rae_ob_banner_8', 'rae_ob_banner_8_big',
+    'rae_ob_banner_9', 'rae_ob_banner_9_big',
+    'rae_ob_banner_10', 'rae_ob_banner_10_big',
+    'rae_ob_banner_11', 'rae_ob_banner_11_big',
+    'rae_ob_banner_12', 'rae_ob_banner_12_big',
+    'rae_ob_banner_13', 'rae_ob_banner_13_big',
+    'rae_ob_banner_14', 'rae_ob_banner_14_big',
+    'rae_ob_banner_15', 'rae_ob_banner_15_big',
+    'rae_ob_banner_16', 'rae_ob_banner_16_big',
+  ],
+  // [thunderstone:OdinPlus/GuildPack]
+  GuildPack: [
+    'BannerBlack', 'BannerBlue', 'BannerGreen', 'BannerGrey', 'BannerPink', 'BannerPurple', 'BannerRed', 'BannerYellow',
+    'FlagBlack', 'FlagBlue', 'FlagGreen', 'FlagGrey', 'FlagPink', 'FlagPurple', 'FlagRed', 'FlagYellow',
+    'ClanShieldBlack', 'ClanShieldBlue', 'ClanShieldGreen', 'ClanShieldGrey', 'ClanShieldPink', 'ClanShieldPurple', 'ClanShieldRed', 'ClanShieldYellow',
+    'CapeBlack', 'CapeBlue', 'CapeGreen', 'CapeGrey', 'CapePink', 'CapePurple', 'CapeRed', 'CapeYellow',
+    'CapeBlackIce', 'CapeBlueIce', 'CapeGreenIce', 'CapeGreyIce', 'CapePinkIce', 'CapePurpleIce', 'CapeRedIce', 'CapeYellowIce',
+    'CapeADM',
+  ],
+  // [thunderstone:OdinPlus/StarHeim]
+  StarHeim: [
+    'HansBlaster', 'KitFistoSaber', 'BlasterRifle', 'StormTrooperHelm', 'BlasterShot'
+  ],
+  // [thunderstone:OdinPlus/BagualPack]
+  BagualPack: [
+    'BarrilGR', 'BarrilPQ', 'BarrilGRS',
+    'Braseiro',
+    'Cande_1Bra', 'Cande_3Bra', 'Cande_3Par',
+    'Cande_1BraGold', 'Cande_5BraGold',
+    'Caldeirao',
+    'CrossCruzader',
+    'Cup1Gold', 'Cup2Gold',
+    'DishGold',
+    'Eagle',
+    'Estatua01',
+    'FlametalDragon',
+    'GargulaPantera',
+    'LeaoPedra1', 'LeaoPedra2', 'LeaoPedra3',
+    'Lustre_4Bra', 'Lustre_10Bra',
+  ],
+  // [thunderstone:Huntardys/EpicValheimsAdditions]
+  EpicValheimsAdditions: [
+    'BowFrometal', 'BowFlametal', 'BowHeavymetal',
+    'AtgeirFrometal', 'AtgeirFlametal', 'AtgeirHeavymetal',
+    'SledgeFrometal', 'SledgeFlametal', 'SledgeHeavymetal',
+    'BattleaxeFrometal', 'BattleaxeFlametal', 'BattleaxeHeavymetal',
+    'SpearFrometal', 'SpearFlametal', 'SpearHeavymetal',
+    'KnifeFrometal', 'KnifeFlametal', 'KnifeHeavymetal',
+    'MaceFrometal', 'MaceFlametal', 'MaceHeavymetal',
+    'GreatswordFrometal', 'GreatswordFlametal', 'GreatswordHeavymetal',
+    'ShieldFrometal', 'ShieldFlametal', 'ShieldHeavymetal',
+    'ShieldTowerFrometal', 'ShieldTowerFlametal', 'ShieldTowerHeavymetal',
+    'AxeFrometal', 'AxeFlametal', 'AxeHeavymetal',
+    'PickaxeFrometal', 'PickaxeFlametal', 'PickaxeHeavymetal',
   ],
 };

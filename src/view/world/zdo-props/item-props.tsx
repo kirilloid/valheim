@@ -2,6 +2,7 @@ import React from 'react';
 
 import type { ValueProps } from '../../parts/types';
 import type { ZDO } from '../types';
+import type { Item } from '../../../types';
 
 import { stableHashCode } from '../../../model/utils';
 import { objects } from '../../../data/zdo';
@@ -17,10 +18,10 @@ const Variant = intComp('variant'); // shields and linen capes
 export function ItemPropsComp({ value: zdo, onChange }: ValueProps<ZDO>) {
   const id = objects.get(zdo.prefab);
   const obj = id != null ? data[id] : undefined;
-  const maxStack = (obj as any)?.stack ?? 1;
+  const maxStack = (obj as Item)?.stack ?? 1;
   const maxDurability = (obj as any)?.durability;
-  const maxQuality = (obj as any)?.maxLvl ?? 1;
-  const variants = (obj as any)?.variants ?? 0;
+  const maxQuality = (obj as Item)?.maxLvl ?? 1;
+  const variants = (obj as Item)?.variants ?? 0;
   const quality = zdo.ints.get(stableHashCode('quality')) ?? 1;
   return <React.Fragment key="ItemProps">
     {!!maxDurability && <Durability value={zdo} onChange={onChange} max={maxDurability[0] + (quality - 1) * maxDurability[1]} />}

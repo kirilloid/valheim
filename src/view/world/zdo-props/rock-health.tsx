@@ -4,7 +4,7 @@ import type { ValueProps } from '../../parts/types';
 import type { ZDO } from '../types';
 
 import { stableHashCode } from '../../../model/utils';
-import { readBase64 } from './base64';
+import { readBase64 } from '../../../file/base64';
 
 const healthHash = stableHashCode('health');
 export function RockHealthComp({ value }: ValueProps<ZDO>) {

@@ -5,7 +5,7 @@ import type { ZDO } from '../types';
 
 import { stableHashCode } from '../../../model/utils';
 import * as Inventory from '../../../file/Inventory';
-import { readBase64 } from './base64';
+import { readBase64 } from '../../../file/base64';
 
 import { TranslationContext } from '../../../effects';
 

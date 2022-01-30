@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import { CraftingStation, EntityId, GameObject, Pair } from '../../types';
+import { CraftingStation, EntityId, GameObject, Item, Pair } from '../../types';
 import { SkillType } from '../../model/skills';
 import { assertNever, days, timeI2S } from '../../model/utils';
 
@@ -185,7 +185,7 @@ export function Recipe({ item }: { item: GameObject }) {
         <Materials
           materials={recipe.materials}
           materialsUp={recipe.materialsPerLevel}
-          maxLvl={(item as any).maxLvl} />
+          maxLvl={(item as Item).maxLvl} />
       </>;
     }
     case 'craft_piece':
