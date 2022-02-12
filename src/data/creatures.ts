@@ -1104,6 +1104,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Surtling',
+    // lightRadius: 3,
     ragdollId: null,
     components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
     tier: 3,

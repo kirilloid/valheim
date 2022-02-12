@@ -58,6 +58,7 @@ function pieceExtra(item: Piece, translate: Translator) {
     case 'misc':
     case 'stand':
     case 'structure':
+    case 'external':
       return null;
     default:
       return assertNever(item);

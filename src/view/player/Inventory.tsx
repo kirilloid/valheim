@@ -2,13 +2,14 @@ import React, { CSSProperties } from 'react';
 import classNames from 'classnames';
 
 import type { Item } from '../../types';
-import type { Inventory, Inventory as TInventory } from './types';
+import type { Inventory as TInventory } from './types';
 
 import '../../css/Inventory.css';
 
 import { data } from '../../data/itemDB';
 
 import { ItemIcon } from '../parts/Icon';
+import { extractExtraData } from '../../mods/epic-loot';
 
 type InvItem = TInventory['items'][number];
 
@@ -29,17 +30,27 @@ export function InvItemView({ invItem, style }: { invItem?: InvItem, style?: CSS
     </div>;
   }
 
+  const extraData = extractExtraData(invItem);
+
   let durabilityPercent: number | undefined = undefined;
-  if ('durability' in item && item.durability[0] !== Infinity) {
+  if ('durability' in item && item.durability[0] !== Infinity && extraData?.effects.Indestructible == null) {
     const maxDurability = item.durability[0] + item.durability[1] * (invItem.quality - 1);
-    durabilityPercent = invItem.durability / maxDurability;
+    const durabilityBonus = extraData?.effects.ModifyDurability ?? 0;
+    durabilityPercent = invItem.durability / (maxDurability * (1 + durabilityBonus / 100));
+  }
+  const classes = ['Inventory__Item'];
+  if (invItem.equipped) {
+    classes.push('Inventory__Item--equipped');
+  }
+  if (extraData) {
+    classes.push('Inventory__Item--EpicLoot');
+    if (extraData.rarity !== 'Generic') {
+      classes.push(`Inventory__Item--EpicLoot-${extraData.rarity}`);
+    }
   }
 
   return <div
-    className={classNames(
-      'Inventory__Item',
-      { 'Inventory__Item--equipped': invItem.equipped }
-    )}
+    className={classes.join(' ')}
     style={style}
   >
     <div className="InvItem__Icon InvItem__Icon--shadow">

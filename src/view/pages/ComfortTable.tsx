@@ -12,10 +12,11 @@ import { isNotNull } from '../../model/utils';
 import { effects } from '../../data/effects';
 
 type Comfortable = { comfort: { value: number, group?: ComfortGroup; } };
-type ComfortablePiece = Piece & Comfortable;
+type Buildable = Required<Pick<Piece, 'recipe'>>;
+type ComfortablePiece = Piece & Comfortable & Buildable;
 
 const isComfortPieceType = (p: Piece): p is ComfortablePiece => {
-  return 'comfort' in p;
+  return 'comfort' in p && 'recipe' in p;
 };
 const allPiecesWithComfort = pieces.filter(isComfortPieceType);
 const comfortables = allPiecesWithComfort.filter(p => !p.season);
@@ -56,7 +57,7 @@ function PieceRow({ piece }: { piece: ComfortablePiece }) {
     <td><InlineObject id={piece.id} /></td>
     <td>{piece.comfort.value}</td>
     <td>{piece.comfort.group}</td>
-    <td><Materials materials={piece.recipe.materials } iconSize={32} /></td>
+    <td><Materials materials={piece.recipe!.materials} iconSize={32} /></td>
   </tr>
 }
 

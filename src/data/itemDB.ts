@@ -92,6 +92,7 @@ export const extraData: Record<string, GameComponent[]> = {
   TrophyDraugrFem: ['ItemDrop'],
 
   Player_tombstone: ['Container'],
+  CargoCrate: ['Container'],
 
   BonePileSpawner: ['CreatureSpawner'],
   Spawner_Blob: ['CreatureSpawner'],

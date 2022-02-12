@@ -221,7 +221,7 @@ export function Ship(props: { item: ShipPiece }) {
     }
   }, [dpi, updateDpi]);
 
-  const { target, size } = item.piece;
+  const { target, size } = item.piece!;
   const { hp, damageModifiers } = item.wear;
   const [ cols, rows ] = item.storage;
   const storage = cols * rows;

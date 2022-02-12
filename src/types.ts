@@ -411,7 +411,7 @@ export interface BasePiece extends GameObjectBase {
     hp: number;
     damageModifiers: DamageModifiers;
   };
-  piece: {
+  piece?: {
     target: 'primary' | 'random' | 'none';
     water: boolean | undefined;
     size?: [width: number, depth: number, height: number];
@@ -424,7 +424,7 @@ export interface BasePiece extends GameObjectBase {
     allowedInDungeons?: boolean;
     requiredSpace?: number;
   };
-  recipe: {
+  recipe?: {
     type: 'craft_piece',
     materials: Record<EntityId, number>;
     station: CraftingStation;
@@ -451,6 +451,8 @@ export type Piece = BasePiece & {
     capacity: number;
     burnTime: number;
     minHeightAbove: number;
+    warmRadius: number;
+    lightRadius: number;
     smoke: boolean;
     fireworks: boolean;
   };
@@ -490,6 +492,8 @@ export type Piece = BasePiece & {
 } | {
   subtype: 'chest';
   space: [width: number, height: number];
+} | {
+  subtype: 'external';
 });
 
 export interface Structure extends GameObjectBase {

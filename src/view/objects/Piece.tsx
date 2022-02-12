@@ -95,12 +95,15 @@ function PieceSpecific({ item }: { item: TPiece }) {
         <dt>space</dt><dd>{width}×{height} = {width * height}</dd>
       </dl>);
     }
+    case 'external':
+      return null;
     default:
       return assertNever(item);
   }
 }
 
 function reqList(piece: TPiece['piece']) {
+  if (piece == null) return null;
   const { water, allowedInDungeons, groundOnly, notOnFloor, notOnWood, onlyOnFlat } = piece;
   const result: string[] = [];
   if (water === false) result.push('not in water');
@@ -114,7 +117,9 @@ function reqList(piece: TPiece['piece']) {
 }
 
 export function Piece({ item }: { item: TPiece }) {
-  const { target, requiredSpace, size } = item.piece;
+  const target = item.piece?.target;
+  const requiredSpace = item.piece?.requiredSpace;
+  const size = item.piece?.size;
   const { hp, damageModifiers, noRoof } = item.wear;
   const translate = useContext(TranslationContext);
   const specialReqs = reqList(item.piece);
@@ -130,7 +135,7 @@ export function Piece({ item }: { item: TPiece }) {
           <dt>base <Link to="/info/base">ℹ️</Link></dt><dd>{yesNo(item.base)}</dd>
           <dt>{translate('ui.pieceTarget')}</dt><dd>{translate(`ui.pieceTarget.${target}`)}</dd>
           <dt>degrades w/o roof</dt><dd>{yesNo(noRoof)}</dd>
-          {specialReqs.length ? <><dt>specific</dt><dd>{specialReqs.join(', ')}</dd></> : null}
+          {specialReqs?.length ? <><dt>specific</dt><dd>{specialReqs.join(', ')}</dd></> : null}
           {requiredSpace ? <><dt>required space</dt><dd>{requiredSpace}m</dd></> : null}
           {size ? <><dt>size</dt><dd>{size.filter(Boolean).join('×')}</dd></> : null}
         </dl>

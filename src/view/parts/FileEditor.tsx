@@ -76,8 +76,12 @@ export function FileEditor<T>(props: Props<T>) {
   }, [processFiles]);
 
   const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setDragging(true);
+    const file = event.dataTransfer.files[0];
+    // sometimes people click on image in content and drag it
+    if (file && !file.type.startsWith('image/')) {
+      event.preventDefault();
+      setDragging(true);
+    }
   }, []);
 
   const onDragLeave = useCallback(() => {

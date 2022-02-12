@@ -256,7 +256,7 @@ export const resources: Resource[] = [
   { type: 'item', id: 'WitheredBone', emoji: '🦴', tier: 3, weight: 1, stack: 30, floating: true, summon: ['Bonemass', 10] },
   { type: 'trophy', id: 'TrophyLeech', emoji: '🧛', tier: 3, weight: 2, stack: 20 },
   { type: 'trophy', id: 'TrophyBlob', tier: 3, weight: 2, stack: 20 },
-  { type: 'trophy', id: 'TrophySurtling', tier: 3, weight: 1, stack: 20 },
+  { type: 'trophy', id: 'TrophySurtling', tier: 3, weight: 1, stack: 20 /* lightRadius: 2, */ }, 
   { type: 'trophy', id: 'TrophyDraugr', emoji: '🧟', tier: 3, weight: 2, stack: 20 },
   { type: 'trophy', id: 'TrophyDraugrElite', emoji: '🧟', tier: 3, weight: 2, stack: 20 },
   { type: 'trophy', id: 'TrophyWraith', emoji: '👻', tier: 3, weight: 1, stack: 20 },

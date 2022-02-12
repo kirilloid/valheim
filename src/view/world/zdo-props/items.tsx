@@ -6,8 +6,10 @@ import type { ZDO } from '../types';
 import { stableHashCode } from '../../../model/utils';
 import * as Inventory from '../../../file/Inventory';
 import { readBase64 } from '../../../file/base64';
+import { data } from '../../../data/itemDB';
 
 import { TranslationContext } from '../../../effects';
+import { ItemIcon } from '../../parts/Icon';
 
 const itemsHash = stableHashCode('items');
 
@@ -18,7 +20,7 @@ export function ItemsComp({ value: zdo }: ValueProps<ZDO>) {
   return <React.Fragment key="items">
     <dt>items</dt>
     <dd><ul>{items.map((item, i) => <li key={i}>
-      {item.stack}&times; {translate(item.id)}
+      {item.stack}&times; <ItemIcon item={data[item.id]} useAlt={false} size={16} />{' '}{translate(item.id)}
     </li>)}</ul></dd>
   </React.Fragment>;
 }
