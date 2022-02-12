@@ -961,6 +961,7 @@
     "ui.locationType.runestone": "runestone",
 
     "ui.moveSpeed": "move speed",
+    "ui.quality": "quality",
     "ui.maxQuality": "max quality",
     "ui.minedFrom": "extracted from",
     "ui.mineType.miscs": "misc",

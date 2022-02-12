@@ -33,6 +33,7 @@ const iconType = (type: GameObject['type']): IconType => {
 };
 
 const iconPath = (item: GameObject): string => {
+  if (item.mod != null) return `/icons/${item.mod}/${item.id}`;
   return item.type === 'object' && item.subtype === 'treasure'
     ? item.id.toLowerCase().includes('chest')
       ? `/icons/piece/piece_chest_wood`

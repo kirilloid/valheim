@@ -91,6 +91,31 @@
   position: relative;  
 }
 
+.InvTooltip {
+  position: absolute;
+  background: #000C;
+  color: white;
+  width: 320px;
+  box-sizing: border-box;
+  padding: 0.5rem;
+}
+.InvTooltip__Header {
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+  font-weight: bold;
+  color: rgb(255, 200, 100);
+  text-align: center;
+}
+.InvTooltip__DLC {
+  color: aqua;
+}
+.InvTooltip__value {
+  color: orange;
+}
+.InvTooltip__extra {
+  color: yellow;
+}
+
 /* EpicLoot */
 .Inventory__Item--EpicLoot.Inventory__Item--equipped {
   background: #0004;
@@ -112,9 +137,19 @@
 .Inventory__Item--EpicLoot.Inventory__Item--EpicLoot-Rare .InvItem__Icon:not(.InvItem__Icon--shadow) {
   background: transparent url('../img/EpicLoot/RareItemBg.png') no-repeat center;
 }
-.Inventory__Item--EpicLoot.Inventory__Item--EpicLoot-Legendary .InvItem__Icon:not(.InvItem__Icon--shadow) {
-  background: transparent url('../img/EpicLoot/LegendaryItemBg.png') no-repeat center;
-}
 .Inventory__Item--EpicLoot.Inventory__Item--EpicLoot-Epic .InvItem__Icon:not(.InvItem__Icon--shadow) {
   background: transparent url('../img/EpicLoot/EpicItemBg.png') no-repeat center;
 }
+.Inventory__Item--EpicLoot.Inventory__Item--EpicLoot-Legendary .InvItem__Icon:not(.InvItem__Icon--shadow) {
+  background: transparent url('../img/EpicLoot/LegendaryItemBg.png') no-repeat center;
+}
+
+.InvTooltip--EpicLoot .InvTooltip__value,
+.InvTooltip--EpicLoot .InvTooltip__extra {
+  color: #ACD7E5;
+}
+
+.EpicLoot--Magic { color: #00A7F8 !important; }
+.EpicLoot--Rare { color: #FFFF75 !important; }
+.EpicLoot--Epic { color: #CF78FE !important; }
+.EpicLoot--Legendary { color: #16EAAB !important; }

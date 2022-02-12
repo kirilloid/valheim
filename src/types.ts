@@ -558,6 +558,7 @@ interface GameObjectBase {
   components?: GameComponent[];
   tags?: string[];
   dlc?: 'beta';
+  mod?: string;
   disabled?: true;
   season?: 'midsummer' | 'christmas' | 'helloween';
   tier: number;

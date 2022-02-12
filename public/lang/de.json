@@ -778,6 +778,7 @@
     "ui.locationType.misc": "verschiedenes",
     "ui.locationType.runestone": "Runenstein",
     "ui.maxQuality": "Max. Qualität",
+    "ui.quality": "Qualität",
     "ui.minedFrom": "extrahiert aus",
     "ui.mining": "Bergbau und Holzfäller",
     "ui.mineType.miscs": "versch.",

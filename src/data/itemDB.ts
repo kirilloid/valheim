@@ -8,6 +8,7 @@ import { pieces } from './building';
 import { creatures } from './creatures';
 import { ships, carts } from './transport';
 import { objects, structures } from './objects';
+import * as mods from '../mods';
 
 export const data: Record<string, GameObject> = {};
 
@@ -36,6 +37,10 @@ for (const coll of [
   resources,
 ]) {
   addCollection(coll);
+}
+
+for (const group of Object.values(mods)) {
+  addCollection(group);
 }
 
 if (typeof window !== 'undefined') {

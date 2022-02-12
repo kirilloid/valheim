@@ -1,3 +1,6 @@
+import type { GameObject, Item, Piece, Resource } from '../types';
+import { CraftingStation, mods } from '../types';
+
 type Rarity = 'Generic' | 'Magic' | 'Rare' | 'Epic' | 'Legendary';
 type EffectType =
 | `Modify${'' | 'Physical' | 'Elemental'}Damage`
@@ -57,7 +60,7 @@ type EffectType =
 | 'FrostDamageAOE'
 | 'Berserker'
 
-type EpicLootData = {
+export type EpicLootData = {
   rarity: Rarity;
   effects: Partial<Record<EffectType, number>>;
 }
@@ -84,3 +87,135 @@ export function extractExtraData({ crafterName }: { crafterName: string }): Epic
     return defaultItem;
   }
 }
+
+const resources: Resource[] = [
+  ...Object.entries({
+    Magic: 2,
+    Rare: 3,
+    Epic: 4,
+    Legendary: 5,
+  }).flatMap<Resource>(([rarity, tier]) => [
+    {
+      id: `Dust${rarity}`,
+      tier,
+      type: 'item',
+      stack: 100,
+      weight: 0.1,
+    },
+    {
+      id: `Essence${rarity}`,
+      tier,
+      type: 'item',
+      stack: 100,
+      weight: 0.1,
+    },
+    {
+      id: `Shard${rarity}`,
+      tier,
+      type: 'item',
+      stack: 100,
+      weight: 0.1,
+    },
+    {
+      id: `Rune${rarity}`,
+      tier,
+      type: 'item',
+      stack: 100,
+      weight: 0.1,
+    },
+  ]),
+];
+
+const items: Item[] = [
+  {
+    id: 'LeatherBelt',
+    tier: 2,
+    type: 'armor', slot: 'util',
+    maxLvl: 1,
+    armor: [0, 0],
+    weight: 2,
+    durability: [Infinity, 0],
+    moveSpeed: 0,
+    recipe: {
+      type: 'craft_upg',
+      time: 3,
+      materials: { LeatherScraps: 5, Bronze: 1 },
+      materialsPerLevel: {},
+      source: { station: CraftingStation.Inventory, level: 0 },
+      upgrade: { station: CraftingStation.Inventory, level: 0 },
+    },
+  },
+  {
+    id: 'GoldRubyRing',
+    tier: 2,
+    type: 'armor', slot: 'util',
+    maxLvl: 1,
+    armor: [0, 0],
+    weight: 1,
+    durability: [Infinity, 0],
+    moveSpeed: 0,
+    recipe: {
+      type: 'craft_upg',
+      time: 3,
+      materials: { Coins: 200, Ruby: 1 },
+      materialsPerLevel: {},
+      source: { station: CraftingStation.Inventory, level: 0 },
+      upgrade: { station: CraftingStation.Inventory, level: 0 },
+    }
+  },
+];
+
+const buildings: Piece[] = [
+  {
+    id: 'piece_enchanter',
+    base: false,
+    type: 'piece',
+    components: ['CraftingStation'],
+    subtype: 'craft_ext',
+    tier: 2,
+    piece: {
+      target: 'primary',
+      water: false,
+    },
+    extends: {
+      id: CraftingStation.Forge,
+      distance: 5,
+    },
+    wear: {
+      hp: 100,
+      damageModifiers: mods([0, 0, 1, 2, 0, 0, 0, 0, 3, 3]),
+      noRoof: false,
+      noSupport: true,
+    },
+    recipe: { type: 'craft_piece', materials: { Wood: 10, }, station: CraftingStation.Inventory, }    
+  },
+  {
+    id: 'piece_augmenter',
+    base: false,
+    type: 'piece',
+    components: ['CraftingStation'],
+    subtype: 'craft_ext',
+    tier: 3,
+    piece: {
+      target: 'primary',
+      water: false,
+    },
+    extends: {
+      id: CraftingStation.Inventory,
+      distance: 5,
+    },
+    wear: {
+      hp: 100,
+      damageModifiers: mods([0, 0, 1, 2, 0, 0, 0, 0, 3, 3]),
+      noRoof: false,
+      noSupport: true,
+    },
+    recipe: { type: 'craft_piece', materials: { Wood: 10, }, station: CraftingStation.Inventory, }    
+  },
+];
+
+export const data: GameObject[] = [
+  ...resources,
+  ...items,
+  ...buildings,
+].map(item => ({ ...item, mod: 'EpicLoot' }) as GameObject)

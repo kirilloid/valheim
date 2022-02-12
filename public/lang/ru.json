@@ -922,6 +922,7 @@
 
     "ui.moveSpeed": "скорость",
     "ui.maxQuality": "макс.качество",
+    "ui.quality": "качество",
     "ui.mineType.miscs": "прочее",
     "ui.mineType.ores": "руды",
     "ui.mineType.rocks": "камни",
