@@ -94,7 +94,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { Wood: 6 },
       materialsPerLevel: { BoneFragments: 5 },
       source: { station: CraftingStation.Inventory, level: 0 },
-      upgrade: { station: CraftingStation.Workbench, level: 1 },
     }
   },
   { type: 'weapon', slot: 'primary',
@@ -131,7 +130,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { Wood: 5, Stone: 4 },
       materialsPerLevel: { Stone: 2 },
       source: { station: CraftingStation.Inventory, level: 0 },
-      upgrade: { station: CraftingStation.Workbench, level: 1 },
     }
   },
   { type: 'weapon', slot: 'either',
@@ -167,7 +165,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { Wood: 1, Resin: 1 },
       materialsPerLevel: {},
       source: { station: CraftingStation.Inventory, level: 0 },
-      upgrade: { station: CraftingStation.Inventory, level: 0 },
     }
   },
 // STONE AGE
@@ -205,7 +202,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { Wood: 4, Flint: 6 },
       materialsPerLevel: { Flint: 3, LeatherScraps: 2 },
       source: { station: CraftingStation.Workbench, level: 1 },
-      upgrade: { station: CraftingStation.Workbench, level: 2 },
     }
   },
   { type: 'weapon', slot: 'primary',
@@ -249,7 +245,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { Wood: 2, Flint: 4, LeatherScraps: 2 },
       materialsPerLevel: { Flint: 2 },
       source: { station: CraftingStation.Workbench, level: 1 },
-      upgrade: { station: CraftingStation.Workbench, level: 2 },
     }
   },
   { type: 'weapon', slot: 'primary',
@@ -291,7 +286,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { Wood: 5, Flint: 10, LeatherScraps: 2 },
       materialsPerLevel: { Wood: 3, Flint: 5, LeatherScraps: 1 },
       source: { station: CraftingStation.Workbench, level: 1 },
-      upgrade: { station: CraftingStation.Workbench, level: 2 },
     }
   },
   { type: 'weapon', slot: 'both',
@@ -328,7 +322,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { RoundLog: 20, TrophyDeer: 5, LeatherScraps: 2 },
       materialsPerLevel: { RoundLog: 5, TrophyDeer: 2, LeatherScraps: 1, BoneFragments: 10 },
       source: { station: CraftingStation.Workbench, level: 2 },
-      upgrade: { station: CraftingStation.Workbench, level: 3 },
     }
   },
   { type: 'weapon', slot: 'bow',
@@ -364,7 +357,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { Wood: 10, LeatherScraps: 8 },
       materialsPerLevel: { Wood: 5, LeatherScraps: 4, DeerHide: 1 },
       source: { station: CraftingStation.Workbench, level: 1 },
-      upgrade: { station: CraftingStation.Workbench, level: 2 },
     }
   },
   { type: 'weapon', slot: 'both',
@@ -399,7 +391,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { Wood: 3, Stone: 10 },
       materialsPerLevel: { Wood: 1, Stone: 5 },
       source: { station: CraftingStation.Workbench, level: 1 },
-      upgrade: { station: CraftingStation.Workbench, level: 1 },
     },
   },
   { type: 'weapon', slot: 'both',
@@ -433,7 +424,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { Wood: 10, HardAntler: 1 },
       materialsPerLevel: {},
       source: { station: CraftingStation.Workbench, level: 1 },
-      upgrade: { station: CraftingStation.Workbench, level: 0 },
     }
   },
   { type: 'shield', slot: 'secondary',
@@ -457,7 +447,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { Wood: 10, Resin: 4, LeatherScraps: 4 },
       materialsPerLevel: { Wood: 5, Resin: 2, LeatherScraps: 2 },
       source: { station: CraftingStation.Workbench, level: 1 },
-      upgrade: { station: CraftingStation.Workbench, level: 2 },
     }
   },
   { type: 'shield', slot: 'secondary',
@@ -481,7 +470,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { Wood: 10, LeatherScraps: 6 },
       materialsPerLevel: { Wood: 5, LeatherScraps: 3 },
       source: { station: CraftingStation.Workbench, level: 1 },
-      upgrade: { station: CraftingStation.Workbench, level: 2 },
     }
   },
 // BRONZE AGE
@@ -526,7 +514,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { Wood: 2, Copper: 8 },
       materialsPerLevel: { GreydwarfEye: 8, Copper: 4 },
       source: { station: CraftingStation.Forge, level: 1 },
-      upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
   { type: 'weapon', slot: 'primary',
@@ -567,7 +554,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { Wood: 10, Bronze: 8, LeatherScraps: 2 },
       materialsPerLevel: { Bronze: 4 },
       source: { station: CraftingStation.Forge, level: 1 },
-      upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
   { type: 'weapon', slot: 'primary',
@@ -604,7 +590,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { Wood: 4, Bronze: 8, LeatherScraps: 2 },
       materialsPerLevel: { Bronze: 4, LeatherScraps: 1 },
       source: { station: CraftingStation.Forge, level: 1 },
-      upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
   { type: 'weapon', slot: 'primary',
@@ -646,7 +631,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { Wood: 4, Bronze: 8, LeatherScraps: 3 },
       materialsPerLevel: { Bronze: 4 },
       source: { station: CraftingStation.Forge, level: 1 },
-      upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
   { type: 'weapon', slot: 'primary',
@@ -688,7 +672,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { Wood: 5, Bronze: 6, DeerHide: 2 },
       materialsPerLevel: { Wood: 3, Bronze: 4, DeerHide: 1 },
       source: { station: CraftingStation.Forge, level: 1 },
-      upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
   { type: 'weapon', slot: 'primary',
@@ -729,7 +712,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { Wood: 2, Bronze: 8, LeatherScraps: 2 },
       materialsPerLevel: { Wood: 1, Bronze: 4, LeatherScraps: 1 },
       source: { station: CraftingStation.Forge, level: 1 },
-      upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
   { type: 'weapon', slot: 'both',
@@ -766,7 +748,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { RoundLog: 3, Bronze: 10 },
       materialsPerLevel: { RoundLog: 1, Bronze: 5 },
       source: { station: CraftingStation.Forge, level: 1 },
-      upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
   { type: 'weapon', slot: 'bow',
@@ -802,7 +783,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { FineWood: 10, RoundLog: 10, DeerHide: 2 },
       materialsPerLevel: { FineWood: 5, RoundLog: 5, DeerHide: 2 },
       source: { station: CraftingStation.Workbench, level: 1 },
-      upgrade: { station: CraftingStation.Workbench, level: 2 },
     }
   },
   { type: 'shield', slot: 'secondary',
@@ -824,7 +804,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { Wood: 4, Bronze: 10 },
       materialsPerLevel: { Wood: 1, Bronze: 5 },
       source: { station: CraftingStation.Forge, level: 1 },
-      upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
   { type: 'shield', slot: 'secondary',
@@ -847,7 +826,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { Wood: 10, BoneFragments: 10, TrophySkeleton: 3 },
       materialsPerLevel: { Wood: 5, BoneFragments: 5 },
       source: { station: CraftingStation.Workbench, level: 3 },
-      upgrade: { station: CraftingStation.Workbench, level: 4 },
     }
   },
 // IRON AGE
@@ -927,7 +905,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { ElderBark: 30, Iron: 35, LeatherScraps: 4 },
       materialsPerLevel: { ElderBark: 5, Iron: 15 },
       source: { station: CraftingStation.Forge, level: 2 },
-      upgrade: { station: CraftingStation.Forge, level: 3 },
     }
   },
   { type: 'weapon', slot: 'primary',
@@ -970,7 +947,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { Wood: 2, Iron: 20, LeatherScraps: 3 },
       materialsPerLevel: { Wood: 1, Iron: 10, LeatherScraps: 2 },
       source: { station: CraftingStation.Forge, level: 2 },
-      upgrade: { station: CraftingStation.Forge, level: 3 },
     },
   },
   { type: 'weapon', slot: 'primary',
@@ -1007,7 +983,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { Wood: 4, Iron: 20, LeatherScraps: 2 },
       materialsPerLevel: { Iron: 10, LeatherScraps: 1 },
       source: { station: CraftingStation.Forge, level: 2 },
-      upgrade: { station: CraftingStation.Forge, level: 3 },
     },
   },
   { type: 'weapon', slot: 'both',
@@ -1041,7 +1016,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { ElderBark: 10, Iron: 30, YmirRemains: 4, TrophyDraugrElite: 1 },
       materialsPerLevel: { ElderBark: 2, Iron: 15, YmirRemains: 2 },
       source: { station: CraftingStation.Forge, level: 2 },
-      upgrade: { station: CraftingStation.Forge, level: 3 },
     },
   },
   { type: 'weapon', slot: 'primary',
@@ -1083,7 +1057,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { Wood: 4, Iron: 20, LeatherScraps: 3 },
       materialsPerLevel: { Iron: 10 },
       source: { station: CraftingStation.Forge, level: 2 },
-      upgrade: { station: CraftingStation.Forge, level: 3 },
     },
   },
   { type: 'weapon', slot: 'primary',
@@ -1125,7 +1098,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { TrollHide: 4, Iron: 10, ElderBark: 10, },
       materialsPerLevel: { TrollHide: 1, Iron: 5, ElderBark: 5 },
       source: { station: CraftingStation.Forge, level: 3 },
-      upgrade: { station: CraftingStation.Forge, level: 4 },
     }
   },
   { type: 'weapon', slot: 'both',
@@ -1162,7 +1134,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { RoundLog: 3, Iron: 20 },
       materialsPerLevel: { RoundLog: 1, Iron: 10 },
       source: { station: CraftingStation.Forge, level: 2 },
-      upgrade: { station: CraftingStation.Forge, level: 3 },
     },
   },
   { type: 'weapon', slot: 'both',
@@ -1203,7 +1174,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { Wood: 10, Iron: 30, LeatherScraps: 2 },
       materialsPerLevel: { Iron: 15, LeatherScraps: 1 },
       source: { station: CraftingStation.Forge, level: 2 },
-      upgrade: { station: CraftingStation.Forge, level: 3 },
     },
   },
   { type: 'weapon', slot: 'bow',
@@ -1239,7 +1209,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { FineWood: 10, Iron: 20, Feathers: 10, DeerHide: 2 },
       materialsPerLevel: { FineWood: 5, Iron: 10, Feathers: 5, DeerHide: 2 },
       source: { station: CraftingStation.Forge, level: 1 },
-      upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
   { type: 'shield', slot: 'secondary',
@@ -1266,7 +1235,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { FineWood: 10, Iron: 8 },
       materialsPerLevel: { FineWood: 10, Iron: 4 },
       source: { station: CraftingStation.Forge, level: 2 },
-      upgrade: { station: CraftingStation.Forge, level: 3 },
     }
   },
   { type: 'shield', slot: 'secondary',
@@ -1292,7 +1260,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { FineWood: 15, Iron: 10 },
       materialsPerLevel: { FineWood: 10, Iron: 5 },
       source: { station: CraftingStation.Forge, level: 2 },
-      upgrade: { station: CraftingStation.Forge, level: 3 },
     }
   },
   { type: 'shield', slot: 'secondary',
@@ -1317,7 +1284,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { Iron: 10, ElderBark: 4 },
       materialsPerLevel: { Iron: 5, ElderBark: 1 },
       source: { station: CraftingStation.Forge, level: 2 },
-      upgrade: { station: CraftingStation.Forge, level: 3 },
     }
   },
   { type: 'shield', slot: 'secondary',
@@ -1344,7 +1310,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { FineWood: 10, Iron: 4, SerpentScale: 8 },
       materialsPerLevel: { FineWood: 10, Iron: 2, SerpentScale: 4 },
       source: { station: CraftingStation.Forge, level: 3 },
-      upgrade: { station: CraftingStation.Forge, level: 4 },
     }
   },
 // SILVER AGE
@@ -1391,7 +1356,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { ElderBark: 40, Silver: 30, Crystal: 10 },
       materialsPerLevel: { ElderBark: 5, Silver: 15 },
       source: { station: CraftingStation.Forge, level: 3 },
-      upgrade: { station: CraftingStation.Forge, level: 4 },
     }
   },
   { type: 'weapon', slot: 'primary',
@@ -1435,7 +1399,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { Wood: 2, Silver: 40, LeatherScraps: 3, Iron: 5 },
       materialsPerLevel: { Wood: 1, Silver: 20, LeatherScraps: 1, Iron: 3 },
       source: { station: CraftingStation.Forge, level: 3 },
-      upgrade: { station: CraftingStation.Forge, level: 4 },
     }
   },
   { type: 'weapon', slot: 'primary',
@@ -1477,7 +1440,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { ElderBark: 10, WolfFang: 4, Silver: 2, LeatherScraps: 2 },
       materialsPerLevel: { ElderBark: 5, WolfFang: 2, Silver: 1, LeatherScraps: 1 },
       source: { station: CraftingStation.Forge, level: 3 },
-      upgrade: { station: CraftingStation.Forge, level: 4 },
     }
   },
   { type: 'weapon', slot: 'primary',
@@ -1521,7 +1483,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { ElderBark: 10, Silver: 30, YmirRemains: 5, FreezeGland: 5 },
       materialsPerLevel: { Silver: 15 },
       source: { station: CraftingStation.Forge, level: 3 },
-      upgrade: { station: CraftingStation.Forge, level: 4 },
     }
   },
   { type: 'weapon', slot: 'primary',
@@ -1600,7 +1561,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { FineWood: 4, Chitin: 20, LeatherScraps: 2 },
       materialsPerLevel: { Chitin: 10 },
       source: { station: CraftingStation.Workbench, level: 2 },
-      upgrade: { station: CraftingStation.Workbench, level: 3 },
     }
   },
   { type: 'weapon', slot: 'primary',
@@ -1645,7 +1605,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { Wood: 2, Silver: 10, LeatherScraps: 3, Iron: 2 },
       materialsPerLevel: { Wood: 1, Silver: 5, LeatherScraps: 1, Iron: 1 },
       source: { station: CraftingStation.Forge, level: 3 },
-      upgrade: { station: CraftingStation.Forge, level: 4 },
     }
   },
   { type: 'weapon', slot: 'bow',
@@ -1684,7 +1643,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { ElderBark: 10, Silver: 20, DeerHide: 2, Guck: 10, },
       materialsPerLevel: { ElderBark: 5, Silver: 10, DeerHide: 2, Guck: 2 },
       source: { station: CraftingStation.Forge, level: 2 },
-      upgrade: { station: CraftingStation.Forge, level: 3 },
     }
   },
   { type: 'shield', slot: 'secondary',
@@ -1711,7 +1669,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { FineWood: 10, Silver: 8 },
       materialsPerLevel: { FineWood: 10, Silver: 4 },
       source: { station: CraftingStation.Forge, level: 3 },
-      upgrade: { station: CraftingStation.Forge, level: 4 },
     }
   },
 // BLACK AGE
@@ -1753,7 +1710,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { FineWood: 10, BlackMetal: 30, LinenThread: 5 },
       materialsPerLevel: { BlackMetal: 15, LinenThread: 5 },
       source: { station: CraftingStation.Forge, level: 4 },
-      upgrade: { station: CraftingStation.Forge, level: 5 },
     },
   },
   { type: 'weapon', slot: 'primary',
@@ -1790,7 +1746,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { FineWood: 6, BlackMetal: 20, LinenThread: 5 },
       materialsPerLevel: { BlackMetal: 10, LinenThread: 5 },
       source: { station: CraftingStation.Forge, level: 4 },
-      upgrade: { station: CraftingStation.Forge, level: 5 },
     },
   },
   { type: 'weapon', slot: 'primary',
@@ -1834,7 +1789,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { FineWood: 4, BlackMetal: 10, LinenThread: 5 },
       materialsPerLevel: { BlackMetal: 4, LinenThread: 5 },
       source: { station: CraftingStation.Forge, level: 4 },
-      upgrade: { station: CraftingStation.Forge, level: 5 },
     },
   },
   { type: 'weapon', slot: 'primary',
@@ -1875,7 +1829,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { FineWood: 2, BlackMetal: 20, LinenThread: 5 },
       materialsPerLevel: { BlackMetal: 10, LinenThread: 5 },
       source: { station: CraftingStation.Forge, level: 4 },
-      upgrade: { station: CraftingStation.Forge, level: 5 },
     },
   },
   { type: 'weapon', slot: 'primary',
@@ -1920,7 +1873,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { FineWood: 5, Iron: 20, Needle: 5, LinenThread: 10 },
       materialsPerLevel: { Iron: 2, LinenThread: 2 },
       source: { station: CraftingStation.Forge, level: 4 },
-      upgrade: { station: CraftingStation.Forge, level: 5 },
     },
   },
   { type: 'shield', slot: 'secondary',
@@ -1947,7 +1899,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { FineWood: 10, BlackMetal: 8, Chain: 5 },
       materialsPerLevel: { FineWood: 10, BlackMetal: 4, Chain: 2 },
       source: { station: CraftingStation.Forge, level: 3 },
-      upgrade: { station: CraftingStation.Forge, level: 4 },
     }
   },
   { type: 'shield', slot: 'secondary',
@@ -1974,7 +1925,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { FineWood: 15, BlackMetal: 10, Chain: 7 },
       materialsPerLevel: { FineWood: 15, BlackMetal: 6, Chain: 3 },  
       source: { station: CraftingStation.Forge, level: 3 },
-      upgrade: { station: CraftingStation.Forge, level: 4 },
     }
   },
 // FLAME AGE
@@ -2021,7 +1971,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { FineWood: 2, Flametal: 20, SurtlingCore: 20, LeatherScraps: 3 },
       materialsPerLevel: { Flametal: 10, SurtlingCore: 10, LeatherScraps: 2 },
       source: { station: CraftingStation.Forge, level: 2 },
-      upgrade: { station: CraftingStation.Forge, level: 3 },
     },
   },
   { type: 'shield', slot: 'secondary',
@@ -2065,7 +2014,6 @@ export const items: (Weapon | Shield)[] = [
       materials: { FineWood: 10, Iron: 6 },
       materialsPerLevel: { FineWood: 10, Iron: 3 },
       source: { station: CraftingStation.Forge, level: 2 },
-      upgrade: { station: CraftingStation.Forge, level: 3 },
     },
   },
   { type: 'weapon', slot: 'primary',

@@ -1,6 +1,19 @@
-import { CraftingStation, Item } from "../types";
+import { CraftingStation, Item, ItemSet } from '../types';
+import { SkillType } from '../model/skills';
 
 const CRAFT_TIME = 4;
+
+const trollSet: ItemSet = {
+  name: 'troll',
+  items: [],
+  bonus: [,,, { Skills: { [SkillType.Sneak]: 15 } }],
+};
+
+const rootSet: ItemSet = {
+  name: 'root',
+  items: [],
+  bonus: [,, { Skills: { [SkillType.Bows]: 15 } }],
+};
 
 export const items: Item[] = [
 // PRE-CRAFT AGE
@@ -18,7 +31,6 @@ export const items: Item[] = [
       materials: { LeatherScraps: 5 },
       materialsPerLevel: { LeatherScraps: 5 },
       source: { station: CraftingStation.Workbench, level: 0 },
-      upgrade: { station: CraftingStation.Workbench, level: 1 },
     }
   },
   { id: 'ArmorRagsChest',
@@ -35,7 +47,6 @@ export const items: Item[] = [
       materials: { LeatherScraps: 5 },
       materialsPerLevel: { LeatherScraps: 5 },
       source: { station: CraftingStation.Workbench, level: 0 },
-      upgrade: { station: CraftingStation.Workbench, level: 1 },
     }
   },
 // STONE AGE
@@ -53,7 +64,6 @@ export const items: Item[] = [
       materials: { DeerHide: 6 },
       materialsPerLevel: { DeerHide: 6, BoneFragments: 5 },
       source: { station: CraftingStation.Workbench, level: 2 },
-      upgrade: { station: CraftingStation.Workbench, level: 3 },
     }
   },
   { id: 'ArmorLeatherChest',
@@ -70,7 +80,6 @@ export const items: Item[] = [
       materials: { DeerHide: 6 },
       materialsPerLevel: { DeerHide: 6, BoneFragments: 5 },
       source: { station: CraftingStation.Workbench, level: 2 },
-      upgrade: { station: CraftingStation.Workbench, level: 3 },
     }
   },
   { id: 'HelmetLeather',
@@ -87,7 +96,6 @@ export const items: Item[] = [
       materials: { DeerHide: 6 },
       materialsPerLevel: { DeerHide: 6, BoneFragments: 5 },
       source: { station: CraftingStation.Workbench, level: 2 },
-      upgrade: { station: CraftingStation.Workbench, level: 3 },
     }
   },
   { id: 'CapeDeerHide',
@@ -104,13 +112,13 @@ export const items: Item[] = [
       materials: { DeerHide: 4, BoneFragments: 5 },
       materialsPerLevel: { DeerHide: 4, BoneFragments: 5 },
       source: { station: CraftingStation.Workbench, level: 2 },
-      upgrade: { station: CraftingStation.Workbench, level: 3 },
     }
   },
   // troll
   { id: 'ArmorTrollLeatherLegs',
     tier: 1,
     type: 'armor', slot: 'legs',
+    set: trollSet,
     armor: [6, 2],
     weight: 5,
     maxLvl: 4,
@@ -122,12 +130,12 @@ export const items: Item[] = [
       materials: { TrollHide: 5 },
       materialsPerLevel: { TrollHide: 2 },
       source: { station: CraftingStation.Workbench, level: 2 },
-      upgrade: { station: CraftingStation.Workbench, level: 3 },
     }
   },
   { id: 'ArmorTrollLeatherChest',
     tier: 1,
     type: 'armor', slot: 'body',
+    set: trollSet,
     armor: [6, 2],
     weight: 5,
     maxLvl: 4,
@@ -139,12 +147,12 @@ export const items: Item[] = [
       materials: { TrollHide: 5 },
       materialsPerLevel: { TrollHide: 2 },
       source: { station: CraftingStation.Workbench, level: 2 },
-      upgrade: { station: CraftingStation.Workbench, level: 3 },
     }
   },
   { id: 'HelmetTrollLeather',
     tier: 1,
     type: 'armor', slot: 'head',
+    set: trollSet,
     armor: [6, 2],
     weight: 1,
     maxLvl: 4,
@@ -156,12 +164,12 @@ export const items: Item[] = [
       materials: { TrollHide: 5, BoneFragments: 3 },
       materialsPerLevel: { TrollHide: 2, BoneFragments: 1 },
       source: { station: CraftingStation.Workbench, level: 2 },
-      upgrade: { station: CraftingStation.Workbench, level: 3 },
     }
   },
   { id: 'CapeTrollHide',
     tier: 1,
     type: 'armor', slot: 'shoulders',
+    set: trollSet,
     armor: [1, 1],
     weight: 4,
     maxLvl: 4,
@@ -173,7 +181,6 @@ export const items: Item[] = [
       materials: { TrollHide: 10, BoneFragments: 10 },
       materialsPerLevel: { TrollHide: 5, BoneFragments: 5 },
       source: { station: CraftingStation.Workbench, level: 2 },
-      upgrade: { station: CraftingStation.Workbench, level: 3 },
     }
   },
 // BRONZE AGE
@@ -191,7 +198,6 @@ export const items: Item[] = [
       materials: { Bronze: 5, DeerHide: 2 },
       materialsPerLevel: { Bronze: 3 },
       source: { station: CraftingStation.Forge, level: 1 },
-      upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
   { id: 'ArmorBronzeChest',
@@ -208,7 +214,6 @@ export const items: Item[] = [
       materials: { Bronze: 5, DeerHide: 2 },
       materialsPerLevel: { Bronze: 3 },
       source: { station: CraftingStation.Forge, level: 1 },
-      upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
   { id: 'HelmetBronze',
@@ -225,13 +230,13 @@ export const items: Item[] = [
       materials: { Bronze: 5, DeerHide: 2 },
       materialsPerLevel: { Bronze: 3 },
       source: { station: CraftingStation.Forge, level: 1 },
-      upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
 // IRON AGE
   { id: 'ArmorRootLegs',
     tier: 3,
     type: 'armor', slot: 'legs',
+    set: rootSet,
     armor: [8, 2],
     weight: 10,
     maxLvl: 4,
@@ -244,12 +249,12 @@ export const items: Item[] = [
       materials: { Root: 10, ElderBark: 10, DeerHide: 2 },
       materialsPerLevel: { Root: 2, ElderBark: 5 },
       source: { station: CraftingStation.Workbench, level: 2 },
-      upgrade: { station: CraftingStation.Workbench, level: 3 },
     }
   },
   { id: 'ArmorRootChest',
     tier: 3,
     type: 'armor', slot: 'body',
+    set: rootSet,
     armor: [8, 2],
     weight: 10,
     maxLvl: 4,
@@ -262,12 +267,12 @@ export const items: Item[] = [
       materials: { Root: 10, ElderBark: 10, DeerHide: 2 },
       materialsPerLevel: { Root: 2, ElderBark: 5 },
       source: { station: CraftingStation.Workbench, level: 2 },
-      upgrade: { station: CraftingStation.Workbench, level: 3 },
     }
   },
   { id: 'HelmetRoot',
     tier: 3,
     type: 'armor', slot: 'head',
+    set: rootSet,
     armor: [8, 2],
     weight: 3,
     maxLvl: 4,
@@ -280,7 +285,6 @@ export const items: Item[] = [
       materials: { Root: 10, ElderBark: 10, LeatherScraps: 4 },
       materialsPerLevel: { Root: 2, ElderBark: 5 },
       source: { station: CraftingStation.Workbench, level: 2 },
-      upgrade: { station: CraftingStation.Workbench, level: 3 },
     }
   },
   { id: 'ArmorIronLegs',
@@ -297,7 +301,6 @@ export const items: Item[] = [
       materials: { Iron: 20, DeerHide: 2 },
       materialsPerLevel: { Iron: 5 },
       source: { station: CraftingStation.Forge, level: 2 },
-      upgrade: { station: CraftingStation.Forge, level: 3 },
     }
   },
   { id: 'ArmorIronChest',
@@ -314,7 +317,6 @@ export const items: Item[] = [
       materials: { Iron: 20, DeerHide: 2 },
       materialsPerLevel: { Iron: 5 },
       source: { station: CraftingStation.Forge, level: 2 },
-      upgrade: { station: CraftingStation.Forge, level: 3 },
     }
   },
   { id: 'HelmetIron',
@@ -331,7 +333,6 @@ export const items: Item[] = [
       materials: { Iron: 20, DeerHide: 2 },
       materialsPerLevel: { Iron: 5 },
       source: { station: CraftingStation.Forge, level: 2 },
-      upgrade: { station: CraftingStation.Forge, level: 3 },
     }
   },
 // SILVER AGE
@@ -349,7 +350,6 @@ export const items: Item[] = [
       materials: { Silver: 20, WolfPelt: 5, WolfFang: 4 },
       materialsPerLevel: { Silver: 5, WolfPelt: 2, WolfFang: 1 },
       source: { station: CraftingStation.Forge, level: 2 },
-      upgrade: { station: CraftingStation.Forge, level: 3 },
     }
   },
   { id: 'ArmorWolfChest',
@@ -367,7 +367,6 @@ export const items: Item[] = [
       materials: { Silver: 20, WolfPelt: 5, Chain: 1 },
       materialsPerLevel: { Silver: 5, WolfPelt: 2 },
       source: { station: CraftingStation.Forge, level: 2 },
-      upgrade: { station: CraftingStation.Forge, level: 3 },
     }
   },
   { id: 'HelmetDrake',
@@ -384,7 +383,6 @@ export const items: Item[] = [
       materials: { Silver: 20, WolfPelt: 2, TrophyHatchling: 2 },
       materialsPerLevel: { Silver: 5 },
       source: { station: CraftingStation.Forge, level: 2 },
-      upgrade: { station: CraftingStation.Forge, level: 3 },
     }
   },
   { id: 'CapeWolf',
@@ -402,7 +400,6 @@ export const items: Item[] = [
       materials: { Silver: 4, WolfPelt: 6, TrophyWolf: 1 },
       materialsPerLevel: { Silver: 2, WolfPelt: 4 },
       source: { station: CraftingStation.Workbench, level: 2 },
-      upgrade: { station: CraftingStation.Workbench, level: 3 },
     }
   },
 // BLACK AGE
@@ -420,7 +417,6 @@ export const items: Item[] = [
       materials: { Iron: 10, LinenThread: 20 },
       materialsPerLevel: { Iron: 3 },
       source: { station: CraftingStation.Forge, level: 2 },
-      upgrade: { station: CraftingStation.Forge, level: 3 },
     }
   },
   { id: 'ArmorPaddedCuirass',
@@ -437,7 +433,6 @@ export const items: Item[] = [
       materials: { Iron: 10, LinenThread: 20 },
       materialsPerLevel: { Iron: 3 },
       source: { station: CraftingStation.Forge, level: 2 },
-      upgrade: { station: CraftingStation.Forge, level: 3 },
     }
   },
   { id: 'HelmetPadded',
@@ -454,7 +449,6 @@ export const items: Item[] = [
       materials: { Iron: 10, LinenThread: 15 },
       materialsPerLevel: { Iron: 5 },
       source: { station: CraftingStation.Forge, level: 2 },
-      upgrade: { station: CraftingStation.Forge, level: 3 },
     }
   },
   { id: 'CapeLinen',
@@ -472,7 +466,6 @@ export const items: Item[] = [
       materials: { LinenThread: 20, Silver: 1 },
       materialsPerLevel: { LinenThread: 4 },
       source: { station: CraftingStation.Workbench, level: 2 },
-      upgrade: { station: CraftingStation.Workbench, level: 3 },
     }
   },
   { id: 'CapeLox',
@@ -490,7 +483,6 @@ export const items: Item[] = [
       materials: { LoxPelt: 6, Silver: 2 },
       materialsPerLevel: { LoxPelt: 2 },
       source: { station: CraftingStation.Workbench, level: 2 },
-      upgrade: { station: CraftingStation.Workbench, level: 3 },
     }
   },
   // non-systematic
@@ -553,7 +545,6 @@ export const items: Item[] = [
       materials: { LeatherScraps: 10, Coal: 4 },
       materialsPerLevel: {},
       source: { station: CraftingStation.Workbench, level: 1 },
-      upgrade: { station: CraftingStation.Workbench, level: 1 },
     },
   },
   { id: 'CapeOdin',
@@ -571,7 +562,6 @@ export const items: Item[] = [
       materials: { LeatherScraps: 10, Coal: 4 },
       materialsPerLevel: {},
       source: { station: CraftingStation.Workbench, level: 1 },
-      upgrade: { station: CraftingStation.Workbench, level: 1 },
     },
   },
   { id: 'CapeTest',

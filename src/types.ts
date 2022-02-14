@@ -627,7 +627,6 @@ interface BaseItem extends GameObjectBase {
     materials: Record<EntityId, number>;
     materialsPerLevel: Record<EntityId, number>;
     source: { station: CraftingStation, level?: number };
-    upgrade: { station: CraftingStation, level?: number };
   } | {
     type: 'craft_one';
     time: number;
@@ -772,6 +771,7 @@ export interface Weapon extends BaseItem {
   attacks: Attack[];
   durability: Pair<number>;
   durabilityDrainPerSec?: number;
+  set?: ItemSet;
   holdDurationMin?: number;
   holdStaminaDrain?: number;
 }
@@ -790,6 +790,7 @@ export interface Shield extends BaseItem {
   knockback?: number;
   backstab?: number;
   durability: Pair<number>;
+  set?: ItemSet;
 }
 
 export interface Armor extends BaseItem {
@@ -801,9 +802,12 @@ export interface Armor extends BaseItem {
   armor: Pair<number>;
   damageModifiers?: Partial<DamageModifiers>;
   durability: Pair<number>;
+  set?: ItemSet;
 }
 
 export type Item = Resource | Weapon | Shield | Armor | Arrow | Tool;
+export type ItemSetBonus = Partial<{ Skills: Partial<Record<SkillType, number>> }>;
+export type ItemSet = { name: string; items: EntityId[]; bonus: (ItemSetBonus | undefined)[]; };
 export type ItemSpecial = Weapon['special'] | Armor['special'] | Tool['special'];
 
 export type GameObject = Item | Piece | Structure | PhysicalObject | Ship | Cart | Creature;

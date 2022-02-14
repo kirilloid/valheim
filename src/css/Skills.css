@@ -3,6 +3,7 @@
   height: 32px;
   position: relative;
   background-color: gray;
+  margin-bottom: 8px;
 }
 
 .SkillBar__level {

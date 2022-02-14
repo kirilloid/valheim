@@ -172,17 +172,17 @@ export const modPrefabNames: Record<string, string[]> = {
   ],
   // [thunderstone:Horem/Fantasy_Armoury]
   Fantasy_Armoury: [
-    'Axe2H_01_FA', 'Axe2H_02_FA', 'Axe2H_03_FA', 'Axe2H_04_FA', 'Axe2H_05_FA', 'Axe2H_06_FA',
     'Axe_1H_01_FA', 'Axe_1H_02_FA', 'Axe_1H_03_FA', 'Axe_1H_04_FA', 'Axe_1H_05_FA', 'Axe_1H_06_FA', 'Axe_1H_07_FA',
+    'Axe2H_01_FA', 'Axe2H_02_FA', 'Axe2H_03_FA', 'Axe2H_04_FA', 'Axe2H_05_FA', 'Axe2H_06_FA',
     'Hammer_2H_01_FA', 'Hammer_2H_02_FA', 'Hammer_2H_03_FA',
-    'Scythe2H_01_FA',
     'Shield_01_FA', 'Shield_02_FA', 'Shield_03_FA', 'Shield_04_FA', 'Shield_05_FA', 'Shield_06_FA', 'Shield_07_FA', 'Shield_08_FA', 'Shield_09_FA',
     'Staff_2H_01_FA', 'Staff_2H_02_FA', 'Staff_2H_03_FA', 'Staff_2H_04_FA', 'Staff_2H_05_FA',
-    'Sword_1H_01_FA', 'Sword_1H_02_FA', 'Sword_1H_03_FA', 'Sword_1H_04_FA', 'Sword_1H_05_FA', 'Sword_2H_01_FA', 'Sword_2H_02_FA', 'Sword_2H_03_FA', 'Sword_2H_04_FA', 'Sword_2H_05_FA', 'Sword_2H_06_FA',
+    'Sword_1H_01_FA', 'Sword_1H_02_FA', 'Sword_1H_03_FA', 'Sword_1H_04_FA', 'Sword_1H_05_FA',
+    'Sword_2H_01_FA', 'Sword_2H_02_FA', 'Sword_2H_03_FA', 'Sword_2H_04_FA', 'Sword_2H_05_FA', 'Sword_2H_06_FA',
   ],
   // [nexus:387]
   // [thunderstone:RandyKnapp/EpicLoot]
-  EpicLoot: [
+  EpicLoot: [ 
     'BountyTarget',
     'ForestToken', 'GoldBountyToken', 'IronBountyToken',
     'ShardMagic', 'DustMagic', 'ReagentMagic', 'EssenceMagic', 'RunestoneMagic',

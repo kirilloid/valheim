@@ -20,7 +20,6 @@ export const tools: Tool[] = [
       materials: { Wood: 3, Stone: 2 },
       materialsPerLevel: { Wood: 1, Stone: 1 },
       source: { station: CraftingStation.Inventory, level: 0 },
-      upgrade: { station: CraftingStation.Workbench, level: 2 },
     }
   },
   {
@@ -38,7 +37,6 @@ export const tools: Tool[] = [
       materials: { Wood: 5, Stone: 2 },
       materialsPerLevel: { Wood: 1, Stone: 1 },
       source: { station: CraftingStation.Workbench, level: 1 },
-      upgrade: { station: CraftingStation.Workbench, level: 2 },
     }
   },
   { 
@@ -57,7 +55,6 @@ export const tools: Tool[] = [
       materials: { Wood: 2, Tin: 4 },
       materialsPerLevel: {},
       source: { station: CraftingStation.Forge, level: 1 },
-      upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
   {
@@ -75,7 +72,6 @@ export const tools: Tool[] = [
       materials: { RoundLog: 5, Bronze: 5 },
       materialsPerLevel: { RoundLog: 1, Bronze: 1 },
       source: { station: CraftingStation.Forge, level: 1 },
-      upgrade: { station: CraftingStation.Forge, level: 2 },
     }
   },
   {

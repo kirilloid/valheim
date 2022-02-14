@@ -1,16 +1,19 @@
 import React, { CSSProperties, useContext, useRef, useState } from 'react';
 
-import type { Item, Weapon, DamageType } from '../../types';
+import type { Armor, Item, ItemSet, ItemSetBonus, Weapon } from '../../types';
 import type { Inventory as TInventory } from './types';
 
 import '../../css/Inventory.css';
 
 import { timeI2S } from '../../model/utils';
+import { addDamage, multiplyDamage } from '../../model/combat';
 import { data } from '../../data/itemDB';
 
 import { ItemIcon } from '../parts/Icon';
-import { EpicLootData, extractExtraData } from '../../mods/epic-loot';
+import { EpicLootData, extractExtraData, modifyDamage } from '../../mods/epic-loot';
 import { TranslationContext } from '../../effects';
+import { defaultMemoize } from 'reselect';
+import { SkillType } from '../../model/skills';
 
 type InvItem = TInventory['items'][number];
 
@@ -27,7 +30,7 @@ function getMaxDurability(invItem: InvItem, item: Item, extraData: EpicLootData 
   return maxDurability * (1 + durabilityBonus / 100);
 }
 
-function Tooltip({ invItem, x, y }: { invItem: InvItem, x: number, y: number }) {
+function Tooltip({ invItem, x, y, equippedItemIds }: { invItem: InvItem; x: number; y: number; equippedItemIds: string[] }) {
   const item = data[invItem.id] as Item | undefined;
   if (item == null) return null;
   const classes = ['InvTooltip'];
@@ -39,11 +42,61 @@ function Tooltip({ invItem, x, y }: { invItem: InvItem, x: number, y: number }) 
     }
   }
   return <div className={classes.join(' ')} style={{ left: x, top: y }}>
-    <TooltipBody invItem={invItem} item={item} />
+    <TooltipBody invItem={invItem} item={item} equippedItemIds={equippedItemIds} />
   </div>;
 }
 
-const TooltipBody = React.memo(({ invItem, item }: { invItem: InvItem, item: Item }) => {
+function EpicLootTooltip({ extraData }: { extraData: EpicLootData | undefined }) {
+  if (extraData == null) return null;
+  return <ul className={`InvTooltip__EpicLoot EpicLoot--${extraData.rarity}`}>{
+    Object.entries(extraData.effects).map(
+      ([key, value]) => <li key={key}>
+        {key}: {value}
+      </li>
+    )}
+  </ul>
+}
+
+function SetBonus({ bonus }: { bonus: ItemSetBonus }) {
+  const translate = useContext(TranslationContext);
+  if (!bonus.Skills) return null;
+  return <>{
+    Object.entries(bonus.Skills)
+      .map(([skill, value]) => translate(`ui.skillType.${SkillType[skill as any]}`) + " +" + value)
+      .join(' ')
+  }</>;
+}
+
+function SetBonusTooltip({ set, item, equippedItemIds }: { set: ItemSet | undefined; item: Item; equippedItemIds: string[] }) {
+  const translate = useContext(TranslationContext);
+  if (set == null) return null;
+  let equippedTotal = 0;
+  const equippedByIndex = [];
+  for (const id of set.items) {
+    const equipped = equippedItemIds.includes(id);
+    if (equipped) equippedTotal++;
+    equippedByIndex.push(equipped);
+  }
+  return <div className="InvTooltip__Set">
+    <header className="InvTooltip__SetHeader">Set: {set.name} ({equippedTotal}/{set.items.length})</header>
+    <ul className="InvTooltip__SetItems">
+      {set.items.map(id => <li key={id}
+        className={equippedItemIds.includes(item.id)
+          ? 'InvTooltip__SetItem--equipped'
+          : 'InvTooltip__SetItem--unequipped'}
+      >{translate(id)}</li>)}
+    </ul>
+    <ul className="InvTooltip__SetBonuses">
+      {set.bonus.map((bonus, n) => bonus == null ? null : <li key={n}
+        className={n + 1 <= equippedTotal 
+          ? 'InvTooltip__SetItem--equipped'
+          : 'InvTooltip__SetItem--unequipped'}
+      >({n + 1}) <SetBonus bonus={bonus} /></li>)}
+    </ul>
+  </div>
+}
+
+const TooltipBody = React.memo(({ invItem, item, equippedItemIds }: { invItem: InvItem; item: Item; equippedItemIds: string[] }) => {
   const translate = useContext(TranslationContext);
   const slot = (item as Weapon).slot as string | undefined;
   const moveSpeed = (item as Weapon).moveSpeed as number | undefined;
@@ -54,6 +107,7 @@ const TooltipBody = React.memo(({ invItem, item }: { invItem: InvItem, item: Ite
   if (extraData && extraData.rarity !== 'Generic') {
     headerClasses.push('EpicLoot--' + extraData.rarity);
   }
+  let set: ItemSet | undefined = undefined;
   return <>
     <header className={headerClasses.join(' ')}>{translate(item.id)}</header>
     {item.dlc != null && <div className="InvTooltip__DLC">{item.dlc}</div>}
@@ -89,22 +143,37 @@ const TooltipBody = React.memo(({ invItem, item }: { invItem: InvItem, item: Ite
             </>;
           return null;
         case 'weapon':
+          const damage = addDamage(item.damage[0], multiplyDamage(item.damage[1], invItem.quality - 1));
+          const resultDamage = modifyDamage(damage, extraData?.effects);
+          set = item.set;
           return <>
-            {Object.entries(item.damage[0])
+            {Object.entries(resultDamage)
               .filter(([, value]) => value)
               .map(([key, value]) => <div key={key}>
                 {translate(`ui.damageType.${key}`)}{': '}
-                <span className="InvTooltip__value">{value + (item.damage[1][key as DamageType] ?? 0) * (invItem.quality - 1)}</span>
+                <span className="InvTooltip__value">{value}</span>
               </div>
             )}
             <div>{translate('ui.knockback')}: <span className="InvTooltip__value">{item.knockback}</span></div>
             <div>{translate('ui.backstab')}: <span className="InvTooltip__value">{item.backstab}x</span></div>
           </>;
+        case 'shield':
+          const block = typeof item.block === 'number'
+            ? item.block
+            : item.block[0] + item.block[1] * (invItem.quality - 1);
+          set = item.set;
+          return <>
+            <div>{translate('ui.block')}: <span className="InvTooltip__value">{block}</span></div>
+            {item.parryBonus > 1 && <div>{translate('ui.parryBonus')}: <span className="InvTooltip__value">{item.parryBonus}x</span></div>}
+          </>;
         case 'armor':
+          const armor = item.armor[0] + item.armor[1] * (invItem.quality - 1);
+          const resultArmor = extraData?.effects.ModifyArmor == null ? armor : armor + extraData.effects.ModifyArmor;
+          set = item.set;
           return <>
             <div>
               {translate('ui.armor')}{': '}
-              <span className="InvTooltip__value">{item.armor[0] + item.armor[1] * (invItem.quality - 1)}</span>
+              <span className="InvTooltip__value">{resultArmor}</span>
             </div>
             {item.damageModifiers != null && Object.entries(item.damageModifiers).map(
               ([key, value]) => <div key={key}>
@@ -124,19 +193,13 @@ const TooltipBody = React.memo(({ invItem, item }: { invItem: InvItem, item: Ite
           );
       }
     })()}
-    {}
-    {!!moveSpeed && <div>
+    {!!moveSpeed && extraData?.effects.RemoveSpeedPenalty == null && <div>
       {translate('ui.moveSpeed')}
       {': '}
       <span className="InvTooltip__value">{Math.round(moveSpeed * 100)}%</span>
     </div>}
-    {extraData != null && <ul className={`EpicLoot--${extraData.rarity}`}>{
-      Object.entries(extraData.effects).map(
-        ([key, value]) => <li key={key}>
-          {key}: {value}
-        </li>
-      )}
-    </ul>}
+    <SetBonusTooltip set={set} item={item} equippedItemIds={equippedItemIds} />
+    <EpicLootTooltip extraData={extraData} />
   </>
 });
 
@@ -193,9 +256,17 @@ export function InvItemView({ invItem, style, onTooltip }: {
   </div>
 }
 
+const getEquippedIds = defaultMemoize(
+  (inventory: TInventory, extras: TInventory[]): string[] => [inventory].concat(extras)
+    .flatMap(invPart => invPart.items)
+    .filter(item => item.equipped)
+    .map(item => item.id)
+);
+
 export function Inventory({ inventory, extras } : { inventory: TInventory, extras: TInventory[] }) {
   const [tooltipData, setTooltipData] = useState<{ invItem: InvItem, x: number, y: number } | undefined>(undefined);
   const rootRef = useRef<HTMLDivElement>(null);
+  const equippedItemIds = getEquippedIds(inventory, extras);
 
   const invMap: (InvItem | undefined)[] = Array.from({ length: INVENTORY_SIZE });
   for (const invItem of inventory.items) {
@@ -265,6 +336,6 @@ export function Inventory({ inventory, extras } : { inventory: TInventory, extra
         )}
       </div>
     )}
-    {tooltipData != null && <Tooltip {...tooltipData} />}
+    {tooltipData != null && <Tooltip {...tooltipData} equippedItemIds={equippedItemIds} />}
   </>
 }

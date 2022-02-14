@@ -1,4 +1,4 @@
-import type { GameObject, Item, Piece, Resource } from '../types';
+import type { DamageProfile, GameObject, Item, Piece, Resource } from '../types';
 import { CraftingStation, mods } from '../types';
 
 type Rarity = 'Generic' | 'Magic' | 'Rare' | 'Epic' | 'Legendary';
@@ -88,6 +88,33 @@ export function extractExtraData({ crafterName }: { crafterName: string }): Epic
   }
 }
 
+export function modifyDamage(damage: DamageProfile, effects: EpicLootData['effects'] | undefined): DamageProfile {
+  if (effects == null) return damage;
+  let { blunt, slash, pierce, chop, pickaxe, fire, frost, lightning, poison, spirit } = damage;
+  if (effects.ModifyPhysicalDamage != null) {
+    const m = (1 + effects.ModifyPhysicalDamage / 100);
+    blunt *= m;
+    slash *= m;
+    pierce *= m;
+  }
+  if (effects.ModifyElementalDamage != null) {
+    const m = (1 + effects.ModifyElementalDamage / 100);
+    fire *= m;
+    frost *= m;
+    lightning *= m;
+  }
+  
+  if (effects.AddBluntDamage != null) blunt += effects.AddBluntDamage;
+  if (effects.AddSlashingDamage != null) slash += effects.AddSlashingDamage;
+  if (effects.AddPiercingDamage != null) pierce += effects.AddPiercingDamage;
+  if (effects.AddFireDamage != null) fire += effects.AddFireDamage;
+  if (effects.AddFrostDamage != null) frost += effects.AddFrostDamage;
+  if (effects.AddLightningDamage != null) lightning += effects.AddLightningDamage;
+  if (effects.AddPoisonDamage != null) poison += effects.AddPoisonDamage;
+  if (effects.AddSpiritDamage != null) spirit += effects.AddSpiritDamage;
+  return { blunt, slash, pierce, chop, pickaxe, fire, frost, lightning, poison, spirit };
+}
+
 const resources: Resource[] = [
   ...Object.entries({
     Magic: 2,
@@ -117,7 +144,14 @@ const resources: Resource[] = [
       weight: 0.1,
     },
     {
-      id: `Rune${rarity}`,
+      id: `Reagent${rarity}`,
+      tier,
+      type: 'item',
+      stack: 100,
+      weight: 0.1,
+    },
+    {
+      id: `Runestone${rarity}`,
       tier,
       type: 'item',
       stack: 100,
@@ -141,8 +175,7 @@ const items: Item[] = [
       time: 3,
       materials: { LeatherScraps: 5, Bronze: 1 },
       materialsPerLevel: {},
-      source: { station: CraftingStation.Inventory, level: 0 },
-      upgrade: { station: CraftingStation.Inventory, level: 0 },
+      source: { station: CraftingStation.Forge, level: 0 },
     },
   },
   {
@@ -159,9 +192,29 @@ const items: Item[] = [
       time: 3,
       materials: { Coins: 200, Ruby: 1 },
       materialsPerLevel: {},
-      source: { station: CraftingStation.Inventory, level: 0 },
-      upgrade: { station: CraftingStation.Inventory, level: 0 },
+      source: { station: CraftingStation.Forge, level: 0 },
     }
+  },
+  {
+    id: 'Advaranaut',
+    tier: 2,
+    type: 'armor', slot: 'util',
+    maxLvl: 1,
+    armor: [0, 0],
+    weight: 1,
+    durability: [Infinity, 0],
+    moveSpeed: 0,
+    recipe: {
+      type: 'trader',
+      value: 2000,
+    }
+  },
+  {
+    id: 'TreasureMap',
+    tier: 2,
+    type: 'item',
+    maxLvl: 1,
+    weight: 1,
   },
 ];
 

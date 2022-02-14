@@ -2,7 +2,7 @@ import { resources } from './resources';
 import { items as weapons } from './weapons';
 import { items as armors } from './armors';
 import { arrows } from './arrows';
-import { EntityGroup, GameComponent, GameObject } from '../types';
+import { EntityGroup, GameComponent, GameObject, ItemSet } from '../types';
 import { tools } from './tools';
 import { pieces } from './building';
 import { creatures } from './creatures';
@@ -41,6 +41,12 @@ for (const coll of [
 
 for (const group of Object.values(mods)) {
   addCollection(group);
+}
+
+// resgister sets
+for (const item of Object.values(data)) {
+  const set = (item as any).set as ItemSet | undefined;
+  if (set != null) set.items.push(item.id);
 }
 
 if (typeof window !== 'undefined') {

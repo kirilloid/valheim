@@ -115,6 +115,21 @@
 .InvTooltip__extra {
   color: yellow;
 }
+.InvTooltip__Set {
+  margin-top: 0.5rem;
+}
+.InvTooltip__SetHeader {
+  color: aqua;
+}
+.InvTooltip__SetItems {
+  padding-inline-start: 0.5rem;
+}
+.InvTooltip__SetItem--equipped {
+  color: white;
+}
+.InvTooltip__SetItem--unequipped {
+  color: gray;
+}
 
 /* EpicLoot */
 .Inventory__Item--EpicLoot.Inventory__Item--equipped {
@@ -144,6 +159,9 @@
   background: transparent url('../img/EpicLoot/LegendaryItemBg.png') no-repeat center;
 }
 
+.InvTooltip__EpicLoot {
+  margin-top: 0.5rem;
+}
 .InvTooltip--EpicLoot .InvTooltip__value,
 .InvTooltip--EpicLoot .InvTooltip__extra {
   color: #ACD7E5;
