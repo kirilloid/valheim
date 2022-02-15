@@ -1,3 +1,4 @@
+import { chestResist, craftStationResist, damageModifiersCooking, darkwoodStructureRecipe, darkwoodStructureWear, ironResist, ironStructureRecipe, stoneResist, stoneStructureRecipe, stoneStructureWear, wearStructure, woodResist, woodRoofStructureWear, woodStructureRecipe, woodStructureWear } from '../model/building';
 import {
   Piece,
   DamageModifiers,
@@ -40,8 +41,6 @@ const damageModifiersWood: DamageModifiers = {
   spirit: 'immune',
 };
 
-const damageModifiersCooking: DamageModifiers = mods([0, 0, 1, 0, 0, 1, 0, 0, 3, 3]);
-
 const notOnWood = true;
 const onlyOnFlat = true;
 const notOnFloor = true;
@@ -53,44 +52,6 @@ const groundOnly = true;
 const requiresRoof = true;
 const requiresFire = true;
 const providesSupport = true;
-
-const wearStructure = (
-  hp: number,
-  damageModifiers: DamageModifiers,
-  materialType: MaterialType | undefined,
-  { noRoof = true, noSupport = true }: { noRoof?: boolean, noSupport?: boolean } = {},
-) => ({
-  hp,
-  damageModifiers,
-  noRoof,
-  noSupport,
-  providesSupport: true,
-  materialType,
-});
-
-const woodResist: DamageModifiers = mods([0, 0, 1, 2, 0, 0, 0, 0, 3, 3]);
-const darkwoodResist: DamageModifiers = mods([0, 0, 1, 2, 1, 2, 0, 0, 3, 3]);
-const stoneResist: DamageModifiers = mods([0, 0, 0, 0, 2, 1, 1, 0, 3, 3]);
-const chestResist: DamageModifiers = mods([1, 1, 1, 1, 1, 1, 1, 0, 3, 3]);
-const ironResist: DamageModifiers = mods([0, 0, 1, 0, 1, 1, 1, 3, 3, 3]);
-const craftStationResist: DamageModifiers = mods([1, 1, 1, 1, 0, 3, 3, 0, 3, 3]);
-
-const woodStructureWear = wearStructure(400, woodResist, MaterialType.Wood);
-const darkwoodStructureWear = wearStructure(400, darkwoodResist, MaterialType.Wood, { noRoof: false });
-const woodRoofStructureWear = { ...woodStructureWear, noRoof: false };
-const stoneStructureWear = wearStructure(1500, stoneResist, MaterialType.Stone, { noRoof: false });
-
-const woodStructureRecipe = (wood: number, type: 'Wood' | 'RoundLog' | 'FineWood' = 'Wood'): Piece['recipe'] =>
-  ({ type: 'craft_piece', materials: { [type]: wood }, station: CraftingStation.Workbench, });
-
-const stoneStructureRecipe = (stone: number): Piece['recipe'] =>
-  ({ type: 'craft_piece', materials: { Stone: stone }, station: CraftingStation.StoneCutter, });
-
-const darkwoodStructureRecipe = (materials: Record<EntityId, number>): Piece['recipe'] =>
-  ({ type: 'craft_piece', materials, station: CraftingStation.Workbench });
-
-const ironStructureRecipe = (iron: number): Piece['recipe'] =>
-  ({ type: 'craft_piece', materials: { Iron: iron }, station: CraftingStation.Forge });
 
 const craftingStationIds = {
 //  [CraftingStation.Inventory]: 'PlayerUnarmed'
