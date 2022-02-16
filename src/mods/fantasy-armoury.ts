@@ -1,5 +1,4 @@
 import type { GameObject, Shield, Weapon } from '../types';
-import { CraftingStation } from '../types';
 import { SkillType } from '../model/skills';
 
 const CRAFT_TIME = 3;
@@ -24,7 +23,7 @@ const shields: Shield[] = [
       time: CRAFT_TIME,
       materials: { Bronze: 10, Wood: 2 },
       materialsPerLevel: { Bronze: 3, Wood: 1, Iron: 3, DeerHide: 3 },
-      source: { station: CraftingStation.Forge, level: 1 },
+      source: { station: 'forge', level: 1 },
     }
   },
   {
@@ -46,7 +45,7 @@ const shields: Shield[] = [
       time: CRAFT_TIME,
       materials: { Bronze: 10, Wood: 2 },
       materialsPerLevel: { Bronze: 3, Wood: 1, Iron: 3, DeerHide: 3 },
-      source: { station: CraftingStation.Forge, level: 1 },
+      source: { station: 'forge', level: 1 },
     }
   },
   {
@@ -68,7 +67,7 @@ const shields: Shield[] = [
       time: CRAFT_TIME,
       materials: { Bronze: 10, Wood: 2 },
       materialsPerLevel: { Bronze: 3, Wood: 1, Iron: 3, DeerHide: 3 },
-      source: { station: CraftingStation.Forge, level: 1 },
+      source: { station: 'forge', level: 1 },
     }
   },
   {
@@ -90,7 +89,7 @@ const shields: Shield[] = [
       time: CRAFT_TIME,
       materials: { Bronze: 10, Wood: 2 },
       materialsPerLevel: { Bronze: 3, Wood: 1, Iron: 3, DeerHide: 3 },
-      source: { station: CraftingStation.Forge, level: 1 },
+      source: { station: 'forge', level: 1 },
     }
   },
   {
@@ -112,7 +111,7 @@ const shields: Shield[] = [
       time: CRAFT_TIME,
       materials: { Bronze: 10, Wood: 2 },
       materialsPerLevel: { Bronze: 3, Wood: 1, Iron: 3, DeerHide: 3 },
-      source: { station: CraftingStation.Forge, level: 1 },
+      source: { station: 'forge', level: 1 },
     }
   },
   {
@@ -134,7 +133,7 @@ const shields: Shield[] = [
       time: CRAFT_TIME,
       materials: { Bronze: 10, Wood: 2 },
       materialsPerLevel: { Bronze: 3, Wood: 1, Iron: 3, DeerHide: 3 },
-      source: { station: CraftingStation.Forge, level: 1 },
+      source: { station: 'forge', level: 1 },
     }
   },
   {
@@ -156,7 +155,7 @@ const shields: Shield[] = [
       time: CRAFT_TIME,
       materials: { Bronze: 10, Wood: 2 },
       materialsPerLevel: { Bronze: 3, Wood: 1, Iron: 3, DeerHide: 3 },
-      source: { station: CraftingStation.Forge, level: 1 },
+      source: { station: 'forge', level: 1 },
     }
   },
   {
@@ -178,7 +177,7 @@ const shields: Shield[] = [
       time: CRAFT_TIME,
       materials: { Bronze: 10, Wood: 2 },
       materialsPerLevel: { Bronze: 3, Wood: 1, Iron: 3, DeerHide: 3 },
-      source: { station: CraftingStation.Forge, level: 1 },
+      source: { station: 'forge', level: 1 },
     }
   },
   {
@@ -200,7 +199,7 @@ const shields: Shield[] = [
       time: CRAFT_TIME,
       materials: { Bronze: 10, Wood: 2 },
       materialsPerLevel: { Bronze: 3, Wood: 1, Iron: 3, DeerHide: 3 },
-      source: { station: CraftingStation.Forge, level: 1 },
+      source: { station: 'forge', level: 1 },
     }
   },
 ];

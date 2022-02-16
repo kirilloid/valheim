@@ -1,4 +1,4 @@
-import { Arrow, CraftingStation } from '../types';
+import type { Arrow } from '../types';
 import { dmg } from '../model/game';
 
 export const arrows: Arrow[] = [
@@ -7,7 +7,7 @@ export const arrows: Arrow[] = [
     recipe: {
       type: 'craft_one',
       time: 2, materials: { Wood: 8 },
-      source: { station: CraftingStation.Workbench, level: 1 },
+      source: { station: 'piece_workbench', level: 1 },
       number: 20,
     }
   },
@@ -16,7 +16,7 @@ export const arrows: Arrow[] = [
     recipe: {
       type: 'craft_one',
       time: 2, materials: { Wood: 8, Resin: 2, Feathers: 2 },
-      source: { station: CraftingStation.Workbench, level: 2 },
+      source: { station: 'piece_workbench', level: 2 },
       number: 20,
     }
   },
@@ -25,7 +25,7 @@ export const arrows: Arrow[] = [
     recipe: {
       type: 'craft_one',
       time: 2, materials: { Wood: 8, Flint: 2, Feathers: 2 },
-      source: { station: CraftingStation.Workbench, level: 2 },
+      source: { station: 'piece_workbench', level: 2 },
       number: 20,
     }
   },
@@ -34,7 +34,7 @@ export const arrows: Arrow[] = [
     recipe: {
       type: 'craft_one',
       time: 2, materials: { Wood: 8, Bronze: 1, Feathers: 2 },
-      source: { station: CraftingStation.Forge, level: 1 },
+      source: { station: 'forge', level: 1 },
       number: 20,
     }
   },
@@ -43,7 +43,7 @@ export const arrows: Arrow[] = [
     recipe: {
       type: 'craft_one',
       time: 2, materials: { Wood: 8, Iron: 1, Feathers: 2 },
-      source: { station: CraftingStation.Forge, level: 2 },
+      source: { station: 'forge', level: 2 },
       number: 20,
     }
   },
@@ -52,7 +52,7 @@ export const arrows: Arrow[] = [
     recipe: {
       type: 'craft_one',
       time: 2, materials: { Wood: 8, Silver: 1, Feathers: 2 },
-      source: { station: CraftingStation.Forge, level: 3 },
+      source: { station: 'forge', level: 3 },
       number: 20,
     }
   },
@@ -61,7 +61,7 @@ export const arrows: Arrow[] = [
     recipe: {
       type: 'craft_one',
       time: 2, materials: { Wood: 8, Obsidian: 4, Feathers: 2 },
-      source: { station: CraftingStation.Workbench, level: 3 },
+      source: { station: 'piece_workbench', level: 3 },
       number: 20,
     }
   },
@@ -70,7 +70,7 @@ export const arrows: Arrow[] = [
     recipe: {
       type: 'craft_one',
       time: 2, materials: { Wood: 8, Obsidian: 4, Feathers: 2, Ooze: 2 },
-      source: { station: CraftingStation.Workbench, level: 3 },
+      source: { station: 'piece_workbench', level: 3 },
       number: 20,
     }
   },
@@ -79,7 +79,7 @@ export const arrows: Arrow[] = [
     recipe: {
       type: 'craft_one',
       time: 2, materials: { Wood: 8, Obsidian: 4, Feathers: 2, FreezeGland: 1 },
-      source: { station: CraftingStation.Workbench, level: 4 },
+      source: { station: 'piece_workbench', level: 4 },
       number: 20,
     }
   },
@@ -88,7 +88,7 @@ export const arrows: Arrow[] = [
     recipe: {
       type: 'craft_one',
       time: 2, materials: { Needle: 4, Feathers: 2 },
-      source: { station: CraftingStation.Workbench, level: 4 },
+      source: { station: 'piece_workbench', level: 4 },
       number: 20,
     }
   },

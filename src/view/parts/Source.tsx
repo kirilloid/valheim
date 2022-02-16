@@ -1,13 +1,12 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import { CraftingStation, EntityId, GameObject, Item, Pair } from '../../types';
+import { EntityId, GameObject, Item, Pair } from '../../types';
 import { SkillType } from '../../model/skills';
 import { assertNever, days, timeI2S } from '../../model/utils';
 
 import { data } from '../../data/itemDB';
 import { creatures } from '../../data/creatures';
-import { getCraftingStationId } from '../../data/building';
 import { miningMap, resourceBuildMap, resourceCraftMap } from '../../data/resource-usage';
 import { locationBiomes, objectLocationMap } from '../../data/location';
 
@@ -47,15 +46,14 @@ export function DropSection({ sources }: { sources: string[] | undefined }) {
     : null;
 }
 
-function Station({ station }: { station: CraftingStation }) {
-  if (station === CraftingStation.Inventory) {
+function Station({ station }: { station: EntityId | null }) {
+  if (station === null) {
     return <>
       <SkillIcon skill={SkillType.Unarmed} useAlt={false} />{' '}
       inventory
     </>;
   }
-  const id = getCraftingStationId(station);
-  return <InlineObjectWithIcon id={id} />;
+  return <InlineObjectWithIcon id={station} />;
 }
 
 const MaterialHeader = ({ cols }: { cols: number }) => (

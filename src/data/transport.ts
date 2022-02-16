@@ -1,4 +1,4 @@
-import { Cart, CraftingStation, DamageModifiers, Ship } from '../types';
+import type { Cart, DamageModifiers, Ship } from '../types';
 
 const shipDamageModifiers: DamageModifiers = {
   blunt: 'normal',
@@ -52,7 +52,7 @@ export const ships: Ship[] = [
     recipe: {
       type: 'craft_piece',
       materials: { Wood: 20, Resin: 6, LeatherScraps: 6 },
-      station: CraftingStation.Workbench,
+      station: 'piece_workbench',
     },
   },
   {
@@ -98,7 +98,7 @@ export const ships: Ship[] = [
         Resin: 20,
         BronzeNails: 80,
       },
-      station: CraftingStation.Workbench,
+      station: 'piece_workbench',
     },
   },
   {
@@ -144,7 +144,7 @@ export const ships: Ship[] = [
         FineWood: 40,
         ElderBark: 40,
       },
-      station: CraftingStation.Workbench,
+      station: 'piece_workbench',
     },
   },
 /*  {
@@ -177,7 +177,7 @@ export const ships: Ship[] = [
         FineWood: 40,
         ElderBark: 40,
       },
-      station: CraftingStation.Workbench,
+      station: 'piece_workbench',
     },
   },*/
 ];
@@ -215,7 +215,7 @@ export const carts: Cart[] = [
     recipe: {
       type: 'craft_piece',
       materials: { Wood: 20, BronzeNails: 10 },
-      station: CraftingStation.Workbench,
+      station: 'piece_workbench',
     },
   },
 ];

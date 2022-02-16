@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { ItemType, MaterialType, Piece as TPiece } from '../../types';
 
-import { getCraftingStationId, getStructuralIntegrity, pieces } from '../../data/building';
+import { getStructuralIntegrity, pieces } from '../../data/building';
 import { stationsMap } from '../../data/resource-usage';
 import { assertNever, days, timeI2S } from '../../model/utils';
 
@@ -30,7 +30,7 @@ function PieceSpecific({ item }: { item: TPiece }) {
     }
     case 'craft': {
       const { requiresFire, requiresRoof, buildRange, queueSize } = item.craft;
-      const extensions = pieces.filter(p => p.subtype === 'craft_ext' && getCraftingStationId(p.extends.id) === item.id);
+      const extensions = pieces.filter(p => p.subtype === 'craft_ext' && p.extends.id === item.id);
       return (<>
         <dl>
           <dt>{translate('ui.crafting.needsFire')}</dt><dd>{yesNo(requiresFire)}</dd>
@@ -49,7 +49,7 @@ function PieceSpecific({ item }: { item: TPiece }) {
     case 'craft_ext': {
       const { id, distance, requiresFire, requiresRoof } = item.extends;
       return (<dl>
-        <dt>{translate('ui.crafting.extends')}</dt><dd><InlineObjectWithIcon id={getCraftingStationId(id)} /></dd>
+        <dt>{translate('ui.crafting.extends')}</dt><dd><InlineObjectWithIcon id={id} /></dd>
         <dt>{translate('ui.crafting.needsFire')}</dt><dd>{yesNo(requiresFire)}</dd>
         <dt>{translate('ui.crafting.needsRoof')}</dt><dd>{yesNo(requiresRoof)}</dd>
         <dt>max distance</dt><dd>{distance}m</dd>
@@ -123,7 +123,7 @@ export function Piece({ item }: { item: TPiece }) {
   const { hp, damageModifiers, noRoof } = item.wear;
   const translate = useContext(TranslationContext);
   const specialReqs = reqList(item.piece);
-  const producedItems = (item.subtype === 'craft' && stationsMap.get(item.craft.id)) || [];
+  const producedItems = (item.subtype === 'craft' && stationsMap.get(item.id)) || [];
   return (
     <>
       <ItemHeader item={item} />

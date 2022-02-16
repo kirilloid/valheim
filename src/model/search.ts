@@ -1,7 +1,6 @@
 import { EntityId } from '../types';
 import { data } from '../data/itemDB';
 import { locations, biomes } from '../data/location';
-import { getCraftingStationId } from '../data/building';
 import { events } from '../data/events';
 
 import { preloadLanguage } from '../effects';
@@ -166,7 +165,7 @@ function addObjects(dict: Record<string, string>) {
             addTag('ui.tags.furniture');
             break;
           case 'craft_ext':
-            addTag(getCraftingStationId(gobj.extends.id));
+            addTag(gobj.extends.id);
             break;
           case 'fireplace':
             addTag('ui.tags.fire');

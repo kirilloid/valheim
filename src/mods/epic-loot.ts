@@ -1,5 +1,5 @@
 import type { DamageProfile, GameObject, Item, Piece, Resource } from '../types';
-import { CraftingStation, mods } from '../types';
+import { mods } from '../types';
 
 type Rarity = 'Generic' | 'Magic' | 'Rare' | 'Epic' | 'Legendary';
 type EffectType =
@@ -175,7 +175,7 @@ const items: Item[] = [
       time: 3,
       materials: { LeatherScraps: 5, Bronze: 1 },
       materialsPerLevel: {},
-      source: { station: CraftingStation.Forge, level: 0 },
+      source: { station: 'forge', level: 0 },
     },
   },
   {
@@ -192,7 +192,7 @@ const items: Item[] = [
       time: 3,
       materials: { Coins: 200, Ruby: 1 },
       materialsPerLevel: {},
-      source: { station: CraftingStation.Forge, level: 0 },
+      source: { station: 'forge', level: 0 },
     }
   },
   {
@@ -231,7 +231,7 @@ const buildings: Piece[] = [
       water: false,
     },
     extends: {
-      id: CraftingStation.Forge,
+      id: 'forge',
       distance: 5,
     },
     wear: {
@@ -240,7 +240,7 @@ const buildings: Piece[] = [
       noRoof: false,
       noSupport: true,
     },
-    recipe: { type: 'craft_piece', materials: { Wood: 10, }, station: CraftingStation.Inventory, }    
+    recipe: { type: 'craft_piece', materials: { Wood: 10, }, station: null, }    
   },
   {
     id: 'piece_augmenter',
@@ -254,7 +254,7 @@ const buildings: Piece[] = [
       water: false,
     },
     extends: {
-      id: CraftingStation.Inventory,
+      id: 'forge',
       distance: 5,
     },
     wear: {
@@ -263,7 +263,7 @@ const buildings: Piece[] = [
       noRoof: false,
       noSupport: true,
     },
-    recipe: { type: 'craft_piece', materials: { Wood: 10, }, station: CraftingStation.Inventory, }    
+    recipe: { type: 'craft_piece', materials: { Wood: 10, }, station: null, }    
   },
 ];
 

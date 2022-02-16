@@ -1,5 +1,5 @@
 import { GameObject, mods, Piece, Tool } from '../types';
-import { CraftingStation, MaterialType } from '../types';
+import { MaterialType } from '../types';
 import {
   crystalStructureRecipe,
   ironStructureRecipe,
@@ -7,7 +7,7 @@ import {
   woodStructureRecipe,
   wearStructure,
   woodResist,
-  damageModifiersCooking,
+  cookingResist,
   darkwoodStructureWear,
   ironStructureWear,
   stoneStructureWear,
@@ -46,7 +46,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { RoundLog: 2, Wood: 1 },
-      station: CraftingStation.Workbench,
+      station: 'piece_workbench',
     },
   },
   {
@@ -60,7 +60,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { RoundLog: 1, Wood: 1 },
-      station: CraftingStation.Workbench,
+      station: 'piece_workbench',
     },
   },
   {
@@ -74,7 +74,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { RoundLog: 2, Wood: 1 },
-      station: CraftingStation.Workbench,
+      station: 'piece_workbench',
     },
   },
   {
@@ -88,7 +88,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { RoundLog: 1, Wood: 1 },
-      station: CraftingStation.Workbench,
+      station: 'piece_workbench',
     },
   },
   {
@@ -102,7 +102,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { ElderBark: 1 },
-      station: CraftingStation.Workbench,
+      station: 'piece_workbench',
     },
   },
   {
@@ -116,7 +116,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { ElderBark: 1 },
-      station: CraftingStation.Workbench,
+      station: 'piece_workbench',
     },
   },
   {
@@ -142,7 +142,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { SurtlingCore: 3, Iron: 6, IronNails: 20, Wood: 10 },
-      station: CraftingStation.Workbench,
+      station: 'piece_workbench',
     },
   },
   {
@@ -157,7 +157,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { SurtlingCore: 6, Iron: 8, IronNails: 30, Wood: 20 },
-      station: CraftingStation.Workbench,
+      station: 'piece_workbench',
     },
   },
   {
@@ -233,7 +233,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { Iron: 3, Tar: 1 },
-      station: CraftingStation.Workbench,
+      station: 'piece_workbench',
     },
   },
   {
@@ -247,7 +247,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { FineWood: 4, Tar: 1 },
-      station: CraftingStation.Workbench,
+      station: 'piece_workbench',
     },
   },
   {
@@ -261,7 +261,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { Iron: 3, Tar: 1 },
-      station: CraftingStation.Workbench,
+      station: 'piece_workbench',
     },
   },
   {
@@ -455,7 +455,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { FineWood: 2, Tar: 1 },
-      station: CraftingStation.Forge,
+      station: 'forge',
     },
   },
   {
@@ -470,7 +470,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { Wood: 12, Iron: 6, SurtlingCore: 1 },
-      station: CraftingStation.Forge,
+      station: 'forge',
     },
   },
   { // ?
@@ -494,7 +494,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { RoundLog: 5, BronzeNails: 5 },
-      station: CraftingStation.Workbench,
+      station: 'piece_workbench',
     },
   },
   {
@@ -508,7 +508,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { RoundLog: 7, Wood: 5, IronNails: 10 },
-      station: CraftingStation.Workbench,
+      station: 'piece_workbench',
     },
   },
   {
@@ -522,7 +522,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { RoundLog: 8, BronzeNails: 5 },
-      station: CraftingStation.Workbench,
+      station: 'piece_workbench',
     },
   },
   {
@@ -535,7 +535,6 @@ const buildings: Piece[] = [
     tier: 1,
     emoji: '🍳',
     craft: {
-      id: CraftingStation.CookingStation,
       requiresFire: true,
       batchSize: 10,
     },
@@ -546,7 +545,7 @@ const buildings: Piece[] = [
     },
     wear: {
       hp: 20,
-      damageModifiers: damageModifiersCooking,
+      damageModifiers: cookingResist,
       noRoof: false,
       noSupport: true,
       materialType: MaterialType.Wood,
@@ -554,7 +553,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { Coal: 20, SurtlingCore: 4, Iron: 5 },
-      station: CraftingStation.Workbench,
+      station: 'piece_workbench',
     }
   },
   {
@@ -565,14 +564,14 @@ const buildings: Piece[] = [
     subtype: 'craft',
     tier: 2,
     emoji: '🐦🏠',
-    craft: { id: CraftingStation.CookingStation },
     // FishingBait -> Feathers
+    craft: {},
     piece: { target: 'primary', water: undefined, size: [1, 1, 1] },
     wear: wearStructure(200, mods([0, 0, 1, 0, 0, 3, 3, 0, 3, 3]), undefined, { noRoof: false }),
     recipe: {
       type: 'craft_piece',
       materials: { Wood: 5, BronzeNails: 8, RoundLog: 1 },
-      station: CraftingStation.Workbench,
+      station: 'piece_workbench',
     },
   },
   {
@@ -585,12 +584,12 @@ const buildings: Piece[] = [
     emoji: '',
     piece: { target: 'primary', water: true, size: [1, 1, 1] },
     // FishingBait -> FishRaw
-    craft: { id: CraftingStation.CookingStation },
+    craft: {},
     wear: wearStructure(200, mods([0, 0, 1, 0, 0, 3, 3, 0, 3, 3]), undefined, { noRoof: false }),
     recipe: {
       type: 'craft_piece',
       materials: { AncientSeed: 1, Wood: 8, Resin: 10 },
-      station: CraftingStation.Workbench,
+      station: 'piece_workbench',
     },
   },
   {
@@ -604,12 +603,12 @@ const buildings: Piece[] = [
     piece: { target: 'primary', water: undefined, size: [1, 1, 1] },
     // NeckTail -> FishingBait
     // RawMeat -> FishingBait
-    craft: { id: CraftingStation.CookingStation },
+    craft: {},
     wear: wearStructure(200, mods([0, 0, 1, 0, 0, 3, 3, 0, 3, 3]), undefined, { noRoof: false }),
     recipe: {
       type: 'craft_piece',
       materials: { NeckTail: 8, Wood: 5, Resin: 10 },
-      station: CraftingStation.Workbench,
+      station: 'piece_workbench',
     },
   },
   {
@@ -635,7 +634,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { Wood: 1, SurtlingCore: 1, Iron: 3 },
-      station: CraftingStation.Forge,
+      station: 'forge',
     },
   },
   {
@@ -661,7 +660,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { Wood: 10, SurtlingCore: 1, Iron: 5 },
-      station: CraftingStation.Forge,
+      station: 'forge',
     },
   },
   {
@@ -687,7 +686,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { Wood: 14, SurtlingCore: 2, Iron: 7 },
-      station: CraftingStation.Forge,
+      station: 'forge',
     },
   },
   {
@@ -713,7 +712,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { Wood: 5, SurtlingCore: 2, Iron: 3 },
-      station: CraftingStation.Forge,
+      station: 'forge',
     },
   },
   {
@@ -739,7 +738,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { SurtlingCore: 1, Iron: 3 },
-      station: CraftingStation.Forge,
+      station: 'forge',
     },
   },
   {
@@ -873,7 +872,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { Wood: 2, Stone: 5 },
-      station: CraftingStation.StoneCutter,
+      station: 'piece_stonecutter',
     },
   },
   {
@@ -887,7 +886,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { Wood: 4, Stone: 10 },
-      station: CraftingStation.StoneCutter,
+      station: 'piece_stonecutter',
     },
   },
   {
@@ -931,7 +930,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { Stone: 15, Iron: 10, Silver: 10 },
-      station: CraftingStation.StoneCutter,
+      station: 'piece_stonecutter',
     },
   },
   {
@@ -1078,7 +1077,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { FineWood: 10, Crystal: 3 },
-      station: CraftingStation.Forge,
+      station: 'forge',
     },
   },
   {
@@ -1093,7 +1092,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { FineWood: 10, Tar: 3 },
-      station: CraftingStation.Forge,
+      station: 'forge',
     },
   },
   {
@@ -1108,7 +1107,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { FineWood: 10, Iron: 5 },
-      station: CraftingStation.Forge,
+      station: 'forge',
     },
   },
   {
@@ -1123,7 +1122,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { FineWood: 2 },
-      station: CraftingStation.Workbench,
+      station: 'piece_workbench',
     },
   },
   {
@@ -1137,7 +1136,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { Crystal: 5, Tar: 2 },
-      station: CraftingStation.Forge,
+      station: 'forge',
     },
   },
   {
@@ -1151,7 +1150,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { Crystal: 6, Tar: 3 },
-      station: CraftingStation.Forge,
+      station: 'forge',
     },
   },
   {
@@ -1166,7 +1165,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { FineWood: 5, Iron: 35, Tar: 10 },
-      station: CraftingStation.Forge,
+      station: 'forge',
     },
   },
   {
@@ -1181,7 +1180,7 @@ const buildings: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { FineWood: 5, Crystal: 15, Tar: 10 },
-      station: CraftingStation.Forge,
+      station: 'forge',
     },
   },
 ];
@@ -1201,7 +1200,7 @@ const tools: Tool[] = [
       time: 4,
       materials: { Wood: 5, Stone: 5 },
       materialsPerLevel: { Wood: 1, Stone: 1 },
-      source: { station: CraftingStation.Workbench, level: 1 },
+      source: { station: 'piece_workbench', level: 1 },
     }
   },
 ];

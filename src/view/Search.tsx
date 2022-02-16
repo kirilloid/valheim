@@ -10,7 +10,6 @@ import { assertNever, days, timeI2S } from '../model/utils';
 import { match, SearchEntry } from '../model/search';
 
 import { data } from '../data/itemDB';
-import { getCraftingStationId } from '../data/building';
 import { events } from '../data/events';
 import { biomes, locations } from '../data/location';
 import { effects } from '../data/effects';
@@ -51,7 +50,7 @@ function pieceExtra(item: Piece, translate: Translator) {
     case 'craft':
       return <Icon id="hammer" alt={translate('ui.crafting')} size={32} />
     case 'craft_ext':
-      const id = getCraftingStationId(item.extends.id);
+      const { id } = item.extends;
       return <ItemIcon useAlt item={data[id]} size={32} />
     case 'chest':
     case 'door':

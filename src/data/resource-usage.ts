@@ -1,4 +1,4 @@
-import { Cart, CraftingStation, EntityId, Item, PhysicalObject, Piece, Ship } from '../types';
+import { Cart, EntityId, Item, PhysicalObject, Piece, Ship } from '../types';
 import { items as weapons } from './weapons';
 import { items as armors } from './armors';
 import { arrows } from './arrows';
@@ -11,7 +11,7 @@ import { assertNever } from '../model/utils';
 
 export const resourceCraftMap: Record<EntityId, Item[]> = {};
 export const resourceBuildMap: Record<EntityId, (Piece | Ship | Cart)[]> = {};
-export const stationsMap = new Map<CraftingStation, (Item | Piece | Ship | Cart)[]>();
+export const stationsMap = new Map<EntityId | null, (Item | Piece | Ship | Cart)[]>();
 export const miningMap = new Map<EntityId, PhysicalObject[]>();
 
 function addToMap<T extends Item | Piece | Ship | Cart>(map: Record<EntityId, T[]>, item: T) {
@@ -21,7 +21,7 @@ function addToMap<T extends Item | Piece | Ship | Cart>(map: Record<EntityId, T[
   function addItem(res: EntityId, item: T) {
     (map[res] ?? (map[res] = [])).push(item);
   }
-  function addStation(station: CraftingStation, item: T) {
+  function addStation(station: EntityId | null, item: T) {
     const stationList = stationsMap.get(station) ?? [];
     stationList.push(item);
     stationsMap.set(station, stationList);

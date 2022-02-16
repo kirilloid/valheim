@@ -1,13 +1,28 @@
-import { chestResist, craftStationResist, damageModifiersCooking, darkwoodStructureRecipe, darkwoodStructureWear, ironResist, ironStructureRecipe, stoneResist, stoneStructureRecipe, stoneStructureWear, wearStructure, woodResist, woodRoofStructureWear, woodStructureRecipe, woodStructureWear } from '../model/building';
 import {
   Piece,
   DamageModifiers,
   MaterialType,
-  CraftingStation,
   ItemType,
   EntityId,
   mods,
 } from '../types';
+import {
+  woodResist,
+  craftStationResist,
+  cookingResist,
+  chestResist,
+  ironResist,
+  stoneResist,
+  darkwoodStructureRecipe,
+  ironStructureRecipe,
+  stoneStructureRecipe,
+  woodStructureRecipe,
+  wearStructure,
+  woodRoofStructureWear,
+  darkwoodStructureWear,
+  stoneStructureWear,
+  woodStructureWear,
+} from '../model/building';
 
 const damageModifiersElementalPart = {
   fire: 'immune',
@@ -52,14 +67,6 @@ const groundOnly = true;
 const requiresRoof = true;
 const requiresFire = true;
 const providesSupport = true;
-
-const craftingStationIds = {
-//  [CraftingStation.Inventory]: 'PlayerUnarmed'
-} as Record<CraftingStation, EntityId>;
-
-export function getCraftingStationId(id: CraftingStation): EntityId {
-  return craftingStationIds[id];
-}
 
 type StructuralIntegrity = {
   maxSupport: number;
@@ -131,7 +138,7 @@ export const pieces: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { Wood: 5, Stone: 2 },
-      station: CraftingStation.Workbench,
+      station: 'piece_workbench',
     }
   },
   { id: 'bonfire',
@@ -169,7 +176,7 @@ export const pieces: Piece[] = [
         RoundLog: 5,
         FineWood: 5,
       },
-      station: CraftingStation.Workbench,
+      station: 'piece_workbench',
     }
   },
   { id: 'hearth',
@@ -220,7 +227,7 @@ export const pieces: Piece[] = [
       water: undefined,
       allowedInDungeons,
     },
-    recipe: { type: 'craft_piece', materials: { Wood: 50, }, station: CraftingStation.Workbench, }
+    recipe: { type: 'craft_piece', materials: { Wood: 50, }, station: 'piece_workbench', }
   },
   { id: 'wood_fine_stack',
     base: false,
@@ -241,7 +248,7 @@ export const pieces: Piece[] = [
       water: undefined,
       allowedInDungeons,
     },
-    recipe: { type: 'craft_piece', materials: { FineWood: 50, }, station: CraftingStation.Inventory, }
+    recipe: { type: 'craft_piece', materials: { FineWood: 50, }, station: null, }
   },
   { id: 'wood_core_stack',
     base: false,
@@ -261,7 +268,7 @@ export const pieces: Piece[] = [
       water: undefined,
       allowedInDungeons,
     },
-    recipe: { type: 'craft_piece', materials: { RoundLog: 50, }, station: CraftingStation.Inventory, }
+    recipe: { type: 'craft_piece', materials: { RoundLog: 50, }, station: null, }
   },
   { id: 'stone_pile',
     base: false,
@@ -282,7 +289,7 @@ export const pieces: Piece[] = [
       noSupport: true,
       materialType: MaterialType.Wood,
     },
-    recipe: { type: 'craft_piece', materials: { Coal: 50, }, station: CraftingStation.Inventory, }
+    recipe: { type: 'craft_piece', materials: { Coal: 50, }, station: null, }
   },
   { id: 'coal_pile',
     base: false,
@@ -302,7 +309,7 @@ export const pieces: Piece[] = [
       noRoof: false,
       noSupport: true,
     },
-    recipe: { type: 'craft_piece', materials: { Stone: 50, }, station: CraftingStation.Inventory, }
+    recipe: { type: 'craft_piece', materials: { Stone: 50, }, station: null, }
   },
   /*{ id: 'tar_pile',
     disabled: true,
@@ -323,7 +330,7 @@ export const pieces: Piece[] = [
       noRoof: false,
       noSupport: true,
     },
-    recipe: { type: 'craft_piece', materials: { Stone: 50, }, station: CraftingStation.Inventory, }
+    recipe: { type: 'craft_piece', materials: { Stone: 50, }, station: null, }
   },*/
   { id: 'treasure_stack',
     base: false,
@@ -344,7 +351,7 @@ export const pieces: Piece[] = [
       noRoof: false,
       noSupport: true,
     },
-    recipe: { type: 'craft_piece', materials: { Coins: 99, }, station: CraftingStation.Inventory, }
+    recipe: { type: 'craft_piece', materials: { Coins: 99, }, station: null, }
   },
   { id: 'treasure_pile',
     base: false,
@@ -365,7 +372,7 @@ export const pieces: Piece[] = [
       noRoof: false,
       noSupport: true,
     },
-    recipe: { type: 'craft_piece', materials: { Coins: 999, }, station: CraftingStation.Inventory, }
+    recipe: { type: 'craft_piece', materials: { Coins: 999, }, station: null, }
   },
   { id: 'incinerator',
     base: false,
@@ -385,7 +392,7 @@ export const pieces: Piece[] = [
       noRoof: false,
       noSupport: true,
     },
-    recipe: { type: 'craft_piece', materials: { Iron: 8, Copper: 4, Thunderstone: 1 }, station: CraftingStation.Forge, }
+    recipe: { type: 'craft_piece', materials: { Iron: 8, Copper: 4, Thunderstone: 1 }, station: 'forge', }
   },
   { id: 'piece_cookingstation',
     base: false,
@@ -396,7 +403,6 @@ export const pieces: Piece[] = [
     tier: 1,
     emoji: '🍳',
     craft: {
-      id: CraftingStation.CookingStation,
       requiresFire,
       batchSize: 2,
     },
@@ -407,12 +413,12 @@ export const pieces: Piece[] = [
     },
     wear: {
       hp: 20,
-      damageModifiers: damageModifiersCooking,
+      damageModifiers: cookingResist,
       noRoof: false,
       noSupport: true,
       materialType: MaterialType.Wood,
     },
-    recipe: { type: 'craft_piece', materials: { Wood: 2, }, station: CraftingStation.Workbench, }
+    recipe: { type: 'craft_piece', materials: { Wood: 2, }, station: 'piece_workbench', }
   },
   { id: 'piece_cookingstation_iron',
     base: false,
@@ -423,7 +429,6 @@ export const pieces: Piece[] = [
     tier: 3,
     emoji: '🍳',
     craft: {
-      id: CraftingStation.CookingStationIron,
       requiresFire,
       batchSize: 5,
     },
@@ -439,7 +444,7 @@ export const pieces: Piece[] = [
       noSupport: true,
       materialType: MaterialType.Wood,
     },
-    recipe: { type: 'craft_piece', materials: { Iron: 3, Chain: 3 }, station: CraftingStation.Forge, }
+    recipe: { type: 'craft_piece', materials: { Iron: 3, Chain: 3 }, station: 'forge', }
   },
   { id: 'piece_cauldron',
     base: false,
@@ -454,17 +459,16 @@ export const pieces: Piece[] = [
       water: false,
     },
     craft: {
-      id: CraftingStation.Cauldron,
       requiresFire,
     },
     wear: {
       hp: 100,
-      damageModifiers: damageModifiersCooking,
+      damageModifiers: cookingResist,
       noRoof: false,
       noSupport: true,
       materialType: MaterialType.Wood,
     },
-    recipe: { type: 'craft_piece', materials: { Tin: 10, }, station: CraftingStation.Forge, }
+    recipe: { type: 'craft_piece', materials: { Tin: 10, }, station: 'forge', }
   },
   { id: 'cauldron_ext1_spice',
     base: false,
@@ -480,7 +484,7 @@ export const pieces: Piece[] = [
       requiredSpace: 2,
     },
     extends: {
-      id: CraftingStation.Cauldron,
+      id: 'piece_cauldron',
       distance: 5,
     },
     wear: {
@@ -489,7 +493,7 @@ export const pieces: Piece[] = [
       noRoof: true,
       noSupport: true,
     },
-    recipe: { type: 'craft_piece', materials: { Dandelion: 3, Carrot: 2, Mushroom: 5, Thistle: 3, Turnip: 3 }, station: CraftingStation.Workbench, }
+    recipe: { type: 'craft_piece', materials: { Dandelion: 3, Carrot: 2, Mushroom: 5, Thistle: 3, Turnip: 3 }, station: 'piece_workbench', }
   },
   { id: 'cauldron_ext3_butchertable',
     base: false,
@@ -505,7 +509,7 @@ export const pieces: Piece[] = [
       requiredSpace: 2.5,
     },
     extends: {
-      id: CraftingStation.Cauldron,
+      id: 'piece_cauldron',
       distance: 5,
     },
     wear: {
@@ -514,7 +518,7 @@ export const pieces: Piece[] = [
       noRoof: true,
       noSupport: true,
     },
-    recipe: { type: 'craft_piece', materials: { ElderBark: 2, RoundLog: 4, FineWood: 4, Silver: 2 }, station: CraftingStation.Workbench, }
+    recipe: { type: 'craft_piece', materials: { ElderBark: 2, RoundLog: 4, FineWood: 4, Silver: 2 }, station: 'piece_workbench', }
   },
   { id: 'cauldron_ext4_pots',
     base: false,
@@ -530,7 +534,7 @@ export const pieces: Piece[] = [
       requiredSpace: 2.5,
     },
     extends: {
-      id: CraftingStation.Cauldron,
+      id: 'piece_cauldron',
       distance: 5,
     },
     wear: {
@@ -539,7 +543,7 @@ export const pieces: Piece[] = [
       noRoof: true,
       noSupport: true,
     },
-    recipe: { type: 'craft_piece', materials: { Iron: 5, Copper: 5, BlackMetal: 5 }, station: CraftingStation.Workbench, }
+    recipe: { type: 'craft_piece', materials: { Iron: 5, Copper: 5, BlackMetal: 5 }, station: 'piece_workbench', }
   },
   { id: 'piece_oven',
     base: false,
@@ -558,7 +562,6 @@ export const pieces: Piece[] = [
     // lightRadius: 8,
     // warmRadius: 8,
     craft: {
-      id: CraftingStation.Oven,
     },
     wear: {
       hp: 500,
@@ -567,7 +570,7 @@ export const pieces: Piece[] = [
       noSupport: true,
       materialType: MaterialType.Stone,
     },
-    recipe: { type: 'craft_piece', materials: { Iron: 15, Stone: 20, SurtlingCore: 4 }, station: CraftingStation.ArtisanTable, }
+    recipe: { type: 'craft_piece', materials: { Iron: 15, Stone: 20, SurtlingCore: 4 }, station: 'piece_artisanstation', }
   },
   { id: 'piece_workbench',
     base: true,
@@ -581,7 +584,6 @@ export const pieces: Piece[] = [
       water: false,
     },
     craft: {
-      id: CraftingStation.Workbench,
       requiresRoof,
     },
     wear: {
@@ -591,7 +593,7 @@ export const pieces: Piece[] = [
       noSupport: true,
       materialType: MaterialType.Wood,
     },
-    recipe: { type: 'craft_piece', materials: { Wood: 10, }, station: CraftingStation.Inventory, }
+    recipe: { type: 'craft_piece', materials: { Wood: 10, }, station: null, }
   },
   { id: 'piece_workbench_ext1',
     base: false,
@@ -607,7 +609,7 @@ export const pieces: Piece[] = [
       requiredSpace: 2,
     },
     extends: {
-      id: CraftingStation.Workbench,
+      id: 'piece_workbench',
       distance: 5,
     },
     wear: {
@@ -617,7 +619,7 @@ export const pieces: Piece[] = [
       noSupport: true,
       materialType: MaterialType.Wood,
     },
-    recipe: { type: 'craft_piece', materials: { Wood: 10, Flint: 10 }, station: CraftingStation.Workbench, }
+    recipe: { type: 'craft_piece', materials: { Wood: 10, Flint: 10 }, station: 'piece_workbench', }
   },
   { id: 'piece_workbench_ext2',
     base: false,
@@ -633,7 +635,7 @@ export const pieces: Piece[] = [
       requiredSpace: 2,
     },
     extends: {
-      id: CraftingStation.Workbench,
+      id: 'piece_workbench',
       distance: 5,
     },
     wear: {
@@ -643,7 +645,7 @@ export const pieces: Piece[] = [
       noSupport: true,
       materialType: MaterialType.Wood,
     },
-    recipe: { type: 'craft_piece', materials: { Wood: 10, Flint: 15, LeatherScraps: 20, DeerHide: 5, }, station: CraftingStation.Workbench, }
+    recipe: { type: 'craft_piece', materials: { Wood: 10, Flint: 15, LeatherScraps: 20, DeerHide: 5, }, station: 'piece_workbench', }
   },
   { id: 'piece_workbench_ext3',
     base: false,
@@ -659,7 +661,7 @@ export const pieces: Piece[] = [
       requiredSpace: 2,
     },
     extends: {
-      id: CraftingStation.Workbench,
+      id: 'piece_workbench',
       distance: 5,
     },
     wear: {
@@ -669,7 +671,7 @@ export const pieces: Piece[] = [
       noSupport: true,
       materialType: MaterialType.Wood,
     },
-    recipe: { type: 'craft_piece', materials: { FineWood: 10, Bronze: 3, }, station: CraftingStation.Forge, }
+    recipe: { type: 'craft_piece', materials: { FineWood: 10, Bronze: 3, }, station: 'forge', }
   },
   { id: 'piece_workbench_ext4',
     base: false,
@@ -685,7 +687,7 @@ export const pieces: Piece[] = [
       requiredSpace: 2,
     },
     extends: {
-      id: CraftingStation.Workbench,
+      id: 'piece_workbench',
       distance: 5,
     },
     wear: {
@@ -695,7 +697,7 @@ export const pieces: Piece[] = [
       noSupport: true,
       materialType: MaterialType.Wood,
     },
-    recipe: { type: 'craft_piece', materials: { FineWood: 10, Iron: 4, Obsidian: 4, }, station: CraftingStation.Forge, }
+    recipe: { type: 'craft_piece', materials: { FineWood: 10, Iron: 4, Obsidian: 4, }, station: 'forge', }
   },
   { id: 'piece_stonecutter',
     base: true,
@@ -711,7 +713,6 @@ export const pieces: Piece[] = [
       requiredSpace: 2,
     },
     craft: {
-      id: CraftingStation.StoneCutter,
       buildRange: 20,
       requiresRoof,
     },
@@ -722,7 +723,7 @@ export const pieces: Piece[] = [
       noSupport: true,
       materialType: MaterialType.Wood,
     },
-    recipe: { type: 'craft_piece', materials: { Wood: 10, Iron: 2, Stone: 4 }, station: CraftingStation.Forge, }
+    recipe: { type: 'craft_piece', materials: { Wood: 10, Iron: 2, Stone: 4 }, station: 'forge', }
   },
   { id: 'piece_artisanstation',
     base: true,
@@ -737,7 +738,6 @@ export const pieces: Piece[] = [
       onlyOnFlat,
     },
     craft: {
-      id: CraftingStation.ArtisanTable,
       buildRange: 40,
       requiresRoof,
     },
@@ -748,7 +748,7 @@ export const pieces: Piece[] = [
       noSupport: true,
       materialType: MaterialType.Wood,
     },
-    recipe: { type: 'craft_piece', materials: { FineWood: 10, DragonTear: 2, }, station: CraftingStation.Workbench, }
+    recipe: { type: 'craft_piece', materials: { FineWood: 10, DragonTear: 2, }, station: 'piece_workbench', }
   },
   { id: 'forge',
     base: true,
@@ -765,7 +765,6 @@ export const pieces: Piece[] = [
       onlyOnFlat,
     },
     craft: {
-      id: CraftingStation.Forge,
       buildRange: 20,
       requiresRoof,
     },
@@ -776,7 +775,7 @@ export const pieces: Piece[] = [
       noSupport: true,
       materialType: MaterialType.Wood,
     },
-    recipe: { type: 'craft_piece', materials: { Stone: 4, Coal: 4, Wood: 10, Copper: 6 }, station: CraftingStation.Workbench, }
+    recipe: { type: 'craft_piece', materials: { Stone: 4, Coal: 4, Wood: 10, Copper: 6 }, station: 'piece_workbench', }
   },
   { id: 'forge_ext5',
     base: false,
@@ -792,7 +791,7 @@ export const pieces: Piece[] = [
       requiredSpace: 2,
     },
     extends: {
-      id: CraftingStation.Forge,
+      id: 'forge',
       distance: 5,
     },
     wear: {
@@ -802,7 +801,7 @@ export const pieces: Piece[] = [
       noSupport: true,
       materialType: MaterialType.Wood,
     },
-    recipe: { type: 'craft_piece', materials: { FineWood: 25, Copper: 10, }, station: CraftingStation.Workbench, }
+    recipe: { type: 'craft_piece', materials: { FineWood: 25, Copper: 10, }, station: 'piece_workbench', }
   },
   { id: 'forge_ext2',
     base: false,
@@ -818,7 +817,7 @@ export const pieces: Piece[] = [
       requiredSpace: 2,
     },
     extends: {
-      id: CraftingStation.Forge,
+      id: 'forge',
       distance: 5,
     },
     wear: {
@@ -828,7 +827,7 @@ export const pieces: Piece[] = [
       noSupport: true,
       materialType: MaterialType.Wood,
     },
-    recipe: { type: 'craft_piece', materials: { Wood: 5, Bronze: 2, }, station: CraftingStation.Workbench, }
+    recipe: { type: 'craft_piece', materials: { Wood: 5, Bronze: 2, }, station: 'piece_workbench', }
   },
   { id: 'forge_ext4',
     base: false,
@@ -844,7 +843,7 @@ export const pieces: Piece[] = [
       requiredSpace: 2,
     },
     extends: {
-      id: CraftingStation.Forge,
+      id: 'forge',
       distance: 5,
     },
     wear: {
@@ -854,7 +853,7 @@ export const pieces: Piece[] = [
       noSupport: true,
       materialType: MaterialType.Wood,
     },
-    recipe: { type: 'craft_piece', materials: { Iron: 20, Wood: 5, }, station: CraftingStation.Workbench, }
+    recipe: { type: 'craft_piece', materials: { Iron: 20, Wood: 5, }, station: 'piece_workbench', }
   },
   { id: 'forge_ext6',
     base: false,
@@ -870,7 +869,7 @@ export const pieces: Piece[] = [
       requiredSpace: 2,
     },
     extends: {
-      id: CraftingStation.Forge,
+      id: 'forge',
       distance: 5,
     },
     wear: {
@@ -880,7 +879,7 @@ export const pieces: Piece[] = [
       noSupport: true,
       materialType: MaterialType.Wood,
     },
-    recipe: { type: 'craft_piece', materials: { Iron: 15, Wood: 10, }, station: CraftingStation.Workbench, }
+    recipe: { type: 'craft_piece', materials: { Iron: 15, Wood: 10, }, station: 'piece_workbench', }
   },
   { id: 'forge_ext1',
     base: false,
@@ -896,7 +895,7 @@ export const pieces: Piece[] = [
       requiredSpace: 2,
     },
     extends: {
-      id: CraftingStation.Forge,
+      id: 'forge',
       distance: 2,
     },
     wear: {
@@ -906,7 +905,7 @@ export const pieces: Piece[] = [
       noSupport: true,
       materialType: MaterialType.Wood,
     },
-    recipe: { type: 'craft_piece', materials: { Wood: 5, DeerHide: 5, Chain: 4 }, station: CraftingStation.Workbench, }
+    recipe: { type: 'craft_piece', materials: { Wood: 5, DeerHide: 5, Chain: 4 }, station: 'piece_workbench', }
   },
   { id: 'forge_ext3',
     base: false,
@@ -922,7 +921,7 @@ export const pieces: Piece[] = [
       requiredSpace: 2,
     },
     extends: {
-      id: CraftingStation.Forge,
+      id: 'forge',
       distance: 5,
     },
     wear: {
@@ -932,7 +931,7 @@ export const pieces: Piece[] = [
       noSupport: true,
       materialType: MaterialType.Wood,
     },
-    recipe: { type: 'craft_piece', materials: { Wood: 25, SharpeningStone: 1, }, station: CraftingStation.Workbench, }
+    recipe: { type: 'craft_piece', materials: { Wood: 25, SharpeningStone: 1, }, station: 'piece_workbench', }
   },
   { id: 'smelter',
     base: true,
@@ -951,7 +950,6 @@ export const pieces: Piece[] = [
     // warmRadius: 4.5,
     // lightRadius: 4.5,
     craft: {
-      id: CraftingStation.Smelter,
       queueSize: 10,
     },
     wear: {
@@ -961,7 +959,7 @@ export const pieces: Piece[] = [
       noSupport: true,
       materialType: MaterialType.Stone,
     },
-    recipe: { type: 'craft_piece', materials: { Stone: 20, SurtlingCore: 5, }, station: CraftingStation.Workbench, }
+    recipe: { type: 'craft_piece', materials: { Stone: 20, SurtlingCore: 5, }, station: 'piece_workbench', }
   },
   { id: 'blastfurnace',
     base: true,
@@ -978,7 +976,6 @@ export const pieces: Piece[] = [
       onlyOnFlat,
     },
     craft: {
-      id: CraftingStation.BlastFurnace,
       queueSize: 10,
     },
     wear: {
@@ -988,7 +985,7 @@ export const pieces: Piece[] = [
       noSupport: true,
       materialType: MaterialType.Stone,
     },
-    recipe: { type: 'craft_piece', materials: { Stone: 20, SurtlingCore: 5, Iron: 10, FineWood: 20 }, station: CraftingStation.ArtisanTable, }
+    recipe: { type: 'craft_piece', materials: { Stone: 20, SurtlingCore: 5, Iron: 10, FineWood: 20 }, station: 'piece_artisanstation', }
   },
   { id: 'charcoal_kiln',
     base: true,
@@ -1005,7 +1002,6 @@ export const pieces: Piece[] = [
       onlyOnFlat,
     },
     craft: {
-      id: CraftingStation.CharcoalKiln,
       queueSize: 25,
     },
     wear: {
@@ -1015,7 +1011,7 @@ export const pieces: Piece[] = [
       noSupport: true,
       materialType: MaterialType.Stone,
     },
-    recipe: { type: 'craft_piece', materials: { Stone: 20, SurtlingCore: 5, }, station: CraftingStation.Workbench, }
+    recipe: { type: 'craft_piece', materials: { Stone: 20, SurtlingCore: 5, }, station: 'piece_workbench', }
   },
   { id: 'windmill',
     base: true,
@@ -1031,7 +1027,6 @@ export const pieces: Piece[] = [
       onlyOnFlat,
     },
     craft: {
-      id: CraftingStation.Windmill,
       queueSize: 50,
     },
     wear: {
@@ -1041,7 +1036,7 @@ export const pieces: Piece[] = [
       noSupport: true,
       materialType: MaterialType.Stone,
     },
-    recipe: { type: 'craft_piece', materials: { Stone: 20, Wood: 30, IronNails: 30 }, station: CraftingStation.ArtisanTable, }
+    recipe: { type: 'craft_piece', materials: { Stone: 20, Wood: 30, IronNails: 30 }, station: 'piece_artisanstation', }
   },
   { id: 'piece_spinningwheel',
     base: true,
@@ -1055,7 +1050,6 @@ export const pieces: Piece[] = [
       onlyOnFlat,
     },
     craft: {
-      id: CraftingStation.SpinningWheel,
       queueSize: 40,
       requiresRoof,
     },
@@ -1066,7 +1060,7 @@ export const pieces: Piece[] = [
       noSupport: true,
       materialType: MaterialType.Stone,
     },
-    recipe: { type: 'craft_piece', materials: { FineWood: 20, IronNails: 10, LeatherScraps: 5 }, station: CraftingStation.ArtisanTable, }
+    recipe: { type: 'craft_piece', materials: { FineWood: 20, IronNails: 10, LeatherScraps: 5 }, station: 'piece_artisanstation', }
   },
   // walls / floors
   { id: 'wood_floor',
@@ -1156,7 +1150,7 @@ export const pieces: Piece[] = [
     emoji: '🚪',
     piece: { target: 'random', water: undefined, size: [2, 0, 3] },
     wear: woodStructureWear,
-    recipe: { type: 'craft_piece', materials: { Wood: 16, Iron: 4, Tar: 2 }, station: CraftingStation.Forge, },
+    recipe: { type: 'craft_piece', materials: { Wood: 16, Iron: 4, Tar: 2 }, station: 'forge', },
   },
   { id: 'wood_stair',
     base: false,
@@ -1369,7 +1363,7 @@ export const pieces: Piece[] = [
     tier: 3,
     piece: { target: 'random', water: undefined, size: [2, 0, 1] },
     wear: wearStructure(2000, woodResist, MaterialType.Iron),
-    recipe: { type: 'craft_piece', materials: { Wood: 2, Iron: 1 }, station: CraftingStation.Forge, },
+    recipe: { type: 'craft_piece', materials: { Wood: 2, Iron: 1 }, station: 'forge', },
   },
   { id: 'woodiron_beam',
     base: false,
@@ -1378,7 +1372,7 @@ export const pieces: Piece[] = [
     tier: 3,
     piece: { target: 'random', water: undefined, size: [2, 0, 1] },
     wear: wearStructure(2000, woodResist, MaterialType.Iron),
-    recipe: { type: 'craft_piece', materials: { Wood: 2, Iron: 1 }, station: CraftingStation.Forge, },
+    recipe: { type: 'craft_piece', materials: { Wood: 2, Iron: 1 }, station: 'forge', },
   },
   { id: 'crystal_wall_1x1',
     base: false,
@@ -1391,7 +1385,7 @@ export const pieces: Piece[] = [
       damageModifiers: mods([0, 0, 0, 2, 0, 0, 0, 0, 3, 3]),
       noRoof: false,
     },
-    recipe: { type: 'craft_piece', materials: { Crystal: 2 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { Crystal: 2 }, station: 'piece_workbench' },
   },
   { id: 'wood_dragon1',
     base: false,
@@ -1607,7 +1601,7 @@ export const pieces: Piece[] = [
     tier: 2,
     piece: { target: 'random', water: undefined, groundOnly, size: [3, 0, 1] },
     wear: wearStructure(200, woodResist, MaterialType.Wood, { noRoof: false }),
-    recipe: { type: 'craft_piece', materials: { Wood: 6, RoundLog: 4 }, station: CraftingStation.Workbench, },
+    recipe: { type: 'craft_piece', materials: { Wood: 6, RoundLog: 4 }, station: 'piece_workbench', },
   },
   { id: 'stone_wall_1x1',
     base: false,
@@ -1681,7 +1675,7 @@ export const pieces: Piece[] = [
     tier: 3,
     piece: { target: 'random', water: undefined, size: [2, 0, 3] },
     wear: wearStructure(2000, mods([0, 0, 0, 0, 0, 0, 0, 0, 3, 3]), MaterialType.Iron),
-    recipe: { type: 'craft_piece', materials: { Iron: 4 }, station: CraftingStation.Forge },
+    recipe: { type: 'craft_piece', materials: { Iron: 4 }, station: 'forge' },
   },
   { id: 'stone_stair',
     base: false,
@@ -1771,7 +1765,7 @@ export const pieces: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { FineWood: 40, DeerHide: 7, WolfPelt: 4, Feathers: 10, IronNails: 15 },
-      station: CraftingStation.Workbench,
+      station: 'piece_workbench',
     },
   },
   { id: 'piece_chest_wood',
@@ -1796,7 +1790,7 @@ export const pieces: Piece[] = [
     space: [6, 4],
     piece: { target: 'primary', water: false, onlyOnFlat, size: [2, 1, 1] },
     wear: wearStructure(1000, chestResist, MaterialType.Wood, { noRoof: false }),
-    recipe: { type: 'craft_piece', materials: { FineWood: 10, Iron: 2 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { FineWood: 10, Iron: 2 }, station: 'piece_workbench' },
   },
   { id: 'piece_chest_private',
     group: 'chest', 
@@ -1808,7 +1802,7 @@ export const pieces: Piece[] = [
     space: [3, 2],
     piece: { target: 'primary', water: false, onlyOnFlat, size: [1, 0.5, 0.5] },
     wear: wearStructure(10000, chestResist, MaterialType.Wood, { noRoof: false }),
-    recipe: { type: 'craft_piece', materials: { FineWood: 10, Iron: 8 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { FineWood: 10, Iron: 8 }, station: 'piece_workbench' },
   },
   { id: 'piece_chest_blackmetal',
     group: 'chest', 
@@ -1820,7 +1814,7 @@ export const pieces: Piece[] = [
     space: [8, 4],
     piece: { target: 'primary', water: false, onlyOnFlat, size: [1, 0.5, 0.5] },
     wear: wearStructure(1000, chestResist, MaterialType.Wood, { noRoof: false }),
-    recipe: { type: 'craft_piece', materials: { Wood: 10, Tar: 2, BlackMetal: 6 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { Wood: 10, Tar: 2, BlackMetal: 6 }, station: 'piece_workbench' },
   },
   { id: 'piece_chest_treasure',
     base: false,
@@ -1829,7 +1823,7 @@ export const pieces: Piece[] = [
     tier: 3,
     piece: { target: 'primary', water: false, onlyOnFlat, size: [1, 0.5, 0.5] },
     wear: wearStructure(200, mods([0, 0, 1, 0, 0, 2, 1, 0, 3, 3]), undefined, { noRoof: false }),
-    recipe: { type: 'craft_piece', materials: { Coins: 99, Ruby: 5, SilverNecklace: 2, FineWood: 8, Silver: 2 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { Coins: 99, Ruby: 5, SilverNecklace: 2, FineWood: 8, Silver: 2 }, station: 'piece_workbench' },
   },
   { id: 'piece_chair',
     base: false,
@@ -1868,7 +1862,7 @@ export const pieces: Piece[] = [
     comfort: { value: 2, group: 'chair' },
     piece: { target: 'random', water: false, onlyOnFlat, size: [0.5, 0.5, 1] },
     wear: wearStructure(200, woodResist, MaterialType.Wood),
-    recipe: { type: 'craft_piece', materials: { FineWood: 4, Tar: 1, IronNails: 5, DeerHide: 1 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { FineWood: 4, Tar: 1, IronNails: 5, DeerHide: 1 }, station: 'piece_workbench' },
   },
   { id: 'piece_bench01',
     base: false,
@@ -1907,7 +1901,7 @@ export const pieces: Piece[] = [
     comfort: { value: 3, group: 'chair' },
     piece: { target: 'random', water: false, onlyOnFlat, size: [1, 1, 1.5] },
     wear: wearStructure(250, woodResist, MaterialType.Wood),
-    recipe: { type: 'craft_piece', materials: { FineWood: 20, IronNails: 10 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { FineWood: 20, IronNails: 10 }, station: 'piece_workbench' },
   },
   { id: 'piece_throne02',
     base: false,
@@ -1920,7 +1914,7 @@ export const pieces: Piece[] = [
     comfort: { value: 3, group: 'chair' },
     piece: { target: 'random', water: false, onlyOnFlat, size: [1, 1, 1.5] },
     wear: wearStructure(500, stoneResist, MaterialType.Stone),
-    recipe: { type: 'craft_piece', materials: { Stone: 20, DeerHide: 2, WolfPelt: 2 }, station: CraftingStation.StoneCutter },
+    recipe: { type: 'craft_piece', materials: { Stone: 20, DeerHide: 2, WolfPelt: 2 }, station: 'piece_stonecutter' },
   },
   { id: 'piece_table',
     base: false,
@@ -1940,7 +1934,7 @@ export const pieces: Piece[] = [
     comfort: { value: 2, group: 'table' },
     piece: { target: 'random', water: false, onlyOnFlat, size: [4, 4, 0.5] },
     wear: wearStructure(150, woodResist, MaterialType.Wood),
-    recipe: { type: 'craft_piece', materials: { FineWood: 10, Tar: 2, IronNails: 20 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { FineWood: 10, Tar: 2, IronNails: 20 }, station: 'piece_workbench' },
   },
   { id: 'piece_table_oak',
     base: false,
@@ -1950,7 +1944,7 @@ export const pieces: Piece[] = [
     comfort: { value: 2, group: 'table' },
     piece: { target: 'random', water: false, onlyOnFlat, size: [4, 2, 0.5] },
     wear: wearStructure(200, woodResist, MaterialType.Wood),
-    recipe: { type: 'craft_piece', materials: { FineWood: 20, Tar: 2, IronNails: 20 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { FineWood: 20, Tar: 2, IronNails: 20 }, station: 'piece_workbench' },
   },
   { id: 'piece_bathtub',
     base: false,
@@ -1963,7 +1957,7 @@ export const pieces: Piece[] = [
     // lightRadius: 4,
     piece: { target: 'random', water: false, onlyOnFlat, size: [3, 3, 1] },
     wear: wearStructure(400, woodResist, MaterialType.Wood, { noRoof: false }),
-    recipe: { type: 'craft_piece', materials: { Wood: 20, Tar: 6, Iron: 10, Stone: 8 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { Wood: 20, Tar: 6, Iron: 10, Stone: 8 }, station: 'piece_workbench' },
   },
   { id: 'piece_walltorch',
     base: true,
@@ -1984,7 +1978,7 @@ export const pieces: Piece[] = [
     },
     piece: { target: 'primary', water: undefined, onlyOnFlat, size: [0, 0, 1.5] },
     wear: wearStructure(100, mods([2, 0, 0, 0, 0, 0, 0, 0, 3, 3]), undefined, { noRoof: false }),
-    recipe: { type: 'craft_piece', materials: { Wood: 2, Copper: 2, Resin: 2 }, station: CraftingStation.Forge },
+    recipe: { type: 'craft_piece', materials: { Wood: 2, Copper: 2, Resin: 2 }, station: 'forge' },
   },
   { id: 'piece_groundtorch',
     base: true,
@@ -2005,7 +1999,7 @@ export const pieces: Piece[] = [
     },
     piece: { target: 'primary', water: undefined, onlyOnFlat, size: [0, 0, 1.5] },
     wear: wearStructure(200, mods([0, 0, 1, 0, 0, 3, 3, 0, 3, 3]), undefined, { noRoof: false }),
-    recipe: { type: 'craft_piece', materials: { Iron: 2, Resin: 2 }, station: CraftingStation.Forge },
+    recipe: { type: 'craft_piece', materials: { Iron: 2, Resin: 2 }, station: 'forge' },
   },
   { id: 'piece_groundtorch_wood',
     base: true,
@@ -2026,7 +2020,7 @@ export const pieces: Piece[] = [
     },
     piece: { target: 'primary', water: undefined, onlyOnFlat, size: [0, 0, 1.5] },
     wear: wearStructure(100, mods([0, 2, 1, 2, 0, 0, 0, 0, 3, 3]), undefined, { noRoof: false }),
-    recipe: { type: 'craft_piece', materials: { Iron: 2, Resin: 2 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { Iron: 2, Resin: 2 }, station: 'piece_workbench' },
   },
   { id: 'piece_groundtorch_green',
     base: true,
@@ -2047,7 +2041,7 @@ export const pieces: Piece[] = [
     },
     piece: { target: 'primary', water: undefined, onlyOnFlat, size: [0, 0, 1.5] },
     wear: wearStructure(200, mods([0, 0, 1, 0, 0, 3, 3, 0, 3, 3]), undefined, { noRoof: false }),
-    recipe: { type: 'craft_piece', materials: { Iron: 2, Resin: 2 }, station: CraftingStation.Forge },
+    recipe: { type: 'craft_piece', materials: { Iron: 2, Resin: 2 }, station: 'forge' },
   },
   { id: 'piece_groundtorch_blue',
     base: true,
@@ -2068,7 +2062,7 @@ export const pieces: Piece[] = [
     },
     piece: { target: 'primary', water: undefined, onlyOnFlat, size: [0, 0, 1.5] },
     wear: wearStructure(200, mods([0, 0, 1, 0, 0, 3, 3, 0, 3, 3]), undefined, { noRoof: false }),
-    recipe: { type: 'craft_piece', materials: { Iron: 2, GreydwarfEye: 2 }, station: CraftingStation.Forge },
+    recipe: { type: 'craft_piece', materials: { Iron: 2, GreydwarfEye: 2 }, station: 'forge' },
   },
   { id: 'piece_brazierceiling01',
     base: true,
@@ -2090,7 +2084,7 @@ export const pieces: Piece[] = [
     comfort: { value: 1, group: 'fire' },
     piece: { target: 'random', water: false, onlyOnFlat, size: [0, 0, 1.5] },
     wear: wearStructure(100, mods([0, 0, 0, 0, 0, 3, 3, 0, 3, 3]), MaterialType.Wood, { noRoof: false }),
-    recipe: { type: 'craft_piece', materials: { Bronze: 5, Coal: 2, Chain: 1 }, station: CraftingStation.Forge },
+    recipe: { type: 'craft_piece', materials: { Bronze: 5, Coal: 2, Chain: 1 }, station: 'forge' },
   },
   { id: 'portal_wood',
     components: ['TeleportWorld'],
@@ -2100,7 +2094,7 @@ export const pieces: Piece[] = [
     tier: 2,
     piece: { target: 'primary', water: false, onlyOnFlat, size: [3, 3, 0] },
     wear: wearStructure(400, mods([1, 0, 1, 2, 1, 0, 0, 0, 3, 3]), MaterialType.Wood, { noRoof: false }),
-    recipe: { type: 'craft_piece', materials: { GreydwarfEye: 10, FineWood: 20, SurtlingCore: 2 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { GreydwarfEye: 10, FineWood: 20, SurtlingCore: 2 }, station: 'piece_workbench' },
   },
   { id: 'guard_stone',
     components: ['PrivateArea'],
@@ -2110,7 +2104,7 @@ export const pieces: Piece[] = [
     tier: 2,
     piece: { target: 'primary', water: false, onlyOnFlat, size: [0.5, 0.5, 1] },
     wear: wearStructure(1000, mods([0, 0, 1, 4, 4, 0, 1, 0, 3, 3]), undefined, { noRoof: false }),
-    recipe: { type: 'craft_piece', materials: { FineWood: 5, GreydwarfEye: 5, SurtlingCore: 1 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { FineWood: 5, GreydwarfEye: 5, SurtlingCore: 1 }, station: 'piece_workbench' },
   },
   { id: 'piece_cartographytable',
     components: ['MapTable'],
@@ -2120,7 +2114,7 @@ export const pieces: Piece[] = [
     tier: 2,
     piece: { target: 'none', water: false, onlyOnFlat, size: [4, 1, 2] },
     wear: wearStructure(100, woodResist, undefined),
-    recipe: { type: 'craft_piece', materials: { FineWood: 10, BoneFragments: 10, Bronze: 2, LeatherScraps: 5, Raspberry: 4 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { FineWood: 10, BoneFragments: 10, Bronze: 2, LeatherScraps: 5, Raspberry: 4 }, station: 'piece_workbench' },
   },
   { id: 'itemstand',
     components: ['ItemStand'],
@@ -2142,7 +2136,7 @@ export const pieces: Piece[] = [
     tier: 2,
     piece: { target: 'none', water: false, onlyOnFlat, size: [0.25, 0.25, 0] },
     wear: { ...woodRoofStructureWear, hp: 50 },
-    recipe: { type: 'craft_piece', materials: { FineWood: 4, BronzeNails: 1 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { FineWood: 4, BronzeNails: 1 }, station: 'piece_workbench' },
   },
   { id: 'itemstandh',
     components: ['ItemStand'],
@@ -2164,7 +2158,7 @@ export const pieces: Piece[] = [
     tier: 2,
     piece: { target: 'none', water: undefined, size: [0.25, 0, 0.25] },
     wear: { ...woodRoofStructureWear, hp: 50 },
-    recipe: { type: 'craft_piece', materials: { FineWood: 4, BronzeNails: 1 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { FineWood: 4, BronzeNails: 1 }, station: 'piece_workbench' },
   },
   { id: 'sign',
     components: ['Sign'],
@@ -2174,7 +2168,7 @@ export const pieces: Piece[] = [
     tier: 2,
     piece: { target: 'none', water: undefined, size: [0.25, 0.1, 0] },
     wear: { ...woodRoofStructureWear, hp: 100 },
-    recipe: { type: 'craft_piece', materials: { Wood: 2, Coal: 1 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { Wood: 2, Coal: 1 }, station: 'piece_workbench' },
   },
   { id: 'rug_deer',
     base: false,
@@ -2185,7 +2179,7 @@ export const pieces: Piece[] = [
     comfort: { value: 1 },
     piece: { target: 'none', water: undefined, onlyOnFlat, size: [2, 1.5, 0] },
     wear: { ...woodRoofStructureWear, hp: 50 },
-    recipe: { type: 'craft_piece', materials: { DeerHide: 4 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { DeerHide: 4 }, station: 'piece_workbench' },
   },
   { id: 'rug_wolf',
     base: false,
@@ -2196,7 +2190,7 @@ export const pieces: Piece[] = [
     comfort: { value: 1 },
     piece: { target: 'none', water: undefined, onlyOnFlat, size: [2, 1.5, 0] },
     wear: { ...woodRoofStructureWear, hp: 50 },
-    recipe: { type: 'craft_piece', materials: { WolfPelt: 4 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { WolfPelt: 4 }, station: 'piece_workbench' },
   },
   { id: 'rug_fur', // lox
     base: false,
@@ -2207,7 +2201,7 @@ export const pieces: Piece[] = [
     comfort: { value: 1 },
     piece: { target: 'none', water: undefined, onlyOnFlat, size: [0.25, 0, 1] },
     wear: { ...woodRoofStructureWear, hp: 50 },
-    recipe: { type: 'craft_piece', materials: { LoxPelt: 4 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { LoxPelt: 4 }, station: 'piece_workbench' },
   },
   { id: 'piece_banner01',
     group: 'banner',
@@ -2218,7 +2212,7 @@ export const pieces: Piece[] = [
     comfort: { value: 1, group: 'banner' },
     piece: { target: 'none', water: undefined, size: [1, 2, 0] },
     wear: { ...woodRoofStructureWear, hp: 50 },
-    recipe: { type: 'craft_piece', materials: { LeatherScraps: 6, FineWood: 2, Coal: 4 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { LeatherScraps: 6, FineWood: 2, Coal: 4 }, station: 'piece_workbench' },
   },
   { id: 'piece_banner02',
     group: 'banner',
@@ -2229,7 +2223,7 @@ export const pieces: Piece[] = [
     comfort: { value: 1, group: 'banner' },
     piece: { target: 'none', water: undefined, size: [1, 2, 0] },
     wear: { ...woodRoofStructureWear, hp: 50 },
-    recipe: { type: 'craft_piece', materials: { LeatherScraps: 6, FineWood: 2, Blueberries: 4 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { LeatherScraps: 6, FineWood: 2, Blueberries: 4 }, station: 'piece_workbench' },
   },
   { id: 'piece_banner03',
     group: 'banner',
@@ -2240,7 +2234,7 @@ export const pieces: Piece[] = [
     comfort: { value: 1, group: 'banner' },
     piece: { target: 'none', water: undefined, size: [1, 2, 0] },
     wear: { ...woodRoofStructureWear, hp: 50 },
-    recipe: { type: 'craft_piece', materials: { LeatherScraps: 6, FineWood: 2, Raspberry: 4 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { LeatherScraps: 6, FineWood: 2, Raspberry: 4 }, station: 'piece_workbench' },
   },
   { id: 'piece_banner04',
     group: 'banner',
@@ -2251,7 +2245,7 @@ export const pieces: Piece[] = [
     comfort: { value: 1, group: 'banner' },
     piece: { target: 'none', water: undefined, size: [1, 2, 0] },
     wear: { ...woodRoofStructureWear, hp: 50 },
-    recipe: { type: 'craft_piece', materials: { LeatherScraps: 6, FineWood: 2, Bloodbag: 1 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { LeatherScraps: 6, FineWood: 2, Bloodbag: 1 }, station: 'piece_workbench' },
   },
   { id: 'piece_banner05',
     group: 'banner',
@@ -2262,7 +2256,7 @@ export const pieces: Piece[] = [
     comfort: { value: 1, group: 'banner' },
     piece: { target: 'none', water: undefined, size: [1, 2, 0] },
     wear: { ...woodRoofStructureWear, hp: 50 },
-    recipe: { type: 'craft_piece', materials: { LeatherScraps: 6, FineWood: 2, Guck: 1 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { LeatherScraps: 6, FineWood: 2, Guck: 1 }, station: 'piece_workbench' },
   },
   { id: 'piece_banner06',
     group: 'banner',
@@ -2273,7 +2267,7 @@ export const pieces: Piece[] = [
     comfort: { value: 1, group: 'banner' },
     piece: { target: 'none', water: undefined, size: [1, 2, 0] },
     wear: { ...woodRoofStructureWear, hp: 50 },
-    recipe: { type: 'craft_piece', materials: { LeatherScraps: 6, FineWood: 2, Blueberries: 2, Raspberry: 2, Cloudberry: 1 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { LeatherScraps: 6, FineWood: 2, Blueberries: 2, Raspberry: 2, Cloudberry: 1 }, station: 'piece_workbench' },
   },
   { id: 'piece_banner07',
     group: 'banner',
@@ -2284,7 +2278,7 @@ export const pieces: Piece[] = [
     comfort: { value: 1, group: 'banner' },
     piece: { target: 'none', water: undefined, size: [1, 2, 0] },
     wear: { ...woodRoofStructureWear, hp: 50 },
-    recipe: { type: 'craft_piece', materials: { LeatherScraps: 6, FineWood: 2, Blueberries: 2, Cloudberry: 3 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { LeatherScraps: 6, FineWood: 2, Blueberries: 2, Cloudberry: 3 }, station: 'piece_workbench' },
   },
   { id: 'piece_beehive',
     components: ['Beehive'],
@@ -2293,12 +2287,10 @@ export const pieces: Piece[] = [
     subtype: 'craft',
     tier: 1,
     emoji: '🐝🏠',
-    craft: {
-      id: CraftingStation.BeeHive,
-    },
+    craft: {},
     piece: { target: 'primary', water: undefined, size: [0.5, 0.5, 0.5] },
     wear: { ...woodRoofStructureWear, hp: 100 },
-    recipe: { type: 'craft_piece', materials: { Wood: 10, QueenBee: 1 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { Wood: 10, QueenBee: 1 }, station: 'piece_workbench' },
   },
   { id: 'fermenter',
     base: true,
@@ -2307,12 +2299,11 @@ export const pieces: Piece[] = [
     subtype: 'craft',
     tier: 2,
     craft: {
-      id: CraftingStation.Fermenter,
       requiresRoof,
     },
     piece: { target: 'primary', water: false, onlyOnFlat, size: [2, 2, 3] },
     wear: wearStructure(1000, craftStationResist, MaterialType.Wood, { noRoof: false }),
-    recipe: { type: 'craft_piece', materials: { FineWood: 30, Bronze: 5, Resin: 10 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { FineWood: 30, Bronze: 5, Resin: 10 }, station: 'piece_workbench' },
   },
   { id: 'piece_gift1', season: 'christmas',
     base: false,
@@ -2324,7 +2315,7 @@ export const pieces: Piece[] = [
     space: [1, 1],
     piece: { target: 'none', water: false, onlyOnFlat, size: [0.5, 0.5, 0.5] },
     wear: wearStructure(10, mods([1, 1, 1, 1, 1, 1, 1, 0, 3, 3]), MaterialType.Wood, { noRoof: false }),
-    recipe: { type: 'craft_piece', materials: { FineWood: 2, BoneFragments: 1 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { FineWood: 2, BoneFragments: 1 }, station: 'piece_workbench' },
   },
   { id: 'piece_gift2', season: 'christmas',
     base: false,
@@ -2336,7 +2327,7 @@ export const pieces: Piece[] = [
     space: [1, 1],
     piece: { target: 'none', water: false, onlyOnFlat, size: [0.5, 0.5, 0.5] },
     wear: wearStructure(10, mods([1, 1, 1, 1, 1, 1, 1, 0, 3, 3]), MaterialType.Wood, { noRoof: false }),
-    recipe: { type: 'craft_piece', materials: { FineWood: 3, Dandelion: 1 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { FineWood: 3, Dandelion: 1 }, station: 'piece_workbench' },
   },
   { id: 'piece_gift3', season: 'christmas',
     base: false,
@@ -2348,7 +2339,7 @@ export const pieces: Piece[] = [
     space: [1, 1],
     piece: { target: 'none', water: false, onlyOnFlat, size: [0.5, 0.5, 0.5] },
     wear: wearStructure(10, mods([1, 1, 1, 1, 1, 1, 1, 0, 3, 3]), MaterialType.Wood, { noRoof: false }),
-    recipe: { type: 'craft_piece', materials: { FineWood: 4, Raspberry: 1 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { FineWood: 4, Raspberry: 1 }, station: 'piece_workbench' },
   },
   { id: 'piece_xmastree', season: 'christmas',
     base: false,
@@ -2359,7 +2350,7 @@ export const pieces: Piece[] = [
     comfort: { value: 1 },
     piece: { target: 'random', water: undefined, size: [1, 1, 3] },
     wear: wearStructure(50, woodResist, MaterialType.Wood, { noRoof: false }),
-    recipe: { type: 'craft_piece', materials: { Wood: 10, FirCone: 1 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { Wood: 10, FirCone: 1 }, station: 'piece_workbench' },
   },
   { id: 'piece_maypole', season: 'midsummer',
     base: false,
@@ -2369,7 +2360,7 @@ export const pieces: Piece[] = [
     comfort: { value: 1 },
     piece: { target: 'random', water: undefined, size: [4, 0.5, 4.2] },
     wear: wearStructure(50, woodResist, undefined, { noRoof: false }),
-    recipe: { type: 'craft_piece', materials: { Wood: 10, Dandelion: 4, Thistle: 4 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { Wood: 10, Dandelion: 4, Thistle: 4 }, station: 'piece_workbench' },
   },
   { id: 'piece_jackoturnip', season: 'helloween',
     base: false,
@@ -2390,7 +2381,7 @@ export const pieces: Piece[] = [
     },
     piece: { target: 'primary', water: undefined, size: [0.5, 0.5, 0.5] },
     wear: wearStructure(200, mods([0, 0, 1, 0, 0, 3, 3, 0, 3, 3]), undefined, { noRoof: false }),
-    recipe: { type: 'craft_piece', materials: { Turnip: 4, Resin: 2 }, station: CraftingStation.Workbench },
+    recipe: { type: 'craft_piece', materials: { Turnip: 4, Resin: 2 }, station: 'piece_workbench' },
   },
   { id: 'CastleKit_groundtorch',
     base: false,
@@ -2409,9 +2400,6 @@ export const pieces: Piece[] = [
 ];
 
 pieces.forEach(p => {
-  if (p.subtype === 'craft') {
-    craftingStationIds[p.craft.id] = p.id;
-  }
   if (p.components == null) p.components = [];
   p.components.push('WearNTear', 'Piece');
 });

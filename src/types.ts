@@ -375,27 +375,7 @@ export type PhysicalObject = GameObjectBase & {
   Plant?: Plantable;
   Beacon?: number;
   SpawnArea?: SpawnArea;
-}; 
-
-export enum CraftingStation {
-  Inventory,
-  Workbench,
-  Forge,
-  ArtisanTable,
-  StoneCutter,
-  CookingStation,
-  CookingStationIron,
-  Cauldron,
-  Oven,
-  Fermenter,
-  Smelter,
-  BlastFurnace,
-  CharcoalKiln,
-  Windmill,
-  SpinningWheel,
-  Cultivator,
-  BeeHive,
-}
+};
 
 export enum MaterialType {
   Wood,
@@ -427,7 +407,7 @@ export interface BasePiece extends GameObjectBase {
   recipe?: {
     type: 'craft_piece',
     materials: Record<EntityId, number>;
-    station: CraftingStation;
+    station: EntityId | null;
   }; 
 }
 
@@ -463,7 +443,6 @@ export type Piece = BasePiece & {
 } | {
   subtype: 'craft';
   craft: {
-    id: CraftingStation;
     queueSize?: number;
     batchSize?: number;
     buildRange?: number;
@@ -473,7 +452,7 @@ export type Piece = BasePiece & {
 } | {
   subtype: 'craft_ext'; 
   extends: {
-    id: CraftingStation;
+    id: EntityId;
     distance: number;
     requiresRoof?: boolean;
     requiresFire?: boolean;
@@ -626,12 +605,12 @@ interface BaseItem extends GameObjectBase {
     time: number;
     materials: Record<EntityId, number>;
     materialsPerLevel: Record<EntityId, number>;
-    source: { station: CraftingStation, level?: number };
+    source: { station: EntityId | null; level?: number };
   } | {
     type: 'craft_one';
     time: number;
     materials: Record<EntityId, number>;
-    source: { station: CraftingStation, level?: number };
+    source: { station: EntityId | null; level?: number };
     number: number;
   } | {
     type: 'trader';
