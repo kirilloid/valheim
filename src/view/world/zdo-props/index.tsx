@@ -11,6 +11,7 @@ import { DropComp } from './drop';
 import { enumComp } from './enum';
 import { floatComp } from './float';
 import { idComp } from './id';
+import { ArmorStandComp } from './armor-stand';
 import { ItemsComp } from './items';
 import { intComp } from './int';
 import { hashedItemComp } from './hashed-item';
@@ -31,6 +32,9 @@ import { LiquidComp } from './liquid';
 const readOnly = true;
 
 export const InterfaceFields: Partial<Record<GameComponent, React.ComponentType<ValueProps<ZDO>>[]>> = {
+  ArmorStand: [
+    ArmorStandComp,
+  ],
   BaseAI: [
     boolComp('huntplayer'),
     vectorComp('spawnpoint'),

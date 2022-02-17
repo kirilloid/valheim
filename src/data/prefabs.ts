@@ -8,6 +8,7 @@ export const prefabNames: string[] = [
   'ArmorPaddedCuirass', 'ArmorPaddedGreaves',
   'ArmorRagsChest', 'ArmorRagsLegs',
   'ArmorRootChest', 'ArmorRootLegs',
+  'ArmorStand',
   'ArmorTrollLeatherChest', 'ArmorTrollLeatherLegs',
   'ArmorWolfChest', 'ArmorWolfLegs',
   'ArrowBronze', 'ArrowFire', 'ArrowFlint', 'ArrowFrost', 'ArrowIron', 'ArrowNeedle', 'ArrowObsidian', 'ArrowPoison', 'ArrowSilver', 'ArrowWood',

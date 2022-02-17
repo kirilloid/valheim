@@ -6,6 +6,7 @@ import { SkillType } from './model/skills';
 export type EntityId = string;
 
 export type GameComponent = 
+| 'ArmorStand'
 | 'BaseAI' | 'Beacon' | 'Bed' | 'Beehive'
 | 'Chair' | 'Character' | 'Container' | 'CookingStation' | 'Corpse' | 'CraftingStation' | 'CraftingStationExtension' | 'CreatureSpawner'
 | 'Destructible' | 'Door' | 'DungeonGenerator'
