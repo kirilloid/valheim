@@ -84,6 +84,36 @@ export const pickables = [
     subtype: 'misc',
   },
   {
+    id: 'Pickable_MountainCaveObsidian',
+    tier: 4,
+    item: 'Obsidian',
+    subtype: 'misc',
+  },
+  {
+    id: 'Pickable_MountainCaveCrystal',
+    tier: 4,
+    item: 'Crystal',
+    subtype: 'misc',
+  },
+  {
+    id: 'Pickable_Hairstrands01',
+    tier: 4,
+    item: 'WolfHairBundle',
+    subtype: 'misc',
+  },
+  {
+    id: 'Pickable_Hairstrands02',
+    tier: 4,
+    item: 'WolfHairBundle',
+    subtype: 'misc',
+  },
+  {
+    id: 'Pickable_FishingRod',
+    tier: 2,
+    item: 'FishingRod',
+    subtype: 'misc',
+  },
+  {
     id: 'Pickable_DragonEgg',
     tier: 4,
     item: 'DragonEgg',

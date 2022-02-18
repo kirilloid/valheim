@@ -1,19 +1,21 @@
 import React, { CSSProperties, useContext, useRef, useState } from 'react';
+import { defaultMemoize } from 'reselect';
 
-import type { Armor, Item, ItemSet, ItemSetBonus, Weapon } from '../../types';
+import type { Effect, Item, ItemSet, Weapon } from '../../types';
 import type { Inventory as TInventory } from './types';
 
 import '../../css/Inventory.css';
 
 import { timeI2S } from '../../model/utils';
 import { addDamage, multiplyDamage } from '../../model/combat';
+import { SkillType } from '../../model/skills';
+import { EpicLootData, extractExtraData, modifyDamage } from '../../mods/epic-loot';
+
 import { data } from '../../data/itemDB';
 
 import { ItemIcon } from '../parts/Icon';
-import { EpicLootData, extractExtraData, modifyDamage } from '../../mods/epic-loot';
 import { TranslationContext } from '../../effects';
-import { defaultMemoize } from 'reselect';
-import { SkillType } from '../../model/skills';
+import { List } from '../helpers';
 
 type InvItem = TInventory['items'][number];
 
@@ -57,14 +59,24 @@ function EpicLootTooltip({ extraData }: { extraData: EpicLootData | undefined })
   </ul>
 }
 
-function SetBonus({ bonus }: { bonus: ItemSetBonus }) {
+function SetBonus({ bonus }: { bonus: Effect }) {
   const translate = useContext(TranslationContext);
-  if (!bonus.Skills) return null;
-  return <>{
-    Object.entries(bonus.Skills)
-      .map(([skill, value]) => translate(`ui.skillType.${SkillType[skill as any]}`) + " +" + value)
-      .join(' ')
-  }</>;
+  const parts = [];
+  if (bonus.attackModifier != null) {
+    parts.push(<span key="skill">{translate(`ui.skillType.${SkillType[bonus.attackModifier[0]]}`)} +{bonus.attackModifier[1]}</span>);
+  }
+  if (bonus.damageModifiers != null) {
+    parts.push(<span key="resist">{
+      Object
+        .entries(bonus.damageModifiers)
+        .map(([key, value]) => <React.Fragment key={key}>
+          {translate(`ui.damageType.${key}`)}
+          {': '}
+          {translate(`ui.damageModifier.${value}`)}
+        </React.Fragment>)
+    }</span>);
+  }
+  return <List>{parts}</List>;
 }
 
 function SetBonusTooltip({ set, item, equippedItemIds }: { set: ItemSet | undefined; item: Item; equippedItemIds: string[] }) {

@@ -217,4 +217,23 @@ export const events: GameEvent[] = [
     ],
     base: true,
   },
+  {
+    id: 'bats',
+    tier: 4,
+    icon: 'Bat',
+    biomes: ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains'],
+    killed: ['Bonemass', 'Bat'],
+    notKilled: [],
+    duration: 120,
+    spawns: [
+      {
+        id: 'Bat',
+        max: 10,
+        group: [2, 4],
+        interval: 10,
+        chance: 1,
+      },
+    ],
+    base: true,
+  },
 ];

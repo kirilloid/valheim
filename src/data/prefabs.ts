@@ -14,10 +14,33 @@ export const prefabNames: string[] = [
   'ArrowBronze', 'ArrowFire', 'ArrowFlint', 'ArrowFrost', 'ArrowIron', 'ArrowNeedle', 'ArrowObsidian', 'ArrowPoison', 'ArrowSilver', 'ArrowWood',
   'AtgeirBlackmetal', 'AtgeirBronze', 'AtgeirIron', 'AxeBlackMetal', 'AxeBronze', 'AxeFlint', 'AxeIron', 'AxeStone',
 
-  'Barley', 'BarleyFlour', 'BarleyWine', 'BarleyWineBase', 'barrell', 'Battleaxe', 'BattleaxeCrystal', 'Beard1', 'Beard2', 'Beard3', 'Beard4', 'Beard5', 'Beard6', 'Beard7', 'Beard8', 'Beard9', 'Beard10', 'BeardNone', 'bed', 'bee_aoe', 'beech_log', 'beech_log_half', 'Beech_Sapling', 'Beech_small1', 'Beech_small2', 'Beech_Stub', 'Beech1', 'BeechSeeds', 'Beehive', 'BeltStrength', 'Birch_log', 'Birch_log_half', 'Birch_Sapling', 'Birch1', 'Birch1_aut', 'Birch2', 'Birch2_aut', 'BirchSeeds', 'BirchStub', 'BlackMetal', 'BlackMetalScrap', 'BlackSoup', 'blastfurnace', 'Blob', 'blob_aoe', 'blob_attack_aoe', 'BlobElite', 'blobelite_attack_aoe', 'BlobTar', 'blobtar_attack', 'blobtar_projectile_tarball', 'Bloodbag', 'BloodPudding', 'Blueberries', 'BlueberryBush', 'Boar', 'boar_base_attack', 'Boar_piggy', 'boar_ragdoll', 'BoarJerky', 'BombOoze', 'BoneFragments', 'Bonemass', 'bonemass_aoe', 'bonemass_attack_aoe', 'bonemass_attack_punch', 'bonemass_attack_spawn', 'bonemass_attack_throw', 'bonemass_spawn', 'bonemass_throw_projectile', 'BonePileSpawner', 'bonfire', 'BossStone_Bonemass', 'BossStone_DragonQueen', 'BossStone_Eikthyr', 'BossStone_TheElder', 'BossStone_Yagluth', 'Bow', 'bow_projectile', 'bow_projectile_fire', 'bow_projectile_frost', 'bow_projectile_needle', 'bow_projectile_poison', 'BowDraugrFang', 'BowFineWood', 'BowHuntsman', 'Bread', 'BreadDough', 'Bronze', 'BronzeNails', 'bronzespear_projectile', 'bucket', 'Bush01', 'Bush01_heath', 'Bush02_en', 
+  'Barley', 'BarleyFlour', 'BarleyWine', 'BarleyWineBase', 'barrell', 'Battleaxe', 'BattleaxeCrystal',
+  'Beard1', 'Beard2', 'Beard3', 'Beard4', 'Beard5', 'Beard6', 'Beard7', 'Beard8', 'Beard9', 'Beard10', 'BeardNone',
+  'bed', 'bee_aoe',
+  'beech_log', 'beech_log_half', 'Beech_Sapling', 'Beech_small1', 'Beech_small2', 'Beech_Stub', 'Beech1', 'BeechSeeds',
+  'Beehive', 'BeltStrength',
+  'Birch_log', 'Birch_log_half', 'Birch_Sapling', 'Birch1', 'Birch1_aut', 'Birch2', 'Birch2_aut', 'BirchSeeds', 'BirchStub',
+  'BlackForestLocationMusic',
+  'BlackMetal', 'BlackMetalScrap',
+  'BlackSoup', 'blastfurnace',
+  'Blob', 'blob_aoe', 'blob_attack_aoe', 'BlobElite', 'blobelite_attack_aoe', 'BlobTar', 'blobtar_attack', 'blobtar_projectile_tarball',
+  'Bloodbag', 'BloodPudding',
+  'Blueberries', 'BlueberryBush',
+  'Boar', 'boar_base_attack', 'Boar_piggy', 'boar_ragdoll', 'BoarJerky',
+  'BombOoze',
+  'BoneFragments', 'Bonemass', 'bonemass_aoe', 'bonemass_attack_aoe', 'bonemass_attack_punch', 'bonemass_attack_spawn', 'bonemass_attack_throw', 'bonemass_spawn', 'bonemass_throw_projectile', 'BonePileSpawner',
+  'bonfire',
+  'BossStone_Bonemass', 'BossStone_DragonQueen', 'BossStone_Eikthyr', 'BossStone_TheElder', 'BossStone_Yagluth',
+  'Bow', 'bow_projectile', 'bow_projectile_fire', 'bow_projectile_frost', 'bow_projectile_needle', 'bow_projectile_poison', 'BowDraugrFang', 'BowFineWood', 'BowHuntsman',
+  'Bread', 'BreadDough', 'Bronze', 'BronzeNails', 'bronzespear_projectile',
+  'bucket',
+  'Bush01', 'Bush01_heath', 'Bush02_en',
 
-  'CapeDeerHide', 'CapeLinen', 'CapeLox', 'CapeOdin', 'CapeTest', 'CapeTrollHide', 'CapeWolf', 'CargoCrate', 'Carrot', 'CarrotSeeds', 'CarrotSoup', 'Cart', 'CastleKit_braided_box01', 'CastleKit_groundtorch', 'CastleKit_groundtorch_green', 'CastleKit_groundtorch_unlit', 'CastleKit_pot03', 'cauldron_ext1_spice', 'cauldron_ext3_butchertable', 'cauldron_ext4_pots',
+  'CapeDeerHide', 'CapeLinen', 'CapeLox', 'CapeOdin', 'CapeTest', 'CapeTrollHide', 'CapeWolf', 'CargoCrate', 'Carrot', 'CarrotSeeds', 'CarrotSoup', 'Cart',
+  'CastleKit_braided_box01', 'CastleKit_brazier', 'CastleKit_groundtorch', 'CastleKit_groundtorch_green', 'CastleKit_groundtorch_unlit', 'CastleKit_metal_groundtorch_unlit', 'CastleKit_pot03',
+  'cauldron_ext1_spice', 'cauldron_ext3_butchertable', 'cauldron_ext4_pots',
   'Chain', 'charcoal_kiln', 'Chest', 'Chitin',
+  'cloth_hanging_door_double', 'cloth_hanging_door', 'cloth_hanging_long',
   'Cloudberry', 'CloudberryBush', 'Club', 'clutter_shrub_large',
   'Coal', 'coal_pile', 'Coins', 'CookedDeerMeat', 'CookedLoxMeat', 'CookedMeat', 'CookedWolfMeat', 'Copper', 'CopperOre',
   'Crow', 'CryptKey', 'Crystal', 'crystal_wall_1x1',
@@ -36,8 +59,11 @@ export const prefabNames: string[] = [
   'EvilHeart_Forest', 'EvilHeart_Swamp',
   'Eyescream',
     
-  'Feathers', 'Feedback', 'Fenring', 'Fenring_attack_claw', 'Fenring_attack_jump', 'Fenring_ragdoll', 'Fenring_taunt', 'fermenter', 
-  'FineWood', 'FirCone', 'fire_pit', 'FireFlies', 'FirTree', 'FirTree_log', 'FirTree_log_half', 'FirTree_oldLog', 'FirTree_Sapling', 'FirTree_small', 'FirTree_small_dead', 'FirTree_Stub', 'Fish1', 'Fish2', 'Fish3', 'Fish4_cave', 'FishCooked', 'FishingBait', 'FishingRod', 'FishingRodFloat', 'FishingRodFloatProjectile', 'FishRaw', 'FishWraps',
+  'Feathers', 'Feedback',
+  'Fenring', 'Fenring_attack_claw', 'Fenring_attack_jump', 'Fenring_ragdoll', 'Fenring_taunt', 'Fenring_Cultist', 'Fenring_cultist_ragdoll',
+  'fenrirhide_hanging_door', 'fenrirhide_hanging',
+  'fermenter', 
+  'FineWood', 'FistFenrirClaw', 'FirCone', 'fire_pit', 'FireFlies', 'FirTree', 'FirTree_log', 'FirTree_log_half', 'FirTree_oldLog', 'FirTree_Sapling', 'FirTree_small', 'FirTree_small_dead', 'FirTree_Stub', 'Fish1', 'Fish2', 'Fish3', 'Fish4_cave', 'FishCooked', 'FishingBait', 'FishingRod', 'FishingRodFloat', 'FishingRodFloatProjectile', 'FishRaw', 'FishWraps',
   'Flametal', 'FlametalOre', 'Flash', 'Flax', 'Flies', 'Flint', 'flintspear_projectile',
   'forge', 'forge_ext1', 'forge_ext2', 'forge_ext3', 'forge_ext4', 'forge_ext5', 'forge_ext6',
   'FreezeGland',
@@ -62,10 +88,14 @@ export const prefabNames: string[] = [
   'guard_stone', 'guard_stone_test', 'Guck', 'GuckSack', 'GuckSack_small', 
     
   'Hair1', 'Hair2', 'Hair3', 'Hair4', 'Hair5', 'Hair6', 'Hair7', 'Hair8', 'Hair9', 'Hair10', 'Hair11', 'Hair12', 'Hair13', 'Hair14', 'HairNone', 'Haldor', 
+  'hanging_hairstand',
   'Hammer', 'HardAntler', 'Hatchling', 'hatchling_cold_projectile', 'Hatchling_ragdoll', 'hatchling_spit_cold', 'HealthUpgrade_Bonemass', 'HealthUpgrade_GDKing', 'hearth', 'HeathRockPillar', 'HeathRockPillar_frac',
   'HelmetBronze', 'HelmetDrake', 'HelmetDverger', 'HelmetIron', 'HelmetLeather', 'HelmetOdin', 'HelmetPadded', 'HelmetRoot', 'HelmetTrollLeather', 'HelmetYule', 'highstone', 'highstone_frac', 'Hoe', 'Honey', 'horizontal_web', 'HugeRoot1', 'HugeStone1',
 
+  'ice_floor', 'ice_floor_fractured',
   'ice_rock1', 'ice_rock1_frac', 'ice1', 'IceBlocker', 'imp_fireball_attack', 'Imp_fireball_projectile', 'incinerator', 'instanced_forest_groundcover', 'instanced_forest_groundcover_brown', 'instanced_heathflower', 'instanced_heathgrass', 'instanced_meadowsgrass', 'instanced_meadowsgrass_short', 'instanced_ormbunke', 'instanced_shrub', 'instanced_small_rock1', 'instanced_swamp_grass', 'instanced_swamp_ormbunke', 'instanced_vass', 'instanced_waterlilies', 'Iron', 'iron_floor_1x1', 'iron_floor_2x2', 'iron_grate', 'iron_wall_1x1', 'iron_wall_2x2', 'IronNails', 'IronOre', 'IronScrap', 'itemstand', 'itemstandh',
+
+  'jute_carpet', 'JuteRed',
 
   'Karve', 'KnifeBlackMetal', 'KnifeButcher', 'KnifeChitin', 'KnifeCopper', 'KnifeFlint', 'KnifeSilver',
 
@@ -81,7 +111,9 @@ export const prefabNames: string[] = [
   'MeadBaseFrostResist', 'MeadBaseHealthMedium', 'MeadBaseHealthMinor', 'MeadBasePoisonResist', 'MeadBaseStaminaMedium', 'MeadBaseStaminaMinor', 'MeadBaseTasty', 'MeadFrostResist', 'MeadHealthMedium', 'MeadHealthMinor', 'MeadPoisonResist', 'MeadStaminaMedium', 'MeadStaminaMinor', 'MeadTasty',
   'MinceMeatSauce', 'MineRock_Copper', 'MineRock_Iron', 'MineRock_Meteorite', 'MineRock_Obsidian', 'MineRock_Stone', 'MineRock_Tin',
   'MountainGraveStone01',
+  'MountainKit_brazier', 'mountainkit_chair', 'mountainkit_table', 'MountainKit_wood_gate',
   'mud_road', 'mud_road_v2', 'mudpile', 'mudpile_beacon', 'mudpile_frac', 'mudpile_old', 'mudpile2', 'mudpile2_frac',
+  'MusicVolume', 'MusicLocation',
   'Mushroom', 'MushroomBlue', 'MushroomYellow',
     
   'Neck', 'Neck_BiteAttack', 'Neck_Ragdoll', 'NeckTail', 'NeckTailGrilled', 'Needle',
@@ -143,13 +175,13 @@ export const prefabNames: string[] = [
   'Trailership', 'TrainingDummy',
   'treasure_pile', 'treasure_stack', 'TreasureChest_blackforest', 'TreasureChest_fCrypt', 'TreasureChest_forestcrypt', 'TreasureChest_heath', 'TreasureChest_meadows', 'TreasureChest_meadows_buried', 'TreasureChest_mountains', 'TreasureChest_plains_stone', 'TreasureChest_sunkencrypt', 'TreasureChest_swamp', 'TreasureChest_trollcave',
   'Troll', 'troll_groundslam', 'troll_groundslam_aoe', 'troll_log_swing_h', 'troll_log_swing_v', 'troll_punch', 'Troll_ragdoll', 'troll_throw', 'troll_throw_projectile', 'TrollHide',
-  'TrophyAbomination', 'TrophyBlob', 'TrophyBoar', 'TrophyBonemass', 'TrophyDeathsquito', 'TrophyDeer', 'TrophyDragonQueen', 'TrophyDraugr', 'TrophyDraugrFem', 'TrophyDraugrElite', 'TrophyEikthyr', 'TrophyFenring', 'TrophyForestTroll', 'TrophyFrostTroll', 'TrophyGoblin', 'TrophyGoblinBrute', 'TrophyGoblinKing', 'TrophyGoblinShaman', 'TrophyGreydwarf', 'TrophyGreydwarfBrute', 'TrophyGreydwarfShaman', 'TrophyGrowth', 'TrophyHatchling', 'TrophyLeech', 'TrophyLox', 'TrophyNeck', 'TrophySGolem', 'TrophySerpent', 'TrophySkeleton', 'TrophySkeletonPoison', 'TrophySurtling', 'TrophyTheElder', 'TrophyWolf', 'TrophyWraith',
+  'TrophyAbomination', 'TrophyBlob', 'TrophyBoar', 'TrophyBonemass', 'TrophyCultist', 'TrophyDeathsquito', 'TrophyDeer', 'TrophyDragonQueen', 'TrophyDraugr', 'TrophyDraugrFem', 'TrophyDraugrElite', 'TrophyEikthyr', 'TrophyFenring', 'TrophyForestTroll', 'TrophyFrostTroll', 'TrophyGoblin', 'TrophyGoblinBrute', 'TrophyGoblinKing', 'TrophyGoblinShaman', 'TrophyGreydwarf', 'TrophyGreydwarfBrute', 'TrophyGreydwarfShaman', 'TrophyGrowth', 'TrophyHatchling', 'TrophyLeech', 'TrophyLox', 'TrophyNeck', 'TrophySGolem', 'TrophySerpent', 'TrophySkeleton', 'TrophySkeletonPoison', 'TrophySurtling', 'TrophyTheElder', 'TrophyUlv', 'TrophyWolf', 'TrophyWraith',
   'tunnel_web', 'turf_roof', 'turf_roof_top', 'turf_roof_wall', 'Turnip', 'TurnipSeeds', 'TurnipStew',
-    
+  
   'Valkyrie', 'VegvisirShard_Bonemass', 'vertical_web', 'vfx_edge_clouds', 'vfx_swamp_mist', 'VikingShip', 'vines',
 
   'Waystone', 'widestone', 'widestone_frac', 'windmill', 'Wishbone', 'WitheredBone',
-  'Wolf', 'Wolf_Attack1', 'Wolf_Attack2', 'Wolf_Attack3', 'Wolf_cub', 'Wolf_Ragdoll', 'WolfFang', 'WolfJerky', 'WolfMeat', 'WolfMeatSkewer', 'WolfPelt',
+  'Wolf', 'Wolf_Attack1', 'Wolf_Attack2', 'Wolf_Attack3', 'Wolf_cub', 'Wolf_Ragdoll', 'WolfClaw', 'WolfFang', 'WolfHairBundle', 'WolfJerky', 'WolfMeat', 'WolfMeatSkewer', 'WolfPelt',
   'Wood', 'wood_beam', 'wood_beam_1', 'wood_beam_26', 'wood_beam_45', 'wood_core_stack', 'wood_door', 'wood_dragon1', 'wood_fence', 'wood_fine_stack', 'wood_floor', 'wood_floor_1x1', 'wood_gate', 'wood_ledge', 'wood_log_26', 'wood_log_45', 'wood_pole', 'wood_pole2', 'wood_pole_log', 'wood_pole_log_4', 'wood_roof', 'wood_roof_45', 'wood_roof_icorner', 'wood_roof_icorner_45', 'wood_roof_ocorner', 'wood_roof_ocorner_45', 'wood_roof_top', 'wood_roof_top_45', 'wood_stack', 'wood_stair', 'wood_stepladder', 'wood_wall_half', 'wood_wall_log', 'wood_wall_log_4x0.5', 'wood_wall_quarter', 'wood_wall_roof', 'wood_wall_roof_45', 'wood_wall_roof_45_upsidedown', 'wood_wall_roof_top', 'wood_wall_roof_top_45', 'wood_wall_roof_upsidedown', 'wood_window', 'woodiron_beam', 'woodiron_pole', 'woodwall',
   'Wraith', 'wraith_melee',
 

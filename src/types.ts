@@ -786,8 +786,7 @@ export interface Armor extends BaseItem {
 }
 
 export type Item = Resource | Weapon | Shield | Armor | Arrow | Tool;
-export type ItemSetBonus = Partial<{ Skills: Partial<Record<SkillType, number>> }>;
-export type ItemSet = { name: string; items: EntityId[]; bonus: (ItemSetBonus | undefined)[]; };
+export type ItemSet = { name: string; items: EntityId[]; bonus: (Effect | undefined)[]; };
 export type ItemSpecial = Weapon['special'] | Armor['special'] | Tool['special'];
 
 export type GameObject = Item | Piece | Structure | PhysicalObject | Ship | Cart | Creature;

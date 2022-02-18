@@ -1427,6 +1427,76 @@ export const creatures: Creature[] = [
 // MOUNTAINS
   {
     type: 'creature',
+    id: 'Bat',
+    ragdollId: null,
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
+    tags: ['animal', 'fly'],
+    tier: 4,
+    emoji: '',
+    faction: 'MountainMonsters',
+    spawners: [],
+    attacks: single([
+      { dmg: dmg({ slash: 20 }), name: 'bite', stagger: NaN, force: 30 },
+    ]),
+    tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 5,
+      run: 10,
+      swim: 0,
+    },
+    turnSpeed: {
+      walk: 300,
+      run: 300,
+      swim: 200,
+    },
+    hp: 10,
+    damageModifiers: animalDmgModifiers,
+    stagger: {
+      factor: 0.5,
+      time: NaN,
+    },
+    drop: [
+      dropEntry('LeatherScraps', { chance: 0.5 }),
+    ],
+  },
+  {
+    type: 'creature',
+    id: 'Ulv',
+    ragdollId: 'Ulv_Ragdoll',
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
+    tags: ['animal'],
+    tier: 4,
+    emoji: '',
+    faction: 'MountainMonsters',
+    spawners: [],
+    attacks: single([
+      { dmg: dmg({ slash: 80 }), name: 'bite', stagger: 1.4, force: 30 },
+      { dmg: dmg({ slash: 70 }), name: 'slash', stagger: 1.4, force: 130 },
+    ]),
+    tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 2,
+      run: 8,
+      swim: 2,
+    },
+    turnSpeed: {
+      walk: 150,
+      run: 200,
+      swim: 100,
+    },
+    hp: 50,
+    damageModifiers: { ...defaultDmgModifiers, fire: 'veryResistant', poison: 'weak' },
+    stagger: {
+      factor: 0.5,
+      time: 1.4,
+    },
+    drop: [
+      dropEntry('WolfFang', { chance: 0.5, min: 1, max: 2 }),
+      dropTrophy('TrophyUlv', 0.1),
+    ],
+  },
+  {
+    type: 'creature',
     id: 'Wolf',
     ragdollId: 'Wolf_Ragdoll',
     components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI', 'Procreation', 'Tameable'],
@@ -1539,6 +1609,56 @@ export const creatures: Creature[] = [
     drop: [
       dropEntry('WolfFang'),
       dropTrophy('TrophyFenring', 0.1),
+    ],
+  },
+  {
+    type: 'creature',
+    id: 'Fenring_Cultist',
+    ragdollId: 'Fenring_cultist_ragdoll',
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
+    tier: 4,
+    emoji: '',
+    faction: 'MountainMonsters',
+    spawners: [spawner({
+      tier: 4,
+      biomes: ['Mountain'],
+      biomeAreas: 2,
+      maxSpawned: 2,
+      interval: 400,
+      chance: 0.2,
+      groupRadius: 1,
+      night: true,
+      levels: [1, 1],
+    })],
+    attacks: single([
+      { dmg: dmg({ slash: 35, fire: 40 }), name: 'claw', stagger: 1.32, force: 60 },
+      { dmg: dmg({ slash: 35, fire: 40 }), name: 'claw2', stagger: 1.12, force: 60 },
+      { dmg: dmg({ fire: 50 }), name: 'flames', stagger: 1.12, force: 60 },
+    ]),
+    tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 5,
+      run: 5,
+      swim: 2,
+    },
+    turnSpeed: {
+      walk: 200,
+      run: 200,
+      swim: 200,
+    },
+    hp: 200,
+    stagger: {
+      factor: 0.5,
+      time: 1.12,
+    },
+    damageModifiers: {
+      ...defaultDmgModifiers,
+      fire: 'immune',
+      poison: 'weak',
+    },
+    drop: [
+      dropEntry('JuteRed', { min: 1, max: 3 }),
+      dropTrophy('TrophyCultist', 0.1),
     ],
   },
   {

@@ -581,6 +581,25 @@ const treasures: PhysicalObject[] = [
   {
     type: 'object',
     subtype: 'treasure',
+    id: 'TreasureChest_mountaincave',
+    components: ['Container'],
+    tier: 4,
+    drop: [{
+      offByOneBug: false,
+      oneOfEach,
+      num: [3, 5],
+      options: [
+        { item: 'Obsidian', num: [3, 9], weight: 0.5 },
+        { item: 'SilverNecklace', num: [1, 2], weight: 0.1 },
+        { item: 'Ruby', num: [1, 1], weight: 0.5 },
+        { item: 'Coins', num: [15, 35] },
+        { item: 'Coins', num: [15, 35] },
+      ],
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
     id: 'TreasureChest_heath',
     components: ['Container'],
     tier: 5,
@@ -632,6 +651,40 @@ const treasures: PhysicalObject[] = [
       ],
     }],
     Beacon: 20,
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
+    id: 'Pickable_MountainCaveRandom',
+    components: ['PickableItem'],
+    tier: 4,
+    drop: [{
+      offByOneBug: false,
+      num: [1, 1],
+      options: [
+        { item: 'Coins', num: [40, 60] },
+        { item: 'WolfHairBundle', num: [1, 1] },
+        { item: 'WolfClaw', num: [1, 1] },
+        { item: 'SilverNecklace', num: [1, 1] },
+      ]
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
+    id: 'Pickable_MeatPile',
+    components: ['PickableItem'],
+    tier: 4,
+    drop: [{
+      offByOneBug: false,
+      num: [1, 3],
+      options: [
+        { item: 'Coins', num: [9, 41], weight: 0.5 },
+        { item: 'Entrails', num: [1, 1] },
+        { item: 'BoneFragments', num: [1, 1] },
+        { item: 'SilverNecklace', num: [1, 1], weight: 0.1 },
+      ]
+    }],
   },
 ];
 
@@ -1668,6 +1721,85 @@ export const objects: PhysicalObject[] = [
   },
 
   // MOUNTAIN
+  {
+    type: 'object',
+    id: 'MountainKit_brazier',
+    subtype: 'misc',
+    // lightRadius: 0.5,
+    // warmRadius: 0.5,
+    tier: 4,
+    Destructible: {
+      minToolTier: 0,
+      hp: 50,
+      damageModifiers: mods([0, 0, 0, 0, 0, 1, 2, 3, 3, 3]),
+      parts: [],
+    },
+    drop: [{
+      num: [2, 2],
+      options: [
+        { item: 'Bronze', num: [1, 2] },
+        { item: 'FineWood', num: [1, 3] },
+      ],
+    }],
+  },
+  {
+    type: 'object',
+    id: 'mountainkit_chair',
+    subtype: 'misc',
+    tier: 4,
+    Destructible: {
+      minToolTier: 0,
+      hp: 10,
+      damageModifiers: mods([0, 0, 0, 0, 0, 0, 0, 0, 1, 1]),
+      parts: [],
+    },
+    drop: [singleDrop('FineWood')],
+  },
+  {
+    type: 'object',
+    id: 'mountainkit_table',
+    subtype: 'misc',
+    tier: 4,
+    Destructible: {
+      minToolTier: 0,
+      hp: 10,
+      damageModifiers: mods([0, 0, 0, 0, 0, 0, 0, 0, 1, 1]),
+      parts: [],
+    },
+    drop: [singleDrop('FineWood', 1, 3)],
+  },
+  {
+    type: 'object',
+    id: 'hanging_hairstand',
+    subtype: 'misc',
+    tier: 4,
+    Destructible: {
+      minToolTier: 0,
+      hp: 10,
+      damageModifiers: mods([0, 0, 0, 0, 0, 1, 1, 3, 3, 3]),
+      parts: [],
+    },
+    drop: [singleDrop('WolfHairBundle', 1, 3)],
+  },
+  {
+    type: 'object',
+    id: 'MountainKit_wood_gate',
+    subtype: 'misc',
+    tier: 4,
+    Destructible: {
+      minToolTier: 0,
+      hp: 100,
+      damageModifiers: mods([0, 0, 0, 0, 0, 2, 1, 3, 3, 3]),
+      parts: [],
+    },
+    drop: [{
+      num: [1, 1],
+      options: [
+        { item: 'Wood', num: [1, 2] },
+        { item: 'IronScrap', num: [1, 2], weight: 0.5 },
+      ],
+    }],
+  },
   ...[1, 2].map<PhysicalObject>(subId => ({
     type: 'object',
     subtype: 'rock',
@@ -1776,6 +1908,7 @@ export const objects: PhysicalObject[] = [
     children: 122,
     drop: singleDrop('Stone', 4, 8),
   }),
+// PLAINS
   ...rock({
     id: ['rock4_heath', 'rock4_heath_frac'],
     grow: itemGrow({

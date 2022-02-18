@@ -6,13 +6,41 @@ const CRAFT_TIME = 4;
 const trollSet: ItemSet = {
   name: 'troll',
   items: [],
-  bonus: [,,, { Skills: { [SkillType.Sneak]: 15 } }],
+  bonus: [,,,
+    {
+      type: 'effect',
+      id: 'trollArmorSet',
+      tier: 2,
+      attackModifier: [SkillType.Sneak, 15],
+    }
+  ],
 };
 
 const rootSet: ItemSet = {
   name: 'root',
   items: [],
-  bonus: [,, { Skills: { [SkillType.Bows]: 15 } }],
+  bonus: [,,
+    {
+      type: 'effect',
+      id: 'rootArmorSet',
+      tier: 3,
+      attackModifier: [SkillType.Bows, 15]
+    }
+  ],
+};
+
+const fenringSet: ItemSet = {
+  name: 'fenring',
+  items: [],
+  bonus: [,,
+    {
+      type: 'effect',
+      id: 'fenringArmorSet',
+      tier: 4,
+      damageModifiers: { fire: 'resistant' },
+      attackModifier: [SkillType.Unarmed, 15],
+    }
+  ],
 };
 
 export const items: Item[] = [
@@ -336,6 +364,58 @@ export const items: Item[] = [
     }
   },
 // SILVER AGE
+  { id: 'ArmorFenringLegs',
+    tier: 3,
+    type: 'armor', slot: 'legs',
+    set: fenringSet,
+    armor: [10, 2],
+    weight: 10,
+    maxLvl: 4,
+    durability: [1000, 200],
+    moveSpeed: 0.03,
+    recipe: {
+      type: 'craft_upg',
+      time: CRAFT_TIME,
+      materials: { WolfHairBundle: 20, WolfPelt: 5, LeatherScraps: 10 },
+      materialsPerLevel: { WolfHairBundle: 5, WolfPelt: 3, LeatherScraps: 4 },
+      source: { station: 'piece_workbench', level: 2 },
+    }
+  },
+  { id: 'ArmorFenringChest',
+    tier: 3,
+    type: 'armor', slot: 'body',
+    set: fenringSet,
+    armor: [10, 2],
+    weight: 10,
+    maxLvl: 4,
+    durability: [1000, 200],
+    moveSpeed: 0.03,
+    damageModifiers: { frost: 'resistant' },
+    recipe: {
+      type: 'craft_upg',
+      time: CRAFT_TIME,
+      materials: { WolfHairBundle: 20, WolfPelt: 5, LeatherScraps: 10 },
+      materialsPerLevel: { WolfHairBundle: 5, WolfPelt: 3, LeatherScraps: 4 },
+      source: { station: 'piece_workbench', level: 2 },
+    }
+  },
+  { id: 'HelmetFenring',
+    tier: 3,
+    type: 'armor', slot: 'head',
+    set: fenringSet,
+    armor: [10, 2],
+    weight: 3,
+    maxLvl: 4,
+    durability: [1000, 200],
+    moveSpeed: 0.03,
+    recipe: {
+      type: 'craft_upg',
+      time: CRAFT_TIME,
+      materials: { WolfHairBundle: 20, WolfPelt: 2, TrophyCultist: 1 },
+      materialsPerLevel: { WolfHairBundle: 5, WolfPelt: 4 },
+      source: { station: 'piece_workbench', level: 2 },
+    }
+  },
   { id: 'ArmorWolfLegs',
     tier: 4,
     type: 'armor', slot: 'legs',

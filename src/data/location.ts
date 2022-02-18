@@ -1179,6 +1179,25 @@ export const locations: LocationConfig[] = [
     },
     'TarPit',
   ),
+  loc(
+    5, 'MountainCave02', ['Mountain'],
+    { type: 'dungeon', components: ['DungeonGenerator'],
+      quantity: 160, biomeArea: 2, chance: 0, group: 'mountaincaves', minApart: 200, terrainDelta: [0, 40], minAlt: 100, radius: 15,
+      items: [
+        locItem('Bat', 0.5, 12),
+        locItem('Ulv', 0.3, 8),
+        locItem('Fenring_Cultist', 0.2, 10),
+        locItem('Pickable_FishingRod', 0.1, 2),
+        locItem('Pickable_Hairstrands01', 0.4, 6),
+        locItem('Pickable_Hairstrands02', 0.4, 6),
+        locItem('Pickable_MountainCaveCrystal', 0.4, 8),
+        locItem('Pickable_MountainCaveObsidian', 0.4, 12),
+        locItem('Pickable_MeatPile', 0.3, 3),
+        locItem('Pickable_MountainCaveRandom', 0.4, 10),
+      ],
+    },
+    'MountainCave',
+  ),
 ];
 
 export const dungeons: DungeonGenConfig[] = [

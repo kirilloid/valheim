@@ -32,6 +32,7 @@ export const envStates = {
   'Ashrain': { emoji: '', wind: [0.1, 0.5], light: [0.8, 1.3], flags: 0 },
   'Crypt': { emoji: '⬛', wind: [0, 0], light: [0, 0], flags: DARK },
   'SunkenCrypt': { emoji: '⬛', wind: [0, 0], light: [0, 0], flags: DARK },
+  'Caves': { emoji: '⬛', wind: [0, 0], light: [0.1, 0.1], flags: DARK | FREEZE },
 } as const;
 
 export type ES = typeof envStates;

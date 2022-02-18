@@ -106,10 +106,12 @@ export const extraData: Record<string, GameComponent[]> = {
   CargoCrate: ['Container'],
 
   BonePileSpawner: ['CreatureSpawner'],
+  Spawner_Bat: ['CreatureSpawner'],
   Spawner_Blob: ['CreatureSpawner'],
   Spawner_BlobElite: ['CreatureSpawner'],
   Spawner_BlobTar_respawn_30: ['CreatureSpawner'],
   Spawner_Boar: ['CreatureSpawner'],
+  Spawner_Cultist: ['CreatureSpawner'],
   Spawner_Draugr: ['CreatureSpawner'],
   Spawner_Draugr_Elite: ['CreatureSpawner'],
   Spawner_Draugr_Ranged: ['CreatureSpawner'],
@@ -130,6 +132,7 @@ export const extraData: Record<string, GameComponent[]> = {
   Spawner_Skeleton_respawn_30: ['CreatureSpawner'],
   Spawner_StoneGolem: ['CreatureSpawner'],
   Spawner_Troll: ['CreatureSpawner'],
+  Spawner_Ulv: ['CreatureSpawner'],
   Spawner_Wraith: ['CreatureSpawner'],
 
   Draugr_Ranged: ['BaseAI', 'Humanoid', 'MonsterAI', 'VisEquipment'],
