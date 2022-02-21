@@ -4,12 +4,13 @@ import { useHistory, useParams } from 'react-router-dom';
 import '../../css/FoodPlanner.css';
 
 import type { Biome, Food, GameObject, Resource, SimpleDrop } from '../../types';
-import { days, isNotNull, groupBy, mapValues } from '../../model/utils';
+import { days, isNotNull, groupBy, mapValues, assertNever } from '../../model/utils';
 import { BASE_HEALTH, BASE_STAMINA, MAX_PLAYERS } from '../../model/game';
 import { addDrop } from '../../model/dist';
 
 import { resources } from '../../data/resources';
 import { data } from '../../data/itemDB';
+import { recipes } from '../../data/recipes';
 
 import { TranslationContext, useRuneTranslate, useDebounceEffect, useGlobalState } from '../../effects';
 import { InlineObjectWithIcon, showNumber } from '../helpers';
@@ -44,10 +45,17 @@ const FoodOptions = React.memo(() => {
 function getItemResources(item: GameObject | undefined): SimpleDrop {
   if (item == null) return {};
   if (item.type !== 'item') return { [item.id]: 1 };
-  const { recipe } = item;
-  if (recipe?.type !== 'craft_one') return { [item.id]: 1 };
-  return Object.entries(recipe.materials)
-    .reduce((total, [res, num]) => addDrop(total, getItemResources(data[res]), num / recipe.number), {});
+  const recipe = recipes.find(r => r.item === item.id);
+  switch (recipe?.type) {
+    case undefined: 
+    case 'trader':
+      return { [item.id]: 1 };
+    case 'craft':
+      return Object.entries(recipe.materials)
+        .reduce((total, [res, num]) => addDrop(total, getItemResources(data[res]), num / recipe.number), {});
+    default:
+      return assertNever(recipe);
+  }
 }
 
 function getFoodResourcesPerDay(item: FoodItem | undefined): SimpleDrop {
@@ -55,11 +63,16 @@ function getFoodResourcesPerDay(item: FoodItem | undefined): SimpleDrop {
     return {};
   }
   const t = 1 / days(item.Food.duration);
-  const { recipe } = item; 
-  if (recipe?.type !== 'craft_one') {
-    return { [item.id]: t };
+  const recipe = recipes.find(r => r.item === item.id);
+  switch (recipe?.type) {
+    case undefined: 
+    case 'trader':
+      return { [item.id]: t };
+    case 'craft':
+      return mapValues(getItemResources(item), v => v * t);
+    default:
+      return assertNever(recipe);
   }
-  return mapValues(getItemResources(item), v => v * t);
 }
 
 function updateAtIndex<T extends any[]>(array: T, idx: number, val: T[number]): T {

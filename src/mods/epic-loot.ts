@@ -1,5 +1,9 @@
-import type { DamageProfile, GameObject, Item, Piece, Resource } from '../types';
+import { forgeRecipe, traderRecipe, inventoryRecipe, genericRecipe } from '../model/recipe';
+import type { DamageProfile, GameObject, Item, Piece, Resource, ItemRecipe, EntityId } from '../types';
 import { mods } from '../types';
+
+const augmenterRecipe = (materials: Record<EntityId, number>, item: EntityId, number = 1) =>
+  genericRecipe('piece_augmenter', 1, 3, materials, {}, item, number);
 
 type Rarity = 'Generic' | 'Magic' | 'Rare' | 'Epic' | 'Legendary';
 type EffectType =
@@ -115,49 +119,19 @@ export function modifyDamage(damage: DamageProfile, effects: EpicLootData['effec
   return { blunt, slash, pierce, chop, pickaxe, fire, frost, lightning, poison, spirit };
 }
 
+const rarityArr = ['Magic', 'Rare', 'Epic', 'Legendary'];
+const magicIngridients = ['Dust', 'Essence', 'Reagent', 'Shard', 'Runestone'];
+
 const resources: Resource[] = [
-  ...Object.entries({
-    Magic: 2,
-    Rare: 3,
-    Epic: 4,
-    Legendary: 5,
-  }).flatMap<Resource>(([rarity, tier]) => [
-    {
-      id: `Dust${rarity}`,
-      tier,
+  ...rarityArr.flatMap<Resource>((rarity, i) => magicIngridients.map(
+    ingridient => ({
+      id: `${ingridient}${rarity}`,
+      tier: i + 2,
       type: 'item',
       stack: 100,
       weight: 0.1,
-    },
-    {
-      id: `Essence${rarity}`,
-      tier,
-      type: 'item',
-      stack: 100,
-      weight: 0.1,
-    },
-    {
-      id: `Shard${rarity}`,
-      tier,
-      type: 'item',
-      stack: 100,
-      weight: 0.1,
-    },
-    {
-      id: `Reagent${rarity}`,
-      tier,
-      type: 'item',
-      stack: 100,
-      weight: 0.1,
-    },
-    {
-      id: `Runestone${rarity}`,
-      tier,
-      type: 'item',
-      stack: 100,
-      weight: 0.1,
-    },
-  ]),
+    })
+  )),
 ];
 
 const items: Item[] = [
@@ -170,13 +144,6 @@ const items: Item[] = [
     weight: 2,
     durability: [Infinity, 0],
     moveSpeed: 0,
-    recipe: {
-      type: 'craft_upg',
-      time: 3,
-      materials: { LeatherScraps: 5, Bronze: 1 },
-      materialsPerLevel: {},
-      source: { station: 'forge', level: 0 },
-    },
   },
   {
     id: 'GoldRubyRing',
@@ -187,13 +154,16 @@ const items: Item[] = [
     weight: 1,
     durability: [Infinity, 0],
     moveSpeed: 0,
-    recipe: {
-      type: 'craft_upg',
-      time: 3,
-      materials: { Coins: 200, Ruby: 1 },
-      materialsPerLevel: {},
-      source: { station: 'forge', level: 0 },
-    }
+  },
+  {
+    id: 'SilverRing',
+    tier: 4,
+    type: 'armor', slot: 'util',
+    maxLvl: 1,
+    armor: [0, 0],
+    weight: 1,
+    durability: [Infinity, 0],
+    moveSpeed: 0,
   },
   {
     id: 'Advaranaut',
@@ -204,10 +174,6 @@ const items: Item[] = [
     weight: 1,
     durability: [Infinity, 0],
     moveSpeed: 0,
-    recipe: {
-      type: 'trader',
-      value: 2000,
-    }
   },
   {
     id: 'TreasureMap',
@@ -272,3 +238,80 @@ export const data: GameObject[] = [
   ...items,
   ...buildings,
 ].map(item => ({ ...item, mod: 'EpicLoot' }) as GameObject)
+
+export const recipes: ItemRecipe[] = [
+  forgeRecipe(1, { LeatherScraps: 5, Bronze: 1 }, {}, 'LeatherBelt'),
+  forgeRecipe(1, { Coins: 200, Ruby: 1 }, {}, 'GoldRubyRing'),
+  forgeRecipe(1, { Silver: 1 }, {}, 'SilverRing'),
+  traderRecipe(2000, 'Advaranaut'),
+
+  // upgrade
+  inventoryRecipe({ ShardMagic: 5 }, 'ShardRare'),
+  inventoryRecipe({ ShardRare: 5, Coins: 5 }, 'ShardEpic'),
+  inventoryRecipe({ ShardEpic: 5, Coins: 10 }, 'ShardLegendary'),
+  inventoryRecipe({ DustMagic: 5 }, 'DustRare'),
+  inventoryRecipe({ DustRare: 5, Coins: 5 }, 'DustEpic'),
+  inventoryRecipe({ DustEpic: 5, Coins: 10 }, 'DustLegendary'),
+  inventoryRecipe({ ReagentMagic: 5 }, 'ReagentRare'),
+  inventoryRecipe({ ReagentRare: 5, Coins: 5 }, 'ReagentEpic'),
+  inventoryRecipe({ ReagentEpic: 5, Coins: 10 }, 'ReagentLegendary'),
+  inventoryRecipe({ EssenceMagic: 5 }, 'EssenceRare'),
+  inventoryRecipe({ EssenceRare: 5, Coins: 5 }, 'EssenceEpic'),
+  inventoryRecipe({ EssenceEpic: 5, Coins: 10 }, 'EssenceLegendary'),
+  inventoryRecipe({ RunestoneMagic: 5 }, 'RunestoneRare'),
+  inventoryRecipe({ RunestoneRare: 5, Coins: 5 }, 'RunestoneEpic'),
+  inventoryRecipe({ RunestoneEpic: 5, Coins: 10 }, 'RunestoneLegendary'),
+  // convert
+  inventoryRecipe({ ShardMagic: 2 }, 'DustMagic'),
+  inventoryRecipe({ ShardMagic: 2 }, 'EssenceMagic'),
+  inventoryRecipe({ ShardMagic: 2 }, 'ReagentMagic'),
+  inventoryRecipe({ ShardRare: 2, Coins: 2 }, 'DustRare'),
+  inventoryRecipe({ ShardRare: 2, Coins: 2 }, 'EssenceRare'),
+  inventoryRecipe({ ShardRare: 2, Coins: 2 }, 'ReagentRare'),
+  inventoryRecipe({ ShardEpic: 2, Coins: 3 }, 'DustEpic'),
+  inventoryRecipe({ ShardEpic: 2, Coins: 3 }, 'EssenceEpic'),
+  inventoryRecipe({ ShardEpic: 2, Coins: 3 }, 'ReagentEpic'),
+  inventoryRecipe({ ShardLegendary: 2, Coins: 4 }, 'DustLegendary'),
+  inventoryRecipe({ ShardLegendary: 2, Coins: 4 }, 'EssenceLegendary'),
+  inventoryRecipe({ ShardLegendary: 2, Coins: 4 }, 'ReagentLegendary'),
+  // "junk"
+  augmenterRecipe({ BoneFragments: 10 }, 'TrophySkeleton'),
+  augmenterRecipe({ GreydwarfEye: 10 }, 'TrophyGreydwarf'),
+  augmenterRecipe({ HardAntler: 5 }, 'TrophyDeer'),
+  augmenterRecipe({ TrollHide: 10 }, 'TrophyFrostTroll'),
+  augmenterRecipe({ SurtlingCore: 2 }, 'TrophySurtling'),
+  augmenterRecipe({ FreezeGland: 3 }, 'TrophyHatchling'),
+  augmenterRecipe({ DragonTear: 3 }, 'RunestoneLegendary'),
+  augmenterRecipe({ YagluthDrop: 1 }, 'RunestoneLegendary'),
+  // trophies
+  augmenterRecipe({ TrophyBoar: 1 }, 'ShardMagic'),
+  augmenterRecipe({ TrophyNeck: 1 }, 'ShardMagic'),
+  augmenterRecipe({ TrophyDeer: 1 }, 'ShardMagic'),
+  augmenterRecipe({ TrophyEikthyr: 1 }, 'RunestoneMagic'),
+
+  // TrophySkeletonPoison
+  augmenterRecipe({ TrophyGreydwarf: 1 }, 'ShardRare'),
+  augmenterRecipe({ TrophyGreydwarfBrute: 1 }, 'ShardRare'),
+  augmenterRecipe({ TrophyGreydwarfShaman: 1 }, 'ShardRare'),
+  augmenterRecipe({ TrophyFrostTroll: 1 }, 'ShardEpic'),
+  augmenterRecipe({ TrophyTheElder: 1 }, 'RunestoneRare'),
+  // TrophyLeech
+  // TrophyBlob
+  // TrophyDraugr
+  // TrophyDraugrElite
+  // TrophyWraith
+  // TrophyAbomination
+  augmenterRecipe({ TrophyBonemass: 1 }, 'RunestoneEpic'),
+  // TrophySerpent
+  // TrophyWolf
+  // TrophyFenring
+  // TrophySGolem
+  augmenterRecipe({ TrophyDragon: 1 }, 'RunestoneLegendary'),
+  // TrophyLox
+  // TrophyDeathsquito
+  // TrophyGrowth
+  // TrophyGoblin
+  // TrophyGoblinBrute
+  // TrophyGoblinShaman
+  augmenterRecipe({ TrophyGoblinKing: 3 }, 'RunestoneLegendary'),
+];

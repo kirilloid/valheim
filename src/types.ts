@@ -594,6 +594,21 @@ export function itemGrow(...grows: ItemGrowConfig[]): ItemGrow[] {
   }));
 }
 
+export type ItemRecipe = {
+  type: 'craft';
+  time: number;
+  materials: Record<EntityId, number>;
+  materialsPerLevel: Record<EntityId, number>;
+  source: { station: EntityId | null; level?: number };
+  item: EntityId;
+  number: number;
+} | {
+  type: 'trader';
+  value: number;
+  item: EntityId;
+  number: number;
+};
+
 interface BaseItem extends GameObjectBase {
   stack?: number;
   maxLvl?: number;
@@ -601,23 +616,6 @@ interface BaseItem extends GameObjectBase {
   weight: number;
   floating?: true;
   teleportable?: false;
-  recipe?: {
-    type: 'craft_upg';
-    time: number;
-    materials: Record<EntityId, number>;
-    materialsPerLevel: Record<EntityId, number>;
-    source: { station: EntityId | null; level?: number };
-  } | {
-    type: 'craft_one';
-    time: number;
-    materials: Record<EntityId, number>;
-    source: { station: EntityId | null; level?: number };
-    number: number;
-  } | {
-    type: 'trader';
-    value: number;
-    number?: number;
-  };
   grow?: ItemGrow[];
 }
 

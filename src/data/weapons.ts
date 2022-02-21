@@ -88,13 +88,6 @@ export const items: (Weapon | Shield)[] = [
       range: 2.4,
     }],
     durability: [100, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Wood: 6 },
-      materialsPerLevel: { BoneFragments: 5 },
-      source: { station: null, level: 0 },
-    }
   },
   { type: 'weapon', slot: 'primary',
     id: 'AxeStone',
@@ -124,13 +117,6 @@ export const items: (Weapon | Shield)[] = [
       range: 2.2,
     }],
     durability: [100, 30],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Wood: 5, Stone: 4 },
-      materialsPerLevel: { Stone: 2 },
-      source: { station: null, level: 0 },
-    }
   },
   { type: 'weapon', slot: 'either',
     id: 'Torch',
@@ -159,13 +145,6 @@ export const items: (Weapon | Shield)[] = [
     }],
     durability: [20, 0],
     durabilityDrainPerSec: 30,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Wood: 1, Resin: 1 },
-      materialsPerLevel: {},
-      source: { station: null, level: 0 },
-    }
   },
 // STONE AGE
   { type: 'weapon', slot: 'primary',
@@ -196,13 +175,6 @@ export const items: (Weapon | Shield)[] = [
       range: 2.2,
     }],
     durability: [100, 30],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Wood: 4, Flint: 6 },
-      materialsPerLevel: { Flint: 3, LeatherScraps: 2 },
-      source: { station: 'piece_workbench', level: 1 },
-    }
   },
   { type: 'weapon', slot: 'primary',
     id: 'KnifeFlint',
@@ -239,13 +211,6 @@ export const items: (Weapon | Shield)[] = [
       mul: { damage: 3, force: 4, stagger: 1 },
     }],
     durability: [200, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Wood: 2, Flint: 4, LeatherScraps: 2 },
-      materialsPerLevel: { Flint: 2 },
-      source: { station: 'piece_workbench', level: 1 },
-    }
   },
   { type: 'weapon', slot: 'primary',
     id: 'SpearFlint',
@@ -280,13 +245,6 @@ export const items: (Weapon | Shield)[] = [
       mul: { damage: 1.5, force: 1.5, stagger: 1 },
     }],
     durability: [100, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Wood: 5, Flint: 10, LeatherScraps: 2 },
-      materialsPerLevel: { Wood: 3, Flint: 5, LeatherScraps: 1 },
-      source: { station: 'piece_workbench', level: 1 },
-    }
   },
   { type: 'weapon', slot: 'both',
     id: 'SledgeStagbreaker',
@@ -316,13 +274,6 @@ export const items: (Weapon | Shield)[] = [
       range: 2.4,
     }],
     durability: [100, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { RoundLog: 20, TrophyDeer: 5, LeatherScraps: 2 },
-      materialsPerLevel: { RoundLog: 5, TrophyDeer: 2, LeatherScraps: 1, BoneFragments: 10 },
-      source: { station: 'piece_workbench', level: 2 },
-    }
   },
   { type: 'weapon', slot: 'bow',
     id: 'Bow',
@@ -351,13 +302,6 @@ export const items: (Weapon | Shield)[] = [
     durability: [50, 50],
     holdDurationMin: 2.5,
     holdStaminaDrain: 4,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Wood: 10, LeatherScraps: 8 },
-      materialsPerLevel: { Wood: 5, LeatherScraps: 4, DeerHide: 1 },
-      source: { station: 'piece_workbench', level: 1 },
-    }
   },
   { type: 'weapon', slot: 'both',
     id: 'PickaxeStone',
@@ -385,13 +329,6 @@ export const items: (Weapon | Shield)[] = [
       range: 1.8,
     }],
     durability: [100, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Wood: 3, Stone: 10 },
-      materialsPerLevel: { Wood: 1, Stone: 5 },
-      source: { station: 'piece_workbench', level: 1 },
-    },
   },
   { type: 'weapon', slot: 'both',
     id: 'PickaxeAntler',
@@ -418,13 +355,6 @@ export const items: (Weapon | Shield)[] = [
       range: 1.8,
     }],
     durability: [100, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Wood: 10, HardAntler: 1 },
-      materialsPerLevel: {},
-      source: { station: 'piece_workbench', level: 1 },
-    }
   },
   { type: 'shield', slot: 'secondary',
     id: 'ShieldWood',
@@ -441,13 +371,6 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 1.5,
     skill: SkillType.Blocking,
     durability: [200, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Wood: 10, Resin: 4, LeatherScraps: 4 },
-      materialsPerLevel: { Wood: 5, Resin: 2, LeatherScraps: 2 },
-      source: { station: 'piece_workbench', level: 1 },
-    }
   },
   { type: 'shield', slot: 'secondary',
     id: 'ShieldWoodTower',
@@ -464,13 +387,6 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 0,
     skill: SkillType.Blocking,
     durability: [200, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Wood: 10, LeatherScraps: 6 },
-      materialsPerLevel: { Wood: 5, LeatherScraps: 3 },
-      source: { station: 'piece_workbench', level: 1 },
-    }
   },
 // BRONZE AGE
   { type: 'weapon', slot: 'primary',
@@ -508,13 +424,6 @@ export const items: (Weapon | Shield)[] = [
       mul: { damage: 3, force: 4, stagger: 1 },
     }],
     durability: [200, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Wood: 2, Copper: 8 },
-      materialsPerLevel: { GreydwarfEye: 8, Copper: 4 },
-      source: { station: 'forge', level: 1 },
-    }
   },
   { type: 'weapon', slot: 'primary',
     id: 'AtgeirBronze',
@@ -548,13 +457,6 @@ export const items: (Weapon | Shield)[] = [
       mul: { damage: 1, force: 10, stagger: 6 },
     }],
     durability: [125, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Wood: 10, Bronze: 8, LeatherScraps: 2 },
-      materialsPerLevel: { Bronze: 4 },
-      source: { station: 'forge', level: 1 },
-    }
   },
   { type: 'weapon', slot: 'primary',
     id: 'AxeBronze',
@@ -584,13 +486,6 @@ export const items: (Weapon | Shield)[] = [
       range: 2.2,
     }],
     durability: [125, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Wood: 4, Bronze: 8, LeatherScraps: 2 },
-      materialsPerLevel: { Bronze: 4, LeatherScraps: 1 },
-      source: { station: 'forge', level: 1 },
-    }
   },
   { type: 'weapon', slot: 'primary',
     id: 'MaceBronze',
@@ -625,13 +520,6 @@ export const items: (Weapon | Shield)[] = [
       mul: { damage: 2.5, force: 2, stagger: 2 },
     }],
     durability: [200, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Wood: 4, Bronze: 8, LeatherScraps: 3 },
-      materialsPerLevel: { Bronze: 4 },
-      source: { station: 'forge', level: 1 },
-    }
   },
   { type: 'weapon', slot: 'primary',
     id: 'SpearBronze',
@@ -666,13 +554,6 @@ export const items: (Weapon | Shield)[] = [
       mul: { damage: 1.5, force: 1.5, stagger: 1 },
     }],
     durability: [100, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Wood: 5, Bronze: 6, DeerHide: 2 },
-      materialsPerLevel: { Wood: 3, Bronze: 4, DeerHide: 1 },
-      source: { station: 'forge', level: 1 },
-    }
   },
   { type: 'weapon', slot: 'primary',
     id: 'SwordBronze',
@@ -706,13 +587,6 @@ export const items: (Weapon | Shield)[] = [
       mul: { damage: 3, force: 1, stagger: 1 },
     }],
     durability: [200, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Wood: 2, Bronze: 8, LeatherScraps: 2 },
-      materialsPerLevel: { Wood: 1, Bronze: 4, LeatherScraps: 1 },
-      source: { station: 'forge', level: 1 },
-    }
   },
   { type: 'weapon', slot: 'both',
     id: 'PickaxeBronze',
@@ -742,13 +616,6 @@ export const items: (Weapon | Shield)[] = [
       range: 1.8,
     }],
     durability: [120, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { RoundLog: 3, Bronze: 10 },
-      materialsPerLevel: { RoundLog: 1, Bronze: 5 },
-      source: { station: 'forge', level: 1 },
-    }
   },
   { type: 'weapon', slot: 'bow',
     id: 'BowFineWood',
@@ -777,13 +644,6 @@ export const items: (Weapon | Shield)[] = [
     durability: [100, 50],
     holdDurationMin: 2.5,
     holdStaminaDrain: 6,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { FineWood: 10, RoundLog: 10, DeerHide: 2 },
-      materialsPerLevel: { FineWood: 5, RoundLog: 5, DeerHide: 2 },
-      source: { station: 'piece_workbench', level: 1 },
-    }
   },
   { type: 'shield', slot: 'secondary',
     id: 'ShieldBronzeBuckler',
@@ -798,13 +658,6 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 2.5,
     skill: SkillType.Blocking,
     durability: [200, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Wood: 4, Bronze: 10 },
-      materialsPerLevel: { Wood: 1, Bronze: 5 },
-      source: { station: 'forge', level: 1 },
-    }
   },
   { type: 'shield', slot: 'secondary',
     id: 'ShieldBoneTower',
@@ -820,13 +673,6 @@ export const items: (Weapon | Shield)[] = [
     parryBonus: 0,
     skill: SkillType.Blocking,
     durability: [200, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Wood: 10, BoneFragments: 10, TrophySkeleton: 3 },
-      materialsPerLevel: { Wood: 5, BoneFragments: 5 },
-      source: { station: 'piece_workbench', level: 3 },
-    }
   },
 // IRON AGE
   { type: 'weapon', slot: 'primary',
@@ -853,14 +699,7 @@ export const items: (Weapon | Shield)[] = [
       stamina: 8,
       range: 1.5,
     }],
-    durability: [0, 0],
-    recipe: {
-      type: 'craft_one',
-      time: CRAFT_TIME,
-      materials: { LeatherScraps: 5, Ooze: 10, Resin: 3 },
-      source: { station: 'piece_workbench', level: 1 },
-      number: 5,
-    }
+    durability: [Infinity, 0],
   },
   { type: 'weapon', slot: 'both',
     id: 'Battleaxe',
@@ -899,13 +738,6 @@ export const items: (Weapon | Shield)[] = [
       mul: { damage: 0.5, force: 2, stagger: 4 },
     }],
     durability: [200, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { ElderBark: 30, Iron: 35, LeatherScraps: 4 },
-      materialsPerLevel: { ElderBark: 5, Iron: 15 },
-      source: { station: 'forge', level: 2 },
-    }
   },
   { type: 'weapon', slot: 'primary',
     id: 'SwordIron',
@@ -941,13 +773,6 @@ export const items: (Weapon | Shield)[] = [
       mul: { damage: 3, force: 1, stagger: 1 },
     }],
     durability: [200, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Wood: 2, Iron: 20, LeatherScraps: 3 },
-      materialsPerLevel: { Wood: 1, Iron: 10, LeatherScraps: 2 },
-      source: { station: 'forge', level: 2 },
-    },
   },
   { type: 'weapon', slot: 'primary',
     id: 'AxeIron',
@@ -977,13 +802,6 @@ export const items: (Weapon | Shield)[] = [
       range: 2.2,
     }],
     durability: [175, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Wood: 4, Iron: 20, LeatherScraps: 2 },
-      materialsPerLevel: { Iron: 10, LeatherScraps: 1 },
-      source: { station: 'forge', level: 2 },
-    },
   },
   { type: 'weapon', slot: 'both',
     id: 'SledgeIron',
@@ -1010,13 +828,6 @@ export const items: (Weapon | Shield)[] = [
       mul: { damage: 1, force: 1, stagger: 2 },
     }],
     durability: [100, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { ElderBark: 10, Iron: 30, YmirRemains: 4, TrophyDraugrElite: 1 },
-      materialsPerLevel: { ElderBark: 2, Iron: 15, YmirRemains: 2 },
-      source: { station: 'forge', level: 2 },
-    },
   },
   { type: 'weapon', slot: 'primary',
     id: 'MaceIron',
@@ -1051,13 +862,6 @@ export const items: (Weapon | Shield)[] = [
       mul: { damage: 2.5, force: 2, stagger: 2 },
     }],
     durability: [200, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Wood: 4, Iron: 20, LeatherScraps: 3 },
-      materialsPerLevel: { Iron: 10 },
-      source: { station: 'forge', level: 2 },
-    },
   },
   { type: 'weapon', slot: 'primary',
     id: 'SpearElderbark',
@@ -1092,13 +896,6 @@ export const items: (Weapon | Shield)[] = [
       mul: { damage: 1.5, force: 1.5, stagger: 1 },
     }],
     durability: [100, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { TrollHide: 4, Iron: 10, ElderBark: 10, },
-      materialsPerLevel: { TrollHide: 1, Iron: 5, ElderBark: 5 },
-      source: { station: 'forge', level: 3 },
-    }
   },
   { type: 'weapon', slot: 'both',
     id: 'PickaxeIron',
@@ -1128,13 +925,6 @@ export const items: (Weapon | Shield)[] = [
       range: 1.8,
     }],
     durability: [150, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { RoundLog: 3, Iron: 20 },
-      materialsPerLevel: { RoundLog: 1, Iron: 10 },
-      source: { station: 'forge', level: 2 },
-    },
   },
   { type: 'weapon', slot: 'both',
     id: 'AtgeirIron',
@@ -1168,13 +958,6 @@ export const items: (Weapon | Shield)[] = [
       mul: { damage: 1, force: 10, stagger: 6 },
     }],
     durability: [175, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Wood: 10, Iron: 30, LeatherScraps: 2 },
-      materialsPerLevel: { Iron: 15, LeatherScraps: 1 },
-      source: { station: 'forge', level: 2 },
-    },
   },
   { type: 'weapon', slot: 'bow',
     id: 'BowHuntsman',
@@ -1203,13 +986,6 @@ export const items: (Weapon | Shield)[] = [
     durability: [100, 50],
     holdDurationMin: 2.5,
     holdStaminaDrain: 8,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { FineWood: 10, Iron: 20, Feathers: 10, DeerHide: 2 },
-      materialsPerLevel: { FineWood: 5, Iron: 10, Feathers: 5, DeerHide: 2 },
-      source: { station: 'forge', level: 1 },
-    }
   },
   { type: 'shield', slot: 'secondary',
     id: 'ShieldBanded',
@@ -1229,13 +1005,6 @@ export const items: (Weapon | Shield)[] = [
     knockback: 50,
     backstab: 4,
     durability: [200, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { FineWood: 10, Iron: 8 },
-      materialsPerLevel: { FineWood: 10, Iron: 4 },
-      source: { station: 'forge', level: 2 },
-    }
   },
   { type: 'shield', slot: 'secondary',
     id: 'ShieldIronTower',
@@ -1254,13 +1023,6 @@ export const items: (Weapon | Shield)[] = [
     durability: [200, 50],
     knockback: 40,
     backstab: 4,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { FineWood: 15, Iron: 10 },
-      materialsPerLevel: { FineWood: 10, Iron: 5 },
-      source: { station: 'forge', level: 2 },
-    }
   },
   { type: 'shield', slot: 'secondary',
     id: 'ShieldIronBuckler',
@@ -1278,13 +1040,6 @@ export const items: (Weapon | Shield)[] = [
     durability: [200, 50],
     knockback: 40,
     backstab: 4,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Iron: 10, ElderBark: 4 },
-      materialsPerLevel: { Iron: 5, ElderBark: 1 },
-      source: { station: 'forge', level: 2 },
-    }
   },
   { type: 'shield', slot: 'secondary',
     id: 'ShieldSerpentscale',
@@ -1304,13 +1059,6 @@ export const items: (Weapon | Shield)[] = [
     durability: [250, 50],
     knockback: 50,
     backstab: 4,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { FineWood: 10, Iron: 4, SerpentScale: 8 },
-      materialsPerLevel: { FineWood: 10, Iron: 2, SerpentScale: 4 },
-      source: { station: 'forge', level: 3 },
-    }
   },
 // SILVER AGE
   { type: 'weapon', slot: 'both',
@@ -1349,13 +1097,6 @@ export const items: (Weapon | Shield)[] = [
       mul: { damage: 1, force: 4, stagger: 6 },
     }],
     durability: [300, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { WolfHairBundle: 10, WolfClaw: 6, Silver: 10 },
-      materialsPerLevel: { WolfHairBundle: 1, WolfClaw: 1, Silver: 1 },
-      source: { station: 'forge', level: 3 },
-    }
   },
   { type: 'weapon', slot: 'both',
     id: 'BattleaxeCrystal',
@@ -1394,13 +1135,6 @@ export const items: (Weapon | Shield)[] = [
       mul: { damage: 0.5, force: 2, stagger: 4 },
     }],
     durability: [200, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { ElderBark: 40, Silver: 30, Crystal: 10 },
-      materialsPerLevel: { ElderBark: 5, Silver: 15 },
-      source: { station: 'forge', level: 3 },
-    }
   },
   { type: 'weapon', slot: 'primary',
     id: 'SwordSilver',
@@ -1437,13 +1171,6 @@ export const items: (Weapon | Shield)[] = [
       mul: { damage: 3, force: 1, stagger: 1 },
     }],
     durability: [200, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Wood: 2, Silver: 40, LeatherScraps: 3, Iron: 5 },
-      materialsPerLevel: { Wood: 1, Silver: 20, LeatherScraps: 1, Iron: 3 },
-      source: { station: 'forge', level: 3 },
-    }
   },
   { type: 'weapon', slot: 'primary',
     id: 'SpearWolfFang',
@@ -1478,13 +1205,6 @@ export const items: (Weapon | Shield)[] = [
       mul: { damage: 1.5, force: 1.5, stagger: 1 },
     }],
     durability: [100, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { ElderBark: 10, WolfFang: 4, Silver: 2, LeatherScraps: 2 },
-      materialsPerLevel: { ElderBark: 5, WolfFang: 2, Silver: 1, LeatherScraps: 1 },
-      source: { station: 'forge', level: 3 },
-    }
   },
   { type: 'weapon', slot: 'primary',
     id: 'MaceSilver',
@@ -1521,13 +1241,6 @@ export const items: (Weapon | Shield)[] = [
       chainCombo: 2,
     }],
     durability: [200, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { ElderBark: 10, Silver: 30, YmirRemains: 5, FreezeGland: 5 },
-      materialsPerLevel: { Silver: 15 },
-      source: { station: 'forge', level: 3 },
-    }
   },
   { type: 'weapon', slot: 'primary',
     id: 'SpearChitin',
@@ -1555,13 +1268,6 @@ export const items: (Weapon | Shield)[] = [
       range: 1,
     }],
     durability: [50, 50],
-    recipe: {
-      type: 'craft_one',
-      time: CRAFT_TIME,
-      materials: { FineWood: 8, Chitin: 30, LeatherScraps: 3 },
-      source: { station: 'piece_workbench', level: 2 },
-      number: 1,
-    }
   },
   { type: 'weapon', slot: 'primary',
     id: 'KnifeChitin',
@@ -1599,13 +1305,6 @@ export const items: (Weapon | Shield)[] = [
       mul: { damage: 3, force: 4, stagger: 1 },
     }],
     durability: [200, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { FineWood: 4, Chitin: 20, LeatherScraps: 2 },
-      materialsPerLevel: { Chitin: 10 },
-      source: { station: 'piece_workbench', level: 2 },
-    }
   },
   { type: 'weapon', slot: 'primary',
     id: 'KnifeSilver',
@@ -1643,13 +1342,6 @@ export const items: (Weapon | Shield)[] = [
       mul: { damage: 3, force: 4, stagger: 1 },
     }],
     durability: [200, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Wood: 2, Silver: 10, LeatherScraps: 3, Iron: 2 },
-      materialsPerLevel: { Wood: 1, Silver: 5, LeatherScraps: 1, Iron: 1 },
-      source: { station: 'forge', level: 3 },
-    }
   },
   { type: 'weapon', slot: 'bow',
     id: 'BowDraugrFang',
@@ -1681,13 +1373,6 @@ export const items: (Weapon | Shield)[] = [
     durability: [100, 50],
     holdDurationMin: 2.5,
     holdStaminaDrain: 10,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { ElderBark: 10, Silver: 20, DeerHide: 2, Guck: 10, },
-      materialsPerLevel: { ElderBark: 5, Silver: 10, DeerHide: 2, Guck: 2 },
-      source: { station: 'forge', level: 2 },
-    }
   },
   { type: 'shield', slot: 'secondary',
     id: 'ShieldSilver',
@@ -1707,13 +1392,6 @@ export const items: (Weapon | Shield)[] = [
     knockback: 50,
     backstab: 4,
     durability: [200, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { FineWood: 10, Silver: 8 },
-      materialsPerLevel: { FineWood: 10, Silver: 4 },
-      source: { station: 'forge', level: 3 },
-    }
   },
 // BLACK AGE
   { type: 'weapon', slot: 'both',
@@ -1748,13 +1426,6 @@ export const items: (Weapon | Shield)[] = [
       mul: { damage: 1, force: 10, stagger: 6 },
     }],
     durability: [175, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { FineWood: 10, BlackMetal: 30, LinenThread: 5 },
-      materialsPerLevel: { BlackMetal: 15, LinenThread: 5 },
-      source: { station: 'forge', level: 4 },
-    },
   },
   { type: 'weapon', slot: 'primary',
     id: 'AxeBlackMetal',
@@ -1784,13 +1455,6 @@ export const items: (Weapon | Shield)[] = [
       range: 2.2,
     }],
     durability: [175, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { FineWood: 6, BlackMetal: 20, LinenThread: 5 },
-      materialsPerLevel: { BlackMetal: 10, LinenThread: 5 },
-      source: { station: 'forge', level: 4 },
-    },
   },
   { type: 'weapon', slot: 'primary',
     id: 'KnifeBlackMetal',
@@ -1827,13 +1491,6 @@ export const items: (Weapon | Shield)[] = [
       mul: { damage: 3, force: 4, stagger: 1 },
     }],
     durability: [200, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { FineWood: 4, BlackMetal: 10, LinenThread: 5 },
-      materialsPerLevel: { BlackMetal: 4, LinenThread: 5 },
-      source: { station: 'forge', level: 4 },
-    },
   },
   { type: 'weapon', slot: 'primary',
     id: 'SwordBlackmetal',
@@ -1867,13 +1524,6 @@ export const items: (Weapon | Shield)[] = [
       mul: { damage: 3, force: 1, stagger: 1 },
     }],
     durability: [200, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { FineWood: 2, BlackMetal: 20, LinenThread: 5 },
-      materialsPerLevel: { BlackMetal: 10, LinenThread: 5 },
-      source: { station: 'forge', level: 4 },
-    },
   },
   { type: 'weapon', slot: 'primary',
     id: 'MaceNeedle',
@@ -1911,13 +1561,6 @@ export const items: (Weapon | Shield)[] = [
       mul: { damage: 2.5, force: 2, stagger: 2 },
     }],
     durability: [150, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { FineWood: 5, Iron: 20, Needle: 5, LinenThread: 10 },
-      materialsPerLevel: { Iron: 2, LinenThread: 2 },
-      source: { station: 'forge', level: 4 },
-    },
   },
   { type: 'shield', slot: 'secondary',
     id: 'ShieldBlackmetal',
@@ -1937,13 +1580,6 @@ export const items: (Weapon | Shield)[] = [
     knockback: 50,
     backstab: 4,
     durability: [200, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { FineWood: 10, BlackMetal: 8, Chain: 5 },
-      materialsPerLevel: { FineWood: 10, BlackMetal: 4, Chain: 2 },
-      source: { station: 'forge', level: 3 },
-    }
   },
   { type: 'shield', slot: 'secondary',
     id: 'ShieldBlackmetalTower',
@@ -1963,13 +1599,6 @@ export const items: (Weapon | Shield)[] = [
     knockback: 50,
     backstab: 4,
     durability: [200, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { FineWood: 15, BlackMetal: 10, Chain: 7 },
-      materialsPerLevel: { FineWood: 15, BlackMetal: 6, Chain: 3 },  
-      source: { station: 'forge', level: 3 },
-    }
   },
 // FLAME AGE
   { type: 'weapon', slot: 'primary',
@@ -2009,13 +1638,6 @@ export const items: (Weapon | Shield)[] = [
       mul: { damage: 3, force: 1, stagger: 1 },
     }],
     durability: [200, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { FineWood: 2, Flametal: 20, SurtlingCore: 20, LeatherScraps: 3 },
-      materialsPerLevel: { Flametal: 10, SurtlingCore: 10, LeatherScraps: 2 },
-      source: { station: 'forge', level: 2 },
-    },
   },
   { type: 'shield', slot: 'secondary',
     id: 'ShieldKnight',
@@ -2052,13 +1674,6 @@ export const items: (Weapon | Shield)[] = [
     knockback: 40,
     backstab: 4,
     durability: [200, 50],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { FineWood: 10, Iron: 6 },
-      materialsPerLevel: { FineWood: 10, Iron: 3 },
-      source: { station: 'forge', level: 2 },
-    },
   },
   { type: 'weapon', slot: 'primary',
     id: 'SwordCheat',

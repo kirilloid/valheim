@@ -1,4 +1,4 @@
-import type { GameObject, Shield, Weapon } from '../types';
+import type { GameObject, ItemRecipe, Shield, Weapon } from '../types';
 import { SkillType } from '../model/skills';
 
 const CRAFT_TIME = 3;
@@ -18,13 +18,6 @@ const shields: Shield[] = [
     parryBonus: NaN,
     skill: SkillType.Blocking,
     durability: [NaN, NaN],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Bronze: 10, Wood: 2 },
-      materialsPerLevel: { Bronze: 3, Wood: 1, Iron: 3, DeerHide: 3 },
-      source: { station: 'forge', level: 1 },
-    }
   },
   {
     type: 'shield', slot: 'secondary',
@@ -40,13 +33,6 @@ const shields: Shield[] = [
     parryBonus: NaN,
     skill: SkillType.Blocking,
     durability: [NaN, NaN],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Bronze: 10, Wood: 2 },
-      materialsPerLevel: { Bronze: 3, Wood: 1, Iron: 3, DeerHide: 3 },
-      source: { station: 'forge', level: 1 },
-    }
   },
   {
     type: 'shield', slot: 'secondary',
@@ -62,13 +48,6 @@ const shields: Shield[] = [
     parryBonus: NaN,
     skill: SkillType.Blocking,
     durability: [NaN, NaN],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Bronze: 10, Wood: 2 },
-      materialsPerLevel: { Bronze: 3, Wood: 1, Iron: 3, DeerHide: 3 },
-      source: { station: 'forge', level: 1 },
-    }
   },
   {
     type: 'shield', slot: 'secondary',
@@ -84,13 +63,6 @@ const shields: Shield[] = [
     parryBonus: NaN,
     skill: SkillType.Blocking,
     durability: [NaN, NaN],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Bronze: 10, Wood: 2 },
-      materialsPerLevel: { Bronze: 3, Wood: 1, Iron: 3, DeerHide: 3 },
-      source: { station: 'forge', level: 1 },
-    }
   },
   {
     type: 'shield', slot: 'secondary',
@@ -106,13 +78,6 @@ const shields: Shield[] = [
     parryBonus: NaN,
     skill: SkillType.Blocking,
     durability: [NaN, NaN],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Bronze: 10, Wood: 2 },
-      materialsPerLevel: { Bronze: 3, Wood: 1, Iron: 3, DeerHide: 3 },
-      source: { station: 'forge', level: 1 },
-    }
   },
   {
     type: 'shield', slot: 'secondary',
@@ -128,13 +93,6 @@ const shields: Shield[] = [
     parryBonus: NaN,
     skill: SkillType.Blocking,
     durability: [NaN, NaN],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Bronze: 10, Wood: 2 },
-      materialsPerLevel: { Bronze: 3, Wood: 1, Iron: 3, DeerHide: 3 },
-      source: { station: 'forge', level: 1 },
-    }
   },
   {
     type: 'shield', slot: 'secondary',
@@ -150,13 +108,6 @@ const shields: Shield[] = [
     parryBonus: NaN,
     skill: SkillType.Blocking,
     durability: [NaN, NaN],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Bronze: 10, Wood: 2 },
-      materialsPerLevel: { Bronze: 3, Wood: 1, Iron: 3, DeerHide: 3 },
-      source: { station: 'forge', level: 1 },
-    }
   },
   {
     type: 'shield', slot: 'secondary',
@@ -172,13 +123,6 @@ const shields: Shield[] = [
     parryBonus: NaN,
     skill: SkillType.Blocking,
     durability: [NaN, NaN],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Bronze: 10, Wood: 2 },
-      materialsPerLevel: { Bronze: 3, Wood: 1, Iron: 3, DeerHide: 3 },
-      source: { station: 'forge', level: 1 },
-    }
   },
   {
     type: 'shield', slot: 'secondary',
@@ -194,13 +138,6 @@ const shields: Shield[] = [
     parryBonus: NaN,
     skill: SkillType.Blocking,
     durability: [NaN, NaN],
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Bronze: 10, Wood: 2 },
-      materialsPerLevel: { Bronze: 3, Wood: 1, Iron: 3, DeerHide: 3 },
-      source: { station: 'forge', level: 1 },
-    }
   },
 ];
 
@@ -212,3 +149,5 @@ export const data: GameObject[] = [
   ...shields,
   ...weapons,
 ].map(item => ({ ...item, mod: 'FantasyArmoury' }) as GameObject)
+
+export const recipes: ItemRecipe[] = [];

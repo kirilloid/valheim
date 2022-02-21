@@ -1,4 +1,5 @@
 import { resources } from './resources';
+import { recipes } from './recipes';
 import { items as weapons } from './weapons';
 import { items as armors } from './armors';
 import { arrows } from './arrows';
@@ -8,7 +9,7 @@ import { pieces } from './building';
 import { creatures } from './creatures';
 import { ships, carts } from './transport';
 import { objects, structures } from './objects';
-import * as mods from '../mods';
+import { data as modsData, recipes as modsRecipes } from '../mods';
 
 export const data: Record<string, GameObject> = {};
 
@@ -39,7 +40,7 @@ for (const coll of [
   addCollection(coll);
 }
 
-for (const group of Object.values(mods)) {
+for (const group of Object.values(modsData)) {
   addCollection(group);
 }
 

@@ -15,7 +15,7 @@ import { data } from '../../data/itemDB';
 
 import { ItemIcon } from '../parts/Icon';
 import { TranslationContext } from '../../effects';
-import { List } from '../helpers';
+import { List, yesNo } from '../helpers';
 
 type InvItem = TInventory['items'][number];
 
@@ -32,9 +32,18 @@ function getMaxDurability(invItem: InvItem, item: Item, extraData: EpicLootData 
   return maxDurability * (1 + durabilityBonus / 100);
 }
 
-function Tooltip({ invItem, x, y, equippedItemIds }: { invItem: InvItem; x: number; y: number; equippedItemIds: string[] }) {
+function Tooltip({ invItem, x, y, equippedItems }: { invItem: InvItem; x: number; y: number; equippedItems: InvItem[] }) {
   const item = data[invItem.id] as Item | undefined;
-  if (item == null) return null;
+  if (item == null) {
+    return <div className="InvTooltip" style={{ left: x, top: y }}>
+      <header className="InvTooltip__Header">{invItem.id}</header>
+      <p>Unknown item</p>
+      <div>number: <span className="InvTooltip__value">{invItem.stack}</span></div>
+      <div>quality: <span className="InvTooltip__value">{invItem.quality}</span></div>
+      <div>durability: <span className="InvTooltip__value">{invItem.durability}</span></div>
+      <div>equipped: {yesNo(invItem.equipped)}</div>
+    </div>;
+  }
   const classes = ['InvTooltip'];
   const extraData = extractExtraData(invItem);
   if (extraData) {
@@ -44,7 +53,7 @@ function Tooltip({ invItem, x, y, equippedItemIds }: { invItem: InvItem; x: numb
     }
   }
   return <div className={classes.join(' ')} style={{ left: x, top: y }}>
-    <TooltipBody invItem={invItem} item={item} equippedItemIds={equippedItemIds} />
+    <TooltipBody invItem={invItem} item={item} equippedItems={equippedItems} />
   </div>;
 }
 
@@ -63,7 +72,11 @@ function SetBonus({ bonus }: { bonus: Effect }) {
   const translate = useContext(TranslationContext);
   const parts = [];
   if (bonus.attackModifier != null) {
-    parts.push(<span key="skill">{translate(`ui.skillType.${SkillType[bonus.attackModifier[0]]}`)} +{bonus.attackModifier[1]}</span>);
+    parts.push(<span key="skill">{
+      translate(`ui.skillType.${SkillType[bonus.attackModifier[0]]}`)}
+      {' '}
+      <span className="InvTooltip__value">+{bonus.attackModifier[1]}</span>
+    </span>);
   }
   if (bonus.damageModifiers != null) {
     parts.push(<span key="resist">{
@@ -72,20 +85,28 @@ function SetBonus({ bonus }: { bonus: Effect }) {
         .map(([key, value]) => <React.Fragment key={key}>
           {translate(`ui.damageType.${key}`)}
           {': '}
-          {translate(`ui.damageModifier.${value}`)}
+          <span className="InvTooltip__value">{translate(`ui.damageModifier.${value}`)}</span>
         </React.Fragment>)
     }</span>);
   }
   return <List>{parts}</List>;
 }
 
-function SetBonusTooltip({ set, item, equippedItemIds }: { set: ItemSet | undefined; item: Item; equippedItemIds: string[] }) {
+function EpicLootSetBonusTooltip({ set, item, equippedItems }: { set: ItemSet | undefined; item: Item; equippedItems: InvItem[] }) {
   const translate = useContext(TranslationContext);
+  const equippedItemIds = new Set<string>();
+  let totalMovementModifier = 0;
+  for (const invItem of equippedItems) {
+    equippedItemIds.add(invItem.id);
+    const _item = data[invItem.id];
+    if (_item == null) continue;
+    totalMovementModifier += (_item as Weapon).moveSpeed ?? 0;
+  }
   if (set == null) return null;
   let equippedTotal = 0;
   const equippedByIndex = [];
   for (const id of set.items) {
-    const equipped = equippedItemIds.includes(id);
+    const equipped = equippedItemIds.has(id);
     if (equipped) equippedTotal++;
     equippedByIndex.push(equipped);
   }
@@ -93,7 +114,7 @@ function SetBonusTooltip({ set, item, equippedItemIds }: { set: ItemSet | undefi
     <header className="InvTooltip__SetHeader">Set: {set.name} ({equippedTotal}/{set.items.length})</header>
     <ul className="InvTooltip__SetItems">
       {set.items.map(id => <li key={id}
-        className={equippedItemIds.includes(item.id)
+        className={equippedItemIds.has(item.id)
           ? 'InvTooltip__SetItem--equipped'
           : 'InvTooltip__SetItem--unequipped'}
       >{translate(id)}</li>)}
@@ -108,7 +129,19 @@ function SetBonusTooltip({ set, item, equippedItemIds }: { set: ItemSet | undefi
   </div>
 }
 
-const TooltipBody = React.memo(({ invItem, item, equippedItemIds }: { invItem: InvItem; item: Item; equippedItemIds: string[] }) => {
+function SetBonusTooltip({ set }: { set: ItemSet | undefined }) {
+  if (set == null) return null;
+  const bonus = set.bonus.slice(-1)[0]!;
+  return <div className="InvTooltip__Set">
+    Set effect (<span className="InvTooltip__value">{set.bonus.length}</span> parts): <SetBonus bonus={bonus} />
+  </div>
+}
+
+function showMoveSpeed(value: number) {
+  return `${value > 0 ? '+' : ''}${Math.round(value * 100)}%`;
+}
+
+const TooltipBody = React.memo(({ invItem, item, equippedItems }: { invItem: InvItem; item: Item; equippedItems: InvItem[] }) => {
   const translate = useContext(TranslationContext);
   const slot = (item as Weapon).slot as string | undefined;
   const moveSpeed = (item as Weapon).moveSpeed as number | undefined;
@@ -120,6 +153,14 @@ const TooltipBody = React.memo(({ invItem, item, equippedItemIds }: { invItem: I
     headerClasses.push('EpicLoot--' + extraData.rarity);
   }
   let set: ItemSet | undefined = undefined;
+  let totalMovementModifier = 0;
+  for (const invItem of equippedItems) {
+    const _item = data[invItem.id];
+    if (_item == null) continue;
+    const _extraData = extractExtraData(invItem);
+    if (_extraData?.effects.RemoveSpeedPenalty != null) continue;
+    totalMovementModifier += (_item as Weapon).moveSpeed ?? 0;
+  }
   return <>
     <header className={headerClasses.join(' ')}>{translate(item.id)}</header>
     {item.dlc != null && <div className="InvTooltip__DLC">{item.dlc}</div>}
@@ -208,9 +249,13 @@ const TooltipBody = React.memo(({ invItem, item, equippedItemIds }: { invItem: I
     {!!moveSpeed && extraData?.effects.RemoveSpeedPenalty == null && <div>
       {translate('ui.moveSpeed')}
       {': '}
-      <span className="InvTooltip__value">{Math.round(moveSpeed * 100)}%</span>
+      <span className="InvTooltip__value">{showMoveSpeed(moveSpeed)}</span>
+      {' '}
+      (Total: <span className="InvTooltip__extra">{showMoveSpeed(totalMovementModifier)}</span>)
     </div>}
-    <SetBonusTooltip set={set} item={item} equippedItemIds={equippedItemIds} />
+    {extraData
+      ? <EpicLootSetBonusTooltip set={set} item={item} equippedItems={equippedItems} />
+      : <SetBonusTooltip set={set} />}
     <EpicLootTooltip extraData={extraData} />
   </>
 });
@@ -225,7 +270,7 @@ export function InvItemView({ invItem, style, onTooltip }: {
   }
   const item = data[invItem.id] as Item | undefined;
   if (item == null) {
-    return <div className="Inventory__Item" style={style}>
+    return <div className="Inventory__Item" style={style} onMouseMove={() => onTooltip(invItem)}>
       <div className="InvItem__Icon">
         <ItemIcon item={item} size={64} />
       </div>
@@ -269,16 +314,15 @@ export function InvItemView({ invItem, style, onTooltip }: {
 }
 
 const getEquippedIds = defaultMemoize(
-  (inventory: TInventory, extras: TInventory[]): string[] => [inventory].concat(extras)
+  (inventory: TInventory, extras: TInventory[]): InvItem[] => [inventory].concat(extras)
     .flatMap(invPart => invPart.items)
     .filter(item => item.equipped)
-    .map(item => item.id)
 );
 
 export function Inventory({ inventory, extras } : { inventory: TInventory, extras: TInventory[] }) {
   const [tooltipData, setTooltipData] = useState<{ invItem: InvItem, x: number, y: number } | undefined>(undefined);
   const rootRef = useRef<HTMLDivElement>(null);
-  const equippedItemIds = getEquippedIds(inventory, extras);
+  const equippedItems = getEquippedIds(inventory, extras);
 
   const invMap: (InvItem | undefined)[] = Array.from({ length: INVENTORY_SIZE });
   for (const invItem of inventory.items) {
@@ -348,6 +392,6 @@ export function Inventory({ inventory, extras } : { inventory: TInventory, extra
         )}
       </div>
     )}
-    {tooltipData != null && <Tooltip {...tooltipData} equippedItemIds={equippedItemIds} />}
+    {tooltipData != null && <Tooltip {...tooltipData} equippedItems={equippedItems} />}
   </>
 }

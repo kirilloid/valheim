@@ -1,13 +1,16 @@
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import '../../css/TopBar.css';
+
+import { modLinks } from '../../mods';
+import { biomes } from '../../data/location';
 
 import { Search } from '../Search';
 import { Icon } from './Icon';
 import { languages, TranslationContext, useLanguage } from '../../effects/translation.effect';
 import { useGlobalState } from '../../effects';
-import { biomes } from '../../data/location';
-import { Link } from 'react-router-dom';
+import { ModLinks } from '../helpers';
 
 function Settings() {
   const translate = useContext(TranslationContext);
@@ -36,6 +39,7 @@ function Settings() {
     <div className="Dialog" hidden={!isOpen}>
       <div className="Dialog__header">Settings</div>
       <div className="Dialog__body">
+        <h2>Preferences</h2>
         <dl>
           <dt className="Dialog__row"><label htmlFor="language">{translate('ui.language')}</label></dt>
           <dd className="Dialog__row"><select id="language" value={lang} onChange={e => setLang(e.target.value)}>
@@ -45,17 +49,42 @@ function Settings() {
               </option>)
             }
           </select></dd>
-          <dt className="Dialog__row"><label htmlFor="spoiler">spoiler</label></dt>
-          <dd className="Dialog__row"><select id="spoiler" value={spoiler} onChange={e => setSpoiler(Number(e.target.value))}>
-            {biomes.map(biome => <option key={biome.id} value={biome.tier}>{translate(`ui.biome.${biome.id}`)}</option>)}
-            <option key="all" value={999}>All</option>
-          </select></dd>
           <dt className="Dialog__row"><label htmlFor="theme">theme</label></dt>
-          <dd className="Dialog__row"><select id="theme" value={theme} onChange={e => setTheme(e.target.value as any)}>
-            <option value="system">system</option>
-            <option value="light">light</option>
-            <option value="dark">dark</option>
-          </select></dd>
+          <dd className="Dialog__row">
+            <select id="theme" value={theme} onChange={e => setTheme(e.target.value as any)}>
+              <option value="system">system</option>
+              <option value="light">light</option>
+              <option value="dark">dark</option>
+            </select>
+          </dd>
+        </dl>
+        <h2>Content</h2>
+        <dl>
+          <dt className="Dialog__row"><label htmlFor="spoiler">tiers</label></dt>
+          <dd className="Dialog__row">
+            <select id="spoiler" value={spoiler}
+              onChange={e => setSpoiler(Number(e.target.value))}>
+              {biomes.map(biome => <option key={biome.id} value={biome.tier}>{translate(`ui.biome.${biome.id}`)}</option>)}
+              <option key="all" value={999}>All</option>
+            </select>
+          </dd>
+          <dt className="Dialog__row"><label htmlFor="hidden">hidden</label></dt>
+          <dd className="Dialog__row">
+            <input id="hidden" type="checkbox" disabled checked />
+          </dd>
+        </dl>
+        <h2>Mods</h2>
+        <dl>
+          {Object.entries(modLinks).map(([modId, linkData]) => <React.Fragment key={modId}>
+            <dt className="Dialog__row">
+              <label htmlFor={modId}>{modId}</label>
+            </dt>
+            <dd className="Dialog__row">
+              <input type="checkbox" id={modId} disabled checked />
+              {' '}
+              <ModLinks {...linkData} />
+            </dd>
+          </React.Fragment>)}
         </dl>
       </div>
       <div className="Dialog__buttons">

@@ -39,7 +39,7 @@ export function PlayerInfo({ value: player, onChange, file, disabled } : EditorP
     if (skillData) {
       tabs.push({
         title: 'Skills',
-        renderer: () => <Skills skillData={skillData} />,
+        renderer: () => <Skills skillData={skillData} playerData={playerData} />,
       });
       <h2>Skills</h2>
     }

@@ -6,6 +6,7 @@ import { SkillType } from '../../model/skills';
 import { assertNever, days, timeI2S } from '../../model/utils';
 
 import { data } from '../../data/itemDB';
+import { recipes } from '../../data/recipes';
 import { creatures } from '../../data/creatures';
 import { miningMap, resourceBuildMap, resourceCraftMap } from '../../data/resource-usage';
 import { locationBiomes, objectLocationMap } from '../../data/location';
@@ -146,12 +147,8 @@ function CraftingSection({ id }: { id: EntityId }) {
 }
 
 function getRecipe(item: GameObject) {
-  if (item.type === 'object'
-   || item.type === 'creature'
-   || item.type === 'structure') {
-    return undefined;
-  }
-  return item.recipe;
+  if (item.type === 'piece') return item.recipe;
+  return recipes.find(r => r.item === item.id);
 }
 
 export function Recipe({ item }: { item: GameObject }) {
@@ -163,29 +160,31 @@ export function Recipe({ item }: { item: GameObject }) {
       return <>
         Bought from <Link to="/info/trader">trader</Link> for {recipe.value} <Icon id="coin" alt={translate('Coins')} size={16} />
       </>;
-    case 'craft_one':
-      const { station, level } = recipe.source;
-      const { number, materials, time } = recipe;
-      return <dl>
-        <dt>station</dt><dd><Station station={station} /> {level ? `lvl ${level}` : ''}</dd>
-        <dt>{translate('ui.time')}</dt><dd><Icon id="time" alt="" size={16} />{timeI2S(time)}</dd>
-        <dt>{translate('ui.resources')}</dt><dd>{
-        Object.keys(materials).length
-          ? <Materials materials={materials} />
-          : 'for free'
-        }</dd>
-        {number === 1 ? null : <><dt>{translate('ui.quantity')}</dt><dd>{number}</dd></>} 
-      </dl>;
-    case 'craft_upg': {
-      const { station, level } = recipe.source;
-      return <>
-        Crafted in <Station station={station} /> {level ? `lvl ${level}` : ''} using:{' '}
-        <Materials
-          materials={recipe.materials}
-          materialsUp={recipe.materialsPerLevel}
-          maxLvl={(item as Item).maxLvl} />
-      </>;
-    }
+    case 'craft':
+      const maxLvl = (item as Item).maxLvl;
+      if (maxLvl == null || maxLvl <= 1) {
+        const { station, level } = recipe.source;
+        const { number, materials, time } = recipe;
+        return <dl>
+          <dt>station</dt><dd><Station station={station} /> {level ? `lvl ${level}` : ''}</dd>
+          <dt>{translate('ui.time')}</dt><dd><Icon id="time" alt="" size={16} />{timeI2S(time)}</dd>
+          <dt>{translate('ui.resources')}</dt><dd>{
+          Object.keys(materials).length
+            ? <Materials materials={materials} />
+            : 'for free'
+          }</dd>
+          {number === 1 ? null : <><dt>{translate('ui.quantity')}</dt><dd>{number}</dd></>} 
+        </dl>;
+      } else {
+        const { station, level } = recipe.source;
+        return <>
+          Crafted in <Station station={station} /> {level ? `lvl ${level}` : ''} using:{' '}
+          <Materials
+            materials={recipe.materials}
+            materialsUp={recipe.materialsPerLevel}
+            maxLvl={(item as Item).maxLvl} />
+        </>;
+      }
     case 'craft_piece':
       return <>
         Built near <Station station={recipe.station} /> using: <Materials materials={recipe.materials} />

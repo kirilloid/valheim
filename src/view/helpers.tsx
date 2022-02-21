@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 
+import '../css/ModLinks.css';
+
 import {
   Biome,
   Creature,
@@ -162,6 +164,27 @@ export function InlineObject({ id, className, ...props }: { id: EntityId } & Rea
   return <Link to={`/obj/${id}`} className={fullClass} {...props}>{runeTranslate(obj)}</Link>
 }
 
+export function ModLinks({ nexus, thunderstore }: { nexus?: number; thunderstore?: string }) {
+  const parts: JSX.Element[] = [];
+  if (nexus != null) {
+    parts.push(<a target="_blank" rel="noreferrer" className="ModLink ModLink--nexus"
+      href={`https://www.nexusmods.com/valheim/mods/${nexus}`}>
+      <img src="https://images.nexusmods.com/favicons/ReskinOrange/favicon.ico" className="ModLink__icon" />
+      {' '}
+      nexus
+    </a>);
+  }
+  if (thunderstore != null) {
+    parts.push(<a target="_blank" rel="noreferrer" className="ModLink ModLink--thunderstore"
+      href={`https://valheim.thunderstore.io/package/${thunderstore}/`}>
+      <img src="https://valheim.thunderstore.io/favicon.ico" className="ModLink__icon" />
+      {' '}
+      thunderstore
+    </a>);
+  }
+  return <span className="ModLinks"><List separator=" | ">{parts}</List></span>;
+}
+
 export function InlineObjectWithIcon({ id, nobr, size }: { id: EntityId, nobr?: boolean; size?: number }) {
   const item = data[id];
   const display = nobr ? 'inline-block' : 'inline';
@@ -253,4 +276,20 @@ export function downloadFile(array: ArrayBufferView, name: string) {
     URL.revokeObjectURL(link.href);
     link.remove();
   }, 0);
+}
+
+const boldRegex = /\*(.+?)\*/g;
+export function markdown(str: string) {
+  const result: (JSX.Element | string)[] = [];
+  let lastIndex = 0;
+  boldRegex.lastIndex = 0;
+  do {
+    const match = boldRegex.exec(str);
+    if (match == null) break;
+    result.push(str.slice(lastIndex, match.index));
+    result.push(<b>{match[1]}</b>);
+    lastIndex = match.index + match[0]!.length;
+  } while (true);
+  result.push(str.slice(lastIndex));
+  return result;
 }

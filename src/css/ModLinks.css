@@ -1,0 +1,19 @@
+.ModLinks {}
+
+.ModLink {
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.ModLink__icon {
+  width: 16px;
+  height: 16px;
+}
+
+.ModLink--nexus {
+  color: orange;
+}
+
+.ModLink--thunderstore {
+  color: #4095bf;
+}

@@ -1,4 +1,4 @@
-import { GameObject, mods, Piece, Tool } from '../types';
+import { GameObject, ItemRecipe, mods, Piece, Tool } from '../types';
 import { MaterialType } from '../types';
 import {
   crystalStructureRecipe,
@@ -13,6 +13,7 @@ import {
   stoneStructureWear,
   woodStructureWear,
 } from '../model/building';
+import { workbenchRecipe } from '../model/recipe';
 
 const buildings: Piece[] = [
   {
@@ -1195,13 +1196,6 @@ const tools: Tool[] = [
     maxLvl: 3,
     durability: [300, 200],
     produces: buildings.map(b => b.id),
-    recipe: {
-      type: 'craft_upg',
-      time: 4,
-      materials: { Wood: 5, Stone: 5 },
-      materialsPerLevel: { Wood: 1, Stone: 1 },
-      source: { station: 'piece_workbench', level: 1 },
-    }
   },
 ];
 
@@ -1209,3 +1203,7 @@ export const data: GameObject[] = [
   ...tools,
   ...buildings,
 ].map(p => ({ ...p, mod: 'OdinArchitect' }));
+
+export const recipes: ItemRecipe[] = [
+  workbenchRecipe(1, { Wood: 5, Stone: 5 }, { Wood: 1, Stone: 1 }, 'odin_hammer'),
+];

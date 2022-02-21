@@ -10,6 +10,7 @@ import { assertNever, days, timeI2S } from '../model/utils';
 import { match, SearchEntry } from '../model/search';
 
 import { data } from '../data/itemDB';
+import { recipes } from '../data/recipes';
 import { events } from '../data/events';
 import { biomes, locations } from '../data/location';
 import { effects } from '../data/effects';
@@ -129,6 +130,9 @@ function ShortRecipe(props: { item: GameObject }) {
     case 'trophy':
       return null;
     case 'piece':
+      const recipe = item.recipe;
+      if (recipe == null) return null;
+      return <Materials materials={recipe.materials} iconSize={16} />
     case 'ship':
     case 'cart':
     case 'shield':
@@ -136,12 +140,10 @@ function ShortRecipe(props: { item: GameObject }) {
     case 'armor':
     case 'ammo':
     case 'weapon': {
-      const { recipe } = item;
+      const recipe = recipes.find(r => r.item === item.id);
       if (recipe == null) return null;
       switch (recipe.type) {
-        case 'craft_one':
-        case 'craft_piece':
-        case 'craft_upg':
+        case 'craft':
           return <Materials materials={recipe.materials} iconSize={16} />
         case 'trader':
           // disabled for now

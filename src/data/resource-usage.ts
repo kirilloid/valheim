@@ -1,21 +1,18 @@
-import { Cart, EntityId, Item, PhysicalObject, Piece, Ship } from '../types';
-import { items as weapons } from './weapons';
-import { items as armors } from './armors';
-import { arrows } from './arrows';
-import { resources } from './resources';
+import { Cart, EntityId, Item, ItemRecipe, PhysicalObject, Piece, Ship } from '../types';
 import { pieces } from './building';
 import { objects } from './objects';
 import { ships, carts } from './transport';
-import { tools } from './tools';
 import { assertNever } from '../model/utils';
+import { recipes } from './recipes';
+import { recipes as modsRecipes } from '../mods';
+import { data } from './itemDB';
 
 export const resourceCraftMap: Record<EntityId, Item[]> = {};
 export const resourceBuildMap: Record<EntityId, (Piece | Ship | Cart)[]> = {};
 export const stationsMap = new Map<EntityId | null, (Item | Piece | Ship | Cart)[]>();
 export const miningMap = new Map<EntityId, PhysicalObject[]>();
 
-function addToMap<T extends Item | Piece | Ship | Cart>(map: Record<EntityId, T[]>, item: T) {
-  const { recipe } = item;
+function addToMap<T extends Item | Piece | Ship | Cart>(map: Record<EntityId, T[]>, item: T, recipe: ItemRecipe | Piece['recipe']) {
   if (item.disabled) return;
   if (recipe == null) return;
   function addItem(res: EntityId, item: T) {
@@ -30,13 +27,7 @@ function addToMap<T extends Item | Piece | Ship | Cart>(map: Record<EntityId, T[
     case 'trader':
       addItem('Coins', item);
       break;
-    case 'craft_one':
-      for (const res of Object.keys(recipe.materials)) {
-        addItem(res, item);
-      }
-      addStation(recipe.source.station, item);
-      break;
-    case 'craft_upg':
+    case 'craft':
       for (const res of Object.keys(recipe.materials)) {
         addItem(res, item);
       }
@@ -58,16 +49,19 @@ function addToMap<T extends Item | Piece | Ship | Cart>(map: Record<EntityId, T[
   }
 }
 
-const addToCraftMap = (item: Item) => addToMap(resourceCraftMap, item);
-weapons.forEach(addToCraftMap);
-armors.forEach(addToCraftMap);
-resources.forEach(addToCraftMap);
-arrows.forEach(addToCraftMap);
-tools.forEach(addToCraftMap);
+function registerRecipes(recipes: ItemRecipe[]) {
+  for (const recipe of recipes) {
+    addToMap(resourceCraftMap, data[recipe.item] as Item, recipe);
+  }
+}
+registerRecipes(recipes);
+for (const modRecipes of Object.values(modsRecipes)) {
+  registerRecipes(modRecipes);
+}
 
-pieces.forEach(p => addToMap(resourceBuildMap, p));
-ships.forEach(s => addToMap(resourceBuildMap, s));
-carts.forEach(c => addToMap(resourceBuildMap, c));
+pieces.forEach(p => addToMap(resourceBuildMap, p, p.recipe));
+ships.forEach(s => addToMap(resourceBuildMap, s, s.recipe));
+carts.forEach(c => addToMap(resourceBuildMap, c, c.recipe));
 
 const parents: Record<EntityId, PhysicalObject> = {};
 

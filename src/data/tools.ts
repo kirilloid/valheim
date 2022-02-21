@@ -14,13 +14,6 @@ export const tools: Tool[] = [
     maxLvl: 3,
     durability: [100, 100],
     produces: pieces.map(p => p.id),
-    recipe: {
-      type: 'craft_upg',
-      time: 4,
-      materials: { Wood: 3, Stone: 2 },
-      materialsPerLevel: { Wood: 1, Stone: 1 },
-      source: { station: null, level: 0 },
-    }
   },
   {
     id: 'Hoe',
@@ -31,13 +24,6 @@ export const tools: Tool[] = [
     maxLvl: 3,
     durability: [200, 200],
     produces: [],
-    recipe: {
-      type: 'craft_upg',
-      time: 4,
-      materials: { Wood: 5, Stone: 2 },
-      materialsPerLevel: { Wood: 1, Stone: 1 },
-      source: { station: 'piece_workbench', level: 1 },
-    }
   },
   { 
     id: 'KnifeButcher',
@@ -49,13 +35,6 @@ export const tools: Tool[] = [
     maxLvl: 1,
     durability: [200, 50],
     produces: [],
-    recipe: {
-      type: 'craft_upg',
-      time: 4,
-      materials: { Wood: 2, Tin: 4 },
-      materialsPerLevel: {},
-      source: { station: 'forge', level: 1 },
-    }
   },
   {
     id: 'Cultivator',
@@ -66,13 +45,6 @@ export const tools: Tool[] = [
     maxLvl: 3,
     durability: [200, 200],
     produces: plants.map(p => p.id),
-    recipe: {
-      type: 'craft_upg',
-      time: 4,
-      materials: { RoundLog: 5, Bronze: 5 },
-      materialsPerLevel: { RoundLog: 1, Bronze: 1 },
-      source: { station: 'forge', level: 1 },
-    }
   },
   {
     id: 'FishingRod',
@@ -84,7 +56,6 @@ export const tools: Tool[] = [
     maxLvl: 1,
     durability: [Infinity, 0],
     produces: ['Fish'],
-    recipe: { type: 'trader', value: 350 }
   },
   {
     id: 'Chisel',
@@ -97,6 +68,5 @@ export const tools: Tool[] = [
     maxLvl: 1,
     durability: [Infinity, 0],
     produces: pieces.map(p => p.id),
-    recipe: { type: 'trader', value: 350 }
   },
 ];

@@ -2,8 +2,10 @@ import React, { useContext } from 'react';
 
 import type { GameObject } from '../../types';
 import { groups } from '../../data/itemDB';
+import { modLinks } from '../../mods';
+
 import { TranslationContext, useRuneTranslate } from '../../effects';
-import { InlineObject, List } from '../helpers';
+import { InlineObject, List, markdown, ModLinks } from '../helpers';
 import { ItemIcon } from './Icon';
 
 export function ItemHeader({ item, children }: { item: GameObject, children?: React.ReactNode }) {
@@ -11,9 +13,19 @@ export function ItemHeader({ item, children }: { item: GameObject, children?: Re
   const runeTranslate = useRuneTranslate();
   const group = item.group && groups[item.group];
   return <>
-    {item.disabled && <div className="info" role="banner">{translate('ui.onlyWithCheats')}</div>}
-    {item.season && <div className="info" role="banner">{translate('ui.onlyInSeason', translate(`ui.onlyInSeason.${item.season}`))}</div>}
-    {item.dlc ? <div className="info" role="banner">{translate('ui.onlyInDLC', item.dlc)}</div> : null}
+    {item.disabled && <div className="info" role="banner">{
+      translate('ui.onlyWithCheats')
+    }</div>}
+    {item.season && <div className="info" role="banner">{
+      markdown(translate('ui.onlyInSeason', translate(`ui.onlyInSeason.${item.season}`)))
+    }</div>}
+    {item.dlc ? <div className="info" role="banner">{
+      markdown(translate('ui.onlyInDLC', item.dlc))
+    }</div> : null}
+    {item.mod ? <div className="info" role="banner" style={{ whiteSpace: 'pre-line' }}>{
+      markdown(translate('ui.onlyInMod', item.mod))}
+      <ModLinks {...(modLinks[item.mod] ?? {})} />
+    </div> : null}
     <h1>
       <ItemIcon item={item} />
       {' '}

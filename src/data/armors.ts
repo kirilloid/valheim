@@ -1,7 +1,6 @@
 import type { Item, ItemSet } from '../types';
 import { SkillType } from '../model/skills';
 
-const CRAFT_TIME = 4;
 
 const trollSet: ItemSet = {
   name: 'troll',
@@ -53,13 +52,6 @@ export const items: Item[] = [
     maxLvl: 2,
     durability: [200, 50],
     moveSpeed: 0,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { LeatherScraps: 5 },
-      materialsPerLevel: { LeatherScraps: 5 },
-      source: { station: 'piece_workbench', level: 0 },
-    }
   },
   { id: 'ArmorRagsChest',
     tier: 0,
@@ -69,13 +61,6 @@ export const items: Item[] = [
     maxLvl: 2,
     durability: [200, 50],
     moveSpeed: 0,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { LeatherScraps: 5 },
-      materialsPerLevel: { LeatherScraps: 5 },
-      source: { station: 'piece_workbench', level: 0 },
-    }
   },
 // STONE AGE
   { id: 'ArmorLeatherLegs',
@@ -86,13 +71,6 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [400, 100],
     moveSpeed: 0,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { DeerHide: 6 },
-      materialsPerLevel: { DeerHide: 6, BoneFragments: 5 },
-      source: { station: 'piece_workbench', level: 2 },
-    }
   },
   { id: 'ArmorLeatherChest',
     tier: 1,
@@ -102,13 +80,6 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [400, 100],
     moveSpeed: 0,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { DeerHide: 6 },
-      materialsPerLevel: { DeerHide: 6, BoneFragments: 5 },
-      source: { station: 'piece_workbench', level: 2 },
-    }
   },
   { id: 'HelmetLeather',
     tier: 1,
@@ -118,13 +89,6 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [400, 100],
     moveSpeed: 0,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { DeerHide: 6 },
-      materialsPerLevel: { DeerHide: 6, BoneFragments: 5 },
-      source: { station: 'piece_workbench', level: 2 },
-    }
   },
   { id: 'CapeDeerHide',
     tier: 1,
@@ -134,13 +98,6 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [400, 50],
     moveSpeed: 0,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { DeerHide: 4, BoneFragments: 5 },
-      materialsPerLevel: { DeerHide: 4, BoneFragments: 5 },
-      source: { station: 'piece_workbench', level: 2 },
-    }
   },
   // troll
   { id: 'ArmorTrollLeatherLegs',
@@ -152,13 +109,6 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [500, 200],
     moveSpeed: 0,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { TrollHide: 5 },
-      materialsPerLevel: { TrollHide: 2 },
-      source: { station: 'piece_workbench', level: 2 },
-    }
   },
   { id: 'ArmorTrollLeatherChest',
     tier: 1,
@@ -169,13 +119,6 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [500, 200],
     moveSpeed: 0,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { TrollHide: 5 },
-      materialsPerLevel: { TrollHide: 2 },
-      source: { station: 'piece_workbench', level: 2 },
-    }
   },
   { id: 'HelmetTrollLeather',
     tier: 1,
@@ -186,13 +129,6 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [500, 200],
     moveSpeed: 0,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { TrollHide: 5, BoneFragments: 3 },
-      materialsPerLevel: { TrollHide: 2, BoneFragments: 1 },
-      source: { station: 'piece_workbench', level: 2 },
-    }
   },
   { id: 'CapeTrollHide',
     tier: 1,
@@ -203,13 +139,6 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [500, 50],
     moveSpeed: 0,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { TrollHide: 10, BoneFragments: 10 },
-      materialsPerLevel: { TrollHide: 5, BoneFragments: 5 },
-      source: { station: 'piece_workbench', level: 2 },
-    }
   },
 // BRONZE AGE
   { id: 'ArmorBronzeLegs',
@@ -220,13 +149,6 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [1000, 200],
     moveSpeed: -0.05,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Bronze: 5, DeerHide: 2 },
-      materialsPerLevel: { Bronze: 3 },
-      source: { station: 'forge', level: 1 },
-    }
   },
   { id: 'ArmorBronzeChest',
     tier: 2,
@@ -236,13 +158,6 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [1000, 200],
     moveSpeed: -0.05,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Bronze: 5, DeerHide: 2 },
-      materialsPerLevel: { Bronze: 3 },
-      source: { station: 'forge', level: 1 },
-    }
   },
   { id: 'HelmetBronze',
     tier: 2,
@@ -252,13 +167,6 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [1000, 200],
     moveSpeed: 0,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Bronze: 5, DeerHide: 2 },
-      materialsPerLevel: { Bronze: 3 },
-      source: { station: 'forge', level: 1 },
-    }
   },
 // IRON AGE
   { id: 'ArmorRootLegs',
@@ -271,13 +179,6 @@ export const items: Item[] = [
     durability: [800, 100],
     moveSpeed: -0.02,
     damageModifiers: { fire: 'weak' },
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Root: 10, ElderBark: 10, DeerHide: 2 },
-      materialsPerLevel: { Root: 2, ElderBark: 5 },
-      source: { station: 'piece_workbench', level: 2 },
-    }
   },
   { id: 'ArmorRootChest',
     tier: 3,
@@ -289,13 +190,6 @@ export const items: Item[] = [
     durability: [800, 100],
     moveSpeed: -0.02,
     damageModifiers: { fire: 'weak', pierce: 'resistant' },
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Root: 10, ElderBark: 10, DeerHide: 2 },
-      materialsPerLevel: { Root: 2, ElderBark: 5 },
-      source: { station: 'piece_workbench', level: 2 },
-    }
   },
   { id: 'HelmetRoot',
     tier: 3,
@@ -307,13 +201,6 @@ export const items: Item[] = [
     durability: [800, 100],
     moveSpeed: 0,
     damageModifiers: { fire: 'weak', poison: 'resistant' },
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Root: 10, ElderBark: 10, LeatherScraps: 4 },
-      materialsPerLevel: { Root: 2, ElderBark: 5 },
-      source: { station: 'piece_workbench', level: 2 },
-    }
   },
   { id: 'ArmorIronLegs',
     tier: 3,
@@ -323,13 +210,6 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [1000, 200],
     moveSpeed: -0.05,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Iron: 20, DeerHide: 2 },
-      materialsPerLevel: { Iron: 5 },
-      source: { station: 'forge', level: 2 },
-    }
   },
   { id: 'ArmorIronChest',
     tier: 3,
@@ -339,13 +219,6 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [1000, 200],
     moveSpeed: -0.05,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Iron: 20, DeerHide: 2 },
-      materialsPerLevel: { Iron: 5 },
-      source: { station: 'forge', level: 2 },
-    }
   },
   { id: 'HelmetIron',
     tier: 3,
@@ -355,13 +228,6 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [1000, 200],
     moveSpeed: 0,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Iron: 20, DeerHide: 2 },
-      materialsPerLevel: { Iron: 5 },
-      source: { station: 'forge', level: 2 },
-    }
   },
 // SILVER AGE
   { id: 'ArmorFenringLegs',
@@ -373,13 +239,6 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [1000, 200],
     moveSpeed: 0.03,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { WolfHairBundle: 20, WolfPelt: 5, LeatherScraps: 10 },
-      materialsPerLevel: { WolfHairBundle: 5, WolfPelt: 3, LeatherScraps: 4 },
-      source: { station: 'piece_workbench', level: 2 },
-    }
   },
   { id: 'ArmorFenringChest',
     tier: 3,
@@ -391,13 +250,6 @@ export const items: Item[] = [
     durability: [1000, 200],
     moveSpeed: 0.03,
     damageModifiers: { frost: 'resistant' },
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { WolfHairBundle: 20, WolfPelt: 5, LeatherScraps: 10 },
-      materialsPerLevel: { WolfHairBundle: 5, WolfPelt: 3, LeatherScraps: 4 },
-      source: { station: 'piece_workbench', level: 2 },
-    }
   },
   { id: 'HelmetFenring',
     tier: 3,
@@ -408,13 +260,6 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [1000, 200],
     moveSpeed: 0.03,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { WolfHairBundle: 20, WolfPelt: 2, TrophyCultist: 1 },
-      materialsPerLevel: { WolfHairBundle: 5, WolfPelt: 4 },
-      source: { station: 'piece_workbench', level: 2 },
-    }
   },
   { id: 'ArmorWolfLegs',
     tier: 4,
@@ -424,13 +269,6 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [1000, 200],
     moveSpeed: -0.05,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Silver: 20, WolfPelt: 5, WolfFang: 4 },
-      materialsPerLevel: { Silver: 5, WolfPelt: 2, WolfFang: 1 },
-      source: { station: 'forge', level: 2 },
-    }
   },
   { id: 'ArmorWolfChest',
     tier: 4,
@@ -441,13 +279,6 @@ export const items: Item[] = [
     durability: [1000, 200],
     moveSpeed: -0.05,
     damageModifiers: { frost: 'resistant' },
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Silver: 20, WolfPelt: 5, Chain: 1 },
-      materialsPerLevel: { Silver: 5, WolfPelt: 2 },
-      source: { station: 'forge', level: 2 },
-    }
   },
   { id: 'HelmetDrake',
     tier: 4,
@@ -457,13 +288,6 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [1000, 200],
     moveSpeed: 0,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Silver: 20, WolfPelt: 2, TrophyHatchling: 2 },
-      materialsPerLevel: { Silver: 5 },
-      source: { station: 'forge', level: 2 },
-    }
   },
   { id: 'CapeWolf',
     tier: 4,
@@ -474,13 +298,6 @@ export const items: Item[] = [
     durability: [1000, 50],
     moveSpeed: 0,
     damageModifiers: { frost: 'resistant' },
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Silver: 4, WolfPelt: 6, TrophyWolf: 1 },
-      materialsPerLevel: { Silver: 2, WolfPelt: 4 },
-      source: { station: 'piece_workbench', level: 2 },
-    }
   },
 // BLACK AGE
   { id: 'ArmorPaddedGreaves',
@@ -491,13 +308,6 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [1000, 200],
     moveSpeed: -0.05,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Iron: 10, LinenThread: 20 },
-      materialsPerLevel: { Iron: 3 },
-      source: { station: 'forge', level: 2 },
-    }
   },
   { id: 'ArmorPaddedCuirass',
     tier: 5,
@@ -507,13 +317,6 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [1000, 200],
     moveSpeed: -0.05,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Iron: 10, LinenThread: 20 },
-      materialsPerLevel: { Iron: 3 },
-      source: { station: 'forge', level: 2 },
-    }
   },
   { id: 'HelmetPadded',
     tier: 5,
@@ -523,13 +326,6 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [1000, 200],
     moveSpeed: 0,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { Iron: 10, LinenThread: 15 },
-      materialsPerLevel: { Iron: 5 },
-      source: { station: 'forge', level: 2 },
-    }
   },
   { id: 'CapeLinen',
     tier: 5,
@@ -540,13 +336,6 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [1500, 50],
     moveSpeed: 0,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { LinenThread: 20, Silver: 1 },
-      materialsPerLevel: { LinenThread: 4 },
-      source: { station: 'piece_workbench', level: 2 },
-    }
   },
   { id: 'CapeLox',
     tier: 5,
@@ -557,13 +346,6 @@ export const items: Item[] = [
     durability: [1200, 50],
     moveSpeed: 0,
     damageModifiers: { frost: 'resistant' },
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { LoxPelt: 6, Silver: 2 },
-      materialsPerLevel: { LoxPelt: 2 },
-      source: { station: 'piece_workbench', level: 2 },
-    }
   },
   // non-systematic
   { id: 'HelmetYule',
@@ -574,7 +356,6 @@ export const items: Item[] = [
     maxLvl: 1,
     durability: [Infinity, 0],
     moveSpeed: 0,
-    recipe: { type: 'trader', value: 100 }
   },
   { id: 'HelmetDverger',
     tier: 2,
@@ -585,7 +366,6 @@ export const items: Item[] = [
     maxLvl: 1,
     durability: [Infinity, 0],
     moveSpeed: 0,
-    recipe: { type: 'trader', value: 620 }
   },
   { id: 'BeltStrength',
     tier: 2,
@@ -596,7 +376,6 @@ export const items: Item[] = [
     maxLvl: 1,
     durability: [Infinity, 0],
     moveSpeed: 0,
-    recipe: { type: 'trader', value: 950 }
   },
   { id: 'Wishbone',
     tier: 4,
@@ -619,13 +398,6 @@ export const items: Item[] = [
     maxLvl: 1,
     durability: [300, 0],
     moveSpeed: 0,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { LeatherScraps: 10, Coal: 4 },
-      materialsPerLevel: {},
-      source: { station: 'piece_workbench', level: 1 },
-    },
   },
   { id: 'CapeOdin',
     dlc: 'beta',
@@ -636,13 +408,6 @@ export const items: Item[] = [
     maxLvl: 1,
     durability: [1500, 0],
     moveSpeed: 0,
-    recipe: {
-      type: 'craft_upg',
-      time: CRAFT_TIME,
-      materials: { LeatherScraps: 10, Coal: 4 },
-      materialsPerLevel: {},
-      source: { station: 'piece_workbench', level: 1 },
-    },
   },
   { id: 'CapeTest',
     tier: -1,

@@ -2,7 +2,7 @@
   height: 100%;
 }
 
-:root {
+:root:not(.theme--dark) {
   --color-primary: #007bff;
   --color-secondary: #6c757d;
   --color-danger: #dc3545;
@@ -50,6 +50,21 @@ body {
     background-color: #32353B;
     color: var(--color-text);
   }
+}
+
+:root.theme--dark {
+  --color-primary: #5865F2;
+  --color-secondary: #4F545C;
+  --color-danger: #ED4245;
+  --color-info: #1AAFF4;
+  --color-background: 54, 57, 63;
+  --color-text: #ddd;
+  --color-text-light: #999;
+}
+
+:root.theme--dark > body {
+  background-color: #32353B;
+  color: var(--color-text);
 }
 
 .text-outline {
