@@ -108,7 +108,7 @@ export const pickables = [
     subtype: 'misc',
   },
   {
-    id: 'Pickable_FishingRod',
+    id: 'Pickable_Fishingrod',
     tier: 2,
     item: 'FishingRod',
     subtype: 'misc',

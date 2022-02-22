@@ -23,7 +23,7 @@ function ZdoSpecialData<T>(props: { data?: Map<number, T>, stringify: (value: T)
 
 function getComponents(id: string | undefined): GameComponent[] {
   if (id == null) return [];
-  return extraData[id] ?? data[id]?.components ?? [];
+  return (extraData[id] ?? []).concat(data[id]?.components ?? []);
 }
 
 export const ItemEditor = React.memo(({ zdo, onChange }: { zdo: ZDO, onChange: (value: ZDO) => void, version: number }) => {

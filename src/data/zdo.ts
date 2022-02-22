@@ -1,5 +1,7 @@
 import { crc32, stableHashCode } from '../model/utils';
 import { prefabNames, modPrefabNames } from './prefabs';
+import { data } from './itemDB';
+import { creatures } from  './creatures';
 
 const addToHashMap = (map: Map<number, string>, values: string[]) => {
   for (const key of values) {
@@ -132,7 +134,10 @@ for (const name of ['alert', 'inWater', 'onGround', 'encumbered', 'flying', 'sle
 
 export const objects = new Map<number, string>();
 addToHashMap(objects, prefabNames);
+addToHashMap(objects, Object.keys(data));
 for (const prefabs of Object.values(modPrefabNames)) {
   addToHashMap(objects, prefabs);
 }
+const ragdolls = creatures.map(c => c.ragdollId).filter(Boolean) as string[];
+addToHashMap(objects, ragdolls);
 export const getId = (map: Map<number, string>, hash: number): string => map.get(hash) ?? `_unknown_${(hash >>> 0).toString(16).padStart(8, '0')}`;

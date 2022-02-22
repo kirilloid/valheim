@@ -18,6 +18,7 @@ const baseKeys = [
   ['defeated_bonemass', 'Bonemass'],
   ['defeated_dragon', 'Dragon'],
   ['defeated_goblinking', 'GoblinKing'],
+  ['KilledBat', 'Bat'],
 ] as const;
 
 function Keys({ value, onChange }: ValueProps<string[]>) {

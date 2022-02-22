@@ -1187,7 +1187,7 @@ export const locations: LocationConfig[] = [
         locItem('Bat', 0.5, 12),
         locItem('Ulv', 0.3, 8),
         locItem('Fenring_Cultist', 0.2, 10),
-        locItem('Pickable_FishingRod', 0.1, 2),
+        locItem('Pickable_Fishingrod', 0.1, 2),
         locItem('Pickable_Hairstrands01', 0.4, 6),
         locItem('Pickable_Hairstrands02', 0.4, 6),
         locItem('Pickable_MountainCaveCrystal', 0.4, 8),

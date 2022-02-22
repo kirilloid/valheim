@@ -2400,8 +2400,6 @@ for (const obj of objects) {
   }
 }
 
-// SwampTree2_Darkland, HugeRoot1
-
 /*
 # any log2
 - dmg: 50 blunt, 30 chop
