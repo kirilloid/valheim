@@ -695,6 +695,10 @@ export type AttackAnimation =
 interface BaseAttack {
   animation: AttackAnimation;
   stamina: number;
+  walkSpeed: number;
+  rotationSpeed: number;
+  startNoise: number;
+  hitNoise: number;
   mul?: { damage: number, force: number, stagger: number, };
   range: number;
 }
@@ -775,6 +779,8 @@ export interface Armor extends BaseItem {
   type: 'armor';
   slot: 'head' | 'shoulders' | 'body' | 'legs' | 'util' | 'none';
   special?: 'light' | 'strength' | 'search';
+  hideHair?: boolean;
+  hideBeard?: boolean;
   maxLvl: number;
   moveSpeed: number;
   armor: Pair<number>;
