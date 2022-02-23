@@ -4,7 +4,7 @@ import type { ValueProps } from '../../parts/types';
 import type { ZDO } from '../types';
 
 import { stableHashCode } from '../../../model/utils';
-import { objects } from '../../../data/zdo';
+import { prefabHashes } from '../../../data/zdo';
 
 export const hashedItemComp = (key: string) => {
   const hash = stableHashCode(key);
@@ -12,7 +12,7 @@ export const hashedItemComp = (key: string) => {
     const value = zdo.ints.get(hash) ?? 0;
     return <React.Fragment key={key}>
       <dt>{key}</dt>
-      <dd>{objects.get(value)}</dd>
+      <dd>{prefabHashes.get(value)}</dd>
     </React.Fragment>;
   };
 };

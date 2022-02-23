@@ -13,7 +13,7 @@ export const tools: Tool[] = [
     weight: 2,
     maxLvl: 3,
     durability: [100, 100],
-    produces: pieces.map(p => p.id),
+    produces: pieces.filter(p => p.subtype !== 'external').map(p => p.id),
   },
   {
     id: 'Hoe',

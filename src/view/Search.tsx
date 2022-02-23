@@ -16,7 +16,7 @@ import { biomes, locations } from '../data/location';
 import { effects } from '../data/effects';
 
 import { TranslationContext, Translator, useGlobalState } from '../effects';
-import { averageAttacksDamage, findDropChanceFromCreature, Materials, ShortWeaponDamage } from './helpers';
+import { averageAttacksDamage, findDropChanceFromCreature, itemClasses, Materials, ShortWeaponDamage } from './helpers';
 import { EffectIcon, Icon, ItemIcon, SkillIcon } from './parts/Icon';
 
 function first(val: number | [number, number]) {
@@ -243,13 +243,14 @@ function SearchObject({ id, text, onClick }: BaseSearchItemProps) {
     return null;
   }
   const className = `SearchItem`;
+  const linkClassName = itemClasses(item).join(' ');
   switch (item.type) {
     case 'creature': {
       const { hp } = item;
       const avgDmg = averageAttacksDamage(item);
       return <div className={className}>
         <ItemIcon item={item} size={32} />
-        <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
+        <Link to={`/obj/${id}`} onClick={onClick} className={linkClassName}>{text}</Link>
         <span>
           <Icon id="health" alt={translate('ui.health')} size={16} />
           {hp < 2000 ? hp : (hp / 1000) + 'k'}
@@ -263,13 +264,13 @@ function SearchObject({ id, text, onClick }: BaseSearchItemProps) {
     case 'item':
       return <div className={className}>
         <ItemIcon item={item} size={32} />
-        <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
+        <Link to={`/obj/${id}`} onClick={onClick} className={linkClassName}>{text}</Link>
         <ItemExtra item={item} />
       </div>
     case 'trophy':
       return <div className={className}>
         <ItemIcon item={item} size={32} />
-        <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
+        <Link to={`/obj/${id}`} onClick={onClick} className={linkClassName}>{text}</Link>
         <span>
         {item.summon
         ? <ItemIcon item={data[item.summon[0]]} useAlt size={32} /> : null}
@@ -280,21 +281,21 @@ function SearchObject({ id, text, onClick }: BaseSearchItemProps) {
     case 'tool':
       return <div className={className}>
         <ItemIcon item={item} size={32} />
-        <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
+        <Link to={`/obj/${id}`} onClick={onClick} className={linkClassName}>{text}</Link>
         {showSpecialIcon(item.special, translate)}
         <ShortRecipe item={item} />
       </div>
     case 'weapon':
       return <div className={className}>
         <ItemIcon item={item} size={32} />
-        <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
+        <Link to={`/obj/${id}`} onClick={onClick} className={linkClassName}>{text}</Link>
         {showSpecialIcon(item.special, translate) ?? <ShortWeaponDamage damage={item.damage[0]} skill={item.skill} />}
         <ShortRecipe item={item} />
       </div>
     case 'shield':
       return <div className={className}>
         <ItemIcon item={item} size={32} />
-        <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
+        <Link to={`/obj/${id}`} onClick={onClick} className={linkClassName}>{text}</Link>
         <span>
           <SkillIcon skill={SkillType.Blocking} useAlt size={16} />
           {first(item.block)}
@@ -304,7 +305,7 @@ function SearchObject({ id, text, onClick }: BaseSearchItemProps) {
     case 'armor':
       return <div className={className}>
         <ItemIcon item={item} size={32} />
-        <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
+        <Link to={`/obj/${id}`} onClick={onClick} className={linkClassName}>{text}</Link>
         <span>{
           showSpecialIcon(item.special, translate) ??
           <>
@@ -317,14 +318,14 @@ function SearchObject({ id, text, onClick }: BaseSearchItemProps) {
     case 'ammo':
       return <div className={className}>
         <ItemIcon item={item} size={32} />
-        <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
+        <Link to={`/obj/${id}`} onClick={onClick} className={linkClassName}>{text}</Link>
         <span><ShortWeaponDamage damage={item.damage} skill={SkillType.Bows} /></span>
         <ShortRecipe item={item} />
       </div>
     case 'object':
       return <div className={className}>
         <ItemIcon item={item} size={32} />
-        <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
+        <Link to={`/obj/${id}`} onClick={onClick} className={linkClassName}>{text}</Link>
         {
           item.Plant
             ? <span>
@@ -340,20 +341,20 @@ function SearchObject({ id, text, onClick }: BaseSearchItemProps) {
     case 'piece':
       return <div className={className}>
         <ItemIcon item={item} size={32} />
-        <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
+        <Link to={`/obj/${id}`} onClick={onClick} className={linkClassName}>{text}</Link>
         {pieceExtra(item, translate)}
         <ShortRecipe item={item} />
       </div>
     case 'structure':
       return  <div className={className}>
         <ItemIcon item={item} size={32} />
-        <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
+        <Link to={`/obj/${id}`} onClick={onClick} className={linkClassName}>{text}</Link>
       </div>
     case 'ship':
     case 'cart':
       return <div className={className}>
         <ItemIcon item={item} size={32} />
-        <Link to={`/obj/${id}`} onClick={onClick}>{text}</Link>
+        <Link to={`/obj/${id}`} onClick={onClick} className={linkClassName}>{text}</Link>
         <span>
           <Icon id="weight" alt={translate('ui.weight')} size={16} />
           {item.storage[0] * item.storage[1]}

@@ -122,7 +122,6 @@ export const prefabNames: string[] = [
   'Spawner_Bat', 'Spawner_Blob', 'Spawner_BlobElite', 'Spawner_BlobTar', 'Spawner_BlobTar_respawn_30', 'Spawner_Boar', 'Spawner_Cultist', 'Spawner_Draugr', 'Spawner_Draugr_Elite', 'Spawner_Draugr_Noise', 'Spawner_Draugr_Ranged', 'Spawner_Draugr_Ranged_Noise', 'Spawner_Draugr_respawn_30', 'Spawner_DraugrPile', 'Spawner_Fenring', 'Spawner_Fish4', 'Spawner_Ghost', 'Spawner_Goblin', 'Spawner_GoblinArcher', 'Spawner_GoblinBrute', 'Spawner_GoblinShaman', 'Spawner_Greydwarf', 'Spawner_Greydwarf_Elite', 'Spawner_Greydwarf_Shaman', 'Spawner_GreydwarfNest', 'Spawner_Hatchling', 'Spawner_imp', 'Spawner_imp_respawn', 'Spawner_Leech_cave', 'Spawner_Location_Elite', 'Spawner_Location_Greydwarf', 'Spawner_Location_Shaman', 'Spawner_Skeleton', 'Spawner_Skeleton_night_noarcher', 'Spawner_Skeleton_poison', 'Spawner_Skeleton_respawn_30', 'Spawner_StoneGolem', 'Spawner_Troll', 'Spawner_Ulv', 'Spawner_Wraith',
 
   'StaminaUpgrade_Greydwarf', 'StaminaUpgrade_Troll', 'StaminaUpgrade_Wraith',
-  'StatueCorgi', 'StatueDeer', 'StatueEvil', 'StatueHare', 'StatueSeed',
   'stoneblock_fracture', 'stonechest',
   'stonegolem_attack_doublesmash', 'stonegolem_attack_sonicboom', 'stonegolem_attack1_spike', 'stonegolem_attack2_left_groundslam', 'stonegolem_attack3_spikesweep', 'StoneGolem_clubs', 'StoneGolem_hat', 'StoneGolem_spikes', 'stubbe_spawner', 
   'sunken_crypt_gate',

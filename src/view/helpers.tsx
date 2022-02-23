@@ -12,6 +12,7 @@ import {
   DamageType,
   EntityId,
   GameLocationId,
+  GameObject,
   ItemSpecial as TItemSpecial,
 } from '../types';
 import { applyDamageModifiers, getTotalDamage, playerDamageModifiers } from '../model/combat';
@@ -150,18 +151,25 @@ export function List({ children, separator = ', ' }: { children: JSX.Element[], 
   return <>{children.flatMap((item, i) => i ? [separator, item] : [item])}</>;
 }
 
+export function itemClasses(obj: GameObject) {
+  const classes: string[] = [];
+  const { dlc, season, mod, disabled } = obj;
+  if (dlc) classes.push('dlc', `dlc--${dlc}`);
+  if (season) classes.push('season', `season--${season}`);
+  if (mod) classes.push('modded');
+  if (disabled) classes.push('disabled');
+  return classes;
+}
+
 export function InlineObject({ id, className, ...props }: { id: EntityId } & React.AnchorHTMLAttributes<HTMLAnchorElement>) {
   const runeTranslate = useRuneTranslate();
   const obj = data[id];
   if (!obj) {
     return <span className="error">#{id}</span>
   }
-  const { dlc, season, disabled } = obj;
-  const dlcClass = dlc ? `dlc dlc--${dlc}` : '';
-  const seasonClass = season ? `season season--${season}` : '';
-  const disabledClass = disabled ? 'disabled' : '';
-  const fullClass = [className ?? '', dlcClass, seasonClass, disabledClass].join(' ');
-  return <Link to={`/obj/${id}`} className={fullClass} {...props}>{runeTranslate(obj)}</Link>
+  const classes = itemClasses(obj);
+  if (className) classes.push(className);
+  return <Link to={`/obj/${id}`} className={classes.join(' ')} {...props}>{runeTranslate(obj)}</Link>
 }
 
 export function ModLinks({ nexus, thunderstore }: { nexus?: number; thunderstore?: string }) {

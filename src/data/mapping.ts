@@ -3,7 +3,8 @@ import { creatures } from './creatures';
 
 export const mapping = new Map<string, EntityId>([
   ['woodwall', 'wood_wall'],
-  ['wood_dragon1', 'wood_dragon'],
+  ['wood_dragon', 'wood_dragon1'],
+  ['wood_beam1', 'wood_beam_1'],
  
   ['sapling_turnip', 'Pickable_Turnip'],
   ['sapling_seedturnip', 'Pickable_SeedTurnip'],

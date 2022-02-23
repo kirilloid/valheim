@@ -4,7 +4,7 @@ import type { GameComponent } from '../../../types';
 import type { ZDO } from '../types';
 
 import { data, extraData } from '../../../data/itemDB';
-import { getId, keys, objects } from '../../../data/zdo';
+import { getId, keys, prefabHashes } from '../../../data/zdo';
 
 import { InterfaceFields } from '../zdo-props';
 import { ItemIcon } from '../../parts/Icon';
@@ -29,7 +29,7 @@ function getComponents(id: string | undefined): GameComponent[] {
 export const ItemEditor = React.memo(({ zdo, onChange }: { zdo: ZDO, onChange: (value: ZDO) => void, version: number }) => {
   const translate = useContext(TranslationContext);
 
-  const currentId = objects.get(zdo.prefab);
+  const currentId = prefabHashes.get(zdo.prefab);
   const item = currentId != null ? data[currentId] : undefined;
   const eComponents = getComponents(currentId);
   const components = eComponents.flatMap(cmp => InterfaceFields[cmp] ?? []);

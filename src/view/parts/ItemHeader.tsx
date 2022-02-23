@@ -5,7 +5,7 @@ import { groups } from '../../data/itemDB';
 import { modLinks } from '../../mods';
 
 import { TranslationContext, useRuneTranslate } from '../../effects';
-import { InlineObject, List, markdown, ModLinks } from '../helpers';
+import { InlineObjectWithIcon, List, markdown, ModLinks } from '../helpers';
 import { ItemIcon } from './Icon';
 
 export function ItemHeader({ item, children }: { item: GameObject, children?: React.ReactNode }) {
@@ -35,7 +35,7 @@ export function ItemHeader({ item, children }: { item: GameObject, children?: Re
     {group ? <div>See also: <List>{
       group
         .filter(e => e !== item)
-        .map(e => <InlineObject key={e.id} id={e.id} />)
+        .map(e => <InlineObjectWithIcon key={e.id} id={e.id} nobr />)
     }</List></div> : null}
   </>;
 }

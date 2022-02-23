@@ -6,7 +6,7 @@ import type { ZDO } from '../types';
 
 import { stableHashCode as strHash } from '../../../model/utils';
 
-import { objects } from '../../../data/zdo';
+import { prefabHashes } from '../../../data/zdo';
 import { data } from '../../../data/itemDB';
 import { getStructuralIntegrity } from '../../../data/building';
 
@@ -14,7 +14,7 @@ const HEALTH_HASH = strHash('health');
 const SUPPORT_HASH = strHash('support');
 
 export function WearNTearComp({ value: zdo, onChange }: ValueProps<ZDO>) {
-  const id = objects.get(zdo.prefab);
+  const id = prefabHashes.get(zdo.prefab);
   const pieceWear = id != null ? (data[id] as Piece | undefined)?.wear : undefined;
   const floats = zdo.floats;
   const material = pieceWear?.materialType;

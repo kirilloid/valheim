@@ -59,7 +59,7 @@ export const forgeRecipe = (
   materialsPerLevel: Record<EntityId, number>,
   item: EntityId,
   number = 1
-) => genericRecipe('piece_forge', level, 3, materials, materialsPerLevel, item, number);
+) => genericRecipe('forge', level, 3, materials, materialsPerLevel, item, number);
 
 export const smelterRecipe = (
   smelter: 'smelter' | 'blastfurnace',

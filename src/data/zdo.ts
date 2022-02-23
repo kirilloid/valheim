@@ -132,12 +132,12 @@ for (const name of ['alert', 'inWater', 'onGround', 'encumbered', 'flying', 'sle
   keys.set(hash, name);
 }
 
-export const objects = new Map<number, string>();
-addToHashMap(objects, prefabNames);
-addToHashMap(objects, Object.keys(data));
+export const prefabHashes = new Map<number, string>();
+addToHashMap(prefabHashes, prefabNames);
+addToHashMap(prefabHashes, Object.keys(data));
 for (const prefabs of Object.values(modPrefabNames)) {
-  addToHashMap(objects, prefabs);
+  addToHashMap(prefabHashes, prefabs);
 }
 const ragdolls = creatures.map(c => c.ragdollId).filter(Boolean) as string[];
-addToHashMap(objects, ragdolls);
+addToHashMap(prefabHashes, ragdolls);
 export const getId = (map: Map<number, string>, hash: number): string => map.get(hash) ?? `_unknown_${(hash >>> 0).toString(16).padStart(8, '0')}`;

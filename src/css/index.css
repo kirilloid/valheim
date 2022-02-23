@@ -8,6 +8,7 @@
   --color-danger: #dc3545;
   --color-warning: #ffc107; 
   --color-info: #17a2b8;
+  --color-modded: teal;
 
   --color-background: 255, 255, 255;
   --color-text: #000;
@@ -41,6 +42,7 @@ body {
     --color-secondary: #4F545C;
     --color-danger: #ED4245;
     --color-info: #1AAFF4;
+    --color-modded: teal;
     --color-background: 54, 57, 63;
     --color-text: #ddd;
     --color-text-light: #999;
@@ -57,6 +59,7 @@ body {
   --color-secondary: #4F545C;
   --color-danger: #ED4245;
   --color-info: #1AAFF4;
+  --color-modded: aqua;
   --color-background: 54, 57, 63;
   --color-text: #ddd;
   --color-text-light: #999;

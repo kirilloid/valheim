@@ -77,7 +77,7 @@ ul {
 }
 
 .dlc--beta::after {
-  content: '\1D5D'; /* superscript betas */
+  content: '\1D5D'; /* superscript beta */
 }
 
 .season--midsummer {
@@ -90,6 +90,10 @@ ul {
 
 .season--helloween {
   color: #c80;
+}
+
+.modded {
+  color: var(--color-modded);
 }
 
 .disabled {

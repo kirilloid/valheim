@@ -7,7 +7,7 @@ import { assertNever, stableHashCode, Vector2i } from './utils';
 import { WORLD_RADIUS, ZONE_SIZE } from './game';
 import { WorldGenerator, Biome as BiomeEnum } from './world-generator';
 
-import { getId, objects } from '../data/zdo';
+import { getId, prefabHashes } from '../data/zdo';
 import { data } from '../data/itemDB';
 import { mapping } from '../data/mapping';
 import { locationHashes } from '../data/location-hashes';
@@ -164,7 +164,7 @@ export const getActiveZoneIds = (zdos: ZDO[]) => {
 export const getTree = (zdos: ZDO[]) => {
   const root = createNode<number>();
   for (const [i, zdo] of zdos.entries()) {
-    const id = getId(objects, zdo.prefab);
+    const id = getId(prefabHashes, zdo.prefab);
     if (id.startsWith('Spawner_')) continue;
     const path = getPath(id, zdo);
     let node = root;

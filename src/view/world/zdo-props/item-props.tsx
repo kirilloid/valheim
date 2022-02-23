@@ -5,7 +5,7 @@ import type { ZDO } from '../types';
 import type { Item } from '../../../types';
 
 import { stableHashCode } from '../../../model/utils';
-import { objects } from '../../../data/zdo';
+import { prefabHashes } from '../../../data/zdo';
 import { floatComp } from './float';
 import { intComp } from './int';
 import { data } from '../../../data/itemDB';
@@ -16,7 +16,7 @@ const Quality = intComp('quality'); // only if maxQuality
 const Variant = intComp('variant'); // shields and linen capes
 
 export function ItemPropsComp({ value: zdo, onChange }: ValueProps<ZDO>) {
-  const id = objects.get(zdo.prefab);
+  const id = prefabHashes.get(zdo.prefab);
   const obj = id != null ? data[id] : undefined;
   const maxStack = (obj as Item)?.stack ?? 1;
   const maxDurability = (obj as any)?.durability;
