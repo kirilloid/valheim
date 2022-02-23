@@ -2214,6 +2214,20 @@ export const objects: PhysicalObject[] = [
     tier: 1,
   },
   {
+    disabled: true,
+    type: 'object',
+    subtype: 'indestructible',
+    id: 'StatueCorgi',
+    tier: 1,
+  },
+  {
+    disabled: true,
+    type: 'object',
+    subtype: 'indestructible',
+    id: 'StatueHare',
+    tier: 1,
+  },
+  {
     type: 'object',
     subtype: 'indestructible',
     id: 'StatueSeed',
