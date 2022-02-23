@@ -1436,7 +1436,7 @@ export const creatures: Creature[] = [
     faction: 'MountainMonsters',
     spawners: [],
     attacks: single([
-      { dmg: dmg({ slash: 20 }), name: 'bite', stagger: NaN, force: 30 },
+      { dmg: dmg({ slash: 20 }), name: 'bite', stagger: 1.68, force: 30 },
     ]),
     tolerate: TOLERATE.WATER,
     speed: {
@@ -1453,7 +1453,7 @@ export const creatures: Creature[] = [
     damageModifiers: animalDmgModifiers,
     stagger: {
       factor: 0.5,
-      time: NaN,
+      time: 1.68,
     },
     drop: [
       dropEntry('LeatherScraps', { chance: 0.5 }),

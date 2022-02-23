@@ -42,6 +42,9 @@ const fenringSet: ItemSet = {
   ],
 };
 
+const hideHair = true;
+const hideBeard = true;
+
 export const items: Item[] = [
 // PRE-CRAFT AGE
   { id: 'ArmorRagsLegs',
@@ -84,6 +87,7 @@ export const items: Item[] = [
   { id: 'HelmetLeather',
     tier: 1,
     type: 'armor', slot: 'head',
+    hideHair,
     armor: [2, 2],
     weight: 1,
     maxLvl: 4,
@@ -123,6 +127,7 @@ export const items: Item[] = [
   { id: 'HelmetTrollLeather',
     tier: 1,
     type: 'armor', slot: 'head',
+    hideHair,
     set: trollSet,
     armor: [6, 2],
     weight: 1,
@@ -162,6 +167,7 @@ export const items: Item[] = [
   { id: 'HelmetBronze',
     tier: 2,
     type: 'armor', slot: 'head',
+    hideHair,
     armor: [8, 2],
     weight: 3,
     maxLvl: 4,
@@ -194,6 +200,8 @@ export const items: Item[] = [
   { id: 'HelmetRoot',
     tier: 3,
     type: 'armor', slot: 'head',
+    hideHair,
+    hideBeard,
     set: rootSet,
     armor: [8, 2],
     weight: 3,
@@ -223,6 +231,7 @@ export const items: Item[] = [
   { id: 'HelmetIron',
     tier: 3,
     type: 'armor', slot: 'head',
+    hideHair,
     armor: [14, 2],
     weight: 3,
     maxLvl: 4,
@@ -254,6 +263,8 @@ export const items: Item[] = [
   { id: 'HelmetFenring',
     tier: 3,
     type: 'armor', slot: 'head',
+    hideHair,
+    hideBeard,
     set: fenringSet,
     armor: [10, 2],
     weight: 3,
@@ -283,6 +294,7 @@ export const items: Item[] = [
   { id: 'HelmetDrake',
     tier: 4,
     type: 'armor', slot: 'head',
+    hideHair,
     armor: [20, 2],
     weight: 3,
     maxLvl: 4,
@@ -321,6 +333,7 @@ export const items: Item[] = [
   { id: 'HelmetPadded',
     tier: 5,
     type: 'armor', slot: 'head',
+    hideHair,
     armor: [26, 2],
     weight: 3,
     maxLvl: 4,
@@ -351,6 +364,7 @@ export const items: Item[] = [
   { id: 'HelmetYule',
     tier: 0,
     type: 'armor', slot: 'head',
+    hideHair,
     armor: [2, 0],
     weight: 1,
     maxLvl: 1,
@@ -393,6 +407,7 @@ export const items: Item[] = [
     dlc: 'beta',
     tier: 0,
     type: 'armor', slot: 'head',
+    hideHair,
     armor: [1, 0],
     weight: 1,
     maxLvl: 1,

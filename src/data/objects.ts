@@ -587,13 +587,14 @@ const treasures: PhysicalObject[] = [
     drop: [{
       offByOneBug: false,
       oneOfEach,
-      num: [3, 5],
+      num: [2, 5],
       options: [
         { item: 'Obsidian', num: [3, 9], weight: 0.5 },
-        { item: 'SilverNecklace', num: [1, 2], weight: 0.1 },
-        { item: 'Ruby', num: [1, 1], weight: 0.5 },
+        { item: 'SilverNecklace', num: [1, 1], weight: 0.1 },
+        { item: 'Ruby', num: [1, 2], weight: 0.5 },
         { item: 'Coins', num: [15, 35] },
         { item: 'Coins', num: [15, 35] },
+        { item: 'Obsidian', num: [1, 5] },
       ],
     }],
   },
@@ -678,13 +679,13 @@ const treasures: PhysicalObject[] = [
     drop: [{
       offByOneBug: false,
       num: [1, 3],
+      chance: 0.5,
       options: [
-        { item: 'Coins', num: [9, 41], weight: 0.5 },
-        { item: 'Entrails', num: [1, 1] },
-        { item: 'BoneFragments', num: [1, 1] },
-        { item: 'SilverNecklace', num: [1, 1], weight: 0.1 },
+        { item: 'Coins', num: [9, 41], weight: 5 },
+        { item: 'BoneFragments', num: [1, 1], weight: 5 },
+        { item: 'SilverNecklace', num: [1, 1], weight: 1 },
       ]
-    }],
+    }, singleDrop('Entrails')],
   },
 ];
 
@@ -1735,10 +1736,11 @@ export const objects: PhysicalObject[] = [
       parts: [],
     },
     drop: [{
-      num: [2, 2],
+      num: [1, 2],
       options: [
-        { item: 'Bronze', num: [1, 2] },
-        { item: 'FineWood', num: [1, 3] },
+        { item: 'Bronze', num: [1, 1], weight: 0.5 },
+        { item: 'FineWood', num: [1, 2] },
+        { item: 'FineWood', num: [1, 1] },
       ],
     }],
   },
@@ -1793,10 +1795,11 @@ export const objects: PhysicalObject[] = [
       parts: [],
     },
     drop: [{
-      num: [1, 1],
+      num: [1, 2],
       options: [
         { item: 'Wood', num: [1, 2] },
-        { item: 'IronScrap', num: [1, 2], weight: 0.5 },
+        { item: 'Wood', num: [1, 1], weight: 0.5 },
+        { item: 'Iron', num: [1, 2], weight: 0.5 },
       ],
     }],
   },
