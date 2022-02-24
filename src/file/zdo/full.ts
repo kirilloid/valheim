@@ -35,8 +35,6 @@ export function readZdo(reader: PackageReader, version: number): ZDO {
   const strings = pkg.readIfSmallMap(pkg.readInt, pkg.readString) ?? new Map<number, string>();
   const byteArrays = (version >= 27 && pkg.readIfSmallMap(pkg.readInt, pkg.readByteArray)) || new Map<number, Uint8Array>();
 
-  const bytesRemaining = bytes.byteOffset + bytes.byteLength - pkg.getOffset();
-
   return {
     id,
     ownerRevision,

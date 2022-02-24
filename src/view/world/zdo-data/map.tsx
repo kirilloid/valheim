@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 
 import type { ZDO } from '../types';
 import type { Biome, EntityId } from '../../../types';

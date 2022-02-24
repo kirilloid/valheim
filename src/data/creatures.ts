@@ -1,5 +1,13 @@
 import { dmg } from '../model/game';
-import { AttackProfile, AttackVariety, Creature, DamageModifiers, TOLERATE, dropEntry, dropTrophy, SpawnerConfig, Biome, Pair, EntityId } from '../types';
+import type {
+  AttackProfile,
+  AttackVariety,
+  Creature,
+  DamageModifiers,
+  SpawnerConfig,
+  Biome, Pair, EntityId,
+} from '../types';
+import { TOLERATE, mods, dropEntry, dropTrophy } from '../types';
 import { EnvId } from './env';
 
 const defaultDmgModifiers: DamageModifiers = {
@@ -46,14 +54,7 @@ const skeletonDamageModifiers: DamageModifiers = {
   poison: 'immune',
 };
 
-const loxDamageModifiers: DamageModifiers = {
-  ...defaultDmgModifiers,
-  blunt: 'resistant',
-  slash: 'resistant',
-  fire: 'weak',
-  frost: 'resistant',
-  spirit: 'immune',
-};
+const loxDamageModifiers = mods([1, 1, 0, 4, 4, 2, 1, 0, 0, 3]);
 
 const unblockable = true;
 const undodgeable = true;
@@ -455,8 +456,39 @@ export const creatures: Creature[] = [
     tame: { tameTime: 1800, fedTime: 600, commandable: true,
             eats: ['Raspberry', 'Mushroom', 'Blueberries', 'Carrot', 'Turnip', 'Onion'] },
             // eatRange:1.0, searchRange:10, heal:5
-    pregnancy: { points: 3, time: 60, chance: 0.33, grow: 3000 },
+    pregnancy: { points: 3, time: 60, chance: 0.33, grow: 3000, childId: 'Boar_piggy' },
     // Boar_piggy: 10hp
+  },
+  {
+    type: 'creature',
+    id: 'Boar_piggy',
+    iconId: 'Boar',
+    ragdollId: null,
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI', 'Growup'],
+    tags: ['animal'],
+    tier: 1,
+    emoji: '🐗',
+    faction: 'ForestMonsters',
+    spawners: [],
+    attacks: [],
+    tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 1.5,
+      run: 8,
+      swim: 2,
+    },
+    turnSpeed: {
+      walk: 100,
+      run: 200,
+      swim: 100,
+    },
+    hp: 10,
+    stagger: {
+      factor: 0.5,
+      time: NaN,
+    },
+    damageModifiers: animalDmgModifiers,
+    drop: [],
   },
   {
     type: 'creature',
@@ -1450,7 +1482,7 @@ export const creatures: Creature[] = [
       swim: 200,
     },
     hp: 10,
-    damageModifiers: animalDmgModifiers,
+    damageModifiers: mods([1, 1, 1, 4, 4, 2, 3, 0, 3, 2]),
     stagger: {
       factor: 0.5,
       time: 1.68,
@@ -1559,8 +1591,35 @@ export const creatures: Creature[] = [
     tame: { tameTime: 1800, fedTime: 600, commandable: true,
             eats: ['RawMeat', 'DeerMeat', 'NeckTail', 'LoxMeat', 'Sausages', 'FishRaw'] },
             // eatRange:1.4, searchRange:10, heal:20
-    pregnancy: { points: 3, time: 60, chance: 0.33, grow: 3000 }, // max: 4, range: 3
-    // Wolf_cub: 10hp
+    pregnancy: { points: 3, time: 60, chance: 0.33, grow: 3000, childId: 'Wolf_cub' }, // max: 4, range: 3
+  },
+  {
+    type: 'creature',
+    id: 'Wolf_cub',
+    iconId: 'Wolf',
+    ragdollId: null,
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI', 'Growup'],
+    tags: ['animal'],
+    tier: 4,
+    emoji: '🐺',
+    faction: 'MountainMonsters',
+    spawners: [],
+    attacks: [],
+    tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 1.5,
+      run: 4,
+      swim: 2,
+    },
+    turnSpeed: {
+      walk: 100,
+      run: 200,
+      swim: 100,
+    },
+    hp: 10,
+    damageModifiers: animalDmgModifiers,
+    stagger: { factor: 0.5, time: NaN, },
+    drop: [],
   },
   {
     type: 'creature',
@@ -2111,10 +2170,39 @@ export const creatures: Creature[] = [
     tame: { tameTime: 1800, fedTime: 600, commandable: false,
             eats: ['Cloudberry', 'Barley', 'Flax'] },
             // eatRange:4, searchRange:10, heal:10
-    pregnancy: { points: 4, time: 120, chance: 0.33, grow: 6000 },
-    // Lox_Calf: 100hp res: loxDamageModifiers
+    pregnancy: { points: 4, time: 120, chance: 0.33, grow: 6000, childId: 'Lox_Calf' },
   },
-  // Lox_Calf -> loxcalf_ragdoll
+  {
+    type: 'creature',
+    id: 'Lox_Calf',
+    iconId: 'Lox',
+    ragdollId: 'loxcalf_ragdoll',
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI', 'Growup'],
+    tags: ['animal'],
+    tier: 5,
+    emoji: '🐂',
+    faction: 'PlainsMonsters',
+    spawners: [],
+    attacks: [],
+    tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 2,
+      run: 6,
+      swim: 3,
+    },
+    turnSpeed: {
+      walk: 120,
+      run: 300,
+      swim: 50,
+    },
+    hp: 1000,
+    stagger: {
+      factor: 0.3,
+      time: NaN,
+    },
+    damageModifiers: loxDamageModifiers,
+    drop: [dropEntry('LoxMeat', { scale: false })],
+  },
   {
     type: 'creature',
     id: 'BlobTar',

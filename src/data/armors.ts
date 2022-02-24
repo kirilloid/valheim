@@ -5,7 +5,10 @@ import { SkillType } from '../model/skills';
 const trollSet: ItemSet = {
   name: 'troll',
   items: [],
-  bonus: [,,,
+  bonus: [
+    undefined,
+    undefined,
+    undefined,
     {
       type: 'effect',
       id: 'trollArmorSet',
@@ -18,7 +21,9 @@ const trollSet: ItemSet = {
 const rootSet: ItemSet = {
   name: 'root',
   items: [],
-  bonus: [,,
+  bonus: [
+    undefined,
+    undefined,
     {
       type: 'effect',
       id: 'rootArmorSet',
@@ -31,7 +36,9 @@ const rootSet: ItemSet = {
 const fenringSet: ItemSet = {
   name: 'fenring',
   items: [],
-  bonus: [,,
+  bonus: [
+    undefined,
+    undefined,
     {
       type: 'effect',
       id: 'fenringArmorSet',

@@ -98,6 +98,7 @@ function SearchLocation({ entry, text, onClick }: { entry: SearchEntry, text: st
   const { id } = entry;
   const loc = locations.find(l => l.typeId === id);
   if (!loc) return null;
+  if (loc.tier > spoiler) return null;
   
   const boss = null; //loc.vegvisir?.boss;
   return <div className="SearchItem">
@@ -457,11 +458,11 @@ export const Search = () => {
           value={searchTerm} />
       </div>
       {items.length
-      ? <ul className="SearchResults" aria-activedescendant={`gs_i${index}`}>
+      ? <ul className="SearchResults">
           {itemsToDisplay.map((entry, i) => {
             const text = translate(entry.i18nKey);
             return (
-              <li id={`gs_i${i}`} key={`${entry.type}_${entry.id}`}
+              <li key={`${entry.type}_${entry.id}`}
                 className={i === index ? 'active' : ''}
                 tabIndex={0}>
                 {renderItem(entry, text, translate, clearSearch)}

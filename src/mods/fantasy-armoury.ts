@@ -1,8 +1,6 @@
 import type { GameObject, ItemRecipe, Shield, Weapon } from '../types';
 import { SkillType } from '../model/skills';
 
-const CRAFT_TIME = 3;
-
 const shields: Shield[] = [
   {
     type: 'shield', slot: 'secondary',

@@ -2,7 +2,6 @@ import { random } from './random';
 import { clamp01, lerp, lerpStep, smoothStep, Vector3 } from './utils';
 import { perlinNoise, fbm } from './perlin';
 import { WORLD_RADIUS, ZONE_SIZE } from './game';
-import type { RegisteredLocation } from './zone-system';
 
 const INT_MIN_VAL = 1 << 31;
 const INT_MAX_VAL = ((1 << 31) >>> 0) - 1;
@@ -215,7 +214,7 @@ export class WorldGenerator {
   }
 
   private _calculateBiomeAreas() {
-    const time = Date.now();
+    // const time = Date.now();
     const OUTER_SIZE_2 = Math.ceil((10000 / ZONE_SIZE + Math.SQRT2) ** 2);
     const INNER_SIZE_2 = Math.ceil((10000 / ZONE_SIZE) ** 2);
     const biomes = new Uint8Array(315 * 315);

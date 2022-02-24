@@ -11,6 +11,7 @@ export type GameComponent =
 | 'Chair' | 'Character' | 'Container' | 'CookingStation' | 'Corpse' | 'CraftingStation' | 'CraftingStationExtension' | 'CreatureSpawner'
 | 'Destructible' | 'Door' | 'DungeonGenerator'
 | 'Fermenter' | 'Fireplace' | 'Fish' | 'FishingFloat'
+| 'Growup'
 | 'Humanoid'
 | 'ItemDrop' | 'ItemStand' // also boss stones & parts of some altars
 | 'Leviathan' | 'LiquidVolume' /* TarLiquid */ | 'LocationProxy' /* ~ */ // | 'LootSpawner' // lootspawner_pineforest
@@ -329,7 +330,7 @@ export interface Creature extends GameObjectBase {
   damageModifiers: DamageModifiers;
   drop: DropEntry[];
   tame?: { fedTime: number; tameTime: number; commandable: boolean; eats: EntityId[] };
-  pregnancy?: { points: number; time: number; chance: number; grow: number; };
+  pregnancy?: { points: number; time: number; chance: number; grow: number; childId: EntityId };
 }
 
 /**
@@ -534,6 +535,7 @@ export interface GameEvent {
 
 interface GameObjectBase {
   id: EntityId;
+  iconId?: string;
   group?: EntityGroup;
   components?: GameComponent[];
   tags?: string[];

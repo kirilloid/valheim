@@ -2,7 +2,6 @@ import type { AttackAnimation, Shield, Weapon } from '../types';
 import { SkillType } from '../model/skills';
 import { dmg } from '../model/game';
 
-const CRAFT_TIME = 4;
 const disabled = true;
 
 export const animations: Record<AttackAnimation, number[]> = {

@@ -95,12 +95,10 @@ function SetBonus({ bonus }: { bonus: Effect }) {
 function EpicLootSetBonusTooltip({ set, item, equippedItems }: { set: ItemSet | undefined; item: Item; equippedItems: InvItem[] }) {
   const translate = useContext(TranslationContext);
   const equippedItemIds = new Set<string>();
-  let totalMovementModifier = 0;
   for (const invItem of equippedItems) {
     equippedItemIds.add(invItem.id);
     const _item = data[invItem.id];
     if (_item == null) continue;
-    totalMovementModifier += (_item as Weapon).moveSpeed ?? 0;
   }
   if (set == null) return null;
   let equippedTotal = 0;
@@ -246,13 +244,13 @@ const TooltipBody = React.memo(({ invItem, item, equippedItems }: { invItem: Inv
           );
       }
     })()}
-    {!!moveSpeed && extraData?.effects.RemoveSpeedPenalty == null && <div>
+    {moveSpeed && extraData?.effects.RemoveSpeedPenalty == null ? <div>
       {translate('ui.moveSpeed')}
       {': '}
       <span className="InvTooltip__value">{showMoveSpeed(moveSpeed)}</span>
       {' '}
       (Total: <span className="InvTooltip__extra">{showMoveSpeed(totalMovementModifier)}</span>)
-    </div>}
+    </div> : null}
     {extraData
       ? <EpicLootSetBonusTooltip set={set} item={item} equippedItems={equippedItems} />
       : <SetBonusTooltip set={set} />}

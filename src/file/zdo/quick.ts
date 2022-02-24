@@ -46,7 +46,8 @@ export function readZdo(reader: PackageReader, version: number): ZDO {
     maps.ints = pkg.readIfSmallMap(pkg.readInt, pkg.readInt) ?? new Map<number, number>();
     maps.longs = pkg.readIfSmallMap(pkg.readInt, pkg.readLong) ?? new Map<number, bigint>();
     maps.strings = pkg.readIfSmallMap(pkg.readInt, pkg.readString) ?? new Map<number, string>();
-    maps.byteArrays = version >= 27 && pkg.readIfSmallMap(pkg.readInt, pkg.readByteArray) || new Map<number, Uint8Array>();
+    maps.byteArrays = (version >= 27 && pkg.readIfSmallMap(pkg.readInt, pkg.readByteArray))
+                   || new Map<number, Uint8Array>();
     mapsRead = true;
     return maps;
   }

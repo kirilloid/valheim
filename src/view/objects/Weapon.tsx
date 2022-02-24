@@ -81,6 +81,14 @@ function Attack({ item, attack }: { item: TWeapon, attack: TAttack }) {
     <dd>{translate(`ui.attackType.${attack.type}`)}</dd>
     <dt>{translate('ui.stamina')}</dt>
     <dd>{attack.stamina}</dd>
+    <dt>{translate('ui.moveSpeed')}</dt>
+    <dd>{
+      attack.walkSpeed === attack.rotationSpeed
+        ? attack.walkSpeed
+        : `${attack.walkSpeed} / ${attack.rotationSpeed}`
+    }</dd>
+    <dt>noise</dt>
+    <dd>{attack.startNoise} / {attack.hitNoise}</dd>
     {attack.type === 'melee' && attack.chain > 0 && <>
       <dt>{translate('ui.attackMelee.combo')}</dt>
       <dd>{attack.chain}</dd>

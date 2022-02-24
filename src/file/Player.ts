@@ -200,9 +200,9 @@ function readFoods(pkg: PackageReader, version: number): FoodData[] {
     if (version >= 25) {
       time = pkg.readFloat();
     } else {
-      const health = pkg.readFloat();
+      pkg.readFloat(); // health
       if (version >= 16) {
-        const stamina = pkg.readFloat();
+        pkg.readFloat(); // stamina
       }
     }
     const obj = itemDB[id];

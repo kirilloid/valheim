@@ -3,7 +3,6 @@ import {
   DamageModifiers,
   MaterialType,
   ItemType,
-  EntityId,
   mods,
 } from '../types';
 import {
