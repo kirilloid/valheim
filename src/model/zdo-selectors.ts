@@ -21,8 +21,11 @@ const creatorHASH = stableHashCode('creator');
 
 const idPaths: Record<string, string[]> = {
   ...Object.fromEntries(
-    ['vfx_swamp_mist', 'vfx_firework_test', 'Flies', 'FireFlies']
-      .map(id => [id, ['visual', id]])
+    [
+      'vfx_swamp_mist', 'vfx_firework_test', 'Flies', 'FireFlies',
+      'BlackForestLocationMusic', 'FrostCavesShrineReveal', 'FrostCavesSanctumMusic',
+    ]
+      .map(id => [id, ['visual / effects', id]])
   ),
   ...Object.fromEntries(
     ['_TerrainCompiler',
@@ -43,7 +46,7 @@ const idPaths: Record<string, string[]> = {
       'BossStone_DragonQueen', 'dragoneggcup',
       'BossStone_Eikthyr',
       'BossStone_TheElder',
-      'BossStone_Yagluth',
+      'BossStone_Yagluth', 'goblinking_totemholder',
       'RockFinger', 'RockFinger_frac',
       'RockFingerBroken', 'RockFingerBroken_frac',
       'RockThumb', 'RockThumb_frac',

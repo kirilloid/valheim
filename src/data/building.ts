@@ -1080,7 +1080,7 @@ export const pieces: Piece[] = [
     wear: woodStructureWear,
     recipe: woodStructureRecipe(1),
   },
-  { id: 'wood_wall',
+  { id: 'woodwall',
     base: false,
     type: 'piece',
     subtype: 'structure',

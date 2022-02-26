@@ -34,6 +34,9 @@ export const recipes: ItemRecipe[] = [
   workbenchRecipe(1, { FineWood: 10, RoundLog: 10, DeerHide: 2 }, { FineWood: 5, RoundLog: 5, DeerHide: 2 }, 'BowFineWood'),
   workbenchRecipe(1, { LeatherScraps: 10, Coal: 4 }, {}, 'HelmetOdin'),
   workbenchRecipe(1, { LeatherScraps: 10, Coal: 4 }, {}, 'CapeOdin'),
+  workbenchRecipe(1, { FineWood: 5, Resin: 2 }, {}, 'Tankard'),
+  workbenchRecipe(1, { FineWood: 4, TrophyDeer: 1, Resin: 2 }, {}, 'TankardOdin'),
+  workbenchRecipe(1, { Bronze: 2, TrollHide: 2, Iron: 2 }, {}, 'TankardAnniversary'),
   // LEVEL 2
   workbenchRecipe(2, { DeerHide: 6 }, { DeerHide: 6, BoneFragments: 5 }, 'ArmorLeatherLegs'),
   workbenchRecipe(2, { DeerHide: 6 }, { DeerHide: 6, BoneFragments: 5 }, 'ArmorLeatherChest'),

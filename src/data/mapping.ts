@@ -2,7 +2,7 @@ import { EntityId } from '../types';
 import { creatures } from './creatures';
 
 export const mapping = new Map<string, EntityId>([
-  ['woodwall', 'wood_wall'],
+  ['wood_wall', 'woodwall'],
   ['wood_dragon', 'wood_dragon1'],
   ['wood_beam1', 'wood_beam_1'],
  
