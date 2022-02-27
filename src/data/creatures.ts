@@ -171,6 +171,7 @@ export const creatures: Creature[] = [
       groupSize: [1, 2],
       groupRadius: 2,
       altitude: [-4, 0.2],
+      levels: [1, 1],
     })],
     attacks: [],
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
