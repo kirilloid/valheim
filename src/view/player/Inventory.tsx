@@ -289,15 +289,17 @@ export function InvItemView({ invItem, style, onTooltip }: {
     }
   }
 
+  const { variant } = invItem;
+
   return <div
     className={classes.join(' ')}
     style={style}
   >
     <div className="InvItem__Icon InvItem__Icon--shadow">
-      <ItemIcon item={item} size={64} />
+      <ItemIcon item={item} size={64} variant={variant} />
     </div>
     <div className="InvItem__Icon" onMouseMove={() => onTooltip(invItem)}>
-      <ItemIcon item={item} size={64} />
+      <ItemIcon item={item} size={64} variant={variant} />
     </div>
     {(item.maxLvl ?? 1) > 1 && <div className="InvItem__quality text-outline">
       {invItem.quality}

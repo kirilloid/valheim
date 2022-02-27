@@ -1,5 +1,6 @@
 export const prefabNames: string[] = [
   '_TerrainCompiler', '_ZoneCtrl',
+  'Skeleton_NoArcher', 'Draugr_Ranged', 'woodwall',
 
   'acacitree', 'ancientbarkspear_projectile', 'aoe_nova',
   

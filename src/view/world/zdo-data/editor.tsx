@@ -9,6 +9,7 @@ import { getId, keys, prefabHashes } from '../../../data/zdo';
 import { InterfaceFields } from '../zdo-props';
 import { ItemIcon } from '../../parts/Icon';
 import { TranslationContext } from '../../../effects';
+import { stableHashCode } from '../../../model/utils';
 
 function ZdoSpecialData<T>(props: { data?: Map<number, T>, stringify: (value: T) => string }) {
   if (props == null) return null;
@@ -26,6 +27,8 @@ function getComponents(id: string | undefined): GameComponent[] {
   return (extraData[id] ?? []).concat(data[id]?.components ?? []);
 }
 
+const variantHash = stableHashCode('variant');
+
 export const ItemEditor = React.memo(({ zdo, onChange }: { zdo: ZDO, onChange: (value: ZDO) => void, version: number }) => {
   const translate = useContext(TranslationContext);
 
@@ -35,7 +38,7 @@ export const ItemEditor = React.memo(({ zdo, onChange }: { zdo: ZDO, onChange: (
   const components = eComponents.flatMap(cmp => InterfaceFields[cmp] ?? []);
 
   return <>
-    <h2><ItemIcon item={item} /> {currentId && translate(currentId)}</h2>
+    <h2><ItemIcon item={item} variant={zdo.ints.get(variantHash)} /> {currentId && translate(currentId)}</h2>
     <dl>
       <dt>position</dt><dd>{zdo.position.x.toFixed(3)} / {zdo.position.z.toFixed(3)} / {zdo.position.y.toFixed(3)}</dd>
       <dt>zone</dt><dd>{zdo.sector.x} / {zdo.sector.y}</dd>

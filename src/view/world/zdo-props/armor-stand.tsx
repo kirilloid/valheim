@@ -36,10 +36,11 @@ export function ArmorStandComp({ value: zdo }: ValueProps<ZDO>) {
   return <React.Fragment key="items">
     <dt>items</dt>
     <dd><ul>{items.map((id, i) => {
+      const variant = zdo.ints.get(stableHashCode(`${i}_variant`))
       const crafterName = zdo.strings.get(stableHashCode(`${i}_crafterName`)) ?? '';
       const extraData = extractExtraData({ crafterName });
       return !!id && <li key={i}>
-        <ItemIcon item={data[id]} useAlt={false} size={16} />
+        <ItemIcon variant={variant} item={data[id]} useAlt={false} size={16} />
         {' '}
         <span className={extraData != null ? 'EpicLoot--' + extraData.rarity : ''}>{translate(id)}</span>
       </li>;

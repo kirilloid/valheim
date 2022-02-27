@@ -63,6 +63,7 @@ export function SkillIcon(props: SkillIconProps) {
 
 type ItemIconProps = {
   item: GameObject | undefined;
+  variant?: number;
   useAlt?: boolean;
   size?: number;
   className?: string;
@@ -80,7 +81,7 @@ export function EffectIcon(props: { id: EntityId; size?: number }) {
 export function ItemIcon(props: ItemIconProps) {
   const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
-  const { item, useAlt, size = 32 } = props;
+  const { item, useAlt, size = 32, variant } = props;
   if (item === undefined) {
     return <img
       className={'icon ' + (props.className ?? '')}
@@ -101,7 +102,7 @@ export function ItemIcon(props: ItemIconProps) {
       height={size}
     />
   }
-  const path = iconPath(item);
+  const path = iconPath(item) + ((item as any).variants > 0 && variant != null ? variant : '');
   return <picture>
     <source srcSet={`${path}.webp`} type="image/webp" />
     <img

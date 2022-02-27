@@ -12,7 +12,7 @@ import { enumComp } from './enum';
 import { floatComp } from './float';
 import { idComp } from './id';
 import { ArmorStandComp } from './armor-stand';
-import { ItemsComp } from './items';
+import { ItemsComp, ItemComp } from './items';
 import { intComp } from './int';
 import { hashedItemComp } from './hashed-item';
 import { hashedLocationComp } from './hashed-location';
@@ -108,7 +108,7 @@ export const InterfaceFields: Partial<Record<GameComponent, React.ComponentType<
     idComp('crafterID'),
     stringComp('crafterName'), // <|extended data from EpicLoot|>
   ],
-  ItemStand: [stringComp('item')],
+  ItemStand: [ItemComp],
   Leviathan: [boolComp('submerged', { hashFn: crc32 })],
   LiquidVolume: [LiquidComp],
   LocationProxy: [hashedLocationComp('location'), intComp('seed', { readOnly })],

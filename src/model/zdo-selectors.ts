@@ -98,7 +98,7 @@ function getPath(id: string, zdo: ZDO): string[] {
         : ['structures (world\'s)', id];
     case 'ship':
     case 'cart':
-      return ['item', id];
+      return ['transport', id];
     case undefined:
       return ['_unknown', id];
     default:

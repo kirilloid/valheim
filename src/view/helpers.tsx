@@ -193,11 +193,16 @@ export function ModLinks({ nexus, thunderstore }: { nexus?: number; thunderstore
   return <span className="ModLinks"><List separator=" | ">{parts}</List></span>;
 }
 
-export function InlineObjectWithIcon({ id, nobr, size }: { id: EntityId, nobr?: boolean; size?: number }) {
+export function InlineObjectWithIcon({ id, variant, nobr, size }: {
+  id: EntityId;
+  variant?: number;
+  nobr?: boolean;
+  size?: number;
+}) {
   const item = data[id];
   const display = nobr ? 'inline-block' : 'inline';
   return <span style={{ display }}>
-    <ItemIcon item={item} size={size} />
+    <ItemIcon item={item} variant={variant} useAlt={false} size={size} />
     {' '}
     <InlineObject id={id} />
   </span>
