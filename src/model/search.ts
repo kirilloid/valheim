@@ -113,7 +113,7 @@ export const pages = [
   { id: 'weather', category: 'plan' },
   { id: 'world-gen', category: 'plan', beta: true },
 
-  { id: 'player-edit', category: 'edit', beta: true },
+  { id: 'player-edit', category: 'edit' },
   { id: 'world-edit', category: 'edit', beta: true },
 ];
 

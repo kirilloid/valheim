@@ -687,6 +687,14 @@ const treasures: PhysicalObject[] = [
       ]
     }, singleDrop('Entrails')],
   },
+  {
+    type: 'object',
+    subtype: 'treasure',
+    id: 'Pickable_Item',
+    components: ['PickableItem'],
+    tier: 4,
+    drop: [singleDrop('Coins', 3, 10)], // 3-9, but offByOneBug: false
+  },
 ];
 
 export const objects: PhysicalObject[] = [
@@ -1785,6 +1793,19 @@ export const objects: PhysicalObject[] = [
   },
   {
     type: 'object',
+    id: 'cloth_hanging_door',
+    subtype: 'misc',
+    tier: 4,
+    Destructible: {
+      minToolTier: 0,
+      hp: 10,
+      damageModifiers: mods([1, 0, 0, 0, 0, 2, 1, 3, 3, 3]),
+      parts: [],
+    },
+    drop: [{ ...singleDrop('JuteRed'), chance: 0.2 }],
+  },
+  {
+    type: 'object',
     id: 'MountainKit_wood_gate',
     subtype: 'misc',
     tier: 4,
@@ -1802,6 +1823,45 @@ export const objects: PhysicalObject[] = [
         { item: 'Iron', num: [1, 2], weight: 0.5 },
       ],
     }],
+  },
+  {
+    type: 'object',
+    id: 'caverock_ice_pillar_wall',
+    subtype: 'misc',
+    tier: 4,
+    Destructible: {
+      minToolTier: 0,
+      hp: 50,
+      damageModifiers: mods([2, 2, 2, 2, 2, 2, 1, 2, 3, 3]),
+      parts: [],
+    },
+    drop: [],
+  },
+  {
+    type: 'object',
+    id: 'caverock_ice_stalagtite',
+    subtype: 'misc',
+    tier: 4,
+    Destructible: {
+      minToolTier: 0,
+      hp: 10,
+      damageModifiers: mods([2, 2, 2, 2, 2, 2, 1, 2, 3, 3]),
+      parts: [],
+    },
+    drop: [],
+  },
+  {
+    type: 'object',
+    id: 'caverock_ice_stalagmite',
+    subtype: 'misc',
+    tier: 4,
+    Destructible: {
+      minToolTier: 0,
+      hp: 10,
+      damageModifiers: mods([2, 2, 2, 2, 2, 2, 1, 2, 3, 3]),
+      parts: [],
+    },
+    drop: [],
   },
   ...[1, 2].map<PhysicalObject>(subId => ({
     type: 'object',
@@ -2002,7 +2062,7 @@ export const objects: PhysicalObject[] = [
     },
     drop: [singleDrop('Chitin', 3, 4)],
   },
-  // DEEP NORTHH
+  // DEEP NORTH
   {
     type: 'object',
     subtype: 'indestructible',

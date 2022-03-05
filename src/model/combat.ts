@@ -157,8 +157,12 @@ export function doAttack(
     overTime.spirit = { total: spirit, time: 3, period: 0.5 };
   }
   if (poison) {
-    const ttl = 1 + Math.floor(Math.sqrt((isPlayer ? 5 : 1) * poison));
-    overTime.poison = { total: poison, time: ttl, period: 1 };
+    const ttl = 1 + Math.sqrt((isPlayer ? 5 : 1) * poison);
+    const expectedTicks = Math.floor(ttl);
+    const actualTicks = Math.ceil(ttl / (1 + FRAME));
+    const total = poison * actualTicks / expectedTicks;
+    overTime.poison = { total, time: actualTicks, period: 1 };
+    afterArmor.poison = total;
   }
   const total = getTotalDamage(afterArmor);
   if (total <= 0.1) {
@@ -278,8 +282,8 @@ export function attackCreature(
   const backstabBonus = backstab && item.skill !== null ? item.backstab : 1;
 
   const { fire, spirit, poison } = overTime;
-  if (isWet) {
-    if (fire) fire.total /= 5;
+  if (isWet && fire?.total) {
+    fire.total /= 5;
     if (spirit) spirit.total /= 5;
   }
   let overTimeTotal = ((fire?.total ?? 0) + (spirit?.total ?? 0)) * skillAvg * comboTotal;

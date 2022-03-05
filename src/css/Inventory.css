@@ -161,6 +161,11 @@
 
 .InvTooltip__EpicLoot {
   margin-top: 0.5rem;
+  padding-left: 0.75rem;
+  list-style-type: '♦';
+}
+.InvTooltip__EpicLoot > li {
+  padding-left: 0.25rem;
 }
 .InvTooltip--EpicLoot .InvTooltip__value,
 .InvTooltip--EpicLoot .InvTooltip__extra {

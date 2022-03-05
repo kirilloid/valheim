@@ -2316,7 +2316,7 @@ export const pieces: Piece[] = [
     base: false,
     type: 'piece',
     subtype: 'structure',
-    tier: 1,
+    tier: 4,
     emoji: '',
     piece: { target: 'random', water: undefined, size: [1, 2, 0] },
     wear: { ...woodRoofStructureWear, hp: 50 },

@@ -7,6 +7,7 @@ export const prefabNames: string[] = [
   'BarleyWineBase', 'barrell',
   // 'Beard1', 'Beard2', 'Beard3', 'Beard4', 'Beard5', 'Beard6', 'Beard7', 'Beard8', 'Beard9', 'Beard10', 'BeardNone',
   'bee_aoe',
+  'Birch1_aut', 'Birch2_aut', 'Birch2',
   'BlackForestLocationMusic', 'FrostCavesShrineReveal', 'FrostCavesSanctumMusic',
   'blob_aoe', 'blob_attack_aoe', 'blobelite_attack_aoe', 'blobtar_attack', 'blobtar_projectile_tarball',
   'boar_base_attack', 'Boar_piggy', 'boar_ragdoll',
@@ -18,7 +19,7 @@ export const prefabNames: string[] = [
 
   'CargoCrate',
   'CastleKit_braided_box01', 'CastleKit_brazier', 'CastleKit_groundtorch', 'CastleKit_groundtorch_green', 'CastleKit_groundtorch_unlit', 'CastleKit_metal_groundtorch_unlit', 'CastleKit_pot03',
-  'caverock_ice_stalagmite', 'caverock_ice_stalagmite_broken', 'caverock_ice_stalagmite_destruction', 'caverock_ice_stalagtite', 'caverock_ice_stalagtite_destruction', 'caverock_ice_stalagtite_falling', 'caverock_ice_pillar', 'caverock_ice_pillar_wall', 'caverock_ice_wall_destruction',
+  'caverock_ice_stalagmite_broken', 'caverock_ice_stalagmite_destruction', 'caverock_ice_stalagtite_destruction', 'caverock_ice_stalagtite_falling', 'caverock_ice_pillar', 'caverock_ice_wall_destruction',
   'cloth_hanging_door_double', 'cloth_hanging_door', 'cloth_hanging_long', 'piece_cloth_hanging_door',
   'clutter_shrub_large',
   'cultivate', 'cultivate_v2',
@@ -30,7 +31,8 @@ export const prefabNames: string[] = [
   'digg', 'digg_v2', 'digg_v3',
   'drag_item',
   'dragon_bite', 'dragon_claw_left', 'dragon_claw_right', 'dragon_coldbreath', 'dragon_coldbreath_OLD', 'dragon_ice_projectile', 'dragon_split_shotgun', 'dragon_taunt',
-  'dragoneggcup', 'draugr_arrow', 'draugr_axe', 'draugr_bow', 'draugr_bow_projectile', 'draugr_sword',
+  'dragoneggcup',
+  'Draugr_Ranged', 'draugr_arrow', 'draugr_axe', 'draugr_bow', 'draugr_bow_projectile', 'draugr_sword',
   'dungeon_forestcrypt_door', 'dungeon_sunkencrypt_irongate',
     
   'Eikthyr_antler', 'Eikthyr_charge', 'Eikthyr_flegs_OLD', 'Eikthyr_stomp',
@@ -68,7 +70,7 @@ export const prefabNames: string[] = [
     
   'Hair1', 'Hair2', 'Hair3', 'Hair4', 'Hair5', 'Hair6', 'Hair7', 'Hair8', 'Hair9', 'Hair10', 'Hair11', 'Hair12', 'Hair13', 'Hair14', 'HairNone',
   'Haldor', 
-  'hanging_hairstand',
+  'hanging_hairstands',
   'hatchling_cold_projectile', 'hatchling_spit_cold', 'HealthUpgrade_Bonemass', 'HealthUpgrade_GDKing',
   'highstone', 'highstone_frac', 'horizontal_web', 'HugeRoot1', 'HugeStone1',
 
@@ -111,11 +113,13 @@ export const prefabNames: string[] = [
   'Root', 'root07', 'root08', 'root11', 'root12',
 
   'sapling_barley', 'sapling_carrot', 'sapling_flax', 'sapling_onion', 'sapling_seedcarrot', 'sapling_seedonion', 'sapling_seedturnip', 'sapling_turnip', 'Sausages',
+  'Beech_Sapling', 'FirTree_Sapling', 'PineTree_Sapling', 'Birch_Sapling', 'Oak_Sapling', 'sapling_seedturnip', 'sapling_seedcarrot', 'sapling_seedonion',
   'Serpent_attack', 'Serpent_taunt', 'SerpentMeat', 'SerpentMeatCooked', 'SerpentScale', 'SerpentStew',
   'shaman_attack_aoe', 'shaman_heal_aoe', 
   'ship_construction',
   'sign', 'sign_notext',
-  'skeleton_bow', 'skeleton_mace', 'skeleton_sword', 'Skull1', 'Skull2',
+  'skeleton_bow', 'skeleton_mace', 'skeleton_sword', 'Skeleton_NoArcher',
+  'Skull1', 'Skull2',
   'sledge_aoe',
   'small_rock1', 'small_rock2',
   'smelter', 'SmokeBall',
@@ -139,6 +143,7 @@ export const prefabNames: string[] = [
 
   'Waystone',
   'Wolf_Attack1', 'Wolf_Attack2', 'Wolf_Attack3', 'Wolf_cub', 'Wolf_Ragdoll',
+  'woodwall',
   'wraith_melee',
 
   'YagluthDrop',
@@ -287,6 +292,8 @@ export const modPrefabNames: Record<string, string[]> = {
     'BombFrost',
     'BowBlackmetalTH',
     'BowFireTH',
+    'JavelinBronze',
+    'JavelinFlint',
     'KnifeIron',
     'KnifeSilverTH',
     'KnifeFireTH',
