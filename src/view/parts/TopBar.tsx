@@ -75,7 +75,7 @@ function Settings() {
         </dl>
         <h2>Mods</h2>
         <dl>
-          {Object.entries(modLinks).map(([modId, linkData]) => <React.Fragment key={modId}>
+          {Object.entries(modLinks).map(([modId, linkData]) => linkData.fullSupport && <React.Fragment key={modId}>
             <dt className="Dialog__row">
               <label htmlFor={modId}>{modId}</label>
             </dt>

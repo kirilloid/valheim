@@ -237,7 +237,11 @@ export const data: GameObject[] = [
   ...resources,
   ...items,
   ...buildings,
-].map(item => ({ ...item, mod: 'EpicLoot' }) as GameObject)
+].map(item => ({ ...item, mod: 'EpicLoot' }) as GameObject);
+
+// sets:
+// 'HeimdallTowerShield', 'HeimdallHelmet', 'HeimdallChest', 'HeimdallLegs',
+// 'RagnarBattleAxe', 'RagnarCape', 'RagnarChest', 'RagnarLegs',
 
 export const recipes: ItemRecipe[] = [
   forgeRecipe(1, { LeatherScraps: 5, Bronze: 1 }, {}, 'LeatherBelt'),

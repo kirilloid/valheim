@@ -148,7 +148,6 @@ export const modPrefabNames: Record<string, string[]> = {
   ChickenBoo: [
     'ChickenBoo', 'chicklet', 'cooked_chicken', 'fried_egg', 'boiled_egg', 'raw_egg', 'raw_chicken', 'chickensombrero', 'helmet'
   ],
-  // [thunderstore:HugotheDwarf/Hugos_Armory]
   Hugos_Armory: [
     'DeerFistsHTD', 'BronzeFistsHTD', 'IronFistsHTD', 'SilverFistsHTD',
     'BronzeGreatSwordHTD', 'BronzeBattleaxeHTD', 'BronzeHammerHTD', 'BronzeCrowbillHTD',
@@ -159,32 +158,6 @@ export const modPrefabNames: Record<string, string[]> = {
     'BoneGreatMaceHTD', 'BoneGreatSwordHTD',
     'ObsidianGreatSwordHTD', 'ObsidianGreatSwordRedHTD', 'FlametalGreatSwordHTD',
   ],
-  // [thunderstore:Horem/Fantasy_Armoury]
-  Fantasy_Armoury: [
-    'Axe_1H_01_FA', 'Axe_1H_02_FA', 'Axe_1H_03_FA', 'Axe_1H_04_FA', 'Axe_1H_05_FA', 'Axe_1H_06_FA', 'Axe_1H_07_FA',
-    'Axe2H_01_FA', 'Axe2H_02_FA', 'Axe2H_03_FA', 'Axe2H_04_FA', 'Axe2H_05_FA', 'Axe2H_06_FA',
-    'Hammer_2H_01_FA', 'Hammer_2H_02_FA', 'Hammer_2H_03_FA',
-    'Shield_01_FA', 'Shield_02_FA', 'Shield_03_FA', 'Shield_04_FA', 'Shield_05_FA', 'Shield_06_FA', 'Shield_07_FA', 'Shield_08_FA', 'Shield_09_FA',
-    'Staff_2H_01_FA', 'Staff_2H_02_FA', 'Staff_2H_03_FA', 'Staff_2H_04_FA', 'Staff_2H_05_FA',
-    'Sword_1H_01_FA', 'Sword_1H_02_FA', 'Sword_1H_03_FA', 'Sword_1H_04_FA', 'Sword_1H_05_FA',
-    'Sword_2H_01_FA', 'Sword_2H_02_FA', 'Sword_2H_03_FA', 'Sword_2H_04_FA', 'Sword_2H_05_FA', 'Sword_2H_06_FA',
-  ],
-  // [nexus:387]
-  // [thunderstore:RandyKnapp/EpicLoot]
-  EpicLoot: [ 
-    'BountyTarget',
-    'ForestToken', 'GoldBountyToken', 'IronBountyToken',
-    'ShardMagic', 'DustMagic', 'ReagentMagic', 'EssenceMagic', 'RunestoneMagic',
-    'ShardRare', 'DustRare', 'ReagentRare', 'EssenceRare', 'RunestoneRare',
-    'ShardEpic', 'DustEpic', 'ReagentEpic', 'EssenceEpic', 'RunestoneEpic',
-    'ShardLegendary', 'DustLegendary', 'ReagentLegendary', 'EssenceLegendary', 'RunestoneLegendary',
-    'LeatherBelt', 'Andvaranaut', 'GoldRubyRing', 'SilverRing',
-    'piece_augmenter', 'piece_enchanter',
-    'HeimdallTowerShield', 'HeimdallHelmet', 'HeimdallChest', 'HeimdallLegs',
-    'RagnarBattleAxe', 'RagnarCape', 'RagnarChest', 'RagnarLegs',
-  ],
-  // [nexus:1174]
-  // [thunderstore:OdinPlus/BuildIt]
   BuildIt: [
     'piece_buildtower',
     'rk_1mbeam', 'rk_1mbeam2',
@@ -252,14 +225,11 @@ export const modPrefabNames: Record<string, string[]> = {
     'rk_woodrack',
     'rk_woodstairs',
   ],
-  // [thunderstore:OdinPlus/BackPacks_Remake/]
   BackPacks_Remake: [
     'CapeLeatherBackpack',
-    'CapeBronzeBackpack',
     'CapeIronBackpack',
     'CapeSilverBackpack',
   ],
-  // [thunderstore:OdinPlus/PotionPlus/]
   PotionsPlus: [
     'Flask_of_Elements',
     'Flask_of_Fortification',
@@ -285,39 +255,6 @@ export const modPrefabNames: Record<string, string[]> = {
     'opalchemy',
     'opcauldron',
   ],
-  // [nexus:1174]
-  // [thunderstore:OdinPlus/OdinArchitect]
-  OdinArchitect: [
-    'odin_hammer',
-    'wooden_gate_1', 'wooden_window_small', 'wooden_window_big',
-    'wooden_fence_1', 'wooden_fence_1_gate', 'wooden_fence_2', 'wooden_fence_2_gate',
-    'thin_wood_beam_1', 'thin_wood_beam_2', 'thin_wood_pole_1', 'thin_wood_pole_2',
-    'wooden_drawbridge_1', 'wooden_arch_1',
-    'refined_stakewall_1', 'refined_stakewall_2', 'refined_sharpstakes',
-    'surtling_lantern_1', 'surtling_lantern_2', 'surtling_lantern_3', 'surtling_lantern_4', 'surtling_lantern_5',
-    'stone_beam_short', 'stone_beam_long', 'stone_pole_short', 'stone_pole_long', 'stone_window_small', 'stone_window_big', 'stone_arch_1', 'stone_arch_2_small', 'stone_table_1', 'stone_throne_1',
-    'stonewall_hardrock_1x1', 'stonewall_hardrock_2x1', 'stonewall_hardrock_4x2', 'stonewall_hardrock_pillar', 'stonewall_hardrock_stairs', 'stonewall_hardrock_arch', 'big_pillar',
-    'iron_dragon', 'iron_gate_small', 'iron_gate_big',
-    'piece_woodbeam_25_thin', 'piece_woodbeam_45_thin',
-    'piece_ironbeam_25_thin', 'piece_ironbeam_45_thin',
-    'piece_crystalbeam_25_thin', 'piece_crystalbeam_45_thin',
-    'iron_beam_short', 'iron_beam_long',
-    'iron_pole_short', 'iron_pole_long',
-    'rae_crystal_beam_short', 'rae_crystal_beam_long',
-    'rae_crystal_pole_short', 'rae_crystal_pole_long',
-    'thin_iron_beam_1', 'thin_iron_beam_2', 'thin_iron_pole_1', 'thin_iron_pole_2',
-    'thin_rae_crystal_beam_1', 'thin_rae_crystal_beam_2',
-    'thin_rae_crystal_pole_1', 'thin_rae_crystal_pole_2',
-    'stone_floor_1_new',
-    'rae_woodwall_half',
-    'rae_woodwall_1', 'rae_woodwall_2', 'rae_woodwall_3', 'rae_woodwall_4',
-    'rae_woodwall_1_half', 'rae_woodwall_2_half', 'rae_woodwall_3_half', 'rae_woodwall_4_half',
-    'rae_darkwood_gate_crystal', 'rae_darkwood_gate_iron', 'rae_bigcrystal_w', 'rae_crystal_floorslab',
-    'rae_darkwood_iron_raven', 'rae_darkwood_iron_wolf', 'rae_irondeco_fence_2', 'rae_darkwooddeco_fence', 'rae_irondeco_fence', 'rae_darkwood_arch_1',
-    'piece_woodgate_iron', 'piece_woodgate_darkwood', 'piece_woodgate_crystal', 'rae_hidden_door', 'food_smelter',
-    'rae_bird_house', 'rae_fish_trap', 'rae_compost', 'rae_elevator',
-  ],
-  // [thunderstore:GoldenJude/Judes_Equipment]
   JudesEquipment: [
     'ArmorBarbarianBronzeHelmetJD', 'ArmorBarbarianBronzeChestJD', 'ArmorBarbarianBronzeLegsJD', 'ArmorBarbarianCapeJD',
     'ArmorPlateIronHelmetJD', 'ArmorPlateIronChestJD', 'ArmorPlateIronLegsJD',
@@ -327,14 +264,12 @@ export const modPrefabNames: Record<string, string[]> = {
     'ArmorMistlandsHelmet', 'ArmorMistlandsChest', 'ArmorMistlandsLegs',
     'BackpackSimple', 'BackpackHeavy',
   ],
-  // [nexus:1215]
   ChaosWarriorArmor: [
     'T1ChaosPlateArmor', 'T1ChaosPlateHelm', 'T1ChaosPlateLegs',
     'T2ChaosPlateArmor', 'T2ChaosPlateHelm', 'T2ChaosPlateLegs',
     'ChaosPlateArmorBody', 'ChaosPlateHelm', 'ChaosPlateLegs',
     'EliteChaosPlateArmor', 'EliteChaosPlateHelm', 'ChaosPlateHelmAlt', 'EliteChaosPlateLegs',
   ],
-  // [nexus:803]
   Terraheim: [
     'ArrowGreatFireTH',
     'AtgeirSilver',
@@ -420,7 +355,6 @@ export const modPrefabNames: Record<string, string[]> = {
     'ArmorBarbarianBronzeChestJDT5_Terraheim_BarbarianArmor_AddNewSets',
     'ArmorBarbarianBronzeHelmetJDT5_Terraheim_BarbarianArmor_AddNewSets',
   ],
-  // [nexus:799]
   Forsaken: [
     'v801_BattleaxeLightning',
     'v801_SpearSpirit',
@@ -437,7 +371,6 @@ export const modPrefabNames: Record<string, string[]> = {
     'v801_KnifeFrost',
     'ArrowBone', 'ArrowLightning',
   ],
-  // [thunderstore:OdinPlus/RunicPack]
   RunicPack: [
     'RunicSwordRed', 'RunicSwordBlue', 'RunicSwordPurple', 'RunicSwordGreen',
     'RunicBowdRed', 'RunicBowBlue', 'RunicBowPurple', 'RunicBowGreen',
@@ -447,16 +380,13 @@ export const modPrefabNames: Record<string, string[]> = {
     'ArrowRunic',
     'CapeRunic',
   ],
-  // [thunderstore:OdinPlus/GoodestBoy]
   GoodestBoy: [
     'BestestDog', 'Bestest_Pup', 'BestestStick',
     'YummyBone', 'EvilBunny', 'BrownEvilBunny',
   ],
-  // [thunderstore:OdinPlus/OdinHorse]
   OdinHorse: [
     'rae_OdinHorse', 'rae_Offspring_Normal', 'rae_SaddleHorse',
   ],
-  // [thunderstore:OdinPlus/OdinBanners]
   OdinBanners: [
     'rae_ob_banner_1', 'rae_ob_banner_1_big',
     'rae_ob_banner_2', 'rae_ob_banner_2_big',
@@ -475,7 +405,6 @@ export const modPrefabNames: Record<string, string[]> = {
     'rae_ob_banner_15', 'rae_ob_banner_15_big',
     'rae_ob_banner_16', 'rae_ob_banner_16_big',
   ],
-  // [thunderstore:OdinPlus/GuildPack]
   GuildPack: [
     'BannerBlack', 'BannerBlue', 'BannerGreen', 'BannerGrey', 'BannerPink', 'BannerPurple', 'BannerRed', 'BannerYellow',
     'FlagBlack', 'FlagBlue', 'FlagGreen', 'FlagGrey', 'FlagPink', 'FlagPurple', 'FlagRed', 'FlagYellow',
@@ -488,7 +417,6 @@ export const modPrefabNames: Record<string, string[]> = {
   StarHeim: [
     'HansBlaster', 'KitFistoSaber', 'BlasterRifle', 'StormTrooperHelm', 'BlasterShot'
   ],
-  // [thunderstore:OdinPlus/BagualPack]
   BagualPack: [
     'BarrilGR', 'BarrilPQ', 'BarrilGRS',
     'Braseiro',
@@ -505,7 +433,6 @@ export const modPrefabNames: Record<string, string[]> = {
     'LeaoPedra1', 'LeaoPedra2', 'LeaoPedra3',
     'Lustre_4Bra', 'Lustre_10Bra',
   ],
-  // [thunderstore:Huntardys/EpicValheimsAdditions]
   EpicValheimsAdditions: [
     'BowFrometal', 'BowFlametal', 'BowHeavymetal',
     'AtgeirFrometal', 'AtgeirFlametal', 'AtgeirHeavymetal',
@@ -520,7 +447,6 @@ export const modPrefabNames: Record<string, string[]> = {
     'AxeFrometal', 'AxeFlametal', 'AxeHeavymetal',
     'PickaxeFrometal', 'PickaxeFlametal', 'PickaxeHeavymetal',
   ],
-  // [nexus:1087]
   MoreGates: [
     'h_drawbridge01', 'h_drawbridge02',
     'lift_gate', 'lift_gate2',
