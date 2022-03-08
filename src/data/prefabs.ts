@@ -252,6 +252,13 @@ export const modPrefabNames: Record<string, string[]> = {
     'rk_woodrack',
     'rk_woodstairs',
   ],
+  // [thunderstore:OdinPlus/BackPacks_Remake/]
+  BackPacks_Remake: [
+    'CapeLeatherBackpack',
+    'CapeBronzeBackpack',
+    'CapeIronBackpack',
+    'CapeSilverBackpack',
+  ],
   // [thunderstore:OdinPlus/PotionPlus/]
   PotionsPlus: [
     'Flask_of_Elements',
@@ -318,7 +325,7 @@ export const modPrefabNames: Record<string, string[]> = {
     'ArmorBlackmetalgarbHelmet', 'ArmorBlackmetalgarbChest', 'ArmorBlackmetalgarbLegs',
     'ArmorWandererHelmet', 'ArmorWandererChest', 'ArmorWandererLegs', 'ArmorWandererCape',
     'ArmorMistlandsHelmet', 'ArmorMistlandsChest', 'ArmorMistlandsLegs',
-    'BackpackSimple',
+    'BackpackSimple', 'BackpackHeavy',
   ],
   // [nexus:1215]
   ChaosWarriorArmor: [

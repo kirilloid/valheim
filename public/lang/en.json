@@ -372,6 +372,10 @@
     "Flametal": "Flametal",
     "Flametal.tags": "metal",
 
+    "CapeLeatherBackpack": "Normal Backpack",
+    "CapeIronBackpack": "Rugged Backpack",
+    "CapeSilverBackpack": "Fine Backpack",
+
     "Shield_09_FA": "Peacekeeper Warden",
     "Shield_08_FA": "Venom Greatshield",
     "Shield_07_FA": "Thirsty Skeletal Blockade",

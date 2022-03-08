@@ -310,6 +310,11 @@
     "Yagluththing": "Yagluth thing",
     "FlametalOre": "Flammenkernerz",
     "Flametal": "Flammenkern",
+
+    "CapeLeatherBackpack": "Gewöhnlicher Rucksack",
+    "CapeIronBackpack": "Rauer Rucksack",
+    "CapeSilverBackpack": "Guter Rucksack",
+
     "Pickable_DolmenTreasure": "Dolmen Schatz",
     "TreasureChest_meadows": "Schatztruhe (Graslandhäuser)",
     "TreasureChest_meadows_buried": "Schatztruhe (Begraben)",
