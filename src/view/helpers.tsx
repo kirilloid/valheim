@@ -175,7 +175,7 @@ export function InlineObject({ id, className, ...props }: { id: EntityId } & Rea
 export function ModLinks({ nexus, thunderstore }: { nexus?: number; thunderstore?: string }) {
   const parts: JSX.Element[] = [];
   if (nexus != null) {
-    parts.push(<a target="_blank" rel="noreferrer" className="ModLink ModLink--nexus"
+    parts.push(<a target="_blank" rel="noreferrer" className="ModLink ModLink--nexus" key="nexus"
       href={`https://www.nexusmods.com/valheim/mods/${nexus}`}>
       <img src="https://images.nexusmods.com/favicons/ReskinOrange/favicon.ico" alt="" className="ModLink__icon" />
       {' '}
@@ -183,7 +183,7 @@ export function ModLinks({ nexus, thunderstore }: { nexus?: number; thunderstore
     </a>);
   }
   if (thunderstore != null) {
-    parts.push(<a target="_blank" rel="noreferrer" className="ModLink ModLink--thunderstore"
+    parts.push(<a target="_blank" rel="noreferrer" className="ModLink ModLink--thunderstore" key="thunderstore"
       href={`https://valheim.thunderstore.io/package/${thunderstore}/`}>
       <img src="https://valheim.thunderstore.io/favicon.ico" alt="" className="ModLink__icon" />
       {' '}

@@ -1,5 +1,5 @@
 import { forgeRecipe, traderRecipe, inventoryRecipe, genericRecipe } from '../model/recipe';
-import type { DamageProfile, GameObject, Item, Piece, Resource, ItemRecipe, EntityId } from '../types';
+import type { DamageProfile, GameObject, Item, Piece, Resource, ItemRecipe, EntityId, DamageModifiers } from '../types';
 import { mods } from '../types';
 
 const augmenterRecipe = (materials: Record<EntityId, number>, item: EntityId, number = 1) =>
@@ -117,6 +117,24 @@ export function modifyDamage(damage: DamageProfile, effects: EpicLootData['effec
   if (effects.AddPoisonDamage != null) poison += effects.AddPoisonDamage;
   if (effects.AddSpiritDamage != null) spirit += effects.AddSpiritDamage;
   return { blunt, slash, pierce, chop, pickaxe, fire, frost, lightning, poison, spirit };
+}
+
+export function modifyResistances(resistances: Partial<DamageModifiers>, effects: EpicLootData['effects'] | undefined): Partial<DamageModifiers> {
+  if (effects == null) return resistances;
+  const copy = { ...resistances };
+  if (effects.AddFireResistance != null) copy.fire = 'resistant';
+  if (effects.AddForstResistance != null) copy.frost = 'resistant';
+  if (effects.AddLightingResistance != null) copy.lightning = 'resistant';
+  if (effects.AddPoisonResistance != null) copy.poison = 'resistant';
+  if (effects.AddSpiritResistance != null) copy.spirit = 'resistant';
+  if (effects.AddElementalResistancePercentage != null) {
+    copy.fire = 'resistant';
+    copy.frost = 'resistant';
+    copy.lightning = 'resistant';
+    copy.poison = 'resistant';
+    copy.spirit = 'resistant';
+  }
+  return copy;
 }
 
 const rarityArr = ['Magic', 'Rare', 'Epic', 'Legendary'];

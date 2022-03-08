@@ -1,7 +1,7 @@
 import React, { CSSProperties, useContext, useRef, useState } from 'react';
 import { defaultMemoize } from 'reselect';
 
-import type { Effect, Item, ItemSet, Weapon } from '../../types';
+import type { DamageType, Effect, Item, ItemSet, Pair, Weapon } from '../../types';
 import type { Inventory as TInventory } from './types';
 
 import '../../css/Inventory.css';
@@ -9,7 +9,7 @@ import '../../css/Inventory.css';
 import { timeI2S } from '../../model/utils';
 import { addDamage, multiplyDamage } from '../../model/combat';
 import { SkillType } from '../../model/skills';
-import { EpicLootData, extractExtraData, modifyDamage } from '../../mods/epic-loot';
+import { EpicLootData, extractExtraData, modifyDamage, modifyResistances } from '../../mods/epic-loot';
 
 import { data } from '../../data/itemDB';
 
@@ -23,25 +23,27 @@ const INVENTORY_WIDTH = 8;
 const INVENTORY_HEIGHT = 4;
 const INVENTORY_SIZE = INVENTORY_WIDTH * INVENTORY_HEIGHT;
 
-function getMaxDurability(invItem: InvItem, item: Item, extraData: EpicLootData | undefined): number {
-  if (item == null) return 0;
-  if (!('durability' in item)) return Infinity;
-  if (item.durability[0] === Infinity || extraData?.effects.Indestructible != null) return Infinity;
+function getMaxDurability(invItem: InvItem, item: Item, extraData: EpicLootData | undefined): Pair<number> {
+  if (item == null) return [0, 0];
+  if (!('durability' in item)) return [Infinity, Infinity];
+  if (item.durability[0] === Infinity) return [Infinity, Infinity]
+  if (extraData?.effects.Indestructible != null) return [0, Infinity];
   const maxDurability = item.durability[0] + item.durability[1] * (invItem.quality - 1);
   const durabilityBonus = extraData?.effects.ModifyDurability ?? 0;
-  return maxDurability * (1 + durabilityBonus / 100);
+  return [maxDurability, maxDurability * (1 + durabilityBonus / 100)];
 }
 
 function Tooltip({ invItem, x, y, equippedItems }: { invItem: InvItem; x: number; y: number; equippedItems: InvItem[] }) {
+  const translate = useContext(TranslationContext);
   const item = data[invItem.id] as Item | undefined;
   if (item == null) {
     return <div className="InvTooltip" style={{ left: x, top: y }}>
       <header className="InvTooltip__Header">{invItem.id}</header>
       <p>Unknown item</p>
       <div>number: <span className="InvTooltip__value">{invItem.stack}</span></div>
-      <div>quality: <span className="InvTooltip__value">{invItem.quality}</span></div>
-      <div>durability: <span className="InvTooltip__value">{invItem.durability}</span></div>
-      <div>equipped: {yesNo(invItem.equipped)}</div>
+      <div>{translate('ui.quality')}: <span className="InvTooltip__value">{invItem.quality}</span></div>
+      <div>{translate('ui.durability')}: <span className="InvTooltip__value">{invItem.durability}</span></div>
+      <div>{translate('ui.equipped')}: {yesNo(invItem.equipped)}</div>
     </div>;
   }
   const classes = ['InvTooltip'];
@@ -58,12 +60,16 @@ function Tooltip({ invItem, x, y, equippedItems }: { invItem: InvItem; x: number
 }
 
 function EpicLootTooltip({ extraData }: { extraData: EpicLootData | undefined }) {
+  const translate = useContext(TranslationContext);
   if (extraData == null) return null;
   return <ul className={`InvTooltip__EpicLoot EpicLoot--${extraData.rarity}`}>{
     Object.entries(extraData.effects).map(
-      ([key, value]) => <li key={key}>
-        {key}: {value}
-      </li>
+      ([key, value]) => {
+        const line = translate(`ui.mod.EpicLoot.effect.${key}`, value!);
+        return <li key={key}>
+          {line.endsWith(key) ? `${key}: ${value}` : line}
+        </li>
+      }
     )}
   </ul>
 }
@@ -144,12 +150,16 @@ const TooltipBody = React.memo(({ invItem, item, equippedItems }: { invItem: Inv
   const slot = (item as Weapon).slot as string | undefined;
   const moveSpeed = (item as Weapon).moveSpeed as number | undefined;
   const extraData = extractExtraData(invItem);
-  const maxDurability = getMaxDurability(invItem, item, extraData);
+  const [maxDurability, resultMaxDurability] = getMaxDurability(invItem, item, extraData);
 
   const headerClasses = ['InvTooltip__Header'];
+  const rarityClass = `EpicLoot--${extraData?.rarity ?? 'Generic'}`;
   if (extraData && extraData.rarity !== 'Generic') {
     headerClasses.push('EpicLoot--' + extraData.rarity);
   }
+  const Value = <T extends string | number>({ value, originalValue }: { value: T; originalValue: T }) => {
+    return <span className={value === originalValue ? 'InvTooltip__value' : rarityClass}>{value}</span>
+  };
   let set: ItemSet | undefined = undefined;
   let totalMovementModifier = 0;
   for (const invItem of equippedItems) {
@@ -174,13 +184,21 @@ const TooltipBody = React.memo(({ invItem, item, equippedItems }: { invItem: Inv
     {(item.maxLvl ?? 1) > 1 && <div>
       {translate('ui.quality')}: <span className="InvTooltip__value">{invItem.quality}</span>
     </div>}
-    {isFinite(maxDurability) && <div>
-      {translate('ui.durability')}
-      {': '}
-      <span className="InvTooltip__value">{Math.round(100 * invItem.durability / maxDurability)}%</span>
-      {' '}
-      <span className="InvTooltip__extra">({Math.round(invItem.durability)}/{maxDurability})</span>
-    </div>}
+    {(() => {
+      if (!isFinite(maxDurability)) return null;
+      if (!isFinite(resultMaxDurability)) return <div>
+        {translate('ui.durability')}
+        {': '}
+        <span className={rarityClass}>{translate('ui.mod.EpicLoot.effect.Indestructible')}</span>
+      </div>
+      return <div>
+        {translate('ui.durability')}
+        {': '}
+        <span className={maxDurability === resultMaxDurability ? 'InvTooltip__value' : rarityClass}>{Math.round(100 * invItem.durability / resultMaxDurability)}%</span>
+        {' '}
+        <span className="InvTooltip__extra">({Math.round(invItem.durability)}/{resultMaxDurability})</span>
+      </div>
+    })()}
     {/* repair station level */}
     {(() => {
       switch (item.type) {
@@ -202,7 +220,7 @@ const TooltipBody = React.memo(({ invItem, item, equippedItems }: { invItem: Inv
               .filter(([, value]) => value)
               .map(([key, value]) => <div key={key}>
                 {translate(`ui.damageType.${key}`)}{': '}
-                <span className="InvTooltip__value">{value}</span>
+                <Value value={value} originalValue={damage[key as DamageType] ?? 0} />
               </div>
             )}
             <div>{translate('ui.knockback')}: <span className="InvTooltip__value">{item.knockback}</span></div>
@@ -219,18 +237,21 @@ const TooltipBody = React.memo(({ invItem, item, equippedItems }: { invItem: Inv
           </>;
         case 'armor':
           const armor = item.armor[0] + item.armor[1] * (invItem.quality - 1);
-          const resultArmor = extraData?.effects.ModifyArmor == null ? armor : armor + extraData.effects.ModifyArmor;
+          const resultArmor = extraData?.effects.ModifyArmor == null ? armor : armor * (1 + extraData.effects.ModifyArmor / 100);
+          const damageModifiers = item.damageModifiers;
+          const resultDamageModifiers = damageModifiers && modifyResistances(damageModifiers, extraData?.effects);
           set = item.set;
           return <>
             <div>
               {translate('ui.armor')}{': '}
-              <span className="InvTooltip__value">{resultArmor}</span>
+              <Value value={resultArmor} originalValue={armor} />
             </div>
-            {item.damageModifiers != null && Object.entries(item.damageModifiers).map(
+            {resultDamageModifiers && Object.entries(resultDamageModifiers).map(
               ([key, value]) => <div key={key}>
                 {translate(`ui.damageType.${key}`)}
                 {': '}
-                {translate(`ui.damageModifier.${value}`)}
+                <Value value={translate(`ui.damageModifier.${value}`)}
+                  originalValue={translate(`ui.damageModifier.${damageModifiers?.[key as DamageType]}`)} />
               </div>
             )}
           </>
@@ -277,7 +298,7 @@ export function InvItemView({ invItem, style, onTooltip }: {
 
   const extraData = extractExtraData(invItem);
 
-  const maxDuarbility = getMaxDurability(invItem, item, extraData);
+  const [, maxDurability] = getMaxDurability(invItem, item, extraData);
   const classes = ['Inventory__Item'];
   if (invItem.equipped) {
     classes.push('Inventory__Item--equipped');
@@ -307,8 +328,8 @@ export function InvItemView({ invItem, style, onTooltip }: {
     {(item.stack ?? 1) > 1 && <div className="InvItem__stack text-outline">
       {invItem.stack}/{item.stack}
     </div>}
-    {isFinite(maxDuarbility) && <div className="InvItem__durability">
-      <div className="InvItem__durability-value" style={{ width: `${100 * invItem.durability / maxDuarbility}%` }} />
+    {isFinite( maxDurability) && <div className="InvItem__durability">
+      <div className="InvItem__durability-value" style={{ width: `${100 * invItem.durability / maxDurability}%` }} />
     </div>}
   </div>
 }
