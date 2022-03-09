@@ -95,9 +95,11 @@
   position: absolute;
   background: #000C;
   color: white;
-  width: 320px;
+  min-width: 320px;
+  max-width: 480px;
   box-sizing: border-box;
   padding: 0.5rem;
+  pointer-events: none;
 }
 .InvTooltip__Header {
   font-size: 1.25rem;
@@ -176,3 +178,4 @@
 .EpicLoot--Rare { color: #FFFF75 !important; }
 .EpicLoot--Epic { color: #CF78FE !important; }
 .EpicLoot--Legendary { color: #16EAAB !important; }
+.EpicLoot--Augmented { font-style: italic; }

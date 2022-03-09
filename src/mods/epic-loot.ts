@@ -1,5 +1,5 @@
 import { forgeRecipe, traderRecipe, inventoryRecipe, genericRecipe } from '../model/recipe';
-import type { DamageProfile, GameObject, Item, Piece, Resource, ItemRecipe, EntityId, DamageModifiers } from '../types';
+import type { DamageProfile, GameObject, Item, Piece, Resource, ItemRecipe, EntityId, DamageModifiers, ItemSet } from '../types';
 import { mods } from '../types';
 
 const augmenterRecipe = (materials: Record<EntityId, number>, item: EntityId, number = 1) =>
@@ -64,14 +64,45 @@ type EffectType =
 | 'FrostDamageAOE'
 | 'Berserker'
 
+type Effects = Partial<Record<EffectType, number>>;
+
+export type LegendaryItemSet = { name: string; items: EntityId[]; effects: (Effects | undefined)[]; };
+
 export type EpicLootData = {
   rarity: Rarity;
-  effects: Partial<Record<EffectType, number>>;
+  effects: Effects;
+  augmentedIndex: number;
+  legendaryId?: string;
+  set?: LegendaryItemSet;
 }
+
+const legendarySets: LegendaryItemSet[] = [
+  {
+    name: 'Heimdall',
+    items: ['HeimdallTowerShield', 'HeimdallHelmet', 'HeimdallChest', 'HeimdallLegs'],
+    effects: [
+      undefined,
+      { ModifyBlockPower: 200 },
+      { Bulwark: 0 },
+      { Undying: 0 },
+    ]
+  },
+  {
+    name: 'Ragnar',
+    items: ['RagnarBattleAxe', 'RagnarCape', 'RagnarChest', 'RagnarLegs'],
+    effects: [
+      undefined,
+      { AddHealthRegen: 2, ModifyHealthRegen: 100 },
+      { Berserker: 0 },
+      { FrostDamageAOE: 50 },
+    ]
+  },
+];
 
 const defaultItem: EpicLootData = {
   rarity: 'Generic',
   effects: {},
+  augmentedIndex: -1,
 }
 
 export function extractExtraData({ crafterName }: { crafterName: string }): EpicLootData | undefined {
@@ -82,17 +113,20 @@ export function extractExtraData({ crafterName }: { crafterName: string }): Epic
   try {
     const obj = JSON.parse(m[1] ?? 'null');
     const rarity = obj.Rarity;
-    const effects: EpicLootData['effects'] = {};
+    const effects: Effects = {};
+    const legendaryId = obj.LegendaryID;
+    const set = legendarySets.find(s => s.name === obj.SetID);
+    const augmentedIndex = obj.AugmentedEffectIndex;
     for (const { EffectType, EffectValue } of obj.Effects) {
       effects[EffectType as EffectType] = EffectValue;
     }
-    return { rarity, effects };
+    return { rarity, effects, augmentedIndex, legendaryId, set };
   } catch (e) {
     return defaultItem;
   }
 }
 
-export function modifyDamage(damage: DamageProfile, effects: EpicLootData['effects'] | undefined): DamageProfile {
+export function modifyDamage(damage: DamageProfile, effects: Effects | undefined): DamageProfile {
   if (effects == null) return damage;
   let { blunt, slash, pierce, chop, pickaxe, fire, frost, lightning, poison, spirit } = damage;
   if (effects.ModifyPhysicalDamage != null) {
@@ -119,7 +153,7 @@ export function modifyDamage(damage: DamageProfile, effects: EpicLootData['effec
   return { blunt, slash, pierce, chop, pickaxe, fire, frost, lightning, poison, spirit };
 }
 
-export function modifyResistances(resistances: Partial<DamageModifiers>, effects: EpicLootData['effects'] | undefined): Partial<DamageModifiers> {
+export function modifyResistances(resistances: Partial<DamageModifiers>, effects: Effects | undefined): Partial<DamageModifiers> {
   if (effects == null) return resistances;
   const copy = { ...resistances };
   if (effects.AddFireResistance != null) copy.fire = 'resistant';
