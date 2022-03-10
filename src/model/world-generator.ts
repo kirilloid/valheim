@@ -340,11 +340,11 @@ export class WorldGenerator {
   private placeRivers(): River[] {
     const state = random.getState();
     random.init(this.riverSeed);
-    // const time = Date.now();
+    // const startTime = Date.now();
     const rivers: River[] = [];
-    const copy = [...this._lakes];
-    while (copy.length > 1) {
-      const vector2 = copy[0]!;
+    const lakesCopy = [...this._lakes];
+    while (lakesCopy.length > 1) {
+      const vector2 = lakesCopy[0]!;
       let randomRiverEnd = this.findRandomRiverEnd(rivers, this._lakes, vector2, 2000, 0.4, 128);
       if (randomRiverEnd === -1 && !this.haveRiver1(rivers, vector2)) {
         randomRiverEnd = this.findRandomRiverEnd(rivers, this._lakes, vector2, 5000, 0.4, 128);
@@ -365,11 +365,11 @@ export class WorldGenerator {
           curveWavelength: distance / 20,
         });
       } else {
-        copy.shift();
+        lakesCopy.shift();
       }
     }
     this.renderRivers(rivers);
-    // const timeSpan = Date.now() - time;
+    // const timeSpan = Date.now() - startTime;
     random.setState(state);
     return rivers;
   }

@@ -21,7 +21,7 @@ addToHashMap(keys, [
   // Character
   'max_health', 'noise', 'level', 'tiltrot', 'BodyVelocity',
   // Container
-  'addedDefaultItems', 'InUse', 'items',
+  'addedDefaultItems', 'InUse', 'items', // base64 inventory
   // CookingStation
   'StartTime', 'fuel', 'slot0', 'slotstatus0', 'slot1', 'slotstatus1', 'slot2', 'slotstatus2', 'slot3', 'slotstatus3', 'slot4', 'slotstatus4',
   // Corpse
@@ -73,7 +73,7 @@ addToHashMap(keys, [
   // Plant
   'plantTime',
   // Player
-  'Stealth', 'stamina', 'emoteID', 'emote', 'emote_oneshot', 'baseValue',
+  'Stealth', 'stamina', 'emoteID', 'emote', 'emote_oneshot', 'baseValue', 'inBed', 'dead',
   // PrivateArea
   'permitted', 'pu_id<num>', 'pu_name<num>', 'creatorName', 'enabled',
   // Procreation

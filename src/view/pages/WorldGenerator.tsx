@@ -152,7 +152,7 @@ const WorldMap = React.memo((props: { seed: string }) => {
               bottom: world2canvasCoord(item.pos.z),
               backgroundImage: group.icon ? `url(/icons/icon/${group.icon}_64.png)` : '',
             }}>
-              {typeIds.size > 1 ? item.title : ''}
+              {typeIds.size > 1 ? translate(`ui.location.${item.subtype}`) : ''}
             </div>)}
           </React.Fragment>
         })}
