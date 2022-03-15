@@ -25,7 +25,7 @@ function write<T>(name: string, value: T): void {
 
 const globalKeysDefaultValue = {
   aggregate: false as boolean,
-  spoiler: 0 as number,
+  spoiler: 999 as number,
   language: undefined as string | undefined,
   theme: 'system' as 'system' | 'light' | 'dark',
 } as const;
