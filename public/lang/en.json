@@ -938,6 +938,7 @@
     "caves.start": "Howls echo from the depths",
     "caves.end": "The howls fade",
 
+    "char.glow": "Bloom",
     "char.skinColor": "Skin Tone",
     "char.hairColor": "Hair Tone",
     "char.beard": "Beard",

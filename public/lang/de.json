@@ -623,6 +623,7 @@
     "wolves.start": "Du wirst gejagt...",
     "wolves.end": "Die Jagd ist vorbei",
 
+    "char.glow": "Bloom",
     "char.skinColor": "Hautfarbe",
     "char.hairColor": "Haarfarbe",
     "char.beard": "Bart",

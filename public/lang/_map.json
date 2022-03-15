@@ -598,6 +598,7 @@
     "caves.start": "event_caves_start",
     "caves.end": "event_caves_end",
 
+    "char.glow": "settings_bloom",
     "char.skinColor": "menu_skintone",
     "char.hairColor": "menu_hairtone",
     "char.beard": "menu_beard",

@@ -1,0 +1,27 @@
+.HDColor {
+  display: flex;
+  flex-direction: row;
+}
+
+.HDColor__box {
+  width: 48px;
+  flex: 0 1 auto;
+  display: flex;
+}
+
+.HDColor__color {
+  width: 24px;
+  height: 24px;
+  align-self: center;
+  border: 1px solid black;
+}
+
+.HDColor__tracks {
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+  
+.HDColor__track {
+  margin-inline-start: 0.5rem;
+}
