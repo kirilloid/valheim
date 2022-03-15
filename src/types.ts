@@ -2,6 +2,7 @@ import type { EnvId } from './data/env';
 import { DungeonRoomsConfig } from './data/rooms';
 import { DropDist } from './model/dist';
 import { SkillType } from './model/skills';
+import { Vector2i } from './model/utils';
 
 export type EntityId = string;
 
@@ -615,6 +616,7 @@ interface BaseItem extends GameObjectBase {
   stack?: number;
   maxLvl?: number;
   variants?: number;
+  trophyPos?: Vector2i;
   weight: number;
   floating?: true;
   teleportable?: false;

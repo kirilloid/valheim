@@ -10,7 +10,7 @@ import { Worlds } from './Worlds';
 import { Appearance } from './Appearance';
 import { Inventory } from './Inventory';
 import { Skills } from './Skills';
-import { Stats } from './Stats';
+import { Stats, Trophies } from './Stats';
 import { readExtraSlots } from './EquipmentAndQuickSlots';
 
 export function PlayerInfo({ value: player, onChange, file, disabled } : EditorProps<Player>) {
@@ -44,8 +44,12 @@ export function PlayerInfo({ value: player, onChange, file, disabled } : EditorP
       <h2>Skills</h2>
     }
     tabs.push({
+      title: 'Trophies',
+      renderer: () => <Trophies trophies={player.playerData?.trophies ?? []} />,
+    });
+    tabs.push({
       title: 'Stats',
-      renderer: () => <Stats stats={player.stats} />,
+      renderer: () => <Stats player={player} />,
     });
   }
 

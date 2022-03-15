@@ -324,3 +324,14 @@ option.spoiler {
   background-color: rgba(var(--color-background), 0.75);
   z-index: 1;
 }
+
+.TrophyRoom {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.TrophyRoom__slot {
+  display: flex;
+  justify-content: center;
+  height: 72px;
+}
