@@ -1,11 +1,12 @@
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 
 import type { Player } from '../../file/Player';
 import { InlineObjectWithIcon } from '../helpers';
 
 import { data } from '../../data/itemDB';
 import { ItemIcon } from '../parts/Icon';
-import { Biome } from '../../types';
+import { Biome, Resource } from '../../types';
 import { TranslationContext } from '../../effects';
 
 const stations: Record<string, string> = {
@@ -59,22 +60,27 @@ export function Stats({ player }: { player: Player }) {
   </>
 }
 
+const allTrophies = Object.values(data).filter(i => i.type === 'trophy' && !i.disabled) as (Resource & { type: 'trophy' })[];
+
 export function Trophies({ trophies }: { trophies: string[] }) {
   const grid: string[][] = Array.from({ length: 6 }, () => Array.from({ length: 7 }, () => ''));
-  for (const id of trophies) {
-    const item = data[id];
-    if (item?.type !== 'trophy') continue;
+  const found = new Set(trophies);
+  for (const item of allTrophies) {
     const pos = item.trophyPos;
     if (pos == null) continue;
-    grid[pos.y]![pos.x] = id;
+    grid[pos.y]![pos.x] = item.id;
   }
 
   return <div className="TrophyRoom">
     {grid.map((row, y) => row.map((id, x) => {
       const item = data[id];
       if (item == null) return <div />;
-      return <div key={`${x}_${y}`} className="TrophyRoom__slot">
-        <ItemIcon item={item} size={64} />
+      const classNames = ['TrophyRoom__slot'];
+      if (found.has(id)) {
+        classNames.push('TrophyRoom__slot--found');
+      }
+      return <div key={`${x}_${y}`} className={classNames.join(' ')}>
+        <Link to={`/obj/${id}`}><ItemIcon item={item} size={64} /></Link>
       </div>
     }))}
   </div>;

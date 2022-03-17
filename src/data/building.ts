@@ -2189,7 +2189,7 @@ export const pieces: Piece[] = [
     tier: 2,
     piece: { target: 'none', water: undefined, size: [0.25, 0.1, 0] },
     wear: { ...woodRoofStructureWear, hp: 100 },
-    recipe: { type: 'craft_piece', materials: { Wood: 2, Coal: 1 }, station: 'piece_workbench' },
+    recipe: { type: 'craft_piece', materials: { Wood: 2, Coal: 1 }, station: null },
   },
   { id: 'rug_deer',
     base: false,
