@@ -4,11 +4,11 @@ import type { PlayerData } from './types';
 import type { ValueProps } from '../parts/types';
 
 import { TranslationContext } from '../../effects';
-import { Color, HDColor, hdColorDatalist } from '../ColorEditor';
+import { HDColor, hdColorDatalist } from '../ColorEditor';
 import { lerp, lerpStep, Vector3 } from '../../model/utils';
 import { Tabs } from '../parts/Tabs';
 
-const MODELS = ['MALE', 'FEMALE'];
+const MODELS = ['male', 'female'];
 const beards = ['Beard1', 'Beard2', 'Beard3', 'Beard4', 'Beard5', 'Beard6', 'Beard7', 'Beard8', 'Beard9', 'Beard10', 'BeardNone'];
 const hairs = ['Hair1', 'Hair2', 'Hair3', 'Hair4', 'Hair5', 'Hair6', 'Hair7', 'Hair8', 'Hair9', 'Hair10', 'Hair11', 'Hair12', 'Hair13', 'Hair14', 'HairNone'];
 
@@ -149,12 +149,12 @@ export function Appearance({ value, onChange } : ValueProps<PlayerData>) {
 
   return <>
     <dl>
-      <dt>model</dt>
+      <dt>{translate('char.sex')}</dt>
       <dd>
         <select value={value.modelIndex}
           onChange={e => onChange({ ...value, modelIndex: +e.target.value })}>
           {MODELS.map((name, index) =>
-            <option key={name} value={index}>{MODELS[index]}</option>
+            <option key={name} value={index}>{translate(`char.sex.${MODELS[index]}`)}</option>
           )}
         </select>
       </dd>

@@ -1,14 +1,15 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import type { ValueProps } from '../parts/types';
 import type { MapData as TMapData, Player } from './types';
-import { read } from '../../file/MapData';
+import { read, write } from '../../file/MapData';
 
 const mapDataCache = new Map<BigInt, TMapData>();
 
-function MapData({ mapData }: { mapData: TMapData }) {
+function MapData({ mapData, id, onChange }: { mapData: TMapData; id: BigInt; onChange: (mapData: TMapData) => void }) {
   const SIZE = 512;
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
   useLayoutEffect(() => {
     const ctx = canvasRef.current?.getContext('2d');
     if (ctx == null) return;
@@ -33,20 +34,27 @@ function MapData({ mapData }: { mapData: TMapData }) {
     }
     ctx.putImageData(imageData, 0, 0);
   }, [mapData]);
-  return <>
-    {' '}
-    map pins: {mapData.pins.length ?? '—'}
-    <br/>
-    explored:
-    <br/>
+
+  return <section>
+    <h2>Unknown world {(Number(id) >>> 0).toString(16)}</h2>
+    {mapData.version < 7 && <p>
+      This world data uses old format. Do you want to upgrade &amp; save 4MB?
+      {' '}
+      <button className="btn btn--primary" onClick={() => onChange({ ...mapData, version: 7 })}>
+        Upgrade
+      </button>
+    </p>}
+    <p>map pins: {mapData.pins.length ?? '—'}</p>
+    <p>explored:</p>
     <canvas ref={canvasRef} width={SIZE} height={SIZE} />
-  </>
+  </section>
 }
 
-export function Worlds({ value: worlds } : ValueProps<Player['worlds']>) {
+export function Worlds({ value: worlds, onChange } : ValueProps<Player['worlds']>) {
   const entries = [...worlds.entries()];
   const [hash, setHash] = useState(entries[0]?.[0] ?? BigInt(0));
   const [mapData, setMapData] = useState<TMapData>();
+
   useEffect(function drawMap() {
     const world = worlds.get(hash);
     if (mapDataCache.has(hash)) {
@@ -54,18 +62,36 @@ export function Worlds({ value: worlds } : ValueProps<Player['worlds']>) {
       return;
     }
     const mapDataPacked = world?.mapData;
-    if (mapDataPacked == null) return;
+    if (mapDataPacked == null) {
+      setMapData(undefined);
+      return;
+    }
     const mapDataUnpacked = read(mapDataPacked);
     mapDataCache.set(hash, mapDataUnpacked);
     setMapData(mapDataUnpacked);
-  }, [worlds, hash])
+  }, [worlds, hash]);
+
+  const updateMapData = useCallback((md: TMapData) => {
+    const mapData = write(md);
+    const world = worlds.get(hash);
+    if (world != null) {
+      worlds.set(hash, { ...world, mapData });
+      mapDataCache.set(hash, md);
+      onChange(worlds);
+    }
+  }, [hash, worlds, onChange]);
+
   if (worlds.size === 0) {
-    return <span>You character hasn't visited any worlds yet</span>
+    return <span>This character hasn't visited any worlds yet</span>
   }
+
   return <>
     <select value={hash.toString()} onChange={e => setHash(BigInt(e.target.value))}>
-      {entries.map(e => <option value={e[0].toString()} key={e[0].toString()}>{e[0].toString(16)}</option>)}
+      {entries.map(e => <option value={e[0].toString()} key={Number(e[0])}>{e[0].toString(16)}</option>)}
     </select>
-    {mapData && <MapData mapData={mapData} />}
+    {mapData && <MapData mapData={mapData} id={hash} onChange={md => {
+      updateMapData(md);
+      setMapData(md);
+    }} />}
   </>
 }

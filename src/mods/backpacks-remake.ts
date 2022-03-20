@@ -1,6 +1,5 @@
-import { forgeRecipe, traderRecipe, inventoryRecipe, genericRecipe, workbenchRecipe } from '../model/recipe';
-import type { DamageProfile, GameObject, Item, Piece, Resource, ItemRecipe, EntityId } from '../types';
-import { mods } from '../types';
+import { workbenchRecipe } from '../model/recipe';
+import type { GameObject, Item, ItemRecipe } from '../types';
 
 const items: Item[] = [
   {

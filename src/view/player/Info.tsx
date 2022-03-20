@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useContext } from 'react';
 
 import type { Player } from './types';
 import type { EditorProps } from '../parts/types';
@@ -13,42 +13,50 @@ import { Skills } from './Skills';
 import { Stats, Trophies } from './Stats';
 import { readExtraSlots } from './EquipmentAndQuickSlots';
 
+import { TranslationContext } from '../../effects';
+
 export function PlayerInfo({ value: player, onChange, file, disabled } : EditorProps<Player>) {
+  const translate = useContext(TranslationContext);
+
+  const onWorldsChange = useCallback((worlds: Player['worlds']) => onChange({ ...player, worlds }), [player]);
+  const onPlayerDataChange = useCallback((playerData: Player['playerData']) => onChange({ ...player, playerData }), [player]);
+
   const tabs = [
     {
-      title: 'File',
+      title: translate('ui.file'),
       renderer: () => <FileInfo version={player.version} file={file} />
     },
     {
-      title: `Worlds (${player.worlds.size})`,
-      renderer: () => <Worlds value={player.worlds} onChange={worlds => onChange({ ...player, worlds })} />
+      title: translate('ui.character.worlds', player.worlds.size),
+      renderer: () => <Worlds value={player.worlds} onChange={onWorldsChange} />
     },
   ];
+
   const { playerData } = player;
+
   if (playerData) {
     const extras = readExtraSlots(playerData);
     tabs.push({
-      title: 'Appearance',
-      renderer: () => <Appearance value={playerData} onChange={playerData => onChange({ ...player, playerData })} />,
+      title: translate('ui.character.appearance'),
+      renderer: () => <Appearance value={playerData} onChange={onPlayerDataChange} />,
     });
     tabs.push({
-      title: 'Inventory',
+      title: translate('ui.character.inventory'),
       renderer: () => <Inventory inventory={playerData.inventory} extras={extras} />,
     });
     const { skillData } = playerData;
     if (skillData) {
       tabs.push({
-        title: 'Skills',
+        title: translate('ui.character.skills'),
         renderer: () => <Skills skillData={skillData} playerData={playerData} />,
       });
-      <h2>Skills</h2>
     }
     tabs.push({
-      title: 'Trophies',
+      title: translate('ui.character.trophies'),
       renderer: () => <Trophies trophies={player.playerData?.trophies ?? []} />,
     });
     tabs.push({
-      title: 'Stats',
+      title: translate('ui.character.statistics'),
       renderer: () => <Stats player={player} />,
     });
   }
