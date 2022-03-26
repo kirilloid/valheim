@@ -1,5 +1,5 @@
 import { forgeRecipe, traderRecipe, inventoryRecipe, genericRecipe } from '../model/recipe';
-import type { DamageProfile, GameObject, Item, Piece, Resource, ItemRecipe, EntityId, DamageModifiers, ItemSet } from '../types';
+import type { DamageProfile, GameObject, Item, Piece, Resource, ItemRecipe, EntityId, DamageModifiers } from '../types';
 import { mods } from '../types';
 
 const augmenterRecipe = (materials: Record<EntityId, number>, item: EntityId, number = 1) =>

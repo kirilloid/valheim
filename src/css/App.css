@@ -334,4 +334,9 @@ option.spoiler {
   display: flex;
   justify-content: center;
   height: 72px;
+  opacity: 0.25;
+}
+
+.TrophyRoom__slot--found {
+  opacity: 1;
 }

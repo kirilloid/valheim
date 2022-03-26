@@ -11,7 +11,6 @@ import { data } from '../../../data/itemDB';
 import { TranslationContext } from '../../../effects';
 import { ItemIcon } from '../../parts/Icon';
 import { extractExtraData } from '../../../mods/epic-loot';
-import { Shield } from '../../../types';
 
 const itemsHash = stableHashCode('items');
 

@@ -9,7 +9,7 @@ import { getId, keys, prefabHashes } from '../../../data/zdo';
 import { InterfaceFields } from '../zdo-props';
 import { ItemIcon } from '../../parts/Icon';
 import { TranslationContext } from '../../../effects';
-import { stableHashCode } from '../../../model/utils';
+import { flip, stableHashCode } from '../../../model/utils';
 
 function ZdoSpecialData<T>(props: { data?: Map<number, T>, stringify: (value: T) => string }) {
   if (props == null) return null;
@@ -29,6 +29,7 @@ function getComponents(id: string | undefined): GameComponent[] {
 
 const variantHash = stableHashCode('variant');
 
+
 export const ItemEditor = React.memo(({ zdo, onChange }: { zdo: ZDO, onChange: (value: ZDO) => void, version: number }) => {
   const translate = useContext(TranslationContext);
 
@@ -41,6 +42,14 @@ export const ItemEditor = React.memo(({ zdo, onChange }: { zdo: ZDO, onChange: (
     <h2><ItemIcon item={item} variant={zdo.ints.get(variantHash)} /> {currentId && translate(currentId)}</h2>
     <dl>
       <dt>position</dt><dd>{zdo.position.x.toFixed(3)} / {zdo.position.z.toFixed(3)} / {zdo.position.y.toFixed(3)}</dd>
+      <dt>transform</dt><dd>
+        {zdo.rotation.x.toFixed(3)} / {zdo.rotation.y.toFixed(3)} / {zdo.rotation.z.toFixed(3)} / {zdo.rotation.w.toFixed(3)}
+        {' '}
+        <button className="btn btn--primary" onClick={() => {
+          zdo.rotation = flip(zdo.rotation);
+          onChange(zdo);
+        }}>flip</button>
+      </dd>
       <dt>zone</dt><dd>{zdo.sector.x} / {zdo.sector.y}</dd>
       {eComponents.length > 0
         ? components.map((C, i) => <C key={i} value={zdo} onChange={onChange} />)

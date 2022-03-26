@@ -394,6 +394,9 @@ export const modPrefabNames: Record<string, string[]> = {
   OdinHorse: [
     'rae_OdinHorse', 'rae_Offspring_Normal', 'rae_SaddleHorse',
   ],
+  Bears: [
+    'Bear', 'Bear_ragdoll', 'Bear_cub', 'Bearcub_ragdoll', 'BearHide', 'rug_bear', 'TrophyBear',
+  ],
   OdinBanners: [
     'rae_ob_banner_1', 'rae_ob_banner_1_big',
     'rae_ob_banner_2', 'rae_ob_banner_2_big',

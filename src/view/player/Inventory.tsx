@@ -1,7 +1,7 @@
 import React, { CSSProperties, useContext, useLayoutEffect, useRef, useState } from 'react';
 import { defaultMemoize } from 'reselect';
 
-import type { Armor, DamageType, Effect, Item, ItemSet, Pair, Resource, Weapon } from '../../types';
+import type { Armor, DamageType, Effect, Item, ItemSet, Pair, Weapon } from '../../types';
 import type { Inventory as TInventory } from './types';
 
 import '../../css/Inventory.css';

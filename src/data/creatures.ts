@@ -1681,7 +1681,7 @@ export const creatures: Creature[] = [
     faction: 'MountainMonsters',
     spawners: [spawner({
       tier: 4,
-      biomes: ['Mountain'],
+      biomes: [],
       biomeAreas: 2,
       maxSpawned: 2,
       interval: 400,

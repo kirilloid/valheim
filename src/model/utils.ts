@@ -62,6 +62,10 @@ export type Quaternion = {
   w: number;
 };
 
+export function flip({ x, y, z, w }: Quaternion): Quaternion {
+  return { x: y, y: -x, z: w, w: -z };
+}
+
 export const timeI2S = (seconds: number) => {
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);
