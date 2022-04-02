@@ -451,9 +451,10 @@
     "piece_gift1": "",
     "piece_gift2": "",
     "piece_gift3": "",
-    "piece_xmastree": "",
-    "piece_maypole": "",
-    "piece_jackoturnip": "",
+    "piece_xmastree": "piece_yuletree",
+    "piece_maypole": "piece_maypole",
+    "piece_jackoturnip": "piece_jackoturnip",
+    "ArmorStand": "piece_armorstand",
 
     "Cart": "tool_cart",
     "Raft": "ship_raft",

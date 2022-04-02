@@ -2433,12 +2433,13 @@ export const pieces: Piece[] = [
     base: false,
     type: 'piece',
     components: ['ArmorStand'], // VisEquipment, but ArmorStand covers things for work with ZDO
-    subtype: 'structure',
+    subtype: 'decoration',
+    comfort: { value: 1 },
     tier: 3,
     wear: wearStructure(600, mods([1, 1, 1, 1, 1, 1, 1, 0, 3, 3]), undefined),
     recipe: {
       type: 'craft_piece',
-      materials: { FinrWood: 8, IronNails: 4, LeatherScraps: 2 },
+      materials: { FineWood: 8, IronNails: 4, LeatherScraps: 2 },
       station: 'piece_workbench',
     },
   },
