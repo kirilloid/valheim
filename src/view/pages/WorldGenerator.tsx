@@ -162,10 +162,12 @@ const WorldMap = React.memo((props: { seed: string }) => {
 });
 
 export function WorldGenerator() {
+  const translate = useContext(TranslationContext);
+  const history = useHistory();
+
   const inputRef = useRef<HTMLInputElement>(null);
   const params = useParams<{ seed?: string }>();
   const [seed, setSeed] = useState(params.seed ?? '');
-  const history = useHistory();
 
   useEffect(() => {
     const input = inputRef.current;
@@ -175,7 +177,7 @@ export function WorldGenerator() {
   return (<>
     <section className="overlay">
       <h1>World Generator</h1>
-      <label>Seed: <input ref={inputRef} type="text" placeholder="Enter seed" /></label>
+      <label>{translate('ui.seed')}: <input ref={inputRef} type="text" placeholder={translate('ui.seedEnter')} /></label>
       <button className="btn" onClick={() => {
         const newSeed = inputRef.current?.value ?? '';
         const path = newSeed.length ? `/world-gen/${newSeed}` : '/world-gen';

@@ -28,6 +28,9 @@ export function FileEditor<T>(props: Props<T>) {
   const { reader } = props;
 
   const processFile = useCallback(async (file: File) => {
+    // sometimes people click on image in content and drag it
+    if (file.type.startsWith('image/')) return;
+
     const buffer = await file.arrayBuffer();
     setState({ state: 'reading', file, progress: 0 });
     const value = await runGenerator(
@@ -76,9 +79,8 @@ export function FileEditor<T>(props: Props<T>) {
   }, [processFiles]);
 
   const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
-    const file = event.dataTransfer.files[0];
-    // sometimes people click on image in content and drag it
-    if (file && !file.type.startsWith('image/')) {
+    const { items } = event.dataTransfer;
+    if (items.length > 0 && items[0]?.kind === 'file') {
       event.preventDefault();
       setDragging(true);
     }

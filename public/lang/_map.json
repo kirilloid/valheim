@@ -878,6 +878,8 @@
     "ui.repEat.moderate": "",
     "ui.repEat.rarely": "",
     "ui.repEat.when": "",
+    "ui.seed": "menu_seed",
+    "ui.seedEnter": "menu_enterseed",
     "ui.ship": "",
     "ui.shipMove.oar": "",
     "ui.shipMove.sail": "",

@@ -3,7 +3,7 @@ import React from 'react';
 import { read, write, Data } from '../file/fwl';
 
 import { FileEditor } from './parts/FileEditor';
-import { WorldMetaInfo,  } from './world/Info';
+import { WorldMetaInfo } from './world/Info';
 
 /* eslint-disable-next-line require-yield */
 function* genRead(data: Uint8Array) {

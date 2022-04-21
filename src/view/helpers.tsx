@@ -177,7 +177,7 @@ export function ModLinks({ nexus, thunderstore }: { nexus?: number; thunderstore
   if (nexus != null) {
     parts.push(<a target="_blank" rel="noreferrer" className="ModLink ModLink--nexus" key="nexus"
       href={`https://www.nexusmods.com/valheim/mods/${nexus}`}>
-      <img src="https://images.nexusmods.com/favicons/ReskinOrange/favicon.ico" alt="" className="ModLink__icon" />
+      <img src="/icons/nexusmods.ico" alt="" className="ModLink__icon" />
       {' '}
       nexus
     </a>);
@@ -185,7 +185,7 @@ export function ModLinks({ nexus, thunderstore }: { nexus?: number; thunderstore
   if (thunderstore != null) {
     parts.push(<a target="_blank" rel="noreferrer" className="ModLink ModLink--thunderstore" key="thunderstore"
       href={`https://valheim.thunderstore.io/package/${thunderstore}/`}>
-      <img src="https://valheim.thunderstore.io/favicon.ico" alt="" className="ModLink__icon" />
+      <img src="/icons/thunderstore.ico" alt="" className="ModLink__icon" />
       {' '}
       thunderstore
     </a>);

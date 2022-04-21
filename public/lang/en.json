@@ -1268,6 +1268,8 @@
     "ui.repEat.planTime": "The scale of the feast",
     "ui.resources": "resources",
     "ui.respawn": "respawn",
+    "ui.seed": "seed",
+    "ui.seedEnter": "menu_enterseed",
     "ui.ship": "ship",
     "ui.shipMove.oar": "paddling",
     "ui.shipMove.sail": "sailing",

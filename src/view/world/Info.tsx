@@ -22,7 +22,7 @@ function showTime(time: number) {
 }
 
 export function WorldMetaInfo({ value, file }: EditorProps<WorldMeta>) {
-  const { version, name, seedName, worldGenVersion } = value;
+  const { version, name, seed, seedName, worldGenVersion } = value;
   const tabs = [{
     title: 'File',
     renderer: () => <FileInfo file={file} version={version} />,
@@ -31,7 +31,7 @@ export function WorldMetaInfo({ value, file }: EditorProps<WorldMeta>) {
     renderer: () => <dl>
       <dt>version</dt><dd>{version}</dd>
       <dt>name</dt><dd>{name}</dd>
-      <dt>seed</dt><dd>{seedName}</dd>
+      <dt>seed</dt><dd>{seedName} / {seed}</dd>
       <dt>generator version</dt><dd>{worldGenVersion}</dd>
     </dl>
   }];

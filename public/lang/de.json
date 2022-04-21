@@ -900,6 +900,8 @@
     "ui.repEat.planTime": "Das Ausmaß des Festes",
     "ui.resources": "Rohstoffe",
     "ui.respawn": "respawnen",
+    "ui.seed": "Seed",
+    "ui.seedEnter": "Seed eingeben",
     "ui.ship": "ship",
     "ui.shipMove.oar": "paddling",
     "ui.shipMove.sail": "sailing",

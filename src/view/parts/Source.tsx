@@ -270,7 +270,7 @@ export function GrowSection({ item }: { item: GameObject | undefined }) {
     </dl>)}</List>
     {grow.length && locations.length ? <hr /> : null}
     <List>{
-      locations.map(loc => <Area key={loc} area={loc} />)
+      locations.map(loc => <div><Area key={loc} area={loc} /></div>)
     }</List>
   </>;
 }

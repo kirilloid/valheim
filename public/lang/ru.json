@@ -1202,6 +1202,8 @@
     "ui.repEat.planTime": "Масштаб пиршества",
     "ui.resources": "ресурсы",
     "ui.respawn": "появляется снова",
+    "ui.seed": "Зерно мира",
+    "ui.seedEnter": "Задайте зерно мира",
     "ui.ship": "корабль",
     "ui.shipMove.oar": "на весле",
     "ui.shipMove.sail": "под парусом",

@@ -3,7 +3,7 @@ import React from 'react';
 import type { GameComponent } from '../../../types';
 import type { ValueProps } from '../../parts/types';
 import type { ZDO } from '../types';
-import { crc32 } from '../../../model/utils';
+import { crc32, stableHashCode } from '../../../model/utils';
 
 import { boolComp } from './bool';
 import { colorComp } from './color';
@@ -111,7 +111,10 @@ export const InterfaceFields: Partial<Record<GameComponent, React.ComponentType<
   ItemStand: [ItemComp],
   Leviathan: [boolComp('submerged', { hashFn: crc32 })],
   LiquidVolume: [LiquidComp],
-  LocationProxy: [hashedLocationComp('location'), intComp('seed', { readOnly })],
+  LocationProxy: [hashedLocationComp('location'), intComp('seed', { readOnly }), ({ value: zdo }) => <>
+    <dt>world seed</dt>
+    <dd>{(zdo.ints.get(stableHashCode('seed')) ?? 0) - zdo.sector.x * 4271 - zdo.sector.y * 9187}</dd>
+  </>],
   // LootSpawner: [timeComp('spawn_time'),],
   MapTable: [MapTable],
   MineRock: [floatComp('Health'), floatComp('Health0')],
