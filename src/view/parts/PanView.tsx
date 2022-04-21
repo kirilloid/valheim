@@ -6,15 +6,17 @@ import { PanViewModel } from '../../model/pan-view';
 import { nop } from '../../model/utils';
 import { Pair } from '../../types';
 
-export function PanView({ children, minZoom, maxZoom, onMouseMove, onZoomChange }: {
+export function PanView({ children, size, minZoom, maxZoom, onMouseMove, onZoomChange }: {
+  children: ReactNode,
+  size: number,
   minZoom?: number,
   maxZoom?: number,
-  children: ReactNode,
   onMouseMove?: (pos: { x: number, y: number }) => void,
   onZoomChange?: (zoomLevel: number) => void,
 }) {
   const refOuter = useRef<HTMLDivElement>(null);
   const refInner = useRef<HTMLDivElement>(null);
+  const refScaledSize = useRef<number>(0);
 
   const [sizes, setSizes] = useState<Pair<number>>([0, 0]);
   const updateSize = useCallback(() => {
@@ -24,8 +26,10 @@ export function PanView({ children, minZoom, maxZoom, onMouseMove, onZoomChange 
       setSizes([width, height]);
     }
   }, [sizes, setSizes]);
+
+  useEffect(updateSize, [size]);
   
-  useEffect(() => {
+  useLayoutEffect(() => {
     window.addEventListener('resize', updateSize);
     return () => {
       window.removeEventListener('resize', updateSize);
@@ -45,6 +49,12 @@ export function PanView({ children, minZoom, maxZoom, onMouseMove, onZoomChange 
       inner.offsetHeight,
       { minZoom, maxZoom },
     );
+    if (refScaledSize.current !== 0) {
+      const value = refScaledSize.current * size;
+      const zoom = Math.log2(model.scale / value);
+      model.zoomIn({ x: size/2, y: size/2 }, zoom);
+    }
+    refScaledSize.current = model.scale / size;
     onZoomChange?.(model.scale);
 
     inner.style.transformOrigin = 'left top';
@@ -78,6 +88,7 @@ export function PanView({ children, minZoom, maxZoom, onMouseMove, onZoomChange 
 
     function update() {
       if (inner == null) return;
+      refScaledSize.current = model.scale / size;
       inner.style.transform = `translate(${-Math.round(model.x)}px, ${-Math.round(model.y)}px) scale(${model.scale})`;
       inner.style.setProperty('--scale', String(model.scale));
     }
@@ -111,7 +122,7 @@ export function PanView({ children, minZoom, maxZoom, onMouseMove, onZoomChange 
       document.removeEventListener('mouseup', end);
       document.removeEventListener('mouseleave', end);
     }
-  }, [refOuter, refInner, minZoom, maxZoom, onMouseMove, onZoomChange, sizes]);
+  }, [refOuter, refInner, size, minZoom, maxZoom, onMouseMove, onZoomChange, sizes]);
 
   return <div className="PanView__outer" ref={refOuter}>
     <div className="PanView__inner" ref={refInner}>

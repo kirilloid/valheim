@@ -3,12 +3,19 @@
   display: inline-block;
 }
 
+.ZdoData--map-expanded .ZdoData__Map {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background-color: rgb(var(--color-background));
+}
+
 @media screen and (min-width: 640px) {
   .ZdoData {
     display: grid;
     grid-template-columns: 1fr 329px;
   }
-  
+
   .ZdoData__Map {
     grid-row: 1;
     grid-column: 2;

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { defaultMemoize, createSelector } from 'reselect';
 
 import '../../../css/ZdoData.css';
@@ -13,6 +13,7 @@ import { TranslationContext } from '../../../effects';
 import { ZdoLike, ZdoMap } from './map';
 import { ItemEditor } from './editor';
 import { lerp, lerpStep } from '../../../model/utils';
+import classNames from 'classnames';
 
 const getItems = createSelector<{ zdos: ZdoLike[], indices: number[] }, ZdoLike[], number[], ZdoLike[]>(
   obj => obj.zdos,
@@ -20,7 +21,7 @@ const getItems = createSelector<{ zdos: ZdoLike[], indices: number[] }, ZdoLike[
   (zdos, indices) => indices.map(i => zdos[i]!),
 );
 
-function MapUI({ zdos, selected, current }: { zdos: ZdoLike[]; selected: ZdoLike[]; current?: ZdoLike }) {
+function MapUI({ zdos, selected, current, size }: { zdos: ZdoLike[]; selected: ZdoLike[]; current?: ZdoLike; size: number }) {
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const [progress, setProgress] = useState<number | undefined>(0);
   const outerRef = useRef<HTMLDivElement>(null);
@@ -32,8 +33,8 @@ function MapUI({ zdos, selected, current }: { zdos: ZdoLike[]; selected: ZdoLike
   }, [markerSize])
 
   return <>
-    <div ref={outerRef} style={{ width: 329, height: 329, position: 'relative', border: '1px solid var(--color-text)' }}>
-      <PanView onMouseMove={setPos}>
+    <div ref={outerRef} style={{ width: size, height: size, position: 'relative', border: '1px solid var(--color-text)' }}>
+      <PanView onMouseMove={setPos} size={size}>
         <ZdoMap zdos={zdos} selected={selected} current={current} markerSize={markerSize} onProgress={setProgress} />
       </PanView>
       {progress != null && <progress max={zdos.length} value={progress} className="Map__progress" />}
@@ -44,6 +45,8 @@ function MapUI({ zdos, selected, current }: { zdos: ZdoLike[]; selected: ZdoLike
 
 const getSearcherCached = defaultMemoize(getSearcher);
 
+const getWidth = () => document.querySelector<HTMLDivElement>('div.App')?.offsetWidth ?? Math.min(window.innerWidth, 960);
+
 export const ZdoData = React.memo(function ZdoData(props: ValueProps<ZDOData>) {
   const translate = useContext(TranslationContext);
   const zdos = props.value.zdos;
@@ -51,15 +54,34 @@ export const ZdoData = React.memo(function ZdoData(props: ValueProps<ZDOData>) {
   const [term, setTerm] = useState('');
   const [index, setIndex] = useState(0); // last mile
   const [version, setVersion] = useState(0);
+  const [mapExpanded, setMapExpanded] = useState(false);
+  const [width, setWidth] = useState(0);
 
   const zdoSearcher = getSearcherCached(zdos, translate);
   const searchIndices = entry?.indices ?? EMPTY_RESULT;
   const searchIndex = searchIndices[index];
   const zdo = searchIndex ? zdos[searchIndex.item] : undefined;
 
-  return <div className="ZdoData">
+  useLayoutEffect(() => {
+    setWidth(getWidth());
+  }, [setWidth]);
+
+  useEffect(() => {
+    const onResize = () => setWidth(getWidth());
+    window.addEventListener('resize', onResize, false);
+    return () => window.removeEventListener('resize', onResize, false);
+  }, [setWidth]);
+
+  return <div className={classNames('ZdoData', {
+    'ZdoData--map-expanded': mapExpanded,
+  })}>
     <div className="ZdoData__Map">
-      <MapUI zdos={zdos} selected={getItems({ zdos, indices: searchIndices.map(i => i.item) })} current={zdo} />
+      <div style={{ position: 'absolute', right: 0, zIndex: 1 }} onClick={() => setMapExpanded(s => !s)}>{mapExpanded ? 'Collapse' : 'Expand'}</div>
+      <MapUI
+        size={mapExpanded ? width : 329}
+        zdos={zdos}
+        selected={getItems({ zdos, indices: searchIndices.map(i => i.item) })}
+        current={zdo} />
     </div>
     <div className="ZdoData__Selector">
       {entry
