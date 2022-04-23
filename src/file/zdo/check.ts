@@ -38,24 +38,24 @@ export function check(world: WorldData, zdo: ZDO): Omit<ZDOCorruption, 'index'> 
     // force-read last map, this might throw an exception
     const bytes = zdo.byteArrays.get(0);
     if (bytes != null && bytes.length < 0) {
-      return { mistake: Mistake.ImpossibleError, offset: zdo.offset };
+      return { mistake: Mistake.ImpossibleError, offset: zdo._offset };
     };
     const string = zdo.strings.get(0);
     if (string != null && string.length < 0) {
-      return { mistake: Mistake.ImpossibleError, offset: zdo.offset };
+      return { mistake: Mistake.ImpossibleError, offset: zdo._offset };
     }
 
     if (zdo.ints.get(stableHashCode('InUse'))) {
       return {
         mistake: Mistake.ContainerStuck,
-        offset: zdo.offset + ((zdo as any).offsetStrings ?? 80) + HEADER_SIZE,
+        offset: zdo._offset + ((zdo as any).offsetStrings ?? 80) + HEADER_SIZE,
       }
     }
 
     if (Number(zdo.timeCreated) / 1e7 > world.netTime) {
       return {
         mistake: Mistake.TimeInFuture,
-        offset: zdo.offset + offsets.timeCreated + HEADER_SIZE,
+        offset: zdo._offset + offsets.timeCreated + HEADER_SIZE,
       };
     }
 
@@ -64,7 +64,7 @@ export function check(world: WorldData, zdo: ZDO): Omit<ZDOCorruption, 'index'> 
     ||  sector.y !== Math.round(position.z / 64)) {
       return {
         mistake: Mistake.CoordinatesInconsistent,
-        offset: zdo.offset + offsets.sector + HEADER_SIZE,
+        offset: zdo._offset + offsets.sector + HEADER_SIZE,
       };
     }
 
@@ -74,13 +74,13 @@ export function check(world: WorldData, zdo: ZDO): Omit<ZDOCorruption, 'index'> 
     && Math.abs(position.y - 5000) > 100)) {
       return {
         mistake: Mistake.CoordinatesTooFar,
-        offset: zdo.offset + offsets.position + HEADER_SIZE,
+        offset: zdo._offset + offsets.position + HEADER_SIZE,
       }
     }
     return { mistake: Mistake.None, offset: 0 };
   } catch (e) {
     const mistake = errorToMistake(e);
-    const { offset } = zdo;
+    const { _offset: offset } = zdo;
     return { mistake, offset };
   }
 }

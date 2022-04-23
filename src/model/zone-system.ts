@@ -42,6 +42,8 @@ export class ZoneSystem {
     } */
     // console.log("Generating locations");
     const now = Date.now();
+    // this.locationsGenerated = true;
+    const state = random.getState();
     // this.CheckLocationDuplicates();
     // this.ClearNonPlacedLocations();
     for (const [i, location] of locations.sort((a, b) => +b.prioritized - +a.prioritized).entries()) {
@@ -50,6 +52,7 @@ export class ZoneSystem {
         yield (i + 1) / locations.length;
       }
     }
+    random.setState(state);
     // console.log(`Done generating locations, duration: ${Date.now() - now} ms`);
     return [...this._locationInstances.values()];
   }
@@ -115,7 +118,6 @@ export class ZoneSystem {
 
   private generateLocation(seed: number, location: LocationConfig): void {
     const now = Date.now();
-    const state = random.getState();
     random.init(seed + stableHashCode(location.id));
     this._prefabIndex.set(location.id, []);
     if (location.group.length > 0 && this._groupIndex.get(location.group) == null) {
@@ -139,8 +141,7 @@ export class ZoneSystem {
     if (location.unique && placed > 0)
       return;
     const [minDistance, maxDistance] = location.distance;
-    for (let iteration = 0; iteration < iterations && placed < location.quantity; ++iteration)
-    {
+    for (let iteration = 0; iteration < iterations && placed < location.quantity; ++iteration) {
       const zone = this.getRandomZone(range);
       if (location.centerFirst) ++range;
       if (this._getLocationIn(zone) != null) {
@@ -184,15 +185,17 @@ export class ZoneSystem {
           }
         }
         const delta = this.worldGenerator.getTerrainDelta(point, location.radius[1]);
-        if (delta < location.terrainDelta[0] || delta > location.terrainDelta[1])
+        if (delta > location.terrainDelta[1] || delta < location.terrainDelta[0]) {
           ++errorTerrainDelta;
-        else if (location.minApart > 0 && this.haveLocationInRange(location.id, location.group, point, location.minApart)) {
-          ++errorSimilar;
-        } else {
-          this.registerLocation(location, point, false);
-          ++placed;
-          break;
+          continue;
         }
+        if (location.minApart > 0 && this.haveLocationInRange(location.id, location.group, point, location.minApart)) {
+          ++errorSimilar;
+          continue;
+        }
+        this.registerLocation(location, point, false);
+        ++placed;
+        break;
       }
     }
     if (placed < location.quantity) {
@@ -209,7 +212,6 @@ export class ZoneSystem {
     }
     const timeSpan = Date.now() - now;
     // console.log("time spent on location " + location.id + ": " + timeSpan);
-    random.setState(state);
   }
 
   private getZone(point: Vector3): Vector2i  {

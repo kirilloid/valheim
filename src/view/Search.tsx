@@ -7,8 +7,9 @@ import '../css/Search.css';
 import { DamageType, EntityId, GameObject, ItemSpecial, Piece, Resource } from '../types';
 import { SkillType } from '../model/skills';
 import { assertNever, days, timeI2S } from '../model/utils';
-import { match, SearchEntry } from '../model/search';
+import type { SearchEntry } from '../model/search';
 
+import { match } from '../data/search';
 import { data } from '../data/itemDB';
 import { recipes } from '../data/recipes';
 import { events } from '../data/events';
@@ -193,15 +194,17 @@ function ItemExtra({ item }: { item: Resource }) {
   const translate = useContext(TranslationContext);
   const respawn = item.grow?.find(g => g.respawn)?.respawn ?? 0;
   if (item.summon) return <ItemIcon item={data[item.summon[0]]} useAlt size={32} />;
-  if (respawn) return <span>{days(respawn)} <Icon id="time" alt={translate('ui.time')} size={16} /></span>;
   if (item.Food != null) {
     return <span>
       <Icon id="health" alt={translate('ui.health')} size={16} />
       {item.Food.health}
       <Icon id="walknut" alt={translate('ui.stamina')} size={16} />
       {item.Food.stamina}
+      <Icon id="time" alt={translate('ui.time')} size={16} />
+      {Math.round(item.Food.duration / 60)}
     </span>
   }
+  if (respawn) return <span>{days(respawn)} <Icon id="time" alt={translate('ui.time')} size={16} /></span>;
   if (item.Potion != null) { 
     return <>
       <span>

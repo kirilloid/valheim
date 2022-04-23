@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom';
 
 import '../../css/Home.css';
 
-import { pages } from '../../model/search';
+import { groupBy } from '../../model/utils';
+
+import { pages } from '../../data/search';
 import { biomes } from '../../data/location';
 
 import { TranslationContext, useRuneTranslate } from '../../effects';
-import { groupBy } from '../../model/utils';
 
 const pageGroups = groupBy(pages, p => p.category);
 

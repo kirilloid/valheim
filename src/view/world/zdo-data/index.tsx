@@ -4,23 +4,23 @@ import { defaultMemoize, createSelector } from 'reselect';
 import '../../../css/ZdoData.css';
 
 import type { ValueProps } from '../../parts/types';
-import type { ZDOData, ZDO } from '../types';
+import type { ZDOData } from '../types';
 
-import { ZdoTree, getTree } from '../../../model/zdo-selectors';
+import { EMPTY_RESULT, getSearcher, SearchEntry } from '../../../model/zdo-selectors';
 
 import { PanView } from '../../parts/PanView';
 import { TranslationContext } from '../../../effects';
-import { ZdoMap } from './map';
+import { ZdoLike, ZdoMap } from './map';
 import { ItemEditor } from './editor';
 import { lerp, lerpStep } from '../../../model/utils';
 
-const getItems = createSelector<{ zdos: ZDO[], indices: number[] }, ZDO[], number[], ZDO[]>(
+const getItems = createSelector<{ zdos: ZdoLike[], indices: number[] }, ZdoLike[], number[], ZdoLike[]>(
   obj => obj.zdos,
   obj => obj.indices,
   (zdos, indices) => indices.map(i => zdos[i]!),
 );
 
-function MapUI({ zdos, selected }: { zdos: ZDO[], selected: ZDO[] }) {
+function MapUI({ zdos, selected, current }: { zdos: ZdoLike[]; selected: ZdoLike[]; current?: ZdoLike }) {
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const [progress, setProgress] = useState<number | undefined>(0);
   const outerRef = useRef<HTMLDivElement>(null);
@@ -34,7 +34,7 @@ function MapUI({ zdos, selected }: { zdos: ZDO[], selected: ZDO[] }) {
   return <>
     <div ref={outerRef} style={{ width: 329, height: 329, position: 'relative', border: '1px solid var(--color-text)' }}>
       <PanView onMouseMove={setPos}>
-        <ZdoMap zdos={zdos} selected={selected} markerSize={markerSize} onProgress={setProgress} />
+        <ZdoMap zdos={zdos} selected={selected} current={current} markerSize={markerSize} onProgress={setProgress} />
       </PanView>
       {progress != null && <progress max={zdos.length} value={progress} className="Map__progress" />}
     </div>
@@ -42,91 +42,65 @@ function MapUI({ zdos, selected }: { zdos: ZDO[], selected: ZDO[] }) {
   </>;
 }
 
-function Breadcumbs({ node, pathBefore, pathAfter, setPath }: {
-  node: ZdoTree<number>,
-  pathBefore: string[],
-  pathAfter: string[],
-  setPath: (path: string[]) => void,
-}) {
-  const translate = useContext(TranslationContext);
-  const current = pathAfter[0];
-  if (node.type === 'leaf') return null;
-  const next = current != null ? node.children[current] : undefined;
-  const size = Object.keys(node.children).length;
-  if (size === 0) return null;
-  return <>
-    <p>
-      <select
-      onChange={e => e.target.value ? setPath(pathBefore.concat(e.target.value)) : setPath(pathBefore)}
-        value={current ?? ''}>
-        <option value="">All ({node.total})</option>
-        {Object.entries(node.children)
-          .sort((a, b) => a[0].localeCompare(b[0]))
-          .map(([id, child]) => <option key={id} value={id}>
-            {translate(id)} ({child.total})
-          </option>)}
-      </select>
-    </p>
-    {next != null && current != null && <Breadcumbs node={next}
-      pathBefore={pathBefore.concat(current)}
-      pathAfter={pathAfter.slice(1)}
-      setPath={setPath} />}
-  </>;
-}
-
-const EMPTY_INDICES: number[] = [];
-const getTreeCached = defaultMemoize(getTree);
+const getSearcherCached = defaultMemoize(getSearcher);
 
 export const ZdoData = React.memo(function ZdoData(props: ValueProps<ZDOData>) {
-  // const zdos = filterItems(props.value.zdos);
+  const translate = useContext(TranslationContext);
   const zdos = props.value.zdos;
-  const [path, setPath] = useState<string[]>([]);
+  const [entry, setEntry] = useState<SearchEntry | undefined>();
+  const [term, setTerm] = useState('');
   const [index, setIndex] = useState(0); // last mile
   const [version, setVersion] = useState(0);
 
-  const zdoTree = getTreeCached(zdos);
-  const selectedNode = path.reduce<ZdoTree<number> | undefined>(
-    (node, part) => node?.type === 'node'
-      ? node.children[part]
-      : undefined,
-    zdoTree,
-  );
-  const selectedLeaf = selectedNode?.type === 'leaf' ? selectedNode : undefined;
-  const currentItemIndices = selectedLeaf?.children;
-  const currentItemIndex = currentItemIndices?.[index];
+  const zdoSearcher = getSearcherCached(zdos, translate);
+  const searchIndices = entry?.indices ?? EMPTY_RESULT;
+  const searchIndex = searchIndices[index];
+  const zdo = searchIndex ? zdos[searchIndex.item] : undefined;
 
   return <div className="ZdoData">
     <div className="ZdoData__Map">
-      <MapUI zdos={zdos} selected={getItems({ zdos, indices: currentItemIndices ?? EMPTY_INDICES })} />
+      <MapUI zdos={zdos} selected={getItems({ zdos, indices: searchIndices.map(i => i.item) })} current={zdo} />
     </div>
     <div className="ZdoData__Selector">
-      <Breadcumbs node={zdoTree} pathBefore={[]} pathAfter={path} setPath={e => {
-        setPath(e);
-        setIndex(0);
-      }} />
-      {currentItemIndices != null && currentItemIndices.length > 1 && <>
-        {currentItemIndices.length > 1000 && <><em>Only first 1000 objects are listed</em><br/></>}
+      {entry
+        ? <span>{entry.text} <button className="btn" onClick={() => setEntry(undefined)}>&times;</button></span>
+        : <>
+            <input value={term} onChange={e => setTerm(e.target.value)}/>
+            <ul style={{ position: 'absolute' }}>
+              {zdoSearcher(term).map(se => <li key={se.id} onClick={() => {
+                setTerm('');
+                setEntry(se);
+              }}>
+                {se.text}
+              </li>)}
+            </ul>
+          </>
+      }
+      {searchIndices.length > 1 && <>
+        {searchIndices.length > 1000 && <><br/><em>Only first 1000 objects are listed</em></>}
+        <br />
         <select onChange={e => {
-            setIndex(+e.target.value);
-          }} value={index}>
-          {currentItemIndices.slice(0, 1000).map((globalIdx, typeIdx) => {
-            const item = zdos[globalIdx]!;
-            return <option key={globalIdx} value={typeIdx}>
+          setIndex(+e.target.value);
+        }} value={index}>
+          {searchIndices.slice(0, 1000).map((globalIdx, typeIdx) => {
+            const item = zdos[globalIdx.item]!;
+            return <option key={`${globalIdx.item}_${globalIdx.container}`} value={typeIdx}>
               {item.position.x.toFixed(3)} / {item.position.z.toFixed(3)}
+              {globalIdx.container > -1 ? ` [${globalIdx.container}]` : null}
             </option>
           })}
         </select>
-        <br />
       </>}
     </div>
-    {currentItemIndex != null && <div className="ZdoData__Editor">
+    {zdo != null && searchIndex != null && <div className="ZdoData__Editor">
       <ItemEditor
-        zdo={zdos[currentItemIndex]!}
-        version={version}
+        value={zdo}
         onChange={() => {
           setVersion(version + 1);
           props.onChange(props.value);
         }}
+        containerIndex={searchIndex.container}
+        version={version}
       />
       <hr style={{ width: '100%' }} />
       <section>
@@ -134,15 +108,13 @@ export const ZdoData = React.memo(function ZdoData(props: ValueProps<ZDOData>) {
           onClick={() => {
             const newValue = {
               ...props.value,
-              zdos: zdos.filter((_, i) => i !== currentItemIndex),
+              zdos: zdos.filter((_, i) => i !== index),
             };
-            if (selectedLeaf?.children.length === 1) {
-              setPath(path.slice(1));
+            if (searchIndices.length === 1) {
+              setEntry(undefined);
               setIndex(0);
-            } else if (index + 1 === selectedLeaf?.children.length) {
+            } else if (index + 1 === searchIndices.length) {
               setIndex(index - 1);
-            } if (selectedLeaf == null) {
-              setIndex(0);
             }
             props.onChange(newValue);
           }}>

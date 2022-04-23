@@ -67,7 +67,7 @@ export function readZdo(reader: PackageReader, version: number): ZDO {
     longs,
     strings,
     byteArrays,
-    offset,
+    _offset: offset,
     save(writer: PackageWriter) {
       writer.writeLong(this.id.userId);
       writer.writeUInt(this.id.id);

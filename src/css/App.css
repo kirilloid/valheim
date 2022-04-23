@@ -310,6 +310,10 @@ option.spoiler {
   pointer-events: none;
 }
 
+.Map__marker--selected {
+  background-color: red;
+}
+
 .Map__progress {
   position: absolute;
   left: 0;

@@ -1,5 +1,5 @@
 import { forgeRecipe, traderRecipe, inventoryRecipe, genericRecipe } from '../model/recipe';
-import type { DamageProfile, GameObject, Item, Piece, Resource, ItemRecipe, EntityId, DamageModifiers } from '../types';
+import type { DamageProfile, GameObject, Item, Piece, Resource, ItemRecipe, EntityId, DamageModifiers, Pair } from '../types';
 import { mods } from '../types';
 
 const augmenterRecipe = (materials: Record<EntityId, number>, item: EntityId, number = 1) =>
@@ -169,6 +169,16 @@ export function modifyResistances(resistances: Partial<DamageModifiers>, effects
     copy.spirit = 'resistant';
   }
   return copy;
+}
+
+export function getMaxDurability(invItem: { quality: number }, item: Item, extraData: EpicLootData | undefined): Pair<number> {
+  if (item == null) return [0, 0];
+  if (!('durability' in item)) return [Infinity, Infinity];
+  if (item.durability[0] === Infinity) return [Infinity, Infinity]
+  if (extraData?.effects.Indestructible != null) return [0, Infinity];
+  const maxDurability = item.durability[0] + item.durability[1] * (invItem.quality - 1);
+  const durabilityBonus = extraData?.effects.ModifyDurability ?? 0;
+  return [maxDurability, maxDurability * (1 + durabilityBonus / 100)];
 }
 
 const rarityArr = ['Magic', 'Rare', 'Epic', 'Legendary'];

@@ -13,12 +13,6 @@ export const mapping = new Map<string, EntityId>([
   ['Pickable_Flax_Wild', 'Pickable_Flax'],
   ['Pickable_Barley_Wild', 'Pickable_Barley'],
 
-  ['Beech_Sapling', 'Beech1'],
-  ['FirTree_Sapling', 'FirTree'],
-  ['PineTree_Sapling', 'Pinetree_01'],
-  ['Birch_Sapling', 'Birch1'],
-  ['Oak_Sapling', 'Oak1'],
-
   ['Birch2', 'Birch1'],
   ['Birch2_aut', 'Birch1_aut'],
   ['dungeon_forestcrypt_door', 'wood_door'],

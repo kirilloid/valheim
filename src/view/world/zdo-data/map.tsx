@@ -4,11 +4,12 @@ import type { ZDO } from '../types';
 import type { Biome, EntityId } from '../../../types';
 
 import { WORLD_SIZE } from '../../../model/game';
-import { nop, runGenerator, stableHashCode } from '../../../model/utils';
+import { nop, runGenerator, stableHashCode, Vector3 } from '../../../model/utils';
 
 import { creatures } from '../../../data/creatures';
 import { resources } from '../../../data/resources';
 import { objects } from '../../../data/objects';
+import classNames from 'classnames';
 
 const HIGHLIGHT_MARKER_LIMIT = 1000;
 
@@ -58,9 +59,11 @@ prefabToBiomeColor.set(stableHashCode('Fish3'), biomeColors.Ocean);
 
 const ZoneCtrlHash = stableHashCode('_ZoneCtrl');
 
+export type ZdoLike = { position: Vector3; prefab: number };
+
 function useDrawMap(
   ref: React.MutableRefObject<HTMLCanvasElement | null>,
-  zdos: ZDO[],
+  zdos: ZdoLike[],
   SIZE: number,
   setProgress: (progress: number | undefined) => void = nop,
 ) {
@@ -115,7 +118,7 @@ function useDrawMap(
 
 function useDrawSelected(
   ref: React.MutableRefObject<HTMLCanvasElement | null>,
-  zdos: ZDO[] | undefined,
+  zdos: ZdoLike[] | undefined,
   SIZE: number,
 ) {
   const WORLD_SIZE_HINTED = WORLD_SIZE - (WORLD_SIZE % SIZE);
@@ -147,9 +150,10 @@ function useDrawSelected(
   }, [ref, zdos, SIZE, WORLD_SIZE_HINTED]);
 }
 
-export function ZdoMap({ zdos, selected, markerSize, onProgress }: {
-  zdos: ZDO[],
-  selected?: ZDO[],
+export function ZdoMap({ zdos, selected, current, markerSize, onProgress }: {
+  zdos: ZdoLike[],
+  selected?: ZdoLike[],
+  current?: ZdoLike,
   markerSize: number,
   onProgress?: (progress?: number) => void,
 }) {
@@ -168,7 +172,9 @@ export function ZdoMap({ zdos, selected, markerSize, onProgress }: {
     <canvas width={HI_RES} height={HI_RES} ref={markersCanvasRef}
       style={{ position: 'absolute', left: 0, top: 0 }} />
     {selected != null && selected.length < HIGHLIGHT_MARKER_LIMIT && <>
-      {selected.map((zdo, i) => <div key={i} className="Map__marker" style={{
+      {selected.map((zdo, i) => <div key={i} className={classNames('Map__marker', {
+        'Map__marker--selected': current === zdo
+      })} style={{
         left: Math.round(zdo.position.x / WORLD_SIZE * HI_RES + HI_RES / 2) - markerSize / 2,
         bottom: Math.round(zdo.position.z / WORLD_SIZE * HI_RES + HI_RES / 2) - markerSize / 2,
       }}></div>)}

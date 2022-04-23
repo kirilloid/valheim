@@ -1,15 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react';
 
 import type { WorldData } from './types';
+import type { Pair } from '../../types';
 import { getGeneratedPercent, DiscoveryStats } from '../../model/zdo-selectors';
 
 import { TranslationContext } from '../../effects';
 import classNames from 'classnames';
+import { runGenerator } from '../../model/utils';
 
 function showPercent(ratio: number, precision: number) {
   const percent = ratio * 100;
   return precision === 1
-    ? `${percent.toFixed(1)}%`
+    ? `${percent.toFixed(1).padStart(5, ' ')}%`
     : `≈${Math.round(percent)}%`
 }
 
@@ -19,18 +21,22 @@ export function WorldDiscovery({ value }: { value: WorldData }) {
   const [precision, setPrecision] = useState(16);
 
   useEffect(() => {
-    setStats(getGeneratedPercent(value, precision));
-    if (precision > 1) {
-      const timerId = setTimeout(() => {
-        setPrecision(precision / 4);
-      }, 25);
-      return () => clearTimeout(timerId);
-    }
+    runGenerator(
+      getGeneratedPercent(value, precision),
+      () => {}
+    ).then(res => {
+      setStats(res);
+      if (precision > 1) setPrecision(precision / 2);
+    });
   }, [value, precision]);
 
   if (stats == null) return null;
   
-  const total = Object.values(stats).reduce((a, b) => [a[0] + b[0], a[1] + b[1]]);
+  const total: Pair<number> = [0, 0];
+  for (const pair of Object.values(stats)) {
+    total[0] += pair[0];
+    total[1] += pair[1];
+  }
   return <div className="WorldEdit__Discovery">
     <h2>Biome discovery</h2>
     <dl>

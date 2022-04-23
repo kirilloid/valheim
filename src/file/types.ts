@@ -15,7 +15,7 @@ export type ZDOData = {
   _checked: boolean;
 };
 
-enum ZDOObjectType {
+export enum ZDOObjectType {
   Default,
   Prioritized,
   Solid,
@@ -70,6 +70,6 @@ export interface ZDO {
   readonly longs: Map<number, bigint>; // int -> long
   readonly strings: Map<number, string>; // int -> string
   readonly byteArrays: Map<number, Uint8Array>; // int -> byte[]
-  readonly offset: number;
+  readonly _offset: number;
   save(writer: PackageWriter): void;
 }

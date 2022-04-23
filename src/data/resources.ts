@@ -332,8 +332,6 @@ export const getSummon = (id: EntityId): Resource['summon'] => {
   return summonMap[id];
 }
 
-// Tankard, Tankard_Odin
-
 // VegvisirShard_Bonemass
 // HealthUpgrade_Bonemass
 // HealthUpgrade_GDKing

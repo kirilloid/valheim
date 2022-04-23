@@ -64,6 +64,7 @@ export const extraData: Record<string, GameComponent[]> = {
   DG_MeadowsFarm:['DungeonGenerator'],
   DG_MeadowsVillage: ['DungeonGenerator'],
   DG_SunkenCrypt: ['DungeonGenerator'],
+  DG_Cave: ['DungeonGenerator'],
 
   BossStone_Bonemass: ['ItemStand'],
   BossStone_DragonQueen: ['ItemStand'],
@@ -102,9 +103,6 @@ export const extraData: Record<string, GameComponent[]> = {
   sapling_seedonion: ['Plant'],
 
   TrophyDraugrFem: ['ItemDrop'],
-
-  Player_tombstone: ['Container'],
-  CargoCrate: ['Container'],
 
   BonePileSpawner: ['CreatureSpawner'],
   Spawner_Bat: ['CreatureSpawner'],

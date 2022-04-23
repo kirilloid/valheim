@@ -137,6 +137,12 @@ export class PackageReader {
 
   public readByteArray(): Uint8Array {
     const length = this.readInt();
+    if (length < 0) {
+      throw new RangeError(`Negative byte array length at ${this.offset}`);
+    }
+    if (this.offset + length > this.bytes.length) {
+      throw new RangeError(`Trying to read byte array beyond end at ${this.offset}`);
+    }
     const base = this.bytes.byteOffset;
     const start = this.offset;
     const end = this.offset += length;
@@ -145,6 +151,12 @@ export class PackageReader {
 
   public skipBytes(n: number): void {
     this.offset += n;
+  }
+
+  public forwardToPattern(callback: (bytes: Uint8Array) => boolean): void {
+    while (!callback(this.bytes.subarray(this.offset)) && this.offset < this.bytes.length) {
+      this.offset++;
+    }
   }
 
   public readArray<T>(reader: (this: PackageReader) => T): T[] {

@@ -24,10 +24,10 @@ class ZdoMmapView implements ZDO {
   _byteArrays: Map<number, Uint8Array> | null = null;
 
   public id: ZDOID;
-  public readonly offset: number;
+  public readonly _offset: number;
 
   constructor(reader: PackageReader, private version: number) {
-    this.offset = reader.getOffset();
+    this._offset = reader.getOffset();
     this.id = {
       userId: reader.readLong(),
       id: reader.readUInt(),

@@ -1,19 +1,21 @@
 import type { Vector2i } from '../model/utils';
 import type { PackageReader, PackageWriter } from './Package';
 
+export type Item = {
+  readonly id: string;
+  stack: number;
+  durability: number;
+  gridPos: Vector2i;
+  equipped: boolean;
+  quality: number;
+  variant: number;
+  crafterID: bigint;
+  crafterName: string;
+};
+
 export type Data = {
   version: number;
-  items: {
-    id: string;
-    stack: number;
-    durability: number;
-    gridPos: Vector2i;
-    equipped: boolean;
-    quality: number;
-    variant: number;
-    crafterID: bigint;
-    crafterName: string;
-  }[];
+  items: Item[];
 };
 
 export function read(pkg: PackageReader): Data {

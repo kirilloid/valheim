@@ -10,6 +10,10 @@ import { InterfaceFields } from '../zdo-props';
 import { ItemIcon } from '../../parts/Icon';
 import { TranslationContext } from '../../../effects';
 import { flip, stableHashCode } from '../../../model/utils';
+import { ValueProps } from '../../parts/types';
+import { ContainedItemComp } from '../zdo-props/items';
+import { List } from '../../helpers';
+import { VirtualItem } from '../../../model/zdo-containers';
 
 function ZdoSpecialData<T>(props: { data?: Map<number, T>, stringify: (value: T) => string }) {
   if (props == null) return null;
@@ -29,40 +33,53 @@ function getComponents(id: string | undefined): GameComponent[] {
 
 const variantHash = stableHashCode('variant');
 
+function Editor({ value: zdo, onChange, index, components }: ValueProps<ZDO> & { index: number; components: GameComponent[] }) {
+  if (components.length === 0) {
+    return <>
+      <ZdoSpecialData data={zdo.floats} stringify={String} />
+      <ZdoSpecialData data={zdo.vec3} stringify={v => `${v.x.toFixed(3)} / ${v.y.toFixed(3)} / ${v.z.toFixed(3)}`} />
+      <ZdoSpecialData data={zdo.quats} stringify={v =>
+        `x: ${v.x.toFixed(3)}, y: ${v.y.toFixed(3)}, z: ${v.z.toFixed(3)}, w: ${v.w.toFixed(3)}`} />
+      <ZdoSpecialData data={zdo.ints} stringify={String} />
+      <ZdoSpecialData data={zdo.longs} stringify={String} />
+      <ZdoSpecialData data={zdo.strings} stringify={String} />
+      <ZdoSpecialData data={zdo.byteArrays} stringify={arr => ([] as number[]).map.call(arr, v => v.toString(16).padStart(2, '0')).join('')} />
+    </>
+  }
+  if (index > -1) {
+    return <ContainedItemComp value={zdo} onChange={onChange} index={index} />
+  }
+  const editors = components.flatMap(cmp => InterfaceFields[cmp] ?? []);
+  return <List separator="">{editors.map((C, i) => <C key={i} value={zdo} onChange={onChange} />)}</List>
+}
 
-export const ItemEditor = React.memo(({ zdo, onChange }: { zdo: ZDO, onChange: (value: ZDO) => void, version: number }) => {
+export const ItemEditor = React.memo(({ value: zdo, onChange, containerIndex }: ValueProps<ZDO> & { containerIndex: number, version: number }) => {
   const translate = useContext(TranslationContext);
 
   const currentId = prefabHashes.get(zdo.prefab);
   const item = currentId != null ? data[currentId] : undefined;
-  const eComponents = getComponents(currentId);
-  const components = eComponents.flatMap(cmp => InterfaceFields[cmp] ?? []);
+  const components = getComponents(currentId);
+  const vItem = VirtualItem(zdo, containerIndex, onChange);
 
   return <>
-    <h2><ItemIcon item={item} variant={zdo.ints.get(variantHash)} /> {currentId && translate(currentId)}</h2>
+    <h2>{
+      vItem
+      ? <><ItemIcon item={data[vItem.id]} variant={vItem.variant} /> {translate(vItem.id)} (<ItemIcon item={item} />)</>
+      : <><ItemIcon item={item} variant={zdo.ints.get(variantHash)} /> {currentId && translate(currentId)}</>
+    }</h2>
     <dl>
       <dt>position</dt><dd>{zdo.position.x.toFixed(3)} / {zdo.position.z.toFixed(3)} / {zdo.position.y.toFixed(3)}</dd>
-      <dt>transform</dt><dd>
-        {zdo.rotation.x.toFixed(3)} / {zdo.rotation.y.toFixed(3)} / {zdo.rotation.z.toFixed(3)} / {zdo.rotation.w.toFixed(3)}
-        {' '}
-        <button className="btn btn--primary" onClick={() => {
-          zdo.rotation = flip(zdo.rotation);
-          onChange(zdo);
-        }}>flip</button>
-      </dd>
+      {Math.abs(zdo.rotation.x) > 0.5 && components.includes('Ship') && <>
+        <dt>Warning</dt>
+        <dd>
+          Ship seems to be turned over <button className="btn btn--primary" onClick={() => {
+            zdo.rotation = flip(zdo.rotation);
+            onChange(zdo);
+          }}>flip</button> it back
+        </dd>
+      </>}
       <dt>zone</dt><dd>{zdo.sector.x} / {zdo.sector.y}</dd>
-      {eComponents.length > 0
-        ? components.map((C, i) => <C key={i} value={zdo} onChange={onChange} />)
-        : <>
-          <ZdoSpecialData data={zdo.floats} stringify={String} />
-          <ZdoSpecialData data={zdo.vec3} stringify={v => `${v.x.toFixed(3)} / ${v.y.toFixed(3)} / ${v.z.toFixed(3)}`} />
-          <ZdoSpecialData data={zdo.quats} stringify={v =>
-            `x: ${v.x.toFixed(3)}, y: ${v.y.toFixed(3)}, z: ${v.z.toFixed(3)}, w: ${v.w.toFixed(3)}`} />
-          <ZdoSpecialData data={zdo.ints} stringify={String} />
-          <ZdoSpecialData data={zdo.longs} stringify={String} />
-          <ZdoSpecialData data={zdo.strings} stringify={String} />
-          <ZdoSpecialData data={zdo.byteArrays} stringify={arr => ([] as number[]).map.call(arr, v => v.toString(16).padStart(2, '0')).join('')} />
-        </>}
+      <Editor value={zdo} onChange={onChange} components={components} index={containerIndex} />
     </dl>
   </>;
 });

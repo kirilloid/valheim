@@ -9,7 +9,7 @@ import '../../css/Inventory.css';
 import { timeI2S } from '../../model/utils';
 import { addDamage, multiplyDamage } from '../../model/combat';
 import { SkillType } from '../../model/skills';
-import { EpicLootData, extractExtraData, LegendaryItemSet, modifyDamage, modifyResistances } from '../../mods/epic-loot';
+import { EpicLootData, extractExtraData, getMaxDurability, LegendaryItemSet, modifyDamage, modifyResistances } from '../../mods/epic-loot';
 
 import { data } from '../../data/itemDB';
 
@@ -22,16 +22,6 @@ type InvItem = TInventory['items'][number];
 const INVENTORY_WIDTH = 8;
 const INVENTORY_HEIGHT = 4;
 const INVENTORY_SIZE = INVENTORY_WIDTH * INVENTORY_HEIGHT;
-
-function getMaxDurability(invItem: InvItem, item: Item, extraData: EpicLootData | undefined): Pair<number> {
-  if (item == null) return [0, 0];
-  if (!('durability' in item)) return [Infinity, Infinity];
-  if (item.durability[0] === Infinity) return [Infinity, Infinity]
-  if (extraData?.effects.Indestructible != null) return [0, Infinity];
-  const maxDurability = item.durability[0] + item.durability[1] * (invItem.quality - 1);
-  const durabilityBonus = extraData?.effects.ModifyDurability ?? 0;
-  return [maxDurability, maxDurability * (1 + durabilityBonus / 100)];
-}
 
 function Tooltip({ invItem, x, y, equippedItems }: { invItem: InvItem; x: number; y: number; equippedItems: InvItem[] }) {
   const translate = useContext(TranslationContext);
@@ -361,7 +351,7 @@ export function InvItemView({ invItem, style, onTooltip }: {
     {(item.stack ?? 1) > 1 && <div className="InvItem__stack text-outline">
       {invItem.stack}/{item.stack}
     </div>}
-    {isFinite( maxDurability) && <div className="InvItem__durability">
+    {isFinite(maxDurability) && <div className="InvItem__durability">
       <div className="InvItem__durability-value" style={{ width: `${100 * invItem.durability / maxDurability}%` }} />
     </div>}
   </div>

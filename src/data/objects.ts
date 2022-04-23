@@ -2469,6 +2469,18 @@ export const structures: Structure[] = [
       parts: [],
     }
   },
+  {
+    id: 'Player_tombstone',
+    type: 'structure',
+    tier: 0,
+    components: ['Container'],
+  },
+  {
+    id: 'CargoCrate',
+    type: 'structure',
+    tier: 2,
+    components: ['Container'],
+  },
 ];
 
 for (const obj of objects) {

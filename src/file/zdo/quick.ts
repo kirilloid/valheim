@@ -83,7 +83,7 @@ export function readZdo(reader: PackageReader, version: number): ZDO {
     get longs() { return readMaps().longs; },
     get strings() { return readMaps().strings; },
     get byteArrays() { return readMaps().byteArrays; },
-    offset,
+    _offset: offset,
     save(writer: PackageWriter) {
       writer.writeLong(this.id.userId);
       writer.writeUInt(this.id.id);

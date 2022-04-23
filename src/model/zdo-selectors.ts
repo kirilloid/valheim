@@ -1,7 +1,7 @@
 import { defaultMemoize } from 'reselect';
 
-import type { ZDO } from '../file/types';
-import type { Biome as BiomeUnion, Pair } from '../types';
+import type { ZDO, ZDOID } from '../file/types';
+import type { Biome as BiomeUnion, EntityId, Pair } from '../types';
 
 import { assertNever, stableHashCode, Vector2i } from './utils';
 import { WORLD_RADIUS, ZONE_SIZE } from './game';
@@ -12,33 +12,25 @@ import { data } from '../data/itemDB';
 import { mapping } from '../data/mapping';
 import { locationHashes } from '../data/location-hashes';
 import { modPrefabNames } from '../data/prefabs';
-
-import { WorldData } from '../file/World';
 import { locations } from '../data/location';
 
+import { WorldData } from '../file/World';
+import { readBase64 } from '../file/base64';
+import { read } from '../file/Inventory';
+import { match } from '../data/search';
+
 const locationHASH = stableHashCode('location');
-const creatorHASH = stableHashCode('creator');
 
 const idPaths: Record<string, string[]> = {
-  ...Object.fromEntries(
-    [
-      'vfx_swamp_mist', 'vfx_firework_test', 'Flies', 'FireFlies',
-      'BlackForestLocationMusic', 'FrostCavesShrineReveal', 'FrostCavesSanctumMusic',
-    ]
-      .map(id => [id, ['visual / effects', id]])
-  ),
-  ...Object.fromEntries(
-    ['_TerrainCompiler',
-      'raise', 'digg', 'digg_v2', 'mud_road', // actually flatten
-      'replant', 'cultivate', 'path', 'paved_road'
-    ]
-      .map(id => [id, ['terraforming']])
-  ),
-  ...Object.fromEntries(
-    ['Raft', 'Karve', 'Longship', 'Cart']
-      .map(id => [id, ['transport']])
-  ),
-  Player_tombstone: ['tomb'],
+  // visual
+  // 'vfx_swamp_mist', 'vfx_firework_test', 'Flies', 'FireFlies',
+  // 'BlackForestLocationMusic', 'FrostCavesShrineReveal', 'FrostCavesSanctumMusic',
+  // 'ZoneCtrl',
+  
+  // terraforming
+  // '_TerrainCompiler',
+  // 'raise', 'digg', 'digg_v2', 'mud_road', // actually flatten
+  // 'replant', 'cultivate', 'path', 'paved_road'
   ...Object.fromEntries(
     [
       'Haldor',
@@ -52,8 +44,6 @@ const idPaths: Record<string, string[]> = {
       'RockThumb', 'RockThumb_frac',
     ].map(id => [id, ['unique']])
   ),
-  _ZoneCtrl: ['zone'],
-  TarLiquid: ['misc', 'TarLiquid'],
 };
 
 for (const [mod, prefabs] of Object.entries(modPrefabNames)) {
@@ -61,72 +51,6 @@ for (const [mod, prefabs] of Object.entries(modPrefabNames)) {
     idPaths[id] = ['modded', mod, id];
   }
 }
-
-function getPath(id: string, zdo: ZDO): string[] {
-  const paths = idPaths[id];
-  if (paths != null) return paths; 
-  if (id.startsWith('DG_')) return ['dungeon', id];
-  if (id.startsWith('Trophy')) return ['trophy'];
-  if (id.startsWith('Pickable_')) return ['resource', id];
-  if (id === 'LocationProxy') {
-    const locationHashed = zdo.ints.get(locationHASH) ?? 0;
-    const location = locationHashes.get(locationHashed) ?? `_unknown_${(locationHashed >>> 0).toString(16)}`;
-    const typeId = locations.find(loc => loc.id === location)?.typeId;
-    return ['location', typeId ? `ui.location.${typeId}` : id];
-  }
-  const obj = data[id] ?? data[mapping.get(id) ?? ''];
-  switch (obj?.type) {
-    case 'object':
-      return [obj.subtype, obj.id];
-    case 'creature':
-      return ['creature', obj.id];
-    case 'item':
-      return ['resource', id];
-    case 'trophy':
-    case 'weapon':
-    case 'shield':
-    case 'armor':
-    case 'ammo':
-    case 'tool':
-      return ['item', id];
-    case 'structure':
-      return ['structures (world\'s)', id];
-    case 'piece':
-      const creator = zdo.longs.get(creatorHASH);
-      return creator
-        ? ['structures (player\'s)', id]
-        : ['structures (world\'s)', id];
-    case 'ship':
-    case 'cart':
-      return ['transport'];
-    case undefined:
-      return ['_unknown', id];
-    default:
-      return assertNever(obj);
-  }
-}
-
-type ZdoNode<T> = {
-  type: 'node',
-  total: number;
-  children: Record<string, ZdoTree<T>>
-}
-
-type ZdoLeaf<T> = {
-  type: 'leaf',
-  total: number,
-  children: T[],
-};
-
-export type ZdoTree<T> = ZdoNode<T> | ZdoLeaf<T>;
-
-const createNode = <T,>(): ZdoNode<T> => ({
-  type: 'node',
-  total: 0,
-  children: Object.create(null),
-});
-
-const createLeaf = <T,>(): ZdoLeaf<T> => ({ type: 'leaf', total: 0, children: [] });
 
 const HASH_ZONE_CTRL = stableHashCode('_ZoneCtrl');
 const HASH_LOCATION = stableHashCode('LocationProxy');
@@ -164,36 +88,97 @@ export const getActiveZoneIds = (zdos: ZDO[]) => {
   return activeZoneIds;
 };
 
-export const getTree = (zdos: ZDO[]) => {
-  const root = createNode<number>();
+function getSubType(id: string): string {
+  const obj = data[id];
+  if (obj == null) return '_unknown';
+  if (obj.mod != null) return obj.mod;
+  switch (obj.type) {
+    case 'ammo':
+    case 'weapon':
+    case 'shield':
+    case 'armor':
+    case 'tool':
+      return 'item';
+    case 'cart':
+    case 'ship':
+      return 'transport';
+    case 'creature':
+      return 'creature';
+    case 'item':
+      return 'resource';
+    case 'trophy':
+      return 'trophy';
+    case 'piece':
+    case 'structure':
+      return 'structure';
+    case 'object':
+      return 'object';
+    default:
+      return assertNever(obj);
+  }
+}
+
+type SearchIndex = { item: number; container: number; };
+export type SearchEntry = { id: string; text: string; subtype: string; indices: SearchIndex[] };
+
+const itemsHash = stableHashCode('items');
+
+export const EMPTY_RESULT: SearchIndex[] = [];
+
+export const getSearcher = (
+  zdos: ZDO[],
+  translate: (arg: string) => string
+): (term: string) => SearchEntry[] => {
+  const idMap: Record<EntityId, SearchIndex[]> = {};
+  function add(id: string, idx: number, cIdx: number) {
+    if (idMap[id] == null) idMap[id] = [];
+    idMap[id]?.push({ item: idx, container: cIdx });
+  }
   for (const [i, zdo] of zdos.entries()) {
     const id = getId(prefabHashes, zdo.prefab);
-    if (id.startsWith('Spawner_')) continue;
-    const path = getPath(id, zdo);
-    let node = root;
-    for (const [pi, part] of path.entries()) {
-      node.total++;
-      // leaf
-      if (pi === path.length - 1) {
-        const nextNode = node.children[part] ?? (node.children[part] = createLeaf<number>());
-        if (nextNode.type === 'node') {
-          console.error('Inconsistent path Expected leaf at ', path, ' got node');
-          break;
-        }
-        nextNode.total++;
-        nextNode.children.push(i);
-      // node
+    if (id === 'LocationProxy') {
+      const locationHashed = zdo.ints.get(locationHASH) ?? 0;
+      const location = locationHashes.get(locationHashed) ?? `_unknown_${(locationHashed >>> 0).toString(16)}`;
+      const typeId = locations.find(loc => loc.id === location)?.typeId;
+      if (typeId != null) {
+        add(typeId, i, -1);
       } else {
-        const nextNode = node.children[part] ?? (node.children[part] = createNode<number>());
-        if (nextNode.type === 'leaf') {
-          console.error('Inconsistent path. Expected node at ', path.slice(0, i + 1), ', got leaf');
-          break;
+        add(id, i, -1);
+      }
+    } else {
+      add(id, i, -1);
+      if (data[id]?.components?.includes('Container')) {
+        const value = zdo.strings.get(itemsHash);
+        const items = value ? read(readBase64(value)).items : [];      
+        for (const [ci, { id }] of items.entries()) add(id, i, ci);
+      }
+      if (data[id]?.components?.includes('ArmorStand')) {
+        for (const ci of [0, 1, 2, 3, 4, 5, 6]) {
+          const id = zdo.strings.get(stableHashCode(`${i}_item`));
+          if (id == null) continue;
+          add(id, i, ci);
         }
-        node = nextNode;
+      }
+      if (data[id]?.components?.includes('ItemStand')) {
+        const id = zdo.strings.get(stableHashCode('item'));
+        if (id) add(id, i, 0);
       }
     }
   }
-  return root;
+  return (term: string) => {
+    const result: SearchEntry[] = [];
+    for (const item of match(term)) {
+      const indices = idMap[item.id];
+      if (indices == null) continue;
+      result.push({
+        id: item.id,
+        indices,
+        subtype: item.type,
+        text: translate(item.i18nKey),
+      });
+    }
+    return result;
+  }
 };
 
 function getWorldSeed(zdos: ZDO[]) {
@@ -209,7 +194,10 @@ function getWorldSeed(zdos: ZDO[]) {
 
 export type DiscoveryStats = Record<BiomeUnion, Pair<number>>
 
-export function getGeneratedPercent(world: WorldData, resolutionStep: number) {
+export function* getGeneratedPercent(
+  world: WorldData,
+  resolutionStep: number
+): Generator<number, DiscoveryStats | undefined, void> {
   const seed = getWorldSeed(world.zdo.zdos);
   if (seed == null) return undefined;
   const gen = new WorldGenerator(seed);
@@ -227,9 +215,12 @@ export function getGeneratedPercent(world: WorldData, resolutionStep: number) {
     DeepNorth: [0, 0],
   };
 
+  let i = 0;
   for (let y = -164; y <= 164; y += resolutionStep) {
     for (let x = -164; x <= 164; x += resolutionStep) {
+      if (x * x + y * y > 164 * 164) continue;
       const id = zoneId({ x, y });
+      if ((i++ & 0xFF) === 0) yield (y + 164) / 328;
       if ((x * x + y * y) * ZONE_SIZE * ZONE_SIZE > WORLD_RADIUS * WORLD_RADIUS) continue;
       const biomeInt = gen.getBiome(x * ZONE_SIZE, y * ZONE_SIZE);
       const biomeStr = BiomeEnum[biomeInt] as BiomeUnion;

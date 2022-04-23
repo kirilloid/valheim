@@ -40,8 +40,10 @@ function* readZDOData(reader: PackageReader, version: number): Generator<number,
   const zdoLength = reader.readInt();
   const corruptions: ZDOCorruption[] = [];
   setVersion(version);
+  let totalCorruptedBytes = 0;
   for (let i = 0; i < zdoLength; i++) {
     const offset = reader.getOffset();
+    if (reader.getProgress() === 1) break;
     if ((i & 0x7FFF) === 0) {
       yield reader.getProgress();
     }
@@ -51,6 +53,15 @@ function* readZDOData(reader: PackageReader, version: number): Generator<number,
     } catch (e) {
       const mistake = errorToMistake(e);
       corruptions.push({ mistake, offset, index: i });
+      reader.forwardToPattern(bytes => bytes.subarray(16, 32).every((v, i) => {
+        switch (i) {
+          case 0: return v !== 0; 
+          case 4: return v !== 0;
+          case 8: return v === 1;
+          default: return v === 0;
+        }
+      }));
+      totalCorruptedBytes += reader.getOffset() - offset;
     }
   }
   const deadZdos = reader.readMap(function () {
@@ -58,6 +69,11 @@ function* readZDOData(reader: PackageReader, version: number): Generator<number,
     const id = this.readUInt();
     return { userId, id };
   }, reader.readLong);
+
+  if (totalCorruptedBytes > 0) {
+    console.error(`Total corrupted bytes = ${totalCorruptedBytes}`);
+  }
+
   return {
     myid,
     nextUid,
