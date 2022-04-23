@@ -14,6 +14,11 @@ import {
 } from './fantasy-armoury';
 
 import {
+  data as odinFoodBarrelsData,
+  recipes as odinFoodBarrelsRecipes,
+} from './odins-food-barrels';
+
+import {
   data as odinArchitectData,
   recipes as odinArchitectRecipes,
 } from './odin-architect';
@@ -22,6 +27,7 @@ export const data = {
   backpackRemakeData,
   epicLootData,
   fantasyArmouryData,
+  odinFoodBarrelsData,
   odinArchitectData,
 };
 
@@ -29,6 +35,7 @@ export const recipes = {
   backpackRemakeRecipes,
   epicLootRecipes,
   fantasyArmouryRecipes,
+  odinFoodBarrelsRecipes,
   odinArchitectRecipes,
 };
 
@@ -95,6 +102,11 @@ export const modLinks: Record<string, ModConfig> = {
   RunicPack: {
     thunderstore: 'OdinPlus/RunicPack',
     version: '1.0.1',
+    fullSupport: false,
+  },
+  OdinsFoodBarrels: {
+    thunderstore: 'OdinPlus/OdinsFoodBarrels',
+    version: '1.0.3',
     fullSupport: false,
   },
   ChickenBoo: {
