@@ -2,7 +2,7 @@ import type { ZDO, ZDOCorruption, ZDOData, ZDOID } from './types';
 
 import type { Vector2i, Vector3 } from '../model/utils';
 import { PackageReader, PackageWriter } from './Package';
-import { readZdoMmap, setVersion, errorToMistake } from './zdo';
+import { readZdoMmap as readZdo, setVersion, errorToMistake } from './zdo';
 
 export type ZoneSystemData = {
   generatedZones: Vector2i[];
@@ -48,7 +48,8 @@ function* readZDOData(reader: PackageReader, version: number): Generator<number,
       yield reader.getProgress();
     }
     try {
-      const zdo = readZdoMmap(reader, version);
+      const zdo = readZdo(reader, version);
+      if (zdo._bytes.length > 10000) debugger;
       zdos.push(zdo);
     } catch (e) {
       const mistake = errorToMistake(e);

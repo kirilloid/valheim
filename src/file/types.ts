@@ -50,6 +50,7 @@ export type ZDOCorruption = {
 
 export interface ZDO {
   id: ZDOID;
+  _bytes: Uint8Array;
   ownerRevision: number;
   dataRevision: number;
   persistent: boolean;

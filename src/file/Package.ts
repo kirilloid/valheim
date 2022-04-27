@@ -140,9 +140,6 @@ export class PackageReader {
     if (length < 0) {
       throw new RangeError(`Negative byte array length at ${this.offset}`);
     }
-    if (this.offset + length > this.bytes.length) {
-      throw new RangeError(`Trying to read byte array beyond end at ${this.offset}`);
-    }
     const base = this.bytes.byteOffset;
     const start = this.offset;
     const end = this.offset += length;

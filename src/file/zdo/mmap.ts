@@ -7,7 +7,7 @@ import { offsets } from './offset';
 const PREFAB_HASH = stableHashCode('prefab');
 
 class ZdoMmapView implements ZDO {
-  private bytes: Uint8Array;
+  public _bytes: Uint8Array;
   private view: DataView;
   private offsetFloats = 0;
   private offsetVec3 = 0;
@@ -32,8 +32,8 @@ class ZdoMmapView implements ZDO {
       userId: reader.readLong(),
       id: reader.readUInt(),
     };
-    this.bytes = reader.readByteArray();
-    this.view = new DataView(this.bytes.buffer, this.bytes.byteOffset, this.bytes.byteLength);
+    this._bytes = reader.readByteArray();
+    this.view = new DataView(this._bytes.buffer, this._bytes.byteOffset, this._bytes.byteLength);
   }
   get ownerRevision(): number { return this.view.getUint32(offsets.ownerRevision, true); }
   set ownerRevision(value: number) { this.view.setUint32(offsets.ownerRevision, value, true); }
@@ -128,32 +128,32 @@ class ZdoMmapView implements ZDO {
   get floats(): FloatBinMap {
     if (this._floats !== null) return this._floats;
     this.offsetFloats = offsets.maps;
-    return this._floats = new FloatBinMap(this.bytes.subarray(offsets.maps));
+    return this._floats = new FloatBinMap(this._bytes.subarray(offsets.maps));
   }
   get vec3(): Vector3BinMap {
     if (this._vec3 !== null) return this._vec3;
     this.offsetVec3 = this.floats.byteSize + this.offsetFloats;
-    return this._vec3 = new Vector3BinMap(this.bytes.subarray(this.offsetVec3));
+    return this._vec3 = new Vector3BinMap(this._bytes.subarray(this.offsetVec3));
   }
   get quats() {
     if (this._quats !== null) return this._quats;
     this.offsetQuats = this.vec3.byteSize + this.offsetVec3;
-    return this._quats = new QuaternionBinMap(this.bytes.subarray(this.offsetQuats));
+    return this._quats = new QuaternionBinMap(this._bytes.subarray(this.offsetQuats));
   }
   get ints() {
     if (this._ints !== null) return this._ints;
     this.offsetInts = this.quats.byteSize + this.offsetQuats;
-    return this._ints = new IntBinMap(this.bytes.subarray(this.offsetInts));
+    return this._ints = new IntBinMap(this._bytes.subarray(this.offsetInts));
   }
   get longs() {
     if (this._longs !== null) return this._longs;
     this.offsetLongs = this.ints.byteSize + this.offsetInts;
-    return this._longs = new LongBinMap(this.bytes.subarray(this.offsetLongs));
+    return this._longs = new LongBinMap(this._bytes.subarray(this.offsetLongs));
   }
   get strings() {
     if (this._strings === null) {
       this.offsetStrings = this.longs.byteSize + this.offsetLongs;
-      const pkg = new PackageReader(this.bytes.subarray(this.offsetStrings));
+      const pkg = new PackageReader(this._bytes.subarray(this.offsetStrings));
       this._strings = pkg.readIfSmallMap(pkg.readInt, pkg.readString) ?? new Map<number, string>();
       if (this.version >= 27) {
         this._byteArrays = pkg.readIfSmallMap(pkg.readInt, pkg.readByteArray) ?? new Map<number, Uint8Array>();
@@ -165,7 +165,7 @@ class ZdoMmapView implements ZDO {
     if (this._byteArrays === null) {
       if (this.version < 27) return this._byteArrays = new Map();
       this.offsetStrings = this.longs.byteSize + this.offsetLongs;
-      const pkg = new PackageReader(this.bytes.subarray(this.offsetStrings));
+      const pkg = new PackageReader(this._bytes.subarray(this.offsetStrings));
       this._strings = pkg.readIfSmallMap(pkg.readInt, pkg.readString) ?? new Map<number, string>();
       this._byteArrays = pkg.readIfSmallMap(pkg.readInt, pkg.readByteArray) ?? new Map<number, Uint8Array>();
     }
@@ -173,43 +173,43 @@ class ZdoMmapView implements ZDO {
   }
 
   private saveAsPackage(): Uint8Array {
-    if (this._floats === null) return this.bytes;
+    if (this._floats === null) return this._bytes;
     const pkg = new PackageWriter();
     // write first bytes
-    pkg.writeBytes(this.bytes.subarray(0, offsets.maps));
+    pkg.writeBytes(this._bytes.subarray(0, offsets.maps));
     this._floats.save(pkg);
     // vec3
     if (this._vec3 === null) {
       this.offsetVec3 = this.floats.byteSize + this.offsetFloats;
-      pkg.writeBytes(this.bytes.subarray(this.offsetVec3));
+      pkg.writeBytes(this._bytes.subarray(this.offsetVec3));
       return pkg.flush();
     }
     this._vec3.save(pkg);
     // quats
     if (this._quats === null) {
       this.offsetQuats = this.vec3.byteSize + this.offsetVec3;
-      pkg.writeBytes(this.bytes.subarray(this.offsetQuats));
+      pkg.writeBytes(this._bytes.subarray(this.offsetQuats));
       return pkg.flush();
     }
     this._quats.save(pkg);
     // ints
     if (this._ints === null) {
       this.offsetInts = this.quats.byteSize + this.offsetQuats;
-      pkg.writeBytes(this.bytes.subarray(this.offsetInts));
+      pkg.writeBytes(this._bytes.subarray(this.offsetInts));
       return pkg.flush();
     }
     this._ints.save(pkg);
     // longs
     if (this._longs === null) {
       this.offsetLongs = this.ints.byteSize + this.offsetInts;
-      pkg.writeBytes(this.bytes.subarray(this.offsetLongs));
+      pkg.writeBytes(this._bytes.subarray(this.offsetLongs));
       return pkg.flush();
     }
     this._longs.save(pkg);
     // strings
     if (this._strings === null) {
       this.offsetStrings = this.longs.byteSize + this.offsetLongs;
-      pkg.writeBytes(this.bytes.subarray(this.offsetStrings));
+      pkg.writeBytes(this._bytes.subarray(this.offsetStrings));
       return pkg.flush();
     }
     pkg.writeIfSmallMap(pkg.writeInt, pkg.writeString, this._strings);

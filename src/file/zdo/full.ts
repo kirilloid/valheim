@@ -10,8 +10,8 @@ export function readZdo(reader: PackageReader, version: number): ZDO {
     userId: reader.readLong(),
     id: reader.readUInt(),
   };
-  const bytes = reader.readByteArray();
-  const pkg = new PackageReader(bytes);
+  const _bytes = reader.readByteArray();
+  const pkg = new PackageReader(_bytes);
   const ownerRevision = pkg.readUInt();
   const dataRevision = pkg.readUInt();
   const persistent = pkg.readBool();
@@ -37,6 +37,7 @@ export function readZdo(reader: PackageReader, version: number): ZDO {
 
   return {
     id,
+    _bytes,
     ownerRevision,
     dataRevision,
     persistent,
@@ -93,7 +94,7 @@ export function readZdo(reader: PackageReader, version: number): ZDO {
       pkg.writeIfSmallMap(pkg.writeInt, pkg.writeString, this.strings);
       pkg.writeIfSmallMap(pkg.writeInt, pkg.writeByteArray, this.byteArrays);
       writer.writeByteArray(pkg.flush());
-    }
+    },
   };
 }
 
