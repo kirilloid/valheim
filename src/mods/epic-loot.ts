@@ -105,6 +105,10 @@ const defaultItem: EpicLootData = {
   augmentedIndex: -1,
 }
 
+export function stripExtraData(value: string) {
+  return value.replace(/<\|\w+\|>.*$/, '');
+}
+
 export function extractExtraData({ crafterName }: { crafterName: string }): EpicLootData | undefined {
   if (!crafterName.startsWith('<|c|>')) return undefined;
   if (!crafterName.includes('<|u|>')) return defaultItem;

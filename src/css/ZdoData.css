@@ -8,6 +8,7 @@
   left: 0;
   right: 0;
   background-color: rgb(var(--color-background));
+  z-index: 1;
 }
 
 @media screen and (min-width: 640px) {

@@ -12,12 +12,13 @@ import { data } from '../data/itemDB';
 import { mapping } from '../data/mapping';
 import { locationHashes } from '../data/location-hashes';
 import { modPrefabNames } from '../data/prefabs';
-import { locations } from '../data/location';
 
 import { WorldData } from '../file/World';
 import { readBase64 } from '../file/base64';
 import { read } from '../file/Inventory';
 import { match } from '../data/search';
+import { locations } from '../data/location';
+import { stripExtraData } from '../mods/epic-loot';
 
 const locationHASH = stableHashCode('location');
 
@@ -88,35 +89,30 @@ export const getActiveZoneIds = (zdos: ZDO[]) => {
   return activeZoneIds;
 };
 
-function getSubType(id: string): string {
-  const obj = data[id];
-  if (obj == null) return '_unknown';
-  if (obj.mod != null) return obj.mod;
-  switch (obj.type) {
-    case 'ammo':
-    case 'weapon':
-    case 'shield':
-    case 'armor':
-    case 'tool':
-      return 'item';
-    case 'cart':
-    case 'ship':
-      return 'transport';
-    case 'creature':
-      return 'creature';
-    case 'item':
-      return 'resource';
-    case 'trophy':
-      return 'trophy';
-    case 'piece':
-    case 'structure':
-      return 'structure';
-    case 'object':
-      return 'object';
-    default:
-      return assertNever(obj);
+const OWNER = stableHashCode('owner');
+const OWNER_NAME = stableHashCode('ownerName');
+
+const CRAFTER_ID = stableHashCode('crafterID');
+const CRAFTER_NAME = stableHashCode('crafterName');
+
+export const getPlayers = (zdos: ZDO[]): Map<bigint, string> => {
+  const map = new Map<bigint, string>();
+  for (const zdo of zdos) {
+    const objId = getId(prefabHashes, zdo.prefab);
+    const components = data[objId]?.components;
+    if (components?.includes('Bed')) {
+      const id = zdo.longs.get(OWNER);
+      const name = zdo.strings.get(OWNER_NAME);
+      if (id != null && name != null) map.set(id, name);
+    }
+    if (components?.includes('ItemDrop')) {
+      const id = zdo.longs.get(CRAFTER_ID);
+      const name = zdo.strings.get(CRAFTER_NAME);
+      if (id && name) map.set(id, stripExtraData(name));
+    }
   }
-}
+  return map;
+};
 
 type SearchIndex = { item: number; container: number; };
 export type SearchEntry = { id: string; text: string; subtype: string; indices: SearchIndex[] };

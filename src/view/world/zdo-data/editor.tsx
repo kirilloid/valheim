@@ -33,7 +33,7 @@ function getComponents(id: string | undefined): GameComponent[] {
 
 const variantHash = stableHashCode('variant');
 
-function Editor({ value: zdo, onChange, index, components }: ValueProps<ZDO> & { index: number; components: GameComponent[] }) {
+function Editor({ value: zdo, onChange, playersMap, index, components }: ValueProps<ZDO> & { playersMap: Map<bigint, string>; index: number; components: GameComponent[] }) {
   if (components.length === 0) {
     return <>
       <ZdoSpecialData data={zdo.floats} stringify={String} />
@@ -50,10 +50,21 @@ function Editor({ value: zdo, onChange, index, components }: ValueProps<ZDO> & {
     return <ContainedItemComp value={zdo} onChange={onChange} index={index} />
   }
   const editors = components.flatMap(cmp => InterfaceFields[cmp] ?? []);
-  return <List separator="">{editors.map((C, i) => <C key={i} value={zdo} onChange={onChange} />)}</List>
+  return <List separator="">{editors.map((C, i) => <C key={i} value={zdo} onChange={onChange} playersMap={playersMap} />)}</List>
 }
 
-export const ItemEditor = React.memo(({ value: zdo, onChange, containerIndex }: ValueProps<ZDO> & { containerIndex: number, version: number }) => {
+export const ItemEditor = React.memo(({
+  zdo,
+  onChange,
+  containerIndex,
+  playersMap,
+}: {
+  zdo: ZDO,
+  onChange: (value: ZDO) => void,
+  containerIndex: number,
+  version: number,
+  playersMap: Map<bigint, string>
+}) => {
   const translate = useContext(TranslationContext);
 
   const currentId = prefabHashes.get(zdo.prefab);
@@ -79,7 +90,7 @@ export const ItemEditor = React.memo(({ value: zdo, onChange, containerIndex }: 
         </dd>
       </>}
       <dt>zone</dt><dd>{zdo.sector.x} / {zdo.sector.y}</dd>
-      <Editor value={zdo} onChange={onChange} components={components} index={containerIndex} />
+      <Editor value={zdo} onChange={onChange} playersMap={playersMap} components={components} index={containerIndex} />
     </dl>
   </>;
 });

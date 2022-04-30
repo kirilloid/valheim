@@ -6,7 +6,7 @@ import '../../../css/ZdoData.css';
 import type { ValueProps } from '../../parts/types';
 import type { ZDOData } from '../types';
 
-import { EMPTY_RESULT, getSearcher, SearchEntry } from '../../../model/zdo-selectors';
+import { EMPTY_RESULT, getSearcher, getPlayers, SearchEntry } from '../../../model/zdo-selectors';
 
 import { PanView } from '../../parts/PanView';
 import { TranslationContext } from '../../../effects';
@@ -44,6 +44,7 @@ function MapUI({ zdos, selected, current, size }: { zdos: ZdoLike[]; selected: Z
 }
 
 const getSearcherCached = defaultMemoize(getSearcher);
+const getPlayersCached = defaultMemoize(getPlayers);
 
 const getWidth = () => document.querySelector<HTMLDivElement>('div.App')?.offsetWidth ?? Math.min(window.innerWidth, 960);
 
@@ -56,6 +57,7 @@ export const ZdoData = React.memo(function ZdoData(props: ValueProps<ZDOData>) {
   const [version, setVersion] = useState(0);
   const [mapExpanded, setMapExpanded] = useState(false);
   const [width, setWidth] = useState(0);
+  const players = getPlayersCached(zdos);
 
   const zdoSearcher = getSearcherCached(zdos, translate);
   const searchIndices = entry?.indices ?? EMPTY_RESULT;
@@ -116,7 +118,8 @@ export const ZdoData = React.memo(function ZdoData(props: ValueProps<ZDOData>) {
     </div>
     {zdo != null && searchIndex != null && <div className="ZdoData__Editor">
       <ItemEditor
-        value={zdo}
+        zdo={zdo}
+        playersMap={players}
         onChange={() => {
           setVersion(version + 1);
           props.onChange(props.value);

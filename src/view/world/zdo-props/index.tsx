@@ -28,10 +28,11 @@ import { vectorComp } from './vector';
 import { WearNTearComp } from './wear-n-tear';
 import { ItemPropsComp } from './item-props';
 import { LiquidComp } from './liquid';
+import { EpicLootComp } from './epic-loot';
 
 const readOnly = true;
 
-export const InterfaceFields: Partial<Record<GameComponent, React.ComponentType<ValueProps<ZDO>>[]>> = {
+export const InterfaceFields: Partial<Record<GameComponent, React.ComponentType<ValueProps<ZDO> & { playersMap?: Map<bigint, string> }>[]>> = {
   ArmorStand: [
     ArmorStandComp,
   ],
@@ -107,6 +108,7 @@ export const InterfaceFields: Partial<Record<GameComponent, React.ComponentType<
     ItemPropsComp,
     idComp('crafterID'),
     stringComp('crafterName'), // <|extended data from EpicLoot|>
+    EpicLootComp,
   ],
   ItemStand: [ItemComp],
   Leviathan: [boolComp('submerged', { hashFn: crc32 })],
