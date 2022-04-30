@@ -2,7 +2,7 @@ import type { ZDO, ZDOCorruption, ZDOData, ZDOID } from './types';
 
 import type { Vector2i, Vector3 } from '../model/utils';
 import { PackageReader, PackageWriter } from './Package';
-import { readZdoMmap as readZdo, setVersion, errorToMistake } from './zdo';
+import { readZdoFull as readZdo, setVersion, errorToMistake } from './zdo';
 
 export type ZoneSystemData = {
   generatedZones: Vector2i[];
@@ -41,6 +41,7 @@ function* readZDOData(reader: PackageReader, version: number): Generator<number,
   const corruptions: ZDOCorruption[] = [];
   setVersion(version);
   let totalCorruptedBytes = 0;
+  const removedPrefabs = new Map<number, number>();
   for (let i = 0; i < zdoLength; i++) {
     const offset = reader.getOffset();
     if (reader.getProgress() === 1) break;
@@ -49,7 +50,18 @@ function* readZDOData(reader: PackageReader, version: number): Generator<number,
     }
     try {
       const zdo = readZdo(reader, version);
-      if (zdo._bytes.length > 10000) debugger;
+      // if (zdo._bytes.length > 10000) debugger;
+      if (zdos.length > 1) {
+        const last = zdos.slice(-1)[0]!;
+        if (
+          last.id.userId === zdo.id.userId &&
+          last._bytes.length === zdo._bytes.length &&
+          last._bytes.every((v, i) => v === zdo._bytes[i])
+        ) {
+          const { prefab } = zdos.pop()!;
+          removedPrefabs.set(prefab, (removedPrefabs.get(prefab) ?? 0) + 1);
+        }
+      }
       zdos.push(zdo);
     } catch (e) {
       const mistake = errorToMistake(e);
@@ -64,6 +76,9 @@ function* readZDOData(reader: PackageReader, version: number): Generator<number,
       }));
       totalCorruptedBytes += reader.getOffset() - offset;
     }
+  }
+  if (removedPrefabs.size > 0) {
+    console.warn('Removed duplicated objects: ', removedPrefabs);
   }
   const deadZdos = reader.readMap(function () {
     const userId = this.readLong();

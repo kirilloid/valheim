@@ -1826,6 +1826,19 @@ export const objects: PhysicalObject[] = [
   },
   {
     type: 'object',
+    id: 'caverock_ice_pillar',
+    subtype: 'misc',
+    tier: 4,
+    Destructible: {
+      minToolTier: 0,
+      hp: 100,
+      damageModifiers: mods([2, 2, 2, 2, 2, 2, 1, 2, 3, 3]),
+      parts: [],
+    },
+    drop: [],
+  },
+  {
+    type: 'object',
     id: 'caverock_ice_pillar_wall',
     subtype: 'misc',
     tier: 4,

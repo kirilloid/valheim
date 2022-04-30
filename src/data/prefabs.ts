@@ -19,7 +19,7 @@ export const prefabNames: string[] = [
 
   'CargoCrate',
   'CastleKit_braided_box01', 'CastleKit_brazier', 'CastleKit_groundtorch', 'CastleKit_groundtorch_green', 'CastleKit_groundtorch_unlit', 'CastleKit_metal_groundtorch_unlit', 'CastleKit_pot03',
-  'caverock_ice_stalagmite_broken', 'caverock_ice_stalagmite_destruction', 'caverock_ice_stalagtite_destruction', 'caverock_ice_stalagtite_falling', 'caverock_ice_pillar', 'caverock_ice_wall_destruction',
+  'caverock_ice_stalagmite_broken', 'caverock_ice_stalagmite_destruction', 'caverock_ice_stalagtite_destruction', 'caverock_ice_stalagtite_falling', 'caverock_ice_wall_destruction',
   'cloth_hanging_door_double', 'cloth_hanging_door', 'cloth_hanging_long', 'piece_cloth_hanging_door',
   'clutter_shrub_large',
   'cultivate', 'cultivate_v2',
