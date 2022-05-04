@@ -95,6 +95,7 @@ export function PanView({ children, size, minZoom, maxZoom, onMouseMove, onZoomC
 
     function onWheel(event: WheelEvent) {
       event.stopPropagation();
+      event.preventDefault();
       const { deltaY } = event;
       const pos = getXY(event);
       if (deltaY < 0) {
@@ -106,7 +107,7 @@ export function PanView({ children, size, minZoom, maxZoom, onMouseMove, onZoomC
       update();
     }
 
-    outer.addEventListener('wheel', onWheel, { passive: true });
+    outer.addEventListener('wheel', onWheel);
     outer.addEventListener('mousedown', start, { passive: true });
     outer.addEventListener('mousemove', move, { passive: true });
     document.addEventListener('mousemove', drag, { passive: true });

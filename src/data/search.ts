@@ -31,8 +31,7 @@ function addArray<T extends { id: string; tier?: number; tags?: string[] }>(
     if (visited.has(id)) continue
     visited.add(id);
     const i18nKey = dictKeyMap(id);
-    const entry = dict[i18nKey];
-    if (entry == null) continue;
+    const entry = dict[i18nKey] ?? id;
     const normalized = entry.toLowerCase();
     fullMatch.set(normalized, id);
     const words = normalized.split(' ');

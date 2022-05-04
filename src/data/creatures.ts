@@ -292,8 +292,10 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Fish1',
+    iconId: 'resource/FishRaw',
     ragdollId: null,
     components: ['Fish'],
+    tags: ['fish'],
     tier: 1,
     emoji: '🐟',
     faction: 'ForestMonsters',
@@ -332,8 +334,10 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Fish2',
+    iconId: 'resource/FishRaw',
     ragdollId: null,
     components: ['Fish'],
+    tags: ['fish'],
     tier: 1,
     emoji: '🐟',
     faction: 'ForestMonsters',
@@ -372,8 +376,10 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Fish3',
+    iconId: 'resource/FishRaw',
     ragdollId: null,
     components: ['Fish'],
+    tags: ['fish'],
     tier: 1,
     emoji: '🐟',
     faction: 'ForestMonsters',
@@ -463,7 +469,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Boar_piggy',
-    iconId: 'Boar',
+    iconId: 'creature/Boar',
     ragdollId: null,
     components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI', 'Growup'],
     tags: ['animal'],
@@ -1597,7 +1603,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Wolf_cub',
-    iconId: 'Wolf',
+    iconId: 'creature/Wolf',
     ragdollId: null,
     components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI', 'Growup'],
     tags: ['animal'],
@@ -2176,7 +2182,7 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Lox_Calf',
-    iconId: 'Lox',
+    iconId: 'creature/Lox',
     ragdollId: 'loxcalf_ragdoll',
     components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI', 'Growup'],
     tags: ['animal'],

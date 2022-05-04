@@ -38,7 +38,9 @@ const iconPath = (item: GameObject): string => {
     ? item.id.toLowerCase().includes('chest')
       ? `/icons/piece/piece_chest_wood`
       : `/icons/resource/Coins`
-    : `/icons/${iconType(item.type)}/${item.iconId ?? item.id}`;
+    : item.iconId
+      ? `/icons/${item.iconId}`
+      : `/icons/${iconType(item.type)}/${item.id}`;
 };
 
 type SkillIconProps = {

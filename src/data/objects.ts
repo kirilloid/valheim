@@ -91,6 +91,7 @@ const emptyDrop: GeneralDrop = {
 
 function tree({
   id: [baseId, stubId, logId, logHalfId],
+  iconId,
   group,
   tier,
   minToolTier,
@@ -100,6 +101,7 @@ function tree({
   Plant,
 }: {
   id: [EntityId, EntityId, EntityId, EntityId];
+  iconId?: EntityId;
   group?: EntityGroup;
   tier: number;
   minToolTier: number;
@@ -114,6 +116,7 @@ function tree({
       subtype: 'tree',
       tags: ['plant', 'tree'],
       id: baseId,
+      iconId,
       components: ['TreeBase'],
       group,
       tier,
@@ -182,6 +185,7 @@ function tree({
 
 function treeSimpler({
   id: [baseId, stubId, logId],
+  iconId,
   tier,
   minToolTier,
   grow,
@@ -189,8 +193,9 @@ function treeSimpler({
   drop: [baseDrop, chunkDrop],
 }: {
   id: [EntityId, EntityId, EntityId];
-  tier: number,
-  minToolTier: number,
+  iconId?: EntityId;
+  tier: number;
+  minToolTier: number;
   grow: ItemGrow[];
   hp: [number, number];
   drop: [GeneralDrop, GeneralDrop];
@@ -201,6 +206,7 @@ function treeSimpler({
       subtype: 'tree',
       tags: ['plant', 'tree'],
       id: baseId,
+      iconId,
       components: ['TreeBase'],
       tier,
       grow,
@@ -251,6 +257,7 @@ function treeSimpler({
 function rock({
   subtype = 'rock',
   id: [baseId, fracId],
+  iconId,
   tier = 1,
   minToolTier = 0,
   grow,
@@ -261,6 +268,7 @@ function rock({
 }: {
   subtype?: PhysicalObject['subtype'],
   id: [EntityId, EntityId];
+  iconId?: string;
   tier?: number;
   minToolTier?: number;
   grow: ItemGrow[];
@@ -274,6 +282,7 @@ function rock({
       type: 'object',
       subtype,
       id: baseId,
+      iconId,
       tier,
       grow,
       Destructible: {
@@ -289,6 +298,7 @@ function rock({
       type: 'object',
       subtype: 'rock',
       id: fracId,
+      iconId,
       components: ['MineRock5'],
       tier,
       Destructible: {
@@ -813,6 +823,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'plant',
     id: 'Pickable_Barley',
+    iconId: 'resource/Flax',
     components: ['Pickable', 'Plant'],
     tier: 5,
     Plant: {
@@ -830,6 +841,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'plant',
     id: 'Pickable_Flax',
+    iconId: 'resource/Flax',
     components: ['Pickable', 'Plant'],
     tier: 5,
     Plant: {
@@ -845,6 +857,7 @@ export const objects: PhysicalObject[] = [
   },
   ...rock({
     id: ['rock4_coast', 'rock4_coast_frac'],
+    iconId: 'resource/Stone',
     grow: itemGrow({
       num: [3, 3],
       scale: [0.6, 1.2],
@@ -903,6 +916,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'tree',
     id: 'Beech_small1',
+    iconId: 'resource/Beech_Sapling',
     group: 'beech',
     tier: 0,
     grow: [
@@ -937,6 +951,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'tree',
     id: 'Beech_small2',
+    iconId: 'resource/Beech_Sapling',
     group: 'beech',
     tier: 0,
     grow: [
@@ -969,6 +984,7 @@ export const objects: PhysicalObject[] = [
   },
   ...tree({
     id: ['Beech1', 'Beech_Stub', 'beech_log', 'beech_log_half'],
+    iconId: 'resource/Beech_Sapling',
     group: 'beech',
     tier: 1,
     minToolTier: 0,
@@ -1032,6 +1048,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'tree',
     id: 'FirTree_oldLog',
+    iconId: 'resource/Wood',
     tier: 0,
     grow: itemGrow({
       locations: ['Swamp'],
@@ -1059,6 +1076,7 @@ export const objects: PhysicalObject[] = [
   },
   ...tree({
     id: ['FirTree', 'FirTree_Stub', 'FirTree_log', 'FirTree_log_half'],
+    iconId: 'resource/FirTree_sapling',
     group: 'fir',
     tier: 1,
     minToolTier: 0,
@@ -1097,6 +1115,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'tree',
     id: 'FirTree_small',
+    iconId: 'resource/FirTree_sapling',
     group: 'fir',
     tier: 0,
     grow: itemGrow({
@@ -1129,6 +1148,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'tree',
     id: 'FirTree_small_dead',
+    iconId: 'resource/FirTree_sapling',
     group: 'fir',
     tier: 3,
     grow: itemGrow({
@@ -1152,6 +1172,7 @@ export const objects: PhysicalObject[] = [
   },
   ...tree({
     id: ['Pinetree_01', 'Pinetree_01_Stub', 'PineTree_log', 'PineTree_log_half'],
+    iconId: 'resource/PineTree_sapling',
     tier: 2,
     minToolTier: 0,
     grow: itemGrow({
@@ -1193,6 +1214,7 @@ export const objects: PhysicalObject[] = [
   }),
   ...tree({
     id: ['Birch1', 'BirchStub', 'Birch_log', 'Birch_log_half'],
+    iconId: 'resource/Birch_Sapling',
     group: 'birch',
     tier: 2,
     minToolTier: 2,
@@ -1236,6 +1258,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'tree',
     id: 'Birch1_aut',
+    iconId: 'resource/Birch_Sapling',
     tier: 2,
     group: 'birch',
     Destructible: {
@@ -1268,6 +1291,7 @@ export const objects: PhysicalObject[] = [
   },
   ...tree({
     id: ['Oak1', 'OakStub', 'Oak_log', 'Oak_log_half'],
+    iconId: 'resource/Oak_Sapling',
     tier: 2,
     minToolTier: 2,
     grow: itemGrow({
@@ -1395,6 +1419,7 @@ export const objects: PhysicalObject[] = [
   },
   ...rock({
     id: ['rock4_forest', 'rock4_forest_frac'],
+    iconId: 'resource/Stone',
     grow: itemGrow({
       locations: ['BlackForest'],
       altitude: [4, 1000],
@@ -1409,6 +1434,7 @@ export const objects: PhysicalObject[] = [
   ...rock({
     subtype: 'ore',
     id: ['rock4_copper', 'rock4_copper_frac'],
+    iconId: 'resource/CopperOre',
     tier: 2,
     grow: itemGrow({
       locations: ['BlackForest'],
@@ -1431,6 +1457,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'ore',
     id: 'MineRock_Tin',
+    iconId: 'resource/TinOre',
     tier: 2,
     Destructible: {
       minToolTier: 0,
@@ -1563,6 +1590,7 @@ export const objects: PhysicalObject[] = [
   ...rock({
     subtype: 'ore',
     id: ['mudpile2', 'mudpile2_frac'],
+    iconId: 'resource/IronScrap',
     tier: 3,
     grow: [],
     hp: 5,
@@ -1580,6 +1608,7 @@ export const objects: PhysicalObject[] = [
   ...rock({
     subtype: 'ore',
     id: ['mudpile_beacon', 'mudpile_frac'],
+    iconId: 'resource/IronScrap',
     tier: 3,
     grow: itemGrow({
       locations: ['Swamp'],
@@ -1603,6 +1632,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'misc',
     id: 'GuckSack_small',
+    iconId: 'resource/Guck',
     tier: 3,
     grow: [],
     Destructible: {
@@ -1617,6 +1647,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'misc',
     id: 'GuckSack',
+    iconId: 'resource/Guck',
     tier: 3,
     grow: [],
     Destructible: {
@@ -1631,6 +1662,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'rock',
     id: 'Rock_4_plains',
+    iconId: 'resource/Stone',
     tier: 1,
     grow: itemGrow({
       locations: ['Plains'],
@@ -1649,6 +1681,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'rock',
     id: 'Rock_4',
+    iconId: 'resource/Stone',
     tier: 1,
     grow: itemGrow({
       locations: ['BlackForest', 'Mistlands'],
@@ -1674,6 +1707,7 @@ export const objects: PhysicalObject[] = [
   },
   ...rock({
     id: ['Rock_3', 'Rock_3_frac'],
+    iconId: 'resource/Stone',
     tier: 1,
     minToolTier: 0,
     grow: itemGrow({
@@ -1695,6 +1729,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'rock',
     id: 'Rock_7',
+    iconId: 'resource/Stone',
     tier: 1,
     grow: [],
     Destructible: {
@@ -1709,6 +1744,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'misc',
     id: 'Spawner_DraugrPile',
+    iconId: 'resource/TrophyDraugr',
     tier: 2,
     grow: [],
     Destructible: {
@@ -1733,6 +1769,7 @@ export const objects: PhysicalObject[] = [
   {
     type: 'object',
     id: 'MountainKit_brazier',
+    iconId: 'piece/piece_brazierfloor01',
     subtype: 'misc',
     // lightRadius: 0.5,
     // warmRadius: 0.5,
@@ -1755,6 +1792,7 @@ export const objects: PhysicalObject[] = [
   {
     type: 'object',
     id: 'mountainkit_chair',
+    iconId: 'piece/piece_chair02',
     subtype: 'misc',
     tier: 4,
     Destructible: {
@@ -1768,6 +1806,7 @@ export const objects: PhysicalObject[] = [
   {
     type: 'object',
     id: 'mountainkit_table',
+    iconId: 'piece/piece_table_oak',
     subtype: 'misc',
     tier: 4,
     Destructible: {
@@ -1781,6 +1820,7 @@ export const objects: PhysicalObject[] = [
   {
     type: 'object',
     id: 'hanging_hairstand',
+    iconId: 'resource/WolfHairBundle',
     subtype: 'misc',
     tier: 4,
     Destructible: {
@@ -1794,6 +1834,7 @@ export const objects: PhysicalObject[] = [
   {
     type: 'object',
     id: 'cloth_hanging_door',
+    iconId: 'piece/piece_cloth_hanging_door',
     subtype: 'misc',
     tier: 4,
     Destructible: {
@@ -1807,6 +1848,7 @@ export const objects: PhysicalObject[] = [
   {
     type: 'object',
     id: 'MountainKit_wood_gate',
+    iconId: 'piece/wood_gate',
     subtype: 'misc',
     tier: 4,
     Destructible: {
@@ -1892,6 +1934,7 @@ export const objects: PhysicalObject[] = [
   })),
   ...rock({
     id: ['highstone', 'highstone_frac'],
+    iconId: 'resource/Stone',
     tier: 4,
     grow: [],
     children: NaN,
@@ -1900,6 +1943,7 @@ export const objects: PhysicalObject[] = [
   }),
   ...rock({
     id: ['widestone', 'widestone_frac'],
+    iconId: 'resource/Stone',
     tier: 4,
     grow: [],
     children: NaN,
@@ -1910,6 +1954,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'rock',
     id: 'MineRock_Obsidian',
+    iconId: 'resource/Obsidian',
     tier: 4,
     grow: itemGrow({
       locations: ['Mountain'],
@@ -1927,6 +1972,7 @@ export const objects: PhysicalObject[] = [
   ...rock({
     subtype: 'ore',
     id: ['silvervein', 'silvervein_frac'],
+    iconId: 'resource/SilverOre',
     tier: 4,
     minToolTier: 2,
     grow: itemGrow({
@@ -1950,6 +1996,7 @@ export const objects: PhysicalObject[] = [
   }),
   ...rock({
     id: ['rock1_mountain', 'rock1_mountain_frac'],
+    iconId: 'resource/Stone',
     grow: itemGrow({
       locations: ['Mountain'],
       tilt: [30, 80],
@@ -1962,6 +2009,7 @@ export const objects: PhysicalObject[] = [
   }),
   ...rock({
     id: ['rock2_mountain', 'rock2_mountain_frac'],
+    iconId: 'resource/Stone',
     grow: itemGrow({
       locations: ['Mountain'],
       tilt: [30, 80],
@@ -1974,6 +2022,7 @@ export const objects: PhysicalObject[] = [
   }),
   ...rock({
     id: ['rock3_mountain', 'rock3_mountain_frac'],
+    iconId: 'resource/Stone',
     grow: itemGrow({
       locations: ['Mountain'],
       tilt: [10, 50],
@@ -1987,6 +2036,7 @@ export const objects: PhysicalObject[] = [
 // PLAINS
   ...rock({
     id: ['rock4_heath', 'rock4_heath_frac'],
+    iconId: 'resource/Stone',
     grow: itemGrow({
       locations: ['Plains'],
       altitude: [4, 1000],
@@ -1999,6 +2049,7 @@ export const objects: PhysicalObject[] = [
   }),
   ...rock({
     id: ['rock2_heath', 'rock2_heath_frac'],
+    iconId: 'resource/Stone',
     grow: itemGrow({
       locations: ['Plains'],
       altitude: [0, 1000],
@@ -2011,6 +2062,7 @@ export const objects: PhysicalObject[] = [
   }),
   ...rock({
     id: ['HeathRockPillar', 'HeathRockPillar_frac'],
+    iconId: 'resource/Stone',
     grow: itemGrow({
       locations: ['Plains'],
       altitude: [0, 1000],
@@ -2026,6 +2078,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'misc',
     id: 'Pickable_TarBig',
+    iconId: 'resource/Tar',
     components: ['Pickable'],
     tier: 5,
     grow: [],
@@ -2035,6 +2088,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'misc',
     id: 'Pickable_Tar',
+    iconId: 'resource/Tar',
     components: ['Pickable'],
     tier: 5,
     grow: [],
@@ -2064,6 +2118,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'misc',
     id: 'Barnacle',
+    iconId: 'resource/Chitin',
     components: ['MineRock'],
     tier: 3,
     grow: [],
@@ -2185,6 +2240,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'ore',
     id: 'MineRock_Meteorite',
+    iconId: 'resource/FlametalOre',
     components: ['MineRock'],
     tier: 7,
     Destructible: {
@@ -2278,6 +2334,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'misc',
     id: 'lox_ribs',
+    iconId: 'resource/BoneFragments',
     tier: 5,
   },
   {
@@ -2319,6 +2376,7 @@ export const objects: PhysicalObject[] = [
 export const structures: Structure[] = [
   {
     id: 'sign_notext',
+    iconId: 'piece/sign',
     type: 'structure',
     tier: 1,
     Destructible: {
@@ -2341,6 +2399,7 @@ export const structures: Structure[] = [
   },
   {
     id: 'goblin_bed',
+    iconId: 'piece/bed',
     type: 'structure',
     tier: 5,
     Destructible: {

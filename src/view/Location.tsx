@@ -60,7 +60,7 @@ export function Location() {
   if (locs.length === 1) {
     return (
       <>
-        <h1>{translate(`ui.location.${id}`)}</h1>
+        <h1>{translate(`ui.location`)}: {translate(`ui.location.${id}`)}</h1>
         <SingleLocation loc={summary} />
       </>
     );  
@@ -76,7 +76,7 @@ export function Location() {
 
   return (
     <>
-      <h1>{translate(`ui.location.${id}`)}</h1>
+      <h1>{translate(`ui.location`)}: {translate(`ui.location.${id}`)}</h1>
       <Tabs tabs={tabs} selected={0} key={id} />
     </>
   );
