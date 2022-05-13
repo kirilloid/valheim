@@ -114,6 +114,21 @@ export const getPlayers = (zdos: ZDO[]): Map<bigint, string> => {
   return map;
 };
 
+const LWT_HASH = stableHashCode('lastWorldTime');
+export const getMaxTime = (zdos: ZDO[]): number => {
+  let maxTime = 0;
+  for (const zdo of zdos) {
+    const id = prefabHashes.get(zdo.prefab);
+    const obj = id != null ? data[id] : undefined;
+    if (obj == null || obj.components?.includes('BaseAI')) continue;
+    const ticks = zdo.longs.get(LWT_HASH);
+    if (ticks == null) continue;
+    const days = Number(ticks) / 1e7;
+    maxTime = Math.max(maxTime, days);
+  }
+  return maxTime;
+};
+
 type SearchIndex = { item: number; container: number; };
 export type SearchEntry = { id: string; text: string; subtype: string; indices: SearchIndex[] };
 

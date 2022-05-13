@@ -1,9 +1,11 @@
 import React from 'react';
+import { defaultMemoize } from 'reselect';
 
 import type { EditorProps } from '../parts/types';
 import type { WorldData, WorldMeta } from './types';
 import { GAME_DAY } from '../../model/game';
 import { timeI2S } from '../../model/utils';
+import { getMaxTime } from '../../model/zdo-selectors';
 
 import { FileInfo } from '../parts/FileInfo';
 import { Tabs } from '../parts/Tabs';
@@ -20,6 +22,8 @@ function showTime(time: number) {
   const timeStr = timeI2S(tod);
   return `Day ${day} @ ${timeStr}`;
 }
+
+const getMaxTimeCached = defaultMemoize(getMaxTime);
 
 export function WorldMetaInfo({ value, file }: EditorProps<WorldMeta>) {
   const { version, name, seed, seedName, worldGenVersion } = value;
@@ -48,15 +52,22 @@ export function WorldInfo({ value, onChange, file, disabled }: EditorProps<World
     renderer: () => <FileInfo file={file} version={version} />,
   }, {
     title: 'Progress',
-    renderer: () => <div className="WorldEdit">
-      <div className="WorldEdit__Time">
-        <h2>world time</h2>
-        <p>{showTime(netTime)}</p>
+    renderer: () => {
+      const maxTime = getMaxTimeCached(zdo.zdos);
+      return <div className="WorldEdit">
+        <div className="WorldEdit__Time">
+          <h2>world time</h2>
+          <p>{showTime(netTime)}</p>
+          {netTime - maxTime > 10 && <p key="fix-time">
+            The time seems to be off{' '}
+            <button className="btn btn--primary" onClick={() => onChange({ ...value, netTime: maxTime })}>Fix it</button>
+          </p>}          
+        </div>
+        {randEvent != null && <RandomEvents value={randEvent} />}
+        {zoneSystem != null && <ZoneSystem value={zoneSystem} onChange={zoneSystem => onChange({ ...value, zoneSystem })} />}
+        <WorldDiscovery value={value} />
       </div>
-      {randEvent != null && <RandomEvents value={randEvent} />}
-      {zoneSystem != null && <ZoneSystem value={zoneSystem} onChange={zoneSystem => onChange({ ...value, zoneSystem })} />}
-      <WorldDiscovery value={value} />
-    </div>
+    },
   }, {
     title: 'Objects',
     renderer: () => <ZdoData value={zdo} onChange={zdo => onChange({ ...value, zdo })} />
