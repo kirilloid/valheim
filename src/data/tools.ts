@@ -70,3 +70,7 @@ export const tools: Tool[] = [
     produces: pieces.map(p => p.id),
   },
 ];
+
+for (const tool of tools) {
+  tool.components = ['ItemDrop'];
+}

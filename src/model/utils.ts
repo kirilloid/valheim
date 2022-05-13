@@ -7,8 +7,8 @@ export const clamp01 = (value: number) => clamp(value, 0, 1);
 export const lerp = (a: number, b: number, t: number) => a + (b - a) * clamp01(t);
 export const lerpStep = (l: number, h: number, v: number) => clamp01((v - l) / (h - l));
 export const smoothStep = (pMin: number, pMax: number, pX: number) => {
-  const num = clamp01(((pX - pMin) / (pMax - pMin)));
-  return (num * num * (3.0 - 2.0 * num));
+  const num = clamp01((pX - pMin) / (pMax - pMin));
+  return num * num * (3.0 - 2.0 * num);
 };
 
 export function stableHashCode(str: string): number {

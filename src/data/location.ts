@@ -521,7 +521,7 @@ export const locations: LocationConfig[] = [
     1, 'WoodHouse1', ['Meadows'],
     { quantity: 20, terrainDelta: [0, 4], radius: 8,
       items: [
-        locItem('beehive', 0.25),
+        locItem('Beehive', 0.25),
         locItem('TreasureChest_meadows', 0.5),
       ],
     },
@@ -531,7 +531,7 @@ export const locations: LocationConfig[] = [
     1, 'WoodHouse2', ['Meadows'],
     { quantity: 20, terrainDelta: [0, 4], radius: 8,
       items: [
-        locItem('beehive', 0.25),
+        locItem('Beehive', 0.25),
         locItem('TreasureChest_meadows', 0.5),
       ],
     },
@@ -541,7 +541,7 @@ export const locations: LocationConfig[] = [
     1, 'WoodHouse3', ['Meadows'],
     { quantity: 20, terrainDelta: [0, 4], radius: 10,
       items: [
-        locItem('beehive', 0.25),
+        locItem('Beehive', 0.25),
       ],
     },
     'WoodHouse',
@@ -550,7 +550,7 @@ export const locations: LocationConfig[] = [
     1, 'WoodHouse4', ['Meadows'],
     { quantity: 20, terrainDelta: [0, 4], radius: 8,
       items: [
-        locItem('beehive', 0.25),
+        locItem('Beehive', 0.25),
       ],
     },
     'WoodHouse',
@@ -559,7 +559,7 @@ export const locations: LocationConfig[] = [
     1, 'WoodHouse5', ['Meadows'],
     { quantity: 20, terrainDelta: [0, 4], radius: 8,
       items: [
-        locItem('beehive', 0.25),
+        locItem('Beehive', 0.25),
       ],
     },
     'WoodHouse',
@@ -568,7 +568,7 @@ export const locations: LocationConfig[] = [
     1, 'WoodHouse6', ['Meadows'],
     { quantity: 20, terrainDelta: [0, 4], radius: 8,
       items: [
-        locItem('beehive', 0.25),
+        locItem('Beehive', 0.25),
         locItem('TreasureChest_meadows', 1),
       ],
     },
@@ -578,7 +578,7 @@ export const locations: LocationConfig[] = [
     1, 'WoodHouse7', ['Meadows'],
     { quantity: 20, terrainDelta: [0, 4], radius: 8,
       items: [
-        locItem('beehive', 0.25),
+        locItem('Beehive', 0.25),
         locItem('TreasureChest_meadows', 0.5),
       ],
     },
@@ -595,7 +595,7 @@ export const locations: LocationConfig[] = [
     1, 'WoodHouse9', ['Meadows'],
     { quantity: 20, terrainDelta: [0, 4], radius: 8,
       items: [
-        locItem('beehive', 0.25),
+        locItem('Beehive', 0.25),
         locItem('TreasureChest_meadows', 0.5),
       ],
     },
@@ -605,7 +605,7 @@ export const locations: LocationConfig[] = [
     1, 'WoodHouse10', ['Meadows'],
     { quantity: 20, terrainDelta: [0, 4], radius: 8,
       items: [
-        locItem('beehive', 0.25),
+        locItem('Beehive', 0.25),
         locItem('TreasureChest_meadows', 0.5),
       ],
     },
@@ -615,7 +615,7 @@ export const locations: LocationConfig[] = [
     1, 'WoodHouse11', ['Meadows'],
     { quantity: 20, terrainDelta: [0, 4], radius: 8,
       items: [
-        locItem('beehive', 0.25),
+        locItem('Beehive', 0.25),
         locItem('TreasureChest_meadows', 0.5),
       ],
     },
@@ -634,7 +634,7 @@ export const locations: LocationConfig[] = [
     1, 'WoodHouse13', ['Meadows'],
     { quantity: 20, terrainDelta: [0, 4], radius: 9,
       items: [
-        locItem('beehive', 0.25),
+        locItem('Beehive', 0.25),
         locItem('TreasureChest_meadows', 0.5),
       ],
     },
@@ -879,7 +879,7 @@ export const locations: LocationConfig[] = [
         locItem('Crow', 1, 2),
         // lvl1
         locItem([
-          locItem('beehive', 0.281),
+          locItem('Beehive', 0.281),
           locItem('TreasureChest_blackforest'),
           locItem('Greydwarf', 0.5),
           locItem('Greydwarf_Elite', 0.5),
