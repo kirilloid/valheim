@@ -26,7 +26,7 @@ function MapData({ mapData, id, onChange }: { mapData: TMapData; id: BigInt; onC
         const dx = (x - SIZE / 2);
         const dy = (y - SIZE / 2);
         if (dx * dx + dy * dy > SIZE_2) continue;
-        const offset = (y * tileSize + x) * (tileSize / SIZE);
+        const offset = ((SIZE - y - 1) * tileSize + x) * (tileSize / SIZE);
         const bitThey = (mapData.exploredOthers[offset >> 3]! >> (offset & 7)) & 1;
         const bitMe = (mapData.explored[offset >> 3]! >> (offset & 7)) & 1;
         imageData.data[(y * SIZE + x) * 4 + 3] += bitMe ? 255 : bitThey ? 128 : 0;
@@ -36,7 +36,7 @@ function MapData({ mapData, id, onChange }: { mapData: TMapData; id: BigInt; onC
   }, [mapData]);
 
   return <section>
-    <h2>Unknown world {(Number(id) >>> 0).toString(16)}</h2>
+    <h2>Unknown world {Number(id).toString(16)}</h2>
     {mapData.version < 7 && <p>
       This world data uses old format. Do you want to upgrade &amp; save 4MB?
       {' '}

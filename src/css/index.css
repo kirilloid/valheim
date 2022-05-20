@@ -6,7 +6,7 @@
   --color-primary: #007bff;
   --color-secondary: #6c757d;
   --color-danger: #dc3545;
-  --color-warning: #ffc107; 
+  --color-warning: #ffc107;
   --color-info: #17a2b8;
   --color-modded: teal;
 
@@ -58,6 +58,7 @@ body {
   --color-primary: #5865F2;
   --color-secondary: #4F545C;
   --color-danger: #ED4245;
+  --color-warning: #ffc107;
   --color-info: #1AAFF4;
   --color-modded: aqua;
   --color-background: 54, 57, 63;
