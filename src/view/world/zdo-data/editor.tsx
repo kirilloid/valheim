@@ -3,17 +3,18 @@ import React, { useContext } from 'react';
 import type { GameComponent } from '../../../types';
 import type { ZDO } from '../types';
 
+import { flip } from '../../../model/utils';
+import { stableHashCode } from '../../../model/hash';
+import { VirtualItem } from '../../../model/zdo-containers';
 import { data, extraData } from '../../../data/itemDB';
 import { getId, keys, prefabHashes } from '../../../data/zdo';
 
 import { InterfaceFields } from '../zdo-props';
 import { ItemIcon } from '../../parts/Icon';
 import { TranslationContext } from '../../../effects';
-import { flip, stableHashCode } from '../../../model/utils';
 import { ValueProps } from '../../parts/types';
 import { ContainedItemComp } from '../zdo-props/items';
 import { List } from '../../helpers';
-import { VirtualItem } from '../../../model/zdo-containers';
 
 function ZdoSpecialData<T>(props: { data?: Map<number, T>, stringify: (value: T) => string }) {
   if (props == null) return null;

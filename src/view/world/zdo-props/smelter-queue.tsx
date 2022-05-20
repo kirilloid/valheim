@@ -3,7 +3,8 @@ import React, { useContext } from 'react';
 import type { ValueProps } from '../../parts/types';
 import type { ZDO } from '../types';
 
-import { groupBy, stableHashCode as strHash } from '../../../model/utils';
+import { groupBy } from '../../../model/utils';
+import { stableHashCode as strHash } from '../../../model/hash';
 import { TranslationContext } from '../../../effects';
 
 export function SmelterQueueComp({ value: zdo }: ValueProps<ZDO>) {

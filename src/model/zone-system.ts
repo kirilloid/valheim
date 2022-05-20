@@ -1,13 +1,14 @@
 import { random } from './random';
 
-import { locations } from '../data/location';
+import type { Quaternion, Vector2i, Vector3 } from './utils';
 import { LocationConfig } from '../types';
-import { Quaternion, stableHashCode, Vector2i, Vector3 } from './utils';
+import { stableHashCode } from './hash';
 import { WATER_LEVEL, ZONE_SIZE } from './game';
 import { Biome as BiomeEnum, BiomeArea, WorldGenerator } from './world-generator';
 import { zoneId } from './zdo-selectors';
-import { objects } from '../data/objects';
 import { Heightmap } from './heightmap';
+import { objects } from '../data/objects';
+import { locations } from '../data/location';
 
 export type RegisteredLocation = {
   location: LocationConfig;

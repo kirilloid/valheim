@@ -1,6 +1,7 @@
 import type { ZDO } from '../types';
 import { PackageReader, PackageWriter } from '../Package';
-import { Quaternion, stableHashCode, Vector3 } from '../../model/utils';
+import { stableHashCode } from '../../model/hash';
+import { Quaternion, Vector3 } from '../../model/utils';
 
 const PREFAB_HASH = stableHashCode('prefab');
 

@@ -1,4 +1,4 @@
-import { stableHashCode } from '../model/utils';
+import { stableHashCode } from '../model/hash';
 import { forestcrypt, gobvill, sunkencrypt, woodfarm, CampConfig, DungeonRoomsConfig } from './rooms';
 
 export const roomHashes = new Map<number, string>();

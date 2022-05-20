@@ -3,7 +3,7 @@ import React from 'react';
 import type { ValueProps } from '../../parts/types';
 import type { ZDO } from '../types';
 
-import { stableHashCode } from '../../../model/utils';
+import { stableHashCode } from '../../../model/hash';
 
 export const idComp = (key: string) => {
   const hash = stableHashCode(key);

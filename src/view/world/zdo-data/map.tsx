@@ -1,15 +1,15 @@
 import React, { useLayoutEffect, useRef } from 'react';
+import classNames from 'classnames';
 
-import type { ZDO } from '../types';
 import type { Biome, EntityId } from '../../../types';
 
 import { WORLD_SIZE } from '../../../model/game';
-import { nop, runGenerator, stableHashCode, Vector3 } from '../../../model/utils';
+import { nop, runGenerator, Vector3 } from '../../../model/utils';
+import { stableHashCode } from '../../../model/hash';
 
 import { creatures } from '../../../data/creatures';
 import { resources } from '../../../data/resources';
 import { objects } from '../../../data/objects';
-import classNames from 'classnames';
 
 const HIGHLIGHT_MARKER_LIMIT = 1000;
 

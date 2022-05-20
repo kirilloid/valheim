@@ -3,7 +3,7 @@ import React from 'react';
 import type { ValueProps } from '../../parts/types';
 import type { ZDO } from '../types';
 
-import { stableHashCode } from '../../../model/utils';
+import { stableHashCode } from '../../../model/hash';
 import { readBase64 } from '../../../file/base64';
 
 const healthHash = stableHashCode('health');

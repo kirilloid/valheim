@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import type { ValueProps } from '../../parts/types';
 import type { ZDO } from '../types';
 
-import { stableHashCode as hash } from '../../../model/utils';
+import { stableHashCode as hash } from '../../../model/hash';
 import { prefabHashes } from '../../../data/zdo';
 import { TranslationContext } from '../../../effects';
 

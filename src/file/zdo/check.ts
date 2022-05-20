@@ -2,7 +2,7 @@ import type { ZDO, ZDOCorruption } from '../types';
 import type { WorldData } from '../World';
 import { Mistake, MistakeLevel } from '../types';
 import { offsets } from './offset';
-import { stableHashCode } from '../../model/utils';
+import { stableHashCode } from '../../model/hash';
 
 export const MistakeLevels: Record<Mistake, MistakeLevel> = {
   [Mistake.None]: MistakeLevel.OK,

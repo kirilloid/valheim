@@ -4,7 +4,7 @@ import type { ValueProps } from '../../parts/types';
 import type { ZDO } from '../types';
 import type { Item } from '../../../types';
 
-import { stableHashCode } from '../../../model/utils';
+import { stableHashCode } from '../../../model/hash';
 import { prefabHashes } from '../../../data/zdo';
 import { floatComp } from './float';
 import { intComp } from './int';

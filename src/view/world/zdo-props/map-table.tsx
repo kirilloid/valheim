@@ -3,7 +3,7 @@ import React from 'react';
 import type { ValueProps } from '../../parts/types';
 import type { ZDO } from '../types';
 
-import { stableHashCode } from '../../../model/utils';
+import { stableHashCode } from '../../../model/hash';
 import * as MapData from '../../../file/MapData';
 
 const MapTableHash = stableHashCode('data');

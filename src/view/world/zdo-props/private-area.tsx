@@ -3,7 +3,7 @@ import React from 'react';
 import type { ValueProps } from '../../parts/types';
 import type { ZDO } from '../types';
 
-import { stableHashCode as strHash } from '../../../model/utils';
+import { stableHashCode as strHash } from '../../../model/hash';
 import { boolComp } from './bool';
 
 type ACLEntry = {

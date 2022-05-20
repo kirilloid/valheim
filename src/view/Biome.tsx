@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 
 import '../css/Biome.css';
 
-import type { Biome, BiomeConfig, EntityId, GameObject, Item, PhysicalObject, Resource, Structure } from '../types';
+import type { BiomeConfig, EntityId, GameObject, Item, PhysicalObject, Resource, Structure } from '../types';
 import { biomes } from '../data/location';
 import { maxLvl } from '../data/creatures';
 import { data } from '../data/itemDB';

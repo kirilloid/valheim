@@ -4,7 +4,7 @@ import type { Piece } from '../../../types';
 import type { ValueProps } from '../../parts/types';
 import type { ZDO } from '../types';
 
-import { stableHashCode as strHash } from '../../../model/utils';
+import { stableHashCode as strHash } from '../../../model/hash';
 
 import { prefabHashes } from '../../../data/zdo';
 import { data } from '../../../data/itemDB';

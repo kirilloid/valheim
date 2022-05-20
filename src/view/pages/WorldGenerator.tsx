@@ -2,7 +2,8 @@ import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 
 import { useParams, useHistory } from 'react-router-dom';
 
 import { WORLD_SIZE } from '../../model/game';
-import { stableHashCode, toggleItem, Vector3 } from '../../model/utils';
+import { toggleItem, Vector3 } from '../../model/utils';
+import { stableHashCode } from '../../model/hash';
 import { generateZones } from '../../model/worker/generate-zones';
 import { generateTerrain } from '../../model/worker/generate-terrain';
 import { RegisteredLocation } from '../../model/zone-system';

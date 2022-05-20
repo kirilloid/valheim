@@ -1,4 +1,4 @@
-import { crc32, stableHashCode } from '../model/utils';
+import { crc32, stableHashCode } from '../model/hash';
 import { prefabNames, modPrefabNames } from './prefabs';
 import { data } from './itemDB';
 import { creatures } from  './creatures';

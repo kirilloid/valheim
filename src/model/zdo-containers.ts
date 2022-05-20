@@ -2,7 +2,7 @@ import type { ZDO } from '../file/types';
 
 import { readBase64, writeBase64 } from '../file/base64';
 import * as Inventory from '../file/Inventory';
-import { stableHashCode } from './utils';
+import { stableHashCode } from './hash';
 import { PackageWriter } from '../file/Package';
 import { prefabHashes } from '../data/zdo';
 import { data } from '../data/itemDB';

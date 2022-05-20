@@ -1,4 +1,4 @@
-import { stableHashCode } from '../model/utils';
+import { stableHashCode } from '../model/hash';
 import { locations } from './location';
 
 export const locationHashes = new Map<number, string>();

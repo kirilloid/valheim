@@ -1,5 +1,6 @@
 import type { ZDO, ZDOID } from '../types';
-import { Quaternion, stableHashCode, Vector2i, Vector3 } from '../../model/utils';
+import { Quaternion, Vector2i, Vector3 } from '../../model/utils';
+import { stableHashCode } from '../../model/hash';
 import { PackageReader, PackageWriter } from '../Package';
 import { FloatBinMap, IntBinMap, LongBinMap, QuaternionBinMap, Vector3BinMap } from './BinMap';
 import { offsets } from './offset';

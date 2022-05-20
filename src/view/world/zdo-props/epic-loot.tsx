@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import type { ValueProps } from '../../parts/types';
 import type { ZDO } from '../types';
 
-import { stableHashCode } from '../../../model/utils';
+import { stableHashCode } from '../../../model/hash';
 import { extractExtraData } from '../../../mods/epic-loot';
 
 import { TranslationContext } from '../../../effects';

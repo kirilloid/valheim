@@ -3,13 +3,13 @@ import { defaultMemoize } from 'reselect';
 import type { ZDO, ZDOID } from '../file/types';
 import type { Biome as BiomeUnion, EntityId, Pair } from '../types';
 
-import { assertNever, stableHashCode, Vector2i } from './utils';
+import { Vector2i } from './utils';
+import { stableHashCode } from './hash';
 import { WORLD_RADIUS, ZONE_SIZE } from './game';
 import { WorldGenerator, Biome as BiomeEnum } from './world-generator';
 
 import { getId, prefabHashes } from '../data/zdo';
 import { data } from '../data/itemDB';
-import { mapping } from '../data/mapping';
 import { locationHashes } from '../data/location-hashes';
 import { modPrefabNames } from '../data/prefabs';
 

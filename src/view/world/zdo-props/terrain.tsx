@@ -3,7 +3,8 @@ import React, { useLayoutEffect, useRef } from 'react';
 import type { ValueProps } from '../../parts/types';
 import type { ZDO } from '../types';
 
-import { lerp, stableHashCode } from '../../../model/utils';
+import { lerp } from '../../../model/utils';
+import { stableHashCode } from '../../../model/hash';
 import { colorMap } from '../../../model/color-map';
 import * as Terrain from '../../../file/TerrainComp';
 

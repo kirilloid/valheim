@@ -4,7 +4,7 @@ import type { ValueProps } from '../../parts/types';
 import type { ZDO } from '../types';
 import type { Item } from '../../../types';
 
-import { stableHashCode } from '../../../model/utils';
+import { stableHashCode } from '../../../model/hash';
 import { VirtualItem } from '../../../model/zdo-containers';
 import * as Inventory from '../../../file/Inventory';
 import { readBase64 } from '../../../file/base64';

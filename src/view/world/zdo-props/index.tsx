@@ -3,7 +3,7 @@ import React from 'react';
 import type { GameComponent } from '../../../types';
 import type { ValueProps } from '../../parts/types';
 import type { ZDO } from '../types';
-import { crc32, stableHashCode } from '../../../model/utils';
+import { crc32, stableHashCode } from '../../../model/hash';
 
 import { boolComp } from './bool';
 import { colorComp } from './color';
