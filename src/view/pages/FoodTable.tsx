@@ -98,7 +98,7 @@ export function FoodTable() {
             {Radio('duration')}
             <label htmlFor="sort_duration">
               <Icon id="time" alt="" size={16} />
-              <span className="FoodTable__extra">{translate('ui.time')}</span>
+              <span className="FoodTable__extra">{translate('ui.duration')}</span>
             </label>
           </th>
           <th>

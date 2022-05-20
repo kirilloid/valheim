@@ -18,7 +18,7 @@ export const intComp = (key: string, extraProps: ExtrasProps = {}) => {
     return <React.Fragment key={key}>
       <dt>{key}</dt>
       <dd>
-        <input type="number"
+        <input type="number" inputMode="numeric"
           max={max}
           {...extraProps}
           value={value}

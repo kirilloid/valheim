@@ -19,7 +19,7 @@ export const floatComp = (key: string, extraProps: ExtrasProps = {}) => {
     return <React.Fragment key={key}>
       <dt>{key}</dt>
       <dd>
-        <input type="number"
+        <input type="number" inputMode="numeric"
           max={max}
           {...extraProps}
           placeholder={String(defaultValue)}

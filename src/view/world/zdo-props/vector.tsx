@@ -13,19 +13,19 @@ export const vectorComp = (key: string) => {
       <dt>{key}</dt>
       <dd>
         {vector != null && <>
-          <label>x: <input type="number" style={{ width: '5em' }} value={vector.x}
+          <label>x: <input type="number" inputMode="numeric" style={{ width: '5em' }} value={vector.x}
             onChange={e => {
               vector.x = +e.target.value;
               zdo.vec3.set(hash, vector);
               onChange(zdo);
             }} /></label>
-          <label>y: <input type="number" style={{ width: '5em' }} value={vector.y}
+          <label>y: <input type="number" inputMode="numeric" style={{ width: '5em' }} value={vector.y}
             onChange={e => {
               vector.y = +e.target.value;
               zdo.vec3.set(hash, vector);
               onChange(zdo);
             }} /></label>
-          <label>z: <input type="number" style={{ width: '5em' }} value={vector.z}
+          <label>z: <input type="number" inputMode="numeric" style={{ width: '5em' }} value={vector.z}
             onChange={e => {
               vector.z = +e.target.value;
               zdo.vec3.set(hash, vector);

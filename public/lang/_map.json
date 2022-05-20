@@ -927,7 +927,7 @@
     "ui.tamed.breeds": "",
     "ui.tameable": "",
 
-    "ui.time": "",
+    "ui.timeOfDay": "",
     "ui.total": "item_total",
     "ui.usedToBuild": "inventory_recipes",
     "ui.usedToCraft": "inventory_recipes",

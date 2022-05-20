@@ -44,7 +44,8 @@ function ItemPropEditor({ label, prop, value, max, onChange }: {
 }) {
   return <>
     <dt><label htmlFor={prop}>{label}</label></dt>
-    <dd><input type="number" id={prop} value={value} max={max}
+    <dd><input type="number" inputMode="numeric"
+      id={prop} value={value} max={max}
       onChange={e => onChange(Number(e.target.value))} /></dd>
   </>
 }

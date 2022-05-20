@@ -174,7 +174,7 @@ function SearchEvent({ id, text, onClick }: BaseSearchItemProps) {
     <span>
       {event.spawns.map(s => <ItemIcon key={s.id} item={data[s.id]} useAlt />)}
       {' '}
-      <Icon id="time" alt={translate('ui.time')} size={16} />
+      <Icon id="time" alt={translate('ui.duration')} size={16} />
       {' '}
       {timeI2S(event.duration)} 
     </span>
@@ -200,11 +200,11 @@ function ItemExtra({ item }: { item: Resource }) {
       {item.Food.health}
       <Icon id="walknut" alt={translate('ui.stamina')} size={16} />
       {item.Food.stamina}
-      <Icon id="time" alt={translate('ui.time')} size={16} />
+      <Icon id="time" alt={translate('ui.duration')} size={16} />
       {Math.round(item.Food.duration / 60)}
     </span>
   }
-  if (respawn) return <span>{days(respawn)} <Icon id="time" alt={translate('ui.time')} size={16} /></span>;
+  if (respawn) return <span>{days(respawn)} <Icon id="time" alt={translate('ui.days')} size={16} /></span>;
   if (item.Potion != null) { 
     return <>
       <span>
@@ -337,7 +337,7 @@ function SearchObject({ id, text, onClick }: BaseSearchItemProps) {
                 –
                 {days(item.Plant.growTime[1]).toFixed(1)}
                 {' '}
-                <Icon id="time" alt={translate('ui.time')} size={16} />
+                <Icon id="time" alt={translate('ui.days')} size={16} />
               </span>
             : null
         }

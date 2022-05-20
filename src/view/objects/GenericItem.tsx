@@ -27,11 +27,11 @@ export function GenericItem({ item }: { item: Resource }) {
     {Potion != null && <section>
       <h2>{translate('ui.itemType.potion')}</h2>
       <dl>
-        {Potion.health ? <><dt>{translate('ui.health')}</dt><dd>+{Potion.health[0]} over {timeI2S(Potion.health[1])}</dd></> : null}
-        {Potion.stamina ? <><dt>{translate('ui.stamina')}</dt><dd>+{Potion.stamina[0]} over {timeI2S(Potion.stamina[1])}</dd></> : null}
-        {Potion.healthRegen ? <><dt>health regen</dt><dd>{Potion.healthRegen * 100}%</dd></> : null}
-        {Potion.staminaRegen ? <><dt>stamina regen</dt><dd>{Potion.staminaRegen * 100}%</dd></> : null}
-        {Potion.damageModifiers ? <><dt>resistance</dt><dd>{Object.keys(Potion.damageModifiers).map(type => translate(`ui.damageType.${type}`)).join(', ')}</dd></> : null}
+        {Potion.health ? <><dt>{translate('ui.health')}</dt><dd>+{Potion.health[0]} / {timeI2S(Potion.health[1])}</dd></> : null}
+        {Potion.stamina ? <><dt>{translate('ui.stamina')}</dt><dd>+{Potion.stamina[0]} / {timeI2S(Potion.stamina[1])}</dd></> : null}
+        {Potion.healthRegen ? <><dt>{translate('ui.healthRegen')}</dt><dd>{Potion.healthRegen * 100}%</dd></> : null}
+        {Potion.staminaRegen ? <><dt>{translate('ui.staminaRegen')}</dt><dd>{Potion.staminaRegen * 100}%</dd></> : null}
+        {Potion.damageModifiers ? <><dt>{translate('ui.damageModifier')}</dt><dd>{Object.keys(Potion.damageModifiers).map(type => translate(`ui.damageType.${type}`)).join(', ')}</dd></> : null}
         <dt>cooldown</dt><dd>{timeI2S(Potion.cooldown)}</dd>
       </dl>
     </section>}
@@ -48,7 +48,7 @@ export function GenericItem({ item }: { item: Resource }) {
           ? <><dt>{translate('ui.nonTeleportable')}</dt><dd><Icon id="noteleport" alt="" size={24} /></dd></>
           : null}
       </dl>
-      {item.Value != null && item.id !== 'Coins' && <>Have no other use rather than to be sold to trader</>}
+      {item.Value != null && item.id !== 'Coins' && <>Has no other use rather than to be sold to trader</>}
       </section>
     <Source id={item.id} />
   </>);

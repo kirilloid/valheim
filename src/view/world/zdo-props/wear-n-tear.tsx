@@ -23,7 +23,7 @@ export function WearNTearComp({ value: zdo, onChange }: ValueProps<ZDO>) {
   return <React.Fragment key="WearNTear">
     <dt>health</dt>
     <dd>
-      <input type="number"
+      <input type="number" inputMode="numeric"
         min="0"
         max={maxHp}
         placeholder={String(maxHp)}
@@ -36,7 +36,7 @@ export function WearNTearComp({ value: zdo, onChange }: ValueProps<ZDO>) {
     {support != null && <>
       <dt>support</dt>
       <dd>
-        <input type="number"
+        <input type="number" inputMode="numeric"
           min={support.minSupport}
           max={support.maxSupport}
           placeholder={String(support.maxSupport)}

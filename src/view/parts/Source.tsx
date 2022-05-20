@@ -57,16 +57,17 @@ function Station({ station }: { station: EntityId | null }) {
   return <InlineObjectWithIcon id={station} />;
 }
 
-const MaterialHeader = ({ cols }: { cols: number }) => (
-  <thead>
+const MaterialHeader = ({ cols }: { cols: number }) => {
+  const translate = useContext(TranslationContext);
+  return <thead>
     <tr key="header">
       <th key="icon"></th>
-      <th key="name">level</th>
+      <th key="name">{translate('ui.quality')}</th>
       {Array.from({ length: cols }, (_, i: number) =>
         <th key={`lvl${i+1}`} className="RecipeItems__value">{i + 1}</th>)}
     </tr>
-  </thead>
-);
+  </thead>;
+};
 
 function Materials({
   materials, materialsUp = {}, maxLvl = 1
@@ -167,7 +168,7 @@ export function Recipe({ item }: { item: GameObject }) {
         const { number, materials, time } = recipe;
         return <dl>
           <dt>station</dt><dd><Station station={station} /> {level ? `lvl ${level}` : ''}</dd>
-          <dt>{translate('ui.time')}</dt><dd><Icon id="time" alt="" size={16} />{timeI2S(time)}</dd>
+          <dt>{translate('ui.duration')}</dt><dd><Icon id="time" alt="" size={16} />{timeI2S(time)}</dd>
           <dt>{translate('ui.resources')}</dt><dd>{
           Object.keys(materials).length
             ? <Materials materials={materials} />

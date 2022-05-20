@@ -416,7 +416,7 @@ export function Weather() {
       </div>
     </div>
     <div className="Weather__header">
-      <div className="Weather__time">{translate('ui.time')}</div>
+      <div className="Weather__time">{translate('ui.timeOfDay')}</div>
       <div className="Weather__biome"></div>
       {biomeIds.map(id => <div key={id} className="Weather__biome">
         {biome[id]}
