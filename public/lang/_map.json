@@ -334,7 +334,7 @@
     "piece_spinningwheel": "piece_spinningwheel",
     "wood_floor": "piece_woodfloor2x2",
     "wood_floor_1x1": "piece_woodfloor1x1",
-    "wood_wall": "piece_woodwall",
+    "woodwall": "piece_woodwall",
     "wood_wall_half": "piece_woodwallhalf",
     "wood_wall_quarter": "piece_woodwallquarter",
     "wood_window": "piece_woodwindowshutter",
