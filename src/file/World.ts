@@ -2,7 +2,7 @@ import type { ZDO, ZDOCorruption, ZDOData, ZDOID } from './types';
 
 import type { Vector2i, Vector3 } from '../model/utils';
 import { PackageReader, PackageWriter } from './Package';
-import { readZdoFull as readZdo, setVersion, errorToMistake } from './zdo';
+import { readZdoMmap as readZdo, setVersion, errorToMistake } from './zdo';
 
 export type ZoneSystemData = {
   generatedZones: Vector2i[];

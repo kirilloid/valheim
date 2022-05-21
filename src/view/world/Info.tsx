@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { defaultMemoize } from 'reselect';
 
 import type { EditorProps, ValueProps } from '../parts/types';
@@ -101,33 +101,36 @@ export function WorldMetaInfo({ value, onChange, file }: EditorProps<WorldMeta>)
 
 export function WorldInfo({ value, onChange, file, disabled }: EditorProps<WorldData>) {
   const { netTime, randEvent, zdo, version, zoneSystem } = value;
+  const onZdoChange = useCallback(zdo => onChange({ ...value, zdo }), [value, onChange]);
+  const onZoneSystemChange = useCallback(zoneSystem => onChange({ ...value, zoneSystem }), [value, onChange]);
   const tabs = [{
     title: 'File',
-    renderer: () => <FileInfo file={file} version={version} />,
+    renderer: useCallback(() => <FileInfo file={file} version={version} />, [file, version]),
   }, {
     title: 'Progress',
-    renderer: () => {
-      const maxTime = getMaxTimeCached(zdo.zdos);
+    renderer: function Progress() {
+      const maxTime = getMaxTimeCached(value.zdo.zdos);
+      const onTimeChange = useCallback(() => onChange({ ...value, netTime: maxTime }), [maxTime]);
       return <div className="WorldEdit">
         <div className="WorldEdit__Time">
           <h2>world time</h2>
           <p>{showTime(netTime)}</p>
           {Math.abs(netTime - maxTime) > 10 && <p key="fix-time">
             The time seems to be off{' '}
-            <button className="btn btn--primary" onClick={() => onChange({ ...value, netTime: maxTime })}>Fix it</button>
+            <button className="btn btn--primary" onClick={onTimeChange}>Fix it</button>
           </p>}          
         </div>
         {randEvent != null && <RandomEvents value={randEvent} />}
-        {zoneSystem != null && <ZoneSystem value={zoneSystem} onChange={zoneSystem => onChange({ ...value, zoneSystem })} />}
+        {zoneSystem != null && <ZoneSystem value={zoneSystem} onChange={onZoneSystemChange} />}
         <WorldDiscovery value={value} />
       </div>
     },
   }, {
     title: 'Objects',
-    renderer: () => <ZdoData value={zdo} onChange={zdo => onChange({ ...value, zdo })} />
+    renderer: useCallback(() => <ZdoData value={zdo} onChange={onZdoChange} />, [zdo, onZdoChange]),
   }, {
     title: 'Recovery',
-    renderer: () => <CorruptionManager value={value} onChange={onChange} />
+    renderer: useCallback(() => <CorruptionManager value={value} onChange={onChange} />, [value, onChange]),
   }];
   return <section className={disabled ? 'FileEditor--disabled' : ''}>
     <h1>{file.name} world</h1>

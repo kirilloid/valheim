@@ -59,12 +59,14 @@ export const ItemEditor = React.memo(({
   onChange,
   containerIndex,
   playersMap,
+  onItemLinkClicked,
 }: {
-  zdo: ZDO,
-  onChange: (value: ZDO) => void,
-  containerIndex: number,
-  version: number,
-  playersMap: Map<bigint, string>
+  zdo: ZDO;
+  onChange: (value: ZDO) => void;
+  containerIndex: number;
+  version: number;
+  playersMap: Map<bigint, string>;
+  onItemLinkClicked: (zdo: ZDO) => void;
 }) => {
   const translate = useContext(TranslationContext);
 
@@ -76,8 +78,15 @@ export const ItemEditor = React.memo(({
   return <>
     <h2>{
       vItem
-      ? <><ItemIcon item={data[vItem.id]} variant={vItem.variant} /> {translate(vItem.id)} (<ItemIcon item={item} />)</>
-      : <><ItemIcon item={item} variant={zdo.ints.get(variantHash)} /> {currentId && translate(currentId)}</>
+      ? <>
+          <ItemIcon item={data[vItem.id]} variant={vItem.variant} />
+          {' '}{translate(vItem.id)}{' '}
+          <span onClick={() => onItemLinkClicked(zdo)}>(<ItemIcon item={item} />)</span>
+        </>
+      : <>
+          <ItemIcon item={item} variant={zdo.ints.get(variantHash)} />
+          {' '}{currentId && translate(currentId)}
+        </>
     }</h2>
     <dl>
       <dt>position</dt><dd>{zdo.position.x.toFixed(3)} / {zdo.position.z.toFixed(3)} / {zdo.position.y.toFixed(3)}</dd>

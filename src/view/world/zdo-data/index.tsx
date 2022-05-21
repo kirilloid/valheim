@@ -1,19 +1,20 @@
-import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { defaultMemoize, createSelector } from 'reselect';
+import classNames from 'classnames';
 
 import '../../../css/ZdoData.css';
 
 import type { ValueProps } from '../../parts/types';
 import type { ZDOData } from '../types';
 
-import { EMPTY_RESULT, getSearcher, getPlayers, SearchEntry } from '../../../model/zdo-selectors';
+import { EMPTY_RESULT, getSearcher, getPlayers, SearchEntry, SearchIndex } from '../../../model/zdo-selectors';
 
 import { PanView } from '../../parts/PanView';
 import { TranslationContext } from '../../../effects';
 import { ZdoLike, ZdoMap } from './map';
 import { ItemEditor } from './editor';
 import { lerp, lerpStep } from '../../../model/utils';
-import classNames from 'classnames';
+import { prefabHashes } from '../../../data/zdo';
 
 const getItems = createSelector<{ zdos: ZdoLike[], indices: number[] }, ZdoLike[], number[], ZdoLike[]>(
   obj => obj.zdos,
@@ -45,6 +46,15 @@ function MapUI({ zdos, selected, current, size }: { zdos: ZdoLike[]; selected: Z
 
 const getSearcherCached = defaultMemoize(getSearcher);
 const getPlayersCached = defaultMemoize(getPlayers);
+const searchItemsCached = defaultMemoize((indices: SearchIndex[]) => indices.map(i => i.item))
+const searchSliceCached = defaultMemoize((indices: SearchIndex[], zdos: ZdoLike[]) => indices.slice(0, 1000)
+  .map((globalIdx, typeIdx) => {
+    const item = zdos[globalIdx.item]!;
+    return <option key={`${globalIdx.item}_${globalIdx.container}`} value={typeIdx}>
+      {item.position.x.toFixed(3)} / {item.position.z.toFixed(3)}
+      {globalIdx.container > -1 ? ` [${globalIdx.container}]` : null}
+    </option>
+  }));
 
 const getWidth = () => document.querySelector<HTMLDivElement>('div.App')?.offsetWidth ?? Math.min(window.innerWidth, 960);
 
@@ -74,6 +84,13 @@ export const ZdoData = React.memo(function ZdoData(props: ValueProps<ZDOData>) {
     return () => window.removeEventListener('resize', onResize, false);
   }, [setWidth]);
 
+  const updateTerm = useCallback(e => setTerm(e.target.value), [setTerm]);
+  const clearEntry = useCallback(() => {
+    setEntry(undefined);
+    setIndex(0);
+  }, [setEntry, setIndex]);
+  const updateIndex = useCallback(e => setIndex(+e.target.value), [setIndex]);
+
   return <div className={classNames('ZdoData', {
     'ZdoData--map-expanded': mapExpanded,
   })}>
@@ -82,14 +99,14 @@ export const ZdoData = React.memo(function ZdoData(props: ValueProps<ZDOData>) {
       <MapUI
         size={mapExpanded ? width : 329}
         zdos={zdos}
-        selected={getItems({ zdos, indices: searchIndices.map(i => i.item) })}
+        selected={getItems({ zdos, indices: searchItemsCached(searchIndices) })}
         current={zdo} />
     </div>
     <div className="ZdoData__Selector">
       {entry
-        ? <span>{entry.text} <button className="btn" onClick={() => setEntry(undefined)}>&times;</button></span>
+        ? <span>{entry.text} <button className="btn" onClick={clearEntry}>&times;</button></span>
         : <>
-            <input value={term} onChange={e => setTerm(e.target.value)}/>
+            <input value={term} onChange={updateTerm}/>
             <ul style={{ position: 'absolute' }}>
               {zdoSearcher(term).map(se => <li key={se.id} onClick={() => {
                 setTerm('');
@@ -103,16 +120,8 @@ export const ZdoData = React.memo(function ZdoData(props: ValueProps<ZDOData>) {
       {searchIndices.length > 1 && <>
         {searchIndices.length > 1000 && <><br/><em>Only first 1000 objects are listed</em></>}
         <br />
-        <select onChange={e => {
-          setIndex(+e.target.value);
-        }} value={index}>
-          {searchIndices.slice(0, 1000).map((globalIdx, typeIdx) => {
-            const item = zdos[globalIdx.item]!;
-            return <option key={`${globalIdx.item}_${globalIdx.container}`} value={typeIdx}>
-              {item.position.x.toFixed(3)} / {item.position.z.toFixed(3)}
-              {globalIdx.container > -1 ? ` [${globalIdx.container}]` : null}
-            </option>
-          })}
+        <select onChange={updateIndex} value={index}>
+          {searchSliceCached(searchIndices, zdos)}
         </select>
       </>}
     </div>
@@ -125,6 +134,15 @@ export const ZdoData = React.memo(function ZdoData(props: ValueProps<ZDOData>) {
           props.onChange(props.value);
         }}
         containerIndex={searchIndex.container}
+        onItemLinkClicked={zdo => {
+          const id = prefabHashes.get(zdo.prefab);
+          if (id == null) return;
+          const se = zdoSearcher(translate(id))[0];
+          if (se == null) return;
+          const index = se.indices.findIndex(si => zdos[si.item] === zdo);
+          setEntry(se);
+          setIndex(index === -1 ? 0 : index);
+        }}
         version={version}
       />
       <hr style={{ width: '100%' }} />
@@ -133,7 +151,7 @@ export const ZdoData = React.memo(function ZdoData(props: ValueProps<ZDOData>) {
           onClick={() => {
             const newValue = {
               ...props.value,
-              zdos: zdos.filter((_, i) => i !== index),
+              zdos: props.value.zdos.filter((_, i) => i !== index),
             };
             if (searchIndices.length === 1) {
               setEntry(undefined);

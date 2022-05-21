@@ -18,8 +18,8 @@ import { TranslationContext } from '../../effects';
 export function PlayerInfo({ value: player, onChange, file, disabled } : EditorProps<Player>) {
   const translate = useContext(TranslationContext);
 
-  const onWorldsChange = useCallback((worlds: Player['worlds']) => onChange({ ...player, worlds }), [player]);
-  const onPlayerDataChange = useCallback((playerData: Player['playerData']) => onChange({ ...player, playerData }), [player]);
+  const onWorldsChange = useCallback((worlds: Player['worlds']) => onChange({ ...player, worlds }), [player, onChange]);
+  const onPlayerDataChange = useCallback((playerData: Player['playerData']) => onChange({ ...player, playerData }), [player, onChange]);
 
   const tabs = [
     {

@@ -129,7 +129,7 @@ export const getMaxTime = (zdos: ZDO[]): number => {
   return maxTime;
 };
 
-type SearchIndex = { item: number; container: number; };
+export type SearchIndex = { item: number; container: number; };
 export type SearchEntry = { id: string; text: string; subtype: string; indices: SearchIndex[] };
 
 const itemsHash = stableHashCode('items');

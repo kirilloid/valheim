@@ -27,7 +27,7 @@ export function PanView({ children, size, minZoom, maxZoom, onMouseMove, onZoomC
     }
   }, [sizes, setSizes]);
 
-  useEffect(updateSize, [size]);
+  useEffect(updateSize, [size, updateSize]);
   
   useLayoutEffect(() => {
     window.addEventListener('resize', updateSize);

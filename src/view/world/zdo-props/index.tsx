@@ -60,7 +60,7 @@ export const InterfaceFields: Partial<Record<GameComponent, React.ComponentType<
     floatComp('max_health'),
     floatComp('noise'),
     boolComp('tamed'),
-    enumComp('level', [[1, '0*'], [2, '1*'], [3, '2*']]),
+    intComp('level'),
     // quaternionComp('tiltrot'),
     vectorComp('BodyVelocity'),
     /* EpicLoot
@@ -100,14 +100,14 @@ export const InterfaceFields: Partial<Record<GameComponent, React.ComponentType<
   DungeonGenerator: [RoomsComp],
   Fermenter: [stringComp('Content'), timeComp('StartTime')],
   Fireplace: [floatComp('fuel'), timeComp('lastTime')],
-  Fish: [vectorComp('spawnpoint'),],
+  Fish: [vectorComp('spawnpoint')],
   FishingFloat: [idComp('RodOwner'), hashedItemComp('CatchID')],
   Humanoid: [boolComp('IsBlocking')],
   ItemDrop: [
     timeComp('SpawnTime'),
     ItemPropsComp,
     idComp('crafterID'),
-    stringComp('crafterName'), // <|extended data from EpicLoot|>
+    stringComp('crafterName'),
     EpicLootComp,
   ],
   ItemStand: [ItemComp],
