@@ -109,6 +109,7 @@ export function FileEditor<T>(props: Props<T>) {
               accept={`.${ext},.${ext}.old`}
               onChange={e => processFiles(e.target.files)} /></p>
             <p>Your files are stored in <code>C:\Users\%username%\AppData\LocalLow\IronGate\Valheim\</code></p>
+            {/* %ProgramFiles(x86)%\Steam\[YourIDNumber]\892970\ */}
           </>
         case 'picking':
           return <>

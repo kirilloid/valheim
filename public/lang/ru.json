@@ -54,6 +54,7 @@
     "CapeLox": "Плащ из шкуры быкозавра",
 
     "HelmetYule": "Праздничный колпак",
+    "HelmetMidsummerCrown": "Корона летнего солнцестояния",
     "HelmetDverger": "Венец дворфов",
     "HelmetDverger.tags": "шлем голова свет",
     "BeltStrength": "Мегингъёрд",
@@ -729,6 +730,10 @@
     "piece_banner05": "Зелёное знамя",
     "piece_banner06": "Триколор",
     "piece_banner07": "Бело-синий полосатый флаг",
+    "piece_banner08": "Желтый флаг",
+    "piece_banner09": "Фиолетовый флаг",
+    "piece_banner10": "Оранжевый флаг",
+    "piece_banner11": "Белый флаг",
     "piece_beehive": "Улей",
     "piece_beehive.tags": "мед пчел",
     "fermenter": "Бродильная бочка",

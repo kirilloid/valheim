@@ -58,6 +58,7 @@
     "CapeLox": "Lox cape",
 
     "HelmetYule": "Yule hat",
+    "HelmetMidsummerCrown": "Midsummer Crown",
     "HelmetDverger": "Dverger circlet",
     "HelmetDverger.tags": "helmet head light",
     "BeltStrength": "Megingjord",
@@ -755,6 +756,10 @@
     "piece_banner05": "Green banner",
     "piece_banner06": "Blue, red and white banner",
     "piece_banner07": "White and blue striped banner",
+    "piece_banner08": "Yellow banner",
+    "piece_banner09": "Purple banner",
+    "piece_banner10": "Orange banner",
+    "piece_banner11": "White banner",
     "piece_beehive": "Beehive",
     "piece_beehive.tags": "Honey",
     "fermenter": "Fermenter",
