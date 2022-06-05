@@ -1,6 +1,10 @@
 import { decode, encode } from '../model/utf8';
 import type { Quaternion, Vector2i, Vector3 } from '../model/utils';
 
+const VALUE_EMPTY = 0;
+const VALUE_DELETE = 1;
+const VALUE_SET = 2;
+ 
 export class PackageReader {
   private offset: number;
   private bytes: Uint8Array;
@@ -165,6 +169,19 @@ export class PackageReader {
     return result;
   }
 
+  public readArrayDiff<T>(reader: (this: PackageReader) => T): T[] & { cleared: boolean } {
+    const result: T[] & { cleared: boolean } = Object.assign([], { cleared: false });
+    const flags = this.readByte();
+    if ((flags & 1) !== 0) result.cleared = true;
+    if ((flags & 2) !== 0) {
+      const length = this.readInt();
+      for (let i = 0; i < length; i++) {
+        result.push(reader.call(this));
+      }
+    }
+    return result;
+  }
+
   public readMap<K, V>(
     keyReader: (this: PackageReader) => K,
     valueReader: (this: PackageReader) => V,
@@ -179,10 +196,53 @@ export class PackageReader {
     return result;
   }
 
+  public readMapDiff<K, V>(
+    keyReader: (this: PackageReader) => K,
+    valueReader: (this: PackageReader) => V,
+  ): Map<K, V | null> {
+    const result: Map<K, V | null> = this.readMap(keyReader, valueReader);
+    let operation = -1;
+    do {
+      operation = this.readByte();
+      switch (operation) {
+        case VALUE_EMPTY:
+          break;
+        case VALUE_DELETE: {
+          const key = keyReader.call(this);
+          result.set(key, null);
+          break;
+        }
+        case VALUE_SET: {
+          const key = keyReader.call(this);
+          const value = valueReader.call(this);
+          result.set(key, value);
+          break;
+        }
+        default:
+          throw new RangeError('Incorrect operation code');
+      }
+    } while (operation != 0);
+    return result;
+  }
+
   public readIf<T>(reader: (this: PackageReader) => T): T | undefined {
     const has = this.readBool();
     if (!has) return undefined;
     return reader.call(this);
+  }
+
+  public readIfDiff<T>(reader: (this: PackageReader) => T | undefined): T | undefined | null {
+    const flag = this.readByte();
+    switch (flag) {
+      case VALUE_EMPTY:
+        return undefined;
+      case VALUE_DELETE:
+        return null;
+      case VALUE_SET:
+        return reader.call(this);
+      default:
+        throw new RangeError('Wrong diff operation code');
+    }
   }
 
   public readIfSmallMap<K, V>(
@@ -355,6 +415,13 @@ export class PackageWriter {
       writer.call(this, values[i]!);
     }
   }
+  
+  public writeArrayDiff<T>(writer: (this: PackageWriter, value: T) => void, values: ArrayLike<T> & { cleared?: boolean }): void {
+    const added = values.length > 0;
+    const cleared = values.cleared;
+    this.writeByte((added ? 2 : 0) | (cleared ? 1 : 0));
+    this.writeArray(writer, values);
+  }
 
   public writeMap<K, V>(
     keyWriter: (this: PackageWriter, value: K) => void,
@@ -369,11 +436,40 @@ export class PackageWriter {
     }
   }
 
+  public writeMapDiff<K, V>(
+    keyWriter: (this: PackageWriter, value: K) => void,
+    valueWriter: (this: PackageWriter, value: V) => void,
+    values: Map<K, V | null>,
+  ) {
+    for (const [key, value] of values) {
+      if (value == null) {
+        this.writeByte(VALUE_DELETE);
+        keyWriter.call(this, key);
+      } else {
+        this.writeByte(VALUE_SET);
+        keyWriter.call(this, key);
+        valueWriter.call(this, value);
+      }
+    }
+    this.writeByte(VALUE_EMPTY);
+  }
+
   public writeIf<T>(writer: (this: PackageWriter, value: T) => void, value: T | undefined): void {
     if (value == null) {
       this.writeBool(false);
     } else {
       this.writeBool(true);
+      writer.call(this, value);
+    }
+  }
+
+  public writeIfDiff<T>(writer: (this: PackageWriter, value: T) => void, value: T | undefined | null): void {
+    if (value === null) {
+      this.writeByte(VALUE_DELETE);
+    } else if (value === undefined) {
+      this.writeByte(VALUE_EMPTY);
+    } else {
+      this.writeByte(VALUE_SET);
       writer.call(this, value);
     }
   }

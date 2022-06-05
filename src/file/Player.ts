@@ -6,7 +6,7 @@ import * as Inventory from './Inventory';
 import { sha512 } from './sha512';
 import { data as itemDB } from '../data/itemDB';
 
-type World = {
+export type World = {
   spawnPoint?: Vector3;
   logoutPoint?: Vector3;
   deathPoint?: Vector3;
@@ -14,9 +14,9 @@ type World = {
   mapData?: Uint8Array;
 };
 
-export type SkillData = Map<SkillType, { level: number, accumulator: number }>;
+export type SkillData = { level: number, accumulator: number };
 
-type FoodData = {
+export type FoodData = {
   id: string;
   time: number;
 };
@@ -46,17 +46,19 @@ export type PlayerData = {
   hairColor: Vector3;
   modelIndex: number;
   foods: FoodData[];
-  skillData?: SkillData;
+  skillData: Map<SkillType, SkillData>;
 };
+
+export type PlayerStats = {
+  kills: number;
+  deaths: number;
+  crafts: number;
+  builds: number;
+}
 
 export type Player = {
   version: number;
-  stats: {
-    kills: number;
-    deaths: number;
-    crafts: number;
-    builds: number;
-  };
+  stats: PlayerStats;
   worlds: Map<bigint, World>;
   playerName: string;
   playerID: bigint;
@@ -75,20 +77,35 @@ function writeCustomPoint(pkg: PackageWriter, point?: Vector3): void {
   pkg.writeVector3(point ?? { x: 0, y: 0, z: 0 });
 }
 
-function* readPlayer(bytes: Uint8Array): Generator<number, Player> {
-  const reader = new PackageReader(bytes);
-  const version = reader.readInt();
-  const stats = version >= 28 ? {
+export function readStats(reader: PackageReader): PlayerStats {
+  return {
     kills: reader.readInt(),
     deaths: reader.readInt(),
     crafts: reader.readInt(),
     builds: reader.readInt(),
-  } : {
-    kills: 0,
-    deaths: 0,
-    crafts: 0,
-    builds: 0,
   }
+}
+
+export const ZERO_STATS: PlayerStats = {
+  kills: 0,
+  deaths: 0,
+  crafts: 0,
+  builds: 0,
+};
+
+export function writeStats(writer: PackageWriter, stats: PlayerStats): void {
+  writer.writeInt(stats.kills);
+  writer.writeInt(stats.deaths);
+  writer.writeInt(stats.crafts);
+  writer.writeInt(stats.builds);
+}
+
+function* readPlayer(bytes: Uint8Array): Generator<number, Player> {
+  const reader = new PackageReader(bytes);
+  const version = reader.readInt();
+  const stats = version >= 28
+    ? readStats(reader)
+    : ZERO_STATS;
   const worldsNumber = reader.readInt();
   const worlds = new Map<bigint, World>();
   for (let i = 0; i < worldsNumber; i++) {
@@ -110,7 +127,7 @@ function* readPlayer(bytes: Uint8Array): Generator<number, Player> {
   const playerName = reader.readString();
   const playerID = reader.readLong();
   const startSeed = reader.readString();
-  const playerData = reader.readIf(reader.readByteArray);
+  const playerData = reader.readIf(() => readPlayerData(reader));
 
   return {
     version,
@@ -119,7 +136,7 @@ function* readPlayer(bytes: Uint8Array): Generator<number, Player> {
     playerName,
     playerID,
     startSeed,
-    playerData: playerData && readPlayerData(playerData),
+    playerData,
   };
 }
 
@@ -130,12 +147,7 @@ function* writePlayer(
   const total = player.worlds.size + 1;
   let current = 0;
   writer.writeInt(player.version);
-  if (player.version >= 28) {
-    writer.writeInt(player.stats.kills);
-    writer.writeInt(player.stats.deaths);
-    writer.writeInt(player.stats.crafts);
-    writer.writeInt(player.stats.builds);
-  }
+  if (player.version >= 28) writeStats(writer, player.stats);
   writer.writeInt(player.worlds.size);
   for (const [key, world] of player.worlds) {
     writer.writeLong(key);
@@ -149,37 +161,31 @@ function* writePlayer(
   writer.writeString(player.playerName);
   writer.writeLong(player.playerID);
   writer.writeString(player.startSeed);
-  const playerData = player.playerData && writePlayerData(player.playerData);
-  writer.writeIf(writer.writeByteArray, playerData);
+  writer.writeIf((playerData) => writePlayerData(writer, playerData), player.playerData);
   yield 0.9;
 }
 
 function readSkills(pkg: PackageReader) {
   const version = pkg.readInt();
-  let size = pkg.readInt();
-  const map: SkillData = new Map();
-  for (let index = 0; index < size; ++index) {
-    const skillType = pkg.readInt();
-    const level = pkg.readFloat();
-    const accumulator = version >= 2 ? pkg.readFloat() : 0;
-    if (skillType in SkillType) {
-      map.set(skillType, { level, accumulator });
+  return pkg.readMap(
+    pkg.readInt,
+    function () {
+      const level = pkg.readFloat();
+      const accumulator = version >= 2 ? pkg.readFloat() : 0;
+      return { level, accumulator };
     }
-  }
-  return map;
+  );
 }
 
-function writeSkills(pkg: PackageWriter, skillData: SkillData) {
+function writeSkills(pkg: PackageWriter, skillData: Map<SkillType, SkillData>) {
   pkg.writeInt(2);
-  pkg.writeInt(skillData.size);
-  for (const [key, { level, accumulator }] of skillData) {
-    pkg.writeInt(key);
+  pkg.writeMap(pkg.writeInt, function ({ level, accumulator }) {
     pkg.writeFloat(level);
     pkg.writeFloat(accumulator);
-  }
+  }, skillData);
 }
 
-function readFoods(pkg: PackageReader, version: number): FoodData[] {
+export function readFoods(pkg: PackageReader, version: number): FoodData[] {
   const length = pkg.readInt();
   const result: FoodData[] = [];
   for (let index = 0; index < length; ++index) {
@@ -215,7 +221,8 @@ function readFoods(pkg: PackageReader, version: number): FoodData[] {
   return result;
 }
 
-function readPlayerData(data: Uint8Array): PlayerData {
+function readPlayerData(reader: PackageReader): PlayerData {
+  const data = reader.readByteArray();
   const pkg = new PackageReader(data);
   const version = pkg.readInt();
   const maxHealth = version >= 7 ? pkg.readFloat() : NaN;
@@ -247,10 +254,10 @@ function readPlayerData(data: Uint8Array): PlayerData {
   const beardItem = version >= 4 ? pkg.readString() : 'beard0';
   const hairItem = version >= 4 ? pkg.readString() : 'hair0';
   const skinColor = version >= 5 ? pkg.readVector3() : { x: 1, y: 1, z: 1 };
-  const hairColor = version >= 5 ? pkg.readVector3() : { x: 1, y: 1, z: 1 };
+  const hairColor = version >= 5 ? pkg.readVector3() : { x: 0, y: 0, z: 0 };
   const modelIndex = version >= 11 ? pkg.readInt() : 0;
   const foods = version >= 12 ? readFoods(pkg, version) : [];
-  const skillData = version >= 17 ? readSkills(pkg) : undefined;
+  const skillData = version >= 17 ? readSkills(pkg) : new Map();
   return {
     version,
     maxHealth,
@@ -279,7 +286,7 @@ function readPlayerData(data: Uint8Array): PlayerData {
   };
 }
 
-function writePlayerData(data: PlayerData): Uint8Array {
+function writePlayerData(pkg: PackageWriter, data: PlayerData): void {
   const writer = new PackageWriter();
   writer.writeInt(data.version);
   if (data.version >= 7) writer.writeFloat(data.maxHealth);
@@ -322,7 +329,7 @@ function writePlayerData(data: PlayerData): Uint8Array {
     }
   }
   if (data.version >= 17) writeSkills(writer, data.skillData!);
-  return writer.flush();
+  pkg.writeByteArray(writer.flush());
 }
 
 export function* read(bytes: Uint8Array): Generator<number, Player> {
