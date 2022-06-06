@@ -275,6 +275,30 @@ export const modPrefabNames: Record<string, string[]> = {
     'ChaosPlateArmorBody', 'ChaosPlateHelm', 'ChaosPlateLegs',
     'EliteChaosPlateArmor', 'EliteChaosPlateHelm', 'ChaosPlateHelmAlt', 'EliteChaosPlateLegs',
   ],
+  DoOrDieMonsters: [
+    // from monster mash
+    'CrazyTroll', 'EarthTroll',
+    'Yeti', 'CapeYeti', 'YetiPelt',
+    'Wizard',
+    'WereWolfBlackArmored', 'WereWolfDarkGrey', 'WereWolfBlack', 'WereWolfBrown', 'WereWolfWhite', 'WerewolfCape',
+    'WereBearBlack', 'WereBearGray', 'WereBearRed',
+    'WendigoForest', 'WendigoSwamp',
+    'EvilReaper', 'Golem2', 'TheNasty', 'Nasty_Spawner',
+    // bosses
+    'SkirSandburst_DoD', 'ShamansVessel_DoD', 'AltarRambone_DoD',
+    'Farkas_DoD', 'LargeFang_DoD', 'AltarBitterstump_DoD',
+    'Bhygshan_DoD', 'SkeletonBones_DoD', 'AltarBhygshan_DoD',
+    'Bitterstump_DoD', 'GreydwarfHeart_DoD', 'AltarFarkas_DoD, AltarFarkasAlt_DoD',
+    'Rambore_DoD', 'BoarTusk_DoD', 'AltarSkirSandburst_DoD',
+    // creatures
+    'GreaterSurtling_DoD', 'CharredRemains_DoD', 'SkeletonG_DoD', 'SkeletonR_DoD', 'FrozenBones_DoD', 'BlackDeer_DoD', 'BlackStag_DoD', 'IceGolem_DoD', 'LavaGolem_DoD', 'ObsidianGolem_DoD', 'Ghost_White_DoD', 'Ghost_Ice_DoD', 'Frostling_DoD', 'Stormling_DoD', 'Voidling_DoD', 'ForestWolf_DoD', 'ForestWolf_Cub_DoD', 'DireWolf_DoD', 'DireWolf_Cub_DoD', 'Vilefang_DoD', 'Vilefang_Cub_DoD', 'LivingLava_DoD', 'LivingWater_DoD', 'IceDrake_DoD', 'FlameDrake_DoD', 'ArcaneDrake_DoD', 'GoldDrake_DoD', 'DarknessDrake_DoD', 'PoisonDrake_DoD', 'DarkDrake_DoD',
+    // buildables
+    'Rug_BlackDeer_DoD', 'Rug_ForestWolf_DoD', 'Rug_DireWolf_DoD',
+    // trophies
+    'TrophyIceDrake_DoD', 'TrophyFlameDrake_DoD', 'TrophyArcaneDrake_DoD', 'TrophyDarknessDrake_DoD', 'TrophyGoldDrake_DoD', 'TrophyPoisonDrake_DoD', 'TrophyFrostling_DoD', 'TrophyStormling_DoD', 'TrophyVoidling_DoD', 'TrophyOGolem_DoD', 'TrophyLGolem_DoD', 'TrophyIceGolem_DoD', 'TrophyVilefang_DoD', 'TrophyDireWolf_DoD', 'TrophyForestWolf_DoD', 'TrophyLivingLava_DoD', 'TrophyLivingWater_DoD', 'TrophyBlackDeer_DoD', 'TrophyFrozenBones_DoD',
+    // materials
+    'InfusedGemstone_DoD', 'DireWolfPelt_DoD', 'ForestWolfPelt_DoD', 'FrostlingCore_DoD', 'StormlingCore_DoD', 'VoidlingCore_DoD', 'WaterGlobe_DoD', 'SpiderChitin_DoD', 'BlackDeerHide_DoD',
+  ],
   Terraheim: [
     'ArrowGreatFireTH',
     'AtgeirSilver',

@@ -23,12 +23,18 @@ import {
   recipes as odinArchitectRecipes,
 } from './odin-architect';
 
+import {
+  data as boneAppetitData,
+  recipes as boneAppetitRecipes,
+} from './bone-appetit';
+
 export const data = {
   backpackRemakeData,
   epicLootData,
   fantasyArmouryData,
   odinFoodBarrelsData,
   odinArchitectData,
+  boneAppetitData,
 };
 
 export const recipes = {
@@ -37,6 +43,7 @@ export const recipes = {
   fantasyArmouryRecipes,
   odinFoodBarrelsRecipes,
   odinArchitectRecipes,
+  boneAppetitRecipes,
 };
 
 type ModConfig = ({ nexus: number; } | { thunderstore: string; }) & {
@@ -107,7 +114,7 @@ export const modLinks: Record<string, ModConfig> = {
   OdinsFoodBarrels: {
     thunderstore: 'OdinPlus/OdinsFoodBarrels',
     version: '1.0.3',
-    fullSupport: false,
+    fullSupport: true,
   },
   ChickenBoo: {
     thunderstore: 'OdinPlus/ChickenBoo',
@@ -124,6 +131,11 @@ export const modLinks: Record<string, ModConfig> = {
     thunderstore: 'Horem/Fantasy_Armoury',
     version: '0.0.5',
     fullSupport: true,
+  },
+  DoOrDieMonsters: {
+    thunderstore: 'Horem/DoOrDieMonsters',
+    version: '0.5.3',
+    fullSupport: false,
   },
   Forsaken: {
     nexus: 799,
@@ -161,6 +173,12 @@ export const modLinks: Record<string, ModConfig> = {
     nexus: 1599,
     thunderstore: 'Detalhes/ValheimLevelSystemVLS',
     version: '1.2.4',
+    fullSupport: true,
+  },
+  BoneAppetit: {
+    nexus: 1250,
+    thunderstore: 'RockerKitten/BoneAppetit',
+    version: '3.0.4',
     fullSupport: true,
   },
   // buildings
