@@ -90,7 +90,7 @@ function Corruptions({ value, onChange }: ValueProps<ZDOData>) {
     {errors != null &&
       <>
         <Problems title="errors" problems={errors} color="var(--color-danger)" />
-        <input type="button" className="btn btn--danger" value="delete" onClick={() => onChange(deleteBadObjects(value))} />
+        <input type="button" className="btn btn--danger" value="delete" onClick={() => onChange(deleteBadObjects(value))} /> corrupted object(s)
       </>
     }
     {warnings != null && <Problems title="warnings" problems={warnings} color="var(--color-warning)" />}

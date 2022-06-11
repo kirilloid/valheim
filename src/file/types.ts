@@ -27,6 +27,7 @@ export enum Mistake {
   CoordinatesInconsistent,
   CoordinatesTooFar,
   TimeInFuture,
+  DropExplosion,
   ContainerStuck,
   UnreadData,
   UTFException,

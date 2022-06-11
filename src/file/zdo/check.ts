@@ -2,12 +2,16 @@ import type { ZDO, ZDOCorruption } from '../types';
 import type { WorldData } from '../World';
 import { Mistake, MistakeLevel } from '../types';
 import { offsets } from './offset';
+import { data, extraData } from '../../data/itemDB';
 import { stableHashCode } from '../../model/hash';
+import { prefabHashes } from '../../data/zdo';
+import { GameComponent } from '../../types';
 
 export const MistakeLevels: Record<Mistake, MistakeLevel> = {
   [Mistake.None]: MistakeLevel.OK,
   [Mistake.CoordinatesTooFar]: MistakeLevel.NOTICE,
   [Mistake.CoordinatesInconsistent]: MistakeLevel.WARNING,
+  [Mistake.DropExplosion]: MistakeLevel.ERROR,
   [Mistake.TimeInFuture]: MistakeLevel.WARNING,
   [Mistake.ContainerStuck]: MistakeLevel.WARNING,
   [Mistake.UnreadData]: MistakeLevel.WARNING,
@@ -31,9 +35,35 @@ export function errorToMistake(e: unknown): Mistake {
   }
 }
 
-const HEADER_SIZE = 16; // ZDOID: long (8), int (4) & byte array length: int (4)
+type CorruptionType = Omit<ZDOCorruption, 'index'>;
 
-export function check(world: WorldData, zdo: ZDO): Omit<ZDOCorruption, 'index'> {
+const HEADER_SIZE = 16; // ZDOID: long (8), int (4) & byte array length: int (4)
+const IN_USE = stableHashCode('InUse');
+
+const componentChecks: Partial<Record<GameComponent, (zdo: ZDO) => CorruptionType | undefined>> = {
+  Container(zdo: ZDO) {
+    if (zdo.ints.get(IN_USE)) {
+      return {
+        mistake: Mistake.ContainerStuck,
+        offset: zdo._offset + ((zdo as any).offsetStrings ?? 80) + HEADER_SIZE,
+      }
+    }
+  },
+  Ragdoll(zdo: ZDO) {
+    const length = zdo.ints.get(stableHashCode('drops')) ?? 0;   
+    for (let i = 0; i < length; i++) {
+      const num = zdo.ints.get(stableHashCode(`drop_amount${i}`));
+      if (num != null && num > 10000) {
+        return {
+          mistake: Mistake.DropExplosion,
+          offset: zdo._offset + ((zdo as any).offsetInts ?? 80) + HEADER_SIZE + 13 + i * 16,
+        }
+      }
+    }
+  },
+}
+
+export function check(world: WorldData, zdo: ZDO): CorruptionType {
   try {
     // force-read last map, this might throw an exception
     const bytes = zdo.byteArrays.get(0);
@@ -45,10 +75,13 @@ export function check(world: WorldData, zdo: ZDO): Omit<ZDOCorruption, 'index'> 
       return { mistake: Mistake.ImpossibleError, offset: zdo._offset };
     }
 
-    if (zdo.ints.get(stableHashCode('InUse'))) {
-      return {
-        mistake: Mistake.ContainerStuck,
-        offset: zdo._offset + ((zdo as any).offsetStrings ?? 80) + HEADER_SIZE,
+    const id = prefabHashes.get(zdo.prefab);
+    if (id != null) {
+      const obj = data[id];
+      const components = (obj == null ? extraData[id] : obj.components) ?? [];
+      for (const cmp of components) {
+        const checkResult = componentChecks[cmp]?.(zdo);
+        if (checkResult != null) return checkResult;
       }
     }
 

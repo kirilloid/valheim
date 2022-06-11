@@ -18,6 +18,7 @@ import { CorruptionManager } from './CorruptionManager';
 import { ZdoData } from './zdo-data';
 
 function showTime(time: number) {
+  if (!isFinite(time)) return `Invalid time`;
   const day = Math.floor(time / GAME_DAY);
   const tod = Math.round(time / GAME_DAY % 1 * 24 * 60);
   const timeStr = timeI2S(tod);
@@ -115,7 +116,7 @@ export function WorldInfo({ value, onChange, file, disabled }: EditorProps<World
         <div className="WorldEdit__Time">
           <h2>world time</h2>
           <p>{showTime(netTime)}</p>
-          {Math.abs(netTime - maxTime) > 10 && <p key="fix-time">
+          {!isFinite(netTime) || Math.abs(netTime - maxTime) > 100 && <p key="fix-time">
             The time seems to be off{' '}
             <button className="btn btn--primary" onClick={onTimeChange}>Fix it</button>
           </p>}          

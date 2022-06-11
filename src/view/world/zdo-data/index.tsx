@@ -112,7 +112,7 @@ export const ZdoData = React.memo(function ZdoData(props: ValueProps<ZDOData>) {
                 setTerm('');
                 setEntry(se);
               }}>
-                {se.text}
+                [{se.indices.length}] {se.text}
               </li>)}
             </ul>
           </>

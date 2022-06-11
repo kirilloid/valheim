@@ -55,6 +55,7 @@ for (const [mod, prefabs] of Object.entries(modPrefabNames)) {
 
 const HASH_ZONE_CTRL = stableHashCode('_ZoneCtrl');
 const HASH_LOCATION = stableHashCode('LocationProxy');
+const HASH_SEED = stableHashCode('seed');
 
 export function zoneId({ x, y }: Vector2i) {
   return (y + 256) * 512 + x + 256;
@@ -188,6 +189,15 @@ export const getSearcher = (
         text: translate(item.i18nKey),
       });
     }
+    if ((term in idMap) && result.findIndex(r => r.id === term) === -1) {
+      const indices = idMap[term]!;
+      result.push({
+        id: term,
+        indices,
+        subtype: 'custom',
+        text: term,
+      });
+    }
     return result;
   }
 };
@@ -195,8 +205,8 @@ export const getSearcher = (
 function getWorldSeed(zdos: ZDO[]) {
   for (const zdo of zdos) {
     if (zdo.prefab === HASH_LOCATION) {
-      const locationSeed = zdo.ints.get(stableHashCode('seed'));
-      if (locationSeed == null) return undefined;
+      const locationSeed = zdo.ints.get(HASH_SEED);
+      if (locationSeed == null) continue;
       const { x, y } = zdo.sector;
       return (locationSeed - x * 4271 - y * 9187) | 0;    
     }

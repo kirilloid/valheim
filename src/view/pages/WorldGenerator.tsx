@@ -140,7 +140,7 @@ const WorldMap = React.memo((props: { seed: string }) => {
       </ul>
     </div>
     <div className="WorldGen">
-      <PanView maxZoom={20} onZoomChange={setZoom} onMouseMove={setPos} size={0}>
+      <PanView maxZoom={20} onZoomChange={setZoom} onMouseMove={setPos} size={1}>
         <canvas className="WorldGen__Map" width={SIZE} height={SIZE} ref={canvasRef}
           style={{ width: `${SIZE}px`, height: `${SIZE}px` }} />
         {selectedLocations.map(key => {
