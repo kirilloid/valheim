@@ -9,7 +9,8 @@ import { data } from './itemDB';
 
 export const resourceCraftMap: Record<EntityId, Item[]> = {};
 export const resourceBuildMap: Record<EntityId, (Piece | Ship | Cart)[]> = {};
-export const stationsMap = new Map<EntityId | null, (Item | Piece | Ship | Cart)[]>();
+export type Produced = Item | Piece | Ship | Cart;
+export const stationsMap = new Map<EntityId | null, Map<number, Produced[]>>();
 export const miningMap = new Map<EntityId, PhysicalObject[]>();
 
 function addToMap<T extends Item | Piece | Ship | Cart>(map: Record<EntityId, T[]>, item: T, recipe: ItemRecipe | Piece['recipe']) {
@@ -18,9 +19,11 @@ function addToMap<T extends Item | Piece | Ship | Cart>(map: Record<EntityId, T[
   function addItem(res: EntityId, item: T) {
     (map[res] ?? (map[res] = [])).push(item);
   }
-  function addStation(station: EntityId | null, item: T) {
-    const stationList = stationsMap.get(station) ?? [];
-    stationList.push(item);
+  function addStation(station: EntityId | null, level: number, item: T) {
+    const stationList = stationsMap.get(station) ?? new Map<number, Produced[]>();
+    const stationLevel = stationList.get(level) ?? [];
+    stationLevel.push(item);
+    stationList.set(level, stationLevel);
     stationsMap.set(station, stationList);
   }
   switch (recipe.type) {
@@ -36,13 +39,13 @@ function addToMap<T extends Item | Piece | Ship | Cart>(map: Record<EntityId, T[
           addItem(res, item);
         }
       }
-      addStation(recipe.source.station, item);
+      addStation(recipe.source.station, recipe.source.level ?? 0, item);
       break;
     case 'craft_piece':
       for (const res of Object.keys(recipe.materials)) {
         addItem(res, item);
       }
-      addStation(recipe.station, item);
+      addStation(recipe.station, 0, item);
       break;
     default:
       assertNever(recipe);

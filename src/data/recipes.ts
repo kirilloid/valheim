@@ -104,7 +104,7 @@ export const recipes: ItemRecipe[] = [
   cauldronRecipe(3, { WolfMeat: 1, Mushroom: 2, Onion: 1 }, 'WolfMeatSkewer', 2),
   cauldronRecipe(3, { WolfMeat: 1, Honey: 1 }, 'WolfJerky', 2),
   cauldronRecipe(3, { GreydwarfEye: 3, FreezeGland: 1 }, 'Eyescream', 1),
-  cauldronRecipe(NaN, { Onion: 3 }, 'OnionSoup', 1),
+  cauldronRecipe(3, { Onion: 3 }, 'OnionSoup', 1),
   // LEVEL 4
   cauldronRecipe(4, { Bloodbag: 2, BarleyFlour: 4, Thistle: 2 }, 'BloodPudding', 1),
   cauldronRecipe(4, { BarleyFlour: 10 }, 'BreadDough', 2),

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { ItemType, MaterialType, Piece as TPiece } from '../../types';
 
 import { getStructuralIntegrity, pieces } from '../../data/building';
-import { stationsMap } from '../../data/resource-usage';
+import { stationsMap, Produced } from '../../data/resource-usage';
 import { assertNever, days, timeI2S } from '../../model/utils';
 
 import { TranslationContext } from '../../effects';
@@ -116,6 +116,33 @@ function reqList(piece: TPiece['piece']) {
   return result;
 }
 
+function CraftList({ items }: { items: Produced[] }) {
+  return <ul className="CraftList">
+    {items.map(item => <li key={item.id}>
+      <InlineObjectWithIcon id={item.id} />
+    </li>)}
+  </ul>
+}
+
+function ProducedItems({ items }: { items: Map<number, Produced[]> }) {
+  if (items.size === 0) return null;
+  if (items.size === 1) {
+    for (const perLevelItems of items.values()) {
+      return <CraftList items={perLevelItems} />
+    }
+  }
+  return <>
+    <h2>Produces</h2>
+    {[...items.entries()]
+      .sort((a, b) => a[0] - b[0])
+      .map(([level, levelItems]) => <React.Fragment>
+        <h4>Level {level}</h4>
+        <CraftList items={levelItems} />
+      </React.Fragment>
+      )}
+  </>;
+}
+
 export function Piece({ item }: { item: TPiece }) {
   const target = item.piece?.target;
   const requiredSpace = item.piece?.requiredSpace;
@@ -123,7 +150,7 @@ export function Piece({ item }: { item: TPiece }) {
   const { hp, damageModifiers, noRoof } = item.wear;
   const translate = useContext(TranslationContext);
   const specialReqs = reqList(item.piece);
-  const producedItems = (item.subtype === 'craft' && stationsMap.get(item.id)) || [];
+  const producedItems = (item.subtype === 'craft' && stationsMap.get(item.id)) || new Map<number, Produced[]>();
   return (
     <>
       <ItemHeader item={item} />
@@ -145,13 +172,7 @@ export function Piece({ item }: { item: TPiece }) {
         <PieceSpecific item={item} />
       </section>
       <Recipe item={item} />
-      {producedItems.length
-      ? <><h2>Produces</h2>
-          <ul className="CraftList">{producedItems.map(item => <li key={item.id}>
-            <InlineObjectWithIcon id={item.id} />
-          </li>)}</ul>
-        </>
-      : null}
+      <ProducedItems items={producedItems} />
     </>
   );
 }
