@@ -116,9 +116,10 @@ export const getPlayers = (zdos: ZDO[]): Map<bigint, string> => {
 };
 
 const LWT_HASH = stableHashCode('lastWorldTime');
-export const getMaxTime = (zdos: ZDO[]): number => {
+export function* getMaxTime(zdos: ZDO[]): Generator<number, number, void> {
   let maxTime = 0;
-  for (const zdo of zdos) {
+  for (const [i, zdo] of zdos.entries()) {
+    if ((i & 0xFFF) === 0) yield i / zdos.length;
     const id = prefabHashes.get(zdo.prefab);
     const obj = id != null ? data[id] : undefined;
     if (obj == null || obj.components?.includes('BaseAI')) continue;
@@ -127,6 +128,7 @@ export const getMaxTime = (zdos: ZDO[]): number => {
     const days = Number(ticks) / 1e7;
     maxTime = Math.max(maxTime, days);
   }
+  yield 1;
   return maxTime;
 };
 

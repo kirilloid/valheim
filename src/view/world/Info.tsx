@@ -1,12 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import { defaultMemoize } from 'reselect';
 
 import type { EditorProps, ValueProps } from '../parts/types';
 import type { WorldData, WorldMeta } from './types';
-import { GAME_DAY } from '../../model/game';
-import { timeI2S } from '../../model/utils';
 import { stableHashCode, solve } from '../../model/hash';
-import { getMaxTime } from '../../model/zdo-selectors';
 
 import { FileInfo } from '../parts/FileInfo';
 import { Tabs } from '../parts/Tabs';
@@ -16,16 +12,7 @@ import { ZoneSystem } from './ZoneSystem';
 import { WorldDiscovery } from './WorldDiscovery';
 import { CorruptionManager } from './CorruptionManager';
 import { ZdoData } from './zdo-data';
-
-function showTime(time: number) {
-  if (!isFinite(time)) return `Invalid time`;
-  const day = Math.floor(time / GAME_DAY);
-  const tod = Math.round(time / GAME_DAY % 1 * 24 * 60);
-  const timeStr = timeI2S(tod);
-  return `Day ${day} @ ${timeStr}`;
-}
-
-const getMaxTimeCached = defaultMemoize(getMaxTime);
+import { WorldTime } from './Time';
 
 function WorldMetaDetails({ value, onChange }: ValueProps<WorldMeta>) {
   const [idChanged, setIdChanged] = useState(false);
@@ -101,7 +88,7 @@ export function WorldMetaInfo({ value, onChange, file }: EditorProps<WorldMeta>)
 }
 
 export function WorldInfo({ value, onChange, file, disabled }: EditorProps<WorldData>) {
-  const { netTime, randEvent, zdo, version, zoneSystem } = value;
+  const { randEvent, zdo, version, zoneSystem } = value;
   const onZdoChange = useCallback(zdo => onChange({ ...value, zdo }), [value, onChange]);
   const onZoneSystemChange = useCallback(zoneSystem => onChange({ ...value, zoneSystem }), [value, onChange]);
   const tabs = [{
@@ -110,17 +97,8 @@ export function WorldInfo({ value, onChange, file, disabled }: EditorProps<World
   }, {
     title: 'Progress',
     renderer: function Progress() {
-      const maxTime = getMaxTimeCached(value.zdo.zdos);
-      const onTimeChange = useCallback(() => onChange({ ...value, netTime: maxTime }), [maxTime]);
       return <div className="WorldEdit">
-        <div className="WorldEdit__Time">
-          <h2>world time</h2>
-          <p>{showTime(netTime)}</p>
-          {!isFinite(netTime) || Math.abs(netTime - maxTime) > 100 && <p key="fix-time">
-            The time seems to be off{' '}
-            <button className="btn btn--primary" onClick={onTimeChange}>Fix it</button>
-          </p>}          
-        </div>
+        <WorldTime value={value} onChange={onChange} />
         {randEvent != null && <RandomEvents value={randEvent} />}
         {zoneSystem != null && <ZoneSystem value={zoneSystem} onChange={onZoneSystemChange} />}
         <WorldDiscovery value={value} />
