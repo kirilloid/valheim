@@ -163,3 +163,5 @@ export function runGenerator<T>(
     }
   }());
 }
+
+export const FIGURE_SPACE = ' ';

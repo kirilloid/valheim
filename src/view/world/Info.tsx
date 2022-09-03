@@ -101,7 +101,7 @@ export function WorldInfo({ value, onChange, file, disabled }: EditorProps<World
         <WorldTime value={value} onChange={onChange} />
         {randEvent != null && <RandomEvents value={randEvent} />}
         {zoneSystem != null && <ZoneSystem value={zoneSystem} onChange={onZoneSystemChange} />}
-        <WorldDiscovery value={value} />
+        <WorldDiscovery value={value} onChange={onChange} />
       </div>
     },
   }, {

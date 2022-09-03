@@ -5,17 +5,8 @@ import type { WorldData } from './types';
 
 import { GAME_DAY } from '../../model/game';
 import { getMaxTime } from '../../model/zdo-selectors';
-import { assertNever, runGenerator, timeI2S } from '../../model/utils';
-
-type ProgressState = {
-  type: 'initial';
-} | {
-  type: 'progress';
-  progress: number;
-} | {
-  type: 'final';
-  result: number;
-};
+import { assertNever, timeI2S } from '../../model/utils';
+import { useProgressState } from '../../effects/progress.effect';
 
 function showTime(time: number) {
   if (!isFinite(time)) return `Invalid time`;
@@ -27,13 +18,9 @@ function showTime(time: number) {
 
 export function WorldTime({ value, onChange }: ValueProps<WorldData>) {
   const { netTime } = value;
-  const [state, setState] = useState<ProgressState>({ type: 'initial' });
+  const [state, runState] = useProgressState<number>();
   const timeCompletelyOff = !isFinite(netTime) || netTime < 0 || netTime >= 1e9;
-  const startScan = useCallback(() => {
-    const gen = getMaxTime(value.zdo.zdos);
-    runGenerator(gen, progress => setState({ type: 'progress', progress }))
-                  .then(result => setState({ type: 'final', result }));
-  }, [value]);
+  const startScan = useCallback(() => runState(getMaxTime(value.zdo.zdos)), [value]);
 
   return <div className="WorldEdit__Time">
     <h2>world time</h2>

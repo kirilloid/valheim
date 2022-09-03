@@ -1,7 +1,8 @@
 import { defaultMemoize } from 'reselect';
 
-import type { ZDO, ZDOID } from '../file/types';
-import type { Biome as BiomeUnion, EntityId, Pair } from '../types';
+import type { ZDO } from '../file/types';
+import type { Biome as BiomeUnion, EntityId } from '../types';
+import type { WorldData, ZoneSystemData } from '../file/World';
 
 import { Vector2i } from './utils';
 import { stableHashCode } from './hash';
@@ -13,7 +14,6 @@ import { data } from '../data/itemDB';
 import { locationHashes } from '../data/location-hashes';
 import { modPrefabNames } from '../data/prefabs';
 
-import { WorldData } from '../file/World';
 import { readBase64 } from '../file/base64';
 import { read } from '../file/Inventory';
 import { match } from '../data/search';
@@ -215,7 +215,8 @@ function getWorldSeed(zdos: ZDO[]) {
   }
 }
 
-export type DiscoveryStats = Record<BiomeUnion, Pair<number>>
+export type DiscoveryStat = { zoneIds: Set<number>; total: number };
+export type DiscoveryStats = Record<BiomeUnion, DiscoveryStat>;
 
 export function* getGeneratedPercent(
   world: WorldData,
@@ -227,15 +228,15 @@ export function* getGeneratedPercent(
   const allZoneIds = new Set<number>(getZoneIds(world));
 
   const stats: DiscoveryStats = {
-    Meadows: [0, 0],
-    BlackForest: [0, 0],
-    Ocean: [0, 0],
-    Swamp: [0, 0],
-    Mountain: [0, 0],
-    Plains: [0, 0],
-    Mistlands: [0, 0],
-    Ashlands: [0, 0],
-    DeepNorth: [0, 0],
+    Meadows: { zoneIds: new Set(), total: 0 },
+    BlackForest: { zoneIds: new Set(), total: 0 },
+    Ocean: { zoneIds: new Set(), total: 0 },
+    Swamp: { zoneIds: new Set(), total: 0 },
+    Mountain: { zoneIds: new Set(), total: 0 },
+    Plains: { zoneIds: new Set(), total: 0 },
+    Mistlands: { zoneIds: new Set(), total: 0 },
+    Ashlands: { zoneIds: new Set(), total: 0 },
+    DeepNorth: { zoneIds: new Set(), total: 0 },
   };
 
   let i = 0;
@@ -247,11 +248,34 @@ export function* getGeneratedPercent(
       if ((x * x + y * y) * ZONE_SIZE * ZONE_SIZE > WORLD_RADIUS * WORLD_RADIUS) continue;
       const biomeInt = gen.getBiome(x * ZONE_SIZE, y * ZONE_SIZE);
       const biomeStr = BiomeEnum[biomeInt] as BiomeUnion;
-      stats[biomeStr][1]++;
+      stats[biomeStr].total++;
       if (allZoneIds.has(id)) {
-        stats[biomeStr][0]++;  
+        stats[biomeStr].zoneIds.add(id);  
       }
     }
   }
   return stats;
+}
+
+function removeFromZoneSystem(zoneSystem: ZoneSystemData | undefined, zoneIds: Set<number>): ZoneSystemData | undefined {
+  if (zoneSystem == null) return undefined;
+  const generatedZones = zoneSystem.generatedZones.filter(zone => !zoneIds.has(zoneId(zone)));
+  return {
+    ...zoneSystem,
+    generatedZones,
+  };
+}
+
+export function* removeZoneIds(value: WorldData, zoneIds: Set<number>): Generator<number, WorldData, void> {
+  const zoneSystem = removeFromZoneSystem(value.zoneSystem, zoneIds);
+  const zdos: ZDO[] = [];
+  for (const [i, zdo] of value.zdo.zdos.entries()) {
+    if ((i & 0xFFF) === 0) yield i / value.zdo.zdos.length;
+    if (!zoneIds.has(zoneId(zdo.sector))) zdos.push(zdo);
+  }
+  return {
+    ...value,
+    zdo: { ...value.zdo, zdos },
+    zoneSystem,
+  };
 }

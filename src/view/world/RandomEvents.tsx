@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import type { RandEventData } from './types';
 import { EVENT_PERIOD } from '../../model/game';
-import { timeI2S } from '../../model/utils';
+import { FIGURE_SPACE, timeI2S } from '../../model/utils';
 import { TranslationContext } from '../../effects';
 
 function showTime(time: number) {
@@ -16,7 +16,7 @@ export function RandomEvents({ value }: { value: RandEventData }) {
     return <div className="WorldEdit__Events">
       <h2>Raids</h2>
       <dl>
-        <dt>timer</dt><dd>{showTime(value.eventTimer)} till next event</dd>
+        <dt>timer</dt><dd>{FIGURE_SPACE}{showTime(value.eventTimer)} till next event</dd>
       </dl>
     </div>
   };
