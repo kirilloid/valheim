@@ -892,6 +892,7 @@
     "ui.nightEat": "Essen nach Sonnenuntergang",
     "ui.nightEat.extra": "(Sei ehrlich, wir sagen es niemandem)",
     "ui.nonTeleportable": "Kann nicht teleportiert werden",
+    "ui.objects": "Objekten",
     "ui.onlyInDLC": "DLC-Item im *{0}*",
     "ui.onlyInSeason": "Dieser Artikel kann nur im *{0}* hergestellt werden",
     "ui.onlyInSeason.christmas": "Weinacht",

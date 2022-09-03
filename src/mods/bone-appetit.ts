@@ -187,8 +187,8 @@ const buildings: Piece[] = [
     },
     recipe: { type: 'craft_piece', materials: { SurtlingCore: 2, TrophySurtling: 1, Stone: 10 }, station: null, }
   },
-  {
-    id: 'rk_oven',
+/*  {
+    id: '???',
     base: false,
     type: 'piece',
     subtype: 'craft',
@@ -205,7 +205,7 @@ const buildings: Piece[] = [
       materialType: MaterialType.Stone,
     },
     recipe: { type: 'craft_piece', materials: { Wood: 4, Tin: 5, Stone: 3 }, station: 'forge', }
-  },
+  },*/
   // rk_campfire, rk_hearth, rk_brazier
 ];
 
