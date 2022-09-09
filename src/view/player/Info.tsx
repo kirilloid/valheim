@@ -48,7 +48,9 @@ export function PlayerInfo({ value: player, onChange, file, disabled } : EditorP
     if (skillData) {
       tabs.push({
         title: translate('ui.character.skills'),
-        renderer: () => <Skills skillData={skillData} playerData={playerData} />,
+        renderer: () => <Skills skillData={skillData}
+          onChange={sd => onChange({ ...player, playerData: { ...playerData, skillData: sd } })}
+          playerData={playerData} />,
       });
     }
     tabs.push({

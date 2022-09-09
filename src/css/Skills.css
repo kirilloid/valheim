@@ -17,6 +17,10 @@
   text-align: center;
   color: white;
 }
+input.SkillBar__value {
+  background: transparent;
+  border: none;
+}
 
 .SkillBar__sublevel {
   height: 8px;

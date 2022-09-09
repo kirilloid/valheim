@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 
 import '../../css/Skills.css';
 
@@ -10,29 +10,55 @@ import { SkillIcon } from '../parts/Icon';
 import { xp } from '../../model/game';
 import { readExtraSkills } from './ValheimLevelSystemVLS';
 
-export function Skills({ skillData, playerData } : { skillData: SkillData; playerData: PlayerData }) {
+function Skill({ skill, value, onChange }: {
+  skill: SkillType;
+  value: { level: number; accumulator: number };
+  onChange: (level: number) => void;
+}) {
   const translate = useContext(TranslationContext);
+  const { level, accumulator } = value;
+  const inLevelPercent = accumulator / xp(level + 1);
+  return <React.Fragment>
+    <dt><SkillIcon size={32} skill={skill} useAlt={false} /> {translate(`ui.skillType.${SkillType[skill]}`)}</dt>
+    <dd>
+      <div className="SkillBar">
+        <div className="SkillBar__level" style={{ width: `${level}%` }}></div>
+        <input className="SkillBar__value text-outline"
+          type="number" inputMode="numeric"
+          value={Math.floor(level)} min={0} max={100} onChange={e => {
+            const value = Number(e.target.value);
+            if (!Number.isNaN(value)) {
+              onChange(Math.min(value, 100));
+            }
+          }} />
+        <div className="SkillBar__sublevel" style={{ width: `${100 * inLevelPercent}%` }}></div>
+      </div>
+    </dd>
+  </React.Fragment>;
+}
+
+export function Skills({ skillData, onChange, playerData } : {
+  skillData: SkillData;
+  onChange: (value: SkillData) => void;
+  playerData: PlayerData;
+}) {
   const deadHeim = readExtraSkills(playerData);
+  const entries = [...skillData.entries()];
+  const [showAll, setShowAll] = useState(false);
+  const nonZeroEntries = entries.filter(([, { level }]) => level);
   return <div>
     <h3>Valheim</h3>
     <dl>
-      {[...skillData.entries()]
-        .filter(([, { level }]) => level)
-        .map(([skill, { level, accumulator }]) => {
-          const inLevelPercent = accumulator / xp(level + 1);
-          return <React.Fragment key={skill}>
-            <dt><SkillIcon size={32} skill={skill} useAlt={false} /> {translate(`ui.skillType.${SkillType[skill]}`)}</dt>
-            <dd>
-              <div className="SkillBar">
-                <div className="SkillBar__level" style={{ width: `${level}%` }}></div>
-                <div className="SkillBar__value text-outline">{Math.floor(level)}</div>
-                <div className="SkillBar__sublevel" style={{ width: `${100 * inLevelPercent}%` }}></div>
-              </div>
-            </dd>
-          </React.Fragment>;
-        })
+      {(showAll ? entries : nonZeroEntries)
+        .map(([skill, value]) => <Skill skill={skill} value={value} key={skill}
+          onChange={value => {
+            const pair = { level: value, accumulator: 0 };
+            const newSkills = new Map([...skillData.entries(), [skill, pair]]);
+            onChange(newSkills);
+          }} />)
       }
     </dl>
+    {!showAll && <button className="btn btn--sm" onClick={() => setShowAll(true)}>Show all skills</button>}
     {deadHeim != null && <React.Fragment key="deadheim">
       <h3>Deadheim</h3>
       <div>Level: {deadHeim.lvl}</div>
