@@ -74,13 +74,13 @@ export function Trophies({ trophies }: { trophies: string[] }) {
   return <div className="TrophyRoom">
     {grid.map((row, y) => row.map((id, x) => {
       const item = data[id];
-      if (item == null) return <div />;
+      if (item == null) return <div key={`${x}_${y}`}></div>;
       const classNames = ['TrophyRoom__slot'];
       if (found.has(id)) {
         classNames.push('TrophyRoom__slot--found');
       }
       return <div key={`${x}_${y}`} className={classNames.join(' ')}>
-        <Link to={`/obj/${id}`}><ItemIcon item={item} size={64} /></Link>
+        <ItemIcon item={item} size={64} useAlt />
       </div>
     }))}
   </div>;

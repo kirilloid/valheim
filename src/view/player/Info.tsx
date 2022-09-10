@@ -1,6 +1,6 @@
 import React, { useCallback, useContext } from 'react';
 
-import type { Player } from './types';
+import type { Player, Inventory as TInventory } from './types';
 import type { EditorProps } from '../parts/types';
 
 import { FileInfo } from '../parts/FileInfo';
@@ -14,6 +14,19 @@ import { Stats, Trophies } from './Stats';
 import { readExtraSlots } from './EquipmentAndQuickSlots';
 
 import { TranslationContext } from '../../effects';
+
+function renameCrafter({ version, items }: TInventory, id: bigint, oldName: string, newName: string) {
+  return {
+    version: version,
+    items: items.map(
+      item => item.crafterID === id
+      // some extended data is written into crafterName
+      // String#replace(string, ...) replaces only first occurence
+      ? { ...item, crafterName: item.crafterName.replace(oldName, newName), }
+      : item
+    ),
+  }
+}
 
 export function PlayerInfo({ value: player, onChange, file, disabled } : EditorProps<Player>) {
   const translate = useContext(TranslationContext);
@@ -38,7 +51,17 @@ export function PlayerInfo({ value: player, onChange, file, disabled } : EditorP
     const extras = readExtraSlots(playerData);
     tabs.push({
       title: translate('ui.character.appearance'),
-      renderer: () => <Appearance value={playerData} onChange={onPlayerDataChange} />,
+      renderer: () => <Appearance
+        value={playerData} onChange={onPlayerDataChange}
+        name={player.playerName} onNameChange={playerName => {
+          const inventory = renameCrafter(playerData.inventory, player.playerID, player.playerName, playerName);
+          onChange({
+            ...player,
+            playerData: { ...playerData, inventory, },
+            playerName,
+          });
+        }}
+      />,
     });
     tabs.push({
       title: translate('ui.character.inventory'),

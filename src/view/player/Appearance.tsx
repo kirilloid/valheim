@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 
 import type { PlayerData } from './types';
 import type { ValueProps } from '../parts/types';
@@ -132,7 +132,10 @@ function isComplexHairColor(color: Vector3): boolean {
       || Math.abs(color.z - reSavedColor.z) > 0.01;
 }
 
-export function Appearance({ value, onChange } : ValueProps<PlayerData>) {
+export function Appearance({ value, onChange, name, onNameChange } : ValueProps<PlayerData> & {
+  name: string;
+  onNameChange: (name: string) => void; 
+}) {
   const translate = useContext(TranslationContext);
   const colorTabs = [
     {
@@ -145,10 +148,23 @@ export function Appearance({ value, onChange } : ValueProps<PlayerData>) {
     },
   ];
 
+  const [nameEditing, setNameEditing] = useState<undefined | string>(undefined);
   const isComplexColor = isComplexSkinColor(value.skinColor) || isComplexHairColor(value.hairColor)
 
   return <>
     <dl>
+      <dt>{translate('char.name')}</dt>
+      <dd>{
+        nameEditing == null
+        ? <>{name} <button className="btn btn--sm" onClick={() => setNameEditing(name)}>Edit</button></>
+        : <>
+            <input value={nameEditing} onChange={e => setNameEditing(e.target.value)} />
+            {' '}
+            <button className="btn btn--sm" onClick={() => onNameChange(nameEditing)} disabled={!nameEditing}>Save</button>
+            {' '}
+            <button className="btn btn--sm" onClick={() => setNameEditing(undefined)}>Cancel</button>
+          </>}
+      </dd>
       <dt>{translate('char.sex')}</dt>
       <dd>
         <select value={value.modelIndex}

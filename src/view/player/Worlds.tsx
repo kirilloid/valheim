@@ -1,12 +1,18 @@
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import type { ValueProps } from '../parts/types';
 import type { MapData as TMapData, Player } from './types';
 import { read, write } from '../../file/MapData';
 
-const mapDataCache = new Map<BigInt, TMapData>();
+import { TranslationContext } from '../../effects';
 
-function MapData({ mapData, id, onChange }: { mapData: TMapData; id: BigInt; onChange: (mapData: TMapData) => void }) {
+const mapDataCache = new Map<bigint, TMapData>();
+
+function MapData({ mapData, id, onChange }: {
+  mapData: TMapData;
+  id: bigint;
+  onChange: (mapData: TMapData) => void;
+}) {
   const SIZE = 512;
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -51,6 +57,8 @@ function MapData({ mapData, id, onChange }: { mapData: TMapData; id: BigInt; onC
 }
 
 export function Worlds({ value: worlds, onChange } : ValueProps<Player['worlds']>) {
+  const translate = useContext(TranslationContext);
+
   const entries = [...worlds.entries()];
   const [hash, setHash] = useState(entries[0]?.[0] ?? BigInt(0));
   const [mapData, setMapData] = useState<TMapData>();
@@ -82,16 +90,28 @@ export function Worlds({ value: worlds, onChange } : ValueProps<Player['worlds']
   }, [hash, worlds, onChange]);
 
   if (worlds.size === 0) {
-    return <span>This character hasn't visited any worlds yet</span>
+    return <p>{translate('ui.character.worlds.none')}</p>
   }
 
   return <>
     <select value={hash.toString()} onChange={e => setHash(BigInt(e.target.value))}>
       {entries.map(e => <option value={e[0].toString()} key={Number(e[0])}>{e[0].toString(16)}</option>)}
     </select>
-    {mapData && <MapData mapData={mapData} id={hash} onChange={md => {
-      updateMapData(md);
-      setMapData(md);
-    }} />}
+    {mapData
+      ? <MapData mapData={mapData} id={hash} onChange={md => {
+        updateMapData(md);
+        setMapData(md);
+      }} />
+      : <p>{translate('ui.character.worlds.uninit')} <button className="btn btn--danger" onClick={() => {
+        worlds.delete(hash);
+        const res = worlds.keys().next();
+        if (res.done) {
+          setHash(BigInt(0));
+        } else {
+          setHash(res.value);
+        }
+        onChange(worlds);
+      }}>{translate('ui.delete')}</button></p>
+    }
   </>
 }
