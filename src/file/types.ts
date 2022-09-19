@@ -62,9 +62,9 @@ export interface ZDO {
   type: ZDOObjectType;
   distant: boolean;
   prefab: number;
-  sector: Vector2i;
-  position: Vector3;
-  rotation: Quaternion;
+  sector: Readonly<Vector2i>;
+  position: Readonly<Vector3>;
+  rotation: Readonly<Quaternion>;
   readonly floats: Map<number, number>; // int -> float
   readonly vec3: Map<number, Vector3>; // int -> Vector3
   readonly quats: Map<number, Quaternion>; // int -> Quaternion

@@ -7,7 +7,7 @@ import '../../../css/ZdoData.css';
 import type { ValueProps } from '../../parts/types';
 import type { ZDOData } from '../types';
 
-import { EMPTY_RESULT, getSearcher, getPlayers, SearchEntry, SearchIndex } from '../../../model/zdo-selectors';
+import { EMPTY_RESULT, getSearcher, getPlayersData, SearchEntry, SearchIndex } from '../../../model/zdo-selectors';
 
 import { PanView } from '../../parts/PanView';
 import { TranslationContext } from '../../../effects';
@@ -45,7 +45,7 @@ function MapUI({ zdos, selected, current, size }: { zdos: ZdoLike[]; selected: Z
 }
 
 const getSearcherCached = defaultMemoize(getSearcher);
-const getPlayersCached = defaultMemoize(getPlayers);
+const getPlayersDataCached = defaultMemoize(getPlayersData);
 const searchItemsCached = defaultMemoize((indices: SearchIndex[]) => indices.map(i => i.item))
 const searchSliceCached = defaultMemoize((indices: SearchIndex[], zdos: ZdoLike[]) => indices.slice(0, 1000)
   .map((globalIdx, typeIdx) => {
@@ -60,6 +60,7 @@ const getWidth = () => document.querySelector<HTMLDivElement>('div.App')?.offset
 
 export const ZdoData = React.memo(function ZdoData(props: ValueProps<ZDOData>) {
   const translate = useContext(TranslationContext);
+
   const zdos = props.value.zdos;
   const [entry, setEntry] = useState<SearchEntry | undefined>();
   const [term, setTerm] = useState('');
@@ -67,7 +68,7 @@ export const ZdoData = React.memo(function ZdoData(props: ValueProps<ZDOData>) {
   const [version, setVersion] = useState(0);
   const [mapExpanded, setMapExpanded] = useState(false);
   const [width, setWidth] = useState(0);
-  const players = getPlayersCached(zdos);
+  const players = getPlayersDataCached(zdos);
 
   const zdoSearcher = getSearcherCached(zdos, translate);
   const searchIndices = entry?.indices ?? EMPTY_RESULT;
@@ -128,7 +129,7 @@ export const ZdoData = React.memo(function ZdoData(props: ValueProps<ZDOData>) {
     {zdo != null && searchIndex != null && <div className="ZdoData__Editor">
       <ItemEditor
         zdo={zdo}
-        playersMap={players}
+        playersData={players}
         onChange={() => {
           setVersion(version + 1);
           props.onChange(props.value);
@@ -161,7 +162,7 @@ export const ZdoData = React.memo(function ZdoData(props: ValueProps<ZDOData>) {
             }
             props.onChange(newValue);
           }}>
-          Delete object
+          {translate('ui.delete')}
         </button>
       </section>
     </div>}

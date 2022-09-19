@@ -87,7 +87,7 @@ class ZdoMmapView implements ZDO {
     }
   }
 
-  get sector(): Vector2i {
+  get sector(): Readonly<Vector2i> {
     return {
       x: this.view.getInt32(offsets.sector, true),
       y: this.view.getInt32(offsets.sector + 4, true),
@@ -98,7 +98,7 @@ class ZdoMmapView implements ZDO {
     this.view.setInt32(offsets.sector + 4, value.y, true);
   }
 
-  get position(): Vector3 {
+  get position(): Readonly<Vector3> {
     return {
       x: this.view.getFloat32(offsets.position, true),
       y: this.view.getFloat32(offsets.position + 4, true),
@@ -111,7 +111,7 @@ class ZdoMmapView implements ZDO {
     this.view.setFloat32(offsets.position + 8, value.z, true);
   }
 
-  get rotation(): Quaternion {
+  get rotation(): Readonly<Quaternion> {
     return {
       x: this.view.getFloat32(offsets.rotation, true),
       y: this.view.getFloat32(offsets.rotation + 4, true),

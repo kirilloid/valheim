@@ -2545,7 +2545,7 @@ export const structures: Structure[] = [
     id: 'Player_tombstone',
     type: 'structure',
     tier: 0,
-    components: ['Container'],
+    components: ['TombStone', 'Container'],
   },
   {
     id: 'CargoCrate',

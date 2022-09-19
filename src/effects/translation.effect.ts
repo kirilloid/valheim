@@ -1,5 +1,7 @@
 import { useCallback, useState, useContext, createContext, useEffect } from 'react';
 import { useGlobalState } from './globalState.effect';
+import json from '../../public/lang/en.json';
+type I18NKey = keyof typeof json;
 
 export const languages = {
   en: 'English',
@@ -15,7 +17,12 @@ export function getDefaultUserLanguage(): string {
 type Dictionary<T = string> = Record<string, T>;
 const langCache: Dictionary<Promise<Dictionary>> = {};
 
-export type Translator = (key: string, ...extraArgs: (string | number)[]) => string;
+export type Translator = {
+  // this makes IDE providing key hints
+  (key: I18NKey, ...extraArgs: (string | number)[]): string;
+  // and doesn't complain about abstract strings
+  (key: string, ...extraArgs: (string | number)[]): string;
+}
 export type RuneTranslator = (object: { tier: number, type: string, id: string }, ...extraArgs: (string | number)[]) => string;
 
 export function preloadLanguage(userLang: string): Promise<Dictionary> {

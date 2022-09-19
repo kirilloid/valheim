@@ -29,10 +29,15 @@ import { WearNTearComp } from './wear-n-tear';
 import { ItemPropsComp } from './item-props';
 import { LiquidComp } from './liquid';
 import { EpicLootComp } from './epic-loot';
+import { PlayersData } from '../../../model/zdo-selectors';
+import { TombComp } from './tomb';
 
 const readOnly = true;
 
-export const InterfaceFields: Partial<Record<GameComponent, React.ComponentType<ValueProps<ZDO> & { playersMap?: Map<bigint, string> }>[]>> = {
+export const InterfaceFields: Partial<Record<
+  GameComponent,
+  React.ComponentType<ValueProps<ZDO> & { playersData: PlayersData }>[]
+>> = {
   ArmorStand: [
     ArmorStandComp,
   ],
@@ -184,9 +189,9 @@ export const InterfaceFields: Partial<Record<GameComponent, React.ComponentType<
   // Teleport: [zdoidProp('target')],
   TeleportWorld: [stringComp('tag')],
   TerrainComp: [TerrainComp],
-  Tombstone: [
+  TombStone: [
     timeComp('timeOfDeath'),
-    vectorComp('SpawnPoint'),
+    TombComp,
   ],
   TreeBase: [floatComp('health')],
   TreeLog: [floatComp('health')],

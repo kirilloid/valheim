@@ -4,7 +4,7 @@ import type { ZDO } from '../file/types';
 import type { Biome as BiomeUnion, EntityId } from '../types';
 import type { WorldData, ZoneSystemData } from '../file/World';
 
-import { Vector2i } from './utils';
+import { Vector2i, Vector3 } from './utils';
 import { stableHashCode } from './hash';
 import { WORLD_RADIUS, ZONE_SIZE } from './game';
 import { WorldGenerator, Biome as BiomeEnum } from './world-generator';
@@ -14,11 +14,12 @@ import { data } from '../data/itemDB';
 import { locationHashes } from '../data/location-hashes';
 import { modPrefabNames } from '../data/prefabs';
 
-import { readBase64 } from '../file/base64';
-import { read } from '../file/Inventory';
+import { readBase64, writeBase64 } from '../file/base64';
+import { read, write } from '../file/Inventory';
 import { match } from '../data/search';
 import { locations } from '../data/location';
 import { stripExtraData } from '../mods/epic-loot';
+import { PackageWriter } from '../file/Package';
 
 const locationHASH = stableHashCode('location');
 
@@ -96,23 +97,85 @@ const OWNER_NAME = stableHashCode('ownerName');
 const CRAFTER_ID = stableHashCode('crafterID');
 const CRAFTER_NAME = stableHashCode('crafterName');
 
-export const getPlayers = (zdos: ZDO[]): Map<bigint, string> => {
-  const map = new Map<bigint, string>();
+export type PlayersData = {
+  names: Map<bigint, string>;
+  beds: Map<bigint, Vector3>;
+  startLocation: Vector3;
+}
+
+const LOCATION_PROXY_HASH = stableHashCode('LocationProxy');
+const LOCATION_HASH = stableHashCode('location');
+
+export const getPlayersData = (zdos: ZDO[]): PlayersData => {
+  const result: PlayersData = {
+    names: new Map(),
+    beds: new Map(),
+    startLocation: { x: 0, y: 0, z: 0 },
+  };
   for (const zdo of zdos) {
     const objId = getId(prefabHashes, zdo.prefab);
     const components = data[objId]?.components;
     if (components?.includes('Bed')) {
       const id = zdo.longs.get(OWNER);
       const name = zdo.strings.get(OWNER_NAME);
-      if (id != null && name != null) map.set(id, name);
+      if (id != null) {
+        if (name != null) result.names.set(id, name);
+        result.beds.set(id, zdo.position);
+      }
     }
     if (components?.includes('ItemDrop')) {
       const id = zdo.longs.get(CRAFTER_ID);
       const name = zdo.strings.get(CRAFTER_NAME);
-      if (id && name) map.set(id, stripExtraData(name));
+      if (id && name) result.names.set(id, stripExtraData(name));
+    }
+    if (zdo.prefab === LOCATION_PROXY_HASH) {
+      const hash = zdo.ints.get(LOCATION_HASH) ?? 0;
+      const loc = locationHashes.get(hash);
+      if (loc === 'StartTemple') {
+        result.startLocation = zdo.position;
+      }
     }
   }
-  return map;
+  return result;
+};
+
+// TODO: use it in rename procedure
+export const renamePlayer = (zdo: ZDO, playerId: bigint, oldName: string, newName: string): ZDO => {
+  const objId = getId(prefabHashes, zdo.prefab);
+  const components = data[objId]?.components;
+  if (components?.includes('Bed')) {
+    const id = zdo.longs.get(OWNER);
+    if (id === playerId) {
+      zdo.strings.set(OWNER_NAME, newName);
+    } 
+  }
+  if (components?.includes('ItemDrop')) {
+    const id = zdo.longs.get(CRAFTER_ID);
+    const name = zdo.strings.get(CRAFTER_NAME);
+    if (id === playerId && name != null) {
+      zdo.strings.set(CRAFTER_NAME, name.replace(oldName, newName));
+    }
+  }
+  if (components?.includes('Container')) {
+    const value = zdo.strings.get(ITEMS_HASH);
+    if (value != null) {
+      const inv = read(readBase64(value));
+      let changed = 0;
+      for (const item of inv.items) {
+        if (item.crafterID === playerId) {
+          item.crafterName = item.crafterName.replace(oldName, newName);
+          changed++;
+        }
+      }
+      if (changed > 0) {
+        const pkg = new PackageWriter();
+        write(pkg, inv);
+        const base64 = writeBase64(pkg);
+        zdo.strings.set(ITEMS_HASH, base64);
+      }
+    }
+  }
+  return zdo;
 };
 
 const LWT_HASH = stableHashCode('lastWorldTime');
@@ -135,7 +198,7 @@ export function* getMaxTime(zdos: ZDO[]): Generator<number, number, void> {
 export type SearchIndex = { item: number; container: number; };
 export type SearchEntry = { id: string; text: string; subtype: string; indices: SearchIndex[] };
 
-const itemsHash = stableHashCode('items');
+const ITEMS_HASH = stableHashCode('items');
 
 export const EMPTY_RESULT: SearchIndex[] = [];
 
@@ -162,7 +225,7 @@ export const getSearcher = (
     } else {
       add(id, i, -1);
       if (data[id]?.components?.includes('Container')) {
-        const value = zdo.strings.get(itemsHash);
+        const value = zdo.strings.get(ITEMS_HASH);
         const items = value ? read(readBase64(value)).items : [];      
         for (const [ci, { id }] of items.entries()) add(id, i, ci);
       }

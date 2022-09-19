@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 
 import type { GameComponent } from '../../../types';
 import type { ZDO } from '../types';
+import type { PlayersData } from '../../../model/zdo-selectors';
 
 import { flip } from '../../../model/utils';
 import { stableHashCode } from '../../../model/hash';
@@ -33,8 +34,9 @@ function getComponents(id: string | undefined): GameComponent[] {
 }
 
 const variantHash = stableHashCode('variant');
+const tombHash = stableHashCode('Player_tombstone');
 
-function Editor({ value: zdo, onChange, playersMap, index, components }: ValueProps<ZDO> & { playersMap: Map<bigint, string>; index: number; components: GameComponent[] }) {
+function Editor({ value: zdo, onChange, playersData, index, components }: ValueProps<ZDO> & { playersData: PlayersData; index: number; components: GameComponent[] }) {
   if (components.length === 0) {
     return <>
       <ZdoSpecialData data={zdo.floats} stringify={String} />
@@ -51,21 +53,21 @@ function Editor({ value: zdo, onChange, playersMap, index, components }: ValuePr
     return <ContainedItemComp value={zdo} onChange={onChange} index={index} />
   }
   const editors = components.flatMap(cmp => InterfaceFields[cmp] ?? []);
-  return <List separator="">{editors.map((C, i) => <C key={i} value={zdo} onChange={onChange} playersMap={playersMap} />)}</List>
+  return <List separator="">{editors.map((C, i) => <C key={i} value={zdo} onChange={onChange} playersData={playersData} />)}</List>
 }
 
 export const ItemEditor = React.memo(({
   zdo,
   onChange,
   containerIndex,
-  playersMap,
+  playersData,
   onItemLinkClicked,
 }: {
   zdo: ZDO;
   onChange: (value: ZDO) => void;
   containerIndex: number;
   version: number;
-  playersMap: Map<bigint, string>;
+  playersData: PlayersData;
   onItemLinkClicked: (zdo: ZDO) => void;
 }) => {
   const translate = useContext(TranslationContext);
@@ -96,11 +98,11 @@ export const ItemEditor = React.memo(({
           Ship seems to be turned over <button className="btn btn--primary" onClick={() => {
             zdo.rotation = flip(zdo.rotation);
             onChange(zdo);
-          }}>flip</button> it back
+          }}>flip it back</button>
         </dd>
       </>}
       <dt>zone</dt><dd>{zdo.sector.x} / {zdo.sector.y}</dd>
-      <Editor value={zdo} onChange={onChange} playersMap={playersMap} components={components} index={containerIndex} />
+      <Editor value={zdo} onChange={onChange} playersData={playersData} components={components} index={containerIndex} />
     </dl>
   </>;
 });

@@ -20,7 +20,7 @@ export type GameComponent =
 | 'Pickable' | 'PickableItem' | 'Piece' | 'Plant' | 'Player' | 'PrivateArea' | 'Procreation'
 | 'Ragdoll' | 'RandomAnimation' | 'RandomFlyingBird' | 'Runestone' /* boss stones */
 | 'Saddle' | 'SEMan' | 'Ship' | 'ShipConstructor' | 'Sign' | 'Smelter'
-| 'Tameable' | 'TeleportWorld' | 'TerrainComp' | 'Tombstone' | 'TreeBase' | 'TreeLog'
+| 'Tameable' | 'TeleportWorld' | 'TerrainComp' | 'TombStone' | 'TreeBase' | 'TreeLog'
 | 'Vagon' | 'Vegvisir' | 'VisEquipment'
 | 'WearNTear' | 'Windmill'
 | 'ZNetView' | 'ZSyncTransform'
