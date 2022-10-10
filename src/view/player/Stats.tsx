@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
 
 import type { Player } from '../../file/Player';
 import { InlineObjectWithIcon } from '../helpers';

@@ -1,6 +1,35 @@
 import { decode, encode } from '../model/utf8';
 import type { Quaternion, Vector2i, Vector3 } from '../model/utils';
 
+/** HACKY POLYFILL */
+if (typeof BigInt === 'undefined') {
+  (window as any).BigInt = Number;
+}
+
+const two_32 = 0x100000000;
+
+if (typeof DataView.prototype.getBigInt64 === 'undefined') {
+  /* eslint-ignore no-extend-native */
+  DataView.prototype.getBigInt64 = function (this: DataView, byteOffset: number, littleEndian?: boolean) {
+    return littleEndian
+      ? this.getInt32(byteOffset, true) + this.getInt32(byteOffset + 4, true) * two_32
+      : this.getInt32(byteOffset, false) * two_32 + this.getInt32(byteOffset + 4, false);
+  } as any;
+}
+
+if (typeof DataView.prototype.setBigInt64 === 'undefined') {
+  /* eslint-ignore no-extend-native */
+  DataView.prototype.setBigInt64 = function(this: DataView, byteOffset: number, value: number, littleEndian?: boolean) {
+    if (littleEndian) {
+      this.setInt32(byteOffset, Math.ceil(value / two_32), true);
+      this.setInt32(byteOffset + 4, value % two_32, true);
+    } else {
+      this.setInt32(byteOffset, value % two_32, true);
+      this.setInt32(byteOffset + 4, Math.ceil(value / two_32), true);
+    }
+  } as any;
+}
+
 export class PackageReader {
   private offset: number;
   private bytes: Uint8Array;

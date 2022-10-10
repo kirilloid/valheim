@@ -11,6 +11,28 @@
     />
     <!-- link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" /-->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <script>
+      window.onerror = function (message) {
+        var elt = document.createElement('div');
+        elt.className = 'error';
+        var html = 'There was an error: `' + message + '`. Why this happened?';
+        if (root.childNodes.length === 0) {
+          root.appendChild(elt);
+          html += '<br>It\'s either connection glitch (reload the page) or you are using old browser (update it)';
+        } else {
+          root.insertBefore(root.firstChild, elt);
+          html += '<br>There\'s probably a bug on this site. Report it to me (kirilloid#8246) on Valheim discord.';
+        }
+        elt.innerHTML = html;
+      };
+      var features = [];
+      if (typeof [].at === 'undefined') features.push('Array.prototype.at');
+      if (features.length > 0) {
+        const script = document.createElement('script');
+        script.src = 'https://polyfill.io/v3/polyfill.min.js?features=' + features.join(',');
+        document.head.appendChild(script);
+      }
+    </script>
     <style>
       @font-face {
         font-family: 'Norse';
