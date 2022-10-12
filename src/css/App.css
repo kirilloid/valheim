@@ -248,25 +248,6 @@ option.spoiler {
   border: 1px dashed gray;
 }
 
-.FileEditor__controls {
-  right: 0;
-  margin-top: 2rem;
-  display: flex;
-  gap: 0.5rem;
-}
-
-@media screen and (min-width: 480px) {
-  .FileEditor__controls {
-    position: absolute;
-  }
-}
-
-.FileEditor--disabled {
-  opacity: 0.5;
-  filter: grayscale(1);
-  pointer-events: none;
-}
-
 @media screen and (min-width: 640px) {
   .WorldEdit {
     display: grid;
@@ -343,4 +324,9 @@ option.spoiler {
 
 .TrophyRoom__slot--found {
   opacity: 1;
+}
+
+.filepaths {
+  display: grid;
+  grid-template-columns: 120px 1fr;
 }

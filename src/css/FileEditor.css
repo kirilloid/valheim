@@ -1,0 +1,58 @@
+.FileEditor__controls {
+  right: 0;
+  margin-top: 2rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+@media screen and (min-width: 480px) {
+  .FileEditor__controls {
+    position: absolute;
+  }
+}
+
+.FileEditor__pathlist {
+  display: block;
+}
+
+.FileEditor__pathlist dt {
+  font-weight: bold;
+}
+
+.FileEditor__pathlist > * {
+  display: block;
+}
+
+@media screen and (min-width: 640px) {
+  .FileEditor__pathlist {
+    display: grid;
+    grid-template-columns: 200px 1fr;  
+  }
+  .FileEditor__pathlist dt {
+    font-weight: normal;
+  }
+}
+
+.FileEditor__icon {
+  display: none;
+}
+:root.theme--light .FileEditor__icon--light,
+:root.theme--dark .FileEditor__icon--dark {
+  display: inline-block;
+}
+@media screen and (prefers-color-scheme: light) {
+  :root.theme--system .FileEditor__icon--light {
+    display: inline-block;
+  }
+}
+@media screen and (prefers-color-scheme: dark) {
+  :root.theme--system .FileEditor__icon--dark {
+    display: inline-block;
+  }  
+}
+
+.FileEditor--disabled {
+  opacity: 0.5;
+  filter: grayscale(1);
+  pointer-events: none;
+}

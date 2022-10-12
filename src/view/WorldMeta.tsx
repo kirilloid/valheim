@@ -22,5 +22,6 @@ export function WorldMeta() {
     reader={genRead}
     writer={genWrite}
     Child={WorldMetaInfo}
+    subpath="worlds"
   />;
 }

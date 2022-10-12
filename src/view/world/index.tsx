@@ -12,5 +12,6 @@ export function WorldEditor() {
     reader={read}
     writer={write}
     Child={WorldInfo}
+    subpath="worlds"
   />;
 }

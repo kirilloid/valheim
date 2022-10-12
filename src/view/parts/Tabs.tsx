@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 export function Tabs({ tabs, selected }: {
   tabs: {
-    title: string;
+    title: string | JSX.Element;
     renderer: () => JSX.Element;
   }[],
   selected: number

@@ -12,5 +12,6 @@ export function PlayerEditor() {
     reader={read}
     writer={write}
     Child={PlayerInfo}
+    subpath="characters"
   />
 }

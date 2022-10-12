@@ -1,10 +1,14 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useContext } from 'react';
 import classNames from 'classnames';
+
+import '../../css/FileEditor.css';
 
 import type { Reader, Writer, EditorProps } from './types';
 
 import { assertNever, getMemUsage, runGenerator } from '../../model/utils';
 import { downloadFile } from '../helpers';
+import { Tabs } from './Tabs';
+import { TranslationContext } from '../../effects';
 
 type Props<T> = {
   defaultFileName: string;
@@ -12,6 +16,7 @@ type Props<T> = {
   reader: Reader<T>;
   writer: Writer<T>;
   Child: React.FC<EditorProps<T>>;
+  subpath: 'worlds' | 'characters';
 };
 
 type FileState<T> =
@@ -21,7 +26,70 @@ type FileState<T> =
 | { state: 'done', file: File, value: T, changed: boolean }
 | { state: 'saving', file: File, value: T, progress: number };
 
+type PathsProps = { subpath: string };
+
+function GameStoreIcon({ type }: { type: string }) {
+  return <>
+    <picture className="FileEditor__icon FileEditor__icon--light">
+      <img alt=""
+        src={`/icons/${type}-light_24.png`}
+        srcSet={`/icons/${type}-light_48.png 2x`}
+      />
+    </picture>
+    <picture className="FileEditor__icon FileEditor__icon--dark">
+      <img alt=""
+        src={`/icons/${type}-dark_24.png`}
+        srcSet={`/icons/${type}-dark_48.png 2x`}
+      />
+    </picture>
+  </>;
+}
+
+function SteamFilePaths({ subpath }: PathsProps) {
+  const translate = useContext(TranslationContext);
+  return (
+    <dl className="FileEditor__pathlist">
+      <dt>{translate('ui.fileEditor.type.local')}</dt>
+      <dd><code>%userprofile%\<wbr/>AppData\<wbr/>LocalLow\<wbr/>IronGate\<wbr/>Valheim\<wbr/>{subpath}_local</code></dd>
+      <dt>{translate('ui.fileEditor.type.cloud')}</dt>
+      <dd><code>%ProgramFiles(x86)%\<wbr/>Steam\<wbr/><em>&lt;steam-id&gt;</em>\<wbr/>892970\<wbr/>{subpath}</code></dd>
+      <dt>{translate('ui.fileEditor.type.legacy')}</dt>
+      <dd><code>%userprofile%\<wbr/>AppData\<wbr/>LocalLow\<wbr/>IronGate\<wbr/>Valheim\<wbr/>{subpath}</code></dd>
+    </dl>
+  );
+}
+
+function GamePassFilePaths({ subpath }: PathsProps) {
+  const translate = useContext(TranslationContext);
+  return (
+    <dl className="FileEditor__pathlist">
+      <dt>{translate('ui.fileEditor.type.local')}</dt>
+      <dd><code>%userprofile%\<wbr/>AppData\<wbr/>LocalLow\<wbr/>IronGate\<wbr/>Valheim\<wbr/>{subpath}_local</code></dd>
+      <dt>{translate('ui.fileEditor.type.cloud')}</dt>
+      <dd><code>%userprofile%\<wbr/>AppData\<wbr/>Local\<wbr/>Packages\<wbr/>CoffeeStainStudios.Valheim_496a1srhmar9w\<wbr/>SystemAppData\<wbr/>wgs</code></dd>
+      <dt>{translate('ui.fileEditor.type.legacy')}</dt>
+      <dd><code>%userprofile%\<wbr/>AppData\<wbr/>LocalLow\<wbr/>IronGate\<wbr/>Valheim\<wbr/>{subpath}</code></dd>
+    </dl>
+  );
+}
+
+function LinuxFilePaths({ subpath }: PathsProps) {
+  const translate = useContext(TranslationContext);
+  return (<>
+    <dl className="FileEditor__pathlist">
+      <dt>{translate('ui.fileEditor.type.local')}</dt>
+      <dd><code>/home/<wbr/>steam/<wbr/>.config/<wbr/>unity3d/<wbr/>IronGate/<wbr/>Valheim/<wbr/>{subpath}_local</code></dd>
+      <dt>{translate('ui.fileEditor.type.cloud')}</dt>
+      <dd><code>~/.local<wbr/>/share<wbr/>/Steam<wbr/>/userdata<wbr/>/<em>&lt;steam-id&gt;</em><wbr/>/892970<wbr/>/{subpath}</code></dd>
+      <dt>{translate('ui.fileEditor.type.legacy')}</dt>
+      <dd><code>/home<wbr/>/steam<wbr/>/.config<wbr/>/unity3d<wbr/>/IronGate<wbr/>/Valheim<wbr/>/{subpath}</code></dd>
+    </dl>
+    <p>Files are visible only by <code>steam</code> user</p>
+  </>);
+}
+
 export function FileEditor<T>(props: Props<T>) {
+  const translate = useContext(TranslationContext);
   const [state, setState] = useState<FileState<T>>({ state: 'empty' });
   const [dragging, setDragging] = useState(false);
   const ext = props.extension;
@@ -47,7 +115,7 @@ export function FileEditor<T>(props: Props<T>) {
 
   const processFiles = useCallback(async (files: FileList | null) => {
     if (files == null) {
-      return setState({ state: 'empty', message: "No file was selected" });
+      return setState({ state: 'empty', message: translate('ui.fileEditor.noFile') });
     }
     const allFiles = [...files];
     const matchingFiles = allFiles.filter(
@@ -59,10 +127,10 @@ export function FileEditor<T>(props: Props<T>) {
     if (allFiles.length === 0) {
       return setState(state => state.state === 'done'
         ? state
-        : { state: 'empty', message: "No file was selected" }
+        : { state: 'empty', message: translate('ui.fileEditor.noFile') }
       );
     }
-    if (!window.confirm("The file(s) you provided, doesn't have proper extension. Reading wrong file might crash this browser tab.\nDo you want to proceed?")) {
+    if (!window.confirm(translate('ui.fileEditor.wrongExtensionWarning'))) {
       return;
     }
     if (allFiles.length === 1) {
@@ -70,7 +138,7 @@ export function FileEditor<T>(props: Props<T>) {
     } else {
       setState({ state: 'picking', files: allFiles });
     }
-  }, [ext, processFile]);
+  }, [ext, processFile, translate]);
 
   const onDrop = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -104,24 +172,37 @@ export function FileEditor<T>(props: Props<T>) {
       switch (state.state) {
         case 'empty':
           return <>
-            <p>Drag a *.{ext} file here or open via dialog</p>
+            <p>{translate('ui.fileEditor.initial', ext)}</p>
             <p><input type="file"
               accept={`.${ext},.${ext}.old`}
               onChange={e => processFiles(e.target.files)} /></p>
-            <p>Your files are stored in <code>C:\Users\%username%\AppData\LocalLow\IronGate\Valheim\</code></p>
-            {/* %ProgramFiles(x86)%\Steam\[YourIDNumber]\892970\ */}
+          <p>{translate('ui.fileEditor.pathComment')}</p>
+            <Tabs tabs={[
+              {
+                title: <><GameStoreIcon type="steam" /> Steam</>,
+                renderer: () => <SteamFilePaths subpath={props.subpath} />,
+              },
+              {
+                title: <><GameStoreIcon type="xbox" /> GamePass</>,
+                renderer: () => <GamePassFilePaths subpath={props.subpath} />,
+              },
+              {
+                title: 'Linux',
+                renderer: () => <LinuxFilePaths subpath={props.subpath} />,
+              },
+            ]} selected={0} />
           </>
         case 'picking':
           return <>
-            <div>Several files cannot be opened at once (in one tab), select one to proceed</div>
-            <ul>{state.files.map((f, i) => <li key={i}>
+            <div>{translate('ui.fileEditor.multiFiles')}</div>
+            {state.files.map((f, i) => <p key={f.name}>
               <button type="button" className="btn btn--secondary" onClick={() => processFile(f)}>{f.name}</button>
-            </li>)}</ul>
+            </p>)}
             <input type="button" className="btn btn--danger" onClick={() => setState({ state: 'empty' })} value="cancel" />
           </>
         case 'reading':
           return <>
-            <div>Reading file &hellip;</div>
+            <div>{translate('ui.fileEditor.reading')} &hellip;</div>
             <progress value={state.progress} max="1" style={{ width: '100%' }} />
           </>
         case 'done':
@@ -139,18 +220,18 @@ export function FileEditor<T>(props: Props<T>) {
                     setState({ state: 'done', file, value: state.value, changed: false });
                   });
                 }}>
-                Save &amp; Download
+                {translate('ui.fileEditor.save')}
               </button>
               <button className="btn btn--danger"
                 onClick={() => setState({ state: 'empty' })}>
-                Close
+                {translate('ui.fileEditor.close')}
               </button>
             </div>
             <props.Child value={state.value} file={state.file} onChange={onChange} />
           </>;
         case 'saving':
           return <>
-            <div>Saving file...</div>
+            <div>{translate('ui.fileEditor.saving')} &hellip;</div>
             <progress value={state.progress} max="1" style={{ width: '100%' }} />
             <props.Child value={state.value} file={state.file} onChange={onChange} disabled={true} />
           </>;
