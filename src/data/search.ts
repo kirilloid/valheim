@@ -77,6 +77,7 @@ export const pages = [
 
   { id: 'player-edit', category: 'edit' },
   { id: 'world-edit', category: 'edit', beta: true },
+  // { id: 'world-meta', category: 'edit' },
 ];
 
 function addObjects(dict: Record<string, string>) {

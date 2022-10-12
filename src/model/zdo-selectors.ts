@@ -1,7 +1,7 @@
 import { defaultMemoize } from 'reselect';
 
 import type { ZDO } from '../file/types';
-import type { Biome as BiomeUnion, EntityId } from '../types';
+import type { Biome as BiomeUnion, EntityId, GameLocationId, Pair } from '../types';
 import type { WorldData, ZoneSystemData } from '../file/World';
 
 import { Vector2i, Vector3 } from './utils';
@@ -138,6 +138,57 @@ export const getPlayersData = (zdos: ZDO[]): PlayersData => {
   }
   return result;
 };
+
+type LocationStats = {
+  generated: number;
+  total: number;
+  nominal: number;
+}
+
+type LocationsStats = Record<GameLocationId, LocationStats>;
+
+export const getTotalLocations = (zoneSystem?: ZoneSystemData): Pair<LocationsStats> => {
+  if (!zoneSystem?.locationsGenerated) return [{}, {}];
+
+  const detailed: LocationsStats = {};
+  const summary: LocationsStats = {};
+  const typeIdMap: Record<GameLocationId, string> = {};
+
+  for (const loc of locations) {
+    detailed[loc.id] = {
+      generated: 0,
+      total: 0,
+      nominal: loc.quantity,
+    };
+    typeIdMap[loc.id] = loc.typeId;
+    if (!(loc.typeId in summary)) {
+      summary[loc.typeId] = {
+        generated: 0,
+        total: 0,
+        nominal: 0,
+      };
+    }
+    summary[loc.typeId]!.nominal += loc.quantity
+  }
+
+  for (const loc of zoneSystem.locationInstances) {
+    const location = detailed[loc.name] ?? (detailed[loc.name] = {
+      generated: 0,
+      total: 0,
+      nominal: 0,
+    });
+    location.total++;
+    if (loc.generated) location.generated++;
+    const id = typeIdMap[loc.name];
+    if (!id) continue;
+    const sum = summary[id];
+    if (!sum) continue;
+    sum.total++;
+    if (loc.generated) sum.generated++;
+  }
+
+  return [summary, detailed];
+}
 
 // TODO: use it in rename procedure
 export const renamePlayer = (zdo: ZDO, playerId: bigint, oldName: string, newName: string): ZDO => {
