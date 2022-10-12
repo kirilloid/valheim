@@ -104,7 +104,7 @@ function spawner(config: {
 }
 
 export const maxLvl = (creature: Creature) => {
-  return creature.spawners.reduce((l, s) => Math.max(l, s.levels[1]), 1);
+  return creature.spawners.reduce((l, s) => Math.max(l, s.levels[1]), creature.maxLvl ?? 1);
 };
 
 export const creatures: Creature[] = [
@@ -2048,6 +2048,7 @@ export const creatures: Creature[] = [
     tier: 5,
     emoji: '',
     faction: 'PlainsMonsters',
+    maxLvl: 3,
     spawners: [],
     attacks: single([
       { dmg: dmg({

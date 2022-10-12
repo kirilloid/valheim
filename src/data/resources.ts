@@ -291,7 +291,7 @@ export const resources: Resource[] = [
   { type: 'item', id: 'MeadStaminaMedium', emoji: '\u{1F9EA}', tier: 1, weight: 1, stack: 10,
     Potion: { stamina: [160, 2], cooldown: 120 },
   },
-  { type: 'item', id: 'BarleyWineBase', tier: 5, weight: 1, stack: 1 },
+  { type: 'item', id: 'BarleyWineBase', iconId: 'resource/MeadBase', tier: 5, weight: 1, stack: 1 },
   { type: 'item', id: 'BarleyWine', emoji: '\u{1F9EA}', tier: 5, weight: 1, stack: 10,
     Potion: { damageModifiers: { fire: 'resistant' }, cooldown: 600 },
   },

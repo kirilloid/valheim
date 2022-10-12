@@ -304,6 +304,7 @@ export interface Creature extends GameObjectBase {
   emoji: string;
   upgradeDistance?: number;
   faction: Faction;
+  maxLvl?: number;
   spawners: SpawnerConfig[];
   tolerate: number;
   speed: {
