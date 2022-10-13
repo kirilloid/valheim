@@ -54,7 +54,12 @@ function addToMap<T extends Item | Piece | Ship | Cart>(map: Record<EntityId, T[
 
 function registerRecipes(recipes: ItemRecipe[]) {
   for (const recipe of recipes) {
-    addToMap(resourceCraftMap, data[recipe.item] as Item, recipe);
+    const item = data[recipe.item] as Item | undefined;
+    if (item == null) {
+      console.error(`Registering a recipe for ${recipe.item}, but the item doesn't exist`);
+    } else {
+      addToMap(resourceCraftMap, item, recipe);
+    }
   }
 }
 registerRecipes(recipes);
