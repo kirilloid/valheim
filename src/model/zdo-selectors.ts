@@ -17,7 +17,7 @@ import { modPrefabNames } from '../data/prefabs';
 import { readBase64, writeBase64 } from '../file/base64';
 import { read, write } from '../file/Inventory';
 import { match } from '../data/search';
-import { locations } from '../data/location';
+import { locations, locationsIdMap } from '../data/location';
 import { stripExtraData } from '../mods/epic-loot';
 import { PackageWriter } from '../file/Package';
 
@@ -267,7 +267,7 @@ export const getSearcher = (
     if (id === 'LocationProxy') {
       const locationHashed = zdo.ints.get(locationHASH) ?? 0;
       const location = locationHashes.get(locationHashed) ?? `_unknown_${(locationHashed >>> 0).toString(16)}`;
-      const typeId = locations.find(loc => loc.id === location)?.typeId;
+      const typeId = locationsIdMap.get(location)?.typeId;
       if (typeId != null) {
         add(typeId, i, -1);
       } else {

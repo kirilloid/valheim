@@ -13,7 +13,7 @@ import { match } from '../data/search';
 import { data } from '../data/itemDB';
 import { recipes } from '../data/recipes';
 import { events } from '../data/events';
-import { biomes, locations } from '../data/location';
+import { biomes, locationsTypeIdMap } from '../data/location';
 import { effects } from '../data/effects';
 
 import { TranslationContext, Translator, useGlobalState } from '../effects';
@@ -97,7 +97,7 @@ function renderItem(entry: SearchEntry, text: string, translate: Translator, onC
 function SearchLocation({ entry, text, onClick }: { entry: SearchEntry, text: string, onClick: React.MouseEventHandler }) {
   const [spoiler] = useGlobalState('spoiler');
   const { id } = entry;
-  const loc = locations.find(l => l.typeId === id);
+  const loc = locationsTypeIdMap.get(id);
   if (!loc) return null;
   if (loc.tier > spoiler) return null;
   

@@ -4,11 +4,11 @@ import type { Quaternion, Vector2i, Vector3 } from './utils';
 import { LocationConfig } from '../types';
 import { stableHashCode } from './hash';
 import { WATER_LEVEL, ZONE_SIZE } from './game';
-import { Biome as BiomeEnum, BiomeArea, WorldGenerator } from './world-generator';
+import { Biome as BiomeEnum, WorldGenerator } from './world-generator';
 import { zoneId } from './zdo-selectors';
 import { Heightmap } from './heightmap';
 import { objects } from '../data/objects';
-import { locations } from '../data/location';
+import { locationsSorted } from '../data/location';
 
 export type RegisteredLocation = {
   location: LocationConfig;
@@ -47,10 +47,10 @@ export class ZoneSystem {
     const state = random.getState();
     // this.CheckLocationDuplicates();
     // this.ClearNonPlacedLocations();
-    for (const [i, location] of locations.sort((a, b) => +b.prioritized - +a.prioritized).entries()) {
+    for (const [i, location] of locationsSorted.entries()) {
       if (location.quantity !== 0) {
         this.generateLocation(seed, location);
-        yield (i + 1) / locations.length;
+        yield (i + 1) / locationsSorted.length;
       }
     }
     random.setState(state);

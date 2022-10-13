@@ -265,6 +265,15 @@ option.spoiler {
   }
 }
 
+/* so hacky hack */
+.WorldEdit table {
+  min-width: 80%;
+}
+
+.WorldEdit table td:nth-child(n+2) {
+  text-align: right;
+}
+
 .WorldGen {
   position: absolute;
   inset: 40px 0 0 0;

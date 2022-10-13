@@ -34,7 +34,6 @@ function getComponents(id: string | undefined): GameComponent[] {
 }
 
 const variantHash = stableHashCode('variant');
-const tombHash = stableHashCode('Player_tombstone');
 
 function Editor({ value: zdo, onChange, playersData, index, components }: ValueProps<ZDO> & { playersData: PlayersData; index: number; components: GameComponent[] }) {
   if (components.length === 0) {

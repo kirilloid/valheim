@@ -60,7 +60,7 @@ export const biomeTiers = Object.fromEntries(biomes.map(b => [b.id as Biome, b.t
 
 export function area(id: Biome | GameLocationId): BiomeConfig | LocationConfig | undefined {
   return biomes.find(b => b.id === id)
-      ?? locations.find(l => l.typeId === id)
+      ?? locationsTypeIdMap.get(id)
 }
 
 function loc(
@@ -219,7 +219,7 @@ export const locations: LocationConfig[] = [
   loc(
     2, 'Runestone_Greydwarfs', ['BlackForest'],
     { type: 'runestone',
-      quantity: 25, chance: 0.1, group: 'Runestones', minApart: 128, maxDistance: 2000, radius: 8,
+      quantity: 50, chance: 0.1, group: 'Runestones', minApart: 128, maxDistance: 2000, radius: 8,
       items: [locItem('FirTree_oldLog', 1, 4)] }
   ),
   loc(
@@ -1474,3 +1474,11 @@ export function getLocationDetails(typeId: GameLocationId): LocationConfig | und
   computedLocations.set(typeId, result);
   return result;
 }
+
+export const locationsSorted: LocationConfig[] = [
+  ...locations.filter(l => l.prioritized),
+  ...locations.filter(l => !l.prioritized),
+];
+
+export const locationsIdMap = new Map(locations.map(l => [l.id, l]));
+export const locationsTypeIdMap = new Map(locations.map(l => [l.typeId, l]));
