@@ -1,5 +1,6 @@
 import type { DamageModifiers, EntityId, Piece } from '../types';
-import { MaterialType, mods } from '../types';
+import { MaterialType } from '../types';
+import { mods } from '../model/game';
 
 export const wearStructure = (
   hp: number,

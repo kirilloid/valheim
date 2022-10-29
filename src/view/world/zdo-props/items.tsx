@@ -12,7 +12,7 @@ import { data } from '../../../data/itemDB';
 
 import { TranslationContext } from '../../../effects';
 import { ItemIcon } from '../../parts/Icon';
-import { extractExtraData, getMaxDurability } from '../../../mods/epic-loot';
+import { getEpicLootData, getMaxDurability } from '../../../mods/epic-loot';
 
 const itemsHash = stableHashCode('items');
 
@@ -24,12 +24,12 @@ export function ItemsComp({ value: zdo }: ValueProps<ZDO>) {
     <dt>items</dt>
     <dd>{items.length > 1
       ? <ul>{items.map((item, i) => {
-          const extraData = extractExtraData(item);
+          const epicLoot = getEpicLootData(item);
           return <li key={i}>
             {item.stack}&times;{' '}
             <ItemIcon item={data[item.id]} variant={item.variant} useAlt={false} size={16} />
             {' '}
-            <span className={extraData != null ? 'EpicLoot--' + extraData.rarity : ''}>{translate(item.id)}</span>
+            <span className={epicLoot != null ? 'EpicLoot--' + epicLoot.rarity : ''}>{translate(item.id)}</span>
           </li>;
         })}</ul>
       : <em>none</em>
@@ -62,9 +62,9 @@ export function ContainedItemComp({
   if (item == null) return null;
   const obj = data[item.id] as Item | undefined;
   if (obj == null) return null;
-  const extraData = extractExtraData(item);
+  const epicLoot = getEpicLootData(item);
   const maxStack = obj.stack ?? 1;
-  const maxDurability = getMaxDurability(item, obj, extraData)[1];
+  const maxDurability = getMaxDurability(item, obj, epicLoot)[1];
   const maxQuality = obj.maxLvl ?? 1;
   const variants = obj.variants ?? 0;
   
@@ -116,11 +116,11 @@ export function ContainedItemComp({
         onChange(zdo);
       }}
     />}
-    {extraData != null && <>
-      <dt>rarity</dt><dd>{extraData.rarity}</dd>
-      {Object.entries(extraData?.effects ?? {})
+    {epicLoot != null && <>
+      <dt>rarity</dt><dd>{epicLoot.rarity}</dd>
+      {Object.entries(epicLoot?.effects ?? {})
         .map(([key, val], i) => <React.Fragment key={key}>
-          <dt>{extraData.augmentedIndex === i ? <em>augmented</em> : ''}</dt>
+          <dt>{epicLoot.augmentedIndex === i ? <em>augmented</em> : ''}</dt>
           <dd>{translate(`ui.mod.EpicLoot.effect.${key}`, val)}</dd>
         </React.Fragment>)}
     </>}

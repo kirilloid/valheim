@@ -1,17 +1,15 @@
-import { singleDrop } from '../model/game';
-import {
+import type {
   DamageModifiers,
   Destructible,
   EntityGroup,
   EntityId,
   GeneralDrop,
-  itemGrow,
   ItemGrow,
-  mods,
   PhysicalObject,
   Plantable,
   Structure,
 } from '../types';
+import { singleDrop, itemGrow, mods } from '../model/game';
 import { pickables } from './pickable';
 
 const oneOfEach = true;
@@ -73,7 +71,7 @@ const chopOnly: DamageModifiers = {
   chop: 'normal',
 };
 
-const pickOnly: DamageModifiers = {
+export const pickOnly: DamageModifiers = {
   ...allImmune,
   pickaxe: 'normal',
 };

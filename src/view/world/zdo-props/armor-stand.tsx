@@ -8,7 +8,7 @@ import { data } from '../../../data/itemDB';
 
 import { TranslationContext } from '../../../effects';
 import { ItemIcon } from '../../parts/Icon';
-import { extractExtraData } from '../../../mods/epic-loot';
+import { getEpicLootData } from '../../../mods/epic-loot';
 
 /*
   zdo.Set(index + "_durability", itemData.m_durability);
@@ -38,11 +38,11 @@ export function ArmorStandComp({ value: zdo }: ValueProps<ZDO>) {
     <dd><ul>{items.map((id, i) => {
       const variant = zdo.ints.get(stableHashCode(`${i}_variant`))
       const crafterName = zdo.strings.get(stableHashCode(`${i}_crafterName`)) ?? '';
-      const extraData = extractExtraData({ crafterName });
+      const epicLoot = getEpicLootData({ crafterName });
       return !!id && <li key={i}>
         <ItemIcon variant={variant} item={data[id]} useAlt={false} size={16} />
         {' '}
-        <span className={extraData != null ? 'EpicLoot--' + extraData.rarity : ''}>{translate(id)}</span>
+        <span className={epicLoot != null ? 'EpicLoot--' + epicLoot.rarity : ''}>{translate(id)}</span>
       </li>;
     })}</ul></dd>
   </React.Fragment>;

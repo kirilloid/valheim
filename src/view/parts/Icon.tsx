@@ -44,7 +44,7 @@ const iconPath = (item: GameObject): string => {
 };
 
 type SkillIconProps = {
-  skill: SkillType;
+  skill?: string;
   useAlt: boolean;
   size?: number;
 }
@@ -52,12 +52,18 @@ type SkillIconProps = {
 export function SkillIcon(props: SkillIconProps) {
   const translate = useContext(TranslationContext);
   const { skill, useAlt, size = 32 } = props;
-  const skillStr = SkillType[skill];
-  return <img
+  return skill ? <img
     className="icon"
-    src={`/icons/skills/${skillStr}.png`}
-    alt={useAlt ? translate(`ui.skillType.${skillStr}`) : ''}
-    title={useAlt ? translate(`ui.skillType.${skillStr}`) : ''}
+    src={`/icons/skills/${skill}.png`}
+    alt={useAlt ? translate(`ui.skillType.${skill}`) : ''}
+    title={useAlt ? translate(`ui.skillType.${skill}`) : ''}
+    width={size}
+    height={size}
+  /> : <img
+    className="icon"
+    src={`/icons/nostroke.png`}
+    alt="Unknown skill"
+    title="Unknown skill"
     width={size}
     height={size}
   />;

@@ -28,6 +28,16 @@ import {
   recipes as boneAppetitRecipes,
 } from './bone-appetit';
 
+import {
+  data as jewelCraftingData,
+  recipes as jewelCraftingRecipes,
+} from './jewel-crafting';
+
+import {
+  data as magicOverhaulData,
+  recipes as magicOverhaulRecipes,
+} from './magic-overhaul';
+
 export const data = {
   backpackRemakeData,
   epicLootData,
@@ -35,6 +45,8 @@ export const data = {
   odinFoodBarrelsData,
   odinArchitectData,
   boneAppetitData,
+  jewelCraftingData,
+  magicOverhaulData,
 };
 
 export const recipes = {
@@ -44,6 +56,8 @@ export const recipes = {
   odinFoodBarrelsRecipes,
   odinArchitectRecipes,
   boneAppetitRecipes,
+  jewelCraftingRecipes,
+  magicOverhaulRecipes,
 };
 
 type ModConfig = ({ nexus: number; } | { thunderstore: string; }) & {
@@ -58,6 +72,17 @@ export const modLinks: Record<string, ModConfig> = {
     version: '0.8.8',
     fullSupport: true,
   },
+  Jewelcrafting: {
+    nexus: 387,
+    thunderstore: 'Smoothbrain/Jewelcrafting',
+    version: '1.2.5',
+    fullSupport: true,
+  },
+  MagicOverhaul: {
+    thunderstore: 'KGvalheim/MagicOverhaul',
+    version: '1.5.594',
+    fullSupport: true,
+  },
   // OdinPlus
   OdinArchitect: {
     nexus: 1174,
@@ -69,6 +94,12 @@ export const modLinks: Record<string, ModConfig> = {
     thunderstore: 'OdinPlus/PotionsPlus',
     version: '0.0.5',
     fullSupport: false,
+  },
+  JotunnBackpacks: {
+    nexus: 1416,
+    thunderstore: 'EmrikNorth_and_Aedenthorn/JotunnBackpacks/',
+    version: '2.0.0',
+    fullSupport: true,
   },
   BackPacks_Remake: {
     thunderstore: 'OdinPlus/BackPacks_Remake',

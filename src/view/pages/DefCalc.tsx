@@ -169,7 +169,7 @@ function Skill({ shield, onChange }: { shield: ShieldConfig | undefined; onChang
   return <div className="row weapon">
     <div className="weapon__label">
       <label htmlFor="skill">{translate('ui.skill')}</label>
-      <SkillIcon skill={shield.item.skill} useAlt size={24} />
+      <SkillIcon skill="Blocking" useAlt size={24} />
     </div>
     <div className="weapon__input-primary">
       <datalist id="skill">

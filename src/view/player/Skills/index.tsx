@@ -2,13 +2,16 @@ import React, { useContext, useState } from 'react';
 
 import '../../css/Skills.css';
 
-import type { PlayerData, SkillData } from './types';
-import { SkillType } from '../../model/skills';
+import type { PlayerData, SkillData } from '../types';
+import { SkillType } from '../../../model/skills';
+import { xp } from '../../../model/game';
 
-import { TranslationContext } from '../../effects';
-import { SkillIcon } from '../parts/Icon';
-import { xp } from '../../model/game';
-import { readExtraSkills } from './ValheimLevelSystemVLS';
+import { TranslationContext } from '../../../effects';
+import { SkillIcon } from '../../parts/Icon';
+
+import { MagicOverhaul } from './magic-overhaul';
+import { Deadheim } from './deadheim';
+import { SkillCodeMap } from './smoothbrain';
 
 function Skill({ skill, value, onChange }: {
   skill: SkillType;
@@ -18,8 +21,18 @@ function Skill({ skill, value, onChange }: {
   const translate = useContext(TranslationContext);
   const { level, accumulator } = value;
   const inLevelPercent = accumulator / xp(level + 1);
+
+  const skillStr = SkillType[skill] ?? SkillCodeMap.get(skill);
+  
   return <React.Fragment>
-    <dt><SkillIcon size={32} skill={skill} useAlt={false} /> {translate(`ui.skillType.${SkillType[skill]}`)}</dt>
+    <dt>
+      <SkillIcon size={32} skill={skillStr} useAlt={false} />
+      {' '}
+      {skillStr
+        ? translate(`ui.skillType.${skillStr}`)
+        : `Unknown skill v${skill}`
+      }
+    </dt>
     <dd>
       <div className="SkillBar">
         <div className="SkillBar__level" style={{ width: `${level}%` }}></div>
@@ -42,7 +55,6 @@ export function Skills({ skillData, onChange, playerData } : {
   onChange: (value: SkillData) => void;
   playerData: PlayerData;
 }) {
-  const deadHeim = readExtraSkills(playerData);
   const entries = [...skillData.entries()];
   const [showAll, setShowAll] = useState(false);
   const nonZeroEntries = entries.filter(([, { level }]) => level);
@@ -59,16 +71,7 @@ export function Skills({ skillData, onChange, playerData } : {
       }
     </dl>
     {!showAll && <button className="btn btn--sm" onClick={() => setShowAll(true)}>Show all skills</button>}
-    {deadHeim != null && <React.Fragment key="deadheim">
-      <h3>Deadheim</h3>
-      <div>Level: {deadHeim.lvl}</div>
-      <dl>
-        {Object.entries(deadHeim.skills).map(([skill, lvl]) => <React.Fragment key={skill}>
-          <dt>{skill}</dt><dd>{lvl}</dd>
-        </React.Fragment>)}
-      </dl>
-      <div>Exp: {deadHeim.exp}</div>
-      <div>Available Points: {deadHeim.points}</div>
-    </React.Fragment>}
+    <MagicOverhaul playerData={playerData} />
+    <Deadheim playerData={playerData} />
   </div>
 }

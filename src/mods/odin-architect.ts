@@ -1,4 +1,4 @@
-import { GameObject, ItemRecipe, mods, Piece, Tool } from '../types';
+import type { GameObject, ItemRecipe, Piece, Tool } from '../types';
 import { MaterialType } from '../types';
 import {
   crystalStructureRecipe,
@@ -13,6 +13,7 @@ import {
   stoneStructureWear,
   woodStructureWear,
 } from '../model/building';
+import { mods } from '../model/game';
 import { workbenchRecipe } from '../model/recipe';
 
 const buildings: Piece[] = [

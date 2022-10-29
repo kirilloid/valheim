@@ -52,6 +52,7 @@ for (const item of Object.values(data)) {
 
 if (typeof window !== 'undefined') {
   (window as any).objectDB = data;
+  (window as any).recipes = recipes.concat(...Object.values(modsRecipes));
 }
 
 export const extraData: Record<string, GameComponent[]> = {

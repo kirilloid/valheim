@@ -50,7 +50,7 @@ export function DropSection({ sources }: { sources: string[] | undefined }) {
 function Station({ station }: { station: EntityId | null }) {
   if (!station) {
     return <>
-      <SkillIcon skill={SkillType.Unarmed} useAlt={false} />{' '}
+      <SkillIcon skill="Unarmed" useAlt={false} />{' '}
       inventory
     </>;
   }

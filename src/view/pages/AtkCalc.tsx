@@ -9,6 +9,7 @@ import { attackCreature, AttackStats, WeaponConfig } from '../../model/combat';
 import { Action, actionCreators, ActionCreators, reducer, enabledItems, CombatStat } from '../../state/off-calc/reducer';
 import { parseState, serializeState, pageName } from '../../state/off-calc';
 import { groupBy } from '../../model/utils';
+import { SkillType } from '../../model/skills';
 
 import { arrows } from '../../data/arrows';
 import { biomeTiers } from '../../data/location';
@@ -101,7 +102,7 @@ function WeaponBlock(props: {
         { 'weapon__item--same': same.arrow },
       )}>
         <label htmlFor={`arrow${index}`}>
-          {translate('ui.itemType.arrow')}
+          {translate('ui.itemType.ammo')}
         </label>
         <ItemIcon item={arrow} size={24} />
       </div>
@@ -128,7 +129,7 @@ function WeaponBlock(props: {
         { 'weapon__item--same': same.skillType },
       )}>
         <label htmlFor={`skill${index}`}>{translate('ui.skill')}</label>
-        <SkillIcon skill={item.skill} useAlt size={24} />
+        <SkillIcon skill={SkillType[item.skill]!} useAlt size={24} />
       </div>
       <div className={classNames(
         'weapon__input-primary',

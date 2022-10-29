@@ -50,13 +50,13 @@ export function ShortWeaponDamage({ damage, skill }: { damage: DamageProfile, sk
   const result: (JSX.Element | string)[] = [];
   if (damage.pickaxe) {
     result.push(
-      <SkillIcon key="Pickaxes" skill={SkillType.Pickaxes} useAlt size={16} />,
+      <SkillIcon key="Pickaxes" skill="Pickaxes" useAlt size={16} />,
       String(damage.pickaxe),
     );
   }
   if (damage.chop) {
     result.push(
-      <SkillIcon key="WoodCutting" skill={SkillType.WoodCutting} useAlt size={16} />,
+      <SkillIcon key="WoodCutting" skill="WoodCutting" useAlt size={16} />,
       String(damage.chop),
     );
   }
@@ -68,7 +68,7 @@ export function ShortWeaponDamage({ damage, skill }: { damage: DamageProfile, sk
   // elemental
   const { fire, frost, poison, lightning, spirit } = damage;
   const obj = { physical, fire, frost, poison, lightning, spirit };
-  if (skill) result.push(<SkillIcon key={skill} skill={skill} useAlt size={16} />);
+  if (skill) result.push(<SkillIcon key={skill} skill={SkillType[skill]} useAlt size={16} />);
   result.push(
     ...Object.entries(obj)
       .filter(kv => kv[1])

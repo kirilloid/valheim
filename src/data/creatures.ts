@@ -1,4 +1,3 @@
-import { dmg } from '../model/game';
 import type {
   AttackProfile,
   AttackVariety,
@@ -7,7 +6,8 @@ import type {
   SpawnerConfig,
   Biome, Pair, EntityId,
 } from '../types';
-import { TOLERATE, mods, dropEntry, dropTrophy } from '../types';
+import { TOLERATE } from '../types';
+import { mods, dmg, dropEntry, dropTrophy } from '../model/game';
 import { EnvId } from './env';
 
 const defaultDmgModifiers: DamageModifiers = {

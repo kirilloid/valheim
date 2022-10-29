@@ -19,7 +19,7 @@ function skill(skill: SkillType | null) {
   const str = skill && SkillType[skill];
   return skill != null && str != null
     ? <>
-        <SkillIcon skill={skill} useAlt={false} size={16} />
+        <SkillIcon skill={SkillType[skill]} useAlt={false} size={16} />
         {' '}
         {str}
       </>

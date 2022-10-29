@@ -80,7 +80,6 @@ export const recipes: ItemRecipe[] = [
   genericRecipe('piece_cookingstation', 1, 25, { FishRaw: 1 }, {}, 'FishCooked'),
   genericRecipe('piece_cookingstation', 1, 25, { DeerMeat: 1 }, {}, 'CookedDeerMeat'),
   genericRecipe('piece_cookingstation', 1, 25, { WolfMeat: 1 }, {}, 'CookedWolfMeat'),
-
   // IRON COOKING STATION
   genericRecipe('piece_cookingstation_iron', 1, 25, { RawMeat: 1 }, {}, 'CookedMeat'),
   genericRecipe('piece_cookingstation_iron', 1, 25, { NeckTail: 1 }, {}, 'NeckTailGrilled'),
@@ -99,17 +98,17 @@ export const recipes: ItemRecipe[] = [
   cauldronRecipe(2, { Bloodbag: 1, Honey: 1, Turnip: 1 }, 'BlackSoup'),
   cauldronRecipe(2, { Ooze: 1, Raspberry: 2, Blueberries: 2 }, 'ShocklateSmoothie'),
   cauldronRecipe(2, { Entrails: 2, RawMeat: 1, Thistle: 4 }, 'Sausages', 4),
-  cauldronRecipe(2, { Mushroom: 1, SerpentMeatCooked: 1, Honey: 2 }, 'SerpentStew', 1),
+  cauldronRecipe(2, { Mushroom: 1, SerpentMeatCooked: 1, Honey: 2 }, 'SerpentStew'),
   // LEVEL 3
-  cauldronRecipe(3, { WolfMeat: 1, Mushroom: 2, Onion: 1 }, 'WolfMeatSkewer', 2),
+  cauldronRecipe(3, { WolfMeat: 1, Mushroom: 2, Onion: 1 }, 'WolfMeatSkewer'),
   cauldronRecipe(3, { WolfMeat: 1, Honey: 1 }, 'WolfJerky', 2),
-  cauldronRecipe(3, { GreydwarfEye: 3, FreezeGland: 1 }, 'Eyescream', 1),
-  cauldronRecipe(3, { Onion: 3 }, 'OnionSoup', 1),
+  cauldronRecipe(3, { GreydwarfEye: 3, FreezeGland: 1 }, 'Eyescream'),
+  cauldronRecipe(3, { Onion: 3 }, 'OnionSoup'),
   // LEVEL 4
-  cauldronRecipe(4, { Bloodbag: 2, BarleyFlour: 4, Thistle: 2 }, 'BloodPudding', 1),
+  cauldronRecipe(4, { Bloodbag: 2, BarleyFlour: 4, Thistle: 2 }, 'BloodPudding'),
   cauldronRecipe(4, { BarleyFlour: 10 }, 'BreadDough', 2),
-  cauldronRecipe(4, { FishCooked: 2, BarleyFlour: 4 }, 'FishWraps', 1),
-  cauldronRecipe(4, { Cloudberry: 2, LoxMeat: 2, BarleyFlour: 4 }, 'LoxPieUncooked', 1),
+  cauldronRecipe(4, { FishCooked: 2, BarleyFlour: 4 }, 'FishWraps'),
+  cauldronRecipe(4, { Cloudberry: 2, LoxMeat: 2, BarleyFlour: 4 }, 'LoxPieUncooked'),
   // FERMENTER
   ...potionRecipe(
     1, { Honey: 10, Blueberries: 5, Raspberry: 10, Dandelion: 1 },
@@ -167,7 +166,7 @@ export const recipes: ItemRecipe[] = [
   forgeRecipe(1, { Bronze: 5, DeerHide: 2 }, { Bronze: 3 }, 'ArmorBronzeLegs'),
   forgeRecipe(1, { Bronze: 5, DeerHide: 2 }, { Bronze: 3 }, 'ArmorBronzeChest'),
   forgeRecipe(1, { Bronze: 5, DeerHide: 2 }, { Bronze: 3 }, 'HelmetBronze'),
-  forgeRecipe(NaN, { Iron: 1 }, {}, 'IronNails', 10),
+  forgeRecipe(1, { Iron: 1 }, {}, 'IronNails', 10),
   // LEVEL 2
   forgeRecipe(2, { ElderBark: 30, Iron: 35, LeatherScraps: 4 }, { ElderBark: 5, Iron: 15 }, 'Battleaxe'),
   forgeRecipe(2, { Wood: 4, Iron: 20, LeatherScraps: 2 }, { Iron: 10, LeatherScraps: 1 }, 'AxeIron'),
@@ -219,8 +218,8 @@ export const recipes: ItemRecipe[] = [
   genericRecipe('piece_stonecutter', 1, STONECUTTER_TIME, { Stone: 5 }, {}, 'SharpeningStone'),
   genericRecipe('piece_spinningwheel', 1, SPIN_WHEEL_TIME, { Flax: 5 }, {}, 'LinenThread'),
   genericRecipe('windmill', 1, 10, { Barley: 5 }, {}, 'BarleyFlour'),
-  genericRecipe('piece_oven', 1, 50, { BreadDough: 5 }, {}, 'Bread'),
-  genericRecipe('piece_oven', 1, 50, { LoxPieUncooked: 5 }, {}, 'LoxPie'),
+  genericRecipe('piece_oven', 1, 50, { BreadDough: 1 }, {}, 'Bread'),
+  genericRecipe('piece_oven', 1, 50, { LoxPieUncooked: 1 }, {}, 'LoxPie'),
   // TRADER
   traderRecipe(120, 'YmirRemains'),
   traderRecipe(10, 'FishingBait', 50),

@@ -199,7 +199,7 @@ export function Mining() {
     </div>
     <div>
       <label>
-        <SkillIcon skill={objectType === 'tree' ? SkillType.WoodCutting : SkillType.Pickaxes} useAlt />
+        <SkillIcon skill={objectType === 'tree' ? 'WoodCutting' : 'Pickaxes'} useAlt />
         {' '}
         {translate('ui.skill')}:
         {' '}

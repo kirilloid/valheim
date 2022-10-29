@@ -301,7 +301,7 @@ function SearchObject({ id, text, onClick }: BaseSearchItemProps) {
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick} className={linkClassName}>{text}</Link>
         <span>
-          <SkillIcon skill={SkillType.Blocking} useAlt size={16} />
+          <SkillIcon skill="Blocking" useAlt size={16} />
           {first(item.block)}
         </span>
         <ShortRecipe item={item} />

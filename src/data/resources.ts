@@ -1,4 +1,5 @@
-import { EntityId, Resource, itemGrow } from '../types';
+import type { EntityId, Resource } from '../types';
+import { itemGrow } from '../model/game';
 
 const HOUR = 3600;
 

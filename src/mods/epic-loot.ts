@@ -1,6 +1,6 @@
-import { forgeRecipe, traderRecipe, inventoryRecipe, genericRecipe } from '../model/recipe';
 import type { DamageProfile, GameObject, Item, Piece, Resource, ItemRecipe, EntityId, DamageModifiers, Pair } from '../types';
-import { mods } from '../types';
+import { forgeRecipe, traderRecipe, inventoryRecipe, genericRecipe } from '../model/recipe';
+import { mods } from '../model/game';
 
 const augmenterRecipe = (materials: Record<EntityId, number>, item: EntityId, number = 1) =>
   genericRecipe('piece_augmenter', 1, 3, materials, {}, item, number);
@@ -109,7 +109,7 @@ export function stripExtraData(value: string) {
   return value.replace(/<\|\w+\|>.*$/, '');
 }
 
-export function extractExtraData({ crafterName }: { crafterName: string }): EpicLootData | undefined {
+export function getEpicLootData({ crafterName }: { crafterName: string }): EpicLootData | undefined {
   if (!crafterName.startsWith('<|c|>')) return undefined;
   if (!crafterName.includes('<|u|>')) return defaultItem;
   const m = crafterName.match(/<\|rkel\|>(.*?)(<\||$)/);

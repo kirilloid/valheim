@@ -65,7 +65,7 @@ export function PlayerInfo({ value: player, onChange, file, disabled } : EditorP
     });
     tabs.push({
       title: translate('ui.character.inventory'),
-      renderer: () => <Inventory inventory={playerData.inventory} extras={extras} />,
+      renderer: () => <Inventory playerData={playerData} extras={extras} />,
     });
     const { skillData } = playerData;
     if (skillData) {

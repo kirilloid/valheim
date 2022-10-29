@@ -14,7 +14,8 @@ type World = {
   mapData?: Uint8Array;
 };
 
-export type SkillData = Map<SkillType, { level: number, accumulator: number }>;
+export type SkillDatum = { level: number, accumulator: number };
+export type SkillData = Map<SkillType, SkillDatum>;
 
 type FoodData = {
   id: string;

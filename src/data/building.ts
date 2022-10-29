@@ -1,10 +1,5 @@
-import {
-  Piece,
-  DamageModifiers,
-  MaterialType,
-  ItemType,
-  mods,
-} from '../types';
+import type { Piece, DamageModifiers } from '../types';
+import { ItemType, MaterialType } from '../types';
 import {
   woodResist,
   craftStationResist,
@@ -22,6 +17,7 @@ import {
   stoneStructureWear,
   woodStructureWear,
 } from '../model/building';
+import { mods } from '../model/game';
 
 const damageModifiersElementalPart = {
   fire: 'immune',
