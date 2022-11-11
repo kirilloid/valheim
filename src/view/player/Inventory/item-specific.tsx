@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import type { Armor as TArmor, Arrow, DamageType, Food as TFood, Item, Shield, Weapon } from '../../../types';
+import type { Armor as TArmor, Arrow, DamageType, Food as TFood, Item, Shield as TShield, Weapon } from '../../../types';
 import type { InvItem } from './types';
 import { addDamage, multiplyDamage } from '../../../model/combat';
 import { timeI2S } from '../../../model/utils';
@@ -43,7 +43,7 @@ function Damage({ item, invItem, epicLoot }: { item: Weapon; invItem: InvItem; e
   </>;
 }
 
-function Shield({ item, invItem }: { item: Shield; invItem: InvItem }) {
+function Shield({ item, invItem }: { item: TShield; invItem: InvItem }) {
   const translate = useContext(TranslationContext);
 
   const block = typeof item.block === 'number'

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 
-import '../../css/Skills.css';
+import '../../../css/Skills.css';
 
 import type { PlayerData, SkillData } from '../types';
 import { SkillType } from '../../../model/skills';

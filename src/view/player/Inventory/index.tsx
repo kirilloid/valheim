@@ -5,7 +5,7 @@ import type { Armor, Item, ItemSet } from '../../../types';
 import type { Inventory as TInventory, PlayerData } from '../types';
 import type { InvItem } from './types';
 
-import '../../css/Inventory.css';
+import '../../../css/Inventory.css';
 
 import { getEpicLootData } from '../../../mods/epic-loot';
 import { Class } from '../../../mods/magic-overhaul';
