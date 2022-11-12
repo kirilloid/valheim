@@ -1074,7 +1074,7 @@ export const objects: PhysicalObject[] = [
   },
   ...tree({
     id: ['FirTree', 'FirTree_Stub', 'FirTree_log', 'FirTree_log_half'],
-    iconId: 'resource/FirTree_sapling',
+    iconId: 'resource/FirTree_Sapling',
     group: 'fir',
     tier: 1,
     minToolTier: 0,
@@ -1113,7 +1113,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'tree',
     id: 'FirTree_small',
-    iconId: 'resource/FirTree_sapling',
+    iconId: 'resource/FirTree_Sapling',
     group: 'fir',
     tier: 0,
     grow: itemGrow({
@@ -1146,7 +1146,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'tree',
     id: 'FirTree_small_dead',
-    iconId: 'resource/FirTree_sapling',
+    iconId: 'resource/FirTree_Sapling',
     group: 'fir',
     tier: 3,
     grow: itemGrow({
@@ -1170,7 +1170,7 @@ export const objects: PhysicalObject[] = [
   },
   ...tree({
     id: ['Pinetree_01', 'Pinetree_01_Stub', 'PineTree_log', 'PineTree_log_half'],
-    iconId: 'resource/PineTree_sapling',
+    iconId: 'resource/PineTree_Sapling',
     tier: 2,
     minToolTier: 0,
     grow: itemGrow({
