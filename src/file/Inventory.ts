@@ -12,6 +12,7 @@ export type Item = {
   variant: number;
   crafterID: bigint;
   crafterName: string;
+  customData: Map<string, string>;
 };
 
 export type Data = {
@@ -37,8 +38,9 @@ export function read(pkg: PackageReader): Data {
     const variant = version >= 102 ? pkg.readInt() : 0;
     const crafterID = version >= 103 ? pkg.readLong() : BigInt(0);
     const crafterName = version >= 103 ? pkg.readString() : "";
+    const customData = version >= 104 ? pkg.readMap(pkg.readString, pkg.readString) : new Map<string, string>();
     if (id !== '') {
-      inventory.items.push({ id, stack, durability, gridPos, equipped, quality, variant, crafterID, crafterName });
+      inventory.items.push({ id, stack, durability, gridPos, equipped, quality, variant, crafterID, crafterName, customData });
     }
   }
   return inventory;
@@ -60,6 +62,8 @@ export function write(pkg: PackageWriter, inventory: Data): void {
     if (inventory.version < 103) continue;
     pkg.writeLong(itemData.crafterID);
     pkg.writeString(itemData.crafterName);
+    if (inventory.version < 104) continue;
+    pkg.writeMap(pkg.writeString, pkg.writeString, itemData.customData);
   }
 }
 

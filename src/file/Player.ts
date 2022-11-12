@@ -49,6 +49,8 @@ export type PlayerData = {
   modelIndex: number;
   foods: FoodData[];
   skillData?: SkillData;
+  customData: Map<string, string>;
+  newStuff: Vector3;
 };
 
 type PlayerStats = {
@@ -268,6 +270,8 @@ function readPlayerData(data: Uint8Array): PlayerData {
   const modelIndex = version >= 11 ? pkg.readInt() : 0;
   const foods = version >= 12 ? readFoods(pkg, version) : [];
   const skillData = version >= 17 ? readSkills(pkg) : undefined;
+  const customData = version >= 26 ? pkg.readMap(pkg.readString, pkg.readString) : new Map();
+  const newStuff = version >= 26 ? pkg.readVector3() : { x: 1, y: 1, z: 1 };
   return {
     version,
     maxHealth,
@@ -293,6 +297,8 @@ function readPlayerData(data: Uint8Array): PlayerData {
     hairColor,
     modelIndex,
     skillData,
+    customData,
+    newStuff,
   };
 }
 
@@ -339,6 +345,10 @@ function writePlayerData(data: PlayerData): Uint8Array {
     }
   }
   if (data.version >= 17) writeSkills(writer, data.skillData!);
+  if (data.version >= 26) {
+    writer.writeMap(writer.writeString, writer.writeString, data.customData);
+    writer.writeVector3(data.newStuff);
+  }
   return writer.flush();
 }
 
