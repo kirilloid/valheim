@@ -2,6 +2,7 @@ import { inflate, deflate } from 'pako';
 
 import type { Vector3 } from '../model/utils';
 import { PackageReader, PackageWriter } from './Package';
+import { checkVersion, TERRAIN_COMP } from './versions';
 
 export type Data = {
   version: number;
@@ -19,6 +20,7 @@ export function read(bytes: Uint8Array): Data {
   const data = inflate(bytes);
   const zpackage = new PackageReader(data);
   const version = zpackage.readInt();
+  checkVersion(version, TERRAIN_COMP);
   const operations = zpackage.readInt();
   const lastOpPoint = zpackage.readVector3();
   const lastOpRadius = zpackage.readFloat();

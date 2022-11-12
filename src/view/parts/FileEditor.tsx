@@ -96,21 +96,25 @@ export function FileEditor<T>(props: Props<T>) {
   const { reader } = props;
 
   const processFile = useCallback(async (file: File) => {
-    // sometimes people click on image in content and drag it
-    if (file.type.startsWith('image/')) return;
+    try {
+      // sometimes people click on image in content and drag it
+      if (file.type.startsWith('image/')) return;
 
-    const buffer = await file.arrayBuffer();
-    setState({ state: 'reading', file, progress: 0 });
-    const value = await runGenerator(
-      reader(new Uint8Array(buffer)),
-      progress => setState({ state: 'reading', file, progress })
-    );
-    setState({ state: 'done', file, value, changed: false });
-    const mem = getMemUsage();
-    const memStr = mem >= 512
-      ? (mem / 1024).toPrecision(3) + ' GB'
-      : mem.toPrecision(3) + ' MB';
-    console.info('Memory used: ' + memStr);
+      const buffer = await file.arrayBuffer();
+      setState({ state: 'reading', file, progress: 0 });
+      const value = await runGenerator(
+        reader(new Uint8Array(buffer)),
+        progress => setState({ state: 'reading', file, progress })
+      );
+      setState({ state: 'done', file, value, changed: false });
+      const mem = getMemUsage();
+      const memStr = mem >= 512
+        ? (mem / 1024).toPrecision(3) + ' GB'
+        : mem.toPrecision(3) + ' MB';
+      console.info('Memory used: ' + memStr);
+    } catch (e: any) {
+      setState({ state: 'empty', message: e?.message });
+    }
   }, [setState, reader]);
 
   const processFiles = useCallback(async (files: FileList | null) => {
@@ -172,6 +176,7 @@ export function FileEditor<T>(props: Props<T>) {
       switch (state.state) {
         case 'empty':
           return <>
+            {state.message ? <p className="warning">{state.message}</p> : null}
             <p>{translate('ui.fileEditor.initial', ext)}</p>
             <p><input type="file"
               accept={`.${ext},.${ext}.old`}
@@ -217,6 +222,9 @@ export function FileEditor<T>(props: Props<T>) {
                     progress => setState({ state: 'saving', file, value: state.value, progress }),
                   ).then(result => {
                     downloadFile(result, file.name);
+                  }).catch(e => {
+                    alert("There was a problem with saving");
+                  }).finally(() => {
                     setState({ state: 'done', file, value: state.value, changed: false });
                   });
                 }}>

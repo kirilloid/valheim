@@ -5,6 +5,7 @@ import { PackageReader, PackageWriter } from './Package';
 import * as Inventory from './Inventory';
 import { sha512 } from './sha512';
 import { data as itemDB } from '../data/itemDB';
+import { checkVersion, PLAYER, PLAYER_DATA, SKILLS } from './versions';
 
 type World = {
   spawnPoint?: Vector3;
@@ -50,20 +51,38 @@ export type PlayerData = {
   skillData?: SkillData;
 };
 
+type PlayerStats = {
+  kills: number;
+  deaths: number;
+  crafts: number;
+  builds: number;
+};
+
 export type Player = {
   version: number;
-  stats: {
-    kills: number;
-    deaths: number;
-    crafts: number;
-    builds: number;
-  };
+  stats: PlayerStats;
   worlds: Map<bigint, World>;
   playerName: string;
   playerID: bigint;
   startSeed: string;
   playerData?: PlayerData;
 };
+
+function readPlayerStats(reader: PackageReader): PlayerStats {
+  return {
+    kills: reader.readInt(),
+    deaths: reader.readInt(),
+    crafts: reader.readInt(),
+    builds: reader.readInt(),
+  };
+}
+
+function writePlayerStats(pkg: PackageWriter, stats: PlayerStats): void {
+  pkg.writeInt(stats.kills);
+  pkg.writeInt(stats.deaths);
+  pkg.writeInt(stats.crafts);
+  pkg.writeInt(stats.builds);
+}
 
 function readCustomPoint(reader: PackageReader) {
   const haveCustomPoint = reader.readBool();
@@ -79,17 +98,15 @@ function writeCustomPoint(pkg: PackageWriter, point?: Vector3): void {
 function* readPlayer(bytes: Uint8Array): Generator<number, Player> {
   const reader = new PackageReader(bytes);
   const version = reader.readInt();
-  const stats = version >= 28 ? {
-    kills: reader.readInt(),
-    deaths: reader.readInt(),
-    crafts: reader.readInt(),
-    builds: reader.readInt(),
-  } : {
-    kills: 0,
-    deaths: 0,
-    crafts: 0,
-    builds: 0,
-  }
+  checkVersion(version, PLAYER);
+  const stats = version >= 28
+    ? readPlayerStats(reader)
+    : {
+      kills: 0,
+      deaths: 0,
+      crafts: 0,
+      builds: 0,
+    };
   const worldsNumber = reader.readInt();
   const worlds = new Map<bigint, World>();
   for (let i = 0; i < worldsNumber; i++) {
@@ -132,10 +149,7 @@ function* writePlayer(
   let current = 0;
   writer.writeInt(player.version);
   if (player.version >= 28) {
-    writer.writeInt(player.stats.kills);
-    writer.writeInt(player.stats.deaths);
-    writer.writeInt(player.stats.crafts);
-    writer.writeInt(player.stats.builds);
+    writePlayerStats(writer, player.stats);
   }
   writer.writeInt(player.worlds.size);
   for (const [key, world] of player.worlds) {
@@ -157,6 +171,7 @@ function* writePlayer(
 
 function readSkills(pkg: PackageReader) {
   const version = pkg.readInt();
+  checkVersion(version, SKILLS);
   let size = pkg.readInt();
   const map: SkillData = new Map();
   for (let index = 0; index < size; ++index) {
@@ -219,6 +234,7 @@ function readFoods(pkg: PackageReader, version: number): FoodData[] {
 function readPlayerData(data: Uint8Array): PlayerData {
   const pkg = new PackageReader(data);
   const version = pkg.readInt();
+  checkVersion(version, PLAYER_DATA);
   const maxHealth = version >= 7 ? pkg.readFloat() : NaN;
   const health = pkg.readFloat();
   const maxStamina = version >= 10 ? pkg.readFloat() : NaN;

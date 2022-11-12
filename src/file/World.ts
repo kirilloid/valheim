@@ -3,6 +3,7 @@ import type { ZDO, ZDOCorruption, ZDOData, ZDOID } from './types';
 import type { Vector2i, Vector3 } from '../model/utils';
 import { PackageReader, PackageWriter } from './Package';
 import { readZdoMmap as readZdo, setVersion, errorToMistake } from './zdo';
+import { checkVersion, WORLD } from './versions';
 
 export type ZoneSystemData = {
   generatedZones: Vector2i[];
@@ -180,6 +181,7 @@ function writeRandEvent(writer: PackageWriter, version: number, event: RandEvent
 export function* read(bytes: Uint8Array): Generator<number, WorldData> {
   let reader = new PackageReader(bytes);
   const version = reader.readInt();
+  checkVersion(version, WORLD);
   const netTime = version >= 4 ? reader.readDouble() : NaN;
   const zdo = yield* readZDOData(reader, version);
   const zoneSystem = version >= 12 ? readZoneSystem(reader, version) : undefined;

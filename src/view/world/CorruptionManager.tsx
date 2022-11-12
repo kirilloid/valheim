@@ -122,13 +122,17 @@ export function CorruptionManager({ value, onChange }: ValueProps<WorldData>) {
         className="btn btn--primary"
         value="run rigorous check"
         onClick={async () => {
-          const newValue = await runGenerator(
-            checkZdos(value),
-            progress => setState({ step: 'progress', progress }),
-          );
-          setState({ step: 'checked' });
-          if (newValue !== value) {
-            onChange(newValue);
+          try {
+            const newValue = await runGenerator(
+              checkZdos(value),
+              progress => setState({ step: 'progress', progress }),
+            );
+            setState({ step: 'checked' });
+            if (newValue !== value) {
+              onChange(newValue);
+            }  
+          } catch {
+            alert("There was an error");
           }
         }} />
     </section>}

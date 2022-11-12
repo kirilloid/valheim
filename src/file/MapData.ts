@@ -1,6 +1,7 @@
 import { deflate, inflate } from 'pako';
 import type { Vector3 } from '../model/utils';
 import { PackageReader, PackageWriter } from './Package';
+import { checkVersion, MAP } from './versions';
 
 enum PinType {
   Icon0,
@@ -40,6 +41,7 @@ export type Data = {
 export function read(data: Uint8Array): Data {
   let reader = new PackageReader(data);
   const version = reader.readInt();
+  checkVersion(version, MAP);
   if (version >= 7) {
     // unpack gzip
     reader = new PackageReader(inflate(reader.readByteArray()));

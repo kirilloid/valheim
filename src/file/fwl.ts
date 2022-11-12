@@ -1,4 +1,5 @@
 import { PackageReader, PackageWriter } from './Package';
+import { checkVersion, WORLD } from './versions';
 
 export type Data = {
   version: number;
@@ -14,6 +15,7 @@ export function read(data: Uint8Array): Data {
   const bytes = zpkg.readByteArray();
   const reader = new PackageReader(bytes);
   const version = reader.readInt();
+  checkVersion(version, WORLD);
   const name = reader.readString();
   const seedName = reader.readString();
   const seed = reader.readInt();

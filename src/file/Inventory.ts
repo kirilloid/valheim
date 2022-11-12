@@ -1,5 +1,6 @@
 import type { Vector2i } from '../model/utils';
 import type { PackageReader, PackageWriter } from './Package';
+import { checkVersion, INVENTORY } from './versions';
 
 export type Item = {
   readonly id: string;
@@ -20,6 +21,7 @@ export type Data = {
 
 export function read(pkg: PackageReader): Data {
   const version = pkg.readInt();
+  checkVersion(version, INVENTORY);
   const length = pkg.readInt();
   const inventory: Data = {
     version,
@@ -51,8 +53,11 @@ export function write(pkg: PackageWriter, inventory: Data): void {
     pkg.writeFloat(itemData.durability);
     pkg.writeVector2i(itemData.gridPos);
     pkg.writeBool(itemData.equipped);
+    if (inventory.version < 101) continue;
     pkg.writeInt(itemData.quality);
+    if (inventory.version < 102) continue;
     pkg.writeInt(itemData.variant);
+    if (inventory.version < 103) continue;
     pkg.writeLong(itemData.crafterID);
     pkg.writeString(itemData.crafterName);
   }

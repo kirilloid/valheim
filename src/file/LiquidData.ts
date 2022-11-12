@@ -1,5 +1,6 @@
 import { deflate, inflate } from 'pako';
 import { PackageReader, PackageWriter } from './Package';
+import { checkVersion, LIQUID } from './versions';
 
 export type Data = {
   version: number;
@@ -12,6 +13,7 @@ export function read(zbytes: Uint8Array): Data {
   const pkg = new PackageReader(bytes);
   // read
   const version = pkg.readInt();
+  checkVersion(version, LIQUID);
   const length = pkg.readInt();
   const depths = new Int16Array(length);
   for (let i = 0; i < length; i++) depths[i] = pkg.readShort();

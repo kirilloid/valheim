@@ -111,6 +111,7 @@ function useDrawMap(
       setProgress,
     ).then(() => {
       ctx.putImageData(imageData, 0, 0);
+    }).finally(() => {
       setProgress(undefined);
     });
   }, [zdos, ref, setProgress, SIZE, WORLD_SIZE_HINTED]);
