@@ -1,29 +1,29 @@
-import type { ShieldConfig } from '../../model/combat';
+import type { BlockerConfig } from '../../model/combat';
 import type { State } from './reducer';
 
-import { parseShield, parseState, serializeShield, serializeState } from './url';
-import { shields } from './items';
+import { parseShield, parseState, serializeBlocker, serializeState } from './url';
+import { blockers } from './items';
 
-const simplifyShield = ({ item: { id: item }, ...rest }: ShieldConfig) => ({ item, ...rest });
+const simplifyBlocker = ({ item: { id: item }, ...rest }: BlockerConfig) => ({ item, ...rest });
 
 const simplifyEnemy = ({ creature: { id: creature }, ...rest }: State['enemy']) => ({ creature, ...rest });
 
-function simplifyState({ enemy, players, shield, armor, resTypes }: State) {
+function simplifyState({ enemy, players, blocker: blocker, armor, resTypes }: State) {
   return {
     enemy: simplifyEnemy(enemy),
     players,
-    shield: shield && simplifyShield(shield),
+    blocker: blocker && simplifyBlocker(blocker),
     armor,
     resTypes,
   };
 }
 
-function testShield(description: string, state: ShieldConfig) {
+function testShield(description: string, state: BlockerConfig) {
   test(description, () => {
-    const str = serializeShield(state);
+    const str = serializeBlocker(state);
     const state2 = parseShield(str);
     if (state2 == null) return fail("Parsed as null");
-    expect(simplifyShield(state)).toEqual(simplifyShield(state2));
+    expect(simplifyBlocker(state)).toEqual(simplifyBlocker(state2));
   });
 }
 
@@ -33,13 +33,13 @@ describe('shield', () => {
     expect(parseShield('')).toBe(undefined);
   });
 
-  const item = shields[0]!;
+  const item = blockers.shields[0]!;
   testShield('basic', { item, level: 1, skill: 0 });
   testShield('level-1', { item, level: 2, skill: 0 });
   testShield('level-2', { item, level: 3, skill: 0 });
   testShield('skill', { item, level: 1, skill: 30 });
   testShield('level & skill', { item, level: 3, skill: 30 });
-  testShield('another item', { item: shields[3]!, level: 1, skill: 0 });
+  testShield('another item', { item: blockers.shields[3]!, level: 1, skill: 0 });
 });
 
 describe('state', () => {
@@ -49,6 +49,18 @@ describe('state', () => {
     expect(state.resTypes).toEqual([]);
     const state2 = parseState(serializeState(state));
     expect(simplifyState(state2)).toEqual(simplifyState(state));
+  });
+
+  test('parse no shield', () => {
+    const state = parseState('Boar-vs');
+    expect(state.enemy.creature.id).toEqual('Boar');
+    const state2 = parseState(serializeState(state));
+    expect(simplifyState(state2)).toEqual(simplifyState(state));
+  });
+
+  test('parse non-attacking creature', () => {
+    const state = parseState('Deer-vs-shield:WoodShield');
+    expect(state.enemy.creature.id).not.toEqual('Deer');
   });
 
   test('parse Bonemass case', () => {
@@ -64,7 +76,7 @@ describe('state', () => {
         stars: 0,
       },
       players: 2,
-      shield: {
+      blocker: {
         item: sid,
         level: 3,
         skill: 30,

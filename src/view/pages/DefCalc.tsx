@@ -6,7 +6,7 @@ import '../../css/Combat.css';
 import type * as T from '../../types';
 import { parseState, serializeState, pageName } from '../../state/def-calc';
 import { actionCreators, reducer } from '../../state/def-calc/reducer';
-import { allItems, shields } from '../../state/def-calc/items';
+import { allItems, blockers } from '../../state/def-calc/items';
 import { isNotNull } from '../../model/utils';
 import { MAX_PLAYERS } from '../../model/game';
 
@@ -16,7 +16,7 @@ import { groupedCreatures } from '../../data/combat_creatures';
 import { TranslationContext } from '../../effects/translation.effect';
 import { useDebounceEffect } from '../../effects/debounce.effect';
 import { EffectIcon, Icon, ItemIcon, SkillIcon } from '../parts/Icon';
-import { addAttackPlayerStats, attackPlayer, AttackPlayerStats, dmgBonus, emptyAttackPlayerStats, isNormalAttackProfile, multiplyDamage, ShieldConfig } from '../../model/combat';
+import { addAttackPlayerStats, attackPlayer, AttackPlayerStats, dmgBonus, emptyAttackPlayerStats, isNormalAttackProfile, multiplyDamage, BlockerConfig } from '../../model/combat';
 import { List, showNumber } from '../helpers';
 import { useGlobalState } from '../../effects';
 
@@ -37,30 +37,30 @@ function Result({ stats, showBlock }: { stats: AttackPlayerStats; showBlock: boo
   const translate = useContext(TranslationContext);
   const { instant, overTime } = stats;
   return <dl>
-    {instant.avg ? <>
+    {instant.avg ? <React.Fragment key="instant">
       <dt>{translate('ui.damage')}</dt>
       <dd>{statsResult(instant)}</dd>
-    </> : null}
-    {overTime.avg ? <>
+    </React.Fragment> : null}
+    {overTime.avg ? <React.Fragment key="overTime">
       <dt>{translate('ui.damageOverTime')}</dt>
       <dd>{statsResult(overTime)}</dd>
-    </> : null}
-    {instant.avg && overTime.avg ? <>
+    </React.Fragment> : null}
+    {instant.avg && overTime.avg ? <React.Fragment key="total">
       <dt>total</dt>
       <dd>{statsResult({
         min: instant.min + overTime.min,
         avg: instant.avg + overTime.avg,
         max: instant.max + overTime.max,
       })}</dd>
-    </> : null}
-    {<>
+    </React.Fragment> : null}
+    {<React.Fragment key="stagger">
       <dt>{translate('ui.stagger')}</dt>
       <dd>{statsResult(stats.stagger)}</dd>
-    </>}
-    {showBlock && <>
+    </React.Fragment>}
+    {showBlock && <React.Fragment key="block">
       <dt>{translate('ui.stamina')}</dt>
       <dd>{statsResult(stats.stamina)}</dd>
-    </>}
+    </React.Fragment>}
   </dl>
 }
 
@@ -71,7 +71,9 @@ function Creature({ creature, biome, onChange }: { creature: T.Creature; biome: 
       {Object.entries(groupedCreatures).map(([gBiome, group]) =>
         group.length ? (
           <optgroup key={gBiome} label={gBiome}>
-            {group.map(c => <option key={`${gBiome}_${c.id}`} value={c.id} selected={creature === c && biome === gBiome}>{translate(c.id)}</option>)}
+            {group
+              .filter(c => c.attacks.length)
+              .map(c => <option key={`${gBiome}_${c.id}`} value={c.id} selected={creature === c && biome === gBiome}>{translate(c.id)}</option>)}
           </optgroup>
         ) : null
       )}
@@ -128,13 +130,29 @@ function Players({ players, onChange }: { players: number; onChange: OnChangeI }
   </div>;
 }
 
-function Shield({ shield, onShieldChange, onLevelChange } : {
-  shield: ShieldConfig | undefined;
+type BlockerType = keyof typeof blockers;
+
+const blockerTypeNames: Record<BlockerType, string> = {
+  shields: 'ui.itemType.shield',
+  weapons2H: 'ui.slot.both',
+  weapons: 'ui.itemType.weapon',
+};
+
+const itemSlotHints: Partial<Record<T.Weapon['slot'] | '', string>> = {
+  either: 'Torch is used for blocking only in right hand',
+  primary: 'Right-handed weapons are used for blocking only if there\'s no shield',
+};
+
+function Blocker({ shield, onShieldChange, onLevelChange } : {
+  shield: BlockerConfig | undefined;
   onShieldChange: OnChangeS;
   onLevelChange: OnChangeI;
 }) {
   const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
+  const id = shield?.item.id ?? '';
+  const hint = itemSlotHints[shield?.item.slot ?? ''];
+
   return <div className="row weapon">
     <div className="weapon__label">
       <label htmlFor="shield">
@@ -146,12 +164,19 @@ function Shield({ shield, onShieldChange, onLevelChange } : {
       <select id="shield"
         className="BigInput"
         onChange={onShieldChange}
-        value={shield?.item.id ?? ''}>
+        value={id}>
         <option value="">—</option>
-        {shields
+        {Object.entries(blockers)
+          .map(([type, items]: [string, (T.Weapon | T.Shield)[]]) => 
+            <optgroup key={type} label={translate(blockerTypeNames[type as BlockerType])}>
+              {items
           .filter(s => s.tier <= spoiler)
           .map(s => <option key={s.id} value={s.id}>{translate(s.id)}</option>)}
+            </optgroup>
+          )
+        }
       </select>
+      {hint && <span title={hint}> * </span>}
     </div>
     {!!shield && shield.item.maxLvl > 1 && <div className="weapon__input-secondary">
       <input type="number" inputMode="numeric" pattern="[0-9]*"
@@ -163,7 +188,7 @@ function Shield({ shield, onShieldChange, onLevelChange } : {
   </div>;
 }
 
-function Skill({ shield, onChange }: { shield: ShieldConfig | undefined; onChange: OnChangeI; }) {
+function Skill({ shield, onChange }: { shield: BlockerConfig | undefined; onChange: OnChangeI; }) {
   const translate = useContext(TranslationContext);
   if (!shield) return null;
   return <div className="row weapon">
@@ -252,7 +277,7 @@ function Items({ resTypes, onChange }: { resTypes: string[], onChange: (item: st
           <List separator=" / ">
             {items
               .filter(item => item.tier <= spoiler)
-              .map(item => <span style={{ display: 'inline-block' }}>
+              .map(item => <span key={item.id} style={{ display: 'inline-block' }}>
                 {item.type === 'effect'
                   ? <EffectIcon id={item.id} size={32} />
                   : <ItemIcon item={item} size={32} />}
@@ -267,6 +292,10 @@ function Items({ resTypes, onChange }: { resTypes: string[], onChange: (item: st
   </>;
 }
 
+function format(value: number) {
+  return value.toFixed(1).replace(/\.0$/, '');
+}
+
 export function DefenseCalc() {
   const translate = useContext(TranslationContext);
   const history = useHistory();
@@ -274,7 +303,7 @@ export function DefenseCalc() {
   const [state, dispatch] = useReducer(reducer, parseState(params));
   const {
     enemy: { creature, biome, stars, variety },
-    shield,
+    blocker,
   } = state;
 
   useDebounceEffect(state, (state) => {
@@ -289,7 +318,7 @@ export function DefenseCalc() {
     changeStars,
     changeVariety,
     changePlayers,
-    changeShield,
+    changeBlocker,
     changeLevel,
     changeSkill,
     changeArmor,
@@ -301,7 +330,7 @@ export function DefenseCalc() {
   const onVarietyChange = (e: React.ChangeEvent<HTMLInputElement>) => dispatch(changeVariety(Number(e.target.value)));
   
   const onPlayersChange = (e: React.ChangeEvent<HTMLInputElement>) => dispatch(changePlayers(Number(e.target.value)));
-  const onShieldChange = (e: React.ChangeEvent<HTMLSelectElement>) => dispatch(changeShield(e.target.value));
+  const onBlockerChange = (e: React.ChangeEvent<HTMLSelectElement>) => dispatch(changeBlocker(e.target.value));
   const onLevelChange = (e: React.ChangeEvent<HTMLInputElement>) => dispatch(changeLevel(Number(e.target.value)));
   const onSkillChange = (e: React.ChangeEvent<HTMLInputElement>) => dispatch(changeSkill(Number(e.target.value)));
   const onArmorChange = (e: React.ChangeEvent<HTMLInputElement>) => dispatch(changeArmor(Number(e.target.value)));
@@ -312,17 +341,17 @@ export function DefenseCalc() {
   };
   const bonus = dmgBonus(scale);
 
-  const block = shield?.item
-    ? applyLevel(shield.item.block, shield.level) * (1 + 0.005 * shield.skill)
+  const block = blocker?.item
+    ? applyLevel(blocker.item.block, blocker.level) * (1 + 0.005 * blocker.skill)
     : 0;
-  const perfectBlock = block * (shield?.item.parryBonus ?? 0);
+  const perfectBlock = block * (blocker?.item.parryBonus ?? 0);
   const attacks = creature.attacks[variety]!.attacks.filter(isNormalAttackProfile);
   const resistItems = state.resTypes
     .map(rt => allItems.get(rt)?.damageModifiers)
     .filter(isNotNull);
 
-  const getStats = (item: T.Shield | undefined, block: number, isParry: boolean) => attacks
-    .map(a => attackPlayer(multiplyDamage(a.dmg, bonus), resistItems, item?.damageModifiers, state.armor, block, isParry))
+  const getStats = (item: T.Shield | T.Weapon | undefined, block: number, isParry: boolean) => attacks
+    .map(a => attackPlayer(multiplyDamage(a.dmg, bonus), resistItems, (item as T.Shield)?.damageModifiers, state.armor, block, isParry))
     .reduce(addAttackPlayerStats, emptyAttackPlayerStats());
 
   return (<>
@@ -342,26 +371,30 @@ export function DefenseCalc() {
         </div>
         <Players players={state.players} onChange={onPlayersChange} />
         <div className="Weapon">
-          <Shield shield={state.shield} onShieldChange={onShieldChange} onLevelChange={onLevelChange} />
-          <Skill shield={state.shield} onChange={onSkillChange} />
+                <Blocker shield={state.blocker} onShieldChange={onBlockerChange} onLevelChange={onLevelChange} />
+                <Skill shield={state.blocker} onChange={onSkillChange} />
           <Armor armor={state.armor} onChange={onArmorChange} />
         </div>
         <h3>{translate('ui.effects')}</h3>
         <Items resTypes={state.resTypes} onChange={onItemChange} />
       </section>
-      <div className="CombatCalc__Results">
+      {attacks.length
+      ? <div className="CombatCalc__Results">
         <h2>Results</h2>
         <h3>No shield</h3>
         <Result stats={getStats(undefined, 0, false)} showBlock={false} />
-        {block > 0 && !attacks.every(a => a.unblockable) ? <>
-          <h3>Block</h3>
-          <Result stats={getStats(shield?.item, block, false)} showBlock={true} />
-        </> : null}
-        {perfectBlock && !attacks.every(a => a.unblockable) ? <>
-          <h3>Parry</h3>
-          <Result stats={getStats(shield?.item, perfectBlock, true)} showBlock={true} />
-        </> : null}
-      </div>
+          {block > 0 && !attacks.every(a => a.unblockable) ? <React.Fragment key="block">
+              <h3>Block [{format(block)}]</h3>
+              <Result stats={getStats(blocker?.item, block, false)} showBlock={true} />
+          </React.Fragment> : null}
+          {perfectBlock && !attacks.every(a => a.unblockable) ? <React.Fragment key="parry">
+              <h3>Parry [{format(perfectBlock)}]</h3>
+              <Result stats={getStats(blocker?.item, perfectBlock, true)} showBlock={true} />
+          </React.Fragment> : null}
+        </div>
+      : <div className="CombatCalc__Results">
+          <p>This creature has no attacks</p>
+        </div>}
     </div>
   </>);
 }

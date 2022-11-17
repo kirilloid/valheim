@@ -1,6 +1,6 @@
 import type { State } from './reducer';
-import { allItems, shields } from './items';
-import type { ShieldConfig } from '../../model/combat';
+import { allItems, blockers, getItemById } from './items';
+import type { BlockerConfig } from '../../model/combat';
 import { isNotNull } from '../../model/utils';
 
 import { creatures, maxLvl } from '../../data/creatures';
@@ -13,7 +13,7 @@ const defaultEnemy = {
   variety: 0,
 };
 
-const item = shields[0]!;
+const item = blockers.shields[0]!;
 const defaultShield = {
   item,
   level: item.maxLvl,
@@ -26,9 +26,9 @@ function serializeEnemy({ creature, stars, variety }: State['enemy']): string {
   return `${creature.id}${varStr}${starStr}`;
 }
 
-export function serializeShield(shield: ShieldConfig | undefined): string {
-  if (shield == null) return '';
-  const { item, level, skill } = shield;
+export function serializeBlocker(blocker: BlockerConfig | undefined): string {
+  if (blocker == null) return '';
+  const { item, level, skill } = blocker;
   const levelPart = level === item.maxLvl ? '' : `*${level}`;
   return `${item.id}${levelPart}-${skill}`;
 }
@@ -45,7 +45,7 @@ function serializeItems(resTypes: string[]): string {
 export function serializeState(state: State): string {
   const enemy = serializeEnemy(state.enemy);
   const armor = state.armor ? `-armor:${state.armor}` : '';
-  const shield = serializeShield(state.shield);
+  const shield = serializeBlocker(state.blocker);
   const shieldPart = shield ? `-shield:${shield}` : '';
   const players = state.players > 1 ? `-players:${state.players}` : '';
   const resTypes = serializeItems(state.resTypes);
@@ -57,7 +57,7 @@ function parseEnemy(url?: string): State['enemy'] {
   if (match == null) return defaultEnemy;
   const [, id, varietyName, stars = '0'] = match;
   const creature = creatures.find(c => c.id === id);
-  if (creature == null) return defaultEnemy;
+  if (creature == null || creature.attacks.length === 0) return defaultEnemy;
   const variety = Math.max(creature.attacks.findIndex(a => a.variety === varietyName), 0);
   return {
     creature,
@@ -67,11 +67,11 @@ function parseEnemy(url?: string): State['enemy'] {
   }
 }
 
-export function parseShield(url?: string): ShieldConfig | undefined {
+export function parseShield(url?: string): BlockerConfig | undefined {
   const match = url?.match(/^(\w+)(?:\*(\d+)?)?(?:-(\d+))?$/);
   if (match == null) return undefined;
   const [, id, level, skill = '0'] = match;
-  const item = shields.find(s => s.id === id);
+  const item = getItemById(id);
   if (item == null) return undefined;
   return {
     item,
@@ -86,7 +86,7 @@ export function parseState(params?: string): State {
     return {
       enemy: defaultEnemy,
       players: 1,
-      shield: defaultShield,
+      blocker: defaultShield,
       armor: 0,
       resTypes: [],
     };
@@ -104,7 +104,7 @@ export function parseState(params?: string): State {
   return {
     enemy: parseEnemy(enemy),
     players: +players,
-    shield: parseShield(shield),
+    blocker: parseShield(shield),
     armor: +armor,
     resTypes,
   }

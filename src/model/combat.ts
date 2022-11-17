@@ -240,8 +240,8 @@ export interface WeaponConfig {
   arrow: Arrow;
 }
 
-export interface ShieldConfig {
-  item: Shield;
+export interface BlockerConfig {
+  item: Shield | Weapon;
   level: number;
   skill: number;
 }

@@ -1,11 +1,31 @@
-import type { DamageModifiers, Effect, Item, Shield } from '../../types';
+import type { DamageModifiers, Effect, EntityId, Item, Shield, Weapon } from '../../types';
 
 import { items as armors } from '../../data/armors';
 import { effects } from '../../data/effects';
 import { resources } from '../../data/resources';
 import { items } from '../../data/weapons';
 
-export const shields = items.filter(i => !i.disabled && i.type === 'shield') as Shield[];
+const enabledWeapons = items.filter(i => !i.disabled);
+
+export const blockers = {
+  shields: [] as Shield[],
+  weapons2H: [] as Weapon[],
+  weapons: []as Weapon[],
+};
+
+for (const item of enabledWeapons) {
+  if (item.type === 'shield') {
+    blockers.shields.push(item);
+  } else if (item.slot === 'both') {
+    blockers.weapons2H.push(item); 
+  } else {
+    blockers.weapons.push(item);
+  }
+}
+
+export function getItemById(id: EntityId | undefined): Weapon | Shield | undefined {
+  return enabledWeapons.find(i => i.id === id);
+}
 
 function resistHash(mods: Partial<DamageModifiers>) {
   return Object.entries(mods)

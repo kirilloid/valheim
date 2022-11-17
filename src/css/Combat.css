@@ -97,6 +97,8 @@
 
 .row {
   margin-top: 0.5em;
+  display: flex;
+  align-items: center;
 }
 .row input {
   vertical-align: bottom;
@@ -150,6 +152,7 @@ input[type='range'] {
 
 .ItemGroup__input {
   flex-grow: 0;
+  flex-shrink: 0;
   margin-top: 0.5rem;
 }
 
@@ -171,3 +174,11 @@ input[type='range'] {
   .weapon__input-primary { width: 50%; }
   .weapon__input-secondary { width: 20%; }
 }
+
+/*
+@media screen and (min-width: 640px) {
+  .CombatCalc__Results-table {
+    column-count: 3;
+  }
+}
+*/

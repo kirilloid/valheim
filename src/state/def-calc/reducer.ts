@@ -1,5 +1,5 @@
-import type { Biome, Creature, EntityId, Shield } from '../../types';
-import { shields } from './items';
+import type { Biome, Creature, EntityId, Shield, Weapon } from '../../types';
+import { getItemById } from './items';
 import { assertNever } from '../../model/utils';
 
 import { creatures, maxLvl } from '../../data/creatures';
@@ -13,8 +13,8 @@ export interface State {
   };
 
   players: number;
-  shield?: {
-    item: Shield;
+  blocker?: {
+    item: Shield | Weapon;
     level: number;
     skill: number;
   };
@@ -34,8 +34,8 @@ const changeVariety = (variety: number) => ({ type: CHANGE_VARIETY, variety });
 const CHANGE_PLAYERS = 'CHANGE_PLAYERS' as const;
 const changePlayers = (players: number) => ({ type: CHANGE_PLAYERS, players });
 
-const CHANGE_SHIELD = 'CHANGE_SHIELD' as const;
-const changeShield = (id: EntityId) => ({ type: CHANGE_SHIELD, id });
+const CHANGE_BLOCKER = 'CHANGE_BLOCKER' as const;
+const changeBlocker = (id: EntityId) => ({ type: CHANGE_BLOCKER, id });
 
 const CHANGE_SKILL = 'CHANGE_SKILL' as const;
 const changeSkill = (skill: number) => ({ type: CHANGE_SKILL, skill });
@@ -54,7 +54,7 @@ export const actionCreators = {
   changeStars,
   changeVariety,
   changePlayers,
-  changeShield,
+  changeBlocker,
   changeSkill,
   changeLevel,
   changeArmor,
@@ -93,21 +93,32 @@ export function reducer(state: State, action: Action): State {
         : items.filter(e => e !== resType);
       return { ...state, resTypes: newItems };
     }
-    case CHANGE_SHIELD: {
+    case CHANGE_BLOCKER: {
       if (action.id === '') {
-        return { ...state, shield: undefined };
+        return { ...state, blocker: undefined };
       }
-      const item = shields.find(s => s.id === action.id);
+      const hasMaxLvl = state.blocker?.level === state.blocker?.item.maxLvl;
+      const item = getItemById(action.id);
       if (item == null) return state;
-      return { ...state, shield: { level: item.maxLvl, skill: 0, ...state.shield, item } };
+      const blocker = 
+        state.blocker ? {
+          item,
+          level: hasMaxLvl ? item.maxLvl : state.blocker.level,
+          skill: state.blocker.skill,
+        } : {
+          item,
+          level: item.maxLvl,
+          skill: 0,
+        }
+      return { ...state, blocker };
     }
     case CHANGE_LEVEL: {
       const { level } = action;
-      return state.shield ? { ...state, shield: { ...state.shield, level } } : state;
+      return state.blocker ? { ...state, blocker: { ...state.blocker, level } } : state;
     }
     case CHANGE_SKILL: {
       const { skill } = action;
-      return state.shield ? { ...state, shield: { ...state.shield, skill } } : state;
+      return state.blocker ? { ...state, blocker: { ...state.blocker, skill } } : state;
     }
     case CHANGE_ARMOR: {
       const { armor } = action;
