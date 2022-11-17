@@ -373,6 +373,8 @@
     "wood_wall_log": "piece_logbeam2",
     "wood_pole_log": "piece_logpole2",
     "wood_pole_log_4": "piece_logpole4",
+    "wood_log_26": "piece_woodlog26",
+    "wood_log_45": "piece_woodlog45",
     "wood_fence": "piece_woodfence",
     "darkwood_beam": "piece_darkwoodbeam",
     "darkwood_beam4": "piece_darkwoodbeam4",
