@@ -15,7 +15,7 @@ import { ZdoData } from './zdo-data';
 import { WorldTime } from './Time';
 
 export function WorldInfo({ value, onChange, file, disabled }: EditorProps<WorldData>) {
-  const { randEvent, zdo, version, zoneSystem } = value;
+  const { version, netTime, randEvent, zdo, zoneSystem } = value;
   const onZdoChange = useCallback(zdo => onChange({ ...value, zdo }), [value, onChange]);
   const onZoneSystemChange = useCallback(zoneSystem => onChange({ ...value, zoneSystem }), [value, onChange]);
   const tabs = [{
@@ -34,7 +34,7 @@ export function WorldInfo({ value, onChange, file, disabled }: EditorProps<World
     },
   }, {
     title: 'Objects',
-    renderer: useCallback(() => <ZdoData value={zdo} onChange={onZdoChange} />, [zdo, onZdoChange]),
+    renderer: useCallback(() => <ZdoData value={zdo} onChange={onZdoChange} time={netTime} />, [netTime, zdo, onZdoChange]),
   }, {
     title: 'Recovery',
     renderer: useCallback(() => <CorruptionManager value={value} onChange={onChange} />, [value, onChange]),

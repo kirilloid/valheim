@@ -16,6 +16,7 @@ import { TranslationContext, useGlobalState } from '../../effects';
 import { Area, InlineObjectWithIcon, rangeBy, Resistances, shortCreatureDamage, yesNo } from '../helpers';
 import { ItemIcon } from '../parts/Icon';
 import { ItemHeader } from '../parts/ItemHeader';
+import { spawnedByMap } from '../../data/spawns';
 
 function NormalAttack({ attack: a, dmgScale }: { attack: NormalAttackProfile, dmgScale: number }) {
   const dmg = multiplyDamage(a.dmg, dmgScale);
@@ -34,7 +35,7 @@ function NormalAttack({ attack: a, dmgScale }: { attack: NormalAttackProfile, dm
 function SpawnAttack({ attack }: { attack: SpawnAttackProfile }) {
   return <>
     <dt key='spawn-key'>spawn</dt>
-    <dd key='spawn-val'>{attack.spawn.map(id => <ItemIcon key={id} item={data[id]} />)}</dd>
+    <dd key='spawn-val'>{attack.spawn.map(id => <InlineObjectWithIcon key={id} id={id}/>)}</dd>
   </>
 }
 
@@ -51,6 +52,8 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
     ...new Set(creature.spawners.flatMap(s => s.biomes)),
     ...(objectLocationMap[creature.id] ?? [])
   ];
+  const spawnedBy = spawnedByMap[id];
+
   return (<>
     <ItemHeader item={creature} >
       {maxLvl(creature) > 1
@@ -68,11 +71,13 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
       <dl>
         <dt>areal</dt>
         <dd>
-          <ul style={{ padding: 0 }}>
-            {locations
-              .filter(loc => (area(loc)?.tier ?? 1000) <= spoiler)
-              .map(loc => <li key={loc}><Area area={loc} /></li>)}
-          </ul>
+          {locations.length > 0 &&
+            <ul style={{ padding: 0 }}>
+              {locations
+                .filter(loc => (area(loc)?.tier ?? 1000) <= spoiler)
+                .map(loc => <li key={loc}><Area area={loc} /></li>)}
+            </ul>}
+          {spawnedBy != null && <>Spawned by: <InlineObjectWithIcon id={spawnedBy} /></>}
         </dd>
         <dt>{translate('ui.faction')}</dt>
         <dd>{translate(`ui.faction.${creature.faction}`)}</dd>
@@ -80,7 +85,7 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
         <dt>{translate('ui.summonedWith')}</dt>
         <dd><InlineObjectWithIcon id={sid} size={16} /> ×{snr}</dd>
       </> : null}
-      <dt>{translate('ui.speed')}</dt>
+      <dt>{translate('ui.moveSpeed')}</dt>
       <dd>{creature.speed.run}</dd>
       <dt>{translate('ui.health')}</dt>
       <dd>{creature.hp * hpBonus(scale)}</dd>
@@ -99,6 +104,12 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
           <dd>immune</dd>
         </> : null}
       </dl>
+      {creature.weakSpots?.map(({ location, damageModifiers }) => <React.Fragment key={location}>
+        <h3>weak spot: {location}</h3>
+        <dl>
+          <Resistances mods={damageModifiers} />
+        </dl>
+      </React.Fragment>)}
       {creature.attacks.length ? <div className="Creature__Attacks">
         <h3>{translate('ui.attacks')}</h3>
         {creature.attacks.map(a => <div className="Creature__Attack" key={`${id}_${a.variety}`}>

@@ -6,6 +6,7 @@ import { data, extraData } from '../../data/itemDB';
 import { stableHashCode } from '../../model/hash';
 import { prefabHashes } from '../../data/zdo';
 import { GameComponent } from '../../types';
+import { ticksToSeconds } from './time';
 
 export const MistakeLevels: Record<Mistake, MistakeLevel> = {
   [Mistake.None]: MistakeLevel.OK,
@@ -85,7 +86,7 @@ export function check(world: WorldData, zdo: ZDO): CorruptionType {
       }
     }
 
-    if (Number(zdo.timeCreated) / 1e7 > world.netTime) {
+    if (ticksToSeconds(zdo.timeCreated) > world.netTime) {
       return {
         mistake: Mistake.TimeInFuture,
         offset: zdo._offset + offsets.timeCreated + HEADER_SIZE,
@@ -101,10 +102,10 @@ export function check(world: WorldData, zdo: ZDO): CorruptionType {
       };
     }
 
-    if (position.x * position.x + position.z * position.z > 11000 * 11000
+    if (position.x * position.x + position.z * position.z > 11500 * 11500
     ||  position.y < -100
     || (position.y > 1000
-    && Math.abs(position.y - 5000) > 100)) {
+    && Math.abs(position.y - 5000) > 500)) {
       return {
         mistake: Mistake.CoordinatesTooFar,
         offset: zdo._offset + offsets.position + HEADER_SIZE,

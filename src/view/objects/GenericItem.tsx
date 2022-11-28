@@ -9,10 +9,11 @@ import { yesNo } from '../helpers';
 import { Icon } from '../parts/Icon';
 import { Source } from '../parts/Source';
 import { ItemHeader } from '../parts/ItemHeader';
+import { DeadSpeak } from '../parts/DeadSpeak';
 
 export function GenericItem({ item }: { item: Resource }) {
   const translate = useContext(TranslationContext);
-  const { Food, Potion } = item;
+  const { Food, Potion, Deadspeak } = item;
   return (<>
     <ItemHeader item={item} />
     {Food != null && <section>
@@ -49,7 +50,8 @@ export function GenericItem({ item }: { item: Resource }) {
           : null}
       </dl>
       {item.Value != null && item.id !== 'Coins' && <>Has no other use rather than to be sold to trader</>}
-      </section>
+    </section>
+    {Deadspeak != null && <DeadSpeak {...Deadspeak} />}
     <Source id={item.id} />
   </>);
 }

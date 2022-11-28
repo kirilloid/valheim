@@ -1,11 +1,10 @@
 import React, { useContext } from 'react';
-import { SkillType } from '../../model/skills';
 import { assertNever } from '../../model/utils';
 import { TranslationContext, useGlobalState } from '../../effects';
 
 import type { EntityId, GameObject } from '../../types';
 
-type IconType = 'armor' | 'arrow' | 'creature' | 'weapon' | 'piece' | 'skills' | 'resource' | 'icon' | 'transport';
+type IconType = 'armor' | 'arrow' | 'creature' | 'weapon' | 'piece' | 'skills' | 'resource' | 'icon' | 'transport' | 'object';
 
 const iconType = (type: GameObject['type']): IconType => {
   switch (type) {
@@ -13,18 +12,23 @@ const iconType = (type: GameObject['type']): IconType => {
     case 'creature':
     case 'piece':
       return type;
+    case 'fish':
+      return 'creature';
     case 'structure':
       return 'piece';
     case 'weapon':
     case 'tool':
     case 'shield':
       return 'weapon';
-    case 'ammo':
+    case 'arrow':
+    case 'bolt':
+    case 'missile':
       return 'arrow';
     case 'item':
     case 'trophy':
-    case 'object':
       return 'resource';
+    case 'object':
+      return 'object';
     case 'ship':
     case 'cart':
       return 'transport';
@@ -33,14 +37,9 @@ const iconType = (type: GameObject['type']): IconType => {
 };
 
 const iconPath = (item: GameObject): string => {
+  if (item.iconId != null) return `/icons/${item.iconId}`;
   if (item.mod != null) return `/icons/${item.mod}/${item.id}`;
-  return item.type === 'object' && item.subtype === 'treasure'
-    ? item.id.toLowerCase().includes('chest')
-      ? `/icons/piece/piece_chest_wood`
-      : `/icons/resource/Coins`
-    : item.iconId
-      ? `/icons/${item.iconId}`
-      : `/icons/${iconType(item.type)}/${item.id}`;
+  return `/icons/${iconType(item.type)}/${item.id}`;
 };
 
 type SkillIconProps = {

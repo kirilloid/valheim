@@ -4,10 +4,10 @@ import { useParams } from 'react-router-dom';
 import type { LocationConfig } from '../types';
 
 import { isEmpty } from '../model/utils';
-import { getLocationDetails, locations } from '../data/location';
+import { getLocationDetails, locations, musicToLocation } from '../data/location';
 
 import { TranslationContext } from '../effects';
-import { Area, List, rangeBy } from './helpers';
+import { Area, InlineObjectWithIcon, List, rangeBy } from './helpers';
 import { DropStats } from './parts/DropTable';
 import { Tabs } from './parts/Tabs';
 
@@ -21,6 +21,10 @@ function SingleLocation({ loc }: { loc: LocationConfig }) {
         <dt>{translate('ui.locationType')}</dt>
         <dd>{translate(`ui.locationType.${loc.type}`)}</dd>
         <dt>{translate('ui.altitude')}</dt>
+        {loc.needsKey ? <React.Fragment key="key">
+          <dd>needs key</dd>
+          <dt><InlineObjectWithIcon id={loc.needsKey} /></dt>
+        </React.Fragment> : null}
         <dd>{rangeBy(loc.altitude, String, '..')}</dd>
         <dt>number in world</dt>
         <dd>{loc.quantity}</dd>
@@ -45,6 +49,22 @@ function SingleLocation({ loc }: { loc: LocationConfig }) {
   );
 }
 
+function CustomMusic({ id }: { id?: string }) {
+  if (id == null) return null;
+  const isUnique = (musicToLocation[id]?.length ?? 0) > 1;
+  return isUnique
+    ? <span
+        style={{ float: 'right' }}
+        title="This location has unique music">
+        ♫
+      </span>
+    : <span
+        style={{ float: 'right' }}
+        title="This location has custom music">
+        ♪
+      </span>;
+}
+
 export function Location() {
   const { id } = useParams<{ id: string }>();
   const translate = useContext(TranslationContext);
@@ -60,7 +80,10 @@ export function Location() {
   if (locs.length === 1) {
     return (
       <>
-        <h1>{translate(`ui.location`)}: {translate(`ui.location.${id}`)}</h1>
+        <h1>
+          {translate(`ui.location`)}: {translate(`ui.location.${id}`)}
+          <CustomMusic id={summary.customMusic} />
+        </h1>
         <SingleLocation loc={summary} />
       </>
     );  
@@ -76,7 +99,10 @@ export function Location() {
 
   return (
     <>
-      <h1>{translate(`ui.location`)}: {translate(`ui.location.${id}`)}</h1>
+      <h1>
+        {translate(`ui.location`)}: {translate(`ui.location.${id}`)}
+        <CustomMusic id={summary.customMusic} />
+      </h1>
       <Tabs tabs={tabs} selected={0} key={id} />
     </>
   );

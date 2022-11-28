@@ -20,6 +20,7 @@ import { match } from '../data/search';
 import { locations, locationsIdMap } from '../data/location';
 import { stripExtraData } from '../mods/epic-loot';
 import { PackageWriter } from '../file/Package';
+import { ticksToSeconds } from '../file/zdo/time';
 
 const locationHASH = stableHashCode('location');
 
@@ -239,8 +240,8 @@ export function* getMaxTime(zdos: ZDO[]): Generator<number, number, void> {
     if (obj == null || obj.components?.includes('BaseAI')) continue;
     const ticks = zdo.longs.get(LWT_HASH);
     if (ticks == null) continue;
-    const days = Number(ticks) / 1e7;
-    maxTime = Math.max(maxTime, days);
+    const current = ticksToSeconds(ticks);
+    maxTime = Math.max(maxTime, current);
   }
   yield 1;
   return maxTime;

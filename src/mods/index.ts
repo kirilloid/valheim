@@ -97,7 +97,7 @@ export const modLinks: Record<string, ModConfig> = {
   },
   JotunnBackpacks: {
     nexus: 1416,
-    thunderstore: 'EmrikNorth_and_Aedenthorn/JotunnBackpacks/',
+    thunderstore: 'EmrikNorth_and_Aedenthorn/JotunnBackpacks',
     version: '2.0.0',
     fullSupport: true,
   },

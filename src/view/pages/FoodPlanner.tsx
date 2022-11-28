@@ -5,7 +5,7 @@ import '../../css/FoodPlanner.css';
 
 import type { Biome, Food, GameObject, Resource, SimpleDrop } from '../../types';
 import { days, isNotNull, groupBy, mapValues, assertNever } from '../../model/utils';
-import { BASE_HEALTH, BASE_STAMINA, MAX_PLAYERS } from '../../model/game';
+import { BASE_EITR, BASE_HEALTH, BASE_STAMINA, MAX_PLAYERS } from '../../model/game';
 import { addDrop } from '../../model/dist';
 
 import { resources } from '../../data/resources';
@@ -24,7 +24,7 @@ function isFood(item: Resource): item is FoodItem {
   return item.Food != null;
 }
 
-const foods = resources.filter(isFood);
+const foods = resources.filter(isFood).filter(i => !i.disabled);
 const foodMap = new Map(foods.map(f => [f.id, f]));
 
 const FoodOptions = React.memo(() => {
@@ -174,7 +174,7 @@ export function FoodPlanner() {
   );
   const mul = (nightEat ? 1 : 0.7) * players * daysDuration * repeat;
 
-  const biomes: Biome[] = ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains'];
+  const biomes: Biome[] = ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains', 'Mistlands'];
 
   return (<>
     <h1>{translate('ui.page.food-planner')}</h1>
@@ -185,7 +185,7 @@ export function FoodPlanner() {
         <div className="FoodPresets__cell FoodPresets__title" key={key}>{translate(`ui.bestFood.${key}`)}</div>
       )}
       {biomes
-        .filter((_, tier) => tier < spoiler)
+        .filter((_, tier) => tier <= spoiler)
         .map((biome, idx) => {
           const tier = idx + 1;
           return <React.Fragment key={biome}>
@@ -208,6 +208,7 @@ export function FoodPlanner() {
           <th>{translate('ui.itemType.food')}</th>
           <th className="FoodPlanner__value">hp <Icon id="health" size={16} alt="" /></th>
           <th className="FoodPlanner__value">sta <Icon id="walknut" size={16} alt="" /></th>
+          <th className="FoodPlanner__value">eitr 🟣</th>
         </tr>
       </thead>
       <tbody>
@@ -216,12 +217,14 @@ export function FoodPlanner() {
           <td>{translate('ui.baseValue')}</td>
           <td className="FoodPlanner__value">{BASE_HEALTH}</td>
           <td className="FoodPlanner__value">{BASE_STAMINA}</td>
+          <td className="FoodPlanner__value">{BASE_EITR}</td>
         </tr>
-        {[0, 1, 2].map(idx => <tr>
+        {[0, 1, 2].map(idx => <tr key={idx}>
           <td><ItemIcon key={idx} item={selectedFoods[idx]} className={(selectedFoods[idx]?.tier ?? 0) > spoiler ? 'spoiler' : ''} /></td>
           <td className="FoodPlanner__select"><FoodSelector key={idx} state={selectedFoods} setState={setSelectedFoods} idx={idx} error={wrongFoods[idx]} /></td>
           <td className="FoodPlanner__value">{selectedFoods[idx]?.Food.health}</td>
           <td className="FoodPlanner__value">{selectedFoods[idx]?.Food.stamina}</td>
+          <td className="FoodPlanner__value">{selectedFoods[idx]?.Food.eitr ?? '—'}</td>
         </tr>)}
       </tbody>
       <tfoot>
@@ -230,6 +233,7 @@ export function FoodPlanner() {
           <th>{translate('ui.total')}</th>
           <th className="FoodPlanner__value">{selectedFoods.reduce((a, b) => a + (b?.Food.health ?? 0), BASE_HEALTH)}</th>
           <th className="FoodPlanner__value">{selectedFoods.reduce((a, b) => a + (b?.Food.stamina ?? 0), BASE_STAMINA)}</th>
+          <th className="FoodPlanner__value">{selectedFoods.reduce((a, b) => a + (b?.Food.eitr ?? 0), BASE_EITR) || '—'}</th>
         </tr>
       </tfoot>
     </table>

@@ -12,7 +12,6 @@ import { axes as allAxes, pickaxes as allPickaxes } from '../../data/weapons';
 
 import { TranslationContext, useGlobalState } from '../../effects';
 import { ItemIcon, SkillIcon } from '../parts/Icon';
-import { SkillType } from '../../model/skills';
 
 const objectMap: Record<EntityId, PhysicalObject> = {};
 const objectTypes = ['tree', 'ore', 'rock', 'misc'] as const;

@@ -12,10 +12,11 @@ import { List } from '../../helpers';
 function Food({ stats }: { stats: TFood }) {
   const translate = useContext(TranslationContext);
   return <>
-    <div>{translate('ui.health')}: <span className="InvTooltip__value" style={{ color: '#ff8080' }}>{stats.health}</span></div>
-    <div>{translate('ui.stamina')}: <span className="InvTooltip__value" style={{ color: '#ffff80' }}>{stats.stamina}</span></div>
-    <div>{translate('ui.duration')}: <span className="InvTooltip__value">{timeI2S(stats.duration)}</span></div>
-    <div>{translate('ui.regen')}: <span className="InvTooltip__value">{stats.regen}</span></div>
+    <div key="health">{translate('ui.health')}: <span className="InvTooltip__value" style={{ color: '#ff8080' }}>{stats.health}</span></div>
+    <div key="stamina">{translate('ui.stamina')}: <span className="InvTooltip__value" style={{ color: '#ffff80' }}>{stats.stamina}</span></div>
+    {stats.eitr && <div key="eitr">{translate('ui.eitr')}: <span className="InvTooltip__value" style={{ color: '#9090ff' }}>{stats.eitr}</span></div>}
+    <div key="duration">{translate('ui.duration')}: <span className="InvTooltip__value">{timeI2S(stats.duration)}</span></div>
+    <div key="regen">{translate('ui.regen')}: <span className="InvTooltip__value">{stats.regen}</span></div>
   </>;
 }
 
@@ -29,6 +30,7 @@ function Damage({ item, invItem, epicLoot }: { item: Weapon; invItem: InvItem; e
   const damage = addDamage(item.damage[0], multiplyDamage(item.damage[1], invItem.quality - 1));
   const resultDamage = modifyDamage(damage, epicLoot?.effects);
   const rarityClass = `EpicLoot--${epicLoot?.rarity ?? 'Generic'}`;
+  const attack = item.attacks[0];
 
   return <>
     {Object.entries(resultDamage)
@@ -38,6 +40,9 @@ function Damage({ item, invItem, epicLoot }: { item: Weapon; invItem: InvItem; e
         <Value value={value} originalValue={damage[key as DamageType] ?? 0} rarityClass={rarityClass} />
       </div>
     )}
+    {attack?.stamina ? <div>{translate('ui.stamina')}: <span className="InvTooltip__value">{attack.stamina}</span></div> : null}
+    {attack?.eitr && <div>{translate('ui.eitr')}: <span className="InvTooltip__value">{attack.eitr}</span></div>}
+    {attack?.healthPercent && <div>{translate('ui.health')}: <span className="InvTooltip__value">{attack.healthPercent}%</span></div>}
     <div>{translate('ui.knockback')}: <span className="InvTooltip__value">{item.knockback}</span></div>
     <div>{translate('ui.backstab')}: <span className="InvTooltip__value">{item.backstab}x</span></div>
   </>;
@@ -85,13 +90,18 @@ function Armor({ item, invItem, epicLoot }: { item: TArmor; invItem: InvItem; ep
 function AmmoDamage({ item }: { item: Arrow }) {
   const translate = useContext(TranslationContext);
 
-  return <List>{Object.entries(item.damage)
-    .filter(([, value]) => value)
-    .map(([key, value]) => <div key={key}>
-      {translate(`ui.damageType.${key}`)}{': '}
-      <span className="InvTooltip__value">{value}</span>
-    </div>
-  )}</List>;
+  return <>
+    <List>
+      {Object.entries(item.damage)
+        .filter(([, value]) => value)
+        .map(([key, value]) => <div key={key}>
+          {translate(`ui.damageType.${key}`)}{': '}
+          <span className="InvTooltip__value">{value}</span>
+        </div>
+      )}
+    </List>
+    <div>{translate('ui.knockback')}: <span className="InvTooltip__value">{item.knockback}</span></div>
+  </>;
 }
 
 export const ItemSpecific = React.memo(({ invItem, item }: { invItem: InvItem; item: Item; }) => {
@@ -106,7 +116,9 @@ export const ItemSpecific = React.memo(({ invItem, item }: { invItem: InvItem; i
       return <Shield item={item} invItem={invItem} />
     case 'armor':
       return <Armor item={item} invItem={invItem} epicLoot={epicLoot} />
-    case 'ammo':
+    case 'arrow':
+    case 'bolt':
+    case 'missile':
       return <AmmoDamage item={item} />
   }
   return null;

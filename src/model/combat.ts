@@ -103,11 +103,23 @@ function getTotalStaggerDamage(damage: DamageProfile): number {
   return blunt + slash + pierce + lightning;
 }
 
+export function getBlockingSkillFactor(skill: number): number {
+  return 1 + 0.005 * skill;
+}
+
 export function getWeaponSkillFactor(skill: number): Pair<number> {
   return [
     (0.25 + 0.006 * skill),
     Math.min(0.55 + 0.006 * skill, 1)
    ];
+}
+
+export function getResourceUsageSkillFactor(skill: number): number {
+  return 1 - 0.33 * skill / 100;
+}
+
+export function getBowDrawTime(skill: number): number {
+  return lerp(1, 0.2, skill / 100);
 }
 
 export function getTotalDamage(damage: Partial<DamageProfile>): number {
@@ -173,15 +185,15 @@ export function doAttack(
 
 function getAttackStats(weapon: Weapon, attack: Attack, skillLvl: number) {
   const animationTimes = animations[attack.animation];
-  const drawTime = (weapon.holdDurationMin ?? 0) * lerp(1, 0.2, skillLvl / 100);
+  const drawTime = (weapon.holdDurationMin ?? 0) * getBowDrawTime(skillLvl);
   const times = animationTimes.map(t => t + drawTime);
   const totalTime = times.reduce((a, b) => a + b, 0);
 
   const drawStamina = weapon.holdDurationMin != null ? drawTime * (weapon.holdStaminaDrain ?? 0) + 3 * FRAME : 0;
-  const attackStamina = attack.stamina * lerp(1, 0.67, skillLvl / 100) * times.length;
+  const attackStamina = attack.stamina * getResourceUsageSkillFactor(skillLvl) * times.length;
   const totalStamina = drawStamina + attackStamina;
 
-  const comboTotal = attack.type !== 'proj' && times.length > 1
+  const comboTotal = attack.type === 'melee' && times.length > 1
     ? times.length + (attack.chainCombo - 1)
     : 1;
 
@@ -359,7 +371,7 @@ export function attackPlayer(
   let staminaStats = new StatCounter();
 
   for (let i = 0; i < ITERATIONS; i++) {
-    const skillFactor = skillMin + (skillMax - skillMin) * i / (ITERATIONS - 1);
+    const skillFactor = Math.sqrt(skillMin + (skillMax - skillMin) * i / (ITERATIONS - 1));
     const stats = doAttack(multiplyDamage(damage, skillFactor), damageModifiers, shieldMod, block, armor, true, isParry);
     const { total, stagger, stamina } = stats;
     const overTime = overTimeSummary(stats.overTime);

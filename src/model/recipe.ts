@@ -12,9 +12,11 @@ export const genericRecipe = (
   materialsPerLevel: Record<EntityId, number>,
   item: EntityId,
   number = 1,
+  onlyOneIngredient = false,
 ): ItemRecipe => ({
   type: 'craft',
   time,
+  onlyOneIngredient: onlyOneIngredient,
   materials,
   materialsPerLevel,
   source: { station, level },
@@ -33,7 +35,8 @@ export const cauldronRecipe = (
   materials: Record<EntityId, number>,
   item: EntityId,
   number = 1,
-) => genericRecipe('piece_cauldron', level, CAULDRON_TIME, materials, {}, item, number);
+  onlyOneIngredient = false,
+) => genericRecipe('piece_cauldron', level, CAULDRON_TIME, materials, {}, item, number, onlyOneIngredient);
 
 export const potionRecipe = (
   cauldronLevel: number,
@@ -61,16 +64,37 @@ export const forgeRecipe = (
   number = 1
 ) => genericRecipe('forge', level, 3, materials, materialsPerLevel, item, number);
 
+export const blackForgeRecipe = (
+  level: number,
+  materials: Record<EntityId, number>,
+  materialsPerLevel: Record<EntityId, number>,
+  item: EntityId,
+  number = 1
+) => genericRecipe('blackforge', level, 3, materials, materialsPerLevel, item, number);
+
+export const mageTableRecipe = (
+  level: number,
+  materials: Record<EntityId, number>,
+  materialsPerLevel: Record<EntityId, number>,
+  item: EntityId,
+  number = 1
+) => genericRecipe('piece_magetable', level, 3, materials, materialsPerLevel, item, number);
+
 export const smelterRecipe = (
   smelter: 'smelter' | 'blastfurnace',
   ore: EntityId,
   metal: EntityId,
 ) => genericRecipe(smelter, 1, SMELTER_TIME, { [ore]: 1, Coal: 2 }, {}, metal, 1);
 
-export const traderRecipe = (value: number, item: EntityId, number = 1): ItemRecipe => ({
+export const traderRecipe = (
+  value: number,
+  item: EntityId,
+  { number = 1, killed }: { number?: number; killed?: EntityId } = {},
+): ItemRecipe => ({
   type: 'trader',
   value,
   item,
   number,
+  killed,
 });
 

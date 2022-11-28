@@ -18,16 +18,17 @@ export type GameComponent =
 | 'Leviathan' | 'LiquidVolume' /* TarLiquid */ | 'LocationProxy' /* ~ */ // | 'LootSpawner' // lootspawner_pineforest
 | 'MapTable' | 'MineRock' | 'MineRock5' | 'MonsterAI'
 | 'Pickable' | 'PickableItem' | 'Piece' | 'Plant' | 'Player' | 'PrivateArea' | 'Procreation'
-| 'Ragdoll' | 'RandomAnimation' | 'RandomFlyingBird' | 'Runestone' /* boss stones */
-| 'Saddle' | 'SEMan' | 'Ship' | 'ShipConstructor' | 'Sign' | 'Smelter'
+| 'Ragdoll' | 'RandomAnimation' | 'RandomFlyingBird' | 'ResourceRoot' | 'Runestone' /* boss stones */
+| 'Saddle' | 'SapCollector' | 'SEMan' | 'Ship' | 'ShipConstructor' | 'Sign' | 'Smelter'
 | 'Tameable' | 'TeleportWorld' | 'TerrainComp' | 'TombStone' | 'TreeBase' | 'TreeLog'
 | 'Vagon' | 'Vegvisir' | 'VisEquipment'
-| 'WearNTear' | 'Windmill'
+| 'WearNTear' | 'Windmill' | 'WispSpawner'
 | 'ZNetView' | 'ZSyncTransform'
 
 export type EntityGroup =
   | 'banner' | 'bed' | 'beech' | 'berry' | 'birch' | 'bird' | 'blob'
   | 'chair' | 'chest' | 'cook'
+  | 'demist'
   | 'fir' | 'fire'
   | 'goblin' | 'gray'
   | 'hide'
@@ -35,7 +36,7 @@ export type EntityGroup =
   | 'metal'
   | 'ore'
   | 'rug'
-  | 'seedTree' | 'seedVeg' | 'ship' | 'smelt' | 'stack' | 'stand'
+  | 'seedTree' | 'seedVeg' | 'seeker' | 'ship' | 'smelt' | 'stack' | 'stand'
   | 'torch'
   | 'value'
 
@@ -60,15 +61,17 @@ export type GameLocationId = string;
   ;*/
 
 export type Faction =
-  | 'Players'
-  | 'AnimalsVeg'
-  | 'ForestMonsters'
-  | 'Undead'
-  | 'Demon' // best friends
-  | 'MountainMonsters'
-  | 'SeaMonsters'
-  | 'PlainsMonsters'
-  | 'Boss' // aggressive only to players
+  | 'Players' // 0
+  | 'AnimalsVeg' // 1
+  | 'ForestMonsters' // 2
+  | 'Undead' // 3
+  | 'Demon' // 4 best friends
+  | 'MountainMonsters' // 5
+  | 'SeaMonsters' // 6
+  | 'PlainsMonsters' // 7
+  | 'Boss' // 8 aggressive only to players
+  | 'MistlandsMonsters' // 9
+  | 'Dverger' // 10
   ;
 
 export type DamageType = 
@@ -102,9 +105,9 @@ export type BiomeConfig = {
   tier: number;
   emoji: string;
   locations: GameLocationId[];
-  destructibles: EntityId[];
-  creatures: Creature[];
-  resources: EntityId[];
+  destructibles: Set<EntityId>;
+  creatures: Set<Creature | Fish>;
+  resources: Set<EntityId>;
 };
 
 export type LocationItem = { item: EntityId | LocationItem[], chance: number, number: number };
@@ -120,7 +123,6 @@ export type LocationConfig = {
   quantity: number,
   biomes: Biome[];
   biomeArea: number;
-  chance: number;
   prioritized: boolean;
   centerFirst: boolean;
   unique: boolean;
@@ -139,7 +141,9 @@ export type LocationConfig = {
   destructibles: DropDist;
   creatures: DropDist;
   resources: DropDist;
+  customMusic?: string;
   items: LocationItem[],
+  needsKey?: EntityId;
   dungeon?: DungeonRoomsConfig,
 };
 
@@ -179,24 +183,28 @@ export const damageModifiersValues: Record<DamageModifier, number> = {
 };
 
 export type Effect = {
-  type: 'effect',
+  type: 'effect';
   id: EntityId;
+  iconId?: string;
   tier: number;
-  special?: 'Tailwind';
+  special?: 'Tailwind' | 'Demister';
   time?: number;
   comfort?: { value: number; };
   cooldown?: number;
-  healthOverTime?: [change: number, interval: number],
+  absorbDamage?: Pair<number>;
+  healthOverTime?: [change: number, interval: number];
   damageModifiers?: Partial<DamageModifiers>;
-  attackModifier?: [skill: SkillType, modifier: number],
-  stealth?: number;
+  attackModifier?: [skill: SkillType, modifier: number];
+  skillModifier?: [skill: SkillType, modifier: number];
+  fallDamage?: number;
   carryWeight?: number;
   runStamina?: number;
   jumpStamina?: number;
   healthRegen?: number;
   staminaRegen?: number;
+  eitrRegen?: number;
   xpModifier?: number;
-  moveSpeed?: number
+  moveSpeed?: number;
 };
 
 export type DamageProfile = Record<DamageType, number>;
@@ -213,7 +221,7 @@ export type NormalAttackProfile = {
 }
 export type SpawnAttackProfile = {
   spawn: EntityId[];
-  number: number;
+  number: Pair<number>;
   max: number;
 }
 export type AttackProfile = NormalAttackProfile | SpawnAttackProfile;
@@ -308,9 +316,23 @@ export interface Creature extends GameObjectBase {
   } | null;
   attacks: AttackVariety[];
   damageModifiers: DamageModifiers;
+  weakSpots?: { location: string; damageModifiers: DamageModifiers }[];
+  // Gjall, SeekerBrute, TheHive, SeekerQueen 
   drop: DropEntry[];
   tame?: { fedTime: number; tameTime: number; commandable: boolean; eats: EntityId[] };
   pregnancy?: { points: number; time: number; chance: number; grow: number; childId: EntityId };
+}
+
+export interface Fish extends GameObjectBase {
+  type: 'fish';
+  components: GameComponent[];
+  emoji: string;
+  spawners: SpawnerConfig[];
+  speed: number;
+  turnSpeed: number;
+  baits: Record<EntityId, number>;
+  staminaUse: number;
+  Deadspeak?: Deadspeak;
 }
 
 /**
@@ -332,7 +354,7 @@ export interface Destructible {
 }
 
 export interface Plantable {
-  subtype: 'tree' | 'vegetable' | 'crop',
+  subtype: 'tree' | 'vegetable' | 'crop' | 'shroom',
   plantedWith: EntityId;
   growTime: Pair<number>;
   cultivatedGround: boolean;
@@ -357,6 +379,7 @@ export type PhysicalObject = GameObjectBase & {
   Plant?: Plantable;
   Beacon?: number;
   SpawnArea?: SpawnArea;
+  floating?: true;
 };
 
 export enum MaterialType {
@@ -364,6 +387,7 @@ export enum MaterialType {
   Stone,
   Iron,
   HardWood,
+  Marble,
 };
 
 export type ComfortGroup = 'fire' | 'bed' | 'banner' | 'chair' | 'table';
@@ -405,7 +429,13 @@ type Wear = {
 export type Piece = BasePiece & {
   type: 'piece';
   base: boolean;
+  demister?: true;
   wear: Wear;
+  Aoe?: {
+    damage: DamageProfile;
+    self: number;
+    backstabBonus?: number;
+  };
 } & ({
   subtype: 'fireplace';
   fireplace: {
@@ -555,6 +585,7 @@ export type ItemGrow = Required<ItemGrowConfig>;
 export type ItemRecipe = {
   type: 'craft';
   time: number;
+  onlyOneIngredient: boolean;
   materials: Record<EntityId, number>;
   materialsPerLevel: Record<EntityId, number>;
   source: { station: EntityId | null; level?: number };
@@ -565,6 +596,7 @@ export type ItemRecipe = {
   value: number;
   item: EntityId;
   number: number;
+  killed?: EntityId;
 };
 
 interface BaseItem extends GameObjectBase {
@@ -575,6 +607,7 @@ interface BaseItem extends GameObjectBase {
   weight: number;
   floating?: true;
   teleportable?: false;
+  demister?: true;
   grow?: ItemGrow[];
 }
 
@@ -599,6 +632,8 @@ export enum ItemType {
   Utility = 18,
   Tool = 19,
   Attach_Atgeir = 20,
+  Fish = 21,
+  TwoHandedWeaponLeft = 22,
 }
 
 export interface Resource extends BaseItem {
@@ -606,24 +641,43 @@ export interface Resource extends BaseItem {
   emoji?: string;
   summon?: [EntityId, number];
   power?: EntityId;
+  Deadspeak?: Deadspeak,
   Food?: Food;
+  EggGrow?: EggGrow;
   Potion?: Potion;
   Value?: number;
+}
+
+export interface Deadspeak {
+  interval: number;
+  chance: number;
+  triggerDistance: number;
+  ttl: number;
+  texts: string[];
 }
 
 export interface Food {
   health: number;
   stamina: number;
+  eitr?: number;
   duration: number;
   regen: number;
-  color: string;
+}
+
+export interface EggGrow {
+  growTime: number;
+  grownId: EntityId;
+  requiresNearbyFire: boolean;
+  requiresUnderRoof: boolean;
 }
 
 export interface Potion {
   health?: [adds: number, time: number];
   stamina?: [adds: number, time: number];
+  eitr?: [adds: number, time: number];
   healthRegen?: number;
   staminaRegen?: number;
+  eitrRegen?: number;
   damageModifiers?: Partial<DamageModifiers>;
   cooldown: number;
 }
@@ -635,12 +689,18 @@ export type AttackAnimation =
 | 'unarmed_kick'
 | 'swing_longsword'
 | 'swing_axe'
+| 'greatsword'
+| 'greatsword_secondary'
+| 'axe_secondary'
 | 'knife_stab'
 | 'knife_secondary'
+| 'dual_knives'
+| 'dual_knives_secondary'
 | 'spear_poke'
 | 'spear_throw'
 | 'swing_sledge'
 | 'bow_fire'
+| 'crossbow_fire'
 | 'swing_pickaxe'
 | 'atgeir_attack'
 | 'atgeir_secondary'
@@ -648,12 +708,17 @@ export type AttackAnimation =
 | 'sword_secondary'
 | 'battleaxe_attack'
 | 'battleaxe_secondary'
+| 'staff_rapidfire'
+| 'staff_fireball'
+| 'staff_summon'
 | 'throw_bomb'
 ;
 
 interface BaseAttack {
   animation: AttackAnimation;
   stamina: number;
+  eitr?: number;
+  healthPercent?: number;
   walkSpeed: number;
   rotationSpeed: number;
   startNoise: number;
@@ -667,17 +732,33 @@ interface MeleeAttack extends BaseAttack {
   chainCombo: number;
 }
 
+interface AreaAttack extends BaseAttack {
+  radius: number;
+}
+
 interface BowAttack extends BaseAttack {
   projVel: Pair<number>;
   projAcc: Pair<number>;
 }
 
+interface SummonAttack extends BaseAttack {
+  summons: EntityId;
+  skillFactor: number;
+}
+
+interface EffectAttack extends BaseAttack {
+  id: EntityId;
+}
+
 export type Attack =
-  | MeleeAttack & { type: 'melee' | 'area' }
+  | MeleeAttack & { type: 'melee' }
+  | AreaAttack & { type: 'area' }
   | BowAttack & { type: 'proj' }
+  | SummonAttack & { type: 'summon' }
+  | EffectAttack & { type: 'cast' }
 
 export interface Arrow extends BaseItem {
-  type: 'ammo';
+  type: 'arrow' | 'bolt' | 'missile';
   damage: DamageProfile;
   knockback: number;
 }
@@ -745,11 +826,13 @@ export interface Armor extends BaseItem {
   armor: Pair<number>;
   damageModifiers?: Partial<DamageModifiers>;
   durability: Pair<number>;
+  eitrRegen?: number;
   set?: ItemSet;
+  effect?: Effect;
 }
 
 export type Item = Resource | Weapon | Shield | Armor | Arrow | Tool;
 export type ItemSet = { name: string; items: EntityId[]; bonus: (Effect | undefined)[]; };
 export type ItemSpecial = Weapon['special'] | Armor['special'] | Tool['special'];
 
-export type GameObject = Item | Piece | Structure | PhysicalObject | Ship | Cart | Creature;
+export type GameObject = Item | Piece | Structure | PhysicalObject | Ship | Cart | Creature | Fish;

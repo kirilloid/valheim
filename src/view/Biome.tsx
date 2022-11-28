@@ -8,12 +8,13 @@ import { biomes } from '../data/location';
 import { maxLvl } from '../data/creatures';
 import { data } from '../data/itemDB';
 import { resourceCraftMap } from '../data/resource-usage';
-import { envSetup } from '../data/env';
+import { envSetup, envStates } from '../data/env';
 
 import { TranslationContext } from '../effects';
 import { averageAttacksDamage, InlineObjectWithIcon, yesNo } from './helpers';
 import { ItemIcon } from './parts/Icon';
 import { SpoilerAlert } from './parts/Spoiler';
+import { sortBy } from '../model/utils';
 
 function ResourceList(props: { list: GameObject[] }) {
   const { list } = props;
@@ -51,7 +52,7 @@ function Weather({ biome }: { biome: BiomeConfig }) {
     <h2><Link to="/weather">{translate('ui.page.weather')}</Link></h2>
     <dl>
       {envs.map(([env, weight]) => <React.Fragment key={env}>
-        <dt>{translate(`ui.weather.${env}`)}</dt><dd>{Math.round(weight / totalWeight * 100)}%</dd>
+        <dt>{envStates[env].emoji} {translate(`ui.weather.${env}`)}</dt><dd>{Math.round(weight / totalWeight * 100)}%</dd>
       </React.Fragment>)}
     </dl>
   </section>
@@ -74,7 +75,10 @@ function Resources({ biome }: { biome: BiomeConfig }) {
       console.error(`Resource '${res}' from biome '${biome.id}' not found`);
       continue;
     }
-    if (item.type === 'piece' || item.type === 'creature') continue;
+    if (item.type === 'piece'
+    ||  item.type === 'creature'
+    ||  item.type === 'fish'
+    ) continue;
     if (item.type === 'object') {
       // they are not here
     } else if (item.type === 'trophy') {
@@ -96,6 +100,8 @@ function Resources({ biome }: { biome: BiomeConfig }) {
           break;
         case 'rock':
           resources.rock.push(obj);
+          break;
+        case 'indestructible':
           break;
         default:
           resources.misc.push(obj);
@@ -139,6 +145,8 @@ function Resources({ biome }: { biome: BiomeConfig }) {
 
 function Creatures({ biome }: { biome: BiomeConfig }) {
   const translate = useContext(TranslationContext);
+  const creatures = [...biome.creatures];
+  sortBy(creatures, c => c.type === 'fish' ? 0 : c.hp)
   return <section>
     <h2>{translate('ui.creatures')}</h2>
     <table width="100%">
@@ -152,12 +160,12 @@ function Creatures({ biome }: { biome: BiomeConfig }) {
         </tr>
       </thead>
       <tbody>
-        {biome.creatures.map(c =>
+        {creatures.map(c =>
         <tr key={c.id}>
           <td><ItemIcon item={c} size={32} /></td>
           <td><Link to={`/obj/${c.id}`}>{translate(c.id)}</Link></td>
-          <td className="value">{c.hp}</td>
-          <td className="value">{averageAttacksDamage(c) || '—'}</td>
+          <td className="value">{c.type === 'fish' ? 1 : c.hp}</td>
+          <td className="value">{c.type === 'fish' ? '—' : averageAttacksDamage(c) || '—'}</td>
           <td className="value">{yesNo(maxLvl(c) > 1)}</td>
         </tr>)}
       </tbody>

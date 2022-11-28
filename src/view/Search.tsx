@@ -15,9 +15,10 @@ import { recipes } from '../data/recipes';
 import { events } from '../data/events';
 import { biomes, locationsTypeIdMap } from '../data/location';
 import { effects } from '../data/effects';
+import { biome } from '../data/emoji';
 
 import { TranslationContext, Translator, useGlobalState } from '../effects';
-import { averageAttacksDamage, findDropChanceFromCreature, itemClasses, Materials, ShortWeaponDamage } from './helpers';
+import { averageAttacksDamage, findDropChanceFromCreature, itemClasses, List, Materials, ShortWeaponDamage } from './helpers';
 import { EffectIcon, Icon, ItemIcon, SkillIcon } from './parts/Icon';
 
 function first(val: number | [number, number]) {
@@ -126,6 +127,7 @@ function ShortRecipe(props: { item: GameObject }) {
   const { item } = props;
   switch (item.type) {
     case 'creature':
+    case 'fish':
     case 'object':
     case 'structure':
     case 'item':
@@ -140,7 +142,9 @@ function ShortRecipe(props: { item: GameObject }) {
     case 'shield':
     case 'tool':
     case 'armor':
-    case 'ammo':
+    case 'arrow':
+    case 'bolt':
+    case 'missile':
     case 'weapon': {
       const recipe = recipes.find(r => r.item === item.id);
       if (recipe == null) return null;
@@ -200,6 +204,10 @@ function ItemExtra({ item }: { item: Resource }) {
       {item.Food.health}
       <Icon id="walknut" alt={translate('ui.stamina')} size={16} />
       {item.Food.stamina}
+      {item.Food.eitr && <>
+        <Icon id="eitr" alt={translate('ui.eitr')} size={16} />
+        {item.Food.eitr}
+      </>}
       <Icon id="time" alt={translate('ui.duration')} size={16} />
       {Math.round(item.Food.duration / 60)}
     </span>
@@ -209,16 +217,34 @@ function ItemExtra({ item }: { item: Resource }) {
     return <>
       <span>
         {item.Potion.health
-          ? <>
+          ? <React.Fragment key="health">
               <Icon id="health" alt={translate('ui.health')} size={16} />
               {item.Potion.health[0]} / {item.Potion.health[1]}s
-            </>
+            </React.Fragment>
           : null}
         {item.Potion.stamina
-          ? <>
+          ? <React.Fragment key="stamina">
               <Icon id="walknut" alt={translate('ui.stamina')} size={16} />
               {item.Potion.stamina[0]} / {item.Potion.stamina[1]}s
-            </>
+            </React.Fragment>
+          : null}
+        {item.Potion.staminaRegen
+          ? <React.Fragment key="staminaRegen">
+              <Icon id="walknut" alt={translate('ui.stamina')} size={16} />
+              +{(item.Potion.staminaRegen - 1) * 100}%
+            </React.Fragment>
+          : null}
+        {item.Potion.eitr
+          ? <React.Fragment key="eitr">
+              <Icon id="eitr" alt={translate('ui.eitr')} size={16} />
+              {item.Potion.eitr[0]} / {item.Potion.eitr[1]}s
+            </React.Fragment>
+          : null}
+        {item.Potion.eitrRegen
+          ? <React.Fragment key="eitrRegen">
+              <Icon id="eitr" alt={translate('ui.eitr')} size={16} />
+              +{(item.Potion.eitrRegen - 1) * 100}%
+            </React.Fragment>
           : null}
         {item.Potion.damageModifiers
           ? (Object.keys(item.Potion.damageModifiers) as DamageType[]).map(type => resistIcon(translate, type))
@@ -262,6 +288,18 @@ function SearchObject({ id, text, onClick }: BaseSearchItemProps) {
             <Icon id="sword" alt={translate('ui.damage')} size={16} />
             {avgDmg}
           </> : null}
+        </span>
+      </div>
+    }
+    case 'fish': {
+      return <div className={className}>
+        <ItemIcon item={item} size={32} />
+        <Link to={`/obj/${id}`} onClick={onClick} className={linkClassName}>{text}</Link>
+        <span>
+          <List separator="">{item.spawners
+            .flatMap(s => s.biomes)
+            .map(b => <span title={translate(`ui.biome.${b}`)} key={b}>{biome[b]}</span>)
+          }</List>
         </span>
       </div>
     }
@@ -319,7 +357,9 @@ function SearchObject({ id, text, onClick }: BaseSearchItemProps) {
         }</span>
         <ShortRecipe item={item} />
       </div>
-    case 'ammo':
+    case 'arrow':
+    case 'bolt':
+    case 'missile':
       return <div className={className}>
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick} className={linkClassName}>{text}</Link>

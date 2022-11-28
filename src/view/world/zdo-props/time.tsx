@@ -8,8 +8,8 @@ import { stableHashCode } from '../../../model/hash';
 import { GAME_DAY } from '../../../model/game';
 
 import { TranslationContext } from '../../../effects';
+import { ticksToSeconds, secondsToTicks } from '../../../file/zdo/time';
 
-const SCALE = 10_000_000;
 const DEFAULT = BigInt(0);
 
 export const timeComp = (key: string) => {
@@ -19,14 +19,14 @@ export const timeComp = (key: string) => {
     const translate = useContext(TranslationContext);
     useEffect(() => {
       const ticks = zdo.longs.get(hash) ?? DEFAULT;
-      const initialValue = Number(ticks) / SCALE;
+      const initialValue = ticksToSeconds(ticks);
       const day = Math.floor(initialValue / GAME_DAY);
       const time = initialValue % GAME_DAY;
       setDayTime({ day, time });
     }, [zdo, setDayTime]);
     const update = () => {
-      const ticks = (value.day * GAME_DAY + value.time);
-      zdo.longs.set(hash, BigInt(ticks * SCALE));
+      const seconds = (value.day * GAME_DAY + value.time);
+      zdo.longs.set(hash, secondsToTicks(seconds));
     }
     return <React.Fragment key={key}>
       <dt>{key}</dt>

@@ -173,7 +173,7 @@ a.Switch__Option {
 
 .Switch__Option--selected {
   font-weight: bold;
-  border-bottom: 2px solid #0004;
+  border-bottom: 2px solid var(--color-text-light);
 }
 
 code {
@@ -186,6 +186,11 @@ p {
 
 .nobr {
   white-space: nowrap;
+}
+
+.quote {
+  font-style: italic;
+  padding: 0.5rem 1rem;
 }
 
 .info {

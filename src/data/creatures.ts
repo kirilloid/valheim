@@ -3,12 +3,11 @@ import type {
   AttackVariety,
   Creature,
   DamageModifiers,
-  SpawnerConfig,
-  Biome, Pair, EntityId,
+  Fish,
 } from '../types';
 import { TOLERATE } from '../types';
 import { mods, dmg, dropEntry, dropTrophy } from '../model/game';
-import { EnvId } from './env';
+import { spawner } from '../model/spawner';
 
 const defaultDmgModifiers: DamageModifiers = {
   blunt: 'normal',
@@ -56,6 +55,19 @@ const skeletonDamageModifiers: DamageModifiers = {
 
 const loxDamageModifiers = mods([1, 1, 0, 4, 4, 2, 1, 0, 0, 3]);
 
+const seekerDamageModifiers: DamageModifiers = {
+  blunt: 'resistant',
+  slash: 'resistant',
+  pierce: 'resistant',
+  chop: 'ignore',
+  pickaxe: 'ignore',
+  fire: 'normal',
+  frost: 'normal',
+  lightning: 'normal',
+  poison: 'normal',
+  spirit: 'immune',
+};
+
 const unblockable = true;
 const undodgeable = true;
 
@@ -63,48 +75,8 @@ const single = (attacks: AttackProfile[]): [AttackVariety] => {
   return [{ rate: 1, variety: '', attacks }]; 
 };
 
-function spawner(config: {
-  tier: number;
-  biomes: Biome[];
-  biomeAreas?: number;
-  maxSpawned: number;
-  interval: number;
-  chance: number;
-  distance?: number;
-  radius?: Pair<number>;
-  killed?: EntityId;
-  envs?: EnvId[];
-  groupSize?: Pair<number>;
-  groupRadius?: number;
-  night?: boolean;
-  altitude?: Pair<number>;
-  tilt?: Pair<number>;
-  forest?: boolean;
-  offset?: number;
-  levels?: Pair<number>;
-  minDistance?: number;
-}): SpawnerConfig {
-  return {
-    biomeAreas: 7,
-    distance: 10,
-    radius: [40, 80],
-    killed: undefined,
-    envs: [],
-    groupSize: [1, 1],
-    groupRadius: 3,
-    night: undefined,
-    altitude: [0, 1000],
-    tilt: [0, 35],
-    forest: undefined,
-    offset: 0.5,
-    levels: [1, 3],
-    minDistance: 0,
-    ...config,
-  };
-}
-
-export const maxLvl = (creature: Creature) => {
-  return creature.spawners.reduce((l, s) => Math.max(l, s.levels[1]), creature.maxLvl ?? 1);
+export const maxLvl = (creature: Creature | Fish) => {
+  return creature.spawners.reduce((l, s) => Math.max(l, s.levels[1]), (creature as Creature).maxLvl ?? 1);
 };
 
 export const creatures: Creature[] = [
@@ -288,132 +260,6 @@ export const creatures: Creature[] = [
       dropEntry('NeckTail', { chance: 0.75 }),
       dropTrophy('TrophyNeck', 0.05),
     ],
-  },
-  {
-    type: 'creature',
-    id: 'Fish1',
-    iconId: 'resource/FishRaw',
-    ragdollId: null,
-    components: ['Fish'],
-    tags: ['fish'],
-    tier: 1,
-    emoji: '🐟',
-    faction: 'ForestMonsters',
-    spawners: [spawner({
-      tier: 0,
-      biomes: ['Meadows', 'BlackForest', 'Plains'],
-      maxSpawned: 5,
-      interval: 120,
-      chance: 0.5,
-      distance: 20,
-      envs: [],
-      groupSize: [2, 6],
-      groupRadius: 2,
-      altitude: [-3, -1.5],
-      tilt: [0, 99],
-      offset: 0.1,
-      levels: [1, 1],
-    })],
-    attacks: [],
-    tolerate: TOLERATE.WATER,
-    speed: {
-      walk: 0,
-      run: 0,
-      swim: 3,
-    },
-    turnSpeed: {
-      walk: 0,
-      run: 0,
-      swim: 100,
-    },
-    hp: 1,
-    stagger: null,
-    damageModifiers: animalDmgModifiers,
-    drop: [dropEntry('FishRaw')],
-  },
-  {
-    type: 'creature',
-    id: 'Fish2',
-    iconId: 'resource/FishRaw',
-    ragdollId: null,
-    components: ['Fish'],
-    tags: ['fish'],
-    tier: 1,
-    emoji: '🐟',
-    faction: 'ForestMonsters',
-    spawners: [spawner({
-      tier: 0,
-      biomes: ['Meadows', 'BlackForest', 'Plains'],
-      maxSpawned: 4,
-      interval: 120,
-      chance: 0.5,
-      distance: 20,
-      envs: [],
-      groupSize: [2, 4],
-      groupRadius: 2,
-      altitude: [-5, -2],
-      tilt: [0, 99],
-      offset: 0.1,
-      levels: [1, 1],
-    })],
-    attacks: [],
-    tolerate: TOLERATE.WATER,
-    speed: {
-      walk: 0,
-      run: 0,
-      swim: 5,
-    },
-    turnSpeed: {
-      walk: 0,
-      run: 0,
-      swim: 100,
-    },
-    hp: 1,
-    stagger: null,
-    damageModifiers: animalDmgModifiers,
-    drop: [dropEntry('FishRaw', { min: 2, max: 2 })],
-  },
-  {
-    type: 'creature',
-    id: 'Fish3',
-    iconId: 'resource/FishRaw',
-    ragdollId: null,
-    components: ['Fish'],
-    tags: ['fish'],
-    tier: 1,
-    emoji: '🐟',
-    faction: 'ForestMonsters',
-    spawners: [spawner({
-      tier: 0,
-      biomes: ['Meadows', 'BlackForest', 'Plains', 'Ocean'],
-      maxSpawned: 3,
-      interval: 120,
-      chance: 0.5,
-      distance: 20,
-      envs: [],
-      groupSize: [1, 2],
-      groupRadius: 2,
-      altitude: [-999, -5],
-      tilt: [0, 99],
-      offset: 0.1,
-      levels: [1, 1],
-    })],
-    attacks: [],
-    tolerate: TOLERATE.WATER,
-    speed: {
-      walk: 0,
-      run: 0,
-      swim: 10,
-    },
-    turnSpeed: {
-      walk: 0,
-      run: 0,
-      swim: 80,
-    },
-    hp: 1,
-    stagger: null,
-    damageModifiers: animalDmgModifiers,
-    drop: [dropEntry('FishRaw', { min: 4, max: 4 })],
   },
   {
     type: 'creature',
@@ -928,8 +774,16 @@ export const creatures: Creature[] = [
       ...animalDmgModifiers,
       blunt: 'resistant',
       pierce: 'weak',
-      poison: 'immune',
     },
+    weakSpots: [
+      {
+        location: 'head',
+        damageModifiers: {
+          ...animalDmgModifiers,
+          pierce: 'veryWeak',
+        }
+      }
+    ],
     drop: [
       dropEntry('TrollHide', { min: 5, max: 5 }),
       dropEntry('Coins', { min: 20, max: 30 }),
@@ -947,7 +801,7 @@ export const creatures: Creature[] = [
     spawners: [],
     attacks: single([
       // SCREAM
-      { spawn: ['TentaRoot'], number: 15, max: 30 },
+      { spawn: ['TentaRoot'], number: [15, 15], max: 30 },
       { dmg: dmg({ pierce: 35, chop: 20, pickaxe: 20 }), name: 'Vine Shoot', burst: 25, toolTier: 0 },
       { dmg: dmg({ blunt: 60, chop: 1000, pickaxe: 1000 }), name: 'Stomp', force: 30, toolTier: 0 }, // area
     ]),
@@ -977,8 +831,7 @@ export const creatures: Creature[] = [
   },
   {
     type: 'creature',
-    disabled: true,
-    id: 'TentaRoot', // from the elder
+    id: 'TentaRoot',
     ragdollId: null,
     components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
     tier: 2,
@@ -1434,7 +1287,7 @@ export const creatures: Creature[] = [
         pickaxe: 1000,
         poison: 50,
       }), name: 'punch', force: 100, toolTier: 0 },
-      { spawn: ['Skeleton', 'Blob'], number: 4, max: 8, }
+      { spawn: ['Skeleton', 'Blob'], number: [4, 4], max: 8, }
     ]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     speed: {
@@ -2303,8 +2156,646 @@ export const creatures: Creature[] = [
       poison: 'immune',
     },
     drop: [
-      dropEntry('Yagluththing', { min: 3, max: 3, scale: false }),
+      dropEntry('YagluthDrop', { min: 3, max: 3, scale: false }),
       dropTrophy('TrophyGoblinKing', 1),
+    ],
+  },
+  {
+    type: 'creature',
+    id: 'Hen',
+    ragdollId: null,
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI', 'Procreation', 'Tameable'],
+    tags: ['animal', 'bird'],
+    tier: 6,
+    emoji: '🐔',
+    faction: 'ForestMonsters',
+    spawners: [],
+    attacks: single([{ dmg: dmg({ blunt: 10 }), stagger: 1.24, name: 'beak' }]),
+    tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 3,
+      run: 6,
+      swim: 2,
+    },
+    turnSpeed: {
+      walk: 100,
+      run: 200,
+      swim: 100,
+    },
+    hp: 80,
+    damageModifiers: animalDmgModifiers,
+    stagger: { factor: 0.5, time: NaN },
+    drop: [
+      dropEntry('ChickenMeat'),
+      dropEntry('Feathers', { max: 3 }),
+    ],
+    tame: { tameTime: 1800, fedTime: 600, commandable: false,
+            eats: ['Dandelion', 'Barley', 'BeechSeeds', 'BirchSeeds', 'CarrotSeeds', 'OnionSeeds', 'TurnipSeeds'] },
+            // eatRange:1, searchRange:10, heal:20
+    pregnancy: { points: 3, time: 60, chance: 0.33, grow: 1800, childId: 'ChickenEgg' }, // max: 10, range: 3
+  },
+  {
+    type: 'creature',
+    id: 'Chicken',
+    iconId: 'creature/Hen',
+    ragdollId: null,
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI', 'Growup'],
+    tags: ['animal'],
+    tier: 6,
+    emoji: '🐤',
+    faction: 'ForestMonsters',
+    spawners: [],
+    attacks: [],
+    tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 4,
+      run: 6,
+      swim: 2,
+    },
+    turnSpeed: {
+      walk: 150,
+      run: 150,
+      swim: 100,
+    },
+    hp: 10,
+    damageModifiers: animalDmgModifiers,
+    stagger: { factor: 0.5, time: NaN, },
+    drop: [
+      dropEntry('ChickenMeat', { chance: 0.25 }),
+      dropEntry('Feathers', { chance: 0.5, max: 2 }),
+    ],
+  },
+  {
+    type: 'creature',
+    id: 'Hare',
+    iconId: 'resource/TrophyHare',
+    ragdollId: 'Hare_ragdoll',
+    components: ['Character'],
+    tags: ['animal'],
+    tier: 6,
+    emoji: '🐇',
+    faction: 'AnimalsVeg',
+    spawners: [spawner({
+      tier: 6,
+      biomes: ['Mistlands'],
+      biomeAreas: 3,
+      maxSpawned: 10,
+      interval: 100,
+      chance: 0.5,
+      distance: 10,
+      groupSize: [1, 3],
+      groupRadius: 6,
+      levels: [1, 3],
+    })],
+    attacks: [],
+
+    tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 4,
+      run: 8,
+      swim: 2,
+    },
+    turnSpeed: {
+      walk: 200,
+      run: 300,
+      swim: 100,
+    },
+    hp: 10,
+    stagger: null,
+    damageModifiers: animalDmgModifiers,
+    drop: [
+      dropEntry('HareMeat'),
+      dropEntry('ScaleHide', { max: 3 }),
+      dropTrophy('TrophyHare', 0.05),
+    ],
+  },
+  {
+    type: 'creature',
+    id: 'Skeleton_Friendly',
+    iconId: 'resource/TrophySkeleton',
+    ragdollId: null,
+    components: ['Character'],
+    tags: ['animal'],
+    tier: 6,
+    emoji: '💀',
+    faction: 'Players',
+    spawners: [],
+    attacks: [
+      {
+        variety: 'melee',
+        rate: 4,
+        // skeleton_sword2
+        attacks: [{ dmg: dmg({ slash: 40 }), name: 'sword', force: 40 }],
+      },
+      {
+        variety: 'ranged',
+        rate: 1,
+        // skeleton_bow2
+        attacks: [{ dmg: dmg({ pierce: 40 }), name: 'bow', force: 15 }],
+      },
+    ],
+    tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
+    speed: {
+      walk: 1,
+      run: 4,
+      swim: 0,
+    },
+    turnSpeed: {
+      walk: 300,
+      run: 300,
+      swim: 0,
+    },
+    hp: 400,
+    stagger: null,
+    damageModifiers: skeletonDamageModifiers,
+    drop: [],
+  },
+  {
+    type: 'creature',
+    id: 'Dverger',
+    iconId: 'resource/TrophyDvergr',
+    ragdollId: 'Dverger_ragdoll',
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
+    tier: 6,
+    emoji: '🏹',
+    faction: 'Dverger',
+    spawners: [spawner({
+      tier: 6,
+      biomes: ['Mistlands'],
+      biomeAreas: 2,
+      maxSpawned: 2,
+      interval: 1000,
+      chance: 0.3,
+      distance: 30,
+      groupSize: [1, 2],
+      groupRadius: 3,
+      night: false,
+      levels: [1, 3],
+    })],
+    attacks: single([
+      { dmg: dmg({ pierce: 110 }), name: 'arbalest', force: 200, stagger: 1.68 },
+      { dmg: dmg({ blunt: 70 }), name: 'melee', force: 80, stagger: 1.84 },
+      // visual: DvergerArbalest
+      // visual: DvergerSuitArbalest
+    ]),
+
+    tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 2,
+      run: 7,
+      swim: 1.5,
+    },
+    turnSpeed: {
+      walk: 200,
+      run: 200,
+      swim: 100,
+    },
+    hp: 350,
+    stagger: {
+      factor: 0.3,
+      time: 1.68,
+    },
+    damageModifiers: animalDmgModifiers,
+    drop: [],
+  },
+  {
+    type: 'creature',
+    id: 'DvergerMage',
+    iconId: 'resource/TrophyDvergr',
+    ragdollId: 'Dverger_ragdoll',
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
+    tier: 6,
+    emoji: '🧙‍♂️',
+    faction: 'Dverger',
+    spawners: [],
+    // visual: DvergerHairMale
+    // visual: DvergerHairFemale
+    attacks: [
+      {
+        rate: 1,
+        variety: 'Fire',
+        attacks: [
+          { dmg: dmg({ blunt: 70 }), name: 'melee', force: 80, stagger: 1.82 },
+          { dmg: dmg({ fire: 100 }), name: 'fireball', force: 50, stagger: 1.68 }, // radius=6
+          // visual: DvergerStaffFire
+          // visual: DvergerSuitFire
+          { dmg: dmg({ fire: 100 }), name: 'clusterbomb', force: 50, stagger: 1.68, burst: 3 }, // radius=3
+        ],
+      },
+      {
+        rate: 1,
+        variety: 'Ice',
+        attacks: [
+          { dmg: dmg({ blunt: 70 }), name: 'melee', force: 80, stagger: 1.82 },
+          { dmg: dmg({ frost: 200 }), name: 'icebolt', force: 50, stagger: 1.68 },
+          // visual: DvergerStaffIce
+          { dmg: dmg({ frost: 150 }), name: 'nova', force: 0, stagger: 1.68 }, // radius=5
+          // visual: DvergerSuitIce
+        ],
+      },
+      {
+        rate: 1,
+        variety: 'Healer',
+        attacks: [
+          // stagger: 1.68
+          // DvergerStaffSupport_buff: cast 'SE_Dvergr_buff', radius=8
+          // DvergerStaffHeal_heal: cast 'SE_Dvergr_heal', radius=4.28
+          // visual: DvergerStaffHeal
+          // visual: DvergerSuitSupport
+          { spawn: ['Mistile'], name: 'mistile', number: [1, 3], max: 9 },
+        ],
+      },
+    ],
+
+    tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 2,
+      run: 7,
+      swim: 1.5,
+    },
+    turnSpeed: {
+      walk: 200,
+      run: 200,
+      swim: 100,
+    },
+    hp: 350,
+    stagger: {
+      factor: 0.3,
+      time: 1.68,
+    },
+    damageModifiers: animalDmgModifiers,
+    drop: [
+      dropEntry('Softtissue', { chance: 0.25, max: 2, scale: false }),
+      dropEntry('BlackMarble', { chance: 0.5, max: 2, scale: false }),
+      dropEntry('Coins', { min: 2, max: 15, scale: false }),
+      dropTrophy('TrophyDvergr', 0.05),
+    ],
+  },
+  {
+    type: 'creature',
+    id: 'Mistile',
+    ragdollId: null,
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
+    tier: 2,
+    emoji: '',
+    faction: 'Dverger',
+    spawners: [],
+    attacks: single([
+      { dmg: dmg({ blunt: 150 }), name: 'kamikaze', force: 20, toolTier: 0 }
+    ]),
+    tolerate: TOLERATE.WATER | TOLERATE.FIRE | TOLERATE.SMOKE,
+    speed: {
+      walk: 5,
+      run: 5,
+      swim: 0,
+    },
+    turnSpeed: {
+      walk: 500,
+      run: 500,
+      swim: 0,
+    },
+    hp: 1,
+    stagger: null,
+    damageModifiers: animalDmgModifiers,
+    drop: [],
+  },
+  {
+    type: 'creature',
+    id: 'Tick',
+    iconId: 'resource/TrophyTick',
+    ragdollId: null,
+    components: ['BaseAI', 'Character', 'MonsterAI'],
+    tier: 6,
+    emoji: '✔',
+    faction: 'MistlandsMonsters',
+    spawners: [],
+    attacks: single([
+      { dmg: dmg({ pierce: 50 }), name: 'stick', stagger: 1.66 },
+    ]),
+
+    tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 1,
+      run: 8,
+      swim: 0,
+    },
+    turnSpeed: {
+      walk: 300,
+      run: 400,
+      swim: 0,
+    },
+    hp: 50,
+    stagger: {
+      factor: 0.5,
+      time: 1.54,
+    },
+    damageModifiers: {
+      ...animalDmgModifiers,
+      pierce: 'resistant',
+    },
+    drop: [
+      dropEntry('GiantBloodSack'),
+      dropTrophy('TrophyTick', 0.05),
+    ],
+  },
+  {
+    type: 'creature',
+    id: 'Gjall',
+    iconId: 'resource/TrophyGjall',
+    ragdollId: null,
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
+    tier: 6,
+    emoji: '🎈',
+    faction: 'MistlandsMonsters',
+    spawners: [spawner({
+      tier: 6,
+      biomes: ['Mistlands'],
+      biomeAreas: 2,
+      maxSpawned: 1,
+      interval: 500,
+      chance: 0.1,
+      distance: 50,
+      groupRadius: 1,
+      night: false,
+      tilt: [0, 90],
+      offset: 6,
+      levels: [1, 3],
+    }), spawner({
+      tier: 6,
+      biomes: ['Mistlands'],
+      biomeAreas: 2,
+      maxSpawned: 1,
+      interval: 500,
+      chance: 0.1,
+      distance: 50,
+      groupRadius: 1,
+      night: true,
+      tilt: [0, 90],
+      offset: 6,
+      levels: [1, 3],
+    })],
+    attacks: single([
+      { dmg: dmg({ blunt: 80, fire: 50 }), name: 'spit', force: 30, burst: 4 },
+      { spawn: ['Tick'], number: [1, 3], max: 8, name: 'eggs' },
+      { dmg: dmg({ blunt: 20 }), name: 'shake', force: 150, unblockable, undodgeable },
+    ]),
+
+    tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 2,
+      run: 6,
+      swim: 4,
+    },
+    turnSpeed: {
+      walk: 150,
+      run: 250,
+      swim: 60,
+    },
+    hp: 1500,
+    stagger: null,
+    damageModifiers: {
+      blunt: 'normal',
+      slash: 'normal',
+      pierce: 'normal',
+      chop: 'ignore',
+      pickaxe: 'ignore',
+      fire: 'resistant',
+      frost: 'normal',
+      lightning: 'normal',
+      poison: 'normal',
+      spirit: 'immune',
+    },
+    weakSpots: [{
+      location: 'belly',
+      damageModifiers: {
+        blunt: 'normal',
+        slash: 'normal',
+        pierce: 'veryWeak',
+        chop: 'ignore',
+        pickaxe: 'ignore',
+        fire: 'normal',
+        frost: 'normal',
+        lightning: 'normal',
+        poison: 'normal',
+        spirit: 'immune',
+      }
+    }],
+    drop: [
+      dropEntry('Bilebag', { scale: false }),
+      dropTrophy('TrophyGjall', 0.3),
+    ],
+  },
+  {
+    type: 'creature',
+    id: 'SeekerBrood',
+    ragdollId: null,
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
+    tier: 6,
+    emoji: '🐜',
+    faction: 'MistlandsMonsters',
+    spawners: [],
+    attacks: single([
+      { dmg: dmg({ pierce: 60 }), name: 'pincers', force: 40, stagger: 1.86 },
+    ]),
+
+    tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 1,
+      run: 3,
+      swim: 4,
+    },
+    turnSpeed: {
+      walk: 150,
+      run: 250,
+      swim: 60,
+    },
+    hp: 20,
+    stagger: {
+      factor: 0.3,
+      time: 1.86,
+    },
+    damageModifiers: seekerDamageModifiers,
+    drop: [dropEntry('RoyalJelly', { max: 3 })],
+  },
+  {
+    type: 'creature',
+    id: 'Seeker',
+    iconId: 'resource/TrophySeeker',
+    ragdollId: null,
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
+    tier: 6,
+    emoji: '🐜',
+    faction: 'MistlandsMonsters',
+    spawners: [spawner({
+      tier: 6,
+      biomes: ['Mistlands'],
+      biomeAreas: 2,
+      maxSpawned: 2,
+      interval: 200,
+      chance: 0.3,
+      distance: 30,
+      groupSize: [2, 3],
+      groupRadius: 6,
+      night: false,
+      levels: [1, 2],
+    }), spawner({
+      tier: 6,
+      biomes: ['Mistlands'],
+      biomeAreas: 2,
+      maxSpawned: 6,
+      interval: 300,
+      chance: 0.2,
+      distance: 40,
+      groupSize: [2, 3],
+      groupRadius: 6,
+      night: true,
+      levels: [1, 3],
+    })],
+    attacks: single([
+      { dmg: dmg({ pierce: 90 }), name: 'pincers', force: 40, stagger: 2.95 },
+      { dmg: dmg({ pierce: 120 }), name: 'claw', force: 20, stagger: 2.95 },
+      { dmg: dmg({ pierce: 120 }), name: 'claw2', force: 20, stagger: 2.95 },
+      { dmg: dmg({ blunt: 100 }), name: 'slam', force: 150, stagger: 2.95 }, // + flying
+    ]),
+
+    tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 2,
+      run: 6,
+      swim: 4,
+    },
+    turnSpeed: {
+      walk: 150,
+      run: 250,
+      swim: 60,
+    },
+    hp: 200,
+    stagger: {
+      factor: 0.3,
+      time: 1.84,
+    },
+    damageModifiers: seekerDamageModifiers,
+    drop: [
+      dropEntry('BugMeat', { max: 2 }),
+      dropEntry('Carapace', { max: 2 }),
+      dropTrophy('TrophySeeker', 0.1),
+    ],
+  },
+  {
+    type: 'creature',
+    id: 'SeekerBrute',
+    iconId: 'resource/TrophySeekerBrute',
+    ragdollId: null,
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
+    tier: 6,
+    emoji: '🐜',
+    faction: 'MistlandsMonsters',
+    spawners: [spawner({
+      tier: 6,
+      biomes: ['Mistlands'],
+      biomeAreas: 2,
+      maxSpawned: 2,
+      interval: 200,
+      chance: 0.1,
+      distance: 40,
+      groupRadius: 12,
+    })],
+    attacks: single([
+      { dmg: dmg({ blunt: 100, chop: 100, pickaxe: 100 }), name: 'ram', force: 200, toolTier: 4, stagger: 2.5 },
+      { dmg: dmg({ slash: 100 }), name: 'bite', force: 70, stagger: 2.48 },
+      { dmg: dmg({ blunt: 120, chop: 100, pickaxe: 100 }), name: 'slam', force: 100, stagger: 2.36 },
+    ]),
+
+    tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 2,
+      run: 6,
+      swim: 4,
+    },
+    turnSpeed: {
+      walk: 150,
+      run: 250,
+      swim: 60,
+    },
+    hp: 1500,
+    stagger: {
+      factor: 0.3,
+      time: 2.36,
+    },
+    damageModifiers: seekerDamageModifiers,
+    weakSpots: [{
+      location: 'ass',
+      damageModifiers: {
+        blunt: 'weak',
+        slash: 'weak',
+        pierce: 'weak',
+        chop: 'ignore',
+        pickaxe: 'ignore',
+        fire: 'weak',
+        frost: 'weak',
+        lightning: 'weak',
+        poison: 'normal',
+        spirit: 'immune',
+      },
+    }],
+    drop: [
+      dropEntry('BugMeat', { max: 2 }),
+      dropEntry('Carapace', { min: 2, max: 4 }),
+      dropTrophy('TrophySeekerBrute', 0.05),
+      dropEntry('Mandible', { min: 1, max: 2, scale: false }),
+    ],
+  },
+  {
+    type: 'creature',
+    id: 'SeekerQueen',
+    iconId: 'resource/TrophySeekerQueen',
+    ragdollId: null,
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
+    tier: 6,
+    emoji: '🐜👑',
+    faction: 'MistlandsMonsters',
+    spawners: [],
+    attacks: single([
+      // teleport
+      { dmg: dmg({ slash: 100, chop: 300, pickaxe: 300 }), name: 'rush', force: 250, toolTier: 3 },
+      { dmg: dmg({ pierce: 140, chop: 100, pickaxe: 100, poison: 100 }), name: 'bite', force: 250, toolTier: 3 },
+      { spawn: ['Seeker'], number: [1, 3], max: 6, name: 'call' },
+      // SeekerQueen_Spit does a burst of 20x
+      // SeekerQueen_projectile_spit, each has 30% spawn on hit
+      // SeekerQueen_SpitSpawnAbility, which spawn 1 SeekerBrood
+      { spawn: ['SeekerBrood'], number: [1, 1], max: 30, name: 'spit' },
+      { dmg: dmg({ slash: 130, chop: 300, pickaxe: 300 }), name: 'slap', force: 250, toolTier: 3 },
+      { dmg: dmg({ pierce: 150, chop: 300, pickaxe: 300 }), name: 'pirce_aoe', force: 250, toolTier: 3 }, // area
+    ]),
+
+    tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 4,
+      run: 8,
+      swim: 4,
+    },
+    turnSpeed: {
+      walk: 50,
+      run: 120,
+      swim: 60,
+    },
+    hp: 12500,
+    stagger: null,
+    damageModifiers: {
+      blunt: 'normal',
+      slash: 'normal',
+      pierce: 'resistant',
+      chop: 'ignore',
+      pickaxe: 'ignore',
+      fire: 'normal',
+      frost: 'normal',
+      lightning: 'normal',
+      poison: 'normal',
+      spirit: 'immune',
+    },
+    drop: [
+      dropTrophy('TrophySeekerQueen', 1),
+      dropEntry('QueenDrop', { min: 3, scale: false }),
     ],
   },
 // OCEAN

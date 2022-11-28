@@ -16,98 +16,98 @@ const items: Resource[] = [
     tier: 4, type: 'item', stack: 10, weight: 1,
   },
   { id: 'rk_butter', tier: 2, type: 'item', stack: 30, weight: 0.5,
-    Food: { health: 10, stamina: 10, duration: 900, regen: 4, color: '#fff' }
+    Food: { health: 10, stamina: 10, duration: 900, regen: 4 }
   },
   { id: 'rk_nut_ella', tier: 2, type: 'item', stack: 20, weight: 1,
-    Food: { health: 10, stamina: 10, duration: 900, regen: 4, color: '#fff' }
+    Food: { health: 10, stamina: 10, duration: 900, regen: 4 }
   },
   { id: 'rk_icecream', tier: 4, type: 'item', stack: 20, weight: 1,
-    Food: { health: 60, stamina: 70, duration: 1600, regen: 4, color: '#fff' },
+    Food: { health: 60, stamina: 70, duration: 1600, regen: 4 },
     Potion: { damageModifiers: { fire: 'veryResistant' }, cooldown: 300 },
   },
   { id: 'rk_porkrind', tier: 1, type: 'item', stack: 20, weight: 1,
-    Food: { health: 35, stamina: 35, duration: 1200, regen: 2, color: '#fff' }
+    Food: { health: 35, stamina: 35, duration: 1200, regen: 2 }
   },
   { id: 'rk_kabob', tier: 4, type: 'item', stack: 10, weight: 2,
-    Food: { health: 50, stamina: 55, duration: 1600, regen: 3, color: '#fff' }
+    Food: { health: 50, stamina: 55, duration: 1600, regen: 3 }
   },
   { id: 'rk_friedloxmeat', tier: 5, type: 'item', stack: 10, weight: 1,
-    Food: { health: 80, stamina: 80, duration: 2400, regen: 4, color: '#fff' }
+    Food: { health: 80, stamina: 80, duration: 2400, regen: 4 }
   },
   { id: 'rk_carrotsticks', tier: 2, type: 'item', stack: 20, weight: 0.5,
-    Food: { health: 40, stamina: 40, duration: 1600, regen: 3, color: '#fff' }
+    Food: { health: 40, stamina: 40, duration: 1600, regen: 3 }
   },
   { id: 'rk_bacon', tier: 1, type: 'item', stack: 20, weight: 0.4,
-    Food: { health: 40, stamina: 30, duration: 1200, regen: 3, color: '#fff' }
+    Food: { health: 40, stamina: 30, duration: 1200, regen: 3 }
   },
   { id: 'rk_smokedfish', tier: 2, type: 'item', stack: 10, weight: 1,
-    Food: { health: 50, stamina: 50, duration: 1600, regen: 3, color: '#fff' }
+    Food: { health: 50, stamina: 50, duration: 1600, regen: 3 }
   },
   { id: 'rk_pancake', tier: 5, type: 'item', stack: 20, weight: 0.5,
-    Food: { health: 80, stamina: 80, duration: 2400, regen: 4, color: '#fff' }
+    Food: { health: 80, stamina: 80, duration: 2400, regen: 4 }
   },
   { id: 'rk_pizza', tier: 5, type: 'item', stack: 10, weight: 0.5,
-    Food: { health: 100, stamina: 50, duration: 2400, regen: 3, color: '#fff' }
+    Food: { health: 100, stamina: 50, duration: 2400, regen: 3 }
   },
   { id: 'rk_coffee', tier: 2, type: 'item', stack: 10, weight: 0.5,
-    Food: { health: 25, stamina: 60, duration: 900, regen: 5, color: '#fff' }
+    Food: { health: 25, stamina: 60, duration: 900, regen: 5 }
   },
   { id: 'rk_latte', tier: 4, type: 'item', stack: 10, weight: 1,
-    Food: { health: 50, stamina: 100, duration: 1200, regen: 6, color: '#fff' }
+    Food: { health: 50, stamina: 100, duration: 1200, regen: 6 }
   },
   { id: 'rk_firecream', tier: 4, type: 'item', stack: 20, weight: 1,
-    Food: { health: 60, stamina: 70, duration: 900, regen: 4, color: '#fff' },
+    Food: { health: 60, stamina: 70, duration: 900, regen: 4 },
     Potion: { damageModifiers: { frost: 'veryResistant' }, cooldown: 300 },
   },
   { id: 'rk_electriccream', tier: 5, type: 'item', stack: 10, weight: 1,
-    Food: { health: 60, stamina: 70, duration: 900, regen: 4, color: '#fff' },
+    Food: { health: 60, stamina: 70, duration: 900, regen: 4 },
     Potion: { damageModifiers: { poison: 'veryResistant' }, cooldown: 300 },
   },
   { id: 'rk_acidcream', tier: 4, type: 'item', stack: 20, weight: 1,
-    Food: { health: 60, stamina: 70, duration: 900, regen: 4, color: '#fff' },
+    Food: { health: 60, stamina: 70, duration: 900, regen: 4 },
     Potion: { damageModifiers: { lightning: 'veryResistant' }, cooldown: 300 },
   },
   { id: 'rk_porridge', tier: 5, type: 'item', stack: 10, weight: 0.5,
-    Food: { health: 80, stamina: 80, duration: 2400, regen: 3, color: '#fff' }
+    Food: { health: 80, stamina: 80, duration: 2400, regen: 3 }
   },
   { id: 'rk_pbj', tier: 5, type: 'item', stack: 20, weight: 2,
-    Food: { health: 80, stamina: 80, duration: 2400, regen: 4, color: '#fff' }
+    Food: { health: 80, stamina: 80, duration: 2400, regen: 4 }
   },
   { id: 'rk_birthday', tier: 5, type: 'item', stack: 10, weight: 1,
-    Food: { health: 80, stamina: 50, duration: 2400, regen: 4, color: '#fff' }
+    Food: { health: 80, stamina: 50, duration: 2400, regen: 4 }
   },
   { id: 'rk_haggis', tier: 3, type: 'item', stack: 10, weight: 0.5,
-    Food: { health: 55, stamina: 50, duration: 1600, regen: 3, color: '#fff' }
+    Food: { health: 55, stamina: 50, duration: 1600, regen: 3 }
   },
   { id: 'rk_candiedturnip', tier: 3, type: 'item', stack: 10, weight: 1,
-    Food: { health: 40, stamina: 60, duration: 1600, regen: 4, color: '#fff' }
+    Food: { health: 40, stamina: 60, duration: 1600, regen: 4 }
   },
   { id: 'rk_moochi', tier: 4, type: 'item', stack: 10, weight: 0.5,
-    Food: { health: 70, stamina: 60, duration: 1800, regen: 3, color: '#fff' }
+    Food: { health: 70, stamina: 60, duration: 1800, regen: 3 }
   },
   { id: 'rk_broth', tier: 2, type: 'item', stack: 10, weight: 1,
-    Food: { health: 10, stamina: 10, duration: 900, regen: 4, color: '#fff' }
+    Food: { health: 10, stamina: 10, duration: 900, regen: 4 }
   },
   { id: 'rk_fishstew', tier: 3, type: 'item', stack: 20, weight: 0.5,
-    Food: { health: 50, stamina: 50, duration: 1600, regen: 4, color: '#fff' }
+    Food: { health: 50, stamina: 50, duration: 1600, regen: 4 }
   },
   { id: 'rk_bloodsausage', tier: 3, type: 'item', stack: 20, weight: 1,
-    Food: { health: 50, stamina: 50, duration: 1600, regen: 4, color: '#fff' }
+    Food: { health: 50, stamina: 50, duration: 1600, regen: 4 }
   },
   { id: 'rk_burger', tier: 5, type: 'item', stack: 10, weight: 2,
-    Food: { health: 80, stamina: 80, duration: 2400, regen: 4, color: '#fff' }
+    Food: { health: 80, stamina: 80, duration: 2400, regen: 4 }
   },
   { id: 'rk_omlette', tier: 2, type: 'item', stack: 20, weight: 0.5,
-    Food: { health: 50, stamina: 50, duration: 2000, regen: 4, color: '#fff' }
+    Food: { health: 50, stamina: 50, duration: 2000, regen: 4 }
   },
   { id: 'rk_boiledegg', tier: 2, type: 'item', stack: 20, weight: 0.5,
-    Food: { health: 40, stamina: 50, duration: 900, regen: 4, color: '#fff' }
+    Food: { health: 40, stamina: 50, duration: 900, regen: 4 }
   },
   { id: 'rk_glazedcarrots', tier: 2, type: 'item', stack: 10, weight: 1,
-    Food: { health: 40, stamina: 40, duration: 1600, regen: 3, color: '#fff' }
+    Food: { health: 40, stamina: 40, duration: 1600, regen: 3 }
   },
   { id: 'rk_mead', tier: 1, type: 'item', stack: 20, weight: 1,
-    Food: { health: 50, stamina: 50, duration: 1600, regen: 8, color: '#fff' }
+    Food: { health: 50, stamina: 50, duration: 1600, regen: 8 }
   },
 ];
 
@@ -187,8 +187,8 @@ const buildings: Piece[] = [
     },
     recipe: { type: 'craft_piece', materials: { SurtlingCore: 2, TrophySurtling: 1, Stone: 10 }, station: null, }
   },
-/*  {
-    id: '???',
+  {
+    id: 'rk_prep',
     base: false,
     type: 'piece',
     subtype: 'craft',
@@ -205,7 +205,7 @@ const buildings: Piece[] = [
       materialType: MaterialType.Stone,
     },
     recipe: { type: 'craft_piece', materials: { Wood: 4, Tin: 5, Stone: 3 }, station: 'forge', }
-  },*/
+  },
   // rk_campfire, rk_hearth, rk_brazier
 ];
 

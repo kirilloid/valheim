@@ -7,7 +7,7 @@ import {
 
 import './css/App.css';
 
-import { defCalc, offCalc, foodTable, foodPlanner, mining, comfort } from './state';
+import { defCalc, offCalc, foodTable, foodPlanner, mining, comfort, skills } from './state';
 
 import { TopBar } from './view/parts/TopBar';
 import { Home } from './view/pages/Home';
@@ -18,6 +18,7 @@ import { Effect } from './view/objects/Effect';
 import { Info } from './view/Info';
 import { AttackCalc } from './view/pages/AtkCalc';
 import { DefenseCalc } from './view/pages/DefCalc';
+import { Skills } from './view/pages/Skills';
 import { ComfortTable } from './view/pages/ComfortTable';
 import { GameEvent, GameEventFilterTable } from './view/pages/Event';
 import { Weather } from './view/pages/Weather';
@@ -67,6 +68,8 @@ function App() {
             <Route path={`/${mining}`} children={<Mining />} />
             <Route path="/world-gen/:seed" children={<WorldGenerator />} />
             <Route path="/world-gen" children={<WorldGenerator />} />
+            <Route path={`/${skills}/:skill/:level`} children={<Skills />} />
+            <Route path={`/${skills}`} children={<Skills />} />
             {/* <Route path="/weapons" children={<Weapons />} /> */}
             <Route path="/world-edit" children={<WorldEditor />} />
             <Route path="/world-meta" children={<WorldMeta />} />

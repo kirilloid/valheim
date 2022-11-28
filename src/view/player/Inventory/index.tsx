@@ -27,6 +27,7 @@ import {
   SetName as EpicLootSetName,
 } from './epic-loot';
 import { JewelCraftingTooltip } from './jewel-crafting';
+import { EitrRegen } from './eitr-regen';
 
 const INVENTORY_WIDTH = 8;
 const INVENTORY_HEIGHT = 4;
@@ -109,6 +110,7 @@ const TooltipBody = React.memo(({ invItem, item, equippedItems }: { invItem: Inv
     {/* repair station level */}
     <ItemSpecific item={item} invItem={invItem} />
     <MoveSpeed item={item} invItem={invItem} equippedItems={equippedItems} />
+    <EitrRegen item={item} equippedItems={equippedItems} />
     <JewelCraftingTooltip invItem={invItem} />
     {epicLoot
       ? <EpicLootSetBonusTooltip set={set} item={item} epicLoot={epicLoot} equippedItems={equippedItems} />

@@ -110,7 +110,7 @@ export function reducer(state: State, action: Action): State {
       return { ...state, weapons };
     }
     case ADD_WEAPON: {
-      const weapon = state.weapons.slice(-1)[0] ?? defaultWeapon;
+      const weapon = state.weapons.at(-1) ?? defaultWeapon;
       const weapons = state.weapons.concat([weapon]);
       return { ...state, weapons };
     }

@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 import '../../css/Combat.css';
 
-import type { Biome, Creature } from '../../types';
+import type { Arrow, Biome, Creature, Weapon } from '../../types';
 import { attackCreature, AttackStats, WeaponConfig } from '../../model/combat';
 import { Action, actionCreators, ActionCreators, reducer, enabledItems, CombatStat } from '../../state/off-calc/reducer';
 import { parseState, serializeState, pageName } from '../../state/off-calc';
@@ -29,6 +29,14 @@ interface SameWeaponConfig {
   skillLevel: boolean;
   arrow: boolean;
 }
+
+const getArrowFilter = (item: Weapon): ((a: Arrow) => boolean) => {
+  switch (item.skill) {
+    case SkillType.Bows: return (a: Arrow) => a.type === 'arrow';
+    case SkillType.Crossbows: return (a: Arrow) => a.type === 'bolt';
+    default: return () => false;
+  }
+};
 
 function WeaponBlock(props: {
   weapon: WeaponConfig;
@@ -115,6 +123,7 @@ function WeaponBlock(props: {
           className="BigInput"
           onChange={e => dispatch(changeArrow(index, e.target.value))} value={arrow.id}>
           {arrows
+            .filter(getArrowFilter(item))
             .filter(a => a.tier <= spoiler)
             .map(a => <option key={a.id} value={a.id} className={a.tier > maxTier ? 'disabled' : ''}>
               {runeTranslate(a)}

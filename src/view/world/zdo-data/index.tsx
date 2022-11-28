@@ -58,7 +58,7 @@ const searchSliceCached = defaultMemoize((indices: SearchIndex[], zdos: ZdoLike[
 
 const getWidth = () => document.querySelector<HTMLDivElement>('div.App')?.offsetWidth ?? Math.min(window.innerWidth, 960);
 
-export const ZdoData = React.memo(function ZdoData(props: ValueProps<ZDOData>) {
+export const ZdoData = React.memo(function ZdoData(props: ValueProps<ZDOData> & { time: number }) {
   const translate = useContext(TranslationContext);
 
   const zdos = props.value.zdos;
@@ -130,6 +130,7 @@ export const ZdoData = React.memo(function ZdoData(props: ValueProps<ZDOData>) {
       <ItemEditor
         zdo={zdo}
         playersData={players}
+        time={props.time}
         onChange={() => {
           setVersion(version + 1);
           props.onChange(props.value);

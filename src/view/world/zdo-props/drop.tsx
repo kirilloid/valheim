@@ -7,9 +7,11 @@ import { stableHashCode as hash } from '../../../model/hash';
 import { prefabHashes } from '../../../data/zdo';
 import { TranslationContext } from '../../../effects';
 
+const DROP_HASH = hash('drops');
+
 export function DropComp({ value: zdo }: ValueProps<ZDO>) {
   const translate = useContext(TranslationContext);
-  const length = zdo.ints.get(hash('drops')) ?? 0;
+  const length = zdo.ints.get(DROP_HASH) ?? 0;
   const items = [];
   
   for (let i = 0; i < length; i++) {

@@ -8,7 +8,7 @@ import { preloadLanguage } from '../effects';
 import { read } from '../effects/globalState.effect';
 import { getDefaultUserLanguage } from '../effects/translation.effect';
 import { effects } from '../data/effects';
-import { comfort, defCalc, foodPlanner, foodTable, mining, offCalc } from '../state';
+import { comfort, defCalc, foodPlanner, foodTable, mining, offCalc, skills } from '../state';
 
 const fullMatch = new Map<string, EntityId>();
 const startTree = treeNode<SearchEntry>();
@@ -73,6 +73,7 @@ export const pages = [
   { id: mining, category: 'gather' },
 
   { id: 'weather', category: 'plan' },
+  { id: skills, category: 'plan' },
   { id: 'world-gen', category: 'plan', beta: true },
 
   { id: 'player-edit', category: 'edit' },

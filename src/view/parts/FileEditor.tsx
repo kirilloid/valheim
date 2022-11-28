@@ -52,7 +52,7 @@ function SteamFilePaths({ subpath }: PathsProps) {
       <dt>{translate('ui.fileEditor.type.local')}</dt>
       <dd><code>%userprofile%\<wbr/>AppData\<wbr/>LocalLow\<wbr/>IronGate\<wbr/>Valheim\<wbr/>{subpath}_local</code></dd>
       <dt>{translate('ui.fileEditor.type.cloud')}</dt>
-      <dd><code>%ProgramFiles(x86)%\<wbr/>Steam\<wbr/><em>&lt;steam-id&gt;</em>\<wbr/>892970\<wbr/>{subpath}</code></dd>
+      <dd><code>%ProgramFiles(x86)%\<wbr/>Steam\<wbr/>userdata\<wbr/><em>&lt;steam-id&gt;</em>\<wbr/>892970\<wbr/>remote\<wbr/>{subpath}</code></dd>
       <dt>{translate('ui.fileEditor.type.legacy')}</dt>
       <dd><code>%userprofile%\<wbr/>AppData\<wbr/>LocalLow\<wbr/>IronGate\<wbr/>Valheim\<wbr/>{subpath}</code></dd>
     </dl>

@@ -46,6 +46,7 @@ class Vector2 {
     return Math.hypot(this.x - v.x, this.y - v.y);
   }
   equal(v: Vector2): boolean {
+    if (this === v) return true;
     const dx = this.x - v.x;
     const dy = this.y - v.y;
     return dx * dx + dy * dy < 1e-10;
@@ -249,9 +250,12 @@ export class WorldGenerator {
   }
 
   private findMountainsAndLakes(): void {
-    for (let y = -10000; y <= 10000; y += 128) {
-      for (let x = -10000; x <= 10000; x += 128) {
-        if (x * x + y * y > 100e6) continue;
+    const RADIUS = 10000;
+    const RADIUS_2 = RADIUS ** 2;
+    const STEP = 128;
+    for (let y = -RADIUS; y <= RADIUS; y += STEP) {
+      for (let x = -RADIUS; x <= RADIUS; x += STEP) {
+        if (x * x + y * y > RADIUS_2) continue;
         const baseHeight = this.getBaseHeight(x, y);
         if (baseHeight > 0.45) {
           this._mountains.push(new Vector2(x, y));
@@ -692,7 +696,7 @@ export class WorldGenerator {
     return this.getBiomeHeight(this.getBiome(wx, wy), wx, wy);
   }
 
-  public getBiomeHeight(biome: Biome, wx: number, wy: number): number {
+  public getBiomeHeight(biome: Biome, wx: number, wy: number, preGen: boolean = false): number {
     switch (biome) {
       case Biome.Meadows:
         return this.getMeadowsHeight(wx, wy) * 200;
@@ -707,7 +711,9 @@ export class WorldGenerator {
       case Biome.Ocean:
         return this.getOceanHeight(wx, wy) * 200;
       case Biome.Mistlands:
-        return this.getForestHeight(wx, wy) * 200;
+        return preGen
+          ? this.getForestHeight(wx, wy) * 200
+          : this.getMistlandsHeight(wx, wy) * 200;
       case Biome.Ashlands:
         return this.getAshlandsHeight(wx, wy) * 200;
       case Biome.DeepNorth:
@@ -753,6 +759,30 @@ export class WorldGenerator {
     return this.addRivers(wx1, wy1, h)
       + perlinNoise(wx2 * 0.1, wy2 * 0.1) * 0.01
       + perlinNoise(wx2 * 0.4, wy2 * 0.4) * 0.003;
+  }
+
+  private getMistlandsHeight(wx1: number, wy1: number): number {
+    const baseHeight = this.getBaseHeight(wx1, wy1);
+    const wx = wx1 + 100000 + this.offset3;
+    const wy = wy1 + 100000 + this.offset3;
+    const base = perlinNoise(wx * 0.02 * 0.7, wy * 0.02 * 0.7)
+               * perlinNoise(wx * 0.04 * 0.7, wy * 0.04 * 0.7);
+    const base2 =
+      base + (perlinNoise(wx * 0.03 * 0.7, wy * 0.03 * 0.7)
+           *  perlinNoise(wx * 0.05 * 0.7, wy * 0.05 * 0.7) * base * 0.5);
+    const baseStretched = base2 > 0.0 ? Math.pow(base2, 1.5) : base2;
+    const h = baseHeight + baseStretched * 0.4;
+    const baseClamped = clamp01(baseStretched * 7);
+    const num5 = this.addRivers(wx1, wy1, h)
+               + perlinNoise(wx * 0.1, wy * 0.1) * 0.03 * baseClamped
+               + perlinNoise(wx * 0.4, wy * 0.4) * 0.01 * baseClamped;
+    const a = (1.0 - baseClamped * 1.2) - (1 - lerpStep(0.1, 0.3, baseClamped));
+    // mask = new Color(0.0, 0.0, 0.0, a);
+    return lerp(
+      num5 + perlinNoise(wx * 0.4, wy * 0.4) / 500,
+      Math.ceil(num5 * 400) / 400,
+      baseClamped
+    );
   }
 
   private getPlainsHeight(wx1: number, wy1: number): number {

@@ -17,6 +17,7 @@ function addToMap<T extends Item | Piece | Ship | Cart>(map: Record<EntityId, T[
   if (item.disabled) return;
   if (recipe == null) return;
   function addItem(res: EntityId, item: T) {
+    if (map[res]?.at(-1) === item) return;
     (map[res] ?? (map[res] = [])).push(item);
   }
   function addStation(station: EntityId | null, level: number, item: T) {

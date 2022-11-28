@@ -236,7 +236,7 @@ const buildings: Piece[] = [
     type: 'piece',
     subtype: 'structure',
     tier: 1,
-    piece: { target: 'random', water: undefined, size: [6, 6, 2] },
+    piece: { target: 'random', water: undefined, size: [10, 10, 2] },
     wear: stoneStructureWear,
     recipe: stoneStructureRecipe(10),
   },

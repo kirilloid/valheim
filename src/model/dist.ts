@@ -115,7 +115,7 @@ export function scaleDist(a: DropDist, m: number) {
   return mapValues(a, v => scale(v, m));
 }
 
-export function distributeDropNoReturn(drop: GeneralDrop): DropDist {
+function distributeDropNoReturn(drop: GeneralDrop): DropDist {
   const { offByOneBug = true, chance = 1, num: [min, max], options } = drop;
   const total = offByOneBug ? Math.max(max - min, 1) : (max - min + 1);
   const prob = chance / total;

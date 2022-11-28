@@ -130,7 +130,9 @@ function itemMatches(item: Item, { slot }: SimpleEffectConfig) {
     case 'shield':
       return slot === 'shield';
     case 'trophy':
-    case 'ammo':
+    case 'arrow':
+    case 'bolt':
+    case 'missile':
     case 'item':
       return false;
     default:
@@ -493,6 +495,7 @@ const skeleton = creatures.find(c => c.id === 'Skeleton')!;
 const firendlySkeleton: Creature = {
   ...skeleton,
   id: 'JC_Skeleton',
+  iconId: 'resource/TrophySkeleton',
   spawners: [],
   faction: 'Players',
 };

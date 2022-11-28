@@ -12,6 +12,7 @@ import {
   ironStructureWear,
   stoneStructureWear,
   woodStructureWear,
+  torchResist,
 } from '../model/building';
 import { mods } from '../model/game';
 import { workbenchRecipe } from '../model/recipe';
@@ -569,7 +570,7 @@ const buildings: Piece[] = [
     // FishingBait -> Feathers
     craft: {},
     piece: { target: 'primary', water: undefined, size: [1, 1, 1] },
-    wear: wearStructure(200, mods([0, 0, 1, 0, 0, 3, 3, 0, 3, 3]), undefined, { noRoof: false }),
+    wear: wearStructure(200, torchResist, undefined, { noRoof: false }),
     recipe: {
       type: 'craft_piece',
       materials: { Wood: 5, BronzeNails: 8, RoundLog: 1 },
@@ -587,7 +588,7 @@ const buildings: Piece[] = [
     piece: { target: 'primary', water: true, size: [1, 1, 1] },
     // FishingBait -> FishRaw
     craft: {},
-    wear: wearStructure(200, mods([0, 0, 1, 0, 0, 3, 3, 0, 3, 3]), undefined, { noRoof: false }),
+    wear: wearStructure(200, torchResist, undefined, { noRoof: false }),
     recipe: {
       type: 'craft_piece',
       materials: { AncientSeed: 1, Wood: 8, Resin: 10 },
@@ -606,7 +607,7 @@ const buildings: Piece[] = [
     // NeckTail -> FishingBait
     // RawMeat -> FishingBait
     craft: {},
-    wear: wearStructure(200, mods([0, 0, 1, 0, 0, 3, 3, 0, 3, 3]), undefined, { noRoof: false }),
+    wear: wearStructure(200, torchResist, undefined, { noRoof: false }),
     recipe: {
       type: 'craft_piece',
       materials: { NeckTail: 8, Wood: 5, Resin: 10 },

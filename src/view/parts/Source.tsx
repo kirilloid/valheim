@@ -14,13 +14,15 @@ import { locationBiomes, objectLocationMap } from '../../data/location';
 import { TranslationContext, useGlobalState } from '../../effects';
 import { Area, InlineObject, InlineObjectWithIcon, List, rangeBy } from '../helpers';
 import { Icon, ItemIcon, SkillIcon } from './Icon';
+import { fishes } from '../../data/fish';
 
 export const SOURCE_CRAFT = 1;
 export const SOURCE_DROP = 2;
 export const SOURCE_RECIPE = 4;
 export const SOURCE_GROW = 8;
 export const SOURCE_MINING = 16;
-export const SOURCE_ALL = SOURCE_CRAFT | SOURCE_DROP | SOURCE_RECIPE | SOURCE_GROW | SOURCE_MINING;
+export const SOURCE_BAIT = 32;
+export const SOURCE_ALL = SOURCE_CRAFT | SOURCE_DROP | SOURCE_RECIPE | SOURCE_GROW | SOURCE_MINING | SOURCE_BAIT;
 
 const source: Record<EntityId, EntityId[]> = {};
 for (const { id, drop } of creatures) {
@@ -160,6 +162,7 @@ export function Recipe({ item }: { item: GameObject }) {
     case 'trader':
       return <>
         Bought from <Link to="/info/trader">trader</Link> for {recipe.value} <Icon id="coin" alt={translate('Coins')} size={16} />
+        {recipe.killed && <><br />Available only after killing <InlineObjectWithIcon id={recipe.killed} /></>}
       </>;
     case 'craft':
       const maxLvl = (item as Item).maxLvl;
@@ -169,7 +172,7 @@ export function Recipe({ item }: { item: GameObject }) {
         return <dl>
           <dt>station</dt><dd><Station station={station} /> {level ? `lvl ${level}` : ''}</dd>
           <dt>{translate('ui.duration')}</dt><dd><Icon id="time" alt="" size={16} />{timeI2S(time)}</dd>
-          <dt>{translate('ui.resources')}</dt><dd>{
+          <dt>{translate('ui.resources')}{recipe.onlyOneIngredient ? ' (any of)' : ''}</dt><dd>{
           Object.keys(materials).length
             ? <Materials materials={materials} />
             : 'for free'
@@ -187,9 +190,9 @@ export function Recipe({ item }: { item: GameObject }) {
         </>;
       }
     case 'craft_piece':
-      return <>
+      return <div>
         Built near <Station station={recipe.station} /> using: <Materials materials={recipe.materials} />
-      </>
+      </div>
     default:
       return assertNever(recipe);
   }
@@ -242,6 +245,7 @@ export function GrowSection({ item }: { item: GameObject | undefined }) {
   if (!item) return null;
   switch (item.type) {
     case 'creature':
+    case 'fish':
     case 'piece':
     case 'structure':
     case 'ship':
@@ -257,7 +261,7 @@ export function GrowSection({ item }: { item: GameObject | undefined }) {
     {' '}
     <List separator={<hr />}>{grow.map((g, i) => <dl key={i}>
       <dt>{translate('ui.locations')}</dt>
-      <dd><List>{g.locations.map(loc => <Area key={loc} area={loc} />)}</List></dd>
+      <dd><List separator="">{g.locations.map(loc => <Area key={loc} area={loc} />)}</List></dd>
       <dt>{translate('ui.altitude')}</dt>
       <dd>{showAltitude(g.altitude)}</dd>
       <dt>surface</dt>
@@ -271,7 +275,7 @@ export function GrowSection({ item }: { item: GameObject | undefined }) {
     </dl>)}</List>
     {grow.length && locations.length ? <hr /> : null}
     <List>{
-      locations.map(loc => <div><Area key={loc} area={loc} /></div>)
+      locations.map(loc => <div key={loc}><Area area={loc} /></div>)
     }</List>
   </>;
 }
@@ -291,6 +295,20 @@ function MiningSection({ id }: { id: EntityId }) {
     : null;
 }
 
+function BaitSection({ id }: { id: EntityId }) {
+  const fish = fishes.filter(f => id in f.baits);
+  return fish.length
+    ? <section>
+        <h2>Baits</h2>
+        <ul>
+          {fish.map(f => <li key={f.id}>
+            <InlineObjectWithIcon id={f.id} />
+          </li>)}
+        </ul>
+      </section>
+    : null;
+}
+
 export function Source({ id, types = SOURCE_ALL }: { id: EntityId, types?: number }) {
   return <>
     {(types & SOURCE_CRAFT) !== 0 && <CraftingSection id={id} />}
@@ -298,5 +316,6 @@ export function Source({ id, types = SOURCE_ALL }: { id: EntityId, types?: numbe
     {(types & SOURCE_RECIPE) !== 0 && <RecipeSection item={data[id]} />}
     {(types & SOURCE_GROW) !== 0 && <GrowSection item={data[id]} />}
     {(types & SOURCE_MINING) !== 0 && <MiningSection id={id} />}
+    {(types & SOURCE_BAIT) !== 0 && <BaitSection id={id} />}
   </>
 }

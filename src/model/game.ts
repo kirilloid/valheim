@@ -15,6 +15,7 @@ export const EVENT_PERIOD = 46 * 60;
 
 export const BASE_HEALTH = 25;
 export const BASE_STAMINA = 50;
+export const BASE_EITR = 0;
 export const MAX_PLAYERS = 10;
 
 export const singleDrop = (item: EntityId, min: number = 1, max: number = min): GeneralDrop => ({

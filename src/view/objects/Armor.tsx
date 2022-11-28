@@ -20,8 +20,9 @@ export function Armor({ item, level }: { item: TArmor, level?: number }) {
           <dt><Link to="/info/combat#armor">{translate('ui.armor')}</Link></dt><dd>{showPair(item.armor, level)}</dd>
           <dt>{translate('ui.maxQuality')}</dt><dd>{item.maxLvl}</dd>
           <dt title="armor loose durability 1:1 to received damage, but only for one randomly chosen piece of armor">{translate('ui.durability')}</dt><dd>{durability(item.durability, level)}</dd>
-          {item.moveSpeed ? <><dt title="when equipeed">{translate('ui.moveSpeed')}</dt><dd>{item.moveSpeed * 100}%</dd></> : null}
+          {item.moveSpeed ? <React.Fragment key="moveSpeed"><dt title="when equipped">{translate('ui.moveSpeed')}</dt><dd>{item.moveSpeed * 100}%</dd></React.Fragment> : null}
           {item.damageModifiers ? <Resistances mods={item.damageModifiers} /> : null}
+          {item.eitrRegen ? <React.Fragment key="eitr"><dt>eitr</dt><dd>{item.eitrRegen} / s</dd></React.Fragment> : null}
           <ItemSpecial special={item.special} />
         </dl>
       </section>

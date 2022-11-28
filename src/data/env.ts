@@ -29,10 +29,15 @@ export const envStates = {
   'Twilight_SnowStorm': { emoji: '❄️', wind: [0.7, 1], light: [0.4, 0.4], flags: FREEZE | COLD_NIGHT },
   'SnowStorm': { emoji: '❄️', wind: [0.8, 1], light: [0.2, 0.7], flags: FREEZE | COLD_NIGHT },
   'Moder': { emoji: '🟣', wind: [1, 1], light: [0.5, 0.7], flags: FREEZE | COLD_NIGHT },
+  'Mistlands_clear': { emoji: '☀️', wind: [0.05, 0.2], light: [0.5, 1.2], flags: COLD_NIGHT },
+  'Mistlands_rain': { emoji: '🌧️', wind: [0.05, 0.2], light: [0.5, 0.7], flags: WET | COLD_NIGHT | DARK },
+  'Mistlands_thunder': { emoji: '⛈️', wind: [0.5, 1], light: [0.5, 0.8], flags: WET | COLD_NIGHT | DARK },
+  'Queen': { emoji: '🟣', wind: [1, 1], light: [0.6, 0.6], flags: DARK },
   'Ashrain': { emoji: '', wind: [0.1, 0.5], light: [0.8, 1.3], flags: 0 },
   'Crypt': { emoji: '⬛', wind: [0, 0], light: [0, 0], flags: DARK },
   'SunkenCrypt': { emoji: '⬛', wind: [0, 0], light: [0, 0], flags: DARK },
   'Caves': { emoji: '⬛', wind: [0, 0], light: [0.1, 0.1], flags: DARK | FREEZE },
+  'InfectedMine': { emoji: '⬛', wind: [0, 0], light: [0.1, 0.1], flags: DARK },
 } as const;
 
 export type ES = typeof envStates;
@@ -48,6 +53,6 @@ export const envSetup: Record<Biome, WeatherBalance> = {
   DeepNorth: [['Twilight_SnowStorm', 1], ['Twilight_Snow', 2], ['Twilight_Clear', 1]],
   Plains: [['Heath_clear', 5], ['Misty', 1], ['LightRain', 1]],
   Ashlands: [['Ashrain', 1]],
-  Mistlands: [['Darklands_dark', 1]],
+  Mistlands: [['Mistlands_clear', 15], ['Mistlands_rain', 1], ['Mistlands_thunder', 1]],
   Ocean: [['Rain', 1], ['LightRain', 1], ['Misty', 1], ['Clear', 10], ['ThunderStorm', 1]],
 };

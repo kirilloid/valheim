@@ -8,12 +8,15 @@ import {
   Attack as TAttack,
 } from '../../types';
 import { SkillType } from '../../model/skills';
-import { TranslationContext } from '../../effects';
+import { assertNever } from '../../model/utils';
+import { effects } from '../../data/effects';
 
-import { durability, ItemSpecial, showPair, yesNo } from '../helpers';
+import { TranslationContext } from '../../effects';
+import { durability, InlineObjectWithIcon, ItemSpecial, showPair, showPercent, yesNo } from '../helpers';
 import { Icon, SkillIcon } from '../parts/Icon';
 import { RecipeSection } from '../parts/Source';
 import { ItemHeader } from '../parts/ItemHeader';
+import { Effect } from '../parts/Effect';
 
 function skill(skill: SkillType | null) {
   const str = skill && SkillType[skill];
@@ -73,6 +76,44 @@ function WeaponStats({ item, level }: { item: TWeapon, level?: number }) {
   </section>
 }
 
+function AttackTypeSpecific({ attack }: { attack: TAttack }) {
+  const translate = useContext(TranslationContext);
+
+  switch (attack.type) {
+    case 'melee':
+      return attack.chain > 0 ? <>
+        <dt>{translate('ui.attackMelee.combo')}</dt>
+        <dd>{attack.chain}</dd>
+      </> : null;
+    case 'proj':
+      return <>
+        <dt>{translate('ui.attackRanged.velocity')}</dt>
+        <dd>{attack.projVel[1]}</dd>
+        <dt>{translate('ui.attackRanged.scatter')}</dt>
+        <dd>{attack.projAcc[1]}&deg;</dd>
+      </>;
+    case 'area':
+      return <>
+        <dt>radius</dt>
+        <dd>{attack.radius}</dd>
+      </>;
+    case 'summon':
+      return <>
+        <dt>{translate('ui.creature')}</dt>
+        <dd><InlineObjectWithIcon id={attack.summons} /></dd>
+        <dt>attack strength</dt>
+        <dd>+{showPercent(attack.skillFactor)} / level</dd>
+      </>;
+    case 'cast': {
+      const effect = effects.find(e => e.id === attack.id);
+      if (!effect) return null;
+      return <Effect effect={effect} />
+    }
+    default:
+      return assertNever(attack);
+  }
+}  
+
 function Attack({ item, attack }: { item: TWeapon, attack: TAttack }) {
   const translate = useContext(TranslationContext);
   const { damage = 1, force = 1, stagger = 1 } = attack.mul ?? {};
@@ -89,16 +130,7 @@ function Attack({ item, attack }: { item: TWeapon, attack: TAttack }) {
     }</dd>
     <dt>noise</dt>
     <dd>{attack.startNoise} / {attack.hitNoise}</dd>
-    {attack.type === 'melee' && attack.chain > 0 && <>
-      <dt>{translate('ui.attackMelee.combo')}</dt>
-      <dd>{attack.chain}</dd>
-    </>}
-    {attack.type === 'proj' && <>
-      <dt>{translate('ui.attackRanged.velocity')}</dt>
-      <dd>{attack.projVel[1]}</dd>
-      <dt>{translate('ui.attackRanged.scatter')}</dt>
-      <dd>{attack.projAcc[1]}&deg;</dd>
-    </>}
+    <AttackTypeSpecific attack={attack} />
     {damage !== 1 && <><dt>{translate('ui.damage')}</dt><dd>{damage}×</dd></>}
     {force !== 1 && <><dt>{translate('ui.knockback')}</dt><dd>{force}×</dd></>}
     {stagger !== 1 && <><dt>{translate('ui.stagger')}</dt><dd>{stagger}×</dd></>}

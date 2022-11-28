@@ -14,7 +14,7 @@ export function Arrow({ item }: { item: TArrow }) {
     <>
       <ItemHeader item={item} />
       <section>
-        <h2>{translate('ui.itemType.ammo')}</h2>
+        <h2>{translate(`ui.itemType.${item.type}`)}</h2>
         <dl>
           <dt>{translate('ui.damage')}</dt>
           <dd><ShortWeaponDamage damage={item.damage} skill={SkillType.Bows} /></dd>

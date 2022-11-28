@@ -1,9 +1,10 @@
-import type { Vector3 } from '../model/utils';
+import { clamp, Vector3 } from '../model/utils';
 import { SkillType } from '../model/skills';
 
 import { PackageReader, PackageWriter } from './Package';
 import * as Inventory from './Inventory';
 import { sha512 } from './sha512';
+import * as DATA_VERSION from './versions';
 import { data as itemDB } from '../data/itemDB';
 import { checkVersion, PLAYER, PLAYER_DATA, SKILLS } from './versions';
 
@@ -25,9 +26,12 @@ type FoodData = {
 
 export type PlayerData = {
   version: number;
-  maxHealth: number;
   health: number;
+  maxHealth: number;
+  stamina: number;
   maxStamina: number;
+  eitr: number;
+  maxEitr: number;
   firstSpawn: boolean;
   timeSinceDeath: number;
   guardianPower: string;
@@ -50,7 +54,6 @@ export type PlayerData = {
   foods: FoodData[];
   skillData?: SkillData;
   customData: Map<string, string>;
-  newStuff: Vector3;
 };
 
 type PlayerStats = {
@@ -180,15 +183,15 @@ function readSkills(pkg: PackageReader) {
     const skillType = pkg.readInt();
     const level = pkg.readFloat();
     const accumulator = version >= 2 ? pkg.readFloat() : 0;
-    if (skillType in SkillType) {
-      map.set(skillType, { level, accumulator });
-    }
+    // if (skillType in SkillType) {
+    map.set(skillType, { level, accumulator });
+    // }
   }
   return map;
 }
 
 function writeSkills(pkg: PackageWriter, skillData: SkillData) {
-  pkg.writeInt(2);
+  pkg.writeInt(DATA_VERSION.SKILLS);
   pkg.writeInt(skillData.size);
   for (const [key, { level, accumulator }] of skillData) {
     pkg.writeInt(key);
@@ -263,20 +266,29 @@ function readPlayerData(data: Uint8Array): PlayerData {
   const knownBiome = version >= 18 ? pkg.readArray(pkg.readInt) : [];
   const knownTexts = pkg.readMap(pkg.readString, pkg.readString);
 
-  const beardItem = version >= 4 ? pkg.readString() : 'beard0';
-  const hairItem = version >= 4 ? pkg.readString() : 'hair0';
-  const skinColor = version >= 5 ? pkg.readVector3() : { x: 1, y: 1, z: 1 };
-  const hairColor = version >= 5 ? pkg.readVector3() : { x: 1, y: 1, z: 1 };
+  const [beardItem, hairItem] = version >= 4
+    ? [pkg.readString(), pkg.readString()]
+    : ['beard0', 'hair0'];
+  const [skinColor, hairColor] = version >= 5
+    ? [pkg.readVector3(), pkg.readVector3()]
+    : [{ x: 1, y: 1, z: 1 }, { x: 1, y: 1, z: 1 }];
   const modelIndex = version >= 11 ? pkg.readInt() : 0;
   const foods = version >= 12 ? readFoods(pkg, version) : [];
-  const skillData = version >= 17 ? readSkills(pkg) : undefined;
+  const skillData = version >= 17 ? readSkills(pkg) : new Map();
+
   const customData = version >= 26 ? pkg.readMap(pkg.readString, pkg.readString) : new Map();
-  const newStuff = version >= 26 ? pkg.readVector3() : { x: 1, y: 1, z: 1 };
+  const stamina = version >= 26 ? clamp(pkg.readFloat(), 0, maxStamina) : 0;
+  const maxEitr = version >= 26 ? pkg.readFloat() : 0;
+  const eitr = version >= 26 ? clamp(pkg.readFloat(), 0, maxEitr) : 0;
+
   return {
     version,
-    maxHealth,
     health,
+    maxHealth,
+    stamina,
     maxStamina,
+    eitr,
+    maxEitr,
     firstSpawn,
     timeSinceDeath,
     guardianPower,
@@ -298,7 +310,6 @@ function readPlayerData(data: Uint8Array): PlayerData {
     modelIndex,
     skillData,
     customData,
-    newStuff,
   };
 }
 
@@ -347,7 +358,9 @@ function writePlayerData(data: PlayerData): Uint8Array {
   if (data.version >= 17) writeSkills(writer, data.skillData!);
   if (data.version >= 26) {
     writer.writeMap(writer.writeString, writer.writeString, data.customData);
-    writer.writeVector3(data.newStuff);
+    writer.writeFloat(data.stamina);
+    writer.writeFloat(data.maxEitr);
+    writer.writeFloat(data.eitr);
   }
   return writer.flush();
 }
@@ -365,7 +378,7 @@ export function* read(bytes: Uint8Array): Generator<number, Player> {
 
 export function* write(
   player: Player,
-  sizeHint: number = 10e6,
+  sizeHint: number = 10e6, // 10 megabytes
 ): Generator<number, Uint8Array> {
   const writer = new PackageWriter(sizeHint);
   yield* writePlayer(player, writer);

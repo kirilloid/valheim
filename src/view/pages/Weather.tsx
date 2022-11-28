@@ -29,7 +29,7 @@ const rollWeather = (weathers: WeatherBalance, roll: number) => {
     sum += weight;
     if (randomWeight < sum) return env;
   }
-  return weathers.slice(-1)[0]![0];
+  return weathers.at(-1)![0];
 };
 
 type Wind = {

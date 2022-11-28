@@ -16,9 +16,10 @@ import { groupedCreatures } from '../../data/combat_creatures';
 import { TranslationContext } from '../../effects/translation.effect';
 import { useDebounceEffect } from '../../effects/debounce.effect';
 import { EffectIcon, Icon, ItemIcon, SkillIcon } from '../parts/Icon';
-import { addAttackPlayerStats, attackPlayer, AttackPlayerStats, dmgBonus, emptyAttackPlayerStats, isNormalAttackProfile, multiplyDamage, BlockerConfig } from '../../model/combat';
+import { addAttackPlayerStats, attackPlayer, AttackPlayerStats, dmgBonus, emptyAttackPlayerStats, isNormalAttackProfile, multiplyDamage, BlockerConfig, getBlockingSkillFactor } from '../../model/combat';
 import { List, showNumber } from '../helpers';
 import { useGlobalState } from '../../effects';
+import { Tabs } from '../parts/Tabs';
 
 type OnChange<T extends HTMLElement> = (e: React.ChangeEvent<T>) => void;
 type OnChangeI = OnChange<HTMLInputElement>;
@@ -170,8 +171,8 @@ function Blocker({ shield, onShieldChange, onLevelChange } : {
           .map(([type, items]: [string, (T.Weapon | T.Shield)[]]) => 
             <optgroup key={type} label={translate(blockerTypeNames[type as BlockerType])}>
               {items
-          .filter(s => s.tier <= spoiler)
-          .map(s => <option key={s.id} value={s.id}>{translate(s.id)}</option>)}
+                .filter(s => s.tier <= spoiler)
+                .map(s => <option key={s.id} value={s.id}>{translate(s.id)}</option>)}
             </optgroup>
           )
         }
@@ -342,7 +343,7 @@ export function DefenseCalc() {
   const bonus = dmgBonus(scale);
 
   const block = blocker?.item
-    ? applyLevel(blocker.item.block, blocker.level) * (1 + 0.005 * blocker.skill)
+    ? applyLevel(blocker.item.block, blocker.level) * getBlockingSkillFactor(blocker.skill)
     : 0;
   const perfectBlock = block * (blocker?.item.parryBonus ?? 0);
   const attacks = creature.attacks[variety]!.attacks.filter(isNormalAttackProfile);
@@ -364,32 +365,36 @@ export function DefenseCalc() {
         {creature.attacks.length > 1 && <CreatureAttackVar creature={creature} variety={variety} onChange={onVarietyChange} />}
       </section>
       <section className="CombatCalc__Player">
-        <div className="PlayerHeader">
-          <h2 className="PlayerHeader__text">
-            {translate('ui.player')}
-          </h2>
-        </div>
-        <Players players={state.players} onChange={onPlayersChange} />
-        <div className="Weapon">
+        <Tabs tabs={[
+          {
+            title: translate('ui.player'),
+            renderer: () => <div style={{ maxWidth: 640 }}>
+              <Players players={state.players} onChange={onPlayersChange} />
+              <div className="Weapon">
                 <Blocker shield={state.blocker} onShieldChange={onBlockerChange} onLevelChange={onLevelChange} />
                 <Skill shield={state.blocker} onChange={onSkillChange} />
-          <Armor armor={state.armor} onChange={onArmorChange} />
-        </div>
-        <h3>{translate('ui.effects')}</h3>
-        <Items resTypes={state.resTypes} onChange={onItemChange} />
+                <Armor armor={state.armor} onChange={onArmorChange} />
+              </div>
+            </div>
+          },
+          {
+            title: translate('ui.effects') + (state.resTypes.length ? ` [${state.resTypes.length}]` : ''),
+            renderer: () => <Items resTypes={state.resTypes} onChange={onItemChange} />,
+          }
+        ]} selected={0} />
       </section>
       {attacks.length
       ? <div className="CombatCalc__Results">
-        <h2>Results</h2>
-        <h3>No shield</h3>
-        <Result stats={getStats(undefined, 0, false)} showBlock={false} />
+          <h2>Results</h2>
+          <h3>No shield</h3>
+          <Result stats={getStats(undefined, 0, false)} showBlock={false} />
           {block > 0 && !attacks.every(a => a.unblockable) ? <React.Fragment key="block">
-              <h3>Block [{format(block)}]</h3>
-              <Result stats={getStats(blocker?.item, block, false)} showBlock={true} />
+            <h3>Block [{format(block)}]</h3>
+            <Result stats={getStats(blocker?.item, block, false)} showBlock={true} />
           </React.Fragment> : null}
           {perfectBlock && !attacks.every(a => a.unblockable) ? <React.Fragment key="parry">
-              <h3>Parry [{format(perfectBlock)}]</h3>
-              <Result stats={getStats(blocker?.item, perfectBlock, true)} showBlock={true} />
+            <h3>Parry [{format(perfectBlock)}]</h3>
+            <Result stats={getStats(blocker?.item, perfectBlock, true)} showBlock={true} />
           </React.Fragment> : null}
         </div>
       : <div className="CombatCalc__Results">

@@ -53,7 +53,7 @@ function* readZDOData(reader: PackageReader, version: number): Generator<number,
       const zdo = readZdo(reader, version);
       // if (zdo._bytes.length > 10000) debugger;
       if (zdos.length > 1) {
-        const last = zdos.slice(-1)[0]!;
+        const last = zdos.at(-1)!;
         if (
           last.id.userId === zdo.id.userId &&
           last._bytes.length === zdo._bytes.length &&

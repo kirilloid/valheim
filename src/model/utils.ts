@@ -72,6 +72,10 @@ export const isEmpty = (arg: Record<string, any>) => {
 
 export function nop() {};
 
+export function sortBy<T>(array: T[], orderFn: (value: T) => number, asc: boolean = true) {
+  array.sort((a, b) => (asc ? 1 : -1) * (orderFn(a) - orderFn(b)));
+}
+
 export function filterValues<K extends string, T, RK extends K = K>(obj: Record<K, T>, fn: (arg: T, key: K) => boolean): Record<RK, T> {
   return Object.fromEntries(
     Object.entries(obj)

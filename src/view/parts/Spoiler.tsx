@@ -23,7 +23,7 @@ export function SpoilerAlert({ tier }: { tier: number }) {
               setSpoiler(tier);
             }} />
             <input className="Dialog__button btn" type="button" value={translate('ui.spoilerHide.disable')} onClick={() => {
-              setSpoiler(99);
+              setSpoiler(999);
             }} />
           </div>
         </div>

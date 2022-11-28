@@ -90,8 +90,8 @@ export function GameEvent() {
   );
 }
 
-const kills: EntityId[] = ['Eikthyr', 'Troll', 'gd_king', 'Surtling', 'Bonemass', 'Bat', 'Dragon', 'GoblinKing'];
-const biomes: Biome[] = ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains'];
+const kills: EntityId[] = ['Eikthyr', 'Troll', 'gd_king', 'Surtling', 'Bonemass', 'Bat', 'Dragon', 'GoblinKing', 'SeekerQueen'];
+const biomes: Biome[] = ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains', 'Mistlands'];
 
 export function GameEventFilterTable() {
   const [spoiler] = useGlobalState('spoiler');

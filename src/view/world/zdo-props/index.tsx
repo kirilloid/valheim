@@ -31,12 +31,14 @@ import { LiquidComp } from './liquid';
 import { EpicLootComp } from './epic-loot';
 import { PlayersData } from '../../../model/zdo-selectors';
 import { TombComp } from './tomb';
+import { ResourceRootComp } from './resource-root';
+import { PlantComp } from './plant';
 
 const readOnly = true;
 
 export const InterfaceFields: Partial<Record<
   GameComponent,
-  React.ComponentType<ValueProps<ZDO> & { playersData: PlayersData }>[]
+  React.ComponentType<ValueProps<ZDO> & { playersData: PlayersData; time: number }>[]
 >> = {
   ArmorStand: [
     ArmorStandComp,
@@ -68,6 +70,7 @@ export const InterfaceFields: Partial<Record<
     intComp('level'),
     // quaternionComp('tiltrot'),
     vectorComp('BodyVelocity'),
+    floatComp('RandomSkillFactor', { readOnly, label: 'scale bonus' }),
     /* EpicLoot
       string BountyData
       string BountyID
@@ -137,7 +140,7 @@ export const InterfaceFields: Partial<Record<
     intComp('itemStack'),
   ],
   Piece: [idComp('creator')],
-  Plant: [timeComp('plantTime')],
+  Plant: [PlantComp],
   Player: [
     // 'emoteID', 'emote', 'emote_oneshot',
     floatComp('Stealth'),
@@ -162,7 +165,13 @@ export const InterfaceFields: Partial<Record<
   ],
   // RandomAnimation: ['<name>', 'RA_<name>',],
   RandomFlyingBird: [vectorComp('spawnpoint'), boolComp('landed'),],
+  ResourceRoot: [ResourceRootComp],
   Saddle: [idComp('user'), floatComp('stamina', { min: 0, max: 300 }),],
+  SapCollector: [
+    timeComp('lastTime'),
+    intComp('level', { max: 10 }),
+    floatComp('product'),
+  ],
   // SEMan: [maskComp('seAttrib')], // ColdResistance = 1, DoubleImpactDamage = 2, SailingPower = 4,
   Ship: [
     floatComp('rudder'),
@@ -185,6 +194,7 @@ export const InterfaceFields: Partial<Record<
     floatComp('TameTimeLeft'),
     timeComp('TameLastFeeding'),
     boolComp('HaveSaddle'),
+    stringComp('follow', { readOnly }),
   ],
   // Teleport: [zdoidProp('target')],
   TeleportWorld: [stringComp('tag')],

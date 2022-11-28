@@ -16,6 +16,7 @@ import { Cart } from './Cart';
 import { PhysicalObject } from './PhysicalObject';
 import { SpoilerAlert } from '../parts/Spoiler';
 import { Structure } from './Structure';
+import { Fish } from './Fish';
 
 function parseLevel(level: string | undefined): number | undefined {
   if (level == null) return undefined;
@@ -40,13 +41,17 @@ function Item({ item, level }: { item: T.GameObject, level?: number }) {
   switch (item.type) {
     case 'creature':
       return <Creature creature={item} level={level} />;
+    case 'fish':
+      return <Fish fish={item} level={level} />;
     case 'armor':
       return <Armor item={item} level={level} />
     case 'weapon':
       return <Weapon item={item} level={level} />
     case 'shield':
       return <Shield item={item} level={level} />
-    case 'ammo':
+    case 'arrow':
+    case 'bolt':
+    case 'missile':
       return <Arrow item={item} />
     case 'tool':
       return <Tool item={item} level={level} />

@@ -23,18 +23,23 @@ export const skill: Record<SkillType, string> = {
   [SkillType.Blocking]: '🛡️',
   [SkillType.Axes]: '🪓',
   [SkillType.Bows]: '🏹',
+  [SkillType.ElementalMagic]: '⚡',
+  [SkillType.BloodMagic]: '🩸',
   [SkillType.Unarmed]: '👐',
   [SkillType.Pickaxes]: '⛏️',
   [SkillType.WoodCutting]: '🪵',
+  [SkillType.Crossbows]: '🏹',
   [SkillType.Jump]: '🔥',
   [SkillType.Sneak]: '👟',
   [SkillType.Run]: '🏃‍♂️',
   [SkillType.Swim]: '🏊',
+  [SkillType.Fishing]: '🎣',
   [SkillType.Ride]: '🏇',
+  [SkillType.All]: '*',
 };
 
 export const biome: Record<Biome, string> = {
-  Meadows: '🌿',
+  Meadows: '⛳',
   BlackForest: '🌳',
   Swamp: '🐸',
   Mountain: '🏔️',
@@ -42,7 +47,7 @@ export const biome: Record<Biome, string> = {
   Ocean: '🌊',
   Mistlands: '🌫️',
   DeepNorth: '❄️',
-  Ashlands: '⚱️',
+  Ashlands: '🔥',
 };
 
 

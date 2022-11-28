@@ -154,7 +154,7 @@ export function Piece({ item }: { item: TPiece }) {
   return (
     <>
       <ItemHeader item={item} />
-      <section>
+      <section key="general">
         <h2>{translate('ui.piece')}</h2>
         <dl>
           <dt>{translate('ui.healthStructure')}</dt><dd>{hp}</dd>
@@ -167,7 +167,18 @@ export function Piece({ item }: { item: TPiece }) {
           {size ? <><dt>size</dt><dd>{size.filter(Boolean).join('×')}</dd></> : null}
         </dl>
       </section>
-      <section>
+      {item.Aoe && <section key="damage">
+        <h2>Damage on contact/activation</h2>
+        <dl>
+          {Object.entries(item.Aoe.damage)
+            .filter(([, value]) => value)
+            .map(([key, value]) => (<React.Fragment key={key}>
+              <dt>{translate(`ui.damageType.${key}`)}</dt>
+              <dd>{value}</dd>
+            </React.Fragment>))}
+        </dl>
+      </section>}
+      <section key="specific">
         <h2>{translate(`ui.pieceType.${item.subtype}`)}</h2>
         <PieceSpecific item={item} />
       </section>

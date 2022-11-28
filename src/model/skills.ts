@@ -7,14 +7,43 @@ export enum SkillType {
   Blocking,
   Axes,
   Bows,
+  ElementalMagic,
+  BloodMagic,
   Unarmed = 11,
   Pickaxes,
   WoodCutting,
+  Crossbows,
   Jump = 100,
   Sneak,
   Run,
   Swim,
+  Fishing,
   Ride = 110,
+  All = 999,
+}
+
+export const skillTiers: Record<SkillType, number> = {
+  [SkillType.Swords]: 2,
+  [SkillType.Knives]: 0,
+  [SkillType.Clubs]: 0,
+  [SkillType.Polearms]: 2,
+  [SkillType.Spears]: 1,
+  [SkillType.Blocking]: 0,
+  [SkillType.Axes]: 0,
+  [SkillType.Bows]: 1,
+  [SkillType.ElementalMagic]: 6,
+  [SkillType.BloodMagic]: 6,
+  [SkillType.Unarmed]: 0,
+  [SkillType.Pickaxes]: 2,
+  [SkillType.WoodCutting]: 0,
+  [SkillType.Crossbows]: 6,
+  [SkillType.Jump]: 0,
+  [SkillType.Sneak]: 0,
+  [SkillType.Run]: 0,
+  [SkillType.Swim]: 0,
+  [SkillType.Fishing]: 2,
+  [SkillType.Ride]: 5,
+  [SkillType.All]: 1000,
 }
 
 /*
@@ -56,6 +85,10 @@ holdDurationMin: 2.5 * (1 - skill / 100)
 projAcc = Math.Lerp(min, max, draw ** 0.5)
 projVel = Math.Lerp(min, max, draw)
 dmg *= draw
+
+magic:
+hit eitr *= (1 - 0.33 * skill / 100)
+hit hp% - the same
 
 damage:
 num = Mathf.Lerp(0.4f, 1f, skillFactor);

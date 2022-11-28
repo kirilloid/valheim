@@ -9,8 +9,8 @@ import { lerp, lerpStep, Vector3 } from '../../model/utils';
 import { Tabs } from '../parts/Tabs';
 
 const MODELS = ['male', 'female'];
-const beards = ['Beard1', 'Beard2', 'Beard3', 'Beard4', 'Beard5', 'Beard6', 'Beard7', 'Beard8', 'Beard9', 'Beard10', 'BeardNone'];
-const hairs = ['Hair1', 'Hair2', 'Hair3', 'Hair4', 'Hair5', 'Hair6', 'Hair7', 'Hair8', 'Hair9', 'Hair10', 'Hair11', 'Hair12', 'Hair13', 'Hair14', 'HairNone'];
+const beards = ['Beard1', 'Beard2', 'Beard3', 'Beard4', 'Beard5', 'Beard6', 'Beard7', 'Beard8', 'Beard9', 'Beard10', 'Beard11', 'Beard12', 'Beard13', 'Beard14', 'Beard15', 'Beard16', 'BeardNone'];
+const hairs = ['Hair1', 'Hair2', 'Hair3', 'Hair4', 'Hair5', 'Hair6', 'Hair7', 'Hair8', 'Hair9', 'Hair10', 'Hair11', 'Hair12', 'Hair13', 'Hair14', 'Hair15', 'Hair16', 'Hair17', 'Hair18', 'Hair19', 'Hair20', 'Hair21', 'Hair22', 'Hair23', 'HairNone'];
 
 const HAIR_COLOR_0: Vector3 = { x: 1, y: 0.9310345, z: 0.7058823 };
 const HAIR_COLOR_1: Vector3 = { x: 1, y: 0.48813385, z: 0.2794118 };

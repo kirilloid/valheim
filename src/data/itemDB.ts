@@ -7,6 +7,7 @@ import { EntityGroup, GameComponent, GameObject, ItemSet } from '../types';
 import { tools } from './tools';
 import { pieces } from './building';
 import { creatures } from './creatures';
+import { fishes } from './fish';
 import { ships, carts } from './transport';
 import { objects, structures } from './objects';
 import { data as modsData, recipes as modsRecipes } from '../mods';
@@ -26,6 +27,7 @@ export const groups: Partial<Record<EntityGroup, GameObject[]>> = {};
 
 for (const coll of [
   creatures,
+  fishes,
   weapons,
   armors,
   arrows,
@@ -66,6 +68,8 @@ export const extraData: Record<string, GameComponent[]> = {
   DG_MeadowsVillage: ['DungeonGenerator'],
   DG_SunkenCrypt: ['DungeonGenerator'],
   DG_Cave: ['DungeonGenerator'],
+  DG_DvergrTown: ['DungeonGenerator'],
+  DG_DvergrBoss: ['DungeonGenerator'],
 
   BossStone_Bonemass: ['ItemStand'],
   BossStone_DragonQueen: ['ItemStand'],
@@ -134,6 +138,9 @@ export const extraData: Record<string, GameComponent[]> = {
   Spawner_Troll: ['CreatureSpawner'],
   Spawner_Ulv: ['CreatureSpawner'],
   Spawner_Wraith: ['CreatureSpawner'],
+  Spawner_Seeker: ['CreatureSpawner'],
+  Spawner_SeekerBrute: ['CreatureSpawner'],
+  Spawner_Tick_stared: ['CreatureSpawner'],
 
   Draugr_Ranged: ['BaseAI', 'Humanoid', 'MonsterAI', 'VisEquipment'],
   GoblinArcher: ['BaseAI', 'Humanoid', 'MonsterAI', 'VisEquipment'],

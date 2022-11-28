@@ -46,6 +46,10 @@ export function showNumber(value: number): string {
     : String(Math.round(value));
 }
 
+export function showPercent(x: number) {
+  return `${(x * 100).toFixed(1).replace(/\.0$/, '')}%`;
+}
+
 export function ShortWeaponDamage({ damage, skill }: { damage: DamageProfile, skill: SkillType | null }) {
   const result: (JSX.Element | string)[] = [];
   if (damage.pickaxe) {
@@ -174,20 +178,20 @@ export function InlineObject({ id, className, ...props }: { id: EntityId } & Rea
 
 export function ModLinks({ nexus, thunderstore }: { nexus?: number; thunderstore?: string }) {
   const parts: JSX.Element[] = [];
-  if (nexus != null) {
-    parts.push(<a target="_blank" rel="noreferrer" className="ModLink ModLink--nexus" key="nexus"
-      href={`https://www.nexusmods.com/valheim/mods/${nexus}`}>
-      <img src="/icons/nexusmods.ico" alt="" className="ModLink__icon" />
-      {' '}
-      nexus
-    </a>);
-  }
   if (thunderstore != null) {
     parts.push(<a target="_blank" rel="noreferrer" className="ModLink ModLink--thunderstore" key="thunderstore"
       href={`https://valheim.thunderstore.io/package/${thunderstore}/`}>
       <img src="/icons/thunderstore.ico" alt="" className="ModLink__icon" />
       {' '}
       thunderstore
+    </a>);
+  }
+  if (nexus != null) {
+    parts.push(<a target="_blank" rel="noreferrer" className="ModLink ModLink--nexus" key="nexus"
+      href={`https://www.nexusmods.com/valheim/mods/${nexus}`}>
+      <img src="/icons/nexusmods.ico" alt="" className="ModLink__icon" />
+      {' '}
+      nexus
     </a>);
   }
   return <span className="ModLinks"><List separator=" | ">{parts}</List></span>;

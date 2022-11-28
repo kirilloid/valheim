@@ -4,7 +4,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import '../../css/FoodTable.css';
 
 import type { Food, Resource } from '../../types';
-import { timeI2S } from '../../model/utils';
+import { sortBy, timeI2S } from '../../model/utils';
 import { resources } from '../../data/resources';
 
 import { TranslationContext, useGlobalState } from '../../effects';
@@ -20,7 +20,7 @@ function isFood(item: Resource): item is FoodItem {
 
 const foods = resources.filter(isFood);
 
-type SortField = 'health' | 'stamina' | 'duration' | 'regen' | 'total';
+type SortField = 'health' | 'stamina' | 'total' | 'duration' | 'regen' | 'eitr';
 
 function parseSort(sort?: string): SortField | undefined {
   switch (sort) {
@@ -33,10 +33,6 @@ function parseSort(sort?: string): SortField | undefined {
     default:
       return undefined;
   }
-}
-
-function sortBy<T>(array: T[], orderFn: (value: T) => number, asc: boolean = true) {
-  array.sort((a, b) => (asc ? 1 : -1) * (orderFn(a) - orderFn(b)));
 }
 
 export function FoodTable() {
@@ -61,7 +57,7 @@ export function FoodTable() {
     if (sort === 'total') {
       sortBy(items, f => f.Food.health + f.Food.stamina, false);
     } else {
-      sortBy(items, f => f.Food[sort], false);
+      sortBy(items, f => f.Food[sort] ?? 0, false);
     }
   }
 
@@ -87,11 +83,9 @@ export function FoodTable() {
             </label>
           </th>
           <th>
-            {Radio('total')}
+            {Radio('eitr')}
             <label htmlFor="sort_total">
-              <Icon id="health" alt="" size={16} />
-              <Icon id="walknut" alt="" size={16} />
-              <span className="FoodTable__extra">total</span>
+              <span className="FoodTable__extra">{translate('ui.effect.Eitr')}</span>
             </label>
           </th>
           <th>
@@ -117,7 +111,7 @@ export function FoodTable() {
           <td><InlineObject id={item.id} className="FoodTable__extra" /></td>
           <td className="FoodTable__value">{item.Food.health}</td>
           <td className="FoodTable__value">{item.Food.stamina}</td>
-          <td className="FoodTable__value">{item.Food.health + item.Food.stamina}</td>
+          <td className="FoodTable__value">{item.Food.eitr ?? '\u{2014}'}</td>
           <td className="FoodTable__value">{timeI2S(item.Food.duration)}</td>
           <td className="FoodTable__value">{item.Food.regen}</td>
         </tr>

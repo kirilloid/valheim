@@ -35,7 +35,7 @@ function getComponents(id: string | undefined): GameComponent[] {
 
 const variantHash = stableHashCode('variant');
 
-function Editor({ value: zdo, onChange, playersData, index, components }: ValueProps<ZDO> & { playersData: PlayersData; index: number; components: GameComponent[] }) {
+function Editor({ value: zdo, onChange, playersData, time, index, components }: ValueProps<ZDO> & { playersData: PlayersData; time: number; index: number; components: GameComponent[] }) {
   if (components.length === 0) {
     return <>
       <ZdoSpecialData data={zdo.floats} stringify={String} />
@@ -52,7 +52,7 @@ function Editor({ value: zdo, onChange, playersData, index, components }: ValueP
     return <ContainedItemComp value={zdo} onChange={onChange} index={index} />
   }
   const editors = components.flatMap(cmp => InterfaceFields[cmp] ?? []);
-  return <List separator="">{editors.map((C, i) => <C key={i} value={zdo} onChange={onChange} playersData={playersData} />)}</List>
+  return <List separator="">{editors.map((C, i) => <C key={i} value={zdo} onChange={onChange} playersData={playersData} time={time} />)}</List>
 }
 
 export const ItemEditor = React.memo(({
@@ -60,6 +60,7 @@ export const ItemEditor = React.memo(({
   onChange,
   containerIndex,
   playersData,
+  time,
   onItemLinkClicked,
 }: {
   zdo: ZDO;
@@ -67,6 +68,7 @@ export const ItemEditor = React.memo(({
   containerIndex: number;
   version: number;
   playersData: PlayersData;
+  time: number;
   onItemLinkClicked: (zdo: ZDO) => void;
 }) => {
   const translate = useContext(TranslationContext);
@@ -101,7 +103,7 @@ export const ItemEditor = React.memo(({
         </dd>
       </>}
       <dt>zone</dt><dd>{zdo.sector.x} / {zdo.sector.y}</dd>
-      <Editor value={zdo} onChange={onChange} playersData={playersData} components={components} index={containerIndex} />
+      <Editor value={zdo} onChange={onChange} playersData={playersData} time={time} components={components} index={containerIndex} />
     </dl>
   </>;
 });
