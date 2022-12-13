@@ -219,7 +219,7 @@ function WindEvent({ event }: { event: WeatherEvent & { type: 'wind' } }) {
   </>;
 }
 
-function ForecastEvent({ event }: { event: WeatherEvent }) {
+function WeatherDetails({ event }: { event: WeatherEvent }) {
   const translate = useContext(TranslationContext);
   switch (event.type) {
     case 'day':
@@ -233,12 +233,11 @@ function ForecastEvent({ event }: { event: WeatherEvent }) {
         <span>
           <span className="Weather__description">weather</span>
         </span>
-      {
-        event.weathers.map((weather, i) => <span key={i} className={classNames('Weather__type', `Weather__type--${weather}`)}>
+        {event.weathers.map((weather, i) => <span key={i} className={classNames('Weather__type', `Weather__type--${weather}`)}>
           <span className="Weather__emoji">{showClearMoon(envStates[weather].emoji, event.time)}</span>
           <span className="Weather__description">{' '}{translate(`ui.weather.${weather}`)}</span>
-        </span>)
-      }</>;
+        </span>)}
+      </>;
     case 'wind':
       return <WindEvent event={event} />
     default:
@@ -316,6 +315,30 @@ class BiomeGen {
 }
 
 const gen = new BiomeGen();
+
+const WeatherRow = React.memo(({ event: e, index: i, startIndex }: {
+  event: WeatherEvent;
+  index: number;
+  startIndex: number;
+}) => {
+  return <div
+    key={(i + startIndex) % VIEWPORT_ROWS}
+    className="Weather__Event"
+    style={{
+      top: `${ROW_HEIGHT * (i + startIndex) + EVENTS_OFFSET_HEIGHT}px`,
+      height: `${ROW_HEIGHT}px`,
+    }}>
+    <span className={classNames(
+      'Weather__time',
+      `Weather__time--${isDay(e.time) ? 'day' : 'night'}`,
+    )}>
+      {timeI2S(Math.round((e.time % GAME_DAY) / GAME_DAY * 24 * 60))}
+    </span>
+    <span className="Weather__details">
+      <WeatherDetails event={e} />
+    </span>
+  </div>
+});
 
 export function Weather() {
   const translate = useContext(TranslationContext);
@@ -423,25 +446,14 @@ export function Weather() {
         {translate(`ui.biome.${id}`)}
       </div>)}
     </div>
-    {events.slice(startIndex, endIndex).map((e, i) => {
-      return <div
-        key={(i + startIndex) % VIEWPORT_ROWS}
-        className="Weather__Event"
-        style={{
-          top: `${ROW_HEIGHT * (i + startIndex) + EVENTS_OFFSET_HEIGHT}px`,
-          height: `${ROW_HEIGHT}px`,
-        }}>
-        <span className={classNames(
-          'Weather__time',
-          `Weather__time--${isDay(e.time) ? 'day' : 'night'}`,
-        )}>
-          {timeI2S(Math.round((e.time % GAME_DAY) / GAME_DAY * 24 * 60))}
-        </span>
-        <span className="Weather__details">
-          <ForecastEvent event={e} />
-        </span>
-      </div>
-    })}
+    {events
+      .slice(startIndex, endIndex)
+      .map((e, i) => <WeatherRow
+        event={e}
+        index={i}
+        startIndex={startIndex}
+      />)
+    }
     <div className="Weather__tombstone"
       style={{ top: `${events.length * ROW_HEIGHT + EVENTS_OFFSET_HEIGHT}px` }}> </div>
   </div>

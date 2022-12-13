@@ -26,9 +26,6 @@ export const mapping = new Map<string, EntityId>([
   ['GoblinArcher', 'Goblin'],
   ['Draugr_Ranged', 'Draugr'],
   ['Skeleton_NoArcher', 'Skeleton'],
-  ['Boar_piggy', 'Boar'],
-  ['Wolf_cub', 'Wolf'],
-  ['Lox_Calf', 'Lox'],
   ['loxcalf_ragdoll', 'Lox'],
   ...creatures
     .map(c => [c.ragdollId, c.id])

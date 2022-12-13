@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import '../../css/Creature.css';
 
-import { Creature as TCreature, NormalAttackProfile, SpawnAttackProfile, TOLERATE } from '../../types';
+import { AttackVariety, Creature as TCreature, NormalAttackProfile, SpawnAttackProfile, TOLERATE } from '../../types';
 import { dmgBonus, hpBonus, multiplyDamage } from '../../model/combat';
 import { timeI2S } from '../../model/utils';
 
@@ -17,6 +17,7 @@ import { Area, InlineObjectWithIcon, rangeBy, Resistances, shortCreatureDamage, 
 import { ItemIcon } from '../parts/Icon';
 import { ItemHeader } from '../parts/ItemHeader';
 import { spawnedByMap } from '../../data/spawns';
+import { Tabs } from '../parts/Tabs';
 
 function NormalAttack({ attack: a, dmgScale }: { attack: NormalAttackProfile, dmgScale: number }) {
   const dmg = multiplyDamage(a.dmg, dmgScale);
@@ -39,6 +40,35 @@ function SpawnAttack({ attack }: { attack: SpawnAttackProfile }) {
   </>
 }
 
+function Attack({ attack, dmgScale }: { attack: AttackVariety; dmgScale: number }) {
+  return <dl>
+    {attack.attacks.map((a, i) => 'spawn' in a
+      ? <SpawnAttack key={i} attack={a} />
+      : <NormalAttack key={i} attack={a} dmgScale={dmgScale} />)}
+  </dl>
+}
+
+function Attacks({ attacks, dmgScale }: { attacks: AttackVariety[]; dmgScale: number }) {
+  const translate = useContext(TranslationContext);
+
+  if (attacks.length === 0) return null;
+  if (attacks.length === 1) {
+    return <div className="Creature__Attacks">
+      <h3>{translate('ui.attacks')}</h3>
+      <Attack attack={attacks[0]!} dmgScale={dmgScale} />
+    </div>
+  }
+  
+  const totalVarietyRates = attacks.reduce((t, a) => t + a.rate, 0);
+  return <div className="Creature__Attacks">
+    <h3>{translate('ui.attacks')}</h3>
+    <Tabs tabs={attacks.map(a => ({
+      title: `${a.variety} (${Math.round(100 * a.rate / totalVarietyRates)}%)`,
+      renderer: () => <Attack attack={a} dmgScale={dmgScale} />,
+    }))} selected={0} />
+  </div>
+}
+
 export function Creature({ creature, level = 1 }: { creature: TCreature, level?: number }) {
   const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
@@ -47,7 +77,6 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
   const dmgScale = dmgBonus(scale);
   const dropGlobalScale = 2 ** (level - 1);
   const [sid, snr] = getSummon(id) ?? ['', 0];
-  const totalVarietyRates = creature.attacks.reduce((t, a) => t + a.rate, 0);
   const locations = [
     ...new Set(creature.spawners.flatMap(s => s.biomes)),
     ...(objectLocationMap[creature.id] ?? [])
@@ -66,7 +95,7 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
         </div>
       : null}
     </ItemHeader>
-    <section>
+    <section key="creature">
       <h2>{translate('ui.creature')}</h2>
       <dl>
         <dt>areal</dt>
@@ -110,25 +139,16 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
           <Resistances mods={damageModifiers} />
         </dl>
       </React.Fragment>)}
-      {creature.attacks.length ? <div className="Creature__Attacks">
-        <h3>{translate('ui.attacks')}</h3>
-        {creature.attacks.map(a => <div className="Creature__Attack" key={`${id}_${a.variety}`}>
-          {creature.attacks.length > 1 ? <h4>{a.variety} ({Math.round(100 * a.rate / totalVarietyRates)}%)</h4> : null}
-          <dl key={a.variety}>
-          {a.attacks.map(a => 'spawn' in a
-            ? <SpawnAttack key={'spawn'} attack={a} />
-            : <NormalAttack key={a.name} attack={a} dmgScale={dmgScale} />)}
-          </dl>
-        </div>)}
-      </div> : null}
+      <Attacks attacks={creature.attacks} dmgScale={dmgScale} />
     </section>
-    <section>
+    {creature.drop.length > 0 && <section key="drop">
       <h2>{translate('ui.drops')}</h2>
       <ul>
         {creature.drop.map(({ item, min, max, scale, chance }) => {
           const dropScale = scale ? dropGlobalScale : 1;
           return <li key={item}>
             <InlineObjectWithIcon id={item} />
+            {' '}
             {min >= max - 1
               ? `${min * dropScale}`
               : `${rangeBy([min * dropScale, (max - 1) * dropScale], String)}`}
@@ -137,8 +157,8 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
           </li>
         })}
       </ul>
-    </section>
-    {tame != null ? <section>
+    </section>}
+    {tame != null ? <section key="tame">
       <h2>{translate('ui.tameable')}</h2>
       <dl>
         <dt>{translate('ui.tamingTime')}</dt>

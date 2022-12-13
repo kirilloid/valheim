@@ -30,11 +30,11 @@ function Plant({ plant }: { plant: T.Plantable }) {
   const { biomes, growTime } = plant;
   const translate = useContext(TranslationContext);
   return <section>
-    <h2>{translate(`ui.plant`)}</h2>
+    <h2>{translate(`ui.itemSubtype.plant`)}</h2>
     <dl>
       <dt>planted in</dt>
       <dd><List>{biomes.map(b => <Area key={b} area={b} />)}</List></dd>
-      <dt>grow time</dt>
+      <dt>{translate('ui.growTime.plant')}</dt>
       <dd>{rangeBy(growTime, timeI2S)}</dd>
     </dl>
   </section>

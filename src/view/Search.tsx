@@ -1,4 +1,4 @@
-import React, { ChangeEvent, KeyboardEvent, useCallback, useContext, useEffect, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useCallback, useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { createSelector } from 'reselect';
 
@@ -6,7 +6,7 @@ import '../css/Search.css';
 
 import { DamageType, EntityId, GameObject, ItemSpecial, Piece, Resource } from '../types';
 import { SkillType } from '../model/skills';
-import { assertNever, days, timeI2S } from '../model/utils';
+import { assertNever, days, groupBy, timeI2S } from '../model/utils';
 import type { SearchEntry } from '../model/search';
 
 import { match } from '../data/search';
@@ -73,6 +73,7 @@ function showSpecialIcon(special: ItemSpecial, translate: Translator) {
     case 'light': return <Icon id="flashlight" alt={translate('ui.itemSpecial.flashlight')} size={16} />;
     case 'strength': return <span><Icon id="weight" alt={translate('ui.weight')} size={16} />+150</span>;
     case 'search': return <Icon id="map_ping" alt="search" size={16} />;
+    case 'demister': return <Icon id="Demister" alt="demister" size={16} />;
     case 'harpoon': return <Icon id="harpoon" alt={translate('ui.itemSpecial.harpoon')} size={16} />;
     case 'build': return null;
     case 'garden': return <Icon path="piece/replant" alt="gardening" size={32} />;
@@ -83,9 +84,9 @@ function showSpecialIcon(special: ItemSpecial, translate: Translator) {
   }
 }
 
-function renderItem(entry: SearchEntry, text: string, translate: Translator, onClick: React.MouseEventHandler) {
+function renderItem(entry: SearchEntry, text: string, duplicateNames: Set<EntityId>, onClick: React.MouseEventHandler) {
   switch (entry.type) {
-    case 'obj': return <SearchObject id={entry.id} text={text} onClick={onClick} />;
+    case 'obj': return <SearchObject id={entry.id} text={text} onClick={onClick} duplicates={duplicateNames} />;
     case 'page': return renderLink('/', entry, text, onClick);
     case 'loc': return <SearchLocation entry={entry} text={text} onClick={onClick} />;
     case 'biome': return <SearchBiome id={entry.id} text={text} onClick={onClick} />;
@@ -112,9 +113,13 @@ function SearchLocation({ entry, text, onClick }: { entry: SearchEntry, text: st
 }
 
 function SearchBiome({ id, text, onClick }: BaseSearchItemProps) {
+  const translate = useContext(TranslationContext);
   const biome = biomes.find(b => b.id === id);
   return biome 
-    ? <Link to={`/biome/${id}`} onClick={onClick}>{text}</Link>
+    ? <Link to={`/biome/${id}`} onClick={onClick}>
+        {text}
+        <span className="entity-type"> &ndash; {translate(`ui.biome`)}</span>
+      </Link>
     : null;
 }
 
@@ -131,6 +136,7 @@ function ShortRecipe(props: { item: GameObject }) {
     case 'object':
     case 'structure':
     case 'item':
+    case 'spawner':
     case 'trophy':
       return null;
     case 'piece':
@@ -174,7 +180,10 @@ function SearchEvent({ id, text, onClick }: BaseSearchItemProps) {
   const event = events.find(e => e.id === id);
   return event ? <div className="SearchItem">
     <ItemIcon item={data[event.icon]} size={32} />
-    <Link to={`/event/${id}`} onClick={onClick}>{text}</Link>
+    <Link to={`/event/${id}`} onClick={onClick}>
+      {text}
+      <span className="entity-type"> &ndash; {translate(`ui.event`)}</span>
+    </Link>
     <span>
       {event.spawns.map(s => <ItemIcon key={s.id} item={data[s.id]} useAlt />)}
       {' '}
@@ -188,7 +197,7 @@ function SearchEvent({ id, text, onClick }: BaseSearchItemProps) {
 function SearchEffect({ id, text, onClick }: BaseSearchItemProps) {
   const effect = effects.find(e => e.id === id);
   return effect ? <div className="SearchItem">
-    <EffectIcon id={effect.id} size={32} />
+    <EffectIcon id={effect.id} iconId={effect.iconId} size={32} />
     {' '}
     <Link to={`/effect/${id}`} onClick={onClick}>{text}</Link>
   </div> : null;
@@ -259,10 +268,13 @@ function ItemExtra({ item }: { item: Resource }) {
       {item.Value}
     </span>
   }
+  if (item.Radiation != null) {
+    return <span>☢️</span>
+  }
   return null;
 }
 
-function SearchObject({ id, text, onClick }: BaseSearchItemProps) {
+function SearchObject({ id, text, onClick, duplicates }: BaseSearchItemProps & { duplicates: Set<string> }) {
   const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
   const item = data[id];
@@ -275,6 +287,8 @@ function SearchObject({ id, text, onClick }: BaseSearchItemProps) {
   const className = `SearchItem`;
   const linkClassName = itemClasses(item).join(' ');
   switch (item.type) {
+    case 'spawner':
+      return null;
     case 'creature': {
       const { hp } = item;
       const avgDmg = averageAttacksDamage(item);
@@ -306,7 +320,10 @@ function SearchObject({ id, text, onClick }: BaseSearchItemProps) {
     case 'item':
       return <div className={className}>
         <ItemIcon item={item} size={32} />
-        <Link to={`/obj/${id}`} onClick={onClick} className={linkClassName}>{text}</Link>
+        <Link to={`/obj/${id}`} onClick={onClick} className={linkClassName}>
+          {text}
+          {duplicates.has(translate(id)) && <span className="entity-type"> &ndash; {translate(`ui.itemType.${item.type}`)}</span>}
+        </Link>
         <ItemExtra item={item} />
       </div>
     case 'trophy':
@@ -369,7 +386,10 @@ function SearchObject({ id, text, onClick }: BaseSearchItemProps) {
     case 'object':
       return <div className={className}>
         <ItemIcon item={item} size={32} />
-        <Link to={`/obj/${id}`} onClick={onClick} className={linkClassName}>{text}</Link>
+        <Link to={`/obj/${id}`} onClick={onClick} className={linkClassName}>
+          {text}
+          {duplicates.has(translate(id)) && <span className="entity-type"> &ndash; {translate(`ui.itemSubtype.${item.subtype}`)}</span>}
+        </Link>
         {
           item.Plant
             ? <span>
@@ -416,11 +436,25 @@ const searchSelector = createSelector(
   ({ spoiler }: { spoiler: number }) => spoiler,
   (term: string, spoiler: number) => [...match(term)].filter(entry => entry.tier <= spoiler),
 );
+
 const arraySliceSelector = createSelector(
   ({ items }: { items: SearchEntry[] }) => items,
   ({ len }: { len: number }) => len,
   (items, len) => items.slice(0, len),
 );
+
+const duplicateNamesSelector = createSelector(
+  ({ items }: { items: SearchEntry[] }) => items,
+  ({ translate }: { translate: Translator }) => translate,
+  (items, translate) => {
+    const groups = groupBy(items, item => translate(item.i18nKey));
+    const duplicateKeys = Object
+      .entries(groups)
+      .filter(([, group]) => group.length > 1)
+      .map(([key]) => key)
+    return new Set(duplicateKeys);
+  }
+)
 
 export const Search = () => {
   const history = useHistory();
@@ -433,6 +467,8 @@ export const Search = () => {
   const items = searchSelector({ searchTerm, spoiler });
   const itemsToDisplay = arraySliceSelector({ items, len });
   const [lastItem, setLastItem] = useState<Element | null>(null);
+
+  const duplicateNames = duplicateNamesSelector({ items: itemsToDisplay, translate });
 
   const updateSearch = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -457,6 +493,10 @@ export const Search = () => {
       observer.unobserve(lastItem);
     }
   }, [lastItem, items, loadMore]);
+
+  useLayoutEffect(() => {
+    document.querySelectorAll(".SearchResults li")[index]?.scrollIntoView({ block: 'nearest' });
+  }, [index]);
 
   const clearSearch = useCallback(() => {
     setSearchTerm('');
@@ -508,7 +548,7 @@ export const Search = () => {
               <li key={`${entry.type}_${entry.id}`}
                 className={i === index ? 'active' : ''}
                 tabIndex={0}>
-                {renderItem(entry, text, translate, clearSearch)}
+                {renderItem(entry, text, duplicateNames, clearSearch)}
               </li>
             );
           })}

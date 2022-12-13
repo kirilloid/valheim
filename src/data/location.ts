@@ -26,6 +26,7 @@ import {
 import { mapValues } from '../model/utils';
 import { creatures } from './creatures';
 import { fishes } from './fish';
+import { spawners } from './spawners';
 
 export const locationBiomes: Record<GameLocationId, Biome> = {};
 
@@ -126,8 +127,8 @@ function loc(
     components = ['Runestone'];
   }
   return {
-    id: id,
-    typeId: typeId,
+    id,
+    typeId,
     components,
     tier,
     quantity,
@@ -686,7 +687,9 @@ export const locations: LocationConfig[] = [
     1, 'WoodVillage1', ['Meadows'],
     { quantity: 15, group: 'woodvillage', minApart: 256, terrainDelta: [0, 4], minDistance: 2000, radius: [20, 32],
       customMusic: 'Music_MeadowsVillageFarm',
-      items: [],
+      items: [
+        locItem('Spawner_DraugrPile', 0.5, 10),
+      ],
     },
     'WoodVillage',
   ),
@@ -1297,10 +1300,10 @@ export const locations: LocationConfig[] = [
           locItem('dvergrprops_crate', 1, 3),
           locItem('dvergrprops_crate', 0.5, 2),
         ], 1, 2),
-        locItem('SpawnerDverger_Arbalest', 1, 3),
-        locItem('SpawnerDverger_Arbalest', 0.5),
-        locItem('SpawnerDverger_Mage', 1, 2),
-        locItem('SpawnerDverger_Mage', 0.5, 2),
+        locItem('Spawner_DvergerArbalest', 1, 3),
+        locItem('Spawner_DvergerArbalest', 0.5),
+        locItem('Spawner_DvergerMage', 1, 2),
+        locItem('Spawner_DvergerMage', 0.5, 2),
         locItem('dvergrprops_wood_stakewall', 0.66, 6),
         locItem('Pickable_DvergrLantern', 0.75, 2),
         locItem('dvergrprops_bed', 0.5, 4),
@@ -1352,10 +1355,10 @@ export const locations: LocationConfig[] = [
           locItem('dvergrprops_crate', 1, 3),
           locItem('dvergrprops_crate', 0.5, 2),
         ], 1, 2),
-        locItem('SpawnerDverger_Arbalest', 1, 3),
-        locItem('SpawnerDverger_Arbalest', 0.5),
-        locItem('SpawnerDverger_Mage', 1, 2),
-        locItem('SpawnerDverger_Mage', 0.5, 2),
+        locItem('Spawner_DvergerArbalest', 1, 3),
+        locItem('Spawner_DvergerArbalest', 0.5),
+        locItem('Spawner_DvergerMage', 1, 2),
+        locItem('Spawner_DvergerMage', 0.5, 2),
         locItem('dvergrprops_wood_stakewall', 0.66, 6),
         locItem('Pickable_DvergrLantern', 0.75, 2),
         locItem('dvergrprops_bed', 0.5, 3),
@@ -1374,10 +1377,10 @@ export const locations: LocationConfig[] = [
           locItem('dvergrprops_crate', 1, 3),
           locItem('dvergrprops_crate', 0.5, 1),
         ], 1, 2),
-        locItem('SpawnerDverger_Arbalest', 1, 3),
-        locItem('SpawnerDverger_Arbalest', 0.5),
-        locItem('SpawnerDverger_Mage', 1, 2),
-        locItem('SpawnerDverger_Mage', 0.5, 2),
+        locItem('Spawner_DvergerArbalest', 1, 3),
+        locItem('Spawner_DvergerArbalest', 0.5),
+        locItem('Spawner_DvergerMage', 1, 2),
+        locItem('Spawner_DvergerMage', 0.5, 2),
         locItem('dvergrprops_wood_stakewall', 0.66, 6),
         locItem('Pickable_DvergrLantern', 0.75, 2),
         locItem('dvergrprops_bed', 0.5, 3),
@@ -1417,9 +1420,9 @@ export const locations: LocationConfig[] = [
           locItem('dvergrprops_stool', 0.75, 2),
           locItem('dvergrprops_chair', 0.75, 1),
         ], 0.75),
-        locItem('SpawnerDverger_Arbalest', 1, 2),
-        locItem('SpawnerDverger_Arbalest', 0.5),
-        locItem('SpawnerDverger_Mage', 1, 3),
+        locItem('Spawner_DvergerArbalest', 1, 2),
+        locItem('Spawner_DvergerArbalest', 0.5),
+        locItem('Spawner_DvergerMage', 1, 3),
         locItem('dvergrprops_bed', 0.5, 3),
         locItem('dvergrprops_guardstone'),
         locItem('dvergrprops_crate_long'),
@@ -1446,9 +1449,9 @@ export const locations: LocationConfig[] = [
         // lanterns
         locItem('Pickable_DvergrLantern', 0.5, 6),
         // ..
-        locItem('SpawnerDverger_Mage', 0.5, 4),
-        locItem('SpawnerDverger_Arbalest', 0.33, 6),
-        locItem('SpawnerDverger_Arbalest', 0.66, 2),
+        locItem('Spawner_DvergerMage', 0.5, 4),
+        locItem('Spawner_DvergerArbalest', 0.33, 6),
+        locItem('Spawner_DvergerArbalest', 0.66, 2),
         locItem('dvergrprops_crate_long'),
       ],
     },
@@ -1468,10 +1471,10 @@ export const locations: LocationConfig[] = [
         // lanterns
         locItem('Pickable_DvergrLantern', 0.5, 6),
         // ..
-        locItem('SpawnerDverger_Mage', 0.5, 4),
-        locItem('SpawnerDverger_Arbalest', 0.5),
-        locItem('SpawnerDverger_Arbalest', 0.33, 5),
-        locItem('SpawnerDverger_Arbalest', 0.66, 2),
+        locItem('Spawner_DvergerMage', 0.5, 4),
+        locItem('Spawner_DvergerArbalest', 0.5),
+        locItem('Spawner_DvergerArbalest', 0.33, 5),
+        locItem('Spawner_DvergerArbalest', 0.66, 2),
         locItem('dvergrprops_crate_long'),
       ],
     },
@@ -1614,6 +1617,7 @@ export const locations: LocationConfig[] = [
     { type: 'dungeon',
       quantity: 5, prioritized, biomeArea: 2, group: 'DvergrBoss', minApart: 2048, slopeRotation, terrainDelta: [0, 40], maxAlt: 20, radius: [32, 32],
       items: [
+        locItem('SeekerQueen'),
         locItem('Spawner_Seeker', 1, 4),
       ],
       needsKey: 'DvergrKey',
@@ -1846,8 +1850,15 @@ for (const obj of objects) {
 }
 
 for (const creature of creatures) {
-  for (const biome of creature.spawners.flatMap(g => g.biomes)) {
-    addToBiome(biome, [], [creature], []);
+  for (const spawner of creature.spawners) {
+    for (const biome of spawner.biomes) {
+      const killed = spawner.killed;
+      const biomeConfig = biomes.find(b => b.id === biome);
+      if (!biomeConfig) continue;
+      if (killed != null && (data[killed]?.tier ?? 0) >= biomeConfig.tier) continue;
+      const items = creature.drop.map(drop => drop.item);
+      addToBiome(biome, items, [creature], []);
+    }
   }
 }
 
@@ -1924,6 +1935,12 @@ function addDistToLocation(loc: LocationConfig, drop: DropDist) {
       case 'creature':
         addToDist(loc.creatures, item, dist);
         break;
+      case 'spawner':
+        const spawner = spawners.find(s => s.id === item);
+        if (spawner != null) {
+          addToDist(loc.creatures, spawner.spawn, dist);
+        }
+        break;
       default:
         addToDist(loc.resources, item, dist);
     }
@@ -1941,8 +1958,11 @@ function addDistToLocation(loc: LocationConfig, drop: DropDist) {
 
 function addToMap(id: GameLocationId, item: EntityId): void {
   const obj = data[item];
-  (objectLocationMap[item] ?? (objectLocationMap[item] = [])).push(id);
   if (obj == null) return;
+  const typeId = locationsIdMap.get(id)?.typeId;
+  if (typeId != null) {
+    (objectLocationMap[item] ?? (objectLocationMap[item] = [])).push(typeId);
+  }
   const loc = locationsIdMap.get(id);
   if (!loc) return;
   for (const biomeId of loc.biomes) {
@@ -1962,6 +1982,10 @@ function addToMap(id: GameLocationId, item: EntityId): void {
         if (item === 'Vegvisir') {
           (loc.tags ?? (loc.tags = [])).push('vegvisir');
         }
+        break;
+      case 'spawner':
+        const creature = data[obj.spawn];
+        addToBiomes(loc.biomes, b => b.creatures, creature);
         break;
       case 'creature':
         addToBiomes(loc.biomes, b => b.creatures, obj);
@@ -1988,12 +2012,12 @@ for (const loc of locations) {
     (musicToLocation[customMusic] ?? (musicToLocation[customMusic] = [])).push(loc.id)
   }
   for (const item of items) {
-    addToMapRec(loc.typeId, item);
+    addToMapRec(loc.id, item);
   }
   if (!dungeon) continue;
   for (const { items } of dungeon.rooms) {
     for (const item of items) {
-      addToMapRec(loc.typeId, item);
+      addToMapRec(loc.id, item);
     }
   }
 }
@@ -2025,6 +2049,7 @@ export function getLocationDetails(typeId: GameLocationId): LocationConfig | und
   const distance: Pair<number> = [10000, 0];
   const altitude: Pair<number> = [1000, -1000];
   const terrainDelta: Pair<number> = [10, 0];
+  let needsKey: EntityId | undefined;
   for (const loc of locs) {
     if (!computedLocations.has(loc.id)) {
       const varDrop = collectItems(loc.items);
@@ -2043,6 +2068,7 @@ export function getLocationDetails(typeId: GameLocationId): LocationConfig | und
     altitude[1] = Math.max(altitude[1], loc.altitude[1]);
     terrainDelta[0] = Math.min(terrainDelta[0], loc.terrainDelta[0]);
     terrainDelta[1] = Math.max(terrainDelta[1], loc.terrainDelta[1]);
+    needsKey = needsKey ?? loc.needsKey;
   }
   const result: LocationConfig = {
     typeId: typeId,
@@ -2070,6 +2096,7 @@ export function getLocationDetails(typeId: GameLocationId): LocationConfig | und
     creatures: {},
     resources: {},
     customMusic: locs.reduce<string | undefined>((a, b) => a ?? b.customMusic, undefined),
+    needsKey,
     items: [],
   };
   addDistToLocation(result, sumDist(total));

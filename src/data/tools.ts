@@ -1,5 +1,6 @@
 import type { Tool } from '../types';
 import { pieces } from './building';
+import { fishes } from './fish';
 import { objects } from './objects';
 
 const plants = objects.filter(o => o.subtype === 'plant' || o.subtype === 'tree');
@@ -55,7 +56,7 @@ export const tools: Tool[] = [
     floating: true,
     maxLvl: 1,
     durability: [Infinity, 0],
-    produces: ['Fish'],
+    produces: fishes.map(f => f.id),
   },
   {
     id: 'Chisel',

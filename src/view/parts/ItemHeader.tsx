@@ -30,6 +30,14 @@ export function ItemHeader({ item, children }: { item: GameObject, children?: Re
       <ItemIcon item={item} />
       {' '}
       {runeTranslate(item)}
+      <span className="entity-type"> &ndash; {
+        translate(item.type === 'object'
+          ? `ui.itemSubtype.${item.subtype}`
+          : item.type === 'armor'
+          ? `ui.armorSlot.${item.slot}`
+          : `ui.itemType.${item.type}`
+        )
+      }</span>
       {children}
     </h1>
     {group ? <div>See also: <List>{

@@ -158,5 +158,5 @@
 }
 
 .FoodOption--odd {
-  background: #ddd;
+  background: var(--color-text-light);
 }

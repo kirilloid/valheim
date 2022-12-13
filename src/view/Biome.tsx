@@ -76,6 +76,7 @@ function Resources({ biome }: { biome: BiomeConfig }) {
       continue;
     }
     if (item.type === 'piece'
+    ||  item.type === 'spawner'
     ||  item.type === 'creature'
     ||  item.type === 'fish'
     ) continue;
@@ -113,7 +114,7 @@ function Resources({ biome }: { biome: BiomeConfig }) {
     <h2>{translate('ui.resources')}</h2>
     <div className="multiList">
       <div>
-        <h3>food</h3>
+        <h3>{translate('ui.itemType.food')}</h3>
         <ResourceList list={resources.food} />
       </div>
       <div>
@@ -125,7 +126,6 @@ function Resources({ biome }: { biome: BiomeConfig }) {
         <ResourceList list={resources.trophies} />
       </div>
     </div>
-    <h2>{translate('ui.mining')}</h2>
     <div className="multiList">
       <div>
         <h3>{translate('ui.mineType.miscs')}</h3>
@@ -201,7 +201,10 @@ export function Biome() {
   return (
     <>
       <SpoilerAlert tier={biome.tier} />
-      <h1>{translate(`ui.biome.${id}`)}</h1>
+      <h1>
+        {translate(`ui.biome.${id}`)}
+        <span className="entity-type"> &ndash; {translate('ui.biome')}</span>
+      </h1>
       <picture>
         <source srcSet={`${imgPath}.webp`} type="image/webp" />
         <img src={`${imgPath}.jpg`} className="BiomePicture" alt="illustration" />

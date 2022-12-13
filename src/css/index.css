@@ -13,6 +13,7 @@
   --color-background: 255, 255, 255;
   --color-text: #000;
   --color-text-light: #555;
+  --color-highlight: #bef4;
 }
 
 body {
@@ -42,14 +43,15 @@ body {
     --color-secondary: #4F545C;
     --color-danger: #ED4245;
     --color-info: #1AAFF4;
-    --color-modded: teal;
+    --color-modded: #0cc;
     --color-background: 54, 57, 63;
     --color-text: #ddd;
     --color-text-light: #999;
+    --color-highlight: #46a4;
   }
 
   :root:not(.theme--light) > body {
-    background-color: #32353B;
+    background-color: rgb(var(--color-background));
     color: var(--color-text);
   }
 }
@@ -64,6 +66,7 @@ body {
   --color-background: 54, 57, 63;
   --color-text: #ddd;
   --color-text-light: #999;
+  --color-highlight: #46a4;
 }
 
 :root.theme--dark > body {
@@ -226,7 +229,7 @@ article h3 {
 
 article *:target,
 article *.active {
-  background: #bde4ff;
+  background: var(--color-highlight);
 }
 
 .Recipe {
@@ -258,13 +261,20 @@ article *.active {
   }
 }
 
-.damage--physical { }
-.damage--fire { color: red; }
-.damage--frost { color: blue; }
-.damage--poison { color: #0c0; }
-.damage--lightning { color: cyan; }
-.damage--spirit { color: lightslategray; }
-
 table .value {
   text-align: right;
 }
+
+/* .damage--physical { } */
+.damage--fire { color: #f00; }
+.damage--frost { color: #00f; }
+.damage--poison { color: #0c0; }
+.damage--lightning { color: #0ff; }
+.damage--spirit { color: #789; }
+
+@media screen and (prefers-color-scheme: dark) {
+  :root:not(.theme--light) .damage--frost { color: #08f; }
+  :root:not(.theme--light) .damage--spirit { color: #ace; }
+}
+:root.theme--dark .damage--frost { color: #08f; }
+:root.theme--dark .damage--spirit { color: #ace; }

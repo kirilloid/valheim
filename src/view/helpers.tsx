@@ -14,6 +14,7 @@ import {
   GameLocationId,
   GameObject,
   ItemSpecial as TItemSpecial,
+  PointLight,
 } from '../types';
 import { applyDamageModifiers, getTotalDamage, playerDamageModifiers } from '../model/combat';
 import { SkillType } from '../model/skills';
@@ -112,17 +113,10 @@ export const averageAttacksDamage = (creature: Creature) => {
 };
 
 export function shortCreatureDamage(damage: DamageProfile) {
-  // physical
-  const physical = (damage.slash ?? 0)
-                 + (damage.pierce ?? 0)
-                 + (damage.blunt ?? 0);
-  // elemental
-  const { fire, frost, poison, lightning, spirit } = damage;
-  const obj = { physical, fire, frost, poison, lightning, spirit };
   return <List separator="+">{
-    Object.entries(obj)
+    Object.entries(damage)
       .filter(kv => kv[1])
-      .map(([type, dmg]) => <span key={type} className={`damage--${type}`}>{dmg}</span>)
+      .map(([type, dmg]) => <span key={type} title={type} className={`damage--${type}`}>{dmg}</span>)
   }</List>
 }
 
@@ -183,7 +177,7 @@ export function ModLinks({ nexus, thunderstore }: { nexus?: number; thunderstore
       href={`https://valheim.thunderstore.io/package/${thunderstore}/`}>
       <img src="/icons/thunderstore.ico" alt="" className="ModLink__icon" />
       {' '}
-      thunderstore
+      <span className="ModLink__text">thunderstore</span>
     </a>);
   }
   if (nexus != null) {
@@ -191,7 +185,7 @@ export function ModLinks({ nexus, thunderstore }: { nexus?: number; thunderstore
       href={`https://www.nexusmods.com/valheim/mods/${nexus}`}>
       <img src="/icons/nexusmods.ico" alt="" className="ModLink__icon" />
       {' '}
-      nexus
+      <span className="ModLink__text">nexus</span>
     </a>);
   }
   return <span className="ModLinks"><List separator=" | ">{parts}</List></span>;
@@ -274,6 +268,15 @@ export function Switch({ children, className }: { children: (JSX.Element | strin
   return <div className={classNames('Switch', className ?? '')}>
     {children.map(c => <span className="Switch__Option">{c}</span>)}
   </div>
+}
+
+export function Light({ color, intensity, range }: PointLight) {
+  return <div className="Light" style={{
+    width: intensity * 8,
+    height: intensity * 8,
+    backgroundColor: color,
+    boxShadow: `0 0 ${range * 8}px ${range * 2}px ${color}`,
+  }} />
 }
 
 export function downloadFile(array: ArrayBufferView, name: string) {

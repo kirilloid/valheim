@@ -20,11 +20,11 @@ function SingleLocation({ loc }: { loc: LocationConfig }) {
         <dd><List>{loc.biomes.map(biome => <Area area={biome} key={biome} />)}</List></dd>
         <dt>{translate('ui.locationType')}</dt>
         <dd>{translate(`ui.locationType.${loc.type}`)}</dd>
-        <dt>{translate('ui.altitude')}</dt>
         {loc.needsKey ? <React.Fragment key="key">
-          <dd>needs key</dd>
-          <dt><InlineObjectWithIcon id={loc.needsKey} /></dt>
+          <dt>needs key</dt>
+          <dd><InlineObjectWithIcon id={loc.needsKey} size={16} /></dd>
         </React.Fragment> : null}
+        <dt>{translate('ui.altitude')}</dt>
         <dd>{rangeBy(loc.altitude, String, '..')}</dd>
         <dt>number in world</dt>
         <dd>{loc.quantity}</dd>
@@ -81,7 +81,8 @@ export function Location() {
     return (
       <>
         <h1>
-          {translate(`ui.location`)}: {translate(`ui.location.${id}`)}
+          {translate(`ui.location.${id}`)}
+          <span className="entity-type"> &ndash; {translate(`ui.location`)}</span>
           <CustomMusic id={summary.customMusic} />
         </h1>
         <SingleLocation loc={summary} />

@@ -5,7 +5,7 @@ import type { Resource } from '../../types';
 import { timeI2S } from '../../model/utils';
 
 import { TranslationContext } from '../../effects';
-import { yesNo } from '../helpers';
+import { Light, rangeBy, ShortWeaponDamage, yesNo } from '../helpers';
 import { Icon } from '../parts/Icon';
 import { Source } from '../parts/Source';
 import { ItemHeader } from '../parts/ItemHeader';
@@ -13,7 +13,7 @@ import { DeadSpeak } from '../parts/DeadSpeak';
 
 export function GenericItem({ item }: { item: Resource }) {
   const translate = useContext(TranslationContext);
-  const { Food, Potion, Deadspeak } = item;
+  const { Food, Potion, Deadspeak, PointLight, Radiation } = item;
   return (<>
     <ItemHeader item={item} />
     {Food != null && <section>
@@ -36,6 +36,13 @@ export function GenericItem({ item }: { item: Resource }) {
         <dt>cooldown</dt><dd>{timeI2S(Potion.cooldown)}</dd>
       </dl>
     </section>}
+    {Radiation != null && <section>
+      <h2>Radiation hazard ☢️</h2>
+      <dl>
+        <dt>rate</dt><dd>one per {rangeBy(Radiation.rate, String)} seconds</dd>
+        <dt>damage</dt><dd><ShortWeaponDamage damage={Radiation.damage} skill={null} /></dd>
+      </dl>
+    </section>}
     <section>
       <h2>{translate('ui.itemType.resource')}</h2>
       <dl>
@@ -48,8 +55,12 @@ export function GenericItem({ item }: { item: Resource }) {
         {item.teleportable === false
           ? <><dt>{translate('ui.nonTeleportable')}</dt><dd><Icon id="noteleport" alt="" size={24} /></dd></>
           : null}
+        {PointLight != null && <React.Fragment key="light">
+          <dt>{translate('ui.tags.light')}</dt>
+          <dd><Light {...PointLight} /></dd>
+        </React.Fragment>}
       </dl>
-      {item.Value != null && item.id !== 'Coins' && <>Has no other use rather than to be sold to trader</>}
+      {item.Value != null && item.id !== 'Coins' && <>Could be sold to trader</>}
     </section>
     {Deadspeak != null && <DeadSpeak {...Deadspeak} />}
     <Source id={item.id} />

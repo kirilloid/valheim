@@ -72,7 +72,7 @@ export const modLinks: Record<string, ModConfig> = {
     version: '0.8.8',
     fullSupport: true,
   },
-  Jewelcrafting: {
+  JewelCrafting: {
     nexus: 387,
     thunderstore: 'Smoothbrain/Jewelcrafting',
     version: '1.2.5',

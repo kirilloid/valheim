@@ -277,7 +277,7 @@ const weapons: Weapon[] = [
 export const data: GameObject[] = [
   ...shields,
   ...weapons,
-].map(item => ({ ...item, mod: 'FantasyArmoury' }) as GameObject)
+].map(item => ({ ...item, mod: 'Fantasy_Armoury' }) as GameObject)
 
 export const recipes: ItemRecipe[] = [
   ...shields.map(({ id }) => forgeRecipe(1, { Bronze: 10, Wood: 2 }, { Bronze: 3, Wood: 3, DeerHide: 3, Iron: 3 }, id)),

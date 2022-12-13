@@ -6,6 +6,7 @@ import type { Armor as TArmor } from '../../types';
 import { durability, ItemSpecial, Resistances, showPair, yesNo } from '../helpers';
 import { Icon } from '../parts/Icon';
 import { ItemHeader } from '../parts/ItemHeader';
+import { Resource } from '../parts/Resource';
 import { RecipeSection } from '../parts/Source';
 
 export function Armor({ item, level }: { item: TArmor, level?: number }) {
@@ -26,13 +27,7 @@ export function Armor({ item, level }: { item: TArmor, level?: number }) {
           <ItemSpecial special={item.special} />
         </dl>
       </section>
-      <section>
-        <h2>{translate('ui.itemType.resource')}</h2>
-        <dl>
-          <dt>{translate('ui.weight')}</dt><dd><Icon id="weight" alt="" size={16} />{' '}{item.weight}</dd>
-          <dt>{translate('ui.floats')}</dt><dd>{yesNo(item.floating)}</dd>
-        </dl>
-      </section>
+      <Resource item={item} />
       <RecipeSection item={item} />
     </>
   );

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import type { Item, Armor } from '../../../types';
+import type { Item } from '../../../types';
 import type { InvItem } from './types';
 
 import { data } from '../../../data/itemDB';

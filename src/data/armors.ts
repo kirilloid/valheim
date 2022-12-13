@@ -398,17 +398,6 @@ export const items: Item[] = [
   },
   // MIST AGE
   {
-    id: 'Demister',
-    tier: 6,
-    type: 'armor', slot: 'util',
-    special: 'light',
-    armor: [0, 0],
-    weight: 0.1,
-    maxLvl: 1,
-    durability: [Infinity, 0],
-    moveSpeed: 0,
-  },
-  {
     id: 'ArmorCarapaceLegs',
     tier: 6,
     type: 'armor', slot: 'legs',
@@ -530,6 +519,7 @@ export const items: Item[] = [
   },
   {
     id: 'Wishbone',
+    PointLight: { color: '#39FF9C', range: 3, intensity: 1 },
     tier: 4,
     type: 'armor', slot: 'util',
     special: 'search',
@@ -540,6 +530,18 @@ export const items: Item[] = [
     durability: [Infinity, 0],
     moveSpeed: 0,
     stack: 1,
+  },
+  {
+    id: 'Demister',
+    PointLight: { color: '#7BCDFF', range: 10, intensity: 1.5 },
+    tier: 6,
+    type: 'armor', slot: 'util',
+    special: 'demister',
+    armor: [0, 0],
+    weight: 0.1,
+    maxLvl: 1,
+    durability: [Infinity, 0],
+    moveSpeed: 0,
   },
   {
     id: 'HelmetOdin',

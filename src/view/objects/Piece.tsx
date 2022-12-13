@@ -8,7 +8,7 @@ import { stationsMap, Produced } from '../../data/resource-usage';
 import { assertNever, days, timeI2S } from '../../model/utils';
 
 import { TranslationContext } from '../../effects';
-import { InlineObjectWithIcon, Resistances, yesNo } from '../helpers';
+import { InlineObjectWithIcon, Light, Resistances, yesNo } from '../helpers';
 import { ItemHeader } from '../parts/ItemHeader';
 import { Recipe } from '../parts/Source';
 
@@ -162,9 +162,10 @@ export function Piece({ item }: { item: TPiece }) {
           <dt>base <Link to="/info/base">ℹ️</Link></dt><dd>{yesNo(item.base)}</dd>
           <dt>{translate('ui.pieceTarget')}</dt><dd>{translate(`ui.pieceTarget.${target}`)}</dd>
           <dt>degrades w/o roof</dt><dd>{yesNo(noRoof)}</dd>
-          {specialReqs?.length ? <><dt>specific</dt><dd>{specialReqs.join(', ')}</dd></> : null}
-          {requiredSpace ? <><dt>required space</dt><dd>{requiredSpace}m</dd></> : null}
-          {size ? <><dt>size</dt><dd>{size.filter(Boolean).join('×')}</dd></> : null}
+          {specialReqs?.length ? <React.Fragment key="specific"><dt>specific</dt><dd>{specialReqs.join(', ')}</dd></React.Fragment> : null}
+          {requiredSpace ? <React.Fragment key="req-space"><dt>required space</dt><dd>{requiredSpace}m</dd></React.Fragment> : null}
+          {size ? <React.Fragment key="size"><dt>size</dt><dd>{size.filter(Boolean).join('×')}</dd></React.Fragment> : null}
+          {item.PointLight ? <React.Fragment key="PointLight"><dt>{translate('ui.tags.light')}</dt><dd><Light {...item.PointLight} /></dd></React.Fragment> : null}
         </dl>
       </section>
       {item.Aoe && <section key="damage">

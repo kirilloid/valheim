@@ -185,6 +185,7 @@ export const damageModifiersValues: Record<DamageModifier, number> = {
 export type Effect = {
   type: 'effect';
   id: EntityId;
+  disabled?: boolean;
   iconId?: string;
   tier: number;
   special?: 'Tailwind' | 'Demister';
@@ -257,6 +258,13 @@ export const TOLERATE = {
   TAR: 8,
 };
 
+export interface Spawner extends GameObjectBase {
+  type: 'spawner';
+  spawn: EntityId;
+  levels: Pair<number>;
+  levelUpChance: number;
+}
+
 export interface SpawnerConfig {
   tier: number;
   biomes: Biome[];
@@ -286,6 +294,7 @@ export interface SpawnerConfig {
 export interface Creature extends GameObjectBase {
   ragdollId: EntityId | null;
   type: 'creature';
+  PointLight?: PointLight;
   components: GameComponent[];
   emoji: string;
   upgradeDistance?: number;
@@ -327,6 +336,8 @@ export interface Fish extends GameObjectBase {
   type: 'fish';
   components: GameComponent[];
   emoji: string;
+  stack: number;
+  weight: Pair<number>;
   spawners: SpawnerConfig[];
   speed: number;
   turnSpeed: number;
@@ -373,6 +384,7 @@ export interface SpawnArea {
 export type PhysicalObject = GameObjectBase & {
   type: 'object';
   subtype: 'tree' | 'plant' | 'rock' | 'ore' | 'indestructible' | 'misc' | 'treasure';
+  PointLight?: PointLight;
   Destructible?: Destructible;
   drop?: GeneralDrop[];
   grow?: ItemGrow[];
@@ -404,6 +416,7 @@ export interface BasePiece extends GameObjectBase {
     notOnWood?: boolean;
     onlyOnFlat?: boolean;
     notOnFloor?: boolean;
+    onlyCeiling?: boolean;
     groundOnly?: boolean;
     repairable?: boolean;
     nonRemovable?: boolean;
@@ -429,8 +442,9 @@ type Wear = {
 export type Piece = BasePiece & {
   type: 'piece';
   base: boolean;
-  demister?: true;
+  demister?: number;
   wear: Wear;
+  PointLight?: PointLight;
   Aoe?: {
     damage: DamageProfile;
     self: number;
@@ -599,7 +613,7 @@ export type ItemRecipe = {
   killed?: EntityId;
 };
 
-interface BaseItem extends GameObjectBase {
+export interface BaseItem extends GameObjectBase {
   stack?: number;
   maxLvl?: number;
   variants?: number;
@@ -607,8 +621,9 @@ interface BaseItem extends GameObjectBase {
   weight: number;
   floating?: true;
   teleportable?: false;
-  demister?: true;
+  demister?: number;
   grow?: ItemGrow[];
+  PointLight?: PointLight;
 }
 
 export enum ItemType {
@@ -641,7 +656,8 @@ export interface Resource extends BaseItem {
   emoji?: string;
   summon?: [EntityId, number];
   power?: EntityId;
-  Deadspeak?: Deadspeak,
+  Deadspeak?: Deadspeak;
+  Radiation?: Radiation;
   Food?: Food;
   EggGrow?: EggGrow;
   Potion?: Potion;
@@ -654,6 +670,22 @@ export interface Deadspeak {
   triggerDistance: number;
   ttl: number;
   texts: string[];
+}
+
+type HexDigit =
+  | '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7'
+  | '8' | '9' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F'
+
+export interface PointLight {
+  range: number;
+  intensity: number;
+  color: string; //`#${HexDigit}${HexDigit}${HexDigit}${HexDigit}${HexDigit}${HexDigit}`;
+}
+
+export interface Radiation {
+  rate: Pair<number>;
+  velocity: number;
+  damage: DamageProfile;
 }
 
 export interface Food {
@@ -765,7 +797,7 @@ export interface Arrow extends BaseItem {
 
 export interface Tool extends BaseItem {
   type: 'tool';
-  special: 'build' | 'garden' | 'ground' | 'fishing' | 'butcher';
+  special: 'build' | 'garden' | 'ground' | 'fishing' | 'butcher' | 'demister';
   maxLvl: number;
   durability: Pair<number>;
   produces: EntityId[];
@@ -776,7 +808,7 @@ export interface Weapon extends BaseItem {
   emoji: string;
   slot: 'primary' | 'both' | 'secondary' | 'bow' | 'either'
     | 'head' | 'shoulders' | 'body' | 'legs'
-    | 'none' | 'util';
+    | 'none';
   special?: 'harpoon';
   maxLvl: number;
   moveSpeed: number;
@@ -817,8 +849,8 @@ export interface Shield extends BaseItem {
 
 export interface Armor extends BaseItem {
   type: 'armor';
-  slot: 'head' | 'shoulders' | 'body' | 'legs' | 'util' | 'none';
-  special?: 'light' | 'strength' | 'search';
+  slot: 'head' | 'shoulders' | 'body' | 'legs'  | 'util' | 'none';
+  special?: 'light' | 'strength' | 'search' | 'demister';
   hideHair?: boolean;
   hideBeard?: boolean;
   maxLvl: number;
@@ -835,4 +867,4 @@ export type Item = Resource | Weapon | Shield | Armor | Arrow | Tool;
 export type ItemSet = { name: string; items: EntityId[]; bonus: (Effect | undefined)[]; };
 export type ItemSpecial = Weapon['special'] | Armor['special'] | Tool['special'];
 
-export type GameObject = Item | Piece | Structure | PhysicalObject | Ship | Cart | Creature | Fish;
+export type GameObject = Item | Piece | Structure | PhysicalObject | Spawner | Ship | Cart | Creature | Fish;

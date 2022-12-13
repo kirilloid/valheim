@@ -66,8 +66,6 @@ function VanillaSkill({ skill, level }: { skill: SkillType, level: number }) {
         <dd>{showPercent(getResourceUsageSkillFactor(level))}</dd>
         <dt>{translate('ui.health')}</dt>
         <dd>{showPercent(getResourceUsageSkillFactor(level))}</dd>
-        <dt>{translate('ui.damage')}</dt>
-        <dd>{rangeBy(getWeaponSkillFactor(level), showPercent)}</dd>
       </>
     case SkillType.WoodCutting:
       return <>

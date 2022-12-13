@@ -368,7 +368,7 @@ const treasures: PhysicalObject[] = [
     type: 'object',
     subtype: 'treasure',
     id: 'Pickable_DolmenTreasure',
-    iconId: 'piece/piece_chest_wood',
+    iconId: 'resource/Coins',
     components: ['PickableItem'],
     tier: 0,
     drop: [{
@@ -840,6 +840,7 @@ export const objects: PhysicalObject[] = [
     tier: p.tier,
     grow: itemGrow(...(p.grow ?? [])),
     drop: [singleDrop(p.item, p.number ?? 1)],
+    PointLight: p.PointLight,
   })),
   ...treasures,
   {
@@ -876,6 +877,16 @@ export const objects: PhysicalObject[] = [
       freeSpaceRadius: 0.5,
       biomes: ['Meadows', 'BlackForest', 'Plains'],
     },
+    grow: itemGrow({
+      num: [0, 0.5],
+      scale: [1, 1.5],
+      randTilt: 0,
+      locations: ['BlackForest'],
+      tilt: [0, 25],
+      abundance: 1,
+      group: [1, 2],
+      groupRadius: 5,
+    }),
     drop: [singleDrop('CarrotSeeds', 3)],
   },
   {
@@ -912,6 +923,16 @@ export const objects: PhysicalObject[] = [
       freeSpaceRadius: 0.5,
       biomes: ['Meadows', 'BlackForest', 'Swamp', 'Plains'],
     },
+    grow: itemGrow({
+      num: [0, 0.5],
+      scale: [1, 1.5],
+      randTilt: 0,
+      locations: ['Swamp'],
+      tilt: [0, 25],
+      abundance: 1,
+      group: [1, 2],
+      groupRadius: 5,
+    }),
     drop: [singleDrop('TurnipSeeds', 3)],
   },
   {
@@ -1003,6 +1024,7 @@ export const objects: PhysicalObject[] = [
       freeSpaceRadius: 0.8,
       biomes: ['Mistlands'],
     },
+    PointLight: { color: '#FFDE52', range: 1.5, intensity: 1.5 },
     drop: [singleDrop('MushroomJotunPuffs', 3)],
   },
   {
@@ -1022,6 +1044,7 @@ export const objects: PhysicalObject[] = [
       freeSpaceRadius: 0.8,
       biomes: ['Mistlands'],
     },
+    PointLight: { color: '#66CDFF', range: 5, intensity: 1.5 },
     drop: [singleDrop('MushroomMagecap', 3)],
   },
   ...rock({
@@ -1666,8 +1689,10 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'misc',
     id: 'Spawner_GreydwarfNest',
+    iconId: 'resource/TrophyGreydwarf',
     tier: 2,
     grow: [],
+    PointLight: { color: '#940071', range: 4, intensity: 3 },
     Destructible: {
       minToolTier: 0,
       hp: 100,
@@ -1924,6 +1949,7 @@ export const objects: PhysicalObject[] = [
     iconId: 'resource/TrophyDraugr',
     tier: 2,
     grow: [],
+    PointLight: { color: '#B5FF62', range: 4, intensity: 1 },
     Destructible: {
       minToolTier: 0,
       hp: 100,
@@ -2020,7 +2046,36 @@ export const objects: PhysicalObject[] = [
       damageModifiers: mods([1, 0, 0, 0, 0, 2, 1, 3, 3, 3]),
       parts: [],
     },
-    drop: [{ ...singleDrop('JuteRed'), chance: 0.2 }],
+    drop: [{
+      chance: 0.2,
+      num: [1, 1],
+      options: [{ item: 'JuteRed', num: [1, 2] }]
+    }],
+  },
+  {
+    type: 'object',
+    id: 'cloth_hanging_door_double',
+    iconId: 'piece/cloth_hanging_door_double',
+    subtype: 'misc',
+    tier: 4,
+    Destructible: {
+      minToolTier: 0,
+      hp: 10,
+      damageModifiers: mods([1, 0, 0, 0, 0, 2, 1, 3, 3, 3]),
+      parts: [],
+    },
+    drop: [{
+      chance: 0.2,
+      num: [1, 2],
+      options: [{ item: 'JuteRed', num: [1, 1] }]
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'indestructible',
+    id: 'RuneStone_CaveMan',
+    tier: 4,
+    grow: [],
   },
   {
     type: 'object',
@@ -2794,6 +2849,7 @@ export const objects: PhysicalObject[] = [
   },
   {
     id: 'dvergrprops_table',
+    iconId: 'piece/piece_table_oak',
     type: 'object',
     subtype: 'misc',
     tier: 6,
@@ -2808,6 +2864,7 @@ export const objects: PhysicalObject[] = [
   },
   {
     id: 'dvergrprops_chair',
+    iconId: 'piece/piece_chair03',
     type: 'object',
     subtype: 'misc',
     tier: 6,
@@ -2822,6 +2879,7 @@ export const objects: PhysicalObject[] = [
   },
   {
     id: 'dvergrprops_stool',
+    iconId: 'piece/piece_chair',
     type: 'object',
     subtype: 'misc',
     tier: 6,
@@ -2851,7 +2909,7 @@ export const objects: PhysicalObject[] = [
   },
   {
     id: 'dvergrprops_wood_beam',
-    iconId: 'wood_beam',
+    iconId: 'piece/wood_beam',
     type: 'object',
     subtype: 'misc',
     tier: 6,
@@ -2894,6 +2952,7 @@ export const objects: PhysicalObject[] = [
   },
   {
     id: 'dvergrprops_wood_pole',
+    iconId: 'piece/wood_pole2',
     type: 'object',
     subtype: 'misc',
     tier: 6,
@@ -3002,6 +3061,20 @@ export const objects: PhysicalObject[] = [
       parts: [],
     },
     drop: [singleDrop('Wood', 1, 2)],
+    tier: 6,
+  },
+  {
+    id: 'SeekerEgg',
+    type: 'object',
+    subtype: 'misc',
+    PointLight: { color: '#FF5C14', range: 3, intensity: 1.5 },
+    Destructible: {
+      hp: 1,
+      minToolTier: 0,
+      damageModifiers: woodResist,
+      parts: [],
+    },
+    drop: [singleDrop('SeekerBrood')],
     tier: 6,
   },
   {

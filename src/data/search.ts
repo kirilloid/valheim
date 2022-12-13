@@ -25,6 +25,7 @@ function addArray<T extends { id: string; tier?: number; tags?: string[] }>(
 ) {
   const visited = new Set<string>();
   for (const obj of data) {
+    if ((obj as any).disabled) continue;
     const id = idReader ? idReader(obj) : obj.id;
     const { tier = 0 } = obj;
     // avoid duplicating locations via different parent biomes
@@ -90,7 +91,7 @@ function addObjects(dict: Record<string, string>) {
     if (entry == null) continue;
     const normalized = entry.toLowerCase();
     fullMatch.set(normalized, key);
-    const words = normalized.split(' ');
+    const words = normalized.split(/[ -]/);
     const item = { type: 'obj', path: '/obj/', id: key, i18nKey: key, tier };
     for (const word of words) {
       addToTree(startTree, word, item);
@@ -109,6 +110,7 @@ function addObjects(dict: Record<string, string>) {
       addTag(`ui.tags.${tag}`);
     }
     addTag(`ui.itemType.${gobj.type}`);
+    if ('PointLight' in gobj) addTag('ui.tags.light');
     switch (gobj.type) {
       case 'weapon':
         if (gobj.slot === 'both') addTag('ui.tags.2hand');

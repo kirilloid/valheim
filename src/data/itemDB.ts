@@ -5,6 +5,7 @@ import { items as armors } from './armors';
 import { arrows } from './arrows';
 import { EntityGroup, GameComponent, GameObject, ItemSet } from '../types';
 import { tools } from './tools';
+import { spawners } from './spawners';
 import { pieces } from './building';
 import { creatures } from './creatures';
 import { fishes } from './fish';
@@ -32,6 +33,7 @@ for (const coll of [
   armors,
   arrows,
   tools,
+  spawners,
   pieces,
   ships,
   carts,

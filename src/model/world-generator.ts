@@ -776,7 +776,7 @@ export class WorldGenerator {
     const num5 = this.addRivers(wx1, wy1, h)
                + perlinNoise(wx * 0.1, wy * 0.1) * 0.03 * baseClamped
                + perlinNoise(wx * 0.4, wy * 0.4) * 0.01 * baseClamped;
-    const a = (1.0 - baseClamped * 1.2) - (1 - lerpStep(0.1, 0.3, baseClamped));
+    // const a = (1.0 - baseClamped * 1.2) - (1 - lerpStep(0.1, 0.3, baseClamped));
     // mask = new Color(0.0, 0.0, 0.0, a);
     return lerp(
       num5 + perlinNoise(wx * 0.4, wy * 0.4) / 500,

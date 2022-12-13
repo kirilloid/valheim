@@ -403,6 +403,13 @@ export const woodfarm: CampConfig = {
   ],
 };
 
+export const woodvillage: CampConfig = {
+  type: 'camp',
+  prefix: `woodvillage_`,
+  perimeter: [],
+  inner: [],
+};
+
 export const forestcrypt: DungeonRoomsConfig = {
   type: 'dungeon',
   prefix: 'forestcrypt_',
@@ -1182,7 +1189,7 @@ export const frostCaves: DungeonRoomsConfig = {
       ],
       items: [
         locItem('MountainKit_brazier', 0.66, 5),
-        locItem('cloth_hanging_door_double 1', 0.66, 2),
+        locItem('cloth_hanging_door_double', 0.66, 2),
         locItem('Spawner_Ulv', 0.5, 4),
       ],
       dist: [0],

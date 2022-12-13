@@ -17,6 +17,7 @@ import { PhysicalObject } from './PhysicalObject';
 import { SpoilerAlert } from '../parts/Spoiler';
 import { Structure } from './Structure';
 import { Fish } from './Fish';
+import { Spawner } from './Spawner';
 
 function parseLevel(level: string | undefined): number | undefined {
   if (level == null) return undefined;
@@ -39,6 +40,8 @@ export function GameObject() {
 
 function Item({ item, level }: { item: T.GameObject, level?: number }) {
   switch (item.type) {
+    case 'spawner':
+      return <Spawner spawner={item} />;
     case 'creature':
       return <Creature creature={item} level={level} />;
     case 'fish':

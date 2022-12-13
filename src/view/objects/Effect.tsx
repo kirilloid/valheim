@@ -19,8 +19,9 @@ export function Effect() {
       Effect "{id}" not found
     </span>
   }
-
-  const imgPath = `/icons/effect/${id}`;
+  
+  const { iconId } = effect;
+  const imgPath = iconId ? `/icons/${iconId}` : `/icons/effect/${id}`;
 
   return (
     <>

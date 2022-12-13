@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import { EntityId, GameObject, Item, Pair } from '../../types';
-import { SkillType } from '../../model/skills';
 import { assertNever, days, timeI2S } from '../../model/utils';
 
 import { data } from '../../data/itemDB';
@@ -245,6 +244,7 @@ export function GrowSection({ item }: { item: GameObject | undefined }) {
   if (!item) return null;
   switch (item.type) {
     case 'creature':
+    case 'spawner':
     case 'fish':
     case 'piece':
     case 'structure':
@@ -274,7 +274,7 @@ export function GrowSection({ item }: { item: GameObject | undefined }) {
       <dd>{g.respawn ? `every ${days(respawn)} game days` : 'never'}</dd>
     </dl>)}</List>
     {grow.length && locations.length ? <hr /> : null}
-    <List>{
+    <List separator="">{
       locations.map(loc => <div key={loc}><Area area={loc} /></div>)
     }</List>
   </>;

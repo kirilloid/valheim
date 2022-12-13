@@ -1,14 +1,15 @@
 import React, { useContext } from 'react';
 
 import type { Effect as TEffect } from '../../types';
+import { SkillType } from '../../model/skills';
 import { assertNever, timeI2S } from '../../model/utils';
 
 import { TranslationContext } from '../../effects';
-import { Resistances } from '../helpers';
+import { Resistances, showNumber } from '../helpers';
 
 function showDiffPercent(value: number): string {
   const plusSign = value < 0 ? '' : '+';
-  return `${plusSign}${value * 100}%`;
+  return `${plusSign}${showNumber(value * 100)}%`;
 }
 
 function Special({ type }: { type: TEffect['special'] }) {
@@ -66,11 +67,11 @@ export function Effect({ effect, level }: { effect: TEffect; level?: number }) {
     </React.Fragment>}
     {damageModifiers && <Resistances key="resistances" mods={damageModifiers} />}
     {attackModifier && <React.Fragment key="attackModifier">
-      <dt>{translate(`ui.skillType.${attackModifier[0]}`)}</dt>
+      <dt>{translate(`ui.skillType.${SkillType[attackModifier[0]]}`)}</dt>
       <dd>{showDiffPercent(attackModifier[1] - 1)}</dd>
     </React.Fragment>}
     {skillModifier != null && <React.Fragment key="skillModifier">
-      <dt>{translate(`ui.skillType.${skillModifier[0]}`)}</dt>
+      <dt>{translate(`ui.skillType.${SkillType[skillModifier[0]]}`)}</dt>
       <dd>+{skillModifier[1]}</dd>
     </React.Fragment>}
     {carryWeight != null && <React.Fragment key="weight">

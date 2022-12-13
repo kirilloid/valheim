@@ -1,4 +1,4 @@
-import { Creature, EntityId, GameComponent, GameObject, Item, ItemRecipe, MaterialType, Piece } from '../types';
+import { Creature, EntityId, Fish, GameComponent, GameObject, Item, ItemRecipe, MaterialType, Piece } from '../types';
 import type { InvItem } from '../view/player/Inventory/types';
 import { genericRecipe, smelterRecipe } from '../model/recipe';
 import { assertNever, groupBy, isNotNull } from '../model/utils';
@@ -104,7 +104,7 @@ function getGems({ crafterName }: { crafterName: string }): Gem[] {
   return parts.flatMap(part => part.split('|').map(gemFromString)).filter(isNotNull);
 }
 
-function itemMatches(item: Item, { slot }: SimpleEffectConfig) {
+function itemMatches(item: Item | Fish, { slot }: SimpleEffectConfig) {
   if (slot === 'all') return true;
   switch (item.type) {
     case 'armor':
@@ -134,6 +134,7 @@ function itemMatches(item: Item, { slot }: SimpleEffectConfig) {
     case 'bolt':
     case 'missile':
     case 'item':
+    case 'fish':
       return false;
     default:
       return assertNever(item);

@@ -1,4 +1,4 @@
-import type { EntityId, ItemGrowConfig } from '../types';
+import type { EntityId, ItemGrowConfig, PointLight } from '../types';
 
 export const pickables: {
   id: string;
@@ -7,6 +7,7 @@ export const pickables: {
   item: EntityId;
   number?: number;
   grow?: ItemGrowConfig[];
+  PointLight?: PointLight;
   subtype: 'misc' | 'plant';
 }[] = [
   {
@@ -62,6 +63,7 @@ export const pickables: {
     iconId: 'resource/Thistle',
     tier: 2,
     item: 'Thistle',
+    PointLight: { color: '#B2FFF9', range: 2, intensity: 1.5 },
     subtype: 'plant',
   },
   {
@@ -97,6 +99,15 @@ export const pickables: {
     iconId: 'resource/MushroomYellow',
     tier: 2,
     item: 'MushroomYellow',
+    PointLight: { color: '#FFDE52', range: 1.5, intensity: 2.5 },
+    subtype: 'plant',
+  },
+  {
+    id: 'Pickable_Mushroom_blue',
+    iconId: 'resource/MushroomBlue',
+    tier: 2,
+    item: 'MushroomBlue',
+    PointLight: { color: '#9FDBFF', range: 1.5, intensity: 1.5 },
     subtype: 'plant',
   },
   {
@@ -136,7 +147,7 @@ export const pickables: {
   },
   {
     id: 'Pickable_Fishingrod',
-    iconId: 'tool/FishingRod',
+    iconId: 'weapon/FishingRod',
     tier: 2,
     item: 'FishingRod',
     subtype: 'misc',

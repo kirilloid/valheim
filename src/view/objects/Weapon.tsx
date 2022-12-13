@@ -12,11 +12,12 @@ import { assertNever } from '../../model/utils';
 import { effects } from '../../data/effects';
 
 import { TranslationContext } from '../../effects';
-import { durability, InlineObjectWithIcon, ItemSpecial, showPair, showPercent, yesNo } from '../helpers';
+import { durability, InlineObjectWithIcon, ItemSpecial, Light, showPair, showPercent, yesNo } from '../helpers';
 import { Icon, SkillIcon } from '../parts/Icon';
 import { RecipeSection } from '../parts/Source';
 import { ItemHeader } from '../parts/ItemHeader';
 import { Effect } from '../parts/Effect';
+import { Resource } from '../parts/Resource';
 
 function skill(skill: SkillType | null) {
   const str = skill && SkillType[skill];
@@ -152,32 +153,18 @@ export function Weapon({ item, level }: { item: TWeapon, level?: number }) {
         <h2>{translate('ui.attack.secondary')}</h2>
         <Attack item={item} attack={secondaryAttack} />
       </section>}
-      <hr />
-      <section>
-        <h2>{translate('ui.itemType.resource')}</h2>
-        <dl>
-          <dt>{translate('ui.weight')}</dt><dd><Icon id="weight" alt="" size={16} />{' '}{item.weight}</dd>
-          <dt>{translate('ui.floats')}</dt><dd>{yesNo(item.floating)}</dd>
-        </dl>
-      </section>
+      <Resource item={item}/>
       <RecipeSection item={item} />
     </>
   );
 }
 
 export function Shield({ item, level }: { item: TShield, level?: number }) {
-  const translate = useContext(TranslationContext);
   return (
     <>
       <ItemHeader item={item} />
       <ShieldStats item={item} level={level} />
-      <section>
-        <h2>{translate('ui.itemType.resource')}</h2>
-        <dl>
-          <dt>{translate('ui.weight')}</dt><dd><Icon id="weight" alt="" size={16} />{' '}{item.weight}</dd>
-          <dt>{translate('ui.floats')}</dt><dd>{yesNo(item.floating)}</dd>
-        </dl>
-      </section>
+      <Resource item={item} />
       <RecipeSection item={item} />
     </>
   );

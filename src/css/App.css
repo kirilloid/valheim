@@ -5,10 +5,6 @@
   flex-direction: column;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
 h1 {
   font-size: 2rem;
   line-height: 3rem;
@@ -104,7 +100,11 @@ ul {
   filter: blur(4px);
 }
 option.spoiler {
-  color: #eee0;
+  color: var(--color-text-light);
+}
+
+.entity-type {
+  color: var(--color-text-light);
 }
 
 .SpoilerAlert {
@@ -180,6 +180,11 @@ option.spoiler {
     flex-direction: row;
     justify-content: flex-end;
   }    
+}
+
+.Dialog .ModLink__text { display: none; }
+@media screen and (min-width: 1024px) { 
+  .Dialog .ModLink__text { display: inline; }
 }
 
 /* TABS */
@@ -348,4 +353,11 @@ option.spoiler {
 .filepaths {
   display: grid;
   grid-template-columns: 120px 1fr;
+}
+
+.Light {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  margin: 4px;
 }

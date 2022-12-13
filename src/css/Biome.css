@@ -1,5 +1,9 @@
 .BiomePicture {
   max-height: 25vh;
+  position: absolute;
+  right: 4%;
+  right: max(4%, calc(50% - 480px));
+  z-index: -1;
 }
 
 .plainList {

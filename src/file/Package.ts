@@ -9,7 +9,7 @@ if (typeof BigInt === 'undefined') {
 const two_32 = 0x100000000;
 
 if (typeof DataView.prototype.getBigInt64 === 'undefined') {
-  /* eslint-ignore no-extend-native */
+  // eslint-disable-next-line no-extend-native
   DataView.prototype.getBigInt64 = function (this: DataView, byteOffset: number, littleEndian?: boolean) {
     return littleEndian
       ? this.getInt32(byteOffset, true) + this.getInt32(byteOffset + 4, true) * two_32
@@ -18,7 +18,7 @@ if (typeof DataView.prototype.getBigInt64 === 'undefined') {
 }
 
 if (typeof DataView.prototype.setBigInt64 === 'undefined') {
-  /* eslint-ignore no-extend-native */
+  // eslint-disable-next-line no-extend-native
   DataView.prototype.setBigInt64 = function(this: DataView, byteOffset: number, value: number, littleEndian?: boolean) {
     if (littleEndian) {
       this.setInt32(byteOffset, Math.ceil(value / two_32), true);

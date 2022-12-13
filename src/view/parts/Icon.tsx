@@ -13,6 +13,7 @@ const iconType = (type: GameObject['type']): IconType => {
     case 'piece':
       return type;
     case 'fish':
+    case 'spawner':
       return 'creature';
     case 'structure':
       return 'piece';
@@ -76,9 +77,9 @@ type ItemIconProps = {
   className?: string;
 }
 
-export function EffectIcon(props: { id: EntityId; size?: number }) {
-  const { id, size = 32 } = props;
-  const path = `/icons/effect/${id}`;
+export function EffectIcon(props: { id: EntityId; iconId?: string; size?: number }) {
+  const { id, iconId, size = 32 } = props;
+  const path = iconId ? `/icons/${iconId}` : `/icons/effect/${id}`;
   return <picture>
     <source srcSet={`${path}.webp`} type="image/webp" />
     <img className="icon" src={`${path}.png`} width={size} height={size} alt="" />
@@ -119,6 +120,7 @@ export function ItemIcon(props: ItemIconProps) {
       title={useAlt ? translate(id) : ''}
       width={size}
       height={size}
+      loading="lazy"
     />
   </picture>;
 }

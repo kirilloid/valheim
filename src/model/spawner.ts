@@ -20,6 +20,7 @@ export function spawner(config: {
   forest?: boolean;
   offset?: number;
   levels?: Pair<number>;
+  levelUpChance?: number;
   minDistance?: number;
 }): SpawnerConfig {
   return {

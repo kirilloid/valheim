@@ -52,7 +52,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'GP_Eikthyr',
-    iconId: 'resource/TrophyEikhtyr',
+    iconId: 'resource/TrophyEikthyr',
     tier: 2,
     time: 300,
     cooldown: 1200,
@@ -84,7 +84,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'GP_Moder',
-    iconId: 'resource/TrophyModer',
+    iconId: 'resource/TrophyDragonQueen',
     tier: 5,
     time: 300,
     cooldown: 1200,
@@ -93,7 +93,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'GP_Yagluth',
-    iconId: 'resource/TrophyYagluth',
+    iconId: 'resource/TrophyGoblinKing',
     tier: 5,
     time: 300,
     cooldown: 1200,
@@ -157,12 +157,14 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'SE_Dvergr_Buff',
+    disabled: true,
     tier: 6,
     attackModifier: [SkillType.All, 1.2],
   },
   {
     type: 'effect',
     id: 'SE_Dvergr_heal',
+    disabled: true,
     tier: 6,
     healthOverTime: [400, 0.5],
   },
@@ -170,6 +172,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'SetEffect_FenringArmor',
+    iconId: 'armor/HelmetFenring',
     tier: 4,
     damageModifiers: { fire: 'resistant' },
     skillModifier: [SkillType.Unarmed, 15],
@@ -178,6 +181,7 @@ export const effects: Effect[] = [
     type: 'effect',
     id: 'SetEffect_MageArmor',
     iconId: 'armor/HelmetMage',
+    disabled: true,
     tier: 6,
     skillModifier: [SkillType.ElementalMagic, 15],
     eitrRegen: 1.5,

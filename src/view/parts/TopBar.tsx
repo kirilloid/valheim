@@ -49,12 +49,12 @@ function Settings() {
               </option>)
             }
           </select></dd>
-          <dt className="Dialog__row"><label htmlFor="theme">theme</label></dt>
+          <dt className="Dialog__row"><label htmlFor="theme">{translate('ui.theme')}</label></dt>
           <dd className="Dialog__row">
             <select id="theme" value={theme} onChange={e => setTheme(e.target.value as any)}>
-              <option value="system">system</option>
-              <option value="light">light</option>
-              <option value="dark">dark</option>
+              <option value="system">{translate('ui.theme.system')}</option>
+              <option value="light">{translate('ui.theme.light')}</option>
+              <option value="dark">{translate('ui.theme.dark')}</option>
             </select>
           </dd>
         </dl>
@@ -72,8 +72,12 @@ function Settings() {
           <dd className="Dialog__row">
             <input id="hidden" type="checkbox" disabled checked />
           </dd>
+          <dt className="Dialog__row"><label htmlFor="mods">mods</label></dt>
+          <dd className="Dialog__row">
+            <input id="mods" type="checkbox" checked disabled />
+          </dd>
         </dl>
-        <h2>Mods</h2>
+        {/* <h2>Mods</h2>
         <dl>
           {Object.entries(modLinks).map(([modId, linkData]) => linkData.fullSupport && <React.Fragment key={modId}>
             <dt className="Dialog__row">
@@ -85,7 +89,7 @@ function Settings() {
               <ModLinks {...linkData} />
             </dd>
           </React.Fragment>)}
-        </dl>
+        </dl> */}
       </div>
       <div className="Dialog__buttons">
         <input type="button" value="Close" className="Dialog__button btn" onClick={() => setIsOpen(false)} />
