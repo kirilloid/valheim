@@ -33,7 +33,7 @@ export function Fish({ fish, level = 1 }: { fish: TFish, level?: number }) {
       : null}
     </ItemHeader>
     <section>
-      <h2>{translate('ui.fish')}</h2>
+      <h2>{translate('ui.itemType.fish')}</h2>
       <dl>
         <dt>areal</dt>
         <dd>

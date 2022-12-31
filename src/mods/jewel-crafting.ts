@@ -375,6 +375,7 @@ const buildings: Piece[] = [
       target: 'primary',
       water: false,
       onlyOnFlat: true,
+      size: [1, 1, 1],
     },
     craft: {},
     wear: {
@@ -407,6 +408,7 @@ const buildings: Piece[] = [
       target: 'primary',
       water: false,
       onlyOnFlat: true,
+      size: [2, 1, 2],
     },
     craft: {},
     wear: {
@@ -434,6 +436,7 @@ const buildings: Piece[] = [
       target: 'primary',
       water: false,
       onlyOnFlat: true,
+      size: [1, 1, 1],
     },
     wear: {
       hp: 1500,
@@ -456,6 +459,7 @@ const buildings: Piece[] = [
       target: 'primary',
       water: false,
       onlyOnFlat: true,
+      size: [2, 2, 2],
     },
     craft: {},
     wear: {

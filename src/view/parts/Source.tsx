@@ -288,7 +288,7 @@ function MiningSection({ id }: { id: EntityId }) {
         <h2>{translate('ui.minedFrom')}</h2>
         <ul>
           {[...new Set(sources)].map(s => <li key={s.id}>
-            <InlineObject id={s.id} />
+            <InlineObjectWithIcon id={s.id} />
           </li>)}
         </ul>
       </section>

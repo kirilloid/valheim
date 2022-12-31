@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 
 import type { Piece } from '../../../types';
 import type { ValueProps } from '../../parts/types';
@@ -15,6 +16,8 @@ import { TranslationContext } from '../../../effects';
 
 const HEALTH_HASH = strHash('health');
 const SUPPORT_HASH = strHash('support');
+
+const BUILDING_SKILL_LEVEL_HASH = strHash('BuildingSkill Level');
 
 function Support({ min, max, current }: { min: number; max: number; current?: number }) {
   const translate = useContext(TranslationContext);
@@ -43,6 +46,8 @@ export function WearNTearComp({ value: zdo, onChange }: ValueProps<ZDO>) {
   const support = material != null ? getStructuralIntegrity(material) : undefined;
   const maxHp = pieceWear?.hp ?? 200;
   const health = floats.get(HEALTH_HASH) ?? maxHp;
+  const buildingSkill = floats.get(BUILDING_SKILL_LEVEL_HASH);
+
   return <React.Fragment key="WearNTear">
     <dt>{translate('ui.durability')}</dt>
     <dd>
@@ -58,5 +63,9 @@ export function WearNTearComp({ value: zdo, onChange }: ValueProps<ZDO>) {
         <span style={{ verticalAlign: 'top' }}>{Math.round(health)}</span>
     </dd>
     {support && <Support min={support.minSupport} max={support.maxSupport} current={floats.get(SUPPORT_HASH)} />}
+    {buildingSkill != null && <>
+      <dt><Link to="/skills/Building">{translate('ui.skillType.Building')}</Link></dt>
+      <dd>{buildingSkill}</dd>
+    </>}
   </React.Fragment>
 }

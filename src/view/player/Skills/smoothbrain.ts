@@ -14,4 +14,9 @@ export const SkillCodeMap = new Map([
   'Mining',
   'Sailing',
   'Farming',
+  'Dual Axes',
+  'Dual Clubs',
+  'Dual Knives',
+  'Dual Swords',
+  'Dual Offhand',
 ].map(name => [stableHashCode(name), name]));

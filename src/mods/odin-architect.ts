@@ -542,10 +542,7 @@ const buildings: Piece[] = [
       batchSize: 10,
     },
     // RawMeat -> CookedMeat
-    piece: {
-      target: 'primary',
-      water: false,
-    },
+    piece: { target: 'primary', water: false, size: [2, 2, 2] },
     wear: {
       hp: 20,
       damageModifiers: cookingResist,

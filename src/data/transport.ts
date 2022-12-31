@@ -201,7 +201,8 @@ export const carts: Cart[] = [
     id: 'Cart',
     components: ['Container', 'Vagon', 'Destructible'],
     tier: 1,
-    emoji: '',
+    emoji: '🛒',
+    // floating: true,
     wear: {
       hp: 500,
       damageModifiers: cartDamageModifiers,

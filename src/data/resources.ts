@@ -1,7 +1,5 @@
 import type { Deadspeak, EntityId, Resource } from '../types';
-import { dmg, itemGrow } from '../model/game';
-
-const HOUR = 3600;
+import { dmg, itemGrow, REAL_HOUR as HOUR } from '../model/game';
 
 // Meadows = 1
 // Swamp = 2
@@ -46,12 +44,11 @@ export const resources: Resource[] = [
   { type: 'item', group: 'seedTree', id: 'BeechSeeds', tier: 1, weight: 0.1, stack: 100 },
   { type: 'item', group: 'berry', id: 'Raspberry', emoji: '🍓', tier: 1, weight: 0.1, stack: 50, tags: ['plant'],
     Food: { health: 7, stamina: 20, duration: 600, regen: 1 },
-    grow: itemGrow({ locations: ['Meadows'], tilt: [0, 45], num: [1, 2], group: [3, 8], inForest: [1, 1.2], respawn: 5 * HOUR }),
   },
   { type: 'item', id: 'Mushroom', emoji: '🍄🔴', tier: 1, weight: 0.1, stack: 50,
     Food: { health: 15, stamina: 15, duration: 900, regen: 1 },
     grow: itemGrow({
-      locations: ['Meadows', 'BlackForest', /* 11, also 'Swamp', but minAlt=1 */],
+      locations: ['Meadows', 'BlackForest', 'Swamp' /* 11, also 'Swamp', but minAlt=1 */],
       altitude: [1, 1000], tilt: [0, 25], num: [1, 2], group: [3, 6], inForest: [0, 1], respawn: 4 * HOUR,
     }),
   },
@@ -128,13 +125,13 @@ export const resources: Resource[] = [
   { type: 'item', group: 'value', id: 'AmberPearl', emoji: '🟡', tier: 2, weight: 0.1, stack: 50, Value: 10 },
   { type: 'item', group: 'value', id: 'SilverNecklace', emoji: '💍', tier: 2, weight: 0.1, stack: 50, Value: 30 },
   { type: 'item', id: 'YmirRemains', tier: 2, weight: 0.3, stack: 50 },
-  { type: 'item', id: 'FishingBait', tier: 2, weight: 0.1, stack: 100 },
+  { type: 'item', id: 'FishingBait', tier: 2, weight: 0.1, stack: 100, floating: true },
   { type: 'item', id: 'Thunderstone', tier: 2, weight: 10, stack: 20,
     PointLight: { color: '#3AC8FF', range: 2, intensity: 1 },
   },
   { type: 'item', group: 'berry', id: 'Blueberries', emoji: '🫐', tier: 2, weight: 0.1, stack: 50, tags: ['plant'],
     Food: { health: 8, stamina: 25, duration: 600, regen: 1 },
-    grow: itemGrow({ locations: ['BlackForest'], num: [1, 1], group: [1, 8], respawn: 5 * HOUR }) },
+  },
   { type: 'item', id: 'QueensJam', emoji: '🧁', tier: 2, weight: 1, stack: 10,
     Food: { health: 14, stamina: 40, duration: 1200, regen: 2 },
   },
@@ -308,7 +305,6 @@ export const resources: Resource[] = [
   { type: 'item', id: 'BarleyFlour', tier: 5, weight: 0.2, stack: 20 },
   { type: 'item', group: 'berry', id: 'Cloudberry', emoji: '🟠', tier: 5, weight: 0.1, stack: 50, tags: ['plant'],
     Food: { health: 13, stamina: 40, duration: 900, regen: 1 },
-    grow: itemGrow({ locations: ['Plains'], altitude: [2, 50], tilt: [0, 30], num: [1, 3], group: [15, 20], respawn: 5 * HOUR }),
   },
   { type: 'item', id: 'LoxMeat', tier: 5, weight: 2, stack: 20 },
   { type: 'item', group: 'hide', id: 'LoxPelt', tier: 5, weight: 1, stack: 50 },
@@ -337,7 +333,7 @@ export const resources: Resource[] = [
   { type: 'item', id: 'BarleyWine', emoji: '\u{1F9EA}', tier: 5, weight: 1, stack: 10,
     Potion: { damageModifiers: { fire: 'resistant' }, cooldown: 600 },
   },
-  { type: 'item', id: 'Tar', emoji: '⚫', tier: 5, weight: 2, stack: 50 }, // Pickable
+  { type: 'item', id: 'Tar', emoji: '⚫', tier: 5, weight: 2, stack: 50, floating: true }, // Pickable
   { type: 'item', id: 'Needle', emoji: '🪡', tier: 5, weight: 0.5, stack: 50 },
   { type: 'item', group: 'ore', id: 'BlackMetalScrap', tier: 5, weight: 10, stack: 30, teleportable: false },
   { type: 'item', group: 'metal', id: 'BlackMetal', tier: 5, weight: 12, stack: 30, teleportable: false, tags: ['metal'] },
@@ -357,7 +353,6 @@ export const resources: Resource[] = [
     PointLight: { color: '#CB00FF', range: 3.76, intensity: 1.5 },
   },
 // MISTLANDS
-  { type: 'item', id: 'FishingBait', tier: 2, weight: 0.1, stack: 100, floating: true },
   { type: 'item', id: 'FishingBaitForest', tier: 2, weight: 0.1, stack: 100, floating: true },
   { type: 'item', id: 'FishingBaitOcean', tier: 2, weight: 0.1, stack: 100, floating: true },
   { type: 'item', id: 'FishingBaitCave', tier: 4, weight: 0.1, stack: 100, floating: true },
@@ -425,7 +420,7 @@ export const resources: Resource[] = [
   { type: 'item', id: 'YggdrasilPorridge', emoji: '🥣', tier: 6, weight: 1, stack: 10,
     Food: { health: 27, stamina: 13, eitr: 80, duration: 1500, regen: 3 } },
   { type: 'item', id: 'DvergrKeyFragment', emoji: '🗝', tier: 6, weight: 0.5, stack: 9 },
-  { type: 'item', id: 'DvergrKey', emoji: '🗝', tier: 6, weight: 0.5 },
+  { type: 'item', id: 'DvergrKey', emoji: '🗝', tier: 6, weight: 0.5, stack: 1 },
   { type: 'item', id: 'GiantBloodSack', emoji: '🩸', tier: 6, weight: 0.5, stack: 50 },
   { type: 'item', id: 'Bilebag', emoji: '👝', tier: 6, weight: 0.5, stack: 50 },
   { type: 'item', id: 'Carapace', emoji: '🐚', tier: 6, weight: 2, stack: 50 },
@@ -439,7 +434,7 @@ export const resources: Resource[] = [
     Radiation: { rate: [5, 20], velocity: 20, damage: dmg({ lightning: 30, poison: 30 }) },
   },
   { type: 'item', id: 'BlackCore', emoji: '🟣', tier: 6, weight: 1, stack: 40 },
-  { type: 'item', id: 'QueenDrop', emoji: '💄', tier: 6, weight: 1, stack: 30,
+  { type: 'item', id: 'QueenDrop', emoji: '💄', tier: 6, weight: 1, stack: 30, floating: true,
     PointLight: { color: '#13BBFF', range: 3.76, intensity: 1.24 },
   },
   { type: 'trophy', id: 'TrophyHare', trophyPos: { x: 2, y: 5 }, tier: 6, weight: 2, stack: 20 },

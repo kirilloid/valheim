@@ -1,3 +1,4 @@
+import { itemGrow, REAL_HOUR as HOUR } from '../model/game';
 import type { EntityId, ItemGrowConfig, PointLight } from '../types';
 
 export const pickables: {
@@ -25,10 +26,17 @@ export const pickables: {
   },
   {
     id: 'RaspberryBush',
-    iconId: 'resource/Raspberry',
     tier: 1,
     item: 'Raspberry',
     subtype: 'plant',
+    grow: itemGrow({
+      locations: ['Meadows'],
+      tilt: [0, 45],
+      num: [1, 2],
+      group: [3, 8],
+      inForest: [1, 1.2],
+      respawn: 5 * HOUR,
+    }),
   },
   {
     id: 'Pickable_Mushroom',
@@ -53,10 +61,15 @@ export const pickables: {
   },
   {
     id: 'BlueberryBush',
-    iconId: 'resource/Blueberries',
     tier: 2,
     item: 'Blueberries',
     subtype: 'plant',
+    grow: itemGrow({
+      locations: ['BlackForest'],
+      num: [1, 1],
+      group: [1, 8],
+      respawn: 5 * HOUR,
+    })
   },
   {
     id: 'Pickable_Thistle',
@@ -161,10 +174,17 @@ export const pickables: {
   },
   {
     id: 'CloudberryBush',
-    iconId: 'resource/Cloudberry',
     tier: 5,
     item: 'Cloudberry',
     subtype: 'plant',
+    grow: itemGrow({
+      locations: ['Plains'],
+      altitude: [2, 50],
+      tilt: [0, 30],
+      num: [1, 3],
+      group: [15, 20],
+      respawn: 5 * HOUR,
+    }),
   },
   {
     id: 'Pickable_BlackCoreStand',

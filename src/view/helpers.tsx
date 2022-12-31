@@ -10,6 +10,7 @@ import {
   DamageModifiers,
   DamageProfile,
   DamageType,
+  Effect,
   EntityId,
   GameLocationId,
   GameObject,
@@ -22,6 +23,7 @@ import { SkillType } from '../model/skills';
 import { locationBiomes } from '../data/location';
 import { data } from '../data/itemDB';
 import { creatures } from '../data/creatures';
+import { effects } from '../data/effects';
 
 import { TranslationContext, Translator, useRuneTranslate } from '../effects';
 import { ItemIcon, SkillIcon } from './parts/Icon';
@@ -53,31 +55,24 @@ export function showPercent(x: number) {
 
 export function ShortWeaponDamage({ damage, skill }: { damage: DamageProfile, skill: SkillType | null }) {
   const result: (JSX.Element | string)[] = [];
-  if (damage.pickaxe) {
+  const { chop, pickaxe, ...restDmg } = damage;
+  if (pickaxe) {
     result.push(
       <SkillIcon key="Pickaxes" skill="Pickaxes" useAlt size={16} />,
-      String(damage.pickaxe),
+      String(pickaxe),
     );
   }
-  if (damage.chop) {
+  if (chop) {
     result.push(
       <SkillIcon key="WoodCutting" skill="WoodCutting" useAlt size={16} />,
-      String(damage.chop),
+      String(chop),
     );
   }
-  // tools
-  // physical
-  const physical = (damage.slash ?? 0)
-                 + (damage.pierce ?? 0)
-                 + (damage.blunt ?? 0);
-  // elemental
-  const { fire, frost, poison, lightning, spirit } = damage;
-  const obj = { physical, fire, frost, poison, lightning, spirit };
   if (skill) result.push(<SkillIcon key={skill} skill={SkillType[skill]} useAlt size={16} />);
   result.push(
-    ...Object.entries(obj)
+    ...Object.entries(restDmg)
       .filter(kv => kv[1])
-      .map(kv => <span key={kv[0]} className={`damage--${kv[0]}`}>{kv[1]}</span>)
+      .map(([type, value]) => <span key={type} className={`damage--${type}`} title={type}>{value}</span>)
       .flatMap((item, i) => i ? ['+', item] : [item])
   );
   return <>{result}</>
@@ -149,9 +144,11 @@ export function List({ children, separator = ', ' }: { children: JSX.Element[], 
   return <>{children.flatMap((item, i) => i ? [separator, item] : [item])}</>;
 }
 
-export function itemClasses(obj: GameObject) {
+export function itemClasses(obj: GameObject | Effect) {
   const classes: string[] = [];
-  const { dlc, season, mod, disabled } = obj;
+  const { disabled } = obj;
+  if (obj.type === 'effect') return classes;
+  const { dlc, season, mod } = obj;
   if (dlc) classes.push('dlc', `dlc--${dlc}`);
   if (season) classes.push('season', `season--${season}`);
   if (mod) classes.push('modded');
@@ -161,7 +158,7 @@ export function itemClasses(obj: GameObject) {
 
 export function InlineObject({ id, className, ...props }: { id: EntityId } & React.AnchorHTMLAttributes<HTMLAnchorElement>) {
   const runeTranslate = useRuneTranslate();
-  const obj = data[id];
+  const obj = data[id] ?? effects.find(e => e.id === id);
   if (!obj) {
     return <span className="error">#{id}</span>
   }

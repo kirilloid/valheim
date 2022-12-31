@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import { TranslationContext } from '../../effects';
 
 import type { Armor as TArmor } from '../../types';
-import { durability, ItemSpecial, Resistances, showPair, yesNo } from '../helpers';
-import { Icon } from '../parts/Icon';
+import { durability, ItemSpecial, Resistances, showPair } from '../helpers';
 import { ItemHeader } from '../parts/ItemHeader';
 import { Resource } from '../parts/Resource';
 import { RecipeSection } from '../parts/Source';

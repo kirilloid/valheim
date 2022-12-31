@@ -8,7 +8,7 @@ import { TranslationContext, useRuneTranslate } from '../../effects';
 import { InlineObjectWithIcon, List, markdown, ModLinks } from '../helpers';
 import { ItemIcon } from './Icon';
 
-export function ItemHeader({ item, children }: { item: GameObject, children?: React.ReactNode }) {
+export function ItemHeader({ item, noIcon = false, children }: { item: GameObject, noIcon?: boolean, children?: React.ReactNode }) {
   const translate = useContext(TranslationContext);
   const runeTranslate = useRuneTranslate();
   const group = item.group && groups[item.group];
@@ -27,14 +27,18 @@ export function ItemHeader({ item, children }: { item: GameObject, children?: Re
       <ModLinks {...(modLinks[item.mod] ?? {})} />
     </div> : null}
     <h1>
-      <ItemIcon item={item} />
-      {' '}
+      {!noIcon && <>
+        <ItemIcon item={item} />
+        {' '}
+      </>}
       {runeTranslate(item)}
       <span className="entity-type"> &ndash; {
         translate(item.type === 'object'
           ? `ui.itemSubtype.${item.subtype}`
           : item.type === 'armor'
           ? `ui.armorSlot.${item.slot}`
+          : 'Food' in item
+          ? `ui.itemType.food`
           : `ui.itemType.${item.type}`
         )
       }</span>

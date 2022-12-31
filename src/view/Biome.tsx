@@ -105,7 +105,13 @@ function Resources({ biome }: { biome: BiomeConfig }) {
         case 'indestructible':
           break;
         default:
-          resources.misc.push(obj);
+          if (obj.drop?.length === 1
+          &&  obj.drop[0]?.options.length === 1
+          &&  biome.resources.has(obj.drop[0]?.options[0]?.item ?? '')) {
+            // this should be pickable
+          } else {
+            resources.misc.push(obj);
+          }
       }
     }
   }

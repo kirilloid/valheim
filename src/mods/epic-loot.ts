@@ -261,6 +261,7 @@ const buildings: Piece[] = [
     piece: {
       target: 'primary',
       water: false,
+      size: [2, 2, 2],
     },
     extends: {
       id: 'forge',
@@ -284,6 +285,7 @@ const buildings: Piece[] = [
     piece: {
       target: 'primary',
       water: false,
+      size: [2, 2, 2],
     },
     extends: {
       id: 'forge',

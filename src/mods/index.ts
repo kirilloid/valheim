@@ -60,7 +60,7 @@ export const recipes = {
   magicOverhaulRecipes,
 };
 
-type ModConfig = ({ nexus: number; } | { thunderstore: string; }) & {
+export type ModConfig = ({ nexus: number; } | { thunderstore: string; }) & {
   version: string;
   fullSupport: boolean;
 };
@@ -72,16 +72,50 @@ export const modLinks: Record<string, ModConfig> = {
     version: '0.8.8',
     fullSupport: true,
   },
-  JewelCrafting: {
-    nexus: 387,
-    thunderstore: 'Smoothbrain/Jewelcrafting',
-    version: '1.2.5',
-    fullSupport: true,
-  },
   MagicOverhaul: {
     thunderstore: 'KGvalheim/MagicOverhaul',
     version: '1.5.594',
     fullSupport: true,
+  },
+  JewelCrafting: { thunderstore: 'Smoothbrain/Jewelcrafting', version: '1.2.5', fullSupport: true },
+  Cooking: { thunderstore: 'Smoothbrain/Cooking', version: '1.1.10', fullSupport: true },
+  Blacksmithing: { thunderstore: 'Smoothbrain/Blacksmithing', version: '1.1.8', fullSupport: true },
+  DualWield: { thunderstore: 'Smoothbrain/DualWield', version: '1.0.5', fullSupport: true },
+  Farming: { thunderstore: 'Smoothbrain/Farming', version: '2.1.3', fullSupport: true },
+  Tenacity: { thunderstore: 'Smoothbrain/Tenacity', version: '1.0.2', fullSupport: true },
+  Evasion: { thunderstore: 'Smoothbrain/Evasion', version: '1.0.2', fullSupport: true },
+  Vitality: { thunderstore: 'Smoothbrain/Vitality', version: '1.0.2', fullSupport: true },
+  PackHorse: { thunderstore: 'Smoothbrain/PackHorse', version: '1.0.2', fullSupport: true },
+  Building: { thunderstore: 'Smoothbrain/Building', version: '1.2.2', fullSupport: true },
+  Lumberjacking: { thunderstore: 'Smoothbrain/Lumberjacking', version: '1.0.3', fullSupport: true },
+  Ranching: { thunderstore: 'Smoothbrain/Ranching', version: '1.1.1', fullSupport: true },
+  Mining: { thunderstore: 'Smoothbrain/Mining', version: '1.1.3', fullSupport: true },
+  Sailing: { thunderstore: 'Smoothbrain/Sailing', version: '1.1.4', fullSupport: true },
+  // CookieMilk
+  BuildPieces: {
+    thunderstore: 'CookieMilk/BuildPieces',
+    version: '1.1.5',
+    fullSupport: false,
+  },
+  SuspiciousPieces: {
+    thunderstore: 'CookieMilk/SuspiciousPieces',
+    version: '1.0.6',
+    fullSupport: false,
+  },
+  ElementalWasps: {
+    thunderstore: 'CookieMilk/ElementalWasps',
+    version: '1.1.5',
+    fullSupport: false,
+  },
+  ElementalOrbs: {
+    thunderstore: 'CookieMilk/ElementalOrbs',
+    version: '1.1.3',
+    fullSupport: false,
+  },
+  CookieGrenades: {
+    thunderstore: 'CookieMilk/CookieGrenades',
+    version: '1.1.7',
+    fullSupport: false,
   },
   // OdinPlus
   OdinArchitect: {
@@ -94,6 +128,11 @@ export const modLinks: Record<string, ModConfig> = {
     thunderstore: 'OdinPlus/PotionsPlus',
     version: '0.0.5',
     fullSupport: false,
+  },
+  CustomDverger: {
+    thunderstore: 'OdinPlus/CustomDverger',
+    version: '0.0.2',
+    fullSupport: true,
   },
   JotunnBackpacks: {
     nexus: 1416,
@@ -112,11 +151,6 @@ export const modLinks: Record<string, ModConfig> = {
     version: '1.3.1',
     fullSupport: false,
   },
-  BagualPack: {
-    thunderstore: 'OdinPlus/BagualPack',
-    version: '???',
-    fullSupport: false,
-  },
   GuildPack: {
     thunderstore: 'OdinPlus/GuildPack',
     version: '0.2.0',
@@ -124,7 +158,7 @@ export const modLinks: Record<string, ModConfig> = {
   },
   OdinBanners: {
     thunderstore: 'OdinPlus/OdinBanners',
-    version: '???',
+    version: '1.0.1',
     fullSupport: false,
   },
   OdinHorse: {
@@ -170,12 +204,13 @@ export const modLinks: Record<string, ModConfig> = {
   },
   Forsaken: {
     nexus: 799,
-    version: '???',
+    version: '0.6.0',
     fullSupport: false,
   },
   EpicValheimsAdditions: {
+    nexus: 1475,
     thunderstore: 'Huntardys/EpicValheimsAdditions',
-    version: '???',
+    version: '1.9.2',
     fullSupport: false,
   },
   Hugos_Armory: {
@@ -194,9 +229,10 @@ export const modLinks: Record<string, ModConfig> = {
     version: '1.7.4',
     fullSupport: false,
   },
-  ChaosWarriorArmor: {
+  ChaosArmor: {
     nexus: 1215,
-    version: '???',
+    thunderstore: 'AeehyehssReeper/ChaosArmor',
+    version: '10.4.1',
     fullSupport: false,
   },
   // skills & others
@@ -215,7 +251,8 @@ export const modLinks: Record<string, ModConfig> = {
   // buildings
   MoreGates: {
     nexus: 1087,
-    version: '1.0.8',
+    thunderstore: 'RagnarokHCRP/MoreGates',
+    version: '1.0.11',
     fullSupport: false,
   },
 };

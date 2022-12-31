@@ -1,14 +1,14 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import { ItemType, MaterialType, Piece as TPiece } from '../../types';
+import { ItemType, MaterialType, Piece as TPiece, SapCollector } from '../../types';
 
 import { getStructuralIntegrity, pieces } from '../../data/building';
 import { stationsMap, Produced } from '../../data/resource-usage';
 import { assertNever, days, timeI2S } from '../../model/utils';
 
 import { TranslationContext } from '../../effects';
-import { InlineObjectWithIcon, Light, Resistances, yesNo } from '../helpers';
+import { InlineObjectWithIcon, Light, List, Resistances, yesNo } from '../helpers';
 import { ItemHeader } from '../parts/ItemHeader';
 import { Recipe } from '../parts/Source';
 
@@ -143,10 +143,20 @@ function ProducedItems({ items }: { items: Map<number, Produced[]> }) {
   </>;
 }
 
+function ResourceExtractor({ from, maxLevel, secPerUnit, item }: SapCollector) {
+  return <dl>
+    <dt>resource</dt><dd><InlineObjectWithIcon id={item} size={24} /></dd>
+    <dt>from</dt><dd><InlineObjectWithIcon id={from} size={24} /></dd>
+    <dt>max capacity</dt><dd>{maxLevel}</dd>
+    <dt>fill rate</dt><dd>{timeI2S(secPerUnit)} per 1 item</dd>
+  </dl>
+}
+
 export function Piece({ item }: { item: TPiece }) {
   const target = item.piece?.target;
   const requiredSpace = item.piece?.requiredSpace;
   const size = item.piece?.size;
+  const blockingPieces = item.blockingPieces;
   const { hp, damageModifiers, noRoof } = item.wear;
   const translate = useContext(TranslationContext);
   const specialReqs = reqList(item.piece);
@@ -163,11 +173,19 @@ export function Piece({ item }: { item: TPiece }) {
           <dt>{translate('ui.pieceTarget')}</dt><dd>{translate(`ui.pieceTarget.${target}`)}</dd>
           <dt>degrades w/o roof</dt><dd>{yesNo(noRoof)}</dd>
           {specialReqs?.length ? <React.Fragment key="specific"><dt>specific</dt><dd>{specialReqs.join(', ')}</dd></React.Fragment> : null}
+          {blockingPieces ? <React.Fragment key="blocking-pieces">
+            <dt>blocked by</dt><dd><List>{blockingPieces.pieces.map(id => <InlineObjectWithIcon id={id} key={id} size={24} />)}</List></dd>
+            <dt>within radius</dt><dd>{blockingPieces.radius}</dd>
+          </React.Fragment> : null}
           {requiredSpace ? <React.Fragment key="req-space"><dt>required space</dt><dd>{requiredSpace}m</dd></React.Fragment> : null}
           {size ? <React.Fragment key="size"><dt>size</dt><dd>{size.filter(Boolean).join('×')}</dd></React.Fragment> : null}
           {item.PointLight ? <React.Fragment key="PointLight"><dt>{translate('ui.tags.light')}</dt><dd><Light {...item.PointLight} /></dd></React.Fragment> : null}
         </dl>
       </section>
+      {item.SapCollector && <section key="SapCollector">
+        <h2>Resource extractor</h2>
+        <ResourceExtractor {...item.SapCollector} />
+      </section>}
       {item.Aoe && <section key="damage">
         <h2>Damage on contact/activation</h2>
         <dl>

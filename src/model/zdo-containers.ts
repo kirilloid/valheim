@@ -15,7 +15,10 @@ export type Item = {
   variant: number;
   readonly crafterID: bigint;
   readonly crafterName: string;
+  readonly customData: ReadonlyMap<string, string>;
 };
+
+const EMPTY_MAP = new Map<string, string>();
 
 function ArmorStand(zdo: ZDO, index: number, onChange: (zdo: ZDO) => void): Item | undefined {
   const id = zdo.strings.get(stableHashCode(index + '_item'));
@@ -24,6 +27,7 @@ function ArmorStand(zdo: ZDO, index: number, onChange: (zdo: ZDO) => void): Item
   const STACK = stableHashCode(index + '_stack');
   const QUALITY = stableHashCode(index + '_quality');
   const VARIANT = stableHashCode(index + '_variant');
+  let customData = EMPTY_MAP;
 
   return {
     get id() {
@@ -63,6 +67,22 @@ function ArmorStand(zdo: ZDO, index: number, onChange: (zdo: ZDO) => void): Item
     get crafterName() {
       return zdo.strings.get(stableHashCode(index + '_crafterName'))!;
     },
+    get customData() {
+      if (customData === EMPTY_MAP) {
+        customData = new Map<string, string>();
+        const size = zdo.ints.get(stableHashCode(index + '_dataCount')) ?? 0;
+        for (let i = 0; i < size; i++) {
+          const key = zdo.strings.get(stableHashCode(`${index}_data_${i}`));
+          const value = zdo.strings.get(stableHashCode(`${index}_data__${i}`));
+          if (key != null && value != null) {
+            customData.set(key, value);
+          } else {
+            console.error(`customData corrupted. Size=${size}, but key[${i}] or value[${i}] is missing`);
+          }
+        }
+      }
+      return customData;
+    }
   };
 };
 
@@ -120,6 +140,9 @@ function Container(zdo: ZDO, index: number, onChange: (zdo: ZDO) => void): Item 
     get crafterName() {
       return item.crafterName;
     },
+    get customData() {
+      return item.customData;
+    },
   };
 }
 
@@ -130,10 +153,12 @@ const QUALITY = stableHashCode('quality');
 const VARIANT = stableHashCode('variant');
 const CRAFTER_ID = stableHashCode('crafterID');
 const CRAFTER_NAME = stableHashCode('crafterName');
+const DATA_COUNT = stableHashCode('dataCount');
 
 function ItemStand(zdo: ZDO, index: number, onChange: (zdo: ZDO) => void): Item | undefined {
   const id = zdo.strings.get(ITEM);
   if (id == null) return undefined;
+  let customData = EMPTY_MAP;
 
   return {
     get id() {
@@ -173,6 +198,17 @@ function ItemStand(zdo: ZDO, index: number, onChange: (zdo: ZDO) => void): Item 
     get crafterName() {
       return zdo.strings.get(CRAFTER_NAME)!;
     },
+    get customData() {
+      if (customData !== EMPTY_MAP) return customData;
+      customData = new Map();
+      const size = zdo.ints.get(DATA_COUNT) ?? 0;
+      for (let i = 0; i < size; i++) {
+        const key = zdo.strings.get(stableHashCode(`data_${i}`))!;
+        const value = zdo.strings.get(stableHashCode(`data__${i}`))!;
+        customData.set(key, value);
+      }
+      return customData;
+    }
   };
 }
 

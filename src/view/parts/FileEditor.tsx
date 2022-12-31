@@ -181,7 +181,7 @@ export function FileEditor<T>(props: Props<T>) {
             <p><input type="file"
               accept={`.${ext},.${ext}.old`}
               onChange={e => processFiles(e.target.files)} /></p>
-          <p>{translate('ui.fileEditor.pathComment')}</p>
+            <p>{translate('ui.fileEditor.pathComment')}</p>
             <Tabs tabs={[
               {
                 title: <><GameStoreIcon type="steam" /> Steam</>,
@@ -196,6 +196,7 @@ export function FileEditor<T>(props: Props<T>) {
                 renderer: () => <LinuxFilePaths subpath={props.subpath} />,
               },
             ]} selected={0} />
+            <p>{translate('ui.fileEditor.localNote')}</p>
           </>
         case 'picking':
           return <>

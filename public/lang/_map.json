@@ -1081,6 +1081,7 @@
     "ui.itemType.weapon": "",
     "ui.knockback": "item_knockback",
     "ui.language": "settings_language",
+    "ui.level": "msg_level",
     "ui.location.AbandonedLogCabin": "",
     "ui.location.Bonemass": "piece_offerbowl_bonemass",
     "ui.location.Crypt": "location_forestcrypt",

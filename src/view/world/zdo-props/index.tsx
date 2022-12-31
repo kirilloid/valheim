@@ -33,6 +33,7 @@ import { PlayersData } from '../../../model/zdo-selectors';
 import { TombComp } from './tomb';
 import { ResourceRootComp } from './resource-root';
 import { PlantComp } from './plant';
+import { BlacksmithingComp } from './blacksmithing';
 
 const readOnly = true;
 
@@ -117,6 +118,7 @@ export const InterfaceFields: Partial<Record<
     idComp('crafterID'),
     stringComp('crafterName'),
     EpicLootComp,
+    BlacksmithingComp,
   ],
   ItemStand: [ItemComp],
   Leviathan: [boolComp('submerged', { hashFn: crc32 })],
@@ -205,6 +207,11 @@ export const InterfaceFields: Partial<Record<
   ],
   TreeBase: [floatComp('health')],
   TreeLog: [floatComp('health')],
+  Turret: [
+    floatComp('lastAttack'),
+    intComp('ammo'),
+    stringComp('ammoType', { readOnly }),
+  ],
   VisEquipment: [
     intComp('ModelIndex', { readOnly }),
     colorComp('SkinColor'),

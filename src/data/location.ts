@@ -166,12 +166,12 @@ const unique = true;
 const iconAlways = true;
 const iconPlaced = true;
 const slopeRotation = true;
-const randomRotation = true;
 
 export const locations: LocationConfig[] = [
+  // locations, sortOrder: 3
   loc(
     1, 'StoneCircle', ['Meadows'],
-    { quantity: 25, minApart: 200, radius: [20, 16], items: [] },
+    { quantity: 25, minApart: 200, maxDistance: 10000, radius: [20, 16], items: [] },
   ),
   // meadows
   loc(
@@ -227,7 +227,7 @@ export const locations: LocationConfig[] = [
   loc(
     2, 'Runestone_Greydwarfs', ['BlackForest'],
     { type: 'runestone',
-      quantity: 50, group: 'Runestones', minApart: 128, maxDistance: 2000, radius: [20, 8],
+      quantity: 25, group: 'Runestones', minApart: 128, maxDistance: 2000, radius: [20, 8],
       customMusic: 'Music_GreydwarfCamp',
       items: [locItem('FirTree_oldLog', 1, 4)] }
   ),
@@ -244,7 +244,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     3, 'SwampRuin1', ['Swamp'],
-    { biomeArea: 6, quantity: 50, minApart: 512, radius: [20, 12], minAlt: 0,
+    { biomeArea: 6, quantity: 30, group: 'SwampRuin', minApart: 256, radius: [20, 12], minAlt: -0.5,
       items: [
         locItem('Vegvisir', 0.3), // Vegvisir_Bonemass
         locItem('TreasureChest_swamp', 0.251),
@@ -258,7 +258,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     3, 'SwampRuin2', ['Swamp'],
-    { biomeArea: 6, quantity: 50, minApart: 512, radius: [20, 10], minAlt: 0,
+    { biomeArea: 6, quantity: 30, minApart: 256, radius: [20, 10], minAlt: -0.5,
       items: [
         locItem('Vegvisir', 0.3), // Vegvisir_Bonemass
         locItem('TreasureChest_swamp', 0.251),
@@ -273,7 +273,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     3, 'FireHole', ['Swamp'],
-    { biomeArea: 6, quantity: 200, minAlt: 0.5, radius: [20, 5],
+    { biomeArea: 2, quantity: 75, minApart: 16, minAlt: -1, radius: [20, 5],
       items: [
         locItem('Surtling', 1, 3), // Spawner_imp_respawn: once in 5 minutes
       ],
@@ -685,7 +685,7 @@ export const locations: LocationConfig[] = [
   ),
   loc( // draugr village
     1, 'WoodVillage1', ['Meadows'],
-    { quantity: 15, group: 'woodvillage', minApart: 256, terrainDelta: [0, 4], minDistance: 2000, radius: [20, 32],
+    { quantity: 15, group: 'woodvillage', minApart: 256, terrainDelta: [0, 4], minDistance: 2000, maxDistance: 10000, radius: [20, 32],
       customMusic: 'Music_MeadowsVillageFarm',
       items: [
         locItem('Spawner_DraugrPile', 0.5, 10),
@@ -697,7 +697,7 @@ export const locations: LocationConfig[] = [
   loc(
     2, 'TrollCave02', ['BlackForest'],
     { type: 'dungeon',
-      biomeArea: 2, quantity: 250, minApart: 256,
+      biomeArea: 2, quantity: 200, minApart: 256,
       randomRotation: false, slopeRotation,
       terrainDelta: [5, 10], minAlt: 3, radius: [24, 12],
       customMusic: 'BlackForestLocationMusic',
@@ -723,7 +723,7 @@ export const locations: LocationConfig[] = [
   loc(
     3, 'SunkenCrypt4', ['Swamp'], // 1,2,3 disabled
     { type: 'dungeon', components: ['DungeonGenerator'],
-      biomeArea: 2, quantity: 400, prioritized, minApart: 64, terrainDelta: [0, 4], minAlt: 0, maxAlt: 2, radius: [14, 12],
+      biomeArea: 2, quantity: 175, prioritized, group: 'SunkenCrypt', minApart: 64, terrainDelta: [0, 4], minAlt: 0, maxAlt: 2, radius: [14, 12],
       // exterior
       items: [
         locItem('Draugr', 0.3, 1),
@@ -738,7 +738,7 @@ export const locations: LocationConfig[] = [
   loc(
     1, 'Dolmen01', ['Meadows', 'BlackForest'],
     // skeleton_no_archer, N, *, once 50%
-    { quantity: 100, terrainDelta: [0, 2], radius: [20, 8],
+    { biomeArea: 3, quantity: 100, terrainDelta: [0, 2], radius: [20, 8],
       customMusic: 'BlackForestLocationMusic',
       items: [
         locItem('BoneFragments', 0.5, 1),
@@ -751,7 +751,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     1, 'Dolmen02', ['Meadows', 'BlackForest'],
-    { quantity: 100, terrainDelta: [0, 2], radius: [20, 8],
+    { biomeArea: 3, quantity: 100, terrainDelta: [0, 2], radius: [20, 8],
       customMusic: 'BlackForestLocationMusic',
       items: [
         locItem('BoneFragments', 0.5, 1),
@@ -764,7 +764,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     1, 'Dolmen03', ['Meadows', 'BlackForest'],
-    { quantity: 50, terrainDelta: [0, 2], radius: [20, 10],
+    { biomeArea: 3, quantity: 50, terrainDelta: [0, 2], radius: [20, 10],
       customMusic: 'BlackForestLocationMusic',
       items: [
         locItem('BoneFragments', 0.5, 1),
@@ -776,15 +776,6 @@ export const locations: LocationConfig[] = [
     },
     'Dolmen',
   ),
-/*  loc(
-    2, 'Crypt2', ['BlackForest'],
-    { type: 'dungeon', components: ['DungeonGenerator'],
-      quantity: 200, minApart: 128, terrainDelta: [0, 2], minAlt: 3, radius: [21, 12],
-      items: [locItem('Skeleton', 1, 3)],
-      dungeon: forestcrypt,
-    },
-    'Crypt',
-  ), */
   loc(
     2, 'Crypt3', ['BlackForest'],
     { type: 'dungeon', components: ['DungeonGenerator'],
@@ -815,7 +806,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     3, 'SwampHut1', ['Swamp'],
-    { quantity: 50, group: 'Swamphut', minApart: 128, minAlt: -2, radius: [20, 8],
+    { biomeArea: 3, quantity: 50, group: 'Swamphut', minApart: 128, minAlt: -2, radius: [20, 8],
       items: [
         locItem([
           locItem('TreasureChest_blackforest'),
@@ -889,7 +880,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     4, 'StoneTowerRuins04', ['Mountain'],
-    { quantity: 50, group: 'Mountainruin', minApart: 128, slopeRotation, terrainDelta: [6, 40], minAlt: 150, radius: [20, 12.28],
+    { biomeArea: 3, quantity: 50, group: 'Mountainruin', minApart: 128, slopeRotation, terrainDelta: [6, 40], minAlt: 150, radius: [20, 12.28],
       customMusic: 'Music_MountainCottage',
       items: [
         locItem([
@@ -903,7 +894,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     4, 'StoneTowerRuins05', ['Mountain'],
-    { quantity: 50, group: 'Mountainruin', minApart: 128, slopeRotation, terrainDelta: [6, 40], minAlt: 150, radius: [20, 22],
+    { biomeArea: 3, quantity: 50, group: 'Mountainruin', minApart: 128, slopeRotation, terrainDelta: [6, 40], minAlt: 150, radius: [20, 22],
       customMusic: 'Music_MountainCottage',
       items: [
         // corner towers
@@ -1036,8 +1027,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     4, 'DrakeNest01', ['Mountain'],
-    { quantity: 200, minApart: 10000, radius: [20, 5],
-      // maxAlt: 2000,
+    { quantity: 200, minApart: 100, minAlt: 100, maxAlt: 2000, radius: [20, 5],
       items: [
         locItem('Hatchling', 0.66, 3),
         locItem('DragonEgg'),
@@ -1048,7 +1038,7 @@ export const locations: LocationConfig[] = [
   // just pile of stones
   loc(
     4, 'Waymarker01', ['Mountain'],
-    { quantity: 50, terrainDelta: [0, 2], minAlt: 100, radius: [3, 20],
+    { quantity: 50, terrainDelta: [0, 2], minAlt: 100, radius: [20, 3],
       items: [locItem('marker')],
     },
     'Waymarker',
@@ -1062,7 +1052,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     4, 'AbandonedLogCabin02', ['Mountain'],
-    { quantity: 33, group: 'Abandonedcabin', minApart: 12800, radius: [20, 10.51],
+    { quantity: 33, group: 'Abandonedcabin', minApart: 128, minAlt: 100, radius: [20, 10.51],
       customMusic: 'Music_MountainCottage',
       items: [
         locItem('StoneGolem', 0.5),
@@ -1077,7 +1067,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     4, 'AbandonedLogCabin03', ['Mountain'],
-    { quantity: 33, group: 'Abandonedcabin', minApart: 12800, radius: [20, 10],
+    { quantity: 33, group: 'Abandonedcabin', minApart: 128, minAlt: 100, radius: [20, 10],
       customMusic: 'Music_MountainCottage',
       items: [
         locItem('TreasureChest_mountains'),
@@ -1091,7 +1081,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     4, 'AbandonedLogCabin04', ['Mountain'],
-    { quantity: 50, group: 'Abandonedcabin', minApart: 12800, radius: [20, 10],
+    { quantity: 50, group: 'Abandonedcabin', minApart: 128, minAlt: 100, radius: [20, 10],
       customMusic: 'Music_MountainCottage',
       items: [
         locItem('TreasureChest_mountains'),
@@ -1205,9 +1195,18 @@ export const locations: LocationConfig[] = [
     { type: 'runestone', quantity: 100, group: 'Runestones', minApart: 128, radius: [20, 8], items: [] }
   ),
   // DevHouse1: disabled
+  // DevSoundTest: disabled
+  // DevHouse2: disabled
+  // DevHouse3: disabled
+  // DevWall1: disabled
+  // DevFloor1: disabled
+  // DevGround1: disabled
+  // DevGround2: disabled
+
+  // locations_cp1, sortOrder: 3
   loc(
     5, 'TarPit1', ['Plains'],
-    { quantity: 100, biomeArea: 2, group: 'Tarpit', minApart: 128, terrainDelta: [0, 1.5], minAlt: 5, maxAlt: 60, radius: [20, 20],
+    { biomeArea: 2, quantity: 100, group: 'tarpit', minApart: 128, terrainDelta: [0, 1.5], minAlt: 5, maxAlt: 60, radius: [20, 20],
       items: [
         locItem('BlobTar', 0.5, 7),
         // locItem('Spawner_BlobTar_respawn_30', 1, 2),
@@ -1219,7 +1218,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     5, 'TarPit2', ['Plains'],
-    { quantity: 100, biomeArea: 2, group: 'Tarpit', minApart: 128, terrainDelta: [0, 1.5], minAlt: 5, maxAlt: 60, radius: [20, 25],
+    { biomeArea: 2, quantity: 100, group: 'tarpit', minApart: 128, terrainDelta: [0, 1.5], minAlt: 5, maxAlt: 60, radius: [20, 25],
       items: [
         locItem('BlobTar', 0.5, 7),
         // locItem('Spawner_BlobTar_respawn_30', 1, 2),
@@ -1231,7 +1230,7 @@ export const locations: LocationConfig[] = [
   ),
   loc(
     5, 'TarPit3', ['Plains'],
-    { quantity: 100, biomeArea: 2, group: 'Tarpit', minApart: 128, terrainDelta: [0, 1.5], minAlt: 5, maxAlt: 60, radius: [20, 14],
+    { biomeArea: 2, quantity: 100, group: 'tarpit', minApart: 128, terrainDelta: [0, 1.5], minAlt: 5, maxAlt: 60, radius: [20, 14],
       items: [
         locItem('BlobTar', 0.5, 7),
         // locItem('Spawner_BlobTar_respawn_30', 1, 2),
@@ -1241,10 +1240,12 @@ export const locations: LocationConfig[] = [
     },
     'TarPit',
   ),
+  // locations_mountaincaves, sortOrder: 3
   loc(
     5, 'MountainCave02', ['Mountain'],
     { type: 'dungeon', components: ['DungeonGenerator'],
-      quantity: 160, biomeArea: 2, group: 'mountaincaves', minApart: 200, terrainDelta: [0, 40], minAlt: 100, radius: [32, 15],
+      biomeArea: 3, quantity: 160, group: 'mountaincaves', minApart: 200,
+      terrainDelta: [0, 40], minAlt: 100, maxAlt: 5000, radius: [32, 15],
       items: [
         locItem('Bat', 0.5, 12),
         locItem('Ulv', 0.3, 8),
@@ -1261,10 +1262,13 @@ export const locations: LocationConfig[] = [
     },
     'MountainCave',
   ),
+  // locations_mistlands, sortOrder: 3
   loc(
     6, 'Mistlands_GuardTower1_new', ['Mistlands'],
     { type: 'misc',
-      quantity: 75, biomeArea: 2, group: 'Dvergr', minApart: 128, slopeRotation, terrainDelta: [0, 10], minAlt: 2, radius: [20, 24],
+      biomeArea: 2, quantity: 75, group: 'Dvergr', minApart: 128,
+      randomRotation: false, slopeRotation,
+      terrainDelta: [0, 10], minAlt: 2, radius: [20, 24],
       customMusic: 'Music_DvergrTower2',
       items: [
         // fort
@@ -1315,7 +1319,9 @@ export const locations: LocationConfig[] = [
   loc(
     6, 'Mistlands_GuardTower1_ruined_new', ['Mistlands'],
     { type: 'misc',
-      quantity: 80, biomeArea: 2, group: 'Dvergr', minApart: 128, slopeRotation, terrainDelta: [0, 10], minAlt: 2, radius: [20, 20],
+      biomeArea: 2, quantity: 80, group: 'Dvergr', minApart: 128,
+      randomRotation: false, slopeRotation,
+      terrainDelta: [0, 10], minAlt: 2, radius: [20, 20],
       customMusic: 'Music_DvergrTower2',
       items: [
         // floor1
@@ -1336,7 +1342,9 @@ export const locations: LocationConfig[] = [
   loc(
     6, 'Mistlands_GuardTower1_ruined_new2', ['Mistlands'],
     { type: 'misc',
-      quantity: 20, biomeArea: 2, group: 'Dvergr', minApart: 128, slopeRotation, terrainDelta: [0, 10], minAlt: 2, radius: [20, 20],
+      biomeArea: 2, quantity: 20, group: 'Dvergr', minApart: 128,
+      randomRotation: false, slopeRotation,
+      terrainDelta: [0, 10], minAlt: 2, radius: [20, 20],
       customMusic: 'Music_DvergrTower2',
       items: [
         locItem('Spawner_Seeker', 0.5, 3),        
@@ -1348,7 +1356,9 @@ export const locations: LocationConfig[] = [
   loc(
     6, 'Mistlands_GuardTower2_new', ['Mistlands'],
     { type: 'misc',
-      quantity: 75, biomeArea: 2, group: 'Dvergr', minApart: 128, slopeRotation, terrainDelta: [0, 10], minAlt: 4, radius: [20, 24],
+      biomeArea: 2, quantity: 75, group: 'Dvergr', minApart: 128,
+      randomRotation: false, slopeRotation,
+      terrainDelta: [0, 10], minAlt: 4, radius: [20, 24],
       customMusic: 'Music_DvergrTower2',
       items: [
         locItem([
@@ -1370,7 +1380,9 @@ export const locations: LocationConfig[] = [
   loc(
     6, 'Mistlands_GuardTower3_new', ['Mistlands'],
     { type: 'misc',
-      quantity: 50, biomeArea: 2, group: 'Dvergr', minApart: 128, slopeRotation, terrainDelta: [0, 10], minAlt: 12, radius: [20, 24],
+      biomeArea: 2, quantity: 50, group: 'Dvergr', minApart: 128,
+      randomRotation: false, slopeRotation,
+      terrainDelta: [0, 10], minAlt: 12, radius: [20, 24],
       customMusic: 'Music_DvergrTower2',
       items: [
         locItem([
@@ -1392,7 +1404,9 @@ export const locations: LocationConfig[] = [
   loc(
     6, 'Mistlands_GuardTower3_ruined_new', ['Mistlands'],
     { type: 'misc',
-      quantity: 50, biomeArea: 2, group: 'Dvergr', minApart: 128, slopeRotation, terrainDelta: [0, 10], minAlt: 11, radius: [20, 20],
+      biomeArea: 2, quantity: 50, group: 'Dvergr', minApart: 128,
+      randomRotation: false, slopeRotation,
+      terrainDelta: [0, 10], minAlt: 11, radius: [20, 20],
       customMusic: 'Music_DvergrTower2',
       items: [
         locItem('YggaShoot_small1', 0.5, 5),
@@ -1404,7 +1418,9 @@ export const locations: LocationConfig[] = [
   loc(
     6, 'Mistlands_Lighthouse1_new', ['Mistlands'],
     { type: 'misc',
-      quantity: 100, biomeArea: 2, group: 'Dvergr', minApart: 128, slopeRotation, terrainDelta: [0, 10], minAlt: 11, radius: [20, 20],
+      biomeArea: 2, quantity: 100, group: 'Dvergr', minApart: 128,
+      randomRotation: false, slopeRotation,
+      terrainDelta: [0, 40], minAlt: 1, maxAlt: 20, radius: [20, 20],
       customMusic: 'Music_DvergrTower2',
       items: [
         locItem([
@@ -1433,7 +1449,9 @@ export const locations: LocationConfig[] = [
   loc(
     6, 'Mistlands_Excavation1', ['Mistlands'],
     { type: 'dungeon',
-      quantity: 40, biomeArea: 2, group: 'Excavation', minApart: 128, slopeRotation, terrainDelta: [0, 4], minAlt: 4, maxAlt: 100, radius: [20, 20],
+      biomeArea: 2, quantity: 40, group: 'Excavation', minApart: 128,
+      randomRotation: false, slopeRotation,
+      terrainDelta: [0, 4], minAlt: 4, maxAlt: 100, radius: [20, 20],
       customMusic: 'Music_DvergrExcavationSite2',
       items: [
         // excavation
@@ -1460,7 +1478,9 @@ export const locations: LocationConfig[] = [
   loc(
     6, 'Mistlands_Excavation2', ['Mistlands'],
     { type: 'dungeon',
-      quantity: 40, biomeArea: 2, group: 'Excavation', minApart: 128, slopeRotation, terrainDelta: [0, 4], minAlt: 4, maxAlt: 100, radius: [20, 20],
+    biomeArea: 2, quantity: 40, group: 'Excavation', minApart: 128,
+    randomRotation: false, slopeRotation,
+    terrainDelta: [0, 4], minAlt: 4, maxAlt: 100, radius: [20, 20],
       customMusic: 'Music_DvergrExcavationSite2',
       items: [
         // excavation
@@ -1483,7 +1503,9 @@ export const locations: LocationConfig[] = [
   loc(
     6, 'Mistlands_Excavation3', ['Mistlands'],
     { type: 'misc',
-      quantity: 40, biomeArea: 2, group: 'Excavation', minApart: 96, slopeRotation, terrainDelta: [0, 5], minAlt: 4, maxAlt: 100, radius: [20, 17],
+      biomeArea: 2, quantity: 40, group: 'Excavation', minApart: 96,
+      randomRotation: false, slopeRotation,
+      terrainDelta: [0, 5], minAlt: 4, maxAlt: 100, radius: [20, 17],
       customMusic: 'Music_DvergrExcavationSite2',
       items: [
         // fort/excavation
@@ -1499,7 +1521,9 @@ export const locations: LocationConfig[] = [
   loc(
     6, 'Mistlands_Harbour1', ['Mistlands'],
     { type: 'misc',
-      quantity: 100, biomeArea: 1, group: 'Harbour', minApart: 64, slopeRotation, terrainDelta: [2, 20], minAlt: -1, maxAlt: -0.25, radius: [20, 20],
+    biomeArea: 1, quantity: 100, group: 'Harbour', minApart: 64,
+    randomRotation: false, slopeRotation, // snapToWater,
+    terrainDelta: [2, 20], minAlt: -1, maxAlt: -0.25, radius: [20, 20],
       items: [
         // pier/crates(3)/
         locItem('dvergrprops_crate', 0.5, 3),
@@ -1534,7 +1558,9 @@ export const locations: LocationConfig[] = [
   loc(
     6, 'Mistlands_Viaduct1', ['Mistlands'],
     { type: 'misc',
-      quantity: 100, biomeArea: 2, group: 'Harbour', minApart: 128, slopeRotation, terrainDelta: [2, 40], minAlt: -1, maxAlt: 15, radius: [20, 24],
+      biomeArea: 2, quantity: 100, group: 'Harbour', minApart: 128,
+      randomRotation: false, slopeRotation,
+      terrainDelta: [2, 40], minAlt: -1, maxAlt: 15, radius: [20, 24],
       items: [
         // MIST AREA R=30 chance=0.25
       ],
@@ -1544,7 +1570,8 @@ export const locations: LocationConfig[] = [
   loc(
     6, 'Mistlands_Viaduct2', ['Mistlands'],
     { type: 'misc',
-      quantity: 150, biomeArea: 2, group: 'Harbour', minApart: 64, terrainDelta: [4, 40], minAlt: -1, maxAlt: 25, radius: [20, 8],
+      biomeArea: 2, quantity: 150, group: 'Harbour', minApart: 64,
+      terrainDelta: [4, 40], minAlt: -1, maxAlt: 25, radius: [20, 8],
       items: [
         // MIST AREA R=20 chance=0.25
       ],
@@ -1554,7 +1581,8 @@ export const locations: LocationConfig[] = [
   loc(
     6, 'Mistlands_RockSpire1', ['Mistlands'],
     { type: 'misc',
-      quantity: 200, biomeArea: 2, minApart: 60, terrainDelta: [2, 99], minAlt: -10, radius: [20, 4],
+      biomeArea: 2, quantity: 200, minApart: 60,
+      terrainDelta: [2, 99], minAlt: -10, radius: [20, 4],
       items: [
         locItem('cliff_mistlands2', 1, 9),
       ],
@@ -1564,7 +1592,8 @@ export const locations: LocationConfig[] = [
   loc(
     6, 'Mistlands_Giant1', ['Mistlands'],
     { type: 'misc',
-      quantity: 350, prioritized, biomeArea: 2, group: 'Giant', minApart: 256, terrainDelta: [0, 3], minAlt: -1, radius: [20, 10],
+      biomeArea: 2, quantity: 350, prioritized, group: 'Giant', minApart: 256,
+      terrainDelta: [0, 3], minAlt: -1, radius: [20, 10],
       items: [
         locItem('giant_sword1', 0.25),
         locItem('giant_ribs'),
@@ -1579,7 +1608,8 @@ export const locations: LocationConfig[] = [
   loc(
     6, 'Mistlands_Giant2', ['Mistlands'],
     { type: 'misc',
-      quantity: 100, prioritized, biomeArea: 2, group: 'Giant', minApart: 256, terrainDelta: [0, 4], minAlt: -1, radius: [20, 10],
+      biomeArea: 2, quantity: 100, prioritized, group: 'Giant', minApart: 256,
+      terrainDelta: [0, 4], minAlt: -1, radius: [20, 10],
       items: [
         locItem('giant_ribs'),
         // MIST AREA R=30
@@ -1590,7 +1620,9 @@ export const locations: LocationConfig[] = [
   loc(
     6, 'Mistlands_DvergrTownEntrance1', ['Mistlands'],
     { type: 'dungeon', components: ['DungeonGenerator'],
-      quantity: 120, prioritized, biomeArea: 2, group: 'DvergrDungeon', minApart: 256, slopeRotation, terrainDelta: [5, 40], minAlt: 12, radius: [32, 20],
+      biomeArea: 2, quantity: 120, prioritized, group: 'DvergrDungeon', minApart: 256,
+      randomRotation: false, slopeRotation,
+      terrainDelta: [5, 40], minAlt: 12, radius: [32, 20],
       items: [
         locItem('Spawner_Seeker', 1, 5),
       ],
@@ -1600,7 +1632,9 @@ export const locations: LocationConfig[] = [
   loc(
     6, 'Mistlands_DvergrTownEntrance2', ['Mistlands'],
     { type: 'dungeon', components: ['DungeonGenerator'],
-      quantity: 120, prioritized, biomeArea: 2, group: 'DvergrDungeon', minApart: 256, terrainDelta: [0, 40], maxAlt: 20, radius: [32, 32],
+      biomeArea: 2, quantity: 120, prioritized, group: 'DvergrDungeon', minApart: 256,
+      randomRotation: false, slopeRotation,
+      terrainDelta: [0, 40], maxAlt: 20, radius: [32, 32],
       items: [
         locItem('cliff_mistlands2', 1, 5),
         // randomcliff
@@ -1615,7 +1649,9 @@ export const locations: LocationConfig[] = [
   loc(
     6, 'Mistlands_DvergrBossEntrance1', ['Mistlands'],
     { type: 'dungeon',
-      quantity: 5, prioritized, biomeArea: 2, group: 'DvergrBoss', minApart: 2048, slopeRotation, terrainDelta: [0, 40], maxAlt: 20, radius: [32, 32],
+      biomeArea: 2, quantity: 5, prioritized, group: 'DvergrBoss', minApart: 2048,
+      randomRotation: false, slopeRotation,
+      terrainDelta: [0, 40], maxAlt: 20, radius: [32, 32],
       items: [
         locItem('SeekerQueen'),
         locItem('Spawner_Seeker', 1, 4),
@@ -1627,7 +1663,8 @@ export const locations: LocationConfig[] = [
   loc(
     6, 'Mistlands_RoadPost1', ['Mistlands'],
     { type: 'misc',
-      quantity: 500, biomeArea: 3, minApart: 2048, terrainDelta: [0, 10], radius: [20, 16],
+      biomeArea: 3, quantity: 500,
+      terrainDelta: [0, 10], radius: [20, 16],
       items: [
         locItem('Spawner_DvergerMage', 0.5),
         locItem('Spawner_DvergerArbalest', 0.5),
@@ -1638,7 +1675,9 @@ export const locations: LocationConfig[] = [
   loc(
     6, 'Mistlands_StatueGroup1', ['Mistlands'],
     { type: 'misc',
-      quantity: 200, biomeArea: 3, minApart: 32, slopeRotation, terrainDelta: [0, 10], minAlt: 2, radius: [20, 16],
+      biomeArea: 3, quantity: 200, minApart: 32,
+      randomRotation: false, slopeRotation,
+      terrainDelta: [0, 10], minAlt: 2, radius: [20, 16],
       items: [
         locItem('blackmarble_column_3', 1, 5),
       ],
@@ -1648,7 +1687,9 @@ export const locations: LocationConfig[] = [
   loc(
     6, 'Mistlands_Statue1', ['Mistlands'],
     { type: 'misc',
-      quantity: 200, biomeArea: 3, minApart: 0, slopeRotation, terrainDelta: [0, 10], minAlt: 2, radius: [20, 6],
+      biomeArea: 3, quantity: 200,
+      randomRotation: false, slopeRotation,
+      terrainDelta: [0, 10], minAlt: 2, radius: [20, 6],
       items: [
         locItem('blackmarble_head_big01'),
       ],
@@ -1658,7 +1699,9 @@ export const locations: LocationConfig[] = [
   loc(
     6, 'Mistlands_Statue2', ['Mistlands'],
     { type: 'misc',
-      quantity: 200, biomeArea: 3, minApart: 0, slopeRotation, terrainDelta: [0, 10], minAlt: 2, radius: [20, 6],
+      biomeArea: 3, quantity: 200,
+      randomRotation: false, slopeRotation,
+      terrainDelta: [0, 10], minAlt: 2, radius: [20, 6],
       items: [
         locItem('blackmarble_head_big02'),
       ],
@@ -1668,7 +1711,8 @@ export const locations: LocationConfig[] = [
   loc(
     6, 'Mistlands_Swords1', ['Mistlands'],
     { type: 'misc',
-      quantity: 33, biomeArea: 3, group: 'GiantArmor', minApart: 256, randomRotation, terrainDelta: [0, 10], minAlt: -1, radius: [20, 12],
+      biomeArea: 2, quantity: 33, group: 'GiantArmor', minApart: 256,
+      terrainDelta: [0, 10], minAlt: -1, radius: [20, 12],
       items: [
         // MIST AREA R=20 chance=0.5
         locItem('giant_sword1', 0.66),
@@ -1686,7 +1730,8 @@ export const locations: LocationConfig[] = [
   loc(
     6, 'Mistlands_Swords2', ['Mistlands'],
     { type: 'misc',
-      quantity: 33, biomeArea: 3, group: 'GiantArmor', minApart: 256, randomRotation, terrainDelta: [0, 10], minAlt: -1, radius: [20, 12],
+      biomeArea: 2, quantity: 33, group: 'GiantArmor', minApart: 256,
+      terrainDelta: [0, 10], minAlt: -1, radius: [20, 12],
       items: [
         // MIST AREA R=20 chance=0.5
         // laying sword
@@ -1702,7 +1747,8 @@ export const locations: LocationConfig[] = [
   loc(
     6, 'Mistlands_Swords3', ['Mistlands'],
     { type: 'misc',
-      quantity: 33, biomeArea: 3, group: 'GiantArmor', minApart: 256, randomRotation, terrainDelta: [0, 10], minAlt: -1, radius: [20, 8],
+      biomeArea: 2, quantity: 33, group: 'GiantArmor', minApart: 256,
+      terrainDelta: [0, 10], minAlt: -1, radius: [20, 8],
       items: [
         // MIST AREA R=20 chance=0.5
         locItem('cliff_mistlands2'),
@@ -1722,7 +1768,9 @@ export const locations: LocationConfig[] = [
   loc(
     6, 'Runestone_Mistlands', ['Mistlands'],
     { type: 'runestone',
-      quantity: 50, biomeArea: 3, group: 'Runestones', minApart: 128, randomRotation, slopeRotation, terrainDelta: [0, 10], minAlt: -1, radius: [20, 12],
+      biomeArea: 3, quantity: 50, group: 'Runestones', minApart: 128,
+      slopeRotation,
+      terrainDelta: [0, 10], minAlt: -1, radius: [20, 12],
       items: [],
     },
     'Runestone_Mistlands',

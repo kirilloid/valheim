@@ -1,20 +1,32 @@
 import React, { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 
-import type { LocationConfig } from '../types';
+import type { GameLocationId, LocationConfig } from '../types';
 
 import { isEmpty } from '../model/utils';
 import { getLocationDetails, locations, musicToLocation } from '../data/location';
 
 import { TranslationContext } from '../effects';
-import { Area, InlineObjectWithIcon, List, rangeBy } from './helpers';
+import { Area, InlineObjectWithIcon, List, rangeBy, showNumber } from './helpers';
 import { DropStats } from './parts/DropTable';
 import { Tabs } from './parts/Tabs';
 
+function LocationHeader({ id, customMusic }: { id: GameLocationId; customMusic?: string }) {
+  const translate = useContext(TranslationContext);
+  return <h1>
+    {translate(`ui.location.${id}`)}
+    <span className="entity-type"> &ndash; {translate(`ui.location`)}</span>
+    <CustomMusic id={customMusic} />
+  </h1>
+}
+
 function SingleLocation({ loc }: { loc: LocationConfig }) {
   const translate = useContext(TranslationContext);
+  const vegvisirChance = 1 - (loc.destructibles.Vevgvisir?.[0] ?? 1);
   return (
-    <section>
+    <section style={{ position: 'relative' }}>
+      {loc.id !== loc.typeId &&
+      <img src={`/icons/location/${loc.id}.png`} className="LocationIllustration" />}
       <dl>
         <dt>{translate('ui.biome')}</dt>
         <dd><List>{loc.biomes.map(biome => <Area area={biome} key={biome} />)}</List></dd>
@@ -28,10 +40,10 @@ function SingleLocation({ loc }: { loc: LocationConfig }) {
         <dd>{rangeBy(loc.altitude, String, '..')}</dd>
         <dt>number in world</dt>
         <dd>{loc.quantity}</dd>
-        {/*vegvisir ? <>
+        {vegvisirChance ? <React.Fragment key="vegvisir">
           <dt>{translate('vegvisir')}</dt>
-          <dd><InlineObjectWithIcon id={vegvisir.boss} />, {vegvisir.chance * 100}% chance</dd>
-        </> : null*/}
+          <dd><InlineObjectWithIcon id="Vegvisir" />, {showNumber(vegvisirChance * 100)}% chance</dd>
+        </React.Fragment> : null}
       </dl>
       {!isEmpty(loc.creatures) && <>
         <h2>{translate('ui.creatures')}</h2>
@@ -51,7 +63,7 @@ function SingleLocation({ loc }: { loc: LocationConfig }) {
 
 function CustomMusic({ id }: { id?: string }) {
   if (id == null) return null;
-  const isUnique = (musicToLocation[id]?.length ?? 0) > 1;
+  const isUnique = (musicToLocation[id]?.length ?? 0) <= 1;
   return isUnique
     ? <span
         style={{ float: 'right' }}
@@ -67,7 +79,6 @@ function CustomMusic({ id }: { id?: string }) {
 
 export function Location() {
   const { id } = useParams<{ id: string }>();
-  const translate = useContext(TranslationContext);
 
   const summary = getLocationDetails(id);
   if (summary == null) {
@@ -80,11 +91,7 @@ export function Location() {
   if (locs.length === 1) {
     return (
       <>
-        <h1>
-          {translate(`ui.location.${id}`)}
-          <span className="entity-type"> &ndash; {translate(`ui.location`)}</span>
-          <CustomMusic id={summary.customMusic} />
-        </h1>
+        <LocationHeader id={id} customMusic={summary.customMusic} />
         <SingleLocation loc={summary} />
       </>
     );  
@@ -100,10 +107,7 @@ export function Location() {
 
   return (
     <>
-      <h1>
-        {translate(`ui.location`)}: {translate(`ui.location.${id}`)}
-        <CustomMusic id={summary.customMusic} />
-      </h1>
+      <LocationHeader id={id} customMusic={summary.customMusic} />
       <Tabs tabs={tabs} selected={0} key={id} />
     </>
   );

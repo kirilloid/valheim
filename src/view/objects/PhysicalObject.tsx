@@ -7,9 +7,11 @@ import { fullDestructible } from '../../data/objects';
 import { TranslationContext } from '../../effects';
 import { Area, List, rangeBy } from '../helpers';
 import { ItemHeader } from '../parts/ItemHeader';
+import { ItemIcon } from '../parts/Icon';
 import { DropTable } from '../parts/DropTable';
 import { GrowSection } from '../parts/Source';
 import { Destructible } from '../parts/Destructible';
+import { ResourceRoot } from '../parts/ResourceRoot';
 
 function Grow({ item }: { item: T.PhysicalObject }) {
   return <section>
@@ -45,9 +47,11 @@ export function PhysicalObject({ item }: { item: T.PhysicalObject }) {
 
   return (
     <>
-      <ItemHeader item={item} />
+      <ItemHeader item={item} noIcon />
+      <ItemIcon item={item} size={128} />
       <Grow item={item} />
       {item.Plant && <Plant plant={item.Plant} />}
+      {item.ResourceRoot && <ResourceRoot params={item.ResourceRoot} />}
       {full?.Destructible && <Destructible item={full.Destructible} />}
       {item.drop && <Drop drop={item.drop} />}
     </>

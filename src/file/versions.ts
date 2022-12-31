@@ -11,7 +11,7 @@ export const TERRAIN_COMP = 1; // TerrainComp.terrainCompVersion
 
 export function checkVersion(file: number, maxSupported: number) {
   if (file <= 0) {
-    throw new Error(`Wrong file version. Most probably a file is corrupted.`);
+    throw new Error(`Wrong file version. Most probably the file is corrupted.`);
   }
   if (file > maxSupported) {
     throw new Error(`Incompatible version.\nProvided: ${file}\nMax supported: ${maxSupported}`);

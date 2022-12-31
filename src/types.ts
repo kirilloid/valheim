@@ -20,7 +20,7 @@ export type GameComponent =
 | 'Pickable' | 'PickableItem' | 'Piece' | 'Plant' | 'Player' | 'PrivateArea' | 'Procreation'
 | 'Ragdoll' | 'RandomAnimation' | 'RandomFlyingBird' | 'ResourceRoot' | 'Runestone' /* boss stones */
 | 'Saddle' | 'SapCollector' | 'SEMan' | 'Ship' | 'ShipConstructor' | 'Sign' | 'Smelter'
-| 'Tameable' | 'TeleportWorld' | 'TerrainComp' | 'TombStone' | 'TreeBase' | 'TreeLog'
+| 'Tameable' | 'TeleportWorld' | 'TerrainComp' | 'TombStone' | 'TreeBase' | 'TreeLog' | 'Turret'
 | 'Vagon' | 'Vegvisir' | 'VisEquipment'
 | 'WearNTear' | 'Windmill' | 'WispSpawner'
 | 'ZNetView' | 'ZSyncTransform'
@@ -136,6 +136,7 @@ export type LocationConfig = {
   inForest: Pair<number> | null;
   distance: Pair<number>;
   altitude: Pair<number>;
+  // interior / exterior
   radius: Pair<number>;
 
   destructibles: DropDist;
@@ -364,6 +365,13 @@ export interface Destructible {
   }[],
 }
 
+export interface ResourceRoot {
+  maxLevel: number;
+  highThreshold: number;
+  emptyTreshold: number;
+  regenPerSec: number;
+}
+
 export interface Plantable {
   subtype: 'tree' | 'vegetable' | 'crop' | 'shroom',
   plantedWith: EntityId;
@@ -386,6 +394,7 @@ export type PhysicalObject = GameObjectBase & {
   subtype: 'tree' | 'plant' | 'rock' | 'ore' | 'indestructible' | 'misc' | 'treasure';
   PointLight?: PointLight;
   Destructible?: Destructible;
+  ResourceRoot?: ResourceRoot;
   drop?: GeneralDrop[];
   grow?: ItemGrow[];
   Plant?: Plantable;
@@ -402,7 +411,7 @@ export enum MaterialType {
   Marble,
 };
 
-export type ComfortGroup = 'fire' | 'bed' | 'banner' | 'chair' | 'table';
+export type ComfortGroup = 'fire' | 'bed' | 'banner' | 'chair' | 'table' | 'carpet';
 
 export interface BasePiece extends GameObjectBase {
   wear: {
@@ -412,7 +421,7 @@ export interface BasePiece extends GameObjectBase {
   piece?: {
     target: 'primary' | 'random' | 'none';
     water: boolean | undefined;
-    size?: [width: number, depth: number, height: number];
+    size: [width: number, height: number, depth: number];
     notOnWood?: boolean;
     onlyOnFlat?: boolean;
     notOnFloor?: boolean;
@@ -444,12 +453,15 @@ export type Piece = BasePiece & {
   base: boolean;
   demister?: number;
   wear: Wear;
+  blockingPieces?: { pieces: EntityId[]; radius: number };
+  SapCollector?: SapCollector;
   PointLight?: PointLight;
   Aoe?: {
     damage: DamageProfile;
     self: number;
     backstabBonus?: number;
   };
+  Turret?: Turret;
 } & ({
   subtype: 'fireplace';
   fireplace: {
@@ -672,6 +684,13 @@ export interface Deadspeak {
   texts: string[];
 }
 
+export interface SapCollector {
+  from: EntityId;
+  secPerUnit: number;
+  maxLevel: number;
+  item: EntityId;
+}
+
 type HexDigit =
   | '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7'
   | '8' | '9' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F'
@@ -680,6 +699,11 @@ export interface PointLight {
   range: number;
   intensity: number;
   color: string; //`#${HexDigit}${HexDigit}${HexDigit}${HexDigit}${HexDigit}${HexDigit}`;
+}
+
+export interface Turret {
+  attackCooldown: number;
+  allowedAmmo: EntityId[];
 }
 
 export interface Radiation {
@@ -771,6 +795,7 @@ interface AreaAttack extends BaseAttack {
 interface BowAttack extends BaseAttack {
   projVel: Pair<number>;
   projAcc: Pair<number>;
+  raiseSkillAmount?: number;
 }
 
 interface SummonAttack extends BaseAttack {

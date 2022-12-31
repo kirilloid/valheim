@@ -1,11 +1,5 @@
 import { useEffect, useState } from 'react';
-
-type GlobalKeys =
-  | 'aggregate' // to sum total resources for item levels or not
-  | 'spoiler' // spoiler levels
-  | 'language' // currently selected & loaded language
-  | 'theme' // theme
-;
+import { mapValues } from '../model/utils';
 
 export function read<T>(name: string, defaultValue: T): T {
   try {
@@ -24,18 +18,21 @@ function write<T>(name: string, value: T): void {
 }
 
 const globalKeysDefaultValue = {
-  aggregate: false as boolean,
-  spoiler: 999 as number,
+  // to sum total resources for item levels or not
+  aggregate: false,
+  // spoiler levels
+  spoiler: 999,
+  // currently selected & loaded language
   language: undefined as string | undefined,
+  // theme
   theme: 'system' as 'system' | 'light' | 'dark',
-} as const;
-
-const listeners: Record<GlobalKeys, Function[]> = {
-  aggregate: [],
-  spoiler: [],
-  language: [],
-  theme: [],
+  searchInMods: false,
+  searchInDisabled: false,
 };
+
+type GlobalKeys = keyof typeof globalKeysDefaultValue;
+
+const listeners: Record<GlobalKeys, Function[]> = mapValues(globalKeysDefaultValue, () => []);
 
 type GK = typeof globalKeysDefaultValue;
 

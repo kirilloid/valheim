@@ -15,6 +15,8 @@ const Stack = intComp('stack'); // maxStack
 const Quality = intComp('quality'); // only if maxQuality 
 const Variant = intComp('variant'); // shields and linen capes
 
+const QUALITY = stableHashCode('quality');
+
 export function ItemPropsComp({ value: zdo, onChange }: ValueProps<ZDO>) {
   const id = prefabHashes.get(zdo.prefab);
   const obj = id != null ? data[id] : undefined;
@@ -22,7 +24,7 @@ export function ItemPropsComp({ value: zdo, onChange }: ValueProps<ZDO>) {
   const maxDurability = (obj as any)?.durability;
   const maxQuality = (obj as Item)?.maxLvl ?? 1;
   const variants = (obj as Item)?.variants ?? 0;
-  const quality = zdo.ints.get(stableHashCode('quality')) ?? 1;
+  const quality = zdo.ints.get(QUALITY) ?? 1;
   return <React.Fragment key="ItemProps">
     {!!maxDurability && <Durability value={zdo} onChange={onChange} max={maxDurability[0] + (quality - 1) * maxDurability[1]} />}
     {maxStack > 1 && <Stack value={zdo} onChange={onChange} max={maxStack} />}

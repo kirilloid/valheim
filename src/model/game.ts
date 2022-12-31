@@ -12,11 +12,13 @@ export const WORLD_SIZE = WORLD_RADIUS * 2;
 export const ZONE_SIZE = 64;
 export const WATER_LEVEL = 30;
 export const EVENT_PERIOD = 46 * 60;
+export const REAL_HOUR = 3600;
 
 export const BASE_HEALTH = 25;
 export const BASE_STAMINA = 50;
 export const BASE_EITR = 0;
 export const MAX_PLAYERS = 10;
+export const DODGE_STAMINA = 15;
 
 export const singleDrop = (item: EntityId, min: number = 1, max: number = min): GeneralDrop => ({
   num: [min, max],

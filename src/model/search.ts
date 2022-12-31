@@ -29,9 +29,11 @@ export const treeNode = <T>(): PrefixTree<T> => ({
 });
 
 export type SearchEntry = {
-  type: 'obj' | 'loc' | 'biome' | 'page' | 'event' | 'effect';
+  type: 'obj' | 'loc' | 'biome' | 'page' | 'event' | 'effect' | 'skill';
   path: string;
   id: string;
   tier: number;
   i18nKey: string;
+  disabled: boolean;
+  mod: string | undefined;
 };

@@ -154,6 +154,9 @@ export const modPrefabNames: Record<string, string[]> = {
   ChickenBoo: [
     'ChickenBoo', 'chicklet', 'cooked_chicken', 'fried_egg', 'boiled_egg', 'raw_egg', 'raw_chicken', 'chickensombrero', 'helmet'
   ],
+  RRRCore: [
+    'RRR_GDThornweaver', 'RRR_GhostVengeful', 'RRR_TrollTosser', 'RRR_Grig', 'RRR_GrigHorn',
+  ],
   Hugos_Armory: [
     'DeerFistsHTD', 'BronzeFistsHTD', 'IronFistsHTD', 'SilverFistsHTD',
     'BronzeGreatSwordHTD', 'BronzeBattleaxeHTD', 'BronzeHammerHTD', 'BronzeCrowbillHTD',
@@ -231,6 +234,25 @@ export const modPrefabNames: Record<string, string[]> = {
     'rk_woodrack',
     'rk_woodstairs',
   ],
+  BuildPieces: [
+    'stone_archgate', 'stone_beam', 'stone_beam2', 'stone_beam4', 'stone_beam_26', 'stone_beam_46', 'stone_decowall', 'stone_door', 'stone_floor_flat_1x1', 'stone_floor_flat_2x2', 'stone_ledge', 'stone_pole', 'stone_pole2', 'stone_pole4', 'stone_reverse_arch', 'stone_roof', 'stone_roof_45', 'stone_roof_top', 'stone_stepladder', 'stone_wall_flat', 'stone_wall_flat_1x1', 'stone_wall_roof', 'stone_wall_roof_45', 'stone_wall_roof_45_upsidedown', 'stone_wall_roof_top', 'stone_wall_roof_top_45', 'stone_wall_roof_upsidedown',
+    'ice_archgate', 'ice_beam', 'ice_beam2', 'ice_beam4', 'ice_beam_26', 'ice_beam_46', 'ice_decowall', 'ice_door', 'ice_floor_flat_1x1', 'ice_floor_flat_2x2', 'ice_ledge', 'ice_pole', 'ice_pole2', 'ice_pole4', 'ice_reverse_arch', 'ice_roof', 'ice_roof_45', 'ice_roof_top', 'ice_stepladder', 'ice_wall_flat', 'ice_wall_flat_1x1', 'ice_wall_roof', 'ice_wall_roof_45', 'ice_wall_roof_45_upsidedown', 'ice_wall_roof_top', 'ice_wall_roof_top_45', 'ice_wall_roof_upsidedown',
+    'moss_archgate', 'moss_beam', 'moss_beam2', 'moss_beam4', 'moss_beam_26', 'moss_beam_46', 'moss_decowall', 'moss_door', 'moss_floor_flat_1x1', 'moss_floor_flat_2x2', 'moss_ledge', 'moss_pole', 'moss_pole2', 'moss_pole4', 'moss_reverse_arch', 'moss_roof', 'moss_roof_45', 'moss_roof_top', 'moss_stepladder', 'moss_wall_flat', 'moss_wall_flat_1x1', 'moss_wall_roof', 'moss_wall_roof_45', 'moss_wall_roof_45_upsidedown', 'moss_wall_roof_top', 'moss_wall_roof_top_45', 'moss_wall_roof_upsidedown',
+    'clay_archgate', 'clay_beam', 'clay_beam2', 'clay_beam4', 'clay_beam_26', 'clay_beam_46', 'clay_decowall', 'clay_door', 'clay_floor_flat_1x1', 'clay_floor_flat_2x2', 'clay_ledge', 'clay_pole', 'clay_pole2', 'clay_pole4', 'clay_reverse_arch', 'clay_roof', 'clay_roof_45', 'clay_roof_top', 'clay_stepladder', 'clay_wall_flat', 'clay_wall_flat_1x1', 'clay_wall_roof', 'clay_wall_roof_45', 'clay_wall_roof_45_upsidedown', 'clay_wall_roof_top', 'clay_wall_roof_top_45', 'clay_wall_roof_upsidedown',
+    'lava_archgate', 'lava_beam', 'lava_beam2', 'lava_beam4', 'lava_beam_26', 'lava_beam_46', 'lava_decowall', 'lava_door', 'lava_floor_flat_1x1', 'lava_floor_flat_2x2', 'lava_ledge', 'lava_pole', 'lava_pole2', 'lava_pole4', 'lava_reverse_arch', 'lava_roof', 'lava_roof_45', 'lava_roof_top', 'lava_stepladder', 'lava_wall_flat', 'lava_wall_flat_1x1', 'lava_wall_roof', 'lava_wall_roof_45', 'lava_wall_roof_45_upsidedown', 'lava_wall_roof_top', 'lava_wall_roof_top_45', 'lava_wall_roof_upsidedown',
+  ],
+  SuspicousPieces: ['sp_portal'],
+  ElementalWasps: ['ew_forest', 'ew_fire', 'ew_frost', 'ew_spirit', 'ew_poison', 'ew_lightning'],
+  ElementalOrbs: [
+    'eo_wisp_treat',
+    'eo_fire_low', 'eo_water_low', 'eo_frost_low', 'eo_shock_low', 'eo_nature_low', 'eo_wind_low', 'eo_arcane_low', 'eo_fairy_low', 'eo_holy_low', 'eo_light_low', 'eo_universe_low', 'eo_mist_low', 'eo_dark_low', 'eo_crimson_low', 'eo_void_low',
+    'eo_fire_high', 'eo_water_high', 'eo_frost_high', 'eo_shock_high', 'eo_nature_high', 'eo_wind_high', 'eo_arcane_high', 'eo_fairy_high', 'eo_holy_high', 'eo_light_high', 'eo_universe_high', 'eo_mist_high', 'eo_dark_high', 'eo_crimson_high', 'eo_void_high',
+    'eo_fire_orb', 'eo_water_orb', 'eo_frost_orb', 'eo_shock_orb', 'eo_nature_orb', 'eo_wind_orb', 'eo_arcane_orb', 'eo_fairy_orb', 'eo_holy_orb', 'eo_light_orb', 'eo_universe_orb', 'eo_mist_orb', 'eo_dark_orb', 'eo_crimson_orb', 'eo_void_orb',
+    'eo_fire_wisp', 'eo_water_wisp', 'eo_frost_wisp', 'eo_shock_wisp', 'eo_nature_wisp', 'eo_wind_wisp', 'eo_arcane_wisp', 'eo_fairy_wisp', 'eo_holy_wisp', 'eo_light_wisp', 'eo_universe_wisp', 'eo_mist_wisp', 'eo_dark_wisp', 'eo_crimson_wisp', 'eo_void_wisp',
+  ],
+  CookieGrenades: [
+    'cg_explosive', 'cg_fire', 'cg_frost', 'cg_spirit', 'cg_poison', 'cg_lightning',
+  ],
   BackPacks_Remake: [
     'CapeLeatherBackpack',
     'CapeIronBackpack',
@@ -270,7 +292,8 @@ export const modPrefabNames: Record<string, string[]> = {
     'ArmorMistlandsHelmet', 'ArmorMistlandsChest', 'ArmorMistlandsLegs',
     'BackpackSimple', 'BackpackHeavy',
   ],
-  ChaosWarriorArmor: [
+  ChaosArmor: [
+    'T0ChaosPlateArmor', 'T0ChaosPlateArmor', 'T0ChaosPlateLegs',
     'T1ChaosPlateArmor', 'T1ChaosPlateHelm', 'T1ChaosPlateLegs',
     'T2ChaosPlateArmor', 'T2ChaosPlateHelm', 'T2ChaosPlateLegs',
     'ChaosPlateArmorBody', 'ChaosPlateHelm', 'ChaosPlateLegs',
@@ -300,6 +323,34 @@ export const modPrefabNames: Record<string, string[]> = {
     // materials
     'InfusedGemstone_DoD', 'DireWolfPelt_DoD', 'ForestWolfPelt_DoD', 'FrostlingCore_DoD', 'StormlingCore_DoD', 'VoidlingCore_DoD', 'WaterGlobe_DoD', 'SpiderChitin_DoD', 'BlackDeerHide_DoD',
   ],
+  MonsterLabZ: [
+    'BlackSpider', 'BrownSpider', 'ForestSpider', 'FrigidSpider', 'FrostSpider', 'GreenSpider', 'TanSpider', 'TreeSpider',
+    'DeepSea_Serpent',
+    'FireGolem',
+    'ML_DraugrShip', 'ML_GoblinLox', 'ML_GoblinShip',
+    'Greydwarf_Purple', 'Greydwarf_Purple_Shroom',
+    'IceGolem',
+    'Kraken', 'KrakenLD', 'Kraken_Blob',
+    'Molluscan', 'MolluscanLand',
+    'NightmareDragon',
+    'ObsidianGolem',
+    'Rainbow_Butterfly', 'Green_Butterfly', 'Silkworm_Butterfly',
+    'Spider_Boss',
+    'Surtling_Spawn',
+    'DwarfGoblin', 'DwarfGoblinLoot', 'DwarfGoblinShaman',
+    'NormalGhostWarrior',
+    'ChaosSkeletonWarrior', 'ChaosSkeletonWarriorNoFX',
+    'FireSkeletonWarrior', 'FireSkeletonWarriorNoFx',
+    'IceSkeletonWarrior', 'IceSkeletonWarriorNoFx',
+    'NormalSkeletonWarrior',
+    'PoisonSkeletonWarrior', 'PoisonSkeletonWarriorNoFx',
+    'Succubus', 'Succubus_Queen1',
+    'Surtr',
+    'WraithWarrior',
+    'MLNPC_Female0', 'MLNPC_Male0', 'MLNPC_Male1', 'MLNPC_Male2', 'MLNPC_Male3',
+    'MLNPC_Svartalfar0',
+  ],
+
   Terraheim: [
     'ArrowGreatFireTH',
     'AtgeirSilver',
@@ -469,6 +520,23 @@ export const modPrefabNames: Record<string, string[]> = {
     'Lustre_4Bra', 'Lustre_10Bra',
   ],
   EpicValheimsAdditions: [
+    // bosses
+    'Golden_Greydwarf_Miniboss', 'Golden_Troll_Miniboss', 'Golden_Wraith_Miniboss',
+    'SvartalfrQueenAltar_New', 'Vegvisir_SvartalfrQueen', 'SvartalfarQueen',
+    'JotunnAltar', 'Vegvisir_Jotunn', 'Jotunn',
+    'BlazingDamnedOneAltar', 'Vegvisir_BlazingDamnedOne', 'HelDemon',
+    // resource nodes
+    'HeavymetalVein', 'FrometalVein_frac', 'BurningTree',
+    // resources
+    'PrimordialIce', 'BurningWorldTreeFragment', 'YmirsSoulEssence',
+    'Heavyscale', 'Drakescale', 'Forgedscale',
+    'OreHeavymetal', 'HeavymetalBar',
+    'OreFrometal', 'FrometalBar',
+    'DeepAbyssEssence',
+    'ErrorDrop', 'EVA_AdminFood',
+    // buildings
+    'piece_alchemystation', 'piece_thorsforge',
+    // items
     'BowFrometal', 'BowFlametal', 'BowHeavymetal',
     'AtgeirFrometal', 'AtgeirFlametal', 'AtgeirHeavymetal',
     'SledgeFrometal', 'SledgeFlametal', 'SledgeHeavymetal',
@@ -481,6 +549,7 @@ export const modPrefabNames: Record<string, string[]> = {
     'ShieldTowerFrometal', 'ShieldTowerFlametal', 'ShieldTowerHeavymetal',
     'AxeFrometal', 'AxeFlametal', 'AxeHeavymetal',
     'PickaxeFrometal', 'PickaxeFlametal', 'PickaxeHeavymetal',
+    'TridentDeepAbyss', 'BowDeepAbyss', 'GreatSwordDeepAbyss',
   ],
   MoreGates: [
     'h_drawbridge01', 'h_drawbridge02',

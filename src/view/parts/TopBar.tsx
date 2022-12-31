@@ -3,19 +3,19 @@ import { Link } from 'react-router-dom';
 
 import '../../css/TopBar.css';
 
-import { modLinks } from '../../mods';
 import { biomes } from '../../data/location';
 
 import { Search } from '../Search';
 import { Icon } from './Icon';
 import { languages, TranslationContext, useLanguage } from '../../effects/translation.effect';
 import { useGlobalState } from '../../effects';
-import { ModLinks } from '../helpers';
 
 function Settings() {
   const translate = useContext(TranslationContext);
   const { lang, setLang } = useLanguage();
   const [spoiler, setSpoiler] = useGlobalState('spoiler');
+  const [mods, setMods] = useGlobalState('searchInMods');
+  const [disabled, setDisabled] = useGlobalState('searchInDisabled');
   const [theme, setTheme] = useGlobalState('theme');
   const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
@@ -70,26 +70,13 @@ function Settings() {
           </dd>
           <dt className="Dialog__row"><label htmlFor="hidden">hidden</label></dt>
           <dd className="Dialog__row">
-            <input id="hidden" type="checkbox" disabled checked />
+            <input id="hidden" type="checkbox" checked={disabled} onChange={e => setDisabled(e.target.checked)} />
           </dd>
           <dt className="Dialog__row"><label htmlFor="mods">mods</label></dt>
           <dd className="Dialog__row">
-            <input id="mods" type="checkbox" checked disabled />
+            <input id="mods" type="checkbox" checked={mods} onChange={e => setMods(e.target.checked)} />
           </dd>
         </dl>
-        {/* <h2>Mods</h2>
-        <dl>
-          {Object.entries(modLinks).map(([modId, linkData]) => linkData.fullSupport && <React.Fragment key={modId}>
-            <dt className="Dialog__row">
-              <label htmlFor={modId}>{modId}</label>
-            </dt>
-            <dd className="Dialog__row">
-              <input type="checkbox" id={modId} disabled checked />
-              {' '}
-              <ModLinks {...linkData} />
-            </dd>
-          </React.Fragment>)}
-        </dl> */}
       </div>
       <div className="Dialog__buttons">
         <input type="button" value="Close" className="Dialog__button btn" onClick={() => setIsOpen(false)} />

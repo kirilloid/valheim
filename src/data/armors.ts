@@ -536,6 +536,7 @@ export const items: Item[] = [
     PointLight: { color: '#7BCDFF', range: 10, intensity: 1.5 },
     tier: 6,
     type: 'armor', slot: 'util',
+    floating: true,
     special: 'demister',
     armor: [0, 0],
     weight: 0.1,

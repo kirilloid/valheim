@@ -92,6 +92,7 @@ function renderItem(entry: SearchEntry, text: string, duplicateNames: Set<Entity
     case 'biome': return <SearchBiome id={entry.id} text={text} onClick={onClick} />;
     case 'event': return <SearchEvent id={entry.id} text={text} onClick={onClick} />;
     case 'effect': return <SearchEffect id={entry.id} text={text} onClick={onClick} />;
+    case 'skill': return <SearchSkill id={entry.id} text={text} onClick={onClick} />;
     default: return assertNever(entry.type);
   }
 }
@@ -201,6 +202,18 @@ function SearchEffect({ id, text, onClick }: BaseSearchItemProps) {
     {' '}
     <Link to={`/effect/${id}`} onClick={onClick}>{text}</Link>
   </div> : null;
+}
+
+function SearchSkill({ id, text, onClick }: BaseSearchItemProps) {
+  const translate = useContext(TranslationContext);
+  return <div className="SearchItem">
+    <SkillIcon skill={id} size={32} useAlt={false} />
+    {' '}
+    <Link to={`/skills/${id}`} onClick={onClick}>
+      {text}
+      <span className="entity-type"> &ndash; {translate(`ui.skill`)}</span>
+    </Link>
+  </div>;
 }
 
 function ItemExtra({ item }: { item: Resource }) {
@@ -434,7 +447,12 @@ const PER_PAGE = 30;
 const searchSelector = createSelector(
   ({ searchTerm }: { searchTerm: string }) => searchTerm,
   ({ spoiler }: { spoiler: number }) => spoiler,
-  (term: string, spoiler: number) => [...match(term)].filter(entry => entry.tier <= spoiler),
+  ({ mods }: { mods: boolean }) => mods,
+  ({ disabled }: { disabled: boolean }) => disabled,
+  (term: string, spoiler: number, mods: boolean, disabled: boolean) => {
+    const all = [...match(term, { mods, disabled })];
+    return all.filter(entry => entry.tier <= spoiler);
+  },
 );
 
 const arraySliceSelector = createSelector(
@@ -460,11 +478,13 @@ export const Search = () => {
   const history = useHistory();
   const translate = useContext(TranslationContext);
   const [spoiler] = useGlobalState('spoiler');
+  const [mods] = useGlobalState('searchInMods');
+  const [disabled] = useGlobalState('searchInDisabled');
 
   const [len, setLen] = useState(0);
   const [index, setIndex] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
-  const items = searchSelector({ searchTerm, spoiler });
+  const items = searchSelector({ searchTerm, spoiler, mods, disabled });
   const itemsToDisplay = arraySliceSelector({ items, len });
   const [lastItem, setLastItem] = useState<Element | null>(null);
 

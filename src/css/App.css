@@ -361,3 +361,11 @@ option.spoiler {
   border-radius: 50%;
   margin: 4px;
 }
+
+.LocationIllustration {
+  width: 128px;
+  height: 128px;
+  position: absolute;
+  inset-inline-end: 0;
+  top: -16px;
+}

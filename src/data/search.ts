@@ -9,6 +9,7 @@ import { read } from '../effects/globalState.effect';
 import { getDefaultUserLanguage } from '../effects/translation.effect';
 import { effects } from '../data/effects';
 import { comfort, defCalc, foodPlanner, foodTable, mining, offCalc, skills } from '../state';
+import { skillTiers, SkillType } from '../model/skills';
 
 const fullMatch = new Map<string, EntityId>();
 const startTree = treeNode<SearchEntry>();
@@ -20,13 +21,17 @@ function addArray<T extends { id: string; tier?: number; tags?: string[] }>(
   path: string,
   dict: Record<string, string>,
   dictKeyMap: (arg: string) => string,
-  customTags?: string,
-  idReader?: (arg: T) => string,
+  options: {
+    tags?: string;
+    id?: (arg: T) => string;
+    disabled?: (arg: T) => boolean;
+    mod?: (arg: T) => string | undefined;
+  } = {}
 ) {
   const visited = new Set<string>();
   for (const obj of data) {
     if ((obj as any).disabled) continue;
-    const id = idReader ? idReader(obj) : obj.id;
+    const id = options.id?.(obj) ?? obj.id;
     const { tier = 0 } = obj;
     // avoid duplicating locations via different parent biomes
     if (visited.has(id)) continue
@@ -36,7 +41,9 @@ function addArray<T extends { id: string; tier?: number; tags?: string[] }>(
     const normalized = entry.toLowerCase();
     fullMatch.set(normalized, id);
     const words = normalized.split(' ');
-    const item: SearchEntry = { type, id, path, i18nKey, tier };
+    const disabled = options.disabled?.(obj) ?? false
+    const mod = options.mod?.(obj);
+    const item: SearchEntry = { type, id, path, i18nKey, tier, disabled, mod };
     for (const word of words) {
       addToTree(startTree, word, item);
       for (let i = 1; i < word.length - 1; i++) {
@@ -50,8 +57,8 @@ function addArray<T extends { id: string; tier?: number; tags?: string[] }>(
       }
     }
     addTag(dict[`${i18nKey}.tags`]);
-    if (customTags) {
-      for (const customTag of customTags.split(' ')) {
+    if (options.tags) {
+      for (const customTag of options.tags.split(' ')) {
         addTag(dict[customTag]);
       }
     }
@@ -71,28 +78,29 @@ export const pages = [
 
   { id: comfort, category: 'live' },
   // { id: 'build', category: 'build' },
-  { id: mining, category: 'gather' },
-
+  
+  { id: mining, category: 'plan' },
   { id: 'weather', category: 'plan' },
   { id: skills, category: 'plan' },
   { id: 'world-gen', category: 'plan', beta: true },
 
   { id: 'player-edit', category: 'edit' },
-  { id: 'world-edit', category: 'edit', beta: true },
-  // { id: 'world-meta', category: 'edit' },
+  { id: 'world-edit', category: 'edit' },
+  { id: 'world-meta', category: 'edit' },
+
+  { id: 'mods', category: 'misc' },
+  { id: 'about', category: 'misc' },
 ];
 
 function addObjects(dict: Record<string, string>) {
   for (const gobj of Object.values(data)) {
-    if (gobj.disabled) continue;
-    const key = gobj.id;
-    const tier = gobj.tier;
+    const { id: key, tier, disabled = false, mod } = gobj;
     const entry = dict[key];
     if (entry == null) continue;
     const normalized = entry.toLowerCase();
     fullMatch.set(normalized, key);
     const words = normalized.split(/[ -]/);
-    const item = { type: 'obj', path: '/obj/', id: key, i18nKey: key, tier };
+    const item = { type: 'obj', path: '/obj/', id: key, i18nKey: key, tier, disabled, mod };
     for (const word of words) {
       addToTree(startTree, word, item);
       for (let i = 1; i < word.length - 1; i++) {
@@ -175,18 +183,23 @@ const lang = read('language', getDefaultUserLanguage());
 
 preloadLanguage(lang).then(dict => {
   addArray(pages, 'page', '/', dict, id => `ui.page.${id}`);
-  addArray(locations, 'loc', '/loc/', dict, id => `ui.location.${id}`, '', ({ typeId }) => typeId);
-  addArray(biomes, 'biome', '/biome/', dict, id => `ui.biome.${id}`, 'ui.biome');
+  addArray(locations, 'loc', '/loc/', dict, id => `ui.location.${id}`, { id: ({ typeId }) => typeId });
+  addArray(biomes, 'biome', '/biome/', dict, id => `ui.biome.${id}`, { tags: 'ui.biome', disabled: (b) => !b.active });
   addObjects(dict);
-  addArray(events, 'event', '/event/', dict, id => id, 'ui.event ui.page.events.tags');
-  addArray(effects, 'effect', '/effect/', dict, id => `ui.effect.${id}`, 'ui.effect');
+  addArray(events, 'event', '/event/', dict, id => id, { tags: 'ui.event ui.page.events.tags' });
+  addArray(effects, 'effect', '/effect/', dict, id => `ui.effect.${id}`, { tags: 'ui.effect' });
+  const skills = Object.entries(skillTiers).map(([id, tier]) => ({
+    id: SkillType[+id]!,
+    tier,
+  }));
+  addArray(skills, 'skill', '/skills/', dict, id => `ui.skillType.${id}`, { tags: 'ui.skill' });
 });
 
 const emptyResults: SearchEntry[] = [];
 
 const _cache = new Map<string, Iterable<SearchEntry>>();
 
-export function match(query: string): Iterable<SearchEntry> {
+export function match(query: string, options: { mods?: boolean, disabled?: boolean } = {}): Iterable<SearchEntry> {
   query = query.toLocaleLowerCase().trim();
   const cached = _cache.get(query);
   if (cached) return cached;
@@ -205,13 +218,16 @@ export function match(query: string): Iterable<SearchEntry> {
   }
   const max = Math.max(...rankedResult.values());
   const maxRank = Math.floor(max / 10) * 10;
-  // console.log({ maxRank });
   
   const result = Array.from(rankedResult.entries())
     .filter(([, val]) => val >= maxRank)
-    .sort(([key1, val1], [key2, val2]) => (fm === key2.id ? 1 : 0) - (fm === key1.id ? 1 : 0)
-                                       || (val2 - val1)
-                                       )
+    .filter(([e]) => (!e.mod || options.mods)
+                  && (!e.disabled || options.disabled))
+    .sort(
+      ([entry1, rank1], [entry2, rank2]) =>
+        (fm === entry2.id ? 1 : 0) - (fm === entry1.id ? 1 : 0)
+      ||(rank2 - rank1)
+    )
     .map(([key]) => key);
   _cache.set(query, result);
   return result;

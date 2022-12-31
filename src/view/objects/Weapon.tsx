@@ -12,7 +12,7 @@ import { assertNever } from '../../model/utils';
 import { effects } from '../../data/effects';
 
 import { TranslationContext } from '../../effects';
-import { durability, InlineObjectWithIcon, ItemSpecial, Light, showPair, showPercent, yesNo } from '../helpers';
+import { durability, InlineObjectWithIcon, ItemSpecial, showPair, showPercent } from '../helpers';
 import { Icon, SkillIcon } from '../parts/Icon';
 import { RecipeSection } from '../parts/Source';
 import { ItemHeader } from '../parts/ItemHeader';

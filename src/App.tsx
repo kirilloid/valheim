@@ -28,9 +28,11 @@ import { Mining } from './view/pages/Mining';
 import { WorldEditor } from './view/world';
 import { WorldMeta } from './view/WorldMeta';
 import { PlayerEditor } from './view/player';
-// import { Weapons } from './view/Weapons';
+// import { Weapons } from './view/pages/Weapons';
 import { TranslationContext, useGlobalState, useTranslation } from './effects';
 import { WorldGenerator } from './view/pages/WorldGenerator';
+import { About } from './view/pages/About';
+import { Mods } from './view/pages/Mods';
 
 function App() {
   const translate = useTranslation();
@@ -69,11 +71,14 @@ function App() {
             <Route path="/world-gen/:seed" children={<WorldGenerator />} />
             <Route path="/world-gen" children={<WorldGenerator />} />
             <Route path={`/${skills}/:skill/:level`} children={<Skills />} />
+            <Route path={`/${skills}/:skill`} children={<Skills />} />
             <Route path={`/${skills}`} children={<Skills />} />
             {/* <Route path="/weapons" children={<Weapons />} /> */}
             <Route path="/world-edit" children={<WorldEditor />} />
             <Route path="/world-meta" children={<WorldMeta />} />
             <Route path="/player-edit" children={<PlayerEditor />} />
+            <Route path="/about" children={<About />} />
+            <Route path="/mods" children={<Mods />} />
             <Route path="/info/:id" children={<Info />} />
           </Switch>
         </Router>
