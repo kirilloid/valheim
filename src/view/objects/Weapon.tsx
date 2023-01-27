@@ -62,7 +62,9 @@ function WeaponStats({ item, level }: { item: TWeapon, level?: number }) {
     <h2>{translate('ui.itemType.weapon')}</h2>
     <dl>
       <dt>{translate('ui.skill')}</dt><dd>{skill(item.skill) ?? <em>{translate('ui.skillType.None')}</em>}</dd>
+      {baseDmg + lvlDmg > 0 && <React.Fragment key="damage">
       <dt>{translate('ui.damage')}</dt><dd>{showPair([baseDmg, lvlDmg], level)}</dd>
+      </React.Fragment>}
       <dt>{translate('ui.backstab')} <Link to="/info/combat#backstab">ℹ️</Link></dt><dd>{item.backstab}×</dd>
       <dt>{translate('ui.hands')}</dt><dd>{translate(`ui.slot.${item.slot}`)}</dd>
       <dt>{translate('ui.maxQuality')}</dt><dd><Icon id="star" alt="" size={16} />{' '}{item.maxLvl}</dd>
@@ -121,8 +123,18 @@ function Attack({ item, attack }: { item: TWeapon, attack: TAttack }) {
   return <dl>
     <dt>{translate('ui.attackType')}</dt>
     <dd>{translate(`ui.attackType.${attack.type}`)}</dd>
-    <dt>{translate('ui.stamina')}</dt>
-    <dd>{attack.stamina}</dd>
+    {attack.stamina > 0 && <React.Fragment key="stamina">
+      <dt>{translate('ui.stamina')}</dt>
+      <dd>{attack.stamina}</dd>
+    </React.Fragment>}
+    {!!attack.eitr && <React.Fragment key="eitr">
+      <dt>{translate('ui.eitr')}</dt>
+      <dd>{attack.eitr}</dd>
+    </React.Fragment>}
+    {!!attack.healthPercent && <React.Fragment key="healthPercent">
+      <dt>{translate('ui.health')}</dt>
+      <dd>{-attack.healthPercent}%</dd>
+    </React.Fragment>}
     <dt>{translate('ui.moveSpeed')}</dt>
     <dd>{
       attack.walkSpeed === attack.rotationSpeed

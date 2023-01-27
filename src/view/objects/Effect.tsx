@@ -8,6 +8,7 @@ import { effects } from '../../data/effects';
 import { TranslationContext } from '../../effects';
 import { SpoilerAlert } from '../parts/Spoiler';
 import { Effect as EffectBoni } from '../parts/Effect';
+import { EffectIcon } from '../parts/Icon';
 
 export function Effect() {
   const { id } = useParams<{ id: string }>();
@@ -20,17 +21,11 @@ export function Effect() {
     </span>
   }
   
-  const { iconId } = effect;
-  const imgPath = iconId ? `/icons/${iconId}` : `/icons/effect/${id}`;
-
   return (
     <>
       <SpoilerAlert tier={effect.tier} />
       <h1>
-        <picture>
-          <source srcSet={`${imgPath}.webp`} type="image/webp" />
-          <img src={`${imgPath}.png`} alt="" width="32" height="32" />
-        </picture>
+        <EffectIcon id={id} size={32} />
         {' '}
         {translate(`ui.effect.${id}`)}
       </h1>

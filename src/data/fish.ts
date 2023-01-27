@@ -416,7 +416,7 @@ export const fishes: Fish[] = [
       tilt: [0, 99],
       offset: 0.1,
       levels: [1, 5],
-      levelUpChance: 0.2,
+      levelUpChance: 0.15,
     })],
     speed: 10,
     turnSpeed: 80,

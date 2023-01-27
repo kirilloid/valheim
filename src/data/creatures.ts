@@ -633,6 +633,7 @@ export const creatures: Creature[] = [
     attacks: single([
       { dmg: dmg({ poison: 30 }), name: 'poison breath' },
       { dmg: dmg({ slash: 14 }), stagger: 1.12, name: 'slash' },
+      { cast: 'SE_Greydwarf_shaman_heal' }
     ]),
     // heals for 2.5hp/s for 4s in 4.3m radius
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
@@ -2399,8 +2400,8 @@ export const creatures: Creature[] = [
         variety: 'Healer',
         attacks: [
           // stagger: 1.68
-          // DvergerStaffSupport_buff: cast 'SE_Dvergr_buff', radius=8
-          // DvergerStaffHeal_heal: cast 'SE_Dvergr_heal', radius=4.28
+          { cast: 'SE_Dvergr_buff' }, // radius=8
+          { cast: 'SE_Dvergr_heal' }, // radius=4.28
           // visual: DvergerStaffHeal
           // visual: DvergerSuitSupport
           { spawn: ['Mistile'], name: 'mistile', number: [1, 3], max: 9 },
@@ -2435,7 +2436,6 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Mistile',
-    iconId: 'resource/Wisp',
     ragdollId: null,
     components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
     PointLight: { color: '#EE433E', range: 10, intensity: 1.5 },
@@ -2516,20 +2516,20 @@ export const creatures: Creature[] = [
       biomes: ['Mistlands'],
       biomeAreas: 2,
       maxSpawned: 1,
-      interval: 500,
+      interval: 4000,
       chance: 0.1,
       distance: 50,
       groupRadius: 1,
       night: false,
       tilt: [0, 90],
       offset: 6,
-      levels: [1, 3],
+      levels: [1, 1],
     }), spawner({
       tier: 6,
       biomes: ['Mistlands'],
       biomeAreas: 2,
       maxSpawned: 1,
-      interval: 500,
+      interval: 4000,
       chance: 0.1,
       distance: 50,
       groupRadius: 1,
@@ -2702,11 +2702,12 @@ export const creatures: Creature[] = [
       tier: 6,
       biomes: ['Mistlands'],
       biomeAreas: 2,
-      maxSpawned: 2,
-      interval: 200,
+      maxSpawned: 1,
+      interval: 4000,
       chance: 0.1,
       distance: 40,
       groupRadius: 12,
+      levels: [1, 3],
     })],
     attacks: single([
       { dmg: dmg({ blunt: 100, chop: 100, pickaxe: 100 }), name: 'ram', force: 200, toolTier: 4, stagger: 2.5 },
@@ -2767,12 +2768,12 @@ export const creatures: Creature[] = [
     attacks: single([
       // teleport
       { dmg: dmg({ slash: 100, chop: 300, pickaxe: 300 }), name: 'rush', force: 250, toolTier: 3 },
-      { dmg: dmg({ pierce: 140, chop: 100, pickaxe: 100, poison: 100 }), name: 'bite', force: 250, toolTier: 3 },
+      { dmg: dmg({ pierce: 140, chop: 300, pickaxe: 300, poison: 100 }), name: 'bite', force: 250, toolTier: 3 },
       { spawn: ['Seeker'], number: [1, 3], max: 6, name: 'call' },
       // SeekerQueen_Spit does a burst of 20x
       // SeekerQueen_projectile_spit, each has 30% spawn on hit
       // SeekerQueen_SpitSpawnAbility, which spawn 1 SeekerBrood
-      { spawn: ['SeekerBrood'], number: [1, 1], max: 30, name: 'spit' },
+      { spawn: ['SeekerBrood'], number: [4, 8], max: 30, name: 'spit' }, // 20 with p=0.3
       { dmg: dmg({ slash: 130, chop: 300, pickaxe: 300 }), name: 'slap', force: 250, toolTier: 3 },
       { dmg: dmg({ pierce: 150, chop: 300, pickaxe: 300 }), name: 'pirce_aoe', force: 250, toolTier: 3 }, // area
     ]),

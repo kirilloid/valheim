@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import '../../css/Creature.css';
 
-import { AttackVariety, Creature as TCreature, NormalAttackProfile, SpawnAttackProfile, TOLERATE } from '../../types';
+import { AttackVariety, CastAttackProfile, Creature as TCreature, NormalAttackProfile, SpawnAttackProfile, TOLERATE } from '../../types';
 import { dmgBonus, hpBonus, multiplyDamage } from '../../model/combat';
 import { timeI2S } from '../../model/utils';
 
@@ -14,7 +14,7 @@ import { maxLvl } from '../../data/creatures';
 
 import { TranslationContext, useGlobalState } from '../../effects';
 import { Area, InlineObjectWithIcon, rangeBy, Resistances, shortCreatureDamage, yesNo } from '../helpers';
-import { ItemIcon } from '../parts/Icon';
+import { EffectIcon, ItemIcon } from '../parts/Icon';
 import { ItemHeader } from '../parts/ItemHeader';
 import { spawnedByMap } from '../../data/spawns';
 import { Tabs } from '../parts/Tabs';
@@ -22,8 +22,8 @@ import { Tabs } from '../parts/Tabs';
 function NormalAttack({ attack: a, dmgScale }: { attack: NormalAttackProfile, dmgScale: number }) {
   const dmg = multiplyDamage(a.dmg, dmgScale);
   return <>
-    <dt key={`atk-key-${a.name}`}>{a.name}</dt>
-    <dd key={`atk-val-${a.name}`}>
+    <dt>{a.name}</dt>
+    <dd>
       {shortCreatureDamage(dmg)}
       {a.burst ? `×${a.burst}` : ''}
       {a.unblockable ? ', unblockable' : ''}
@@ -35,8 +35,21 @@ function NormalAttack({ attack: a, dmgScale }: { attack: NormalAttackProfile, dm
 
 function SpawnAttack({ attack }: { attack: SpawnAttackProfile }) {
   return <>
-    <dt key='spawn-key'>spawn</dt>
-    <dd key='spawn-val'>{attack.spawn.map(id => <InlineObjectWithIcon key={id} id={id}/>)}</dd>
+    <dt>spawn</dt>
+    <dd>{attack.spawn.map(id => <InlineObjectWithIcon key={id} id={id} size={24} />)}</dd>
+  </>
+}
+
+function CastAttack({ attack }: { attack: CastAttackProfile }) {
+  const translate = useContext(TranslationContext);
+  const id = attack.cast;
+  return <>
+    <dt>cast</dt>
+    <dd>
+      <EffectIcon id={id} size={24} />
+      {' '}
+      <Link to={`/effect/${id}`}>{translate(`ui.effect.${id}`)}</Link>
+    </dd>
   </>
 }
 
@@ -44,6 +57,8 @@ function Attack({ attack, dmgScale }: { attack: AttackVariety; dmgScale: number 
   return <dl>
     {attack.attacks.map((a, i) => 'spawn' in a
       ? <SpawnAttack key={i} attack={a} />
+      : 'cast' in a
+      ? <CastAttack key={i} attack={a} />
       : <NormalAttack key={i} attack={a} dmgScale={dmgScale} />)}
   </dl>
 }
@@ -53,14 +68,14 @@ function Attacks({ attacks, dmgScale }: { attacks: AttackVariety[]; dmgScale: nu
 
   if (attacks.length === 0) return null;
   if (attacks.length === 1) {
-    return <div className="Creature__Attacks">
+    return <div>
       <h3>{translate('ui.attacks')}</h3>
       <Attack attack={attacks[0]!} dmgScale={dmgScale} />
     </div>
   }
   
   const totalVarietyRates = attacks.reduce((t, a) => t + a.rate, 0);
-  return <div className="Creature__Attacks">
+  return <div>
     <h3>{translate('ui.attacks')}</h3>
     <Tabs tabs={attacks.map(a => ({
       title: `${a.variety} (${Math.round(100 * a.rate / totalVarietyRates)}%)`,

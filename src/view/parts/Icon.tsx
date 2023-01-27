@@ -3,6 +3,7 @@ import { assertNever } from '../../model/utils';
 import { TranslationContext, useGlobalState } from '../../effects';
 
 import type { EntityId, GameObject } from '../../types';
+import { effects } from '../../data/effects';
 
 type IconType = 'armor' | 'arrow' | 'creature' | 'weapon' | 'piece' | 'skills' | 'resource' | 'icon' | 'transport' | 'object';
 
@@ -77,8 +78,9 @@ type ItemIconProps = {
   className?: string;
 }
 
-export function EffectIcon(props: { id: EntityId; iconId?: string; size?: number }) {
-  const { id, iconId, size = 32 } = props;
+export function EffectIcon(props: { id: EntityId; size?: number }) {
+  const { id, size = 32 } = props;
+  const iconId = effects.find(e => e.id === id)?.iconId;
   const path = iconId ? `/icons/${iconId}` : `/icons/effect/${id}`;
   return <picture>
     <source srcSet={`${path}.webp`} type="image/webp" />
@@ -130,7 +132,7 @@ type IconProps =
 & { alt: string; size?: number; style?: React.CSSProperties }
 
 export function Icon(props: IconProps) {
-  const { alt = "", size = 32 } = props;
+  const { alt, size = 32 } = props;
   if ('id' in props) {
     const { id } = props;
     return (

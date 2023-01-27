@@ -198,7 +198,7 @@ function SearchEvent({ id, text, onClick }: BaseSearchItemProps) {
 function SearchEffect({ id, text, onClick }: BaseSearchItemProps) {
   const effect = effects.find(e => e.id === id);
   return effect ? <div className="SearchItem">
-    <EffectIcon id={effect.id} iconId={effect.iconId} size={32} />
+    <EffectIcon id={effect.id} size={32} />
     {' '}
     <Link to={`/effect/${id}`} onClick={onClick}>{text}</Link>
   </div> : null;

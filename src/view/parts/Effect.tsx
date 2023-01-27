@@ -34,6 +34,7 @@ export function Effect({ effect, level }: { effect: TEffect; level?: number }) {
     // comfort?: { value: number; };
     cooldown,
     absorbDamage,
+    healthOverTime,
     // healthOverTime?: [change: number, interval: number],
     damageModifiers,
     attackModifier,
@@ -58,6 +59,10 @@ export function Effect({ effect, level }: { effect: TEffect; level?: number }) {
       <dt>{translate('ui.cooldown')}</dt>
       <dd>{timeI2S(cooldown)}</dd>
     </React.Fragment> : null}
+    {healthOverTime != null ? <React.Fragment key="healthOverTime">
+      <dt>{translate('ui.healthRegen')}</dt>
+      <dd>{healthOverTime[0]}</dd>
+    </React.Fragment> : null}
     {absorbDamage && <React.Fragment>
       <dt>shield</dt>
       <dd>{level == null
@@ -68,7 +73,7 @@ export function Effect({ effect, level }: { effect: TEffect; level?: number }) {
     {damageModifiers && <Resistances key="resistances" mods={damageModifiers} />}
     {attackModifier && <React.Fragment key="attackModifier">
       <dt>{translate(`ui.skillType.${SkillType[attackModifier[0]]}`)}</dt>
-      <dd>{showDiffPercent(attackModifier[1] - 1)}</dd>
+      <dd>{translate('ui.damage')}: {showDiffPercent(attackModifier[1] - 1)}</dd>
     </React.Fragment>}
     {skillModifier != null && <React.Fragment key="skillModifier">
       <dt>{translate(`ui.skillType.${SkillType[skillModifier[0]]}`)}</dt>

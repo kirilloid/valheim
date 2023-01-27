@@ -4,25 +4,3 @@
   font-size: 1rem;
 }
 
-.Creature__Attacks {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.Creature__Attacks h3 {
-  width: 100%;
-}
-
-.Creature__Attack {
-  flex: 50%;
-  max-width: 50%;
-}
-
-@media screen and (min-width: 640px) {
-  .Creature__Attack {
-    flex: 25%;
-  }
-}
-
-.Creature__Attack dt { flex: 60% 1 1; }
-.Creature__Attack dd { flex: 20% 1 1; }

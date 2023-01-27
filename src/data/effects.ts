@@ -156,19 +156,31 @@ export const effects: Effect[] = [
   },
   {
     type: 'effect',
-    id: 'SE_Dvergr_Buff',
-    disabled: true,
+    id: 'SE_Dvergr_buff',
+    iconId: 'effect/Rested',
     tier: 6,
+    time: 20,
     attackModifier: [SkillType.All, 1.2],
   },
   {
     type: 'effect',
     id: 'SE_Dvergr_heal',
+    iconId: 'effect/heal',
     disabled: true,
     tier: 6,
+    time: 4,
     healthOverTime: [400, 0.5],
   },
-  // SE_Greydwarf_shaman_heal: same, but 20
+  {
+    // radius = 4.32
+    type: 'effect',
+    id: 'SE_Greydwarf_shaman_heal',
+    iconId: 'effect/heal',
+    disabled: true,
+    tier: 6,
+    healthOverTime: [20, 0.5],
+    time: 4,
+  },
   {
     type: 'effect',
     id: 'SetEffect_FenringArmor',

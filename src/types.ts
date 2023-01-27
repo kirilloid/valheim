@@ -226,7 +226,10 @@ export type SpawnAttackProfile = {
   number: Pair<number>;
   max: number;
 }
-export type AttackProfile = NormalAttackProfile | SpawnAttackProfile;
+export type CastAttackProfile = {
+  cast: EntityId;
+}
+export type AttackProfile = NormalAttackProfile | SpawnAttackProfile | CastAttackProfile;
 export type AttackVariety = {
   rate: number;
   variety: string;

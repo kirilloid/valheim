@@ -275,6 +275,8 @@ export const recipes: ItemRecipe[] = [
   blackForgeRecipe(1, { Carapace: 20, ScaleHide: 3, Iron: 5, Eitr: 4 }, { Carapace: 10, ScaleHide: 1, Eitr: 2 }, 'ArmorCarapaceLegs'),
   blackForgeRecipe(1, { Carapace: 20, ScaleHide: 3, Iron: 5, Eitr: 4 }, { Carapace: 10, ScaleHide: 1, Eitr: 2 }, 'ArmorCarapaceChest'),
   blackForgeRecipe(1, { Carapace: 16, ScaleHide: 3, Mandible: 2, Eitr: 4 }, { Carapace: 8, ScaleHide: 1, Eitr: 2 }, 'HelmetCarapace'),
+  blackForgeRecipe(1, { Carapace: 20, ScaleHide: 3, Eitr: 10 }, { Carapace: 10, ScaleHide: 3, Eitr: 3 }, 'ShieldCarapace'),
+  blackForgeRecipe(1, { Carapace: 16, ScaleHide: 3, Eitr: 10 }, { Carapace: 8, ScaleHide: 3, Eitr: 3 }, 'ShieldCarapaceBuckler'),
   blackForgeRecipe(1, { Carapace: 4, Feathers: 2, Wood: 8 }, {}, 'ArrowCarapace', 20),
   blackForgeRecipe(1, { BoneFragments: 8, Feathers: 2 }, {}, 'BoltBone', 20),
   blackForgeRecipe(1, { Wood: 8, Iron: 1, Feathers: 2 }, {}, 'BoltIron', 20),

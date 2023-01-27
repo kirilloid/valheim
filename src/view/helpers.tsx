@@ -26,7 +26,7 @@ import { creatures } from '../data/creatures';
 import { effects } from '../data/effects';
 
 import { TranslationContext, Translator, useRuneTranslate } from '../effects';
-import { ItemIcon, SkillIcon } from './parts/Icon';
+import { Icon, ItemIcon, SkillIcon } from './parts/Icon';
 
 export function durability(values: [number, number], level?: number): string | number {
   if (values[0] === Infinity) return '—';
@@ -111,7 +111,7 @@ export function shortCreatureDamage(damage: DamageProfile) {
   return <List separator="+">{
     Object.entries(damage)
       .filter(kv => kv[1])
-      .map(([type, dmg]) => <span key={type} title={type} className={`damage--${type}`}>{dmg}</span>)
+      .map(([type, dmg]) => <span key={type}><Icon id={type} alt={type} size={16} /> {dmg}</span>)
   }</List>
 }
 
