@@ -1,5 +1,6 @@
 import type { Item, ItemSet } from '../types';
 import { SkillType } from '../model/skills';
+import { effects } from './effects';
 
 
 const trollSet: ItemSet = {
@@ -472,6 +473,7 @@ export const items: Item[] = [
     damageModifiers: { frost: 'resistant' },
     durability: [1200, 50],
     moveSpeed: 0,
+    effect: effects.find(e => e.id === 'SlowFall'),
   },
   // non-systematic
   {
@@ -494,6 +496,17 @@ export const items: Item[] = [
     maxLvl: 1,
     durability: [Infinity, 0],
     moveSpeed: 0,
+  },
+  {
+    id: 'HelmetFishingHat',
+    tier: 6,
+    type: 'armor', slot: 'head',
+    armor: [8, 4],
+    weight: 3,
+    maxLvl: 4,
+    durability: [1000, 200],
+    moveSpeed: 0,
+    effect: effects.find(e => e.id === 'SetEffect_FishingHat'),
   },
   {
     id: 'HelmetDverger',

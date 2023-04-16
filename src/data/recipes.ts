@@ -13,6 +13,8 @@ import {
 } from '../model/recipe';
 import { fishes } from './fish';
 
+const allFishes = Object.fromEntries(fishes.map(f => [f.id, 1]));
+
 const STONECUTTER_TIME = 2;
 const KILN_TIME = 15;
 const SPIN_WHEEL_TIME = 30;
@@ -40,8 +42,9 @@ export const recipes: ItemRecipe[] = [
   workbenchRecipe(1, { FineWood: 5, Resin: 2 }, {}, 'Tankard'),
   workbenchRecipe(1, { FineWood: 4, TrophyDeer: 1, Resin: 2 }, {}, 'TankardOdin'),
   workbenchRecipe(1, { Bronze: 2, TrollHide: 2, Iron: 2 }, {}, 'TankardAnniversary'),
-  workbenchRecipe(1, { Dandelion: 10 }, {}, 'HelmetMidsummerCrown'),
   workbenchRecipe(1, { Silver: 1, Wisp: 1 }, {}, 'Demister'),
+  workbenchRecipe(1, { Dandelion: 10 }, {}, 'HelmetMidsummerCrown'),
+  workbenchRecipe(1, allFishes, allFishes, 'HelmetFishingHat'),
   // LEVEL 2
   workbenchRecipe(2, { DeerHide: 6 }, { DeerHide: 6, BoneFragments: 5 }, 'ArmorLeatherLegs'),
   workbenchRecipe(2, { DeerHide: 6 }, { DeerHide: 6, BoneFragments: 5 }, 'ArmorLeatherChest'),
@@ -103,7 +106,7 @@ export const recipes: ItemRecipe[] = [
   cauldronRecipe(1, { Mushroom: 1, Carrot: 3 }, 'CarrotSoup'),
   cauldronRecipe(1, { CookedDeerMeat: 1, Blueberries: 1, Carrot: 1 }, 'DeerStew'),
   cauldronRecipe(1, { RawMeat: 1, NeckTail: 1, Carrot: 1 }, 'MinceMeatSauce'),
-  cauldronRecipe(1, Object.fromEntries(fishes.map(f => [f.id, 1])), 'FishRaw', 1, true),
+  cauldronRecipe(1, allFishes, 'FishRaw', 1, true),
   // LEVEL 2
   cauldronRecipe(2, { RawMeat: 1, Turnip: 3 }, 'TurnipStew'),
   cauldronRecipe(2, { Bloodbag: 1, Honey: 1, Turnip: 1 }, 'BlackSoup'),
@@ -130,14 +133,14 @@ export const recipes: ItemRecipe[] = [
   cauldronRecipe(5, { Fish9: 1, BreadDough: 2 }, 'FishAndBreadUncooked'),
   cauldronRecipe(5, { BugMeat: 1, LoxMeat: 1, HareMeat: 2 }, 'MeatPlatterUncooked'),
   // BAITS
-  cauldronRecipe(1, { Fish1: 1, TrophyFrostTroll: 1 }, 'FishingBaitForest', 40),
-  cauldronRecipe(1, { Fish4: 1, TrophySerpent: 1 }, 'FishingBaitOcean', 40),
-  cauldronRecipe(1, { Fish3: 1, TrophyFenring: 1 }, 'FishingBaitCave', 40),
-  cauldronRecipe(1, { Fish5: 1, TrophyAbomination: 1 }, 'FishingBaitSwamp', 40),
-  cauldronRecipe(1, { Fish6: 1, TrophyGoblin: 1 }, 'FishingBaitPlains', 40),
-  cauldronRecipe(1, { Fish7: 1, TrophyLox: 1 }, 'FishingBaitMistlands', 40),
-  cauldronRecipe(1, { Fish9: 1, TrophySutrling: 1 }, 'FishingBaitAshlands', 40),
-  cauldronRecipe(1, { Fish11: 1, TrophyHatchling: 1 }, 'FishingBaitDeepNorth', 40),
+  cauldronRecipe(1, { FishingBait: 20, TrophyFrostTroll: 1 }, 'FishingBaitForest', 20),
+  cauldronRecipe(1, { FishingBait: 20, TrophySerpent: 1 }, 'FishingBaitOcean', 20),
+  cauldronRecipe(1, { FishingBait: 20, TrophyFenring: 1 }, 'FishingBaitCave', 20),
+  cauldronRecipe(1, { FishingBait: 20, TrophyAbomination: 1 }, 'FishingBaitSwamp', 20),
+  cauldronRecipe(1, { FishingBait: 20, TrophyGoblin: 1 }, 'FishingBaitPlains', 20),
+  cauldronRecipe(1, { FishingBait: 20, TrophyLox: 1 }, 'FishingBaitMistlands', 20),
+  cauldronRecipe(1, { FishingBait: 20, TrophySutrling: 1 }, 'FishingBaitAshlands', 20),
+  cauldronRecipe(1, { FishingBait: 20, TrophyHatchling: 1 }, 'FishingBaitDeepNorth', 20),
   // FERMENTER
   ...potionRecipe(
     1, { Honey: 10, Blueberries: 5, Raspberry: 10, Dandelion: 1 },
@@ -185,8 +188,10 @@ export const recipes: ItemRecipe[] = [
   ),
   // SMELTER
   smelterRecipe('smelter', 'CopperOre', 'Copper'),
+  smelterRecipe('smelter', 'CopperScrap', 'Copper'),
   smelterRecipe('smelter', 'TinOre', 'Tin'),
   smelterRecipe('smelter', 'IronScrap', 'Iron'),
+  smelterRecipe('smelter', 'IronOre', 'Iron'),
   smelterRecipe('smelter', 'SilverOre', 'Silver'),
   // BLASTFURNACE
   smelterRecipe('blastfurnace', 'BlackMetalScrap', 'BlackMetal'),
@@ -308,7 +313,7 @@ export const recipes: ItemRecipe[] = [
   traderRecipe(100, 'HelmetYule'),
   traderRecipe(620, 'HelmetDverger'),
   traderRecipe(950, 'BeltStrength'),
-  traderRecipe(120, 'YmirRemains', { killed: 'Bonemass' }), 
+  traderRecipe(120, 'YmirRemains', { killed: 'TheElder' }), 
   traderRecipe(350, 'FishingRod'),
   traderRecipe(10, 'FishingBait', { number: 50 }),
   traderRecipe(50, 'Thunderstone', { killed: 'TheElder' }),

@@ -213,6 +213,7 @@ export const resources: Resource[] = [
   },
   { type: 'item', group: 'lumber', id: 'ElderBark', tier: 3, weight: 2, stack: 50, floating: true },
   { type: 'item', group: 'ore', id: 'IronScrap', tier: 3, weight: 10, stack: 30, teleportable: false },
+  { type: 'item', group: 'ore', id: 'IronOre', tier: 3, weight: 10, stack: 30, teleportable: false },
   { type: 'item', group: 'metal', id: 'Iron', tier: 3, weight: 12, stack: 30, teleportable: false, tags: ['metal'] },
   { type: 'item', id: 'IronNails', tier: 3, weight: 0.5, stack: 100 },
   { type: 'item', id: 'SharpeningStone', tier: 3, weight: 6, stack: 20 },

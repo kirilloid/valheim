@@ -23,18 +23,28 @@ xpTable.push(Infinity);
 
 function VanillaSkillLevelUp({ skill }: { skill: SkillType }) {
   switch (skill) {
+    case SkillType.Spears:
+    case SkillType.Bows:
+      return <>
+        <dt>+2.25 xp</dt>
+        <dd>hitting enemy</dd>
+        <dt>+1 xp</dt>
+        <dd>hitting object (non-zero damage)</dd>
+      </>
     case SkillType.Swords:
     case SkillType.Knives:
     case SkillType.Clubs:
     case SkillType.Polearms:
-    case SkillType.Spears:
-    case SkillType.Axes:
     case SkillType.Unarmed:
-    case SkillType.Bows:
     case SkillType.Crossbows:
       return <>
-        <dt>+1 xp</dt>
+        <dt>+1.5 xp</dt>
         <dd>hitting enemy</dd>
+        <dt>+1 xp</dt>
+        <dd>hitting object (non-zero damage)</dd>
+      </>
+    case SkillType.Axes:
+      return <>
       </>
     case SkillType.Pickaxes:
       return <>
@@ -43,9 +53,9 @@ function VanillaSkillLevelUp({ skill }: { skill: SkillType }) {
       </>
     case SkillType.Blocking:
       return <>
-        <dt>+1 xp</dt>
+        <dt>+0.5 xp</dt>
         <dd>block</dd>
-        <dt>+2 xp</dt>
+        <dt>+1 xp</dt>
         <dd>parry</dd>
       </>
     case SkillType.ElementalMagic:
@@ -69,36 +79,36 @@ function VanillaSkillLevelUp({ skill }: { skill: SkillType }) {
       </>
     case SkillType.Jump:
       return <>
-        <dt>+1 xp</dt>
+        <dt>+0.5 xp</dt>
         <dd>1 jump</dd>
       </>
     case SkillType.Sneak:
       return <>
-        <dt>+1 xp/s</dt>
+        <dt>+0.5 xp/s</dt>
         <dd>sneaking near enemy</dd>
-        <dt>+0.1 xp/s</dt>
+        <dt>+0.05 xp/s</dt>
         <dd>sneaking far from enemies</dd>
       </>
     case SkillType.Run:
       return <>
-        <dt>+1 xp/s</dt>
+        <dt>+0.2 xp/s</dt>
         <dd>running</dd>
       </>
     case SkillType.Swim:
       return <>
-        <dt>+1 xp/s</dt>
+        <dt>+0.3 xp/s</dt>
         <dd>swimming</dd>
       </>
     case SkillType.Fishing:
       return <>
-        <dt>+1 xp/s</dt>
-        <dd>baiting</dd>
-        <dt>+2 xp/s</dt>
+        <dt>+0.25 xp/s</dt>
+        <dd>pulling empty</dd>
+        <dt>+0.5 xp/s</dt>
         <dd>pulling hooked</dd>
       </>
     case SkillType.Ride:
       return <>
-        <dt>+1 xp/s</dt>
+        <dt>+0.2 xp/s</dt>
         <dd>riding</dd>
       </>
     case SkillType.All:
@@ -128,7 +138,7 @@ function ModdedSkillLevelUp({ skill }: { skill: SkillType }) {
       </>
     case 'Tenacity':
       return <>
-        <dt>+√(damage received) xp</dt>
+        <dt>+√(damage) xp</dt>
         <dd>for actual damage received all reductions like block</dd>
       </>
     case 'Vitality':
@@ -151,7 +161,7 @@ function ModdedSkillLevelUp({ skill }: { skill: SkillType }) {
         <dt>+5 xp</dt>
         <dd>with 10% chance per taming tick (3s)</dd>
         <dt>+35 xp</dt>
-        <dd>when tamed creature is killed and player is within 50m</dd>
+        <dd>when tamed creature is killed and any player is within 50m</dd>
       </>
     case 'Alchemy':
       return <>

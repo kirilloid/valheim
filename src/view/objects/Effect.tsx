@@ -28,6 +28,7 @@ export function Effect() {
         <EffectIcon id={id} size={32} />
         {' '}
         {translate(`ui.effect.${id}`)}
+        <span className="entity-type"> &ndash; {translate('ui.effect')}</span>
       </h1>
       <section>
         <dl>

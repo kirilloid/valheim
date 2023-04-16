@@ -4,6 +4,7 @@ import { TranslationContext } from '../../effects';
 
 import type { Armor as TArmor } from '../../types';
 import { durability, ItemSpecial, Resistances, showPair } from '../helpers';
+import { Effect } from '../parts/Effect';
 import { ItemHeader } from '../parts/ItemHeader';
 import { Resource } from '../parts/Resource';
 import { RecipeSection } from '../parts/Source';
@@ -26,6 +27,14 @@ export function Armor({ item, level }: { item: TArmor, level?: number }) {
           <ItemSpecial special={item.special} />
         </dl>
       </section>
+      {item.effect ? <React.Fragment key="effect">
+      <section>
+        <h2>{translate('ui.effect')}</h2>
+        <dl>
+          <Effect effect={item.effect} />
+        </dl>
+      </section>
+      </React.Fragment> : null}
       <Resource item={item} />
       <RecipeSection item={item} />
     </>

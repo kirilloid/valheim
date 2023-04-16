@@ -38,10 +38,11 @@ export function Effect({ effect, level }: { effect: TEffect; level?: number }) {
     // healthOverTime?: [change: number, interval: number],
     damageModifiers,
     attackModifier,
-    skillModifier,
+    skillModifiers,
     carryWeight,
     runStamina,
     jumpStamina,
+    fallDamage,
     healthRegen,
     staminaRegen,
     eitrRegen,
@@ -75,10 +76,10 @@ export function Effect({ effect, level }: { effect: TEffect; level?: number }) {
       <dt>{translate(`ui.skillType.${SkillType[attackModifier[0]]}`)}</dt>
       <dd>{translate('ui.damage')}: {showDiffPercent(attackModifier[1] - 1)}</dd>
     </React.Fragment>}
-    {skillModifier != null && <React.Fragment key="skillModifier">
-      <dt>{translate(`ui.skillType.${SkillType[skillModifier[0]]}`)}</dt>
-      <dd>+{skillModifier[1]}</dd>
-    </React.Fragment>}
+    {skillModifiers != null && Object.entries(skillModifiers).map(([key, val]) => <React.Fragment key={`skillModifier-${key}`}>
+      <dt>{translate(`ui.skillType.${SkillType[key as unknown as SkillType]}`)}</dt>
+      <dd>+{val}</dd>
+    </React.Fragment>)}
     {carryWeight != null && <React.Fragment key="weight">
       <dt>{translate(`ui.weight`)}</dt>
       <dd>+{carryWeight}</dd>
@@ -102,6 +103,10 @@ export function Effect({ effect, level }: { effect: TEffect; level?: number }) {
     {jumpStamina != null && <React.Fragment key="jumpStamina">
       <dt>jump stamina drain</dt>
       <dd>{showDiffPercent(jumpStamina)}</dd>
+    </React.Fragment>}
+    {fallDamage != null && <React.Fragment key="fallDamage">
+      <dt>fall damage</dt>
+      <dd>{showDiffPercent(fallDamage)}</dd>
     </React.Fragment>}
     {xpModifier != null && <React.Fragment key="xpModifier">
       <dt>{translate(`ui.xp`)}</dt>

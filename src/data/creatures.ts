@@ -1451,7 +1451,7 @@ export const creatures: Creature[] = [
       dropTrophy('TrophyWolf', 0.1),
     ],
     tame: { tameTime: 1800, fedTime: 600, commandable: true,
-            eats: ['RawMeat', 'DeerMeat', 'NeckTail', 'LoxMeat', 'Sausages', 'FishRaw'] },
+            eats: ['RawMeat', 'DeerMeat', 'NeckTail', 'LoxMeat', 'Sausages', 'FishRaw', 'ChickenMeat'] },
             // eatRange:1.4, searchRange:10, heal:20
     pregnancy: { points: 3, time: 60, chance: 0.33, grow: 3000, childId: 'Wolf_cub' }, // max: 4, range: 3
   },
@@ -2539,7 +2539,7 @@ export const creatures: Creature[] = [
       levels: [1, 3],
     })],
     attacks: single([
-      { dmg: dmg({ blunt: 80, fire: 50 }), name: 'spit', force: 30, burst: 4 },
+      { dmg: dmg({ blunt: 50, fire: 80 }), name: 'spit', force: 30, burst: 2 }, // interval = 0.7
       { spawn: ['Tick'], number: [1, 3], max: 8, name: 'eggs' },
       { dmg: dmg({ blunt: 20 }), name: 'shake', force: 150, unblockable, undodgeable },
     ]),

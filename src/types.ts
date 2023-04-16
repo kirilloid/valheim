@@ -197,7 +197,7 @@ export type Effect = {
   healthOverTime?: [change: number, interval: number];
   damageModifiers?: Partial<DamageModifiers>;
   attackModifier?: [skill: SkillType, modifier: number];
-  skillModifier?: [skill: SkillType, modifier: number];
+  skillModifiers?: Partial<Record<SkillType, number>>;
   fallDamage?: number;
   carryWeight?: number;
   runStamina?: number;
@@ -347,6 +347,8 @@ export interface Fish extends GameObjectBase {
   turnSpeed: number;
   baits: Record<EntityId, number>;
   staminaUse: number;
+  escapeStaminaUse: number;
+  extraDrop: GeneralDrop;
   Deadspeak?: Deadspeak;
 }
 

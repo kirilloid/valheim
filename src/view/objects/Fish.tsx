@@ -43,6 +43,8 @@ export function Fish({ fish, level = 1 }: { fish: TFish, level?: number }) {
         </dd>
         <dt>{translate('ui.moveSpeed')}</dt>
         <dd>{fish.speed}</dd>
+        <dt>{translate('stamina')}</dt>
+        <dd>{fish.staminaUse} / {fish.escapeStaminaUse}</dd>
       </dl>
     </section>
     <section>

@@ -187,7 +187,14 @@ export const effects: Effect[] = [
     iconId: 'armor/HelmetFenring',
     tier: 4,
     damageModifiers: { fire: 'resistant' },
-    skillModifier: [SkillType.Unarmed, 15],
+    skillModifiers: { [SkillType.Unarmed]: 15 },
+  },
+  {
+    type: 'effect',
+    id: 'SetEffect_FishingHat',
+    iconId: 'armor/HelmetFishingHat',
+    tier: 6,
+    skillModifiers: { [SkillType.Fishing]: 20, [SkillType.Swim]: 20 },
   },
   {
     type: 'effect',
@@ -195,7 +202,7 @@ export const effects: Effect[] = [
     iconId: 'armor/HelmetMage',
     disabled: true,
     tier: 6,
-    skillModifier: [SkillType.ElementalMagic, 15],
+    skillModifiers: { [SkillType.ElementalMagic]: 15 },
     eitrRegen: 1.5,
   },
   {
@@ -203,14 +210,14 @@ export const effects: Effect[] = [
     id: 'SetEffect_RootArmor',
     iconId: 'armor/HelmetRoot',
     tier: 3,
-    skillModifier: [SkillType.Bows, 15],
+    skillModifiers: { [SkillType.Bows]: 15 },
   },
   {
     type: 'effect',
     id: 'SetEffect_TrollArmor',
     iconId: 'armor/HelmetTrollLeather',
     tier: 2,
-    skillModifier: [SkillType.Sneak, 15],
+    skillModifiers: { [SkillType.Sneak]: 15 },
   },
   {
     type: 'effect',
