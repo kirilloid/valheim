@@ -7,6 +7,7 @@ import { sha512 } from './sha512';
 import * as DATA_VERSION from './versions';
 import { data as itemDB } from '../data/itemDB';
 import { checkVersion, PLAYER, PLAYER_DATA, SKILLS } from './versions';
+import { PlayerStatType } from './PlayerStatType';
 
 type World = {
   spawnPoint?: Vector3;
@@ -56,12 +57,7 @@ export type PlayerData = {
   customData: Map<string, string>;
 };
 
-type PlayerStats = {
-  kills: number;
-  deaths: number;
-  crafts: number;
-  builds: number;
-};
+type PlayerStats = number[] ;
 
 export type Player = {
   version: number;
@@ -70,23 +66,37 @@ export type Player = {
   playerName: string;
   playerID: bigint;
   startSeed: string;
+  usedCheats: boolean;
+  dateCreated: Date;
+  knownWorlds: Map<string, number>;
+  knownWorldKeys: Map<string, number>;
+  knownCommands: Map<string, number>;
   playerData?: PlayerData;
 };
 
-function readPlayerStats(reader: PackageReader): PlayerStats {
-  return {
-    kills: reader.readInt(),
-    deaths: reader.readInt(),
-    crafts: reader.readInt(),
-    builds: reader.readInt(),
-  };
+function readPlayerStats(version: number, reader: PackageReader): PlayerStats {
+  if (version >= 38) {
+    return reader.readArray(reader.readFloat);
+  }
+  const result: PlayerStats = [];
+  if (version >= 28) {
+    result[PlayerStatType.EnemyKills] = reader.readInt();
+    result[PlayerStatType.Deaths] = reader.readInt();
+    result[PlayerStatType.CraftsOrUpgrades] = reader.readInt();
+    result[PlayerStatType.Builds] = reader.readInt();
+  }
+  return result;
 }
 
-function writePlayerStats(pkg: PackageWriter, stats: PlayerStats): void {
-  pkg.writeInt(stats.kills);
-  pkg.writeInt(stats.deaths);
-  pkg.writeInt(stats.crafts);
-  pkg.writeInt(stats.builds);
+function writePlayerStats(version: number, pkg: PackageWriter, stats: PlayerStats): void {
+  if (version >= 38) {
+    pkg.writeArray(pkg.writeFloat, stats);
+  } else if (version >= 28) {
+    pkg.writeInt(stats[PlayerStatType.EnemyKills] ?? 0);
+    pkg.writeInt(stats[PlayerStatType.Deaths] ?? 0);
+    pkg.writeInt(stats[PlayerStatType.CraftsOrUpgrades] ?? 0);
+    pkg.writeInt(stats[PlayerStatType.Builds] ?? 0);
+  }
 }
 
 function readCustomPoint(reader: PackageReader) {
@@ -104,14 +114,7 @@ function* readPlayer(bytes: Uint8Array): Generator<number, Player> {
   const reader = new PackageReader(bytes);
   const version = reader.readInt();
   checkVersion(version, PLAYER);
-  const stats = version >= 28
-    ? readPlayerStats(reader)
-    : {
-      kills: 0,
-      deaths: 0,
-      crafts: 0,
-      builds: 0,
-    };
+  const stats = readPlayerStats(version, reader)
   const worldsNumber = reader.readInt();
   const worlds = new Map<bigint, World>();
   for (let i = 0; i < worldsNumber; i++) {
@@ -133,17 +136,48 @@ function* readPlayer(bytes: Uint8Array): Generator<number, Player> {
   const playerName = reader.readString();
   const playerID = reader.readLong();
   const startSeed = reader.readString();
-  const playerData = reader.readIf(reader.readByteArray);
 
-  return {
-    version,
-    stats,
-    worlds,
-    playerName,
-    playerID,
-    startSeed,
-    playerData: playerData && readPlayerData(playerData),
-  };
+  if (version >= 38) {
+    const usedCheats = reader.readBool();
+    const dateCreated = new Date(Number(reader.readLong()));
+
+    const knownWorlds = reader.readMap(reader.readString, reader.readFloat);
+    const knownWorldKeys = reader.readMap(reader.readString, reader.readFloat);
+    const knownCommands = reader.readMap(reader.readString, reader.readFloat);
+
+    const playerData = reader.readIf(reader.readByteArray);
+
+    return {
+      version,
+      stats,
+      worlds,
+      playerName,
+      playerID,
+      startSeed,
+      usedCheats,
+      dateCreated,
+      knownWorlds,
+      knownWorldKeys,
+      knownCommands,
+      playerData: playerData && readPlayerData(playerData),
+    };
+  } else {
+    const playerData = reader.readIf(reader.readByteArray);
+    return {
+      version,
+      stats,
+      worlds,
+      playerName,
+      playerID,
+      startSeed,
+      usedCheats: false,
+      dateCreated: new Date(2021, 1, 2),
+      knownWorlds: new Map(),
+      knownWorldKeys: new Map(),
+      knownCommands: new Map(),
+      playerData: playerData && readPlayerData(playerData),
+    };
+  }
 }
 
 function* writePlayer(
@@ -153,9 +187,7 @@ function* writePlayer(
   const total = player.worlds.size + 1;
   let current = 0;
   writer.writeInt(player.version);
-  if (player.version >= 28) {
-    writePlayerStats(writer, player.stats);
-  }
+  writePlayerStats(player.version, writer, player.stats);
   writer.writeInt(player.worlds.size);
   for (const [key, world] of player.worlds) {
     writer.writeLong(key);
@@ -169,6 +201,14 @@ function* writePlayer(
   writer.writeString(player.playerName);
   writer.writeLong(player.playerID);
   writer.writeString(player.startSeed);
+  if (player.version >= 38) {
+    writer.writeBool(player.usedCheats);
+    writer.writeLong(BigInt(player.dateCreated.getTime()));
+    
+    writer.writeMap(writer.writeString, writer.writeFloat, player.knownWorlds);
+    writer.writeMap(writer.writeString, writer.writeFloat, player.knownWorldKeys);
+    writer.writeMap(writer.writeString, writer.writeFloat, player.knownCommands);
+  }
   const playerData = player.playerData && writePlayerData(player.playerData);
   writer.writeIf(writer.writeByteArray, playerData);
   yield 0.9;
@@ -264,7 +304,7 @@ function readPlayerData(data: Uint8Array): PlayerData {
   const uniques = version >= 6 ? pkg.readArray(pkg.readString) : [];
   const trophies = version >= 9 ? pkg.readArray(pkg.readString) : [];
   const knownBiome = version >= 18 ? pkg.readArray(pkg.readInt) : [];
-  const knownTexts = pkg.readMap(pkg.readString, pkg.readString);
+  const knownTexts = version >= 22 ? pkg.readMap(pkg.readString, pkg.readString) : new Map();
 
   const [beardItem, hairItem] = version >= 4
     ? [pkg.readString(), pkg.readString()]
@@ -373,7 +413,9 @@ export function* read(bytes: Uint8Array): Generator<number, Player> {
   if (computed.some((v, i) => v !== hash[i])) {
     throw new RangeError("Incorrect hash");
   }
-  return yield* readPlayer(data);
+  const player = yield* readPlayer(data);
+  Object.defineProperty(player, 'usedCheats', { writable: false, value: player.usedCheats });
+  return player;
 }
 
 export function* write(

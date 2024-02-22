@@ -1007,6 +1007,13 @@ export const locations: LocationConfig[] = [
     },
   ),
   loc(
+    2, 'Hildir_camp', ['Meadows'],
+    { biomeArea: 3, quantity: 10, prioritized, unique, minApart: 1000, iconPlaced, terrainDelta: [0, 2], minDistance: 3000, radius: [20, 24],
+      customMusic: 'Music_Hildir',
+      items: [locItem('Hildir')]
+    },
+  ),
+  loc(
     1, 'ShipSetting01', ['Meadows'],
     { quantity: 100, minApart: 128, radius: [20, 24],
       items: [
@@ -1024,6 +1031,37 @@ export const locations: LocationConfig[] = [
       minApart: 3000, terrainDelta: [0, 4], maxDistance: 8000, minAlt: 150, maxAlt: 500, radius: [12, 20],
       items: [locItem('Dragon')],
     },
+  ),
+  loc( // Environment: CavesHildir
+    4, 'Hildir_cave', ['Mountain'],
+    { components: [],
+      biomeArea: 2, quantity: 3, prioritized,
+      minApart: 2000, terrainDelta: [0, 40], minAlt: 200, radius: [32, 15], minDistance: 1000,
+      items: [],
+    },
+    'Hildir_cave',
+  ),
+  loc( // Environment: CryptHildir
+    2, 'Hildir_crypt', ['BlackForest'],
+    { components: [],
+      biomeArea: 2, quantity: 3, prioritized,
+      minApart: 3000, terrainDelta: [0, 2], minAlt: 1, radius: [21, 18], minDistance: 3000,
+      items: [
+        // skeletons
+      ],
+    },
+    'Hildir_crypt',
+  ),
+  loc(
+  4, 'Hildir_plainsfortress', ['Plains'],
+    { components: [],
+      biomeArea: 2, quantity: 3, prioritized,
+      minApart: 3000, terrainDelta: [0, 4], minAlt: 8, radius: [32, 32],
+      items: [
+        // skeletons
+      ],
+    },
+    'Hildir_plainsfortress',
   ),
   loc(
     4, 'DrakeNest01', ['Mountain'],

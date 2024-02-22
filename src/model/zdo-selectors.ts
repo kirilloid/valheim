@@ -37,6 +37,7 @@ const idPaths: Record<string, string[]> = {
   ...Object.fromEntries(
     [
       'Haldor',
+      'Hildir',
       'BossStone_Bonemass',
       'BossStone_DragonQueen', 'dragoneggcup',
       'BossStone_Eikthyr',

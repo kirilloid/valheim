@@ -48,6 +48,7 @@ export const effects: Effect[] = [
     staminaRegen: 0.4,
     damageModifiers: { fire: 'resistant' }
   },
+  // Frost
   // GoblinShaman_shield
   {
     type: 'effect',
@@ -219,6 +220,7 @@ export const effects: Effect[] = [
     tier: 2,
     skillModifiers: { [SkillType.Sneak]: 15 },
   },
+  // SetEffect_WolfArmor: frost resistance
   {
     type: 'effect',
     id: 'Shelter',
@@ -263,7 +265,8 @@ export const effects: Effect[] = [
       fire: 'veryWeak',
     },
     moveSpeed: -0.5,
-  },  {
+  },
+  {
     type: 'effect',
     id: 'SoftDeath',
     tier: 0,
@@ -289,4 +292,5 @@ export const effects: Effect[] = [
       lightning: 'weak',
     }
   },
+  // Wishbone
 ];

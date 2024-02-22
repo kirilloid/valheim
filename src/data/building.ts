@@ -181,7 +181,42 @@ export const pieces: Piece[] = [
     recipe: {
       type: 'craft_piece',
       materials: { Wood: 5, Stone: 2 },
-      station: 'piece_workbench',
+      station: null,
+    }
+  },
+  {
+    id: 'fire_pit_iron',
+    base: true,
+    type: 'piece',
+    components: ['Fireplace'],
+    subtype: 'fireplace',
+    group: 'fire',
+    tier: 0,
+    emoji: '🔥',
+    piece: { target: 'random', water: false, onlyOnFlat, allowedInDungeons, size: [NaN, NaN, NaN] },
+    comfort: { value: 1, group: 'fire' },
+    fireplace: {
+      fuel: 'Wood',
+      capacity: 10,
+      burnTime: 5000,
+      minHeightAbove: 0.5,
+      warmRadius: 4,
+      lightRadius: 8,
+      smoke: true,
+      fireworks: true,
+    },
+    wear: {
+      hp: 200,
+      damageModifiers: damageModifiersFireplace,
+      noRoof: false,
+      noSupport: true,
+      materialType: MaterialType.Wood,
+    },
+    Aoe: { damage: dmg({ fire: 10 }), self: 10, backstabBonus: 4 }, // radius: 4
+    recipe: {
+      type: 'craft_piece',
+      materials: { IronPit: 1, Wood: 1 },
+      station: null,
     }
   },
   {
@@ -930,7 +965,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     components: ['CraftingStationExtension'],
     subtype: 'craft_ext',
-    tier: 1,
+    tier: 6,
     emoji: '🧰',
     piece: { target: 'primary', water: false, onlyOnFlat, requiredSpace: 2, size: [1.6, 0.33, 0.5] },
     extends: { id: 'blackforge', distance: 5 },
@@ -942,6 +977,34 @@ export const pieces: Piece[] = [
       materialType: MaterialType.Wood,
     },
     recipe: { type: 'craft_piece', materials: { Iron: 5, Copper: 5, BlackMarble: 4 }, station: 'blackforge' }
+  },
+  {
+    id: 'blackforge_ext2_vise',
+    base: false,
+    type: 'piece',
+    components: ['CraftingStationExtension'],
+    subtype: 'craft_ext',
+    tier: 6,
+    emoji: '🧰',
+    piece: {
+      target: 'primary',
+      water: false,
+      onlyOnFlat,
+      requiredSpace: 2,
+      size: [NaN, NaN, NaN],
+    },
+    extends: {
+      id: 'blackforge',
+      distance: 4,
+    },
+    wear: {
+      hp: 100,
+      damageModifiers: mods([0, 0, 1, 2, 0, 0, 1, 0, 3, 3]),
+      noRoof: true,
+      noSupport: true,
+      materialType: MaterialType.Wood,
+    },
+    recipe: { type: 'craft_piece', materials: { Iron: 5, Copper: 8, MechanicalSpring: 2 }, station: 'blackforge' }
   },
   {
     id: 'charcoal_kiln',
@@ -2816,6 +2879,20 @@ export const pieces: Piece[] = [
     recipe: { type: 'craft_piece', materials: { Wood: 20, Tar: 6, Iron: 10, Stone: 8 }, station: 'piece_workbench' },
   },
   {
+    id: 'piece_barber',
+    base: false,
+    type: 'piece',
+    components: [],
+    subtype: 'decoration',
+    emoji: '💈',
+    tier: 5,
+    comfort: { value: 2, group: 'chair' },
+    // lightRadius: 4,
+    piece: { target: 'random', water: false, onlyOnFlat, size: [0, 0, 0] },
+    wear: wearStructure(200, woodResist, MaterialType.Wood, { noRoof: false }),
+    recipe: { type: 'craft_piece', materials: { FineWood: 10, BarberKit: 1, BronzeNails: 5, TrollHide: 5 }, station: 'piece_workbench' },
+  },
+  {
     id: 'crystal_wall_1x1',
     base: false,
     type: 'piece',
@@ -2921,7 +2998,35 @@ export const pieces: Piece[] = [
       noSupport: true,
       materialType: MaterialType.Wood,
     },
-    recipe: { type: 'craft_piece', materials: { BlackMarble: 10, YggdrasilWood: 5, Eitr: 10 }, station: 'piece_workbench' }
+    recipe: { type: 'craft_piece', materials: { BlackMarble: 10, TrophySkeleton: 3, Eitr: 10, Resin: 15 }, station: 'piece_workbench' }
+  },
+  {
+    id: 'piece_magetable_ext2',
+    base: false,
+    type: 'piece',
+    components: ['CraftingStationExtension'],
+    subtype: 'craft_ext',
+    tier: 6,
+    emoji: '🧰',
+    piece: {
+      target: 'primary',
+      water: false,
+      onlyOnFlat,
+      requiredSpace: 2,
+      size: [NaN, NaN, NaN],
+    },
+    extends: {
+      id: 'piece_magetable',
+      distance: 5,
+    },
+    wear: {
+      hp: 100,
+      damageModifiers: mods([0, 0, 1, 2, 0, 0, 1, 0, 3, 3]),
+      noRoof: true,
+      noSupport: true,
+      materialType: MaterialType.Wood,
+    },
+    recipe: { type: 'craft_piece', materials: { BlackMarble: 10, YggdrasilWood: 5, Eitr: 10, Resin: 15 }, station: 'piece_workbench' }
   },
   {
     id: 'piece_wisplure',

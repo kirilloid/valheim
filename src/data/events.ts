@@ -8,6 +8,8 @@ export const events: GameEvent[] = [
     biomes: ['Meadows', 'BlackForest'],
     killed: [],
     notKilled: ['Eikthyr'],
+    altItemsNot: ['PickaxeAntler', 'PickaxeBronze', 'PickaxeIron', 'HardAntler', 'TrophyEikthyr'],
+    altPlayerKeysNot: ['GP_Eikthyr'],
     duration: 90,
     spawns: [
       {
@@ -30,6 +32,10 @@ export const events: GameEvent[] = [
     biomes: ['Meadows', 'BlackForest', 'Swamp', 'Plains'],
     killed: ['Eikthyr'],
     notKilled: ['gd_king'],
+    altItems: ['PickaxeAntler', 'PickaxeBronze', 'PickaxeIron', 'HardAntler', 'TrophyEikthyr'],
+    altItemsNot: ['TrophyTheElder', 'CryptKey'],
+    altPlayerKeys: ['GP_Eikthyr'],
+    altPlayerKeysNot: ['GP_TheElder'],
     duration: 120,
     spawns: [
       {
@@ -57,6 +63,8 @@ export const events: GameEvent[] = [
     biomes: ['Meadows', 'BlackForest', 'Swamp', 'Plains'],
     killed: ['gd_king', 'Troll'],
     notKilled: [],
+    altItems: ['TrophyTheElder', 'CryptKey'],
+    altPlayerKeys: ['KilledTroll'],
     duration: 80,
     spawns: [
       {
@@ -74,6 +82,10 @@ export const events: GameEvent[] = [
     biomes: ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains'],
     killed: ['gd_king'],
     notKilled: ['Bonemass'],
+    altItems: ['TrophyTheElder', 'CryptKey'],
+    altItemsNot: ['TrophyBonemass', 'Wishbone'],
+    altPlayerKeys: ['GP_TheElder'],
+    altPlayerKeysNot: ['GP_Bonemass'],
     duration: 150,
     spawns: [
       {
@@ -95,6 +107,8 @@ export const events: GameEvent[] = [
     icon: 'Skeleton',
     biomes: ['Meadows', 'BlackForest', 'Swamp', 'Plains', 'Mistlands'],
     killed: ['Bonemass'],
+    altItems: ['TrophyBonemass', 'Wishbone'],
+    altPlayerKeys: ['GP_Bonemass'],
     notKilled: [],
     duration: 120,
     spawns: [
@@ -120,6 +134,8 @@ export const events: GameEvent[] = [
     biomes: ['Meadows', 'BlackForest', 'Swamp', 'Plains'],
     killed: ['Bonemass', 'Surtling'],
     notKilled: [],
+    altItems: ['TrophyBonemass', 'Wishbone'],
+    altPlayerKeys: ['killed_surtling'],
     duration: 120,
     spawns: [
       {
@@ -137,6 +153,8 @@ export const events: GameEvent[] = [
     biomes: ['Meadows', 'BlackForest', 'Swamp', 'Plains'],
     killed: ['Bonemass'],
     notKilled: [],
+    altItems: ['TrophyBonemass', 'Wishbone'],
+    altPlayerKeys: ['GP_Bonemass'],
     duration: 120,
     spawns: [
       {
@@ -159,6 +177,10 @@ export const events: GameEvent[] = [
     biomes: ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains'],
     killed: ['Bonemass'],
     notKilled: ['Dragon'],
+    altItems: ['TrophyBonemass', 'Wishbone'],
+    altItemsNot: ['TrophyDragonQueen', 'DragonTear'],
+    altPlayerKeys: ['GP_Bonemass'],
+    altPlayerKeysNot: ['GP_Moder'],
     duration: 150,
     spawns: [
       {
@@ -176,6 +198,8 @@ export const events: GameEvent[] = [
     biomes: ['Mountain', 'Plains'],
     killed: ['Bonemass'],
     notKilled: [],
+    altItems: ['Wishbone', 'TrophyBonemass'],
+    altPlayerKeys: ['GP_Bonemass'],
     duration: 120,
     spawns: [
       {
@@ -193,6 +217,9 @@ export const events: GameEvent[] = [
     biomes: ['Meadows', 'BlackForest', 'Plains'],
     killed: ['Dragon'],
     notKilled: ['GoblinKing'],
+    altItems: ['DragonTear', 'TrophyDragonQueen'],
+    altItemsNot: ['TrophyGoblinKing', 'YagluthDrop'],
+    altPlayerKeysNot: ['GP_Yagluth'],
     duration: 120,
     spawns: [
       {
@@ -224,6 +251,7 @@ export const events: GameEvent[] = [
     biomes: ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains'],
     killed: ['Bonemass', 'Bat'],
     notKilled: [],
+    altPlayerKeys: ['KilledBat'],
     duration: 120,
     spawns: [
       {
@@ -243,6 +271,10 @@ export const events: GameEvent[] = [
     biomes: ['Mistlands'],
     killed: ['GoblinKing'],
     notKilled: ['SeekerQueen'],
+    altItems: ['YagluthDrop', 'Demister', 'Wisp'],
+    altItemsNot: ['QueenDrop'],
+    altPlayerKeys: ['$se_yagluth_name'],
+    altPlayerKeysNot: ['GP_Queen'],
     duration: 90,
     spawns: [
       {
@@ -267,6 +299,10 @@ export const events: GameEvent[] = [
     biomes: ['BlackForest', 'Mountain', 'Plains', 'Ocean', 'Mistlands'],
     killed: ['GoblinKing'],
     notKilled: ['SeekerQueen'],
+    altItems: ['YagluthDrop', 'Demister', 'Wisp'],
+    altItemsNot: ['QueenDrop'],
+    altPlayerKeys: ['defeated_queen'],
+    altPlayerKeysNot: ['GP_Queen'],
     duration: 120,
     spawns: [
       {
@@ -289,6 +325,111 @@ export const events: GameEvent[] = [
         group: [1, 1],
         interval: 100,
         chance: 1,
+      },
+    ],
+    base: true,
+  },
+  {
+    id: 'hildirboss1',
+    tier: 2,
+    icon: 'Skeleton_Hildir',
+    biomes: ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains', 'Ocean', 'Mistlands'],
+    killed: ['Skeleton_Hildir'],
+    notKilled: [],
+    altItems: ['chest_hildir1'],
+    altPlayerKeys: ['BossHildir1'],
+    duration: 90,
+    spawns: [
+      {
+        id: 'Skeleton_Hildir_nochest',
+        max: 1,
+        group: [1, 1],
+        interval: 100,
+        chance: 1,
+      },
+      {
+        id: 'Skeleton',
+        max: 4,
+        group: [1, 2],
+        interval: 20,
+        level: [2, 3],
+      },
+      {
+        id: 'Skeleton_Poison',
+        max: 1,
+        group: [1, 1],
+        interval: 100,
+        level: [2, 3],
+      },
+    ],
+    base: true,
+  },
+  {
+    id: 'hildirboss2',
+    tier: 2,
+    icon: 'Fenring_Cultist_Hildir',
+    biomes: ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains', 'Ocean', 'Mistlands'],
+    killed: ['Fenring_Cultist_Hildir'],
+    notKilled: [],
+    altItems: ['chest_hildir2'],
+    altPlayerKeys: ['BossHildir2'],
+    duration: 90,
+    spawns: [
+      {
+        id: 'Fenring_Cultist_Hildir',
+        max: 1,
+        group: [1, 1],
+        interval: 100,
+        chance: 1,
+      },
+      {
+        id: 'Fenring',
+        max: 3,
+        group: [1, 2],
+        interval: 20,
+        level: [2, 3],
+      },
+      {
+        id: 'Fenring_Cultist',
+        max: 1,
+        group: [1, 1],
+        interval: 100,
+        level: [2, 3],
+      },
+    ],
+    base: true,
+  },
+  {
+    id: 'hildirboss3',
+    tier: 2,
+    icon: 'GoblinBruteBros',
+    biomes: ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains', 'Ocean', 'Mistlands'],
+    killed: ['GoblinBruteBros'],
+    notKilled: [],
+    altItems: ['chest_hildir3'],
+    altPlayerKeys: ['BossHildir3'],
+    duration: 90,
+    spawns: [
+      {
+        id: 'GoblinBruteBros',
+        max: 1,
+        group: [1, 1],
+        interval: 100,
+        chance: 1,
+      },
+      {
+        id: 'Goblin',
+        max: 4,
+        group: [1, 2],
+        interval: 20,
+        level: [2, 3],
+      },
+      {
+        id: 'GoblinBrute',
+        max: 1,
+        group: [1, 1],
+        interval: 100,
+        level: [2, 3],
       },
     ],
     base: true,

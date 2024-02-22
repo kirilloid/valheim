@@ -560,6 +560,8 @@ interface GameEventSpawn {
   group?: Pair<number>;
   interval: number;
   chance?: number;
+  // TODO: not used
+  level?: Pair<number>;
 }
 
 export interface GameEvent {
@@ -569,6 +571,10 @@ export interface GameEvent {
   biomes: Biome[];
   killed: EntityId[];
   notKilled: EntityId[];
+  altItems?: EntityId[];
+  altItemsNot?: EntityId[];
+  altPlayerKeys?: string[];
+  altPlayerKeysNot?: string[];
   duration: number;
   spawns: GameEventSpawn[];
   base: boolean;

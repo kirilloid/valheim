@@ -8,6 +8,8 @@ export type Data = {
   seed: number;
   uid: bigint;
   worldGenVersion: number;
+  needsDB: boolean;
+  startingGlobalKeys: string[];
 };
 
 export function read(data: Uint8Array): Data {
@@ -21,6 +23,8 @@ export function read(data: Uint8Array): Data {
   const seed = reader.readInt();
   const uid = reader.readLong();
   const worldGenVersion = version >= 26 ? reader.readInt() : 0;
+  const needsDB = version >= 30 ? reader.readBool() : false;
+  const startingGlobalKeys = version >= 32 ? reader.readArray(reader.readString) : [];
   return {
     version,
     name,
@@ -28,6 +32,8 @@ export function read(data: Uint8Array): Data {
     seed,
     uid,
     worldGenVersion,
+    needsDB,
+    startingGlobalKeys,
   };
 }
 
@@ -40,6 +46,12 @@ export function write(data: Data): Uint8Array {
   writer.writeLong(data.uid);
   if (data.version >= 26) {
     writer.writeInt(data.worldGenVersion);
+  }
+  if (data.version >= 30) {
+    writer.writeBool(data.needsDB);
+  }
+  if (data.version >= 32) {
+    writer.writeArray(writer.writeString, data.startingGlobalKeys);
   }
   const bytes = writer.flush();
   const zpkg = new PackageWriter();

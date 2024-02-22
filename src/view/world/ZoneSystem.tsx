@@ -20,6 +20,9 @@ const baseKeys = [
   ['defeated_dragon', 'Dragon'],
   ['defeated_goblinking', 'GoblinKing'],
   ['defeated_queen', 'SeekerQueen'],
+  ['Skeleton_Hildir', 'BossHildir1'],
+  ['Fenring_Cultist_Hildir', 'BossHildir2'],
+  ['GoblinBruteBros', 'BossHildir3'],
 ] as const;
 
 function Keys({ value, onChange }: ValueProps<string[]>) {

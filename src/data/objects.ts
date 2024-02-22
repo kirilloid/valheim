@@ -483,6 +483,15 @@ const treasures: PhysicalObject[] = [
   {
     type: 'object',
     subtype: 'treasure',
+    id: 'TreasureChest_forestcrypt_hildir',
+    iconId: 'piece/piece_chest_wood',
+    components: ['Container'],
+    tier: 2,
+    drop: [singleDrop('HildirKey_forestcrypt')],
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
     id: 'TreasureChest_trollcave',
     iconId: 'piece/piece_chest_wood',
     components: ['Container'],
@@ -634,6 +643,15 @@ const treasures: PhysicalObject[] = [
   {
     type: 'object',
     subtype: 'treasure',
+    id: 'TreasureChest_mountaincave_hildir',
+    iconId: 'piece/piece_chest_wood',
+    components: ['Container'],
+    tier: 4,
+    drop: [singleDrop('HildirKey_mountaincave')],
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
     id: 'TreasureChest_heath',
     iconId: 'piece/piece_chest_wood',
     components: ['Container'],
@@ -670,6 +688,15 @@ const treasures: PhysicalObject[] = [
         { item: 'GoblinTotem', weight: 0.1, },
       ],
     }],
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
+    tier: 5,
+    id: 'TreasureChest_plainsfortress_hildir',
+    iconId: 'piece/piece_chest_wood',
+    components: ['Container'],
+    drop: [singleDrop('HildirKey_plainsfortress')],
   },
   {
     type: 'object',
