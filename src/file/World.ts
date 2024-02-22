@@ -81,11 +81,13 @@ function* readZDOData(reader: PackageReader, version: number): Generator<number,
   if (removedPrefabs.size > 0) {
     console.warn('Removed duplicated objects: ', removedPrefabs);
   }
-  const deadZdos = reader.readMap(function () {
-    const userId = this.readLong();
-    const id = this.readUInt();
-    return { userId, id };
-  }, reader.readLong);
+  const deadZdos = version < 30
+    ? reader.readMap(function () {
+        const userId = this.readLong();
+        const id = this.readUInt();
+        return { userId, id };
+      }, reader.readLong)
+    : new Map<ZDOID, bigint>();
 
   if (totalCorruptedBytes > 0) {
     console.error(`Total corrupted bytes = ${totalCorruptedBytes}`);

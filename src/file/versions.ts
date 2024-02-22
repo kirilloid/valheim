@@ -1,5 +1,5 @@
 export const SKILLS = 2; // Skills.dataVersion
-export const WORLD = 29; // Version.m_worldVersion
+export const WORLD = 30; // Version.m_worldVersion
 export const MAP = 7; // Minimap.MAPVERSION
 export const SHARED_MAP = 2; // Minimap.sharedMapDataVersion, is it used at all?
 export const PLAYER = 37; // Version.m_playerVersion

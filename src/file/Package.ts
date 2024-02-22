@@ -100,6 +100,12 @@ export class PackageReader {
     return { x, y };
   }
 
+  public readVector2s(): Vector2i {
+    const x = this.readShort();
+    const y = this.readShort();
+    return { x, y };
+  }
+
   public readVector3(): Vector3 {
     const x = this.readFloat();
     const y = this.readFloat();
@@ -305,6 +311,13 @@ export class PackageWriter {
     this.view.setInt32(this.offset, value.x, true);
     this.view.setInt32(this.offset += 4, value.y, true);
     this.offset += 4;
+  }
+
+  public writeVector2s(value: Vector2i): void {
+    this.ensureSpace(4);
+    this.view.setInt16(this.offset, value.x, true);
+    this.view.setInt16(this.offset += 2, value.y, true);
+    this.offset += 2;
   }
 
   public writeVector3(value: Vector3): void {

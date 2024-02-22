@@ -50,21 +50,20 @@ export type ZDOCorruption = {
 };
 
 export interface ZDO {
-  id: ZDOID;
+  // id: ZDOID;
   _bytes: Uint8Array;
-  ownerRevision: number;
-  dataRevision: number;
+  // ownerRevision: number;
+  // dataRevision: number;
   persistent: boolean;
-  owner: bigint;
-  // ms timestamp?
-  timeCreated: bigint;
-  pgwVersion: number;
+  // owner: bigint;
+  // timeCreated: bigint;
+  // pgwVersion: number;
   type: ZDOObjectType;
   distant: boolean;
   prefab: number;
   sector: Readonly<Vector2i>;
   position: Readonly<Vector3>;
-  rotation: Readonly<Quaternion>;
+  rotation: Readonly<Vector3>;
   readonly floats: Map<number, number>; // int -> float
   readonly vec3: Map<number, Vector3>; // int -> Vector3
   readonly quats: Map<number, Quaternion>; // int -> Quaternion
