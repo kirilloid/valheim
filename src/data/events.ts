@@ -376,7 +376,7 @@ export const events: GameEvent[] = [
     duration: 90,
     spawns: [
       {
-        id: 'Fenring_Cultist_Hildir',
+        id: 'Fenring_Cultist_Hildir_nochest',
         max: 1,
         group: [1, 1],
         interval: 100,
@@ -411,7 +411,7 @@ export const events: GameEvent[] = [
     duration: 90,
     spawns: [
       {
-        id: 'GoblinBruteBros',
+        id: 'GoblinBruteBros_nochest',
         max: 1,
         group: [1, 1],
         interval: 100,

@@ -464,6 +464,8 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Skeleton_Hildir',
+    iconId: 'resource/TrophySkeletonHildir',
+    group: 'semiboss',
     ragdollId: null,
     components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI', 'VisEquipment'],
     tier: 3,
@@ -492,7 +494,42 @@ export const creatures: Creature[] = [
     },
     damageModifiers: mods([2, 0, 1, 4, 4, 3, 2, 0, 3, 0 ]),
     drop: [
-      dropEntry('chest_hildir1'),
+      dropTrophy('chest_hildir1', 1),
+      dropTrophy('TrophySkeletonHildir', 1),
+    ],
+  },
+  {
+    type: 'creature',
+    id: 'Skeleton_Hildir_nochest',
+    iconId: 'resource/TrophySkeletonHildir',
+    ragdollId: null,
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI', 'VisEquipment'],
+    tier: 3,
+    emoji: '☠️',
+    faction: 'Undead',
+    spawners: [],
+    attacks: single([
+      { dmg: dmg({ fire: 75 }), name: 'skeleton_hildir_firenova', force: 40, toolTier: 0 }, // AoE
+      { dmg: dmg({ slash: 60, fire: 20 }), name: 'skeleton_sword_hildir', force: 40, toolTier: 0 },
+    ]),
+    tolerate: TOLERATE.WATER | TOLERATE.SMOKE | TOLERATE.FIRE,
+    speed: {
+      walk: 1,
+      run: 4,
+      swim: 1,
+    },
+    turnSpeed: {
+      walk: 300,
+      run: 300,
+      swim: 100,
+    },
+    hp: 600,
+    stagger: {
+      factor: 0.5,
+      time: 2.48,
+    },
+    damageModifiers: mods([2, 0, 1, 4, 4, 3, 2, 0, 3, 0 ]),
+    drop: [
       dropTrophy('TrophySkeletonHildir', 1),
     ],
   },
@@ -1589,7 +1626,8 @@ export const creatures: Creature[] = [
     attacks: single([
       { dmg: dmg({ slash: 35, fire: 40 }), name: 'claw', stagger: 1.32, force: 60 },
       { dmg: dmg({ slash: 35, fire: 40 }), name: 'claw2', stagger: 1.12, force: 60 },
-      { dmg: dmg({ fire: 50 }), name: 'flames', stagger: 1.12, force: 60 },
+      // fenring_attack_flames
+      { dmg: dmg({ fire: 50 }), name: 'flames', stagger: 1.12, unblockable, force: 0 },
     ]),
     tolerate: TOLERATE.WATER,
     speed: {
@@ -1620,6 +1658,8 @@ export const creatures: Creature[] = [
   {
     type: 'creature',
     id: 'Fenring_Cultist_Hildir',
+    iconId: 'resource/TrophyCultist_Hildir',
+    group: 'semiboss',
     ragdollId: 'Fenring_cultist_ragdoll_hildir',
     components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
     tier: 4,
@@ -1632,7 +1672,9 @@ export const creatures: Creature[] = [
       // Fenring_attack_iceclaw
       { dmg: dmg({ slash: 40, frost: 70 }), name: 'claw2', stagger: 1.12, force: 60 },
       // Fenring_attack_frost
-      { dmg: dmg({ frost: 100 }), name: 'frost', stagger: 1.12, force: 0 },
+      { dmg: dmg({ frost: 100 }), name: 'frost', stagger: 1.12, force: 0, unblockable },
+      // Fenring_attack_IceNova
+      { dmg: dmg({ frost: 90 }), name: 'nova', stagger: 1.12, force: 0, unblockable, undodgeable },
     ]),
     tolerate: TOLERATE.WATER,
     speed: {
@@ -1656,8 +1698,53 @@ export const creatures: Creature[] = [
       frost: 'immune',
     },
     drop: [
-      dropEntry('JuteRed', { min: 1, max: 3 }),
-      dropTrophy('TrophyCultist', 0.1),
+      dropTrophy('chest_hildir2', 1),
+      dropTrophy('TrophyCultist_Hildir', 1),
+    ],
+  },
+  {
+    type: 'creature',
+    id: 'Fenring_Cultist_Hildir_nochest',
+    iconId: 'resource/TrophyCultist_Hildir',
+    ragdollId: 'Fenring_cultist_ragdoll_hildir',
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
+    tier: 4,
+    emoji: '🐺',
+    faction: 'MountainMonsters',
+    spawners: [],
+    attacks: single([
+      // Fenring_attack_iceclaw_double
+      { dmg: dmg({ slash: 60, frost: 70 }), name: 'claw', stagger: 1.32, force: 60 },
+      // Fenring_attack_iceclaw
+      { dmg: dmg({ slash: 40, frost: 70 }), name: 'claw2', stagger: 1.12, force: 60 },
+      // Fenring_attack_frost
+      { dmg: dmg({ frost: 100 }), name: 'frost', stagger: 1.12, force: 0, unblockable },
+      // Fenring_attack_IceNova
+      { dmg: dmg({ frost: 20 }), name: 'nova', stagger: 1.12, force: 50 },
+    ]),
+    tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 1.25,
+      run: 5,
+      swim: 2,
+    },
+    turnSpeed: {
+      walk: 200,
+      run: 200,
+      swim: 100,
+    },
+    hp: 1850,
+    stagger: {
+      factor: 0.5,
+      time: NaN,
+    },
+    damageModifiers: {
+      ...defaultDmgModifiers,
+      fire: 'weak',
+      frost: 'immune',
+    },
+    drop: [
+      dropTrophy('TrophyCultist_Hildir', 1),
     ],
   },
   {
@@ -1946,8 +2033,8 @@ export const creatures: Creature[] = [
     attacks: single([
       { dmg: dmg({ blunt: 100 }), name: 'staff', stagger: 3.2 },
       { dmg: dmg({ blunt: 20, fire: 100 }), name: 'fireball', stagger: 3.2 },
+      { cast: 'GoblinShaman_shield' },
     ]),
-
     tolerate: TOLERATE.WATER,
     speed: {
       walk: 1,
@@ -1970,6 +2057,80 @@ export const creatures: Creature[] = [
       dropEntry('BlackMetalScrap', { min: 1, max: 2 }),
       dropEntry('Pukeberries', { min: 1, max: 2 }),
       dropTrophy('TrophyGoblinShaman', 0.1),
+    ],
+  },
+  {
+    type: 'creature',
+    group: 'semiboss',
+    id: 'GoblinShaman_Hildir',
+    iconId: 'resource/TrophyGoblinBruteBrosShaman',
+    ragdollId: 'GoblinShaman_Hildir_ragdoll',
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI', 'VisEquipment'],
+    tier: 5,
+    emoji: '',
+    faction: 'PlainsMonsters',
+    spawners: [],
+    attacks: single([
+      { dmg: dmg({ blunt: 100 }), name: 'staff', stagger: 3.2 },
+      { dmg: dmg({ blunt: 20, fire: 100 }), name: 'fireball', stagger: 3.2 },
+      { cast: 'GoblinShaman_shield' },
+    ]),
+    tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 1,
+      run: 2,
+      swim: 1.5,
+    },
+    turnSpeed: {
+      walk: 200,
+      run: 200,
+      swim: 200,
+    },
+    hp: 2400,
+    stagger: {
+      factor: 0.3,
+      time: 3.2,
+    },
+    damageModifiers: animalDmgModifiers,
+    drop: [
+      dropTrophy('chest_hildir3', 1),
+      dropTrophy('TrophyGoblinBruteBrosShaman', 1),
+    ],
+  },
+  {
+    type: 'creature',
+    id: 'GoblinShaman_Hildir_nochest',
+    iconId: 'resource/TrophyGoblinBruteBrosShaman',
+    ragdollId: 'GoblinShaman_Hildir_ragdoll',
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI', 'VisEquipment'],
+    tier: 5,
+    emoji: '',
+    faction: 'PlainsMonsters',
+    spawners: [],
+    attacks: single([
+      { dmg: dmg({ blunt: 100 }), name: 'staff', stagger: 3.2 },
+      { dmg: dmg({ blunt: 20, fire: 100 }), name: 'fireball', stagger: 3.2 },
+      { cast: 'GoblinShaman_shield' },
+    ]),
+    tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 1,
+      run: 2,
+      swim: 1.5,
+    },
+    turnSpeed: {
+      walk: 200,
+      run: 200,
+      swim: 200,
+    },
+    hp: 1200,
+    stagger: {
+      factor: 0.3,
+      time: 3.2,
+    },
+    damageModifiers: animalDmgModifiers,
+    drop: [
+      dropTrophy('TrophyGoblinBruteBrosShaman', 1),
     ],
   },
   {
@@ -2022,8 +2183,10 @@ export const creatures: Creature[] = [
   },
   {
     type: 'creature',
-    group: 'goblin',
+    group: 'semiboss',
     id: 'GoblinBrute_Hildir',
+    iconId: 'resource/TrophyGoblinBruteBrosBrute',
+    disabled: true,
     ragdollId: 'GoblinBrute_Hildir_ragdoll',
     components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI', 'VisEquipment'],
     tier: 5,
@@ -2069,8 +2232,9 @@ export const creatures: Creature[] = [
   },
   {
     type: 'creature',
-    group: 'goblin',
+    group: 'semiboss',
     id: 'GoblinBruteBros',
+    iconId: 'resource/TrophyGoblinBruteBrosBrute',
     ragdollId: 'GoblinBrute_Hildir_ragdoll',
     components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI', 'VisEquipment'],
     tier: 5,
@@ -2097,6 +2261,7 @@ export const creatures: Creature[] = [
         fire: 100,
       }), name: 'rageattack', stagger: 2.88, force: 80 },
       // GoblinShaman_attack_protect_hildir
+      { cast: 'GoblinShaman_shield' },
     ]),
     tolerate: TOLERATE.WATER,
     speed: {
@@ -2117,6 +2282,60 @@ export const creatures: Creature[] = [
     damageModifiers: animalDmgModifiers,
     drop: [
       dropEntry('GoblinShaman_Hildir'),
+      dropTrophy('TrophyGoblinBruteBrosBrute', 1),
+    ],
+  },
+  {
+    type: 'creature',
+    id: 'GoblinBruteBros_nochest',
+    iconId: 'resource/TrophyGoblinBruteBrosBrute',
+    ragdollId: 'GoblinBrute_Hildir_ragdoll',
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI', 'VisEquipment'],
+    tier: 5,
+    emoji: '',
+    faction: 'PlainsMonsters',
+    maxLvl: 1,
+    spawners: [],
+    attacks: single([
+      { dmg: dmg({
+        blunt: 150,
+        chop: 100,
+        pickaxe: 40,
+      }), name: 'attack', stagger: 2.88, force: 100, toolTier: 2 },
+      { dmg: dmg({
+        blunt: 130,
+        chop: 100,
+        pickaxe: 40,
+      }), name: 'rageattack', stagger: 2.88, force: 100, toolTier: 2 },
+      // taunt
+      // HipCloth
+      // ShoulderGuard
+      { dmg: dmg({ // GoblinShaman_attack_fireball_hildir
+        blunt: 20,
+        fire: 100,
+      }), name: 'rageattack', stagger: 2.88, force: 80 },
+      // GoblinShaman_attack_protect_hildir
+      { cast: 'GoblinShaman_shield' },
+    ]),
+    tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 2,
+      run: 5,
+      swim: 1.5,
+    },
+    turnSpeed: {
+      walk: 150,
+      run: 300,
+      swim: 100,
+    },
+    hp: 2100,
+    stagger: {
+      factor: 0.3,
+      time: NaN,
+    },
+    damageModifiers: animalDmgModifiers,
+    drop: [
+      dropEntry('GoblinShaman_Hildir_nochest'),
       dropTrophy('TrophyGoblinBruteBrosBrute', 1),
     ],
   },

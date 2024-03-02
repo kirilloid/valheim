@@ -21,6 +21,8 @@ function deadSpeakBoss(line: string): Deadspeak {
   };
 }
 
+const disabled = true;
+
 export const resources: Resource[] = [
 // MEADOWS
   { type: 'item', group: 'lumber', id: 'Wood', emoji: '🪵', tier: 0, weight: 2, stack: 50, floating: true,
@@ -140,12 +142,12 @@ export const resources: Resource[] = [
     PointLight: { range: 1.5, intensity: 1.5, color: '#FFE36D' },
   },
   { type: 'item', id: 'MushroomBlue', emoji: '🍄🔵', tier: 2, weight: 0.1, stack: 50,
-    disabled: true,
+    disabled,
     Food: { health: 20, stamina: 20, duration: 600, regen: 1 },
     PointLight: { range: 1.5, intensity: 1.5, color: '#9FDBFF' },
   },
   { type: 'item', id: 'GlowingMushroom', emoji: '🍄⚪', tier: 2, weight: 0.1, stack: 50,
-    disabled: true,
+    disabled,
     PointLight: { range: 10, intensity: 2, color: '#658290' }
   },
   { type: 'item', id: 'MeadBaseHealthMedium', iconId: 'resource/MeadBase', tier: 1, weight: 1, stack: 1 },
@@ -221,7 +223,7 @@ export const resources: Resource[] = [
   { type: 'item', id: 'WitheredBone', emoji: '🦴', tier: 3, weight: 1, stack: 30, floating: true, summon: ['Bonemass', 10] },
   { type: 'trophy', id: 'TrophyLeech', trophyPos: { x: 0, y: 2 }, emoji: '🧛', tier: 3, weight: 2, stack: 20 },
   { type: 'trophy', id: 'TrophyBlob', trophyPos: { x: 6, y: 2 }, tier: 3, weight: 2, stack: 20 },
-  { type: 'trophy', id: 'TrophySurtling', trophyPos: { x: 0, y: 5 }, tier: 3, weight: 1, stack: 20,
+  { type: 'trophy', id: 'TrophySurtling', trophyPos: { x: 0, y: 6 }, tier: 3, weight: 1, stack: 20,
     PointLight: { range: 1, intensity: 3, color: '#FFB174' },
     /* warmRadius: 2, */ }, 
   { type: 'trophy', id: 'TrophyDraugr', trophyPos: { x: 1, y: 2 }, emoji: '🧟', tier: 3, weight: 2, stack: 20 },
@@ -240,7 +242,7 @@ export const resources: Resource[] = [
   { type: 'item', id: 'SerpentStew', emoji: '🍜', tier: 3, weight: 1, stack: 10,
     Food: { health: 80, stamina: 26, duration: 1800, regen: 4 },
   },
-  { type: 'trophy', id: 'TrophySerpent', trophyPos: { x: 1, y: 5 }, tier: 3, weight: 25, stack: 20 },
+  { type: 'trophy', id: 'TrophySerpent', trophyPos: { x: 1, y: 6 }, tier: 3, weight: 25, stack: 20 },
 // MOUNTAIN
   { type: 'item', group: 'hide', id: 'WolfPelt', tier: 4, weight: 1, stack: 50 },
   { type: 'item', id: 'WolfFang', tier: 4, weight: 0.1, stack: 50 },
@@ -453,9 +455,10 @@ export const resources: Resource[] = [
 // QUEST
   { type: 'item', id: 'Ironpit', emoji: '🔥', tier: 2, teleportable: false, weight: 10 },
   { type: 'item', id: 'BarberKit', emoji: '🪒', tier: 2, weight: 2 },
-  { type: 'item', id: 'HildirKey_forestcrypt', emoji: '🗝', tier: 2, weight: 0.1 },
-  { type: 'item', id: 'HildirKey_mountaincave', emoji: '🗝', tier: 2, weight: 0.1 },
-  { type: 'item', id: 'HildirKey_plainsfortress', emoji: '🗝', tier: 2, weight: 0.1 },
+  { type: 'item', id: 'HildirKey_forestcrypt', emoji: '🗝', tier: 2, disabled, weight: 0.1 },
+  { type: 'item', id: 'HildirKey_mountaincave', emoji: '🗝', tier: 2, disabled, weight: 0.1 },
+  { type: 'item', id: 'HildirKey_plainsfortress', emoji: '🗝', tier: 2, disabled, weight: 0.1 },
+  { type: 'item', id: 'FireworksRocket_White', emoji: '🎆', tier: 2, weight: 0.5, stack: 10 },
   { type: 'item', id: 'chest_hildir1', emoji: '🧰', tier: 2, teleportable: false, weight: 200 },
   { type: 'item', id: 'chest_hildir2', emoji: '🧰', tier: 4, teleportable: false, weight: 200 },
   { type: 'item', id: 'chest_hildir3', emoji: '🧰', tier: 5, teleportable: false, weight: 200 },

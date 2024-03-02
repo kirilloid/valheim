@@ -18,9 +18,10 @@ let loadId = 0;
 
 function readPropMap<T>(
   reader: PackageReader,
-  method: (this: PackageReader) => T
+  method: (this: PackageReader) => T,
+  version: number,
 ): Map<number, T> {
-  const size = reader.readByte();
+  const size = version < 33 ? reader.readByte() : reader.readNumItems();
   const map = new Map<number, T>();
   for (let index = 0; index < size; ++index) {
     const key = reader.readInt();
@@ -34,8 +35,13 @@ function writePropMap<T>(
   writer: PackageWriter,
   method: (this: PackageWriter, value: T) => void,
   map: Map<number, T>,
+  version: number,
 ): Map<number, T> {
-  writer.writeByte(map.size);
+  if (version < 33) {
+    writer.writeByte(map.size);
+  } else {
+    writer.writeNumItems(map.size);
+  }
   for (const [key, value] of map.entries()) {
     writer.writeInt(key);
     method.call(writer, value);
@@ -44,89 +50,86 @@ function writePropMap<T>(
 }
 
 function writeZdo_post30(this: ZDO, writer: PackageWriter) {
-  let data = 0;
+  let _flags = 0;
   const isIdentityRotation =
         this.rotation.x === 0
     &&  this.rotation.y === 0
     &&  this.rotation.z === 0;
-  if (!isIdentityRotation) data |= 1;
-  if (this.floats.size) data |= 2;
-  if (this.vec3.size) data |= 4;
-  if (this.quats.size) data |= 8;
-  if (this.ints.size) data |= 16;
-  if (this.longs.size) data |= 32;
-  if (this.strings.size) data |= 64;
-  if (this.byteArrays.size) data |= 128;
-  writer.writeByte(data);
-  let _dataFlags = 0;
-  // if (this.owned) _dataFlags |= 16;
-  // if (this.owner) _dataFlags |= 8;
-  // if (this.saveClone) _dataFlags |= 128;
-  if (this.type) _dataFlags |= 4;
-  if (this.persistent) _dataFlags |= 1;
-  if (this.distant) _dataFlags |= 2;
-  writer.writeByte(_dataFlags);
+  if (!isIdentityRotation) _flags |= 4096;
+  if (this.floats.size) _flags |= 2;
+  if (this.vec3.size) _flags |= 4;
+  if (this.quats.size) _flags |= 8;
+  if (this.ints.size) _flags |= 16;
+  if (this.longs.size) _flags |= 32;
+  if (this.strings.size) _flags |= 64;
+  if (this.byteArrays.size) _flags |= 128;
+  _flags |= (this.type << 10);
+  if (this.persistent) _flags |= 256;
+  if (this.distant) _flags |= 512;
+  writer.writeShort(_flags);
   writer.writeVector2s(this.sector);
   writer.writeVector3(this.position);
   writer.writeInt(this.prefab);
   if (!isIdentityRotation) writer.writeVector3(this.rotation);
-  if (this.floats.size) writePropMap(writer, writer.writeFloat, this.floats);
-  if (this.vec3.size) writePropMap(writer, writer.writeVector3, this.vec3);
-  if (this.quats.size) writePropMap(writer, writer.writeQuaternion, this.quats);
-  if (this.ints.size) writePropMap(writer, writer.writeInt, this.ints);
-  if (this.longs.size) writePropMap(writer, writer.writeLong, this.longs);
-  if (this.strings.size) writePropMap(writer, writer.writeString, this.strings);
-  if (this.byteArrays.size) writePropMap(writer, writer.writeByteArray, this.byteArrays);
+  if (this.floats.size) writePropMap(writer, writer.writeFloat, this.floats, this.version);
+  if (this.vec3.size) writePropMap(writer, writer.writeVector3, this.vec3, this.version);
+  if (this.quats.size) writePropMap(writer, writer.writeQuaternion, this.quats, this.version);
+  if (this.ints.size) writePropMap(writer, writer.writeInt, this.ints, this.version);
+  if (this.longs.size) writePropMap(writer, writer.writeLong, this.longs, this.version);
+  if (this.strings.size) writePropMap(writer, writer.writeString, this.strings, this.version);
+  if (this.byteArrays.size) writePropMap(writer, writer.writeByteArray, this.byteArrays, this.version);
 }
 
 const ZERO_VECTOR: Vector3 = { x: 0, y: 0, z: 0 };
 
-function readZdo_post30(reader: PackageReader, version: number): ZDO {
+export function readZdo_post30(reader: PackageReader, version: number): ZDO {
   const _offset = reader.getOffset();
   const id = {
     userId: BigInt(0),
     id: loadId++,
   };
-  const num1 = reader.readByte();
-  const _dataFlags = reader.readByte();
+  const _flags = reader.readShort();
+  const persistent = (_flags & 256) !== 0;
+  const distant = (_flags & 512) !== 0;
+  const type = (_flags >> 10) & 3;
   const sector = reader.readVector2s();
   const position = reader.readVector3();
   const prefab = reader.readInt();
-  const owned = (_dataFlags & 16) !== 0;
-  const owner = (_dataFlags & 8) !== 0;
-  const saveClone = (_dataFlags & 128) !== 0;
-  const type = (_dataFlags & 4) >> 2;
-  const persistent = (_dataFlags & 1) !== 0;
-  const distant = (_dataFlags & 2) !== 0;
-  const rotation = (num1 & 1) ? reader.readVector3() : ZERO_VECTOR;
-  const floats = (num1 & 2)
-    ? readPropMap(reader, reader.readFloat)
+  const rotation = (_flags & 4096) ? reader.readVector3() : ZERO_VECTOR;
+  const connectionData = (_flags & 1) ? {
+    type: reader.readByte(),
+    hash: reader.readInt(),
+  } : undefined;
+  const floats = (_flags & 2)
+    ? readPropMap(reader, reader.readFloat, version)
     : new Map<number, number>();
-  const vec3 = (num1 & 4)
-    ? readPropMap(reader, reader.readVector3)
+  const vec3 = (_flags & 4)
+    ? readPropMap(reader, reader.readVector3, version)
     : new Map<number, Vector3>();
-  const quats = (num1 & 8)
-    ? readPropMap(reader, reader.readQuaternion)
+  const quats = (_flags & 8)
+    ? readPropMap(reader, reader.readQuaternion, version)
     : new Map<number, Quaternion>();
-  const ints = (num1 & 16)
-    ? readPropMap(reader, reader.readInt)
+  const ints = (_flags & 16)
+    ? readPropMap(reader, reader.readInt, version)
     : new Map<number, number>();
-  const longs = (num1 & 32)
-    ? readPropMap(reader, reader.readLong)
+  const longs = (_flags & 32)
+    ? readPropMap(reader, reader.readLong, version)
     : new Map<number, bigint>();
-  const strings = (num1 & 64)
-    ? readPropMap(reader, reader.readString)
+  const strings = (_flags & 64)
+    ? readPropMap(reader, reader.readString, version)
     : new Map<number, string>();
-  const byteArrays = (num1 & 128)
-    ? readPropMap(reader, reader.readByteArray)
+  const byteArrays = (_flags & 128)
+    ? readPropMap(reader, reader.readByteArray, version)
     : new Map<number, Uint8Array>();
   
   const result: ZDO = {
-    id,
+    // id,
+    version,
     persistent,
     type,
     distant,
     prefab,
+    connectionData,
     sector,
     position,
     rotation,
@@ -138,16 +141,17 @@ function readZdo_post30(reader: PackageReader, version: number): ZDO {
     strings,
     byteArrays,
     _offset,
+    _bytes: new Uint8Array(),
     save: writeZdo_post30,
   }
-  if (num1 === 0) {
+  // if (num1 === 0) {
     return result;
-  }
+  // }
 }
 
 function writeZdo_pre30(this: ZDO, writer: PackageWriter) {
-  writer.writeLong(this.id.userId);
-  writer.writeUInt(this.id.id);
+  writer.writeLong((this as any).id.userId);
+  writer.writeUInt((this as any).id.id);
   const pkg = new PackageWriter();
   pkg.writeUInt(0);
   pkg.writeUInt(0);
@@ -204,7 +208,8 @@ function readZdo_pre30(reader: PackageReader, version: number): ZDO {
   const byteArrays = (version >= 27 && pkg.readIfSmallMap(pkg.readInt, pkg.readByteArray)) || new Map<number, Uint8Array>();
 
   return {
-    id,
+    // id,
+    version,
     _bytes,
     persistent,
     type,

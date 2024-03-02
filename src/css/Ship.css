@@ -1,6 +1,33 @@
-.square {
+.Windrose {
+    margin: 8px 0 0 -18px;
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.Windrose__chart {
+    flex-basis: 34%;
+}
+
+.fine-marker {
+    stroke: var(--color-text-light);
+}
+.coarse-marker {
+    stroke: var(--color-text);
+}
+
+.Windrose__label {
+    fill: var(--color-text);
+    stroke-width: 0;
+    font: 16px sans-serif;
+}
+
+.Windrose__legend-item {
     display: inline-block;
     width: 1em;
     height: 1em;
-    vertical-align: bottom;
+    vertical-align: -10%;
 }
+
+.Windrose__legend-item--full-sail { background-color: #f00; }
+.Windrose__legend-item--half-sail { background-color: #f80; }
+.Windrose__legend-item--paddle { background-color: #cc0; }

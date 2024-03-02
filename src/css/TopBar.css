@@ -2,6 +2,12 @@
   display: flex;
   flex-direction: row;
   height: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.TopBar__home {
+  /* to match input's margin */
+  margin-top: 4px;
 }
 
 .TopBar__search {

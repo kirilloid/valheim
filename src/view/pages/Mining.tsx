@@ -203,8 +203,7 @@ export function Mining() {
         {translate('ui.skill')}:
         {' '}
         <input type="range"
-          min="0" max="100" value={skill} onChange={e => setSkill(+e.target.value)}
-          style={{ verticalAlign: 'middle', width: '190px' }} />
+          min="0" max="100" value={skill} onChange={e => setSkill(+e.target.value)} />
         {' '}
         <input type="number" inputMode="numeric" pattern="[0-9]*"
           min="0" max="100" value={skill} onChange={e => setSkill(+e.target.value)}

@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 
 import type { Effect as TEffect } from '../../types';
 import { SkillType } from '../../model/skills';
@@ -6,6 +7,7 @@ import { assertNever, timeI2S } from '../../model/utils';
 
 import { TranslationContext } from '../../effects';
 import { Resistances, showNumber } from '../helpers';
+import { SkillIcon } from './Icon';
 
 function showDiffPercent(value: number): string {
   const plusSign = value < 0 ? '' : '+';
@@ -76,10 +78,13 @@ export function Effect({ effect, level }: { effect: TEffect; level?: number }) {
       <dt>{translate(`ui.skillType.${SkillType[attackModifier[0]]}`)}</dt>
       <dd>{translate('ui.damage')}: {showDiffPercent(attackModifier[1] - 1)}</dd>
     </React.Fragment>}
-    {skillModifiers != null && Object.entries(skillModifiers).map(([key, val]) => <React.Fragment key={`skillModifier-${key}`}>
-      <dt>{translate(`ui.skillType.${SkillType[key as unknown as SkillType]}`)}</dt>
-      <dd>+{val}</dd>
-    </React.Fragment>)}
+    {skillModifiers != null && Object.entries(skillModifiers).map(([key, val]) => {
+      const skillStr = SkillType[key as unknown as SkillType];
+      return <React.Fragment key={`skillModifier-${key}`}>
+        <dt><SkillIcon skill={skillStr} useAlt={false} /> <Link to={`/skills/${skillStr}`}>{translate(`ui.skillType.${skillStr}`)}</Link></dt>
+        <dd>+{val}</dd>
+      </React.Fragment>
+    })}
     {carryWeight != null && <React.Fragment key="weight">
       <dt>{translate(`ui.weight`)}</dt>
       <dd>+{carryWeight}</dd>

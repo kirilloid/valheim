@@ -32,7 +32,16 @@ const infos: Record<string, Article> = {
     sections: [
       {
         header: 'base',
-        text: `Some structures prevent spawn, but having effect from 3 of them will allow [/events](events) to happen`,
+        text: `Some structures prevent random creatures spawn, but having effect from 3 of them will allow [/events](events) to happen`,
+      },
+    ],
+  },
+  trader: {
+    header: 'traders',
+    sections: [
+      {
+        header: 'traders',
+        text: `There are two traders in Valheim: [/loc/Vendor_BlackForest](Haldor) and [/loc/Hildir_camp](Hildir)`,
       },
     ],
   }
@@ -94,7 +103,7 @@ export function Info() {
   return <article>
     <h1>{article.header}</h1>
     {article.sections.map(s => <section>
-      <h1 id={s.header} className={s.header === hash ? 'active' : ''}>{s.header}</h1>
+      <h2 id={s.header} className={s.header === hash ? 'active' : ''}>{s.header}</h2>
       <p>{replaceAllWidgets(s.text)}</p>
     </section>)}
   </article>

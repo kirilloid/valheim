@@ -832,7 +832,7 @@ const treasures: PhysicalObject[] = [
       num: [3, 8],
       options: [
         { item: 'Coins', num: [12, 54], },
-        { item: 'Softtisue', num: [1, 8], },
+        { item: 'Softtissue', num: [1, 8], },
         { item: 'DvergrNeedle', num: [1, 3], },
       ],
     }],
@@ -2595,6 +2595,14 @@ export const objects: PhysicalObject[] = [
     id: 'YggdrasilRoot',
     tier: 6,
     components: ['ResourceRoot'],
+    grow: itemGrow({
+      locations: ['Mistlands'],
+      num: [2, 4],
+      scale: [1, 1.5],
+      terrainDelta: [0, 6],
+      terrainDeltaRadius: 5,
+      tilt: [0, 45],
+    }),
     ResourceRoot: {
       maxLevel: 50,
       highThreshold: 40,

@@ -7,7 +7,7 @@ import { toggleItem } from '../../model/utils';
 import { data } from '../../data/itemDB';
 
 import { TranslationContext } from '../../effects';
-import { Icon, ItemIcon } from '../parts/Icon';
+import { ItemIcon } from '../parts/Icon';
 import { Wiki } from '../parts/Wiki';
 
 const baseKeys = [
@@ -20,9 +20,9 @@ const baseKeys = [
   ['defeated_dragon', 'Dragon'],
   ['defeated_goblinking', 'GoblinKing'],
   ['defeated_queen', 'SeekerQueen'],
-  ['Skeleton_Hildir', 'BossHildir1'],
-  ['Fenring_Cultist_Hildir', 'BossHildir2'],
-  ['GoblinBruteBros', 'BossHildir3'],
+  ['BossHildir1', 'Skeleton_Hildir'],
+  ['BossHildir2', 'Fenring_Cultist_Hildir'],
+  ['BossHildir3', 'GoblinBruteBros'],
 ] as const;
 
 function Keys({ value, onChange }: ValueProps<string[]>) {
@@ -42,27 +42,12 @@ function Keys({ value, onChange }: ValueProps<string[]>) {
       {baseKeys.map(([key, id]) => <li key={key}>
         <label>
           <input type="checkbox" checked={value.includes(key)} onChange={e => onChange(toggleItem(value, key, e.target.checked))} />
+          {' '}
           <ItemIcon item={data[id]} />
+          {' '}
           {translate(id)}
         </label>
       </li>)}
-    <hr />
-    <ul>
-      <li key="nomap">
-        <label>
-          <input type="checkbox" checked={!value.includes('nomap')} onChange={e => onChange(toggleItem(value, 'nomap', !e.target.checked))} />
-          <Icon id="map_ping" alt="" />
-          map
-        </label>
-      </li>
-      <li key="noportal">
-        <label>
-          <input type="checkbox" checked={!value.includes('noportals')} onChange={e => onChange(toggleItem(value, 'noportals', !e.target.checked))} />
-          <ItemIcon item={data.portal_wood} />
-          {translate('portal_wood')}
-        </label>
-      </li>
-    </ul>
       {/* {value.map(key => baseKeys.find(pair => pair[0] === key)
         ? null
         : <li key={key}>

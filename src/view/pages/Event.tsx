@@ -90,7 +90,14 @@ export function GameEvent() {
   );
 }
 
-const kills: EntityId[] = ['Eikthyr', 'Troll', 'gd_king', 'Surtling', 'Bonemass', 'Bat', 'Dragon', 'GoblinKing', 'SeekerQueen'];
+const kills: EntityId[] = [
+  'Eikthyr',
+  'Troll', 'Skeleton_Hildir', 'gd_king',
+  'Surtling', 'Bonemass',
+  'Bat', 'Fenring_Cultist_Hildir', 'Dragon',
+  'GoblinBruteBros', 'GoblinKing',
+  'SeekerQueen',
+];
 const biomes: Biome[] = ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains', 'Mistlands'];
 
 export function GameEventFilterTable() {
@@ -128,15 +135,17 @@ export function GameEventFilterTable() {
           <ul>
             {kills.map(id => <li key={id}>
               <input id={id} type="checkbox" checked={state.kills[id]} onChange={onKillChange} />
-              <label htmlFor={id}>{translate(id)}</label>
+              {' '}
+              <label htmlFor={id}><InlineObjectWithIcon id={id} /></label>
             </li>)}
           </ul>
         </div>
         <div className="Events__Control">
-          <header>biome</header>
+          <header>{translate('ui.biome')}</header>
           <ul>
             {biomes.map(id => <li key={id}>
               <input id={id} type="radio" name="biome" checked={state.biome === id} onChange={onBiomeChange} />
+              {' '}
               <label htmlFor={id}>{translate(`ui.biome.${id}`)}</label>
             </li>)}
           </ul>          

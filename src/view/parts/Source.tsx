@@ -118,8 +118,9 @@ function Materials({
   );
 }
 
-function CraftingSection({ id }: { id: EntityId }) {
+const CraftingSection = React.memo(({ id }: { id: EntityId }) => {
   const translate = useContext(TranslationContext);
+  const [mods] = useGlobalState('searchInMods');
   const crafts = resourceCraftMap[id];
   const builds = resourceBuildMap[id];
   return <>
@@ -128,7 +129,7 @@ function CraftingSection({ id }: { id: EntityId }) {
           <h2>{translate('ui.crafting')}</h2>
           <div>{translate('ui.usedToCraft')}:</div>
           <ul className="CraftList">
-            {crafts.sort((a, b) => a.tier - b.tier).map(item => <li key={item.id}>
+            {(mods ? crafts : crafts.filter(r => r.mod == null)).sort((a, b) => a.tier - b.tier).map(item => <li key={item.id}>
               <InlineObjectWithIcon id={item.id} />
             </li>)}
           </ul>
@@ -146,10 +147,15 @@ function CraftingSection({ id }: { id: EntityId }) {
         </section>
       : null}
   </>
-}
+});
 
 function getRecipe(item: GameObject) {
-  if (item.type === 'piece') return item.recipe;
+  switch (item.type) {
+    case 'piece':
+    case 'ship':
+    case 'cart':
+      return item.recipe;
+  }
   return recipes.find(r => r.item === item.id);
 }
 
@@ -158,9 +164,10 @@ export function Recipe({ item }: { item: GameObject }) {
   const recipe = getRecipe(item);
   if (recipe == null) return null;
   switch (recipe.type) {
-    case 'trader':
+    case 'haldor':
+    case 'hildir':
       return <>
-        Bought from <Link to="/info/trader">trader</Link> for {recipe.value} <Icon id="coin" alt={translate('Coins')} size={16} />
+        Bought from <Link to="/info/trader">{recipe.type}</Link> for {recipe.value} <Icon id="coin" alt={translate('Coins')} size={16} />
         {recipe.killed && <><br />Available only after killing <InlineObjectWithIcon id={recipe.killed} /></>}
       </>;
     case 'craft':

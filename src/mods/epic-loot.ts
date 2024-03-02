@@ -1,5 +1,5 @@
 import type { DamageProfile, GameObject, Item, Piece, Resource, ItemRecipe, EntityId, DamageModifiers, Pair } from '../types';
-import { forgeRecipe, traderRecipe, inventoryRecipe, genericRecipe } from '../model/recipe';
+import { forgeRecipe, haldorRecipe, inventoryRecipe, genericRecipe } from '../model/recipe';
 import { mods } from '../model/game';
 
 const augmenterRecipe = (materials: Record<EntityId, number>, item: EntityId, number = 1) =>
@@ -315,7 +315,7 @@ export const recipes: ItemRecipe[] = [
   forgeRecipe(1, { LeatherScraps: 5, Bronze: 1 }, {}, 'LeatherBelt'),
   forgeRecipe(1, { Coins: 200, Ruby: 1 }, {}, 'GoldRubyRing'),
   forgeRecipe(1, { Silver: 1 }, {}, 'SilverRing'),
-  traderRecipe(2000, 'Advaranaut'),
+  haldorRecipe(2000, 'Advaranaut'),
 
   // upgrade
   inventoryRecipe({ ShardMagic: 5 }, 'ShardRare'),

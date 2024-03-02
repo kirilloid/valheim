@@ -15,7 +15,7 @@ import { arrows } from '../../data/arrows';
 import { biomeTiers } from '../../data/location';
 import { groupedCreatures } from '../../data/combat_creatures';
 
-import { TranslationContext, useGlobalState, useDebounceEffect, useRuneTranslate } from '../../effects';
+import { TranslationContext, useGlobalState, useDebounceEffect, useRuneTranslate, GameSettingsContext } from '../../effects';
 import { showNumber } from '../helpers';
 import { Icon, ItemIcon, SkillIcon } from '../parts/Icon';
 import { SpoilerAlert } from '../parts/Spoiler';
@@ -159,7 +159,7 @@ function WeaponBlock(props: {
           <option value="100"/>
         </datalist>
         <input type="range" id={`skill${index}`}
-          className="BigInput"
+          className="range BigInput"
           min="0" max="100" value={skill}
           onChange={e => dispatch(changeSkill(index, Number(e.target.value), smart))}
           list="skill" />
@@ -228,6 +228,8 @@ function StatBar(props: {
 export function AttackCalc() {
   const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
+  const { worldlevel } = useContext(GameSettingsContext);
+
   const runeTranslate = useRuneTranslate();
   const history = useHistory();
   const { params } = useParams<{ params?: string }>();
@@ -261,7 +263,7 @@ export function AttackCalc() {
   const onChangeStat = (e: React.ChangeEvent<HTMLSelectElement>) => dispatch(changeStat(e.target.value as any));
   // const [stars, onStarsChange] = useStateInputEffect(0, numberReader);  
   // const scale = { players, stars: Math.min(stars, creature.maxLvl - 1) };
-  const attackStats = weapons.map(w => w.item.attacks.map(a => attackCreature(w, a, creature, isWet, backstab)));
+  const attackStats = weapons.map(w => w.item.attacks.map(a => attackCreature(w, a, creature, worldlevel, isWet, backstab)));
   const maxStat = Math.max(...attackStats.flatMap(ws => ws.map(s => pickStat(s, stat, creature))));
 
   function areTheSame<T>(weapons: WeaponConfig[], reader: (w: WeaponConfig) => T): boolean {
@@ -387,7 +389,7 @@ export function AttackCalc() {
           <span className="InputBlock__Gap" />
           <Icon id="armor" alt="" size={24} />
           <input type="number" inputMode="numeric" pattern="[0-9]*" min="0" max="100" onChange={onArmorChange} value={armor} style={{ width: '3em' }} />
-          <input type="range" min="0" max="100" onChange={onArmorChange} value={armor} className="BigInput" list="armor" />
+          <input type="range" min="0" max="100" onChange={onArmorChange} value={armor} className="range BigInput" list="armor" />
           <datalist id="armor">
             <option value="2" label="Rag" />
             <option value="7" label="Leather 1" />
@@ -406,7 +408,7 @@ export function AttackCalc() {
           <span className="InputBlock__Gap" />
           <Icon id="player" alt="" size={24} />
           <input type="number" pattern="[0-9]+" min="1" max={MAX_PLAYERS} onChange={onPlayersChange} value={players} style={{ width: '3em' }} />
-          <input type="range" min="1" max={MAX_PLAYERS} onChange={onPlayersChange} value={players} className="BigInput" />
+          <input type="range" min="1" max={MAX_PLAYERS} onChange={onPlayersChange} value={players} className="range BigInput" />
         </label>*/}
       </div>
     </div>

@@ -51,6 +51,7 @@ export type ZDOCorruption = {
 
 export interface ZDO {
   // id: ZDOID;
+  version: number;
   _bytes: Uint8Array;
   // ownerRevision: number;
   // dataRevision: number;
@@ -61,6 +62,7 @@ export interface ZDO {
   type: ZDOObjectType;
   distant: boolean;
   prefab: number;
+  connectionData?: { type: number; hash: number };
   sector: Readonly<Vector2i>;
   position: Readonly<Vector3>;
   rotation: Readonly<Vector3>;
@@ -73,49 +75,4 @@ export interface ZDO {
   readonly byteArrays: Map<number, Uint8Array>; // int -> byte[]
   readonly _offset: number;
   save(writer: PackageWriter): void;
-}
-
-export enum GlobalKeys {
-  PlayerDamage,
-  EnemyDamage,
-  WorldLevel,
-  EventRate,
-  ResourceRate,
-  StaminaRate,
-  MoveStaminaRate,
-  StaminaRegenRate,
-  SkillGainRate,
-  SkillReductionRate,
-  EnemySpeedSize,
-  EnemyLevelUpRate,
-  PlayerEvents,
-  Fire,
-  DeathKeepEquip,
-  DeathDeleteItems,
-  DeathDeleteUnequipped,
-  DeathSkillsReset,
-  NoBuildCost,
-  NoCraftCost,
-  AllPiecesUnlocked,
-  NoWorkbench,
-  AllRecipesUnlocked,
-  WorldLevelLockedTools,
-  PassiveMobs,
-  NoMap,
-  NoPortals,
-  NoBossPortals,
-  DungeonBuild,
-  TeleportAll,
-  Preset,
-  NonServerOption,
-  defeated_eikthyr,
-  defeated_dragon,
-  defeated_goblinking,
-  defeated_gdking,
-  defeated_bonemass,
-  activeBosses,
-  KilledTroll,
-  killed_surtling,
-  KilledBat,
-  Count,
 }

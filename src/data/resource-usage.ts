@@ -28,7 +28,8 @@ function addToMap<T extends Item | Piece | Ship | Cart>(map: Record<EntityId, T[
     stationsMap.set(station, stationList);
   }
   switch (recipe.type) {
-    case 'trader':
+    case 'haldor':
+    case 'hildir':
       addItem('Coins', item);
       break;
     case 'craft':

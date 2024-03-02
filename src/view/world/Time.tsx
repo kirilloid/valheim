@@ -20,7 +20,7 @@ export function WorldTime({ value, onChange }: ValueProps<WorldData>) {
   const { netTime } = value;
   const [state, runState] = useProgressState<number>();
   const timeCompletelyOff = !isFinite(netTime) || netTime < 0 || netTime >= 1e9;
-  const startScan = useCallback(() => runState(getMaxTime(value.zdo.zdos)), [value]);
+  const startScan = useCallback(() => runState(getMaxTime(value.zdo.zdos)), [runState, value]);
 
   return <div className="WorldEdit__Time">
     <h2>world time</h2>

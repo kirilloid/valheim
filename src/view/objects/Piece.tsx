@@ -7,7 +7,7 @@ import { getStructuralIntegrity, pieces } from '../../data/building';
 import { stationsMap, Produced } from '../../data/resource-usage';
 import { assertNever, days, timeI2S } from '../../model/utils';
 
-import { TranslationContext } from '../../effects';
+import { TranslationContext, useGlobalState } from '../../effects';
 import { InlineObjectWithIcon, Light, List, Resistances, yesNo } from '../helpers';
 import { ItemHeader } from '../parts/ItemHeader';
 import { Recipe } from '../parts/Source';
@@ -117,8 +117,10 @@ function reqList(piece: TPiece['piece']) {
 }
 
 function CraftList({ items }: { items: Produced[] }) {
+  const [mods] = useGlobalState('searchInMods');
+
   return <ul className="CraftList">
-    {items.map(item => <li key={item.id}>
+    {(mods ? items : items.filter(item => item.mod == null)).map(item => <li key={item.id}>
       <InlineObjectWithIcon id={item.id} />
     </li>)}
   </ul>

@@ -17,7 +17,7 @@ const HAIR_COLOR_1: Vector3 = { x: 1, y: 0.48813385, z: 0.2794118 };
 
 function SkinColor({ value, onChange } : ValueProps<Vector3>) {
   return <>
-    <input type="range" value={value.x} min="0.3" max="1" step="0.001" onChange={e => {
+    <input type="range" className="range" value={value.x} min="0.3" max="1" step="0.001" onChange={e => {
       const v = Number(e.target.value);
       onChange({ x: v, y: v, z: v });
     }} />
@@ -41,12 +41,12 @@ function hairColorToRgb(darkness: number, hue: number) {
 function HairColor({ value, onChange } : ValueProps<Vector3>) {
   const { darkness, hue } = hairColorFromRgb(value);
   return <>
-    <input type="range" min="0.1" max="1" step="0.001" value={darkness} onChange={e => {
+    <input type="range" className="range" min="0.1" max="1" step="0.001" value={darkness} onChange={e => {
       const d = Number(e.target.value);
       onChange(hairColorToRgb(d, hue));
     }} style={{ height: 8 }} />
     <br />
-    <input type="range" value={hue} min="0" max="1" step="0.001" onChange={e => {
+    <input type="range" className="range" value={hue} min="0" max="1" step="0.001" onChange={e => {
       const h = Number(e.target.value);
       onChange(hairColorToRgb(darkness, h));
     }} />

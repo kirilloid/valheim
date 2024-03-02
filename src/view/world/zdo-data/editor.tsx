@@ -4,7 +4,7 @@ import type { GameComponent } from '../../../types';
 import type { ZDO } from '../types';
 import type { PlayersData } from '../../../model/zdo-selectors';
 
-import { flip } from '../../../model/utils';
+import { flipV } from '../../../model/utils';
 import { stableHashCode } from '../../../model/hash';
 import { VirtualItem } from '../../../model/zdo-containers';
 import { data, extraData } from '../../../data/itemDB';
@@ -97,7 +97,7 @@ export const ItemEditor = React.memo(({
         <dt>Warning</dt>
         <dd>
           Ship seems to be turned over <button className="btn btn--primary" onClick={() => {
-            zdo.rotation = flip(zdo.rotation);
+            zdo.rotation = flipV(zdo.rotation);
             onChange(zdo);
           }}>flip it back</button>
         </dd>

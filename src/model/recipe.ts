@@ -86,15 +86,20 @@ export const smelterRecipe = (
   metal: EntityId,
 ) => genericRecipe(smelter, 1, SMELTER_TIME, { [ore]: 1, Coal: 2 }, {}, metal, 1);
 
-export const traderRecipe = (
+const traderRecipe = (
+  type: 'haldor' | 'hildir',
+) => (
   value: number,
   item: EntityId,
   { number = 1, killed }: { number?: number; killed?: EntityId } = {},
 ): ItemRecipe => ({
-  type: 'trader',
+  type,
   value,
   item,
   number,
   killed,
 });
+
+export const haldorRecipe = traderRecipe('haldor');
+export const hildirRecipe = traderRecipe('hildir');
 

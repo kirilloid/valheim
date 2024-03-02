@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
 
 import type { WorldData } from './types';
@@ -16,7 +16,7 @@ function showPercent(ratio: number, precision: number) {
     : `≈${Math.round(percent)}%`
 }
 
-const laterReleasedBiome = new Set<Biome>(['Mistlands'/*, 'Ashlands', 'DeepNorth'*/]);
+const laterReleasedBiome = new Set<Biome>(['Ashlands'/*, 'DeepNorth'*/]);
 
 type ProgressState = {
   progress: number;
@@ -39,6 +39,8 @@ export function WorldDiscovery({ value, onChange }: ValueProps<WorldData>) {
     });
   }, [value, precision]);
 
+  const overall = useMemo(() => ({ discovered: 0, total: 0 }), []);
+
   const resetBiome = useCallback(async (biome: Biome, zoneIds: Set<number>) => {
     if (!stats) return;
     // await confirm("This will erase both naturally spawned and items you might have created. Do you want to proceed?");
@@ -50,11 +52,10 @@ export function WorldDiscovery({ value, onChange }: ValueProps<WorldData>) {
     onChange(result);
     setStats({ ...stats, [biome]: { zoneIds: new Set(), total } })
     setProgressState(undefined);
-  }, [stats, setStats, onChange, setProgressState]);
+  }, [stats, setStats, onChange, setProgressState, overall, value]);
 
   if (stats == null) return null;
   
-  const overall = { discovered: 0, total: 0 };
   for (const pair of Object.values(stats)) {
     overall.discovered += pair.zoneIds.size;
     overall.total += pair.total;
@@ -100,11 +101,13 @@ export function WorldDiscovery({ value, onChange }: ValueProps<WorldData>) {
           </tr>;
         })}
       </tbody>
-      <tr>
-        <td>{translate('ui.total')}</td>
-        <td>{showPercent(overall.discovered / overall.total, precision)}</td>
-        <td>{showPercent(1, 1)}</td>
-      </tr>
+      <tfoot>
+        <tr>
+          <td>{translate('ui.total')}</td>
+          <td>{showPercent(overall.discovered / overall.total, precision)}</td>
+          <td>{showPercent(1, 1)}</td>
+        </tr>
+      </tfoot>
     </table>
     <p>You can use those numbers to know how much of the world is already generated and won't be updated when new content will be released</p>
   </div>;

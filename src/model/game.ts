@@ -20,6 +20,23 @@ export const BASE_EITR = 0;
 export const MAX_PLAYERS = 10;
 export const DODGE_STAMINA = 15;
 
+export const WORLD_CONFIG = {
+  difficultyScaleMaxPlayers: 5,
+  damageScalePerPlayer: 0.04,
+  healthScalePerPlayer: 0.3,
+  nonScaledDropTypes: 0xd000000,
+  worldLevelEnemyBaseAC: 60,
+  worldLevelEnemyHPMultiplier: 2.5,
+  worldLevelEnemyBaseDamage: 35,
+  worldLevelGearBaseAC: 38,
+  worldLevelGearBaseDamage: 120,
+  worldLevelEnemyLevelUpExponent: 1.15,
+  worldLevelEnemyMoveSpeedMultiplier: 0.3,
+  worldLevelPieceBaseDamage: 100,
+  worldLevelPieceHPMultiplier: 1,
+  worldLevelMineHPMultiplier: 4,
+};
+
 export const singleDrop = (item: EntityId, min: number = 1, max: number = min): GeneralDrop => ({
   num: [min, max],
   options: [{ item }]

@@ -3,12 +3,16 @@ import React, { useContext } from 'react';
 import type { Player } from '../../file/Player';
 import { InlineObjectWithIcon } from '../helpers';
 
+import '../../css/Stats.css';
+
 import { data } from '../../data/itemDB';
 import { EffectIcon, Icon, ItemIcon } from '../parts/Icon';
-import { Biome, Resource } from '../../types';
+import { Biome, Creature, EntityId, Resource } from '../../types';
 import { TranslationContext } from '../../effects';
 import { PlayerStatType } from '../../file/PlayerStatType';
 import { Tabs } from '../parts/Tabs';
+import { creatures } from '../../data/creatures';
+import { runeText } from '../../effects/translation.effect';
 
 const stations: Record<string, string> = {
   '$piece_workbench': 'piece_workbench',
@@ -264,26 +268,47 @@ export function Stats({ player }: { player: Player }) {
 }
 
 const allTrophies = Object.values(data).filter(i => i.type === 'trophy' && !i.disabled) as (Resource & { type: 'trophy' })[];
+const maxX = Math.max(...allTrophies.map(t => t.trophyPos?.x ?? 0));
+const maxY = Math.max(...allTrophies.map(t => t.trophyPos?.y ?? 0));
+const grid: string[][] = Array.from({ length: maxY + 1 }, () => Array.from({ length: maxX + 1 }, () => ''));
+for (const item of allTrophies) {
+  const pos = item.trophyPos;
+  if (pos == null) continue;
+  grid[pos.y]![pos.x] = item.id;
+}
+const trophyToCreature: Record<EntityId, Creature> = {};
+
+for (const c of creatures) {
+  for (const i of c.drop) {
+    const item = data[i.item];
+    if (item?.type === 'trophy') {
+      trophyToCreature[i.item] = c;
+    }
+  }
+}
 
 export function Trophies({ trophies }: { trophies: string[] }) {
-  const grid: string[][] = Array.from({ length: 6 }, () => Array.from({ length: 7 }, () => ''));
+  const translate = useContext(TranslationContext);
+
   const found = new Set(trophies);
-  for (const item of allTrophies) {
-    const pos = item.trophyPos;
-    if (pos == null) continue;
-    grid[pos.y]![pos.x] = item.id;
-  }
 
   return <div className="TrophyRoom">
     {grid.map((row, y) => row.map((id, x) => {
+      const isFound = found.has(id);
       const item = data[id];
       if (item == null) return <div key={`${x}_${y}`}></div>;
       const classNames = ['TrophyRoom__slot'];
-      if (found.has(id)) {
+      if (isFound) {
         classNames.push('TrophyRoom__slot--found');
       }
-      return <div key={`${x}_${y}`} className={classNames.join(' ')}>
-        <ItemIcon item={item} size={64} useAlt />
+      const name = translate(trophyToCreature[item.id]?.id ?? item.id);
+      const shownName = isFound ? name : runeText(name);
+      return <div key={`${x}_${y}`} className={classNames.join(' ')} title="shownName">
+        <div className="TrophyRoom__shadow"><ItemIcon item={item} size={64} /></div>
+        <div className="TrophyRoom__icon"><ItemIcon item={item} size={64} /></div>
+        <span className="TrophyRoom__title">
+          {shownName}
+        </span>
       </div>
     }))}
   </div>;

@@ -2,13 +2,13 @@
   width: 200px;
   height: 32px;
   position: relative;
-  background-color: gray;
+  background-color: #222;
   margin-bottom: 8px;
 }
 
 .SkillBar__level {
   height: 24px;
-  background-color: #cc0; 
+  background: #cc0 url("data:image/bmp;base64, Qk2WAAAAAAAAADYAAAAoAAAAAQAAABgAAAABABgAAAAAAAAAAADEDgAAxA4AAAAAAAAAAAAABVpuAApkegAEZXwAAGV9AABlfgAAaIIAAGyHAABwjQAAeZgAAYWkAAOPsAACkrQAAJW4AAGjyQAEtOAAA77uAADB8wAAwfIAAL7tAAG76AAAtuIAAK/ZAACm0AAjoL8A") repeat-x;
 }
 
 .SkillBar__value {
@@ -21,8 +21,11 @@ input.SkillBar__value {
   background: transparent;
   border: none;
 }
+input.SkillBar__value:focus-visible {
+  outline-offset: 2px;
+}
 
 .SkillBar__sublevel {
   height: 8px;
-  background-color: #f80;
+  background: #f80 url("data:image/bmp;base64, Qk1WAAAAAAAAADYAAAAoAAAAAQAAAAgAAAABABgAAAAAAAAAAADEDgAAxA4AAAAAAAAAAAAACiVcAAMpfAAAK5cAAj2/ABBP4AAQUegAA0jBAAA7cQA=") repeat-x;
 }

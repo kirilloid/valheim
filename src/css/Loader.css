@@ -1,0 +1,79 @@
+.Loader {
+  position: relative;
+  width: 256px;
+  height: 256px;
+  margin: 0 auto;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.Loader--layer {
+  position: absolute;
+  animation: rotation 1s linear infinite;
+  width: 256px;
+  height: 256px;
+  margin: 64px auto;
+}
+
+.Loader--layer-1 {
+  background-image: image-set(
+    url("../img/teleport/teleport_1.png") type("image/png"),
+    url("../img/teleport/teleport_1.webp") type("image/webp")
+  );
+  animation-duration: 2s;
+}
+
+.Loader--layer-2 {
+  background-image: image-set(
+    url("../img/teleport/teleport_2.png") type("image/png"),
+    url("../img/teleport/teleport_2.webp") type("image/webp")
+  );
+  animation-duration: 3s;
+}
+
+.Loader--layer-3 {
+  background-image: image-set(
+    url("../img/teleport/teleport_3.png") type("image/png"),
+    url("../img/teleport/teleport_3.webp") type("image/webp")
+  );
+  animation-duration: 4s;
+}
+
+.Loader--layer-4 {
+  background-image: image-set(
+    url("../img/teleport/teleport_4.png") type("image/png"),
+    url("../img/teleport/teleport_4.webp") type("image/webp")
+  );
+  animation-duration: 5s;
+}
+
+.Loader--layer-5 {
+  background-image: image-set(
+    url("../img/teleport/teleport_5.png") type("image/png"),
+    url("../img/teleport/teleport_5.webp") type("image/webp")
+  );
+  animation-duration: 6s;
+}
+
+.Loader--layer-6 {
+  background-image: image-set(
+    url("../img/teleport/teleport_6.png") type("image/png"),
+    url("../img/teleport/teleport_6.webp") type("image/webp")
+  );
+  animation-duration: 7s;
+}
+
+.Loader--layer-7 {
+  background-image: image-set(
+    url("../img/teleport/teleport_7.png") type("image/png"),
+    url("../img/teleport/teleport_7.webp") type("image/webp")
+  );
+  animation-duration: 8s;
+}

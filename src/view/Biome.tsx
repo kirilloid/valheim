@@ -11,7 +11,7 @@ import { resourceCraftMap } from '../data/resource-usage';
 import { envSetup, envStates } from '../data/env';
 
 import { TranslationContext } from '../effects';
-import { averageAttacksDamage, InlineObjectWithIcon, yesNo } from './helpers';
+import { averageAttacksDamage, InlineObjectWithIcon, List, yesNo } from './helpers';
 import { ItemIcon } from './parts/Icon';
 import { SpoilerAlert } from './parts/Spoiler';
 import { sortBy } from '../model/utils';
@@ -191,6 +191,19 @@ function Locations({ biome }: { biome: BiomeConfig }) {
   </section>
 }
 
+function BiomeList({ id }: { id: string }) {
+  const translate = useContext(TranslationContext);
+
+  return <div>Biomes: <List separator=" | ">{biomes.map(biome => {
+    const name = translate(`ui.biome.${biome.id}`);
+    return biome.active
+      ? biome.id === id
+        ? <strong key={biome.id}>{name}</strong>
+        : <Link key={biome.id} to={`/biome/${biome.id}`}>{name}</Link>
+      : <span key={biome.id} className="disabled">{name}</span>
+  })}</List></div>
+}
+
 export function Biome() {
   const { id } = useParams<{ id: string }>();
   const translate = useContext(TranslationContext);
@@ -211,6 +224,7 @@ export function Biome() {
         {translate(`ui.biome.${id}`)}
         <span className="entity-type"> &ndash; {translate('ui.biome')}</span>
       </h1>
+      <BiomeList id={id} />
       <picture>
         <source srcSet={`${imgPath}.webp`} type="image/webp" />
         <img src={`${imgPath}.jpg`} className="BiomePicture" alt="illustration" />

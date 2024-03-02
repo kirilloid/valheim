@@ -30,6 +30,7 @@ export const ships: Ship[] = [
       water: true,
       size: [4, 6, 4],
     },
+    sailWidth: 2.5,
     sail: {
       forceDistance: 2,
       force: 0.5,
@@ -71,6 +72,7 @@ export const ships: Ship[] = [
       water: true,
       size: [4, 10, 8],
     },
+    sailWidth: 8,
     sail: {
       forceDistance: 2,
       force: 1,
@@ -117,6 +119,7 @@ export const ships: Ship[] = [
       water: true,
       size: [6, 22, 12],
     },
+    sailWidth: 8,
     sail: {
       forceDistance: 3,
       force: 1,

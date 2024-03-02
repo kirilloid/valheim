@@ -8,6 +8,7 @@ import type { Reader, Writer, EditorProps } from './types';
 import { assertNever, getMemUsage, runGenerator } from '../../model/utils';
 import { downloadFile } from '../helpers';
 import { Tabs } from './Tabs';
+import { Loader } from './Loader';
 import { TranslationContext } from '../../effects';
 
 type Props<T> = {
@@ -210,6 +211,7 @@ export function FileEditor<T>(props: Props<T>) {
           return <>
             <div>{translate('ui.fileEditor.reading')} &hellip;</div>
             <progress value={state.progress} max="1" style={{ width: '100%' }} />
+            <Loader />
           </>
         case 'done':
           return <>

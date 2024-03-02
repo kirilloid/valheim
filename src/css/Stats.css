@@ -1,0 +1,38 @@
+.TrophyRoom {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-top: 32px;
+}
+
+.TrophyRoom__slot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    word-break: break-word;
+    opacity: 0.25;
+    position: relative;
+    background: url('../img/trophy-bg.png') no-repeat center top;
+    height: 128px;
+    padding: 0 8px;
+}
+
+.TrophyRoom__slot--found {
+    opacity: 1;
+}  
+
+.TrophyRoom__icon {
+    width: 64px;
+    height: 64px;
+    z-index: 1;
+}
+
+.TrophyRoom__shadow {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    margin-left: 2px;
+    margin-top: 2px;
+    filter: brightness(0) blur(2px) opacity(0.75);
+    transform: translateX(-50%);
+}

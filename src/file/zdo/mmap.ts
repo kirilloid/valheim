@@ -24,10 +24,13 @@ class ZdoMmapView implements ZDO {
   _strings: Map<number, string> | null = null;
   _byteArrays: Map<number, Uint8Array> | null = null;
 
+  private readSize = PackageReader.prototype.readChar;
+  private writeSize = PackageWriter.prototype.writeChar;
+
   public id: ZDOID;
   public readonly _offset: number;
 
-  constructor(reader: PackageReader, private version: number) {
+  constructor(reader: PackageReader, public version: number) {
     this._offset = reader.getOffset();
     this.id = {
       userId: reader.readLong(),
@@ -129,27 +132,27 @@ class ZdoMmapView implements ZDO {
   get floats(): FloatBinMap {
     if (this._floats !== null) return this._floats;
     this.offsetFloats = offsets.maps;
-    return this._floats = new FloatBinMap(this._bytes.subarray(offsets.maps));
+    return this._floats = new FloatBinMap(this._bytes.subarray(offsets.maps), this.readSize, this.writeSize);
   }
   get vec3(): Vector3BinMap {
     if (this._vec3 !== null) return this._vec3;
     this.offsetVec3 = this.floats.byteSize + this.offsetFloats;
-    return this._vec3 = new Vector3BinMap(this._bytes.subarray(this.offsetVec3));
+    return this._vec3 = new Vector3BinMap(this._bytes.subarray(this.offsetVec3), this.readSize, this.writeSize);
   }
   get quats() {
     if (this._quats !== null) return this._quats;
     this.offsetQuats = this.vec3.byteSize + this.offsetVec3;
-    return this._quats = new QuaternionBinMap(this._bytes.subarray(this.offsetQuats));
+    return this._quats = new QuaternionBinMap(this._bytes.subarray(this.offsetQuats), this.readSize, this.writeSize);
   }
   get ints() {
     if (this._ints !== null) return this._ints;
     this.offsetInts = this.quats.byteSize + this.offsetQuats;
-    return this._ints = new IntBinMap(this._bytes.subarray(this.offsetInts));
+    return this._ints = new IntBinMap(this._bytes.subarray(this.offsetInts), this.readSize, this.writeSize);
   }
   get longs() {
     if (this._longs !== null) return this._longs;
     this.offsetLongs = this.ints.byteSize + this.offsetInts;
-    return this._longs = new LongBinMap(this._bytes.subarray(this.offsetLongs));
+    return this._longs = new LongBinMap(this._bytes.subarray(this.offsetLongs), this.readSize, this.writeSize);
   }
   get strings() {
     if (this._strings === null) {

@@ -26,7 +26,7 @@ function SingleLocation({ loc }: { loc: LocationConfig }) {
   return (
     <section style={{ position: 'relative' }}>
       {loc.id !== loc.typeId &&
-      <img src={`/icons/location/${loc.id}.png`} className="LocationIllustration" />}
+      <img src={`/icons/location/${loc.id}.png`} alt="" className="LocationIllustration" />}
       <dl>
         <dt>{translate('ui.biome')}</dt>
         <dd><List>{loc.biomes.map(biome => <Area area={biome} key={biome} />)}</List></dd>
@@ -65,13 +65,11 @@ function CustomMusic({ id }: { id?: string }) {
   if (id == null) return null;
   const isUnique = (musicToLocation[id]?.length ?? 0) <= 1;
   return isUnique
-    ? <span
-        style={{ float: 'right' }}
+    ? <span className="music-icon"
         title="This location has unique music">
         ♫
       </span>
-    : <span
-        style={{ float: 'right' }}
+    : <span className="music-icon"
         title="This location has custom music">
         ♪
       </span>;

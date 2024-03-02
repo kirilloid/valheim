@@ -4,14 +4,17 @@ import type { GameObject } from '../../types';
 import { groups } from '../../data/itemDB';
 import { modLinks } from '../../mods';
 
-import { TranslationContext, useRuneTranslate } from '../../effects';
+import { TranslationContext, useGlobalState, useRuneTranslate } from '../../effects';
 import { InlineObjectWithIcon, List, markdown, ModLinks } from '../helpers';
 import { ItemIcon } from './Icon';
 
-export function ItemHeader({ item, noIcon = false, children }: { item: GameObject, noIcon?: boolean, children?: React.ReactNode }) {
+export const ItemHeader = React.memo(({ item, noIcon = false, children }: { item: GameObject, noIcon?: boolean, children?: React.ReactNode }) => {
   const translate = useContext(TranslationContext);
   const runeTranslate = useRuneTranslate();
+  const [showDisabled] = useGlobalState('searchInDisabled');
+  
   const group = item.group && groups[item.group];
+
   return <>
     {item.disabled && <div className="info" role="banner">{
       translate('ui.onlyWithCheats')
@@ -44,10 +47,10 @@ export function ItemHeader({ item, noIcon = false, children }: { item: GameObjec
       }</span>
       {children}
     </h1>
-    {group ? <div>See also: <List>{
-      group
+    {group ? <div>See also: <List separator=" | ">{
+      (showDisabled ? group : group.filter(e => !e.disabled))
         .filter(e => e !== item)
         .map(e => <InlineObjectWithIcon key={e.id} id={e.id} nobr />)
     }</List></div> : null}
   </>;
-}
+});

@@ -12,7 +12,6 @@ import { ItemHeader } from '../parts/ItemHeader';
 import { Source } from '../parts/Source';
 
 type ChartProps = {
-  dpi: number;
   ship: ShipPiece;
   wind: number;
 }
@@ -22,118 +21,122 @@ const styles = {
   coarseMarker: '#ccc',
 };
 
-const Windrose = React.memo(({ dpi, ship, wind }: ChartProps) => {
-  const canvas = useRef<HTMLCanvasElement>(null);
-  const WIDTH = 280;
-  const HEIGHT = 400;
-  const width = WIDTH * dpi;
-  const height = HEIGHT * dpi;
+const WIDTH = 280;
+const HEIGHT = 400;
 
-  useEffect(() => {
-    const ctx = canvas.current?.getContext('2d');
-    if (!ctx) return;
-    // draw polar grid
-    const cx = 20 * dpi;
-    const cy = 140 * dpi;
-    const radius = 225 * dpi;
-    ctx.lineWidth = dpi;
-    ctx.fillStyle = '#fff';
-    ctx.fillRect(0, 0, width, height);
-    const SPEED_SIZE = 8;
+const CX = 20;
+const CY = 140;
+const RADIUS = 225;
+const SPEED_SIZE = 8;
 
-    const fromPolar = (r: number, p: number): [number, number] => {
-      return [cx + r * Math.cos(p), cy - r * Math.sin(p)];  
-    };
+const fromPolar = (r: number, p: number): [number, number] => {
+  return [CX + r * Math.cos(p), CY - r * Math.sin(p)];  
+};
 
-    const meridians = (num: number, style: string) => {
-      ctx.strokeStyle = style;
-      ctx.beginPath();
-      for (let i = 0; i <= num; i++) {
-        const angle = Math.PI * i / num - Math.PI / 2;
-        ctx.moveTo(...fromPolar(radius, angle));
-        ctx.lineTo(...fromPolar(0, 0));
-      }
-      ctx.closePath();
-      ctx.stroke();
-    };
+const Meridians = React.memo(({ num, className }: { num: number, className: string }) => {
+  const lines = [];
+  const [x0, y0] = fromPolar(0, 0);
+  for (let i = 0; i <= num; i++) {
+    const angle = Math.PI * i / num - Math.PI / 2;
+    const [x1, y1] = fromPolar(RADIUS, angle);
+    lines.push(<line key={i} x1={x1} y1={y1} x2={x0} y2={y0} className={className} />);
+  }
 
-    const circles = (num: number, style: string) => {
-      ctx.strokeStyle = style;
-      ctx.beginPath();
-      for (let i = 1; i <= num; i++) {
-        ctx.arc(cx, cy, radius * i / num, 3 * Math.PI / 2, Math.PI / 2);
-      }
-      ctx.closePath();
-      ctx.stroke();  
-    };
-
-    const windrose = (sailSize: number, wind: number, color: string) => {
-      const rho = (angle: number) => magnitude(getSailSpeed(ship.sail, sailSize, wind, angle));
-      const phi = (angle: number) => Math.PI / 2 - angle;
-      const coords = (angle: number) => {
-        const r = rho(angle) / SPEED_SIZE * radius;
-        const p = phi(angle);
-        return fromPolar(r, p);  
-      }
-      const step = 1;
-      ctx.beginPath();
-      ctx.moveTo(...coords(0));
-      for (let i = 0; i <= 180; i += step) {
-        ctx.lineTo(...coords(Math.PI * i / 180));
-      }
-      ctx.strokeStyle = color;
-      ctx.stroke();
-      ctx.closePath();
-    };
-    // grid
-    meridians(36, styles.fineMarker);
-    circles(SPEED_SIZE * 10, styles.fineMarker);
-    meridians(18, styles.coarseMarker);
-    circles(SPEED_SIZE, styles.coarseMarker);
-
-    ctx.lineWidth = 2 * dpi;
-    ctx.strokeStyle = '#cc0';
-    const rudderSpeed = magnitude(getSailSpeed(ship.sail, Sail.Slow, 0, 0)) / 8;
-    ctx.beginPath();
-    ctx.arc(cx, cy, radius * rudderSpeed, 3 * Math.PI / 2, Math.PI / 2);
-    ctx.stroke();
-    ctx.closePath();
-    windrose(Sail.Full, wind, '#f00');
-    windrose(Sail.Half, wind, '#f80');
-
-    // labels
-    ctx.fillStyle = '#444';
-    ctx.font = `${16 * dpi}px sans-serif`;
-    for (let i = 1; i <= SPEED_SIZE; i++) {
-      ctx.fillText(
-        String(i),
-        cx - 12 * dpi,
-        cy + i * radius / SPEED_SIZE + 4 * dpi,
-      );
-    }
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.rotate(-Math.PI / 2);
-    ctx.translate(-cx, -cy);
-    ctx.fillText('speed, m/s', cx, cy - 4 * dpi);
-    ctx.restore();
-    for (let i = 180; i >= 45; i -= 10) {
-      const angle = Math.PI * (90 - i) / 180;
-      ctx.fillText(
-        `${i}°`,
-        cx + (radius + 16 * dpi) * Math.cos(angle) - 12 * dpi,
-        cy - (radius + 16 * dpi) * Math.sin(angle) + 6 * dpi,
-      );  
-    }
-  }, [dpi, ship, wind, width, height]);
-  return (
-    <canvas ref={canvas} width={width} height={height} style={{ width: `${WIDTH}px`, height: `${HEIGHT}px` }}>
-      Your browser somehow does not support canvas
-    </canvas>
-  );
+  return <g>{lines}</g>;
 });
 
-const Acceleration = React.memo(({ dpi, ship, wind }: ChartProps) => {
+const Circles = React.memo(({ num, className }: { num: number, className: string }) => {
+  const arcs = [];
+  // ctx.beginPath();
+  for (let i = 1; i <= num; i++) {
+    const radius = RADIUS * i / num;
+    const largeArcFlag = 1;
+    var d = [
+      "M", CX, CY + radius, 
+      "A", radius, radius, 0, largeArcFlag, 0, CX, CY - radius,
+    ].join(" ");
+
+    arcs.push(<path key={i} d={d} className={className} fill="none" />);
+  }
+  return <g>{arcs}</g>
+});
+
+const Curve = React.memo(({ sailSize, sail, wind, color }: {
+  sailSize: number;
+  sail: ShipPiece['sail'];
+  wind: number;
+  color: string;
+}) => {
+  const rho = (angle: number) => magnitude(getSailSpeed(sail, sailSize, wind, angle));
+  const phi = (angle: number) => Math.PI / 2 - angle;
+  const coords = (angle: number) => {
+    const r = rho(angle) / SPEED_SIZE * RADIUS;
+    const p = phi(angle);
+    return fromPolar(r, p);  
+  }
+  const step = 1;
+  // ctx.beginPath();
+  const points = [];
+  const [x0, y0] = coords(0);
+  points.push(`M${x0} ${y0}`);
+  for (let i = 0; i <= 180; i += step) {
+    const [x, y] = coords(Math.PI * i / 180);
+    points.push(`L${x} ${y}`);
+    // ctx.lineTo(...);
+  }
+  return <path d={points.join(',')} fill="none" stroke={color} strokeWidth={2} />
+});
+
+const Labels = React.memo(() => {
+  const labels = [];
+  // speed
+  for (let i = 1; i <= SPEED_SIZE; i++) {
+    labels.push(<text className="Windrose__label" x={CX - 12} y={CY + i * RADIUS / SPEED_SIZE + 4}>{i}</text>)
+  }
+  // speed text
+  labels.push(<g style={{ transform: `translate(${CX}px, ${CY}px) rotate(-90deg) translate(${-CX}px, ${-CY}px)` }}>
+    <text className="Windrose__label" x={CX} y={CY - 4}>speed, m/s</text>
+  </g>);
+  // meridians
+  for (let i = 180; i >= 45; i -= 10) {
+    const angle = Math.PI * (90 - i) / 180;
+    labels.push(<text className="Windrose__label"
+      x={CX + (RADIUS + 16) * Math.cos(angle) - 12}
+      y={CY - (RADIUS + 16) * Math.sin(angle) + 6}
+    >{i}°</text>)
+  }
+  return <g>{labels}</g>;
+});
+
+const Windrose = React.memo(({ ship, wind }: ChartProps) => {
+  const rudderSpeed = magnitude(getSailSpeed(ship.sail, Sail.Slow, 0, 0)) / SPEED_SIZE;
+  const RR = rudderSpeed * RADIUS;
+
+  return (<div className="Windrose">
+    <div className="Windrose__chart">
+      <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} width={WIDTH} height={HEIGHT}>
+        <Meridians num={36} className="fine-marker" />
+        <Circles num={SPEED_SIZE * 2} className="fine-marker" />;
+        <Meridians num={18} className="coarse-marker" />
+        <Circles num={SPEED_SIZE} className="coarse-marker" />;
+        <path d={`M${CX} ${CY+RR}, A${RR} ${RR} 0 0 0 ${CX} ${CY-RR}`} fill="none" stroke="#cc0" strokeWidth={2} />
+        <Curve sailSize={Sail.Full} sail={ship.sail} wind={wind} color="#f00" />
+        <Curve sailSize={Sail.Half} sail={ship.sail} wind={wind} color="#f80" />
+        <Labels />
+      </svg>
+    </div>
+    <div className="Windrose__legend">
+      <ul>
+        <li><span className="Windrose__legend-item Windrose__legend-item--full-sail" /> Full sail</li>
+        <li><span className="Windrose__legend-item Windrose__legend-item--half-sail" /> Half sail</li>
+        <li><span className="Windrose__legend-item Windrose__legend-item--paddle" /> Paddle</li>
+      </ul>
+    </div>
+  </div>);
+});
+
+const Acceleration = React.memo(({ ship, wind }: ChartProps) => {
+  const dpi = 1;
   const canvas = useRef<HTMLCanvasElement>(null);
   const WIDTH = 499;
   const HEIGHT = 399;
@@ -221,6 +224,7 @@ export function Ship(props: { item: ShipPiece }) {
     }
   }, [dpi, updateDpi]);
 
+  const { sailWidth } = item;
   const { target, size } = item.piece!;
   const { hp, damageModifiers } = item.wear;
   const [ cols, rows ] = item.storage;
@@ -234,10 +238,10 @@ export function Ship(props: { item: ShipPiece }) {
         <dt>{translate('ui.healthStructure')}</dt><dd>{hp}</dd>
         <Resistances mods={damageModifiers} />
         <dt>target</dt><dd>{translate(`ui.pieceTarget.${target}`)}</dd>
-        {size ? <><dt>size</dt><dd>{size.filter(Boolean).join('×')}</dd></> : null}
+        {size ? <><dt>size</dt><dd>{size.filter(Boolean).join('×')} m</dd></> : null}
+        <><dt>sail width</dt><dd>{sailWidth} m</dd></>
       </dl>
     </section>
-    <Source id={item.id} />
     <section>
       <h2>{translate('ui.ship')}</h2>
       <dl>
@@ -245,13 +249,8 @@ export function Ship(props: { item: ShipPiece }) {
         <dt>{translate('ui.shipMove.sail')}</dt><dd>{translate('ui.speedRange.ms', item.speed.full[0]!, item.speed.full[4]!)}</dd>
         <dt>capacity</dt><dd>{storage}</dd>
       </dl>
-      <Windrose dpi={dpi} ship={item} wind={0.5} />
+      <Windrose ship={item} wind={0.5} />
     </section>
+    <Source id={item.id} />
   </>);
 }
-
-/*
-      <span className="square" style={{ backgroundColor: '#f00' }}></span> full sail
-      <span className="square" style={{ backgroundColor: '#f80' }}></span> half sail
-      <span className="square" style={{ backgroundColor: '#cc0' }}></span> rudder
-*/

@@ -58,6 +58,13 @@ export class PackageReader {
     return this.view.getUint8(this.offset++);
   }
 
+  public readNumItems(): number {
+    let num = this.view.getUint8(this.offset++);
+    if ((num & 128) !== 0)
+      num = ((num & 127) << 8) | this.view.getUint8(this.offset++);
+    return num;
+  }
+
   public readShort(): number {
     const result = this.view.getInt16(this.offset, true);
     this.offset += 2;
@@ -220,6 +227,20 @@ export class PackageReader {
     return reader.call(this);
   }
 
+  public readShortMap<K, V>(
+    keyReader: (this: PackageReader) => K,
+    valueReader: (this: PackageReader) => V,
+  ): Map<K, V> {
+    const result = new Map<K, V>();
+    const length = this.readNumItems();
+    for (let i = 0; i < length; i++) {
+      const key = keyReader.call(this);
+      const value = valueReader.call(this);
+      result.set(key, value);
+    }
+    return result;
+  }
+
   public readIfSmallMap<K, V>(
     keyReader: (this: PackageReader) => K,
     valueReader: (this: PackageReader) => V,
@@ -268,6 +289,15 @@ export class PackageWriter {
   public writeByte(value: number): void {
     this.ensureSpace(1);
     this.view.setUint8(this.offset++, value & 0xFF);
+  }
+
+  public writeNumItems(value: number): void {
+    if (value < 128) {
+      this.view.setUint8(this.offset++, value);
+    } else {
+      this.view.setUint8(this.offset++, ((value >> 8) | 128));
+      this.view.setUint8(this.offset++, value & 0xFF);
+    }
   }
 
   public writeShort(value: number): void {
@@ -417,6 +447,19 @@ export class PackageWriter {
     } else {
       this.writeBool(true);
       writer.call(this, value);
+    }
+  }
+
+  public writeShortMap<K, V>(
+    keyWriter: (this: PackageWriter, value: K) => void,
+    valueWriter: (this: PackageWriter, value: V) => void,
+    values: Map<K, V>,
+  ): void {
+    const length = values.size;
+    this.writeNumItems(length);
+    for (const [key, value] of values) {
+      keyWriter.call(this, key);
+      valueWriter.call(this, value);
     }
   }
 

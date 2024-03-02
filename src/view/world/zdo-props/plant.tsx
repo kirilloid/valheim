@@ -11,13 +11,16 @@ import { ticksToSeconds } from '../../../file/zdo/time';
 import { prefabHashes } from '../../../data/zdo';
 import { data } from '../../../data/itemDB';
 
+const S_SEED_HASH = hash('s_seed');
+
 function getGrowTime(zdo: ZDO) {
   const hash = prefabHashes.get(zdo.prefab);
   const obj = hash != null ? data[hash] : undefined;
   const growTime = (obj != null && 'Plant' in obj && obj.Plant?.growTime) || [3000, 5000];
 
   const state = random.getState();
-  const seed = Number(BigInt(zdo.id.id) + zdo.id.userId) << 0;
+  // const seed = Number(BigInt(zdo.id.id) + zdo.id.userId) << 0;
+  const seed = zdo.ints.get(S_SEED_HASH) ?? 0;
   random.init(seed);
   const t = random.random();
   random.setState(state);

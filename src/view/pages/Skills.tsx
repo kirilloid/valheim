@@ -505,8 +505,8 @@ export function Skills() {
           min="0" max="100" value={level} onChange={e => setLevel(+e.target.value)}
           style={{ width: '3em' }} />
         {' '}
-        <input type="range"
-          style={{ verticalAlign: 'middle', width: 300 }}
+        <input className="range" type="range"
+          style={{ width: 300 }}
           min="0" max="100" value={level} onChange={e => setLevel(+e.target.value)} />
         {' '}
       </dd>

@@ -158,7 +158,8 @@ function ShortRecipe(props: { item: GameObject }) {
       switch (recipe.type) {
         case 'craft':
           return <Materials materials={recipe.materials} iconSize={16} />
-        case 'trader':
+        case 'haldor':
+        case 'hildir':
           // disabled for now
           return null && <span><Icon id="coin" alt="" size={16} /> {recipe.value}</span>
         default:

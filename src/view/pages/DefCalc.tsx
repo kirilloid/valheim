@@ -8,7 +8,7 @@ import { parseState, serializeState, pageName } from '../../state/def-calc';
 import { actionCreators, reducer } from '../../state/def-calc/reducer';
 import { allItems, blockers } from '../../state/def-calc/items';
 import { isNotNull } from '../../model/utils';
-import { MAX_PLAYERS } from '../../model/game';
+import { MAX_PLAYERS, WORLD_CONFIG } from '../../model/game';
 
 import { maxLvl } from '../../data/creatures';
 import { groupedCreatures } from '../../data/combat_creatures';
@@ -18,7 +18,7 @@ import { useDebounceEffect } from '../../effects/debounce.effect';
 import { EffectIcon, Icon, ItemIcon, SkillIcon } from '../parts/Icon';
 import { addAttackPlayerStats, attackPlayer, AttackPlayerStats, dmgBonus, emptyAttackPlayerStats, isNormalAttackProfile, multiplyDamage, BlockerConfig, getBlockingSkillFactor } from '../../model/combat';
 import { List, showNumber } from '../helpers';
-import { useGlobalState } from '../../effects';
+import { GameSettingsContext, useGlobalState } from '../../effects';
 import { Tabs } from '../parts/Tabs';
 
 type OnChange<T extends HTMLElement> = (e: React.ChangeEvent<T>) => void;
@@ -118,7 +118,7 @@ function Players({ players, onChange }: { players: number; onChange: OnChangeI }
     </div>
     <div className="weapon__input-primary">
       <input type="range" id="players"
-        className="BigInput"
+        className="range BigInput"
         min="1" max={MAX_PLAYERS} value={players}
         onChange={onChange} />
     </div>
@@ -212,7 +212,7 @@ function Skill({ shield, onChange }: { shield: BlockerConfig | undefined; onChan
         <option value="100"/>
       </datalist>
       <input type="range" id="skill"
-        className="BigInput"
+        className="range BigInput"
         min="0" max="100" value={shield.skill}
         onChange={onChange}
         list="skill" />
@@ -229,7 +229,7 @@ function Skill({ shield, onChange }: { shield: BlockerConfig | undefined; onChan
 function Armor({ armor, onChange }: { armor: number; onChange: OnChangeI; }) {
   const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
-  const spoilerArmor = [2, 21, 46, 64, 82, 100];
+  const spoilerArmor = [2, 21, 46, 64, 82, 100, 118];
   return <div className="row weapon">
     <div className="weapon__label">
       <label htmlFor="armor">{translate('ui.armor')}</label>
@@ -249,7 +249,7 @@ function Armor({ armor, onChange }: { armor: number; onChange: OnChangeI; }) {
         <option value="100" label="Padded" />
       </datalist>
       <input type="range" id="skill"
-        className="BigInput" list="armor"
+        className="range BigInput" list="armor"
         min="0" max={spoilerArmor[spoiler] ?? 100} value={armor}
         onChange={onChange} />
     </div>
@@ -299,6 +299,7 @@ function format(value: number) {
 
 export function DefenseCalc() {
   const translate = useContext(TranslationContext);
+  const { worldlevel } = useContext(GameSettingsContext);
   const history = useHistory();
   const { params } = useParams<{ params?: string }>();
   const [state, dispatch] = useReducer(reducer, parseState(params));
@@ -352,7 +353,14 @@ export function DefenseCalc() {
     .filter(isNotNull);
 
   const getStats = (item: T.Shield | T.Weapon | undefined, block: number, isParry: boolean) => attacks
-    .map(a => attackPlayer(multiplyDamage(a.dmg, bonus), resistItems, (item as T.Shield)?.damageModifiers, state.armor, block, isParry))
+    .map(a => attackPlayer(
+      multiplyDamage(a.dmg, bonus),
+      resistItems,
+      (item as T.Shield)?.damageModifiers,
+      state.armor + worldlevel * WORLD_CONFIG.worldLevelGearBaseAC,
+      block,
+      isParry,
+    ))
     .reduce(addAttackPlayerStats, emptyAttackPlayerStats());
 
   return (<>

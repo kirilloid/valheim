@@ -1,3 +1,6 @@
+import type { GameSettings } from '../types/GameSettings';
+import { gameSettings } from '../data/game-settings';
+
 import { PackageReader, PackageWriter } from './Package';
 import { checkVersion, WORLD } from './versions';
 
@@ -9,8 +12,46 @@ export type Data = {
   uid: bigint;
   worldGenVersion: number;
   needsDB: boolean;
-  startingGlobalKeys: string[];
+  keys: Partial<GameSettings>;
 };
+
+function readKeys(reader: PackageReader): Partial<GameSettings> {
+  const result = {};
+  const keys = reader.readArray(reader.readString);
+  for (const item of keys) {
+    const [key, val] = item.split(' ', 2);
+    if (key == null) continue;
+    if (key in gameSettings) {
+      const defaultValue = Reflect.get(gameSettings, key);
+      switch (typeof defaultValue) {
+        case 'number':
+          const value = Number(val);
+          if (Number.isFinite(value) && value >= 0) {
+            Reflect.set(result, key, value);
+          }
+          break;
+        case 'boolean':
+          Reflect.set(result, key, true);
+          break;
+        case 'string':
+          if (val !== undefined) {
+            Reflect.set(result, key, val);
+          }
+          break;
+        default:
+          console.warn("Unknown key: ", item);
+      }
+    }
+  }
+  return result;
+}
+
+function writeKeys(writer: PackageWriter, keys: Partial<GameSettings>) {
+  const strKeys = Object
+    .entries(keys)
+    .map(([k, v]) => v === true ? k : `${k} ${v}`);
+  writer.writeArray(writer.writeString, strKeys);
+}
 
 export function read(data: Uint8Array): Data {
   const zpkg = new PackageReader(data);
@@ -24,7 +65,7 @@ export function read(data: Uint8Array): Data {
   const uid = reader.readLong();
   const worldGenVersion = version >= 26 ? reader.readInt() : 0;
   const needsDB = version >= 30 ? reader.readBool() : false;
-  const startingGlobalKeys = version >= 32 ? reader.readArray(reader.readString) : [];
+  const keys = version >= 32 ? readKeys(reader) : {};
   return {
     version,
     name,
@@ -33,7 +74,7 @@ export function read(data: Uint8Array): Data {
     uid,
     worldGenVersion,
     needsDB,
-    startingGlobalKeys,
+    keys,
   };
 }
 
@@ -51,7 +92,7 @@ export function write(data: Data): Uint8Array {
     writer.writeBool(data.needsDB);
   }
   if (data.version >= 32) {
-    writer.writeArray(writer.writeString, data.startingGlobalKeys);
+    writeKeys(writer, data.keys);
   }
   const bytes = writer.flush();
   const zpkg = new PackageWriter();

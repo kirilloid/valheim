@@ -14,10 +14,14 @@ abstract class FixedBinMap<V> implements Map<number, V> {
   protected abstract saveKeyValue(writer: PackageWriter, key: number, value: V): void;
   protected abstract baseByteSize: number;
 
-  constructor(bytes: Uint8Array) {
+  constructor(
+    bytes: Uint8Array,
+    private readSize: (this: PackageReader) => number,
+    private writeSize: (this: PackageWriter, value: number) => void,
+  ) {
     this.sizeOffset = 0;
     const pkg = new PackageReader(bytes);
-    this.initialSize = pkg.readChar();
+    this.initialSize = this.readSize.call(pkg);
     this.sizeOffset = pkg.getOffset() - bytes.byteOffset;
     this.view = new DataView(bytes.buffer, pkg.getOffset());
   }
@@ -138,7 +142,7 @@ abstract class FixedBinMap<V> implements Map<number, V> {
       writer.writeBytes(bytes);
       return;
     }
-    writer.writeChar(this.size);
+    this.writeSize.call(writer, this.size);
     for (const [key, value] of this.entries()) {
       this.saveKeyValue(writer, key, value);
     }
@@ -150,6 +154,76 @@ abstract class FixedBinMap<V> implements Map<number, V> {
 
   get [Symbol.toStringTag]() {
     return 'BinMap';
+  }
+}
+
+export class EmptyBinMap<V> implements Map<number, V> {
+  private _map = new Map<number, V>();
+
+  constructor(
+    private writeSize: (this: PackageWriter, value: number) => void,
+    private writeValue: (this: PackageWriter, value: V) => void,
+  ) {}
+
+  clear(): void {
+    this._map.clear();
+  }
+
+  delete(key: number): boolean {
+    return this._map.delete(key);
+  }
+
+  forEach(callbackfn: (value: V, key: number, map: Map<number, V>) => void): void {
+    this._map.forEach(callbackfn);
+  }
+
+  get(key: number): V | undefined {
+    return this._map.get(key);
+  }
+
+  has(key: number): boolean {
+    return this._map.has(key);
+  }
+
+  set(key: number, value: V): this {
+    this._map.set(key, value);
+    return this;
+  }
+
+  get size(): number {
+    return this._map.size;
+  };
+
+  get byteSize(): number {
+    return 0;
+  }
+
+  entries(): IterableIterator<[number, V]> {
+    return this._map.entries();
+  }
+
+  keys(): IterableIterator<number> {
+    return this._map.keys();
+  }
+
+  values(): IterableIterator<V> {
+    return this._map.values();
+  }
+
+  save(writer: PackageWriter) {
+    this.writeSize.call(writer, this._map.size);
+    for (const [key, value] of this.entries()) {
+      writer.writeInt(key);
+      this.writeValue.call(writer, value);
+    }
+  }
+
+  [Symbol.iterator]() {
+    return this.entries();
+  }
+
+  get [Symbol.toStringTag]() {
+    return 'BinEmptyMap';
   }
 }
 

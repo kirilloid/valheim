@@ -139,7 +139,7 @@ function* readPlayer(bytes: Uint8Array): Generator<number, Player> {
 
   if (version >= 38) {
     const usedCheats = reader.readBool();
-    const dateCreated = new Date(Number(reader.readLong()));
+    const dateCreated = new Date(Number(reader.readLong()) * 1000);
 
     const knownWorlds = reader.readMap(reader.readString, reader.readFloat);
     const knownWorldKeys = reader.readMap(reader.readString, reader.readFloat);
@@ -413,9 +413,7 @@ export function* read(bytes: Uint8Array): Generator<number, Player> {
   if (computed.some((v, i) => v !== hash[i])) {
     throw new RangeError("Incorrect hash");
   }
-  const player = yield* readPlayer(data);
-  Object.defineProperty(player, 'usedCheats', { writable: false, value: player.usedCheats });
-  return player;
+  return yield* readPlayer(data);
 }
 
 export function* write(

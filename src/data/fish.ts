@@ -17,6 +17,7 @@ export const fishes: Fish[] = [
   {
     type: 'fish',
     id: 'Fish1',
+    group: 'fish',
     components: ['Fish'],
     tags: ['fish'],
     tier: 1,
@@ -61,6 +62,7 @@ export const fishes: Fish[] = [
   {
     type: 'fish',
     id: 'Fish2',
+    group: 'fish',
     components: ['Fish'],
     tags: ['fish'],
     tier: 1,
@@ -104,6 +106,7 @@ export const fishes: Fish[] = [
   {
     type: 'fish',
     id: 'Fish3',
+    group: 'fish',
     components: ['Fish'],
     tags: ['fish'],
     tier: 1,
@@ -148,6 +151,7 @@ export const fishes: Fish[] = [
   {
     type: 'fish',
     id: 'Fish4_cave',
+    group: 'fish',
     components: ['Fish'],
     tags: ['fish'],
     tier: 4,
@@ -177,6 +181,7 @@ export const fishes: Fish[] = [
   {
     type: 'fish',
     id: 'Fish5',
+    group: 'fish',
     components: ['Fish'],
     tags: ['fish'],
     tier: 1,
@@ -221,6 +226,7 @@ export const fishes: Fish[] = [
   {
     type: 'fish',
     id: 'Fish6',
+    group: 'fish',
     components: ['Fish'],
     tags: ['fish'],
     tier: 1,
@@ -265,6 +271,7 @@ export const fishes: Fish[] = [
   {
     type: 'fish',
     id: 'Fish7',
+    group: 'fish',
     components: ['Fish'],
     tags: ['fish'],
     tier: 1,
@@ -309,6 +316,7 @@ export const fishes: Fish[] = [
   {
     type: 'fish',
     id: 'Fish8',
+    group: 'fish',
     components: ['Fish'],
     tags: ['fish'],
     tier: 3,
@@ -353,6 +361,7 @@ export const fishes: Fish[] = [
   {
     type: 'fish',
     id: 'Fish9',
+    group: 'fish',
     components: ['Fish'],
     tags: ['fish'],
     tier: 6,
@@ -397,6 +406,7 @@ export const fishes: Fish[] = [
   {
     type: 'fish',
     id: 'Fish12',
+    group: 'fish',
     components: ['Fish'],
     tags: ['fish'],
     tier: 5,
@@ -441,6 +451,7 @@ export const fishes: Fish[] = [
   {
     type: 'fish',
     id: 'Fish10',
+    group: 'fish',
     components: ['Fish'],
     tags: ['fish'],
     tier: 1,
@@ -485,6 +496,7 @@ export const fishes: Fish[] = [
   {
     type: 'fish',
     id: 'Fish11',
+    group: 'fish',
     components: ['Fish'],
     tags: ['fish'],
     tier: 1,

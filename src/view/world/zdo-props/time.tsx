@@ -44,7 +44,7 @@ export const timeComp = (key: string) => {
         </label>
         <label>
           {translate('ui.timeOfDay')}
-          <input type="range" value={value.time} min={0} max={GAME_DAY}
+          <input type="range" className="range" value={value.time} min={0} max={GAME_DAY}
             style={{ verticalAlign: 'middle' }}
             onChange={e => {
               setDayTime({ day: value.day, time: Number(e.target.value) });

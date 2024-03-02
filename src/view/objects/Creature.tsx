@@ -12,7 +12,7 @@ import { getSummon } from '../../data/resources';
 import { area, objectLocationMap } from '../../data/location';
 import { maxLvl } from '../../data/creatures';
 
-import { TranslationContext, useGlobalState } from '../../effects';
+import { GameSettingsContext, TranslationContext, useGlobalState } from '../../effects';
 import { Area, InlineObjectWithIcon, rangeBy, Resistances, shortCreatureDamage, yesNo } from '../helpers';
 import { EffectIcon, ItemIcon } from '../parts/Icon';
 import { ItemHeader } from '../parts/ItemHeader';
@@ -87,6 +87,8 @@ function Attacks({ attacks, dmgScale }: { attacks: AttackVariety[]; dmgScale: nu
 export function Creature({ creature, level = 1 }: { creature: TCreature, level?: number }) {
   const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
+  const { worldlevel } = useContext(GameSettingsContext);
+
   const { id, tame, pregnancy, stagger } = creature;
   const scale = { stars: level - 1 };
   const dmgScale = dmgBonus(scale);
@@ -132,10 +134,10 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
       <dt>{translate('ui.moveSpeed')}</dt>
       <dd>{creature.speed.run}</dd>
       <dt>{translate('ui.health')}</dt>
-      <dd>{creature.hp * hpBonus(scale)}</dd>
+      <dd>{creature.hp * hpBonus(scale, worldlevel)}</dd>
       <dt>{translate('ui.stagger')}</dt>
       <dd>{stagger
-        ? creature.hp * hpBonus(scale) * stagger.factor
+        ? creature.hp * hpBonus(scale, worldlevel) * stagger.factor
         : translate('ui.damageModifier.immune')}</dd>
       </dl>
       <h3>{translate('ui.damageModifiers')}</h3>

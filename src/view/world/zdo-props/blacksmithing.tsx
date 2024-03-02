@@ -23,7 +23,7 @@ export function BlacksmithingComp({ value: zdo, onChange }: ValueProps<ZDO>) {
   }
   return value != null ? <>
     <dt>{translate('ui.skillType.Blacksmithing')}</dt>
-    <dd><input type="range" min={0} max={100} value={value} onChange={e => {
+    <dd><input type="range" className="range" min={0} max={100} value={value} onChange={e => {
       zdo.strings.set(stableHashCode(`data__${index}`), e.target.value);
       onChange(zdo);
     }} /> {value}</dd>

@@ -1037,7 +1037,7 @@ export const locations: LocationConfig[] = [
     { components: [],
       biomeArea: 2, quantity: 3, prioritized,
       minApart: 2000, terrainDelta: [0, 40], minAlt: 200, radius: [32, 15], minDistance: 1000,
-      items: [],
+      items: [locItem('Fenring_Cultist_Hildir')],
     },
     'Hildir_cave',
   ),
@@ -1047,7 +1047,7 @@ export const locations: LocationConfig[] = [
       biomeArea: 2, quantity: 3, prioritized,
       minApart: 3000, terrainDelta: [0, 2], minAlt: 1, radius: [21, 18], minDistance: 3000,
       items: [
-        // skeletons
+        locItem('Skeleton_Hildir'),
       ],
     },
     'Hildir_crypt',
@@ -1058,7 +1058,9 @@ export const locations: LocationConfig[] = [
       biomeArea: 2, quantity: 3, prioritized,
       minApart: 3000, terrainDelta: [0, 4], minAlt: 8, radius: [32, 32],
       items: [
-        // skeletons
+        locItem('GoblinShaman_Hildir'),
+        locItem('GoblinBrute_Hildir'),
+        locItem('GoblinBruteBros'),
       ],
     },
     'Hildir_plainsfortress',

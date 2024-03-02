@@ -49,7 +49,14 @@ export const effects: Effect[] = [
     damageModifiers: { fire: 'resistant' }
   },
   // Frost
-  // GoblinShaman_shield
+  {
+    type: 'effect',
+    id: 'GoblinShaman_shield',
+    iconId: 'creature/GoblinShaman',
+    tier: 5,
+    time: 40,
+    absorbDamage: [100, 100],
+  },
   {
     type: 'effect',
     id: 'GP_Eikthyr',

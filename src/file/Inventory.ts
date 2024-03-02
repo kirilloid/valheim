@@ -13,6 +13,8 @@ export type Item = {
   crafterID: bigint;
   crafterName: string;
   customData: Map<string, string>;
+  worldLevel: number;
+  pickedUp: boolean;
 };
 
 export type Data = {
@@ -39,8 +41,10 @@ export function read(pkg: PackageReader): Data {
     const crafterID = version >= 103 ? pkg.readLong() : BigInt(0);
     const crafterName = version >= 103 ? pkg.readString() : "";
     const customData = version >= 104 ? pkg.readMap(pkg.readString, pkg.readString) : new Map<string, string>();
+    const worldLevel = version >= 106 ? pkg.readInt() : 0;
+    const pickedUp = version >= 106 ? pkg.readBool() : false;
     if (id !== '') {
-      inventory.items.push({ id, stack, durability, gridPos, equipped, quality, variant, crafterID, crafterName, customData });
+      inventory.items.push({ id, stack, durability, gridPos, equipped, quality, variant, crafterID, crafterName, customData, worldLevel, pickedUp });
     }
   }
   return inventory;
@@ -64,6 +68,9 @@ export function write(pkg: PackageWriter, inventory: Data): void {
     pkg.writeString(itemData.crafterName);
     if (inventory.version < 104) continue;
     pkg.writeMap(pkg.writeString, pkg.writeString, itemData.customData);
+    if (inventory.version < 106) continue;
+    pkg.writeInt(itemData.worldLevel);
+    pkg.writeBool(itemData.pickedUp);
   }
 }
 

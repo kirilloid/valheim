@@ -16,7 +16,7 @@ import {
 import { effects } from '../data/effects';
 import { animations } from '../data/weapons';
 import { addStatCounters, StatCounter, lerp, mapValues } from './utils';
-import { FRAME } from './game';
+import { FRAME, WORLD_CONFIG } from './game';
 
 function applyArmorTotal(damage: number, armor: number): number {
   return armor < damage / 2
@@ -75,12 +75,17 @@ export function multiplyDamage(damage: DamageProfile, mul: number): DamageProfil
   return mapValues(damage, value => value * mul);
 }
 
-export function hpBonus({ players = 1, stars = 0 }: { players?: number, stars?: number }) {
-  return (1 + (Math.min(players, 5) - 1) * 0.3) * (1 + stars);
+export function hpBonus({ players = 1, stars = 0 }: { players?: number, stars?: number }, worldLevel: number) {
+  return (1 + (Math.min(players, WORLD_CONFIG.difficultyScaleMaxPlayers) - 1)
+      * (worldLevel > 0 ? worldLevel * WORLD_CONFIG.worldLevelEnemyHPMultiplier : 1)
+      * WORLD_CONFIG.healthScalePerPlayer)
+      * (1 + stars);
 }
 
 export function dmgBonus({ players = 1, stars = 0 }: { players?: number, stars?: number }) {
-  return (1 + (Math.min(players, 5) - 1) * 0.04) * (1 + stars * 0.5);
+  return (1 + (Math.min(players, WORLD_CONFIG.difficultyScaleMaxPlayers) - 1)
+      * WORLD_CONFIG.damageScalePerPlayer)
+      * (1 + stars * 0.5);
 }
 
 export function applyDamageModifiers(damage: DamageProfile, modifiers: DamageModifiers): DamageProfile {
@@ -269,6 +274,7 @@ export function attackCreature(
   { item, level, skill, arrow }: WeaponConfig,
   attack: Attack,
   creature: Creature,
+  worldLevel: number,
   isWet: boolean,
   backstab: boolean,
 ): AttackStats {
@@ -283,7 +289,7 @@ export function attackCreature(
     ? [1, 2] // ooze bomb
     : getWeaponSkillFactor(skill);
   const skillAvg = (skillMin + skillMax) / 2;
-  const { instant, overTime, total } = doAttack(totalDamage, damageModifiers, defaultDamageModifiers, 0, 0, false, false);
+  const { instant, overTime, total } = doAttack(totalDamage, damageModifiers, defaultDamageModifiers, 0, worldLevel * WORLD_CONFIG.worldLevelEnemyBaseAC, false, false);
   const singleHit = total;
 
   const damageFixed = getTotalDamage(instant);

@@ -34,8 +34,12 @@ export type Quaternion = {
   w: number;
 };
 
-export function flip({ x, y, z, w }: Quaternion): Quaternion {
+export function flipQ({ x, y, z, w }: Quaternion): Quaternion {
   return { x: y, y: -x, z: w, w: -z };
+}
+
+export function flipV({ x, y, z }: Vector3): Vector3 {
+  return { x, y: -y, z };
 }
 
 export const timeI2S = (seconds: number) => {

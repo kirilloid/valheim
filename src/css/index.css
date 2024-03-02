@@ -95,12 +95,19 @@ select, input, button {
   height: 1.5em;
   box-sizing: border-box;
   border: 1px solid #888;
+  margin: 0.25em 0;
+  border-radius: 0.25em;
 }
 
 input[type='checkbox'],
 input[type='radio'] {
   height: auto;
   width: 1rem;
+}
+
+.range {
+  vertical-align: middle;
+  min-width: 200px;
 }
 
 label {
@@ -278,3 +285,8 @@ table .value {
 }
 :root.theme--dark .damage--frost { color: #08f; }
 :root.theme--dark .damage--spirit { color: #ace; }
+
+.music-icon {
+  float: right;
+  cursor: default;
+}

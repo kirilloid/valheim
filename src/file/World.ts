@@ -2,7 +2,12 @@ import type { ZDO, ZDOCorruption, ZDOData, ZDOID } from './types';
 
 import type { Vector2i, Vector3 } from '../model/utils';
 import { PackageReader, PackageWriter } from './Package';
-import { readZdoMmap as readZdo, setVersion, errorToMistake } from './zdo';
+import {
+  readZdoMmapOld as readZdoOld,
+  readZdo_post30 as readZdoNew,
+  setVersion,
+  errorToMistake,
+} from './zdo';
 import { checkVersion, WORLD } from './versions';
 
 export type ZoneSystemData = {
@@ -43,6 +48,7 @@ function* readZDOData(reader: PackageReader, version: number): Generator<number,
   setVersion(version);
   let totalCorruptedBytes = 0;
   const removedPrefabs = new Map<number, number>();
+  const readZdo = version >= 30 ? readZdoNew : readZdoOld;
   for (let i = 0; i < zdoLength; i++) {
     const offset = reader.getOffset();
     if (reader.getProgress() === 1) break;
@@ -52,10 +58,10 @@ function* readZDOData(reader: PackageReader, version: number): Generator<number,
     try {
       const zdo = readZdo(reader, version);
       // if (zdo._bytes.length > 10000) debugger;
-      if (zdos.length > 1) {
+      if (zdos.length > 1 && zdo._bytes.length !== 0) {
         const last = zdos.at(-1)!;
         if (
-          last.id.userId === zdo.id.userId &&
+          // last.id.userId === zdo.id.userId &&
           last._bytes.length === zdo._bytes.length &&
           last._bytes.every((v, i) => v === zdo._bytes[i])
         ) {

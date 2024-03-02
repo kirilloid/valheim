@@ -30,7 +30,8 @@ export function Mods() {
   return <article>
     <h1>Mods</h1>
     <p>
-      This site supports not only Vanilla game, but also a range of mods.
+      This site supports not only Vanilla game, but also a range of mods.<br/>
+      By default content from mods is not included, you can enable it in the settings menu (top right button).<br/>
       Obviously, I cannot support all mods, so I'm trying to balance between popularity and easiness of adding a mod.
     </p>
     <h2>Fully supported</h2>

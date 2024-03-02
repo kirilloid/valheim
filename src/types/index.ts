@@ -1,10 +1,15 @@
-import type { EnvId } from './data/env';
-import { DungeonRoomsConfig } from './data/rooms';
-import { DropDist } from './model/dist';
-import { SkillType } from './model/skills';
-import { Vector2i } from './model/utils';
+import type { EnvId } from '../data/env';
+import type { DropDist } from '../model/dist';
+import type { Vector2i } from '../model/utils';
 
-export type EntityId = string;
+import type { EntityId, Pair } from './base';
+import type { DamageModifier, DamageModifiers, DamageProfile } from './damage';
+import type { Attack } from './attack';
+
+import { SkillType } from '../model/skills';
+import { DungeonRoomsConfig } from '../data/rooms';
+import { Deadspeak, EggGrow, Food, PointLight, Potion, Radiation, SapCollector, Turret } from './components';
+import { DropEntry, GeneralDrop } from './drop';
 
 export type GameComponent = 
 | 'ArmorStand'
@@ -27,9 +32,9 @@ export type GameComponent =
 
 export type EntityGroup =
   | 'banner' | 'bed' | 'beech' | 'berry' | 'birch' | 'bird' | 'blob'
-  | 'chair' | 'chest' | 'cook'
+  | 'chair' | 'chest' | 'cook' | 'craft_station'
   | 'demist'
-  | 'fir' | 'fire'
+  | 'fir' | 'fire' | 'fish'
   | 'goblin' | 'gray'
   | 'hide'
   | 'lumber'
@@ -39,6 +44,7 @@ export type EntityGroup =
   | 'seedTree' | 'seedVeg' | 'seeker' | 'ship' | 'smelt' | 'stack' | 'stand'
   | 'torch'
   | 'value'
+  | 'semiboss'
 
 export type Biome =
   | 'Meadows'
@@ -73,31 +79,6 @@ export type Faction =
   | 'MistlandsMonsters' // 9
   | 'Dverger' // 10
   ;
-
-export type DamageType = 
-  | 'blunt'
-  | 'slash'
-  | 'pierce'
-  | 'chop'
-  | 'pickaxe'
-  | 'fire'
-  | 'frost'
-  | 'lightning'
-  | 'poison'
-  | 'spirit'
-  ;
-
-export type DamageModifier =
-  | 'normal'
-  | 'resistant'
-  | 'weak'
-  | 'immune'
-  | 'ignore'
-  | 'veryResistant'
-  | 'veryWeak'
-  ;
-
-export type DamageModifiers = Record<DamageType, DamageModifier>;
 
 export type BiomeConfig = {
   id: Biome;
@@ -209,7 +190,6 @@ export type Effect = {
   moveSpeed?: number;
 };
 
-export type DamageProfile = Record<DamageType, number>;
 export type NormalAttackProfile = {
   dmg: DamageProfile;
   burst?: number;
@@ -235,25 +215,6 @@ export type AttackVariety = {
   variety: string;
   attacks: AttackProfile[];
 };
-
-export interface DropEntry {
-  item: EntityId;
-  chance: number;
-  min: number;
-  max: number;
-  scale: boolean;
-  perPlayer: boolean;
-}
-
-export interface GeneralDrop {
-  offByOneBug?: boolean;
-  chance?: number;
-  oneOfEach?: boolean;
-  num: Pair<number>;
-  options: { item: EntityId, num?: Pair<number>, weight?: number }[];
-}
-
-export type SimpleDrop = Record<EntityId, number>;
 
 export const TOLERATE = {
   WATER: 1,
@@ -543,6 +504,7 @@ export interface Ship extends Transport {
     waterLevelOffset: number;
     disableLevel: number;
   };
+  sailWidth: number;
   speed: {
     rudder: number;
     half: number[];
@@ -629,7 +591,7 @@ export type ItemRecipe = {
   item: EntityId;
   number: number;
 } | {
-  type: 'trader';
+  type: 'haldor' | 'hildir';
   value: number;
   item: EntityId;
   number: number;
@@ -686,144 +648,6 @@ export interface Resource extends BaseItem {
   Potion?: Potion;
   Value?: number;
 }
-
-export interface Deadspeak {
-  interval: number;
-  chance: number;
-  triggerDistance: number;
-  ttl: number;
-  texts: string[];
-}
-
-export interface SapCollector {
-  from: EntityId;
-  secPerUnit: number;
-  maxLevel: number;
-  item: EntityId;
-}
-
-type HexDigit =
-  | '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7'
-  | '8' | '9' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F'
-
-export interface PointLight {
-  range: number;
-  intensity: number;
-  color: string; //`#${HexDigit}${HexDigit}${HexDigit}${HexDigit}${HexDigit}${HexDigit}`;
-}
-
-export interface Turret {
-  attackCooldown: number;
-  allowedAmmo: EntityId[];
-}
-
-export interface Radiation {
-  rate: Pair<number>;
-  velocity: number;
-  damage: DamageProfile;
-}
-
-export interface Food {
-  health: number;
-  stamina: number;
-  eitr?: number;
-  duration: number;
-  regen: number;
-}
-
-export interface EggGrow {
-  growTime: number;
-  grownId: EntityId;
-  requiresNearbyFire: boolean;
-  requiresUnderRoof: boolean;
-}
-
-export interface Potion {
-  health?: [adds: number, time: number];
-  stamina?: [adds: number, time: number];
-  eitr?: [adds: number, time: number];
-  healthRegen?: number;
-  staminaRegen?: number;
-  eitrRegen?: number;
-  damageModifiers?: Partial<DamageModifiers>;
-  cooldown: number;
-}
-
-export type Pair<T> = [T, T];
-
-export type AttackAnimation =
-| 'unarmed_attack'
-| 'unarmed_kick'
-| 'swing_longsword'
-| 'swing_axe'
-| 'greatsword'
-| 'greatsword_secondary'
-| 'axe_secondary'
-| 'knife_stab'
-| 'knife_secondary'
-| 'dual_knives'
-| 'dual_knives_secondary'
-| 'spear_poke'
-| 'spear_throw'
-| 'swing_sledge'
-| 'bow_fire'
-| 'crossbow_fire'
-| 'swing_pickaxe'
-| 'atgeir_attack'
-| 'atgeir_secondary'
-| 'mace_secondary'
-| 'sword_secondary'
-| 'battleaxe_attack'
-| 'battleaxe_secondary'
-| 'staff_rapidfire'
-| 'staff_fireball'
-| 'staff_summon'
-| 'throw_bomb'
-;
-
-interface BaseAttack {
-  animation: AttackAnimation;
-  stamina: number;
-  eitr?: number;
-  healthPercent?: number;
-  walkSpeed: number;
-  rotationSpeed: number;
-  startNoise: number;
-  hitNoise: number;
-  mul?: { damage: number, force: number, stagger: number, };
-  range: number;
-}
-
-interface MeleeAttack extends BaseAttack {
-  chain: number;
-  chainCombo: number;
-}
-
-interface AreaAttack extends BaseAttack {
-  radius: number;
-}
-
-interface BowAttack extends BaseAttack {
-  projVel: Pair<number>;
-  projAcc: Pair<number>;
-  raiseSkillAmount?: number;
-}
-
-interface SummonAttack extends BaseAttack {
-  summons: EntityId;
-  skillFactor: number;
-}
-
-interface EffectAttack extends BaseAttack {
-  id: EntityId;
-}
-
-export type Attack =
-  | MeleeAttack & { type: 'melee' }
-  | AreaAttack & { type: 'area' }
-  | BowAttack & { type: 'proj' }
-  | SummonAttack & { type: 'summon' }
-  | EffectAttack & { type: 'cast' }
 
 export interface Arrow extends BaseItem {
   type: 'arrow' | 'bolt' | 'missile';
@@ -899,8 +723,16 @@ export interface Armor extends BaseItem {
   effect?: Effect;
 }
 
+export * from './base';
+export * from './attack';
+export * from './damage';
+export * from './drop';
+export * from './components';
+
 export type Item = Resource | Weapon | Shield | Armor | Arrow | Tool;
 export type ItemSet = { name: string; items: EntityId[]; bonus: (Effect | undefined)[]; };
 export type ItemSpecial = Weapon['special'] | Armor['special'] | Tool['special'];
 
 export type GameObject = Item | Piece | Structure | PhysicalObject | Spawner | Ship | Cart | Creature | Fish;
+
+export type KeysOfType<T, TProp> = { [P in keyof T]: T[P] extends TProp? P : never}[keyof T];

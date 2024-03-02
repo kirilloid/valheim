@@ -15,6 +15,7 @@ if (typeof global.TextEncoder !== 'undefined') {
     const bytes = Buffer.from(source, 'utf8');
     destination.set(bytes);
     return {
+      read: source.length,
       written: bytes.length,
     };
   };

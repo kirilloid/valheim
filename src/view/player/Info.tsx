@@ -33,6 +33,9 @@ export function PlayerInfo({ value: player, onChange, file, disabled } : EditorP
 
   const onWorldsChange = useCallback((worlds: Player['worlds']) => onChange({ ...player, worlds }), [player, onChange]);
   const onPlayerDataChange = useCallback((playerData: Player['playerData']) => onChange({ ...player, playerData }), [player, onChange]);
+  const onCheatChange = useCallback((player: Player) => {
+    onChange({ ...player, usedCheats: true });
+  }, [onChange]);
 
   const tabs = [
     {
@@ -72,7 +75,7 @@ export function PlayerInfo({ value: player, onChange, file, disabled } : EditorP
       tabs.push({
         title: translate('ui.character.skills'),
         renderer: () => <Skills skillData={skillData}
-          onChange={sd => onChange({ ...player, playerData: { ...playerData, skillData: sd } })}
+          onChange={sd => onCheatChange({ ...player, playerData: { ...playerData, skillData: sd } })}
           playerData={playerData} />,
       });
     }

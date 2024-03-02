@@ -29,10 +29,12 @@ import { WorldEditor } from './view/world';
 import { WorldMeta } from './view/WorldMeta';
 import { PlayerEditor } from './view/player';
 // import { Weapons } from './view/pages/Weapons';
-import { TranslationContext, useGlobalState, useTranslation } from './effects';
+import { TranslationContext, GameSettingsContext, useGlobalState, useTranslation } from './effects';
+import { gameSettings } from './data/game-settings';
 import { WorldGenerator } from './view/pages/WorldGenerator';
 import { About } from './view/pages/About';
 import { Mods } from './view/pages/Mods';
+import { Loader } from './view/parts/Loader';
 
 function App() {
   const translate = useTranslation();
@@ -43,6 +45,7 @@ function App() {
   return (
     <div className="App">
       <TranslationContext.Provider value={translate}>
+      <GameSettingsContext.Provider value={gameSettings}>
         <Router>
           <TopBar />
           <Switch>
@@ -80,8 +83,10 @@ function App() {
             <Route path="/about" children={<About />} />
             <Route path="/mods" children={<Mods />} />
             <Route path="/info/:id" children={<Info />} />
+            <Route path="/test" children={<Loader />} />
           </Switch>
         </Router>
+      </GameSettingsContext.Provider>
       </TranslationContext.Provider>
     </div>
   );

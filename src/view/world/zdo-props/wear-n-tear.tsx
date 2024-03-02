@@ -52,6 +52,7 @@ export function WearNTearComp({ value: zdo, onChange }: ValueProps<ZDO>) {
     <dt>{translate('ui.durability')}</dt>
     <dd>
       <input type="range"
+        className="range"
         min={0}
         max={maxHp}
         value={health}

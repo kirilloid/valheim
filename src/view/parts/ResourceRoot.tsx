@@ -12,7 +12,7 @@ export function ResourceRoot({ params }: { params: T.ResourceRoot }) {
     <h2>Resource node</h2>
     <dl>
       <dt>max level</dt><dd>{params.maxLevel}</dd>
-      <dt>regenerates in</dt><dd>{showNumber(days(regenTime))}</dd>
+      <dt>regenerates in</dt><dd>{showNumber(days(regenTime))} days</dd>
     </dl>
   </section>
 }
