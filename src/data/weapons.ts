@@ -36,7 +36,7 @@ export const animations: Record<AttackAnimation, number[]> = {
 // bow_aim_recoil: 21
 
 
-export const items: (Weapon | Shield)[] = [
+export const items: (Weapon | Shield | Bomb)[] = [
 // PRE-CRAFT AGE
   {
     type: 'weapon', slot: 'both',
@@ -964,14 +964,7 @@ export const items: (Weapon | Shield)[] = [
     // radius: 4, ttl: 10, interval: 1
     // oozebomb_projectile
     spawns: 'oozebomb_explosion',
-      stamina: 8,
-      walkSpeed: 0.3,
-      rotationSpeed: 0.3,
-      startNoise: 0,
-      hitNoise: 0,
-      range: 1.5,
-    }],
-    durability: [Infinity, 0],
+    stamina: 8,
   },
   {
     type: 'weapon', slot: 'both',
@@ -2198,7 +2191,7 @@ export const items: (Weapon | Shield)[] = [
     // bilebomb_projectile
     // bilebomb_explosion
     spawns: 'bilebomb_explosion',
-      stamina: 8,
+    stamina: 8,
   },
   {
     type: 'weapon', slot: 'either',

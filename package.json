@@ -25,7 +25,7 @@
   "config-overrides-path": "react-app-rewired.config.js",
   "scripts": {
     "start": "react-app-rewired --openssl-legacy-provider start",
-    "build": "react-app-rewired build",
+    "build": "react-app-rewired --openssl-legacy-provider build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },

@@ -9,7 +9,7 @@ import type {
   Plantable,
   Structure,
 } from '../types';
-import { singleDrop, itemGrow, mods } from '../model/game';
+import { singleDrop, itemGrow, mods, dmg } from '../model/game';
 import { torchResist, woodResist } from '../model/building';
 import { pickables } from './pickable';
 
@@ -2849,7 +2849,6 @@ export const objects: PhysicalObject[] = [
     { id: 'Vegvisir_DragonQueen', loc: 'Dragonqueen', tier: 5 },
     { id: 'Vegvisir_GoblinKing', loc: 'GoblinKing', tier: 4 },
     { id: 'Vegvisir_SeekerQueen', loc: 'Mistlands_DvergrBossEntrance1', tier: 6 },
-  {
   ].map<PhysicalObject>(({ id, loc, tier }) => ({
     type: 'object',
     subtype: 'indestructible',
