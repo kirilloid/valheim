@@ -13,7 +13,7 @@ export function read(zbytes: Uint8Array): Data {
   const pkg = new PackageReader(bytes);
   // read
   const version = pkg.readInt();
-  checkVersion(version, LIQUID);
+  checkVersion('liquid', version, LIQUID);
   const length = pkg.readInt();
   const depths = new Int16Array(length);
   for (let i = 0; i < length; i++) depths[i] = pkg.readShort();

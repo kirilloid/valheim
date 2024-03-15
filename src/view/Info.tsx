@@ -41,7 +41,7 @@ const infos: Record<string, Article> = {
     sections: [
       {
         header: 'traders',
-        text: `There are two traders in Valheim: [/loc/Vendor_BlackForest](Haldor) and [/loc/Hildir_camp](Hildir)`,
+        text: `There are two traders in Valheim: [/obj/Haldor](Haldor) and [/obj/Hildir](Hildir)`,
       },
     ],
   }

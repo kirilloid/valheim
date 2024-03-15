@@ -183,7 +183,7 @@ export const locations: LocationConfig[] = [
         locItem('BossStone_Eikthyr'),
         locItem('BossStone_TheElder'),
         locItem('BossStone_Yagluth'),
-        locItem('Vegvisir'), // Vegvisir_Eikthyr
+        locItem('Vegvisir_Eikthyr'),
         locItem('Raspberry', 1, 2),
         locItem('Mushroom', 1, 2),
         locItem('Wood', 1, 2),
@@ -246,7 +246,7 @@ export const locations: LocationConfig[] = [
     3, 'SwampRuin1', ['Swamp'],
     { biomeArea: 6, quantity: 30, group: 'SwampRuin', minApart: 256, radius: [20, 12], minAlt: -0.5,
       items: [
-        locItem('Vegvisir', 0.3), // Vegvisir_Bonemass
+        locItem('Vegvisir_Bonemass', 0.3),
         locItem('TreasureChest_swamp', 0.251),
         locItem('Draugr', 0.5, 2),
         locItem('Draugr_Elite', 0.321),
@@ -260,7 +260,7 @@ export const locations: LocationConfig[] = [
     3, 'SwampRuin2', ['Swamp'],
     { biomeArea: 6, quantity: 30, minApart: 256, radius: [20, 10], minAlt: -0.5,
       items: [
-        locItem('Vegvisir', 0.3), // Vegvisir_Bonemass
+        locItem('Vegvisir_Bonemass', 0.3),
         locItem('TreasureChest_swamp', 0.251),
         locItem('Draugr', 0.5, 2),
         locItem('Draugr_Elite', 0.321),
@@ -356,7 +356,7 @@ export const locations: LocationConfig[] = [
         locItem('Greydwarf', 0.2, 1),
         locItem('TreasureChest_blackforest', 0.3),
         locItem('barrel', 0.3),
-        locItem('Vegvisir', 0.3), // Vegvisir_GDKing
+        locItem('Vegvisir_GDKing', 0.3),
         locItem('Crow', 1, 2),
         /*
         locItem('stone_wall', 1, 63),
@@ -464,7 +464,7 @@ export const locations: LocationConfig[] = [
           locItem('TreasureChest_heath_stone', 1, 1),
           // locItem('Rock_3', 1, 6),
         ], 0.5, 1),
-        locItem('Vegvisir', 0.4), // Vegvisir_GoblinKing
+        locItem('Vegvisir_GoblinKing', 0.4),
         // locItem('Rock_3', 1, 6),
       ]
     },
@@ -494,7 +494,7 @@ export const locations: LocationConfig[] = [
           locItem('GoblinBrute', 1, 1),
           locItem('TreasureChest_heath_stone', 1, 1),
         ], 0.5, 1),
-        locItem('Vegvisir', 0.4), // Vegvisir_GoblinKing
+        locItem('Vegvisir_GoblinKing', 0.4),
         // locItem([locItem('Rock_3', 1, 3)], 0.5),
         // locItem([locItem('Rock_3', 1, 5)], 0.5),
       ],
@@ -507,7 +507,7 @@ export const locations: LocationConfig[] = [
       customMusic: 'Music_StoneHenge',
       items: [
         locItem('GoblinBrute', 0.5, 2),
-        locItem('Vegvisir', 0.4), // Vegvisir_GoblinKing
+        locItem('Vegvisir_GoblinKing', 0.4),
       ],
     },
     'StoneHengeL',
@@ -518,7 +518,7 @@ export const locations: LocationConfig[] = [
       customMusic: 'Music_StoneHenge',
       items: [
         locItem([locItem('Goblin', 0.54, 3)], 0.75),
-        locItem('Vegvisir', 0.4), // Vegvisir_GoblinKing
+        locItem('Vegvisir_GoblinKing', 0.4),
         // locItem([locItem('Rock_3', 1, 4)], 0.75),
         // locItem('Rock_3', 1, 4),
       ],
@@ -885,7 +885,7 @@ export const locations: LocationConfig[] = [
       items: [
         locItem([
           locItem('TreasureChest_mountains', 0.66),
-          locItem('Vegvisir', 0.7), // Vegvisir_DragonQueen
+          locItem('Vegvisir_DragonQueen', 0.7),
         ], 0.9),
         locItem([locItem('Draugr', 1, 3)], 0.33),
       ],
@@ -928,7 +928,7 @@ export const locations: LocationConfig[] = [
           locItem('TreasureChest_blackforest'),
           locItem('Greydwarf', 0.5),
           locItem('Greydwarf_Elite', 0.5),
-          locItem('Vegvisir', 0.3), // Vegvisir_GDKing
+          locItem('Vegvisir_GDKing', 0.3),
         ], 0.818),
       ],
     },
@@ -2016,7 +2016,7 @@ function addDistToLocation(loc: LocationConfig, drop: DropDist) {
         for (const [tItem, tDist] of Object.entries(items)) {
           addToDist(loc.resources, tItem, powerDist(tDist, dist));
         }
-        if (item === 'Vegvisir') {
+        if ('Vegvisir' in obj) {
           (loc.tags ?? (loc.tags = [])).push('vegvisir');
         }
         break;
@@ -2067,7 +2067,7 @@ function addToMap(id: GameLocationId, item: EntityId): void {
             addToMap(id, option.item);
           }
         }
-        if (item === 'Vegvisir') {
+        if ('Vegvisir' in obj) {
           (loc.tags ?? (loc.tags = [])).push('vegvisir');
         }
         break;
@@ -2077,6 +2077,9 @@ function addToMap(id: GameLocationId, item: EntityId): void {
         break;
       case 'creature':
         addToBiomes(loc.biomes, b => b.creatures, obj);
+        obj.drop.forEach(({ item }) => {
+          addToBiomes(loc.biomes, b => b.resources, item);
+        });
         break;
       default:
         addToBiomes(loc.biomes, b => b.resources, item);

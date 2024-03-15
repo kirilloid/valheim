@@ -7,7 +7,7 @@ import type { Food, Resource } from '../../types';
 import { sortBy, timeI2S } from '../../model/utils';
 import { resources } from '../../data/resources';
 
-import { TranslationContext, useGlobalState } from '../../effects';
+import { TranslationContext, useSettingsFilter } from '../../effects';
 import { InlineObject } from '../helpers';
 import { Icon, ItemIcon } from '../parts/Icon';
 import { foodTable as pageName } from '../../state';
@@ -36,7 +36,7 @@ function parseSort(sort?: string): SortField | undefined {
 }
 
 export function FoodTable() {
-  const [spoiler] = useGlobalState('spoiler');
+  const settingsFilter = useSettingsFilter();
   const translate = useContext(TranslationContext);
   const params = useParams<{ sort?: string }>();
   const history = useHistory();
@@ -105,7 +105,7 @@ export function FoodTable() {
         </tr>
       </thead>
       <tbody>
-      {items.filter(item => item.tier <= spoiler).map(item => {
+      {items.filter(settingsFilter).map(item => {
         return <tr key={item.id}>
           <td><ItemIcon item={item} size={32} /></td>
           <td><InlineObject id={item.id} className="FoodTable__extra" /></td>

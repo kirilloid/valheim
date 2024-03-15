@@ -25,7 +25,7 @@ export type GameComponent =
 | 'Pickable' | 'PickableItem' | 'Piece' | 'Plant' | 'Player' | 'PrivateArea' | 'Procreation'
 | 'Ragdoll' | 'RandomAnimation' | 'RandomFlyingBird' | 'ResourceRoot' | 'Runestone' /* boss stones */
 | 'Saddle' | 'SapCollector' | 'SEMan' | 'Ship' | 'ShipConstructor' | 'Sign' | 'Smelter'
-| 'Tameable' | 'TeleportWorld' | 'TerrainComp' | 'TombStone' | 'TreeBase' | 'TreeLog' | 'Turret'
+| 'Tameable' | 'TeleportWorld' | 'TerrainComp' | 'TombStone' | 'Trader' | 'TreeBase' | 'TreeLog' | 'Turret'
 | 'Vagon' | 'Vegvisir' | 'VisEquipment'
 | 'WearNTear' | 'Windmill' | 'WispSpawner'
 | 'ZNetView' | 'ZSyncTransform'
@@ -42,7 +42,7 @@ export type EntityGroup =
   | 'ore'
   | 'rug'
   | 'seedTree' | 'seedVeg' | 'seeker' | 'ship' | 'smelt' | 'stack' | 'stand'
-  | 'torch'
+  | 'torch' | 'trader'
   | 'value'
   | 'semiboss'
 
@@ -338,6 +338,13 @@ export interface ResourceRoot {
   regenPerSec: number;
 }
 
+export interface Aoe {
+  damage: DamageProfile;
+  radius: number;
+  backstabBonus: number;
+  ttl: number;
+}
+
 export interface Plantable {
   subtype: 'tree' | 'vegetable' | 'crop' | 'shroom',
   plantedWith: EntityId;
@@ -357,14 +364,17 @@ export interface SpawnArea {
 
 export type PhysicalObject = GameObjectBase & {
   type: 'object';
-  subtype: 'tree' | 'plant' | 'rock' | 'ore' | 'indestructible' | 'misc' | 'treasure';
+  subtype: 'tree' | 'plant' | 'rock' | 'ore' | 'indestructible' | 'misc' | 'treasure' | 'trader';
   PointLight?: PointLight;
   Destructible?: Destructible;
+  Aoe?: Aoe;
   ResourceRoot?: ResourceRoot;
   drop?: GeneralDrop[];
+  trader?: 'haldor' | 'hildir';
   grow?: ItemGrow[];
   Plant?: Plantable;
   Beacon?: number;
+  Vegvisir?: GameLocationId;
   SpawnArea?: SpawnArea;
   floating?: true;
 };
@@ -542,6 +552,8 @@ export interface GameEvent {
   base: boolean;
 }
 
+export type Season = 'midsummer' | 'christmas' | 'helloween';
+
 interface GameObjectBase {
   id: EntityId;
   iconId?: string;
@@ -551,7 +563,7 @@ interface GameObjectBase {
   dlc?: 'beta';
   mod?: string;
   disabled?: true;
-  season?: 'midsummer' | 'christmas' | 'helloween';
+  season?: Season;
   tier: number;
   emoji?: string;
 }
@@ -679,6 +691,7 @@ export interface Weapon extends BaseItem {
   parryBonus: number;
   skill: Exclude<SkillType, SkillType.Blocking> | null;
   toolTier?: number;
+  hitEffect?: { id: EntityId; chance: number };
   damage: Pair<DamageProfile>;
   knockback: number;
   backstab: number;
@@ -706,6 +719,13 @@ export interface Shield extends BaseItem {
   durability: Pair<number>;
   set?: ItemSet;
 }
+export interface Bomb extends BaseItem {
+  type: 'bomb';
+  emoji: string,
+  slot: 'primary';
+  spawns: EntityId;
+  stamina: number;
+}
 
 export interface Armor extends BaseItem {
   type: 'armor';
@@ -715,6 +735,7 @@ export interface Armor extends BaseItem {
   hideBeard?: boolean;
   maxLvl: number;
   moveSpeed: number;
+  staminaModifiers?: Partial<Record<'dodge' | 'block' | 'attack' | 'home', number>>;
   armor: Pair<number>;
   damageModifiers?: Partial<DamageModifiers>;
   durability: Pair<number>;
@@ -729,7 +750,7 @@ export * from './damage';
 export * from './drop';
 export * from './components';
 
-export type Item = Resource | Weapon | Shield | Armor | Arrow | Tool;
+export type Item = Resource | Weapon | Shield | Bomb | Armor | Arrow | Tool;
 export type ItemSet = { name: string; items: EntityId[]; bonus: (Effect | undefined)[]; };
 export type ItemSpecial = Weapon['special'] | Armor['special'] | Tool['special'];
 

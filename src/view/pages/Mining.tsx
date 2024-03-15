@@ -10,7 +10,7 @@ import { objects } from '../../data/objects';
 import { objectLocationMap } from '../../data/location';
 import { axes as allAxes, pickaxes as allPickaxes } from '../../data/weapons';
 
-import { TranslationContext, useGlobalState } from '../../effects';
+import { TranslationContext, useSettingsFilter } from '../../effects';
 import { ItemIcon, SkillIcon } from '../parts/Icon';
 
 const objectMap: Record<EntityId, PhysicalObject> = {};
@@ -159,7 +159,7 @@ function parseMiningStat(stat?: string): MineStat {
 }
 
 export function Mining() {
-  const [spoiler] = useGlobalState('spoiler');
+  const settingsFilter = useSettingsFilter();
   const translate = useContext(TranslationContext);
   const history = useHistory();
   const { objectType: urlObjectType, stat: urlStat } = useParams<{ objectType?: string, stat?: string }>();
@@ -174,7 +174,7 @@ export function Mining() {
   for (const type of objectTypes) {
     const copy: typeof root[ObjectType] = {};
     for (const [key, objs] of Object.entries(root[type])) {
-      const newObjs = objs.filter(pair => pair[0].tier <= spoiler);
+      const newObjs = objs.filter(pair => settingsFilter(pair[0]));
       if (newObjs.length) copy[key] = newObjs;
     }
     destructibles[type] = copy;
@@ -212,7 +212,7 @@ export function Mining() {
     </div>
     <MiningTable
       id={objectType}
-      tools={(objectType === 'tree' ? allAxes : allPickaxes).filter(a => a.tier <= spoiler)}
+      tools={(objectType === 'tree' ? allAxes : allPickaxes).filter(settingsFilter)}
       destructibles={destructibles[objectType]}
       skill={skill}
       stat={stat}

@@ -5,7 +5,7 @@ import { assertNever } from '../../model/utils';
 import { data } from '../../data/itemDB';
 
 import { Armor } from './Armor';
-import { Weapon, Shield } from './Weapon';
+import { Weapon, Shield, Bomb } from './Weapon';
 import { Creature } from './Creature';
 import { Arrow } from './Arrow';
 import { GenericItem } from './GenericItem';
@@ -52,6 +52,8 @@ function Item({ item, level }: { item: T.GameObject, level?: number }) {
       return <Weapon item={item} level={level} />
     case 'shield':
       return <Shield item={item} level={level} />
+    case 'bomb':
+      return <Bomb item={item} />
     case 'arrow':
     case 'bolt':
     case 'missile':

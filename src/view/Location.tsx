@@ -39,7 +39,11 @@ function SingleLocation({ loc }: { loc: LocationConfig }) {
         <dt>{translate('ui.altitude')}</dt>
         <dd>{rangeBy(loc.altitude, String, '..')}</dd>
         <dt>number in world</dt>
-        <dd>{loc.quantity}</dd>
+        <dd>{loc.quantity}{loc.unique ? ', but only 1 is realized' : ''}</dd>
+        {loc.distance[0] !== 0 && loc.distance[1] !== 0 ? <React.Fragment key="distance">
+          <dt>distance from center</dt>
+          <dd>{rangeBy(loc.distance, String)}</dd>
+        </React.Fragment> : null}
         {vegvisirChance ? <React.Fragment key="vegvisir">
           <dt>{translate('vegvisir')}</dt>
           <dd><InlineObjectWithIcon id="Vegvisir" />, {showNumber(vegvisirChance * 100)}% chance</dd>

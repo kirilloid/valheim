@@ -24,7 +24,7 @@ export type Data = {
 
 export function read(pkg: PackageReader): Data {
   const version = pkg.readInt();
-  checkVersion(version, INVENTORY);
+  checkVersion('inventory', version, INVENTORY);
   const length = pkg.readInt();
   const inventory: Data = {
     version,

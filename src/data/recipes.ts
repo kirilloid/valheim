@@ -66,7 +66,7 @@ export const recipes: ItemRecipe[] = [
   workbenchRecipe(2, { WolfHairBundle: 20, WolfPelt: 5, LeatherScraps: 10 }, { WolfHairBundle: 5, WolfPelt: 3, LeatherScraps: 4 }, 'ArmorFenringLegs'),
   workbenchRecipe(2, { WolfHairBundle: 20, WolfPelt: 5, LeatherScraps: 10 }, { WolfHairBundle: 5, WolfPelt: 3, LeatherScraps: 4 }, 'ArmorFenringChest'),
   workbenchRecipe(2, { WolfHairBundle: 20, WolfPelt: 2, TrophyCultist: 1 }, { WolfHairBundle: 5, WolfPelt: 4 }, 'ArmorFenringChest'),
-  // ARROWS
+  // ARROWS & BOMBS
   workbenchRecipe(1, { Wood: 8 }, {}, 'ArrowWood', 20),
   workbenchRecipe(1, { Wood: 8, Resin: 2, Feathers: 2 }, {}, 'ArrowFire', 20),
   workbenchRecipe(1, { Wood: 8, Flint: 2, Feathers: 2 }, {}, 'ArrowFlint', 20),
@@ -76,13 +76,21 @@ export const recipes: ItemRecipe[] = [
   workbenchRecipe(4, { Needle: 4, Feathers: 2 }, {}, 'ArrowNeedle', 20),
   workbenchRecipe(1, { LeatherScraps: 5, Ooze: 10, Resin: 3 }, {}, 'BombOoze', 5),
   workbenchRecipe(1, { Sap: 1, Bilebag: 1, Resin: 3 }, {}, 'BombBile', 3),
+  // FIREWORKS
+  workbenchRecipe(1, { FireworksRocket_White: 1, Blueberries: 1 }, {}, 'FireworksRocket_Blue'),
+  workbenchRecipe(1, { FireworksRocket_White: 1, GreydwarfEye: 1 }, {}, 'FireworksRocket_Cyan'),
+  workbenchRecipe(1, { FireworksRocket_White: 1, Guck: 1 }, {}, 'FireworksRocket_Green'),
+  workbenchRecipe(1, { FireworksRocket_White: 1, Turnip: 1 }, {}, 'FireworksRocket_Purple'),
+  workbenchRecipe(1, { FireworksRocket_White: 1, Raspberry: 1 }, {}, 'FireworksRocket_Red'),
+  workbenchRecipe(1, { FireworksRocket_White: 1, Dandelion: 1 }, {}, 'FireworksRocket_Yellow'),
+
   // LEVEL 3
   workbenchRecipe(3, { Wood: 10, BoneFragments: 10, TrophySkeleton: 3 }, { Wood: 5, BoneFragments: 5 }, 'ShieldBoneTower'),
   // KILN
   genericRecipe('charcoal_kiln', 1, KILN_TIME, { Wood: 1 }, {}, 'Coal'),
   genericRecipe('charcoal_kiln', 1, KILN_TIME, { FineWood: 1 }, {}, 'Coal'),
   genericRecipe('charcoal_kiln', 1, KILN_TIME, { RoundLog: 1 }, {}, 'Coal'),
-  genericRecipe('charcoal_kiln', 1, KILN_TIME, { ElderBark: 1 }, {}, 'Coal'),
+  // genericRecipe('charcoal_kiln', 1, KILN_TIME, { ElderBark: 1 }, {}, 'Coal'),
   // COOKING STATION
   genericRecipe('piece_cookingstation', 1, 25, { RawMeat: 1 }, {}, 'CookedMeat'),
   genericRecipe('piece_cookingstation', 1, 25, { NeckTail: 1 }, {}, 'NeckTailGrilled'),
@@ -191,6 +199,7 @@ export const recipes: ItemRecipe[] = [
   smelterRecipe('smelter', 'CopperOre', 'Copper'),
   smelterRecipe('smelter', 'CopperScrap', 'Copper'),
   smelterRecipe('smelter', 'TinOre', 'Tin'),
+  smelterRecipe('smelter', 'BronzeScrap', 'Bronze'),
   smelterRecipe('smelter', 'IronScrap', 'Iron'),
   smelterRecipe('smelter', 'IronOre', 'Iron'),
   smelterRecipe('smelter', 'SilverOre', 'Silver'),
@@ -248,7 +257,6 @@ export const recipes: ItemRecipe[] = [
   forgeRecipe(2, { Iron: 10, LinenThread: 20 }, { Iron: 3 }, 'ArmorPaddedGreaves'),
   forgeRecipe(2, { Iron: 10, LinenThread: 20 }, { Iron: 3 }, 'ArmorPaddedCuirass'),
   forgeRecipe(1, { Iron: 10, LinenThread: 15 }, { Iron: 5 }, 'HelmetPadded'),
-  forgeRecipe(1, { LeatherScraps: 10, LinenThread: 20, BlackMetal: 15 }, {}, 'SaddleLox'),
   // BLACK METAL
   forgeRecipe(2, { YggdrasilWood: 3, BlackMetal: 25 }, { YggdrasilWood: 1, BlackMetal: 15 }, 'PickaxeBlackMetal'),
   forgeRecipe(4, { FineWood: 10, BlackMetal: 30, LinenThread: 5 }, { BlackMetal: 15, LinenThread: 5 }, 'AtgeirBlackmetal'),
@@ -258,6 +266,7 @@ export const recipes: ItemRecipe[] = [
   forgeRecipe(4, { FineWood: 5, Iron: 20, Needle: 5, LinenThread: 10 }, { Iron: 2, LinenThread: 2 }, 'MaceNeedle'),
   forgeRecipe(3, { FineWood: 10, BlackMetal: 8, Chain: 5 }, { FineWood: 10, BlackMetal: 4, Chain: 2 }, 'ShieldBlackmetal'),
   forgeRecipe(3, { FineWood: 15, BlackMetal: 10, Chain: 7 }, { FineWood: 15, BlackMetal: 6, Chain: 3 }, 'ShieldBlackmetalTower'),
+  forgeRecipe(1, { LeatherScraps: 10, LinenThread: 20, BlackMetal: 15 }, {}, 'SaddleLox'),
   // EXTRA
   forgeRecipe(2, { FineWood: 2, Flametal: 20, SurtlingCore: 20, LeatherScraps: 3 }, { Flametal: 10, SurtlingCore: 10, LeatherScraps: 2 }, 'SwordIronFire'),
   forgeRecipe(2, { FineWood: 10, Iron: 6 }, { FineWood: 10, Iron: 3 }, 'ShieldIronSquare'),
@@ -267,8 +276,8 @@ export const recipes: ItemRecipe[] = [
   forgeRecipe(3, { Wood: 8, Silver: 1, Feathers: 2 }, {}, 'ArrowSilver', 20),
   // ARTISAN STATION
   genericRecipe('piece_artisanstation', 1, 3, { Eitr: 1, Iron: 3 }, {}, 'MechanicalSpring'),
-  genericRecipe('piece_artisanstation', 1, 3, { RoundLog: 5, Feathers: 2 }, {}, 'TurretBoltWood', 5),
-  genericRecipe('piece_artisanstation', 1, 3, { Wood: 10, BlackMetal: 1 }, {}, 'TurretBolt', 5),
+  genericRecipe('piece_artisanstation', 1, 3, { RoundLog: 5, Feathers: 2 }, {}, 'TurretBoltWood', 20),
+  genericRecipe('piece_artisanstation', 1, 3, { Wood: 10, BlackMetal: 1 }, {}, 'TurretBolt', 20),
   // BLACK FORGE
   blackForgeRecipe(1, { Bronze: 2, SurtlingCore: 1, Crystal: 1 }, {}, 'Lantern'),
   blackForgeRecipe(1, { FineWood: 10, BoneFragments: 40, Eitr: 10 }, { FineWood: 5, BoneFragments: 20 }, 'BowSpineSnap'),
@@ -309,7 +318,7 @@ export const recipes: ItemRecipe[] = [
   genericRecipe('piece_oven', 1, 50, { MeatPlatterUncooked: 1 }, {}, 'MeatPlatter'),
   genericRecipe('piece_oven', 1, 50, { HoneyGlazedChickenUncooked: 1 }, {}, 'HoneyGlazedChicken'),
   genericRecipe('piece_oven', 1, 50, { MisthareSupremeUncooked: 1 }, {}, 'MisthareSupreme'),
-  genericRecipe('piece_oven', 1, 50, { MagicallyStuffedShroom: 1 }, {}, 'MagicallyStuffedShroomUncooked'),
+  genericRecipe('piece_oven', 1, 50, { MagicallyStuffedShroomUncooked: 1 }, {}, 'MagicallyStuffedShroom'),
   // TRADER
   haldorRecipe(100, 'HelmetYule'),
   haldorRecipe(620, 'HelmetDverger'),

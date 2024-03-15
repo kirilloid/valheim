@@ -127,6 +127,7 @@ export const items: Item[] = [
       weight: 10,
       maxLvl: 4,
       durability: [1000, 200],
+      staminaModifiers: { home: -0.2 },
       moveSpeed: 0,
     },
     {
@@ -137,6 +138,7 @@ export const items: Item[] = [
       weight: 10,
       maxLvl: 4,
       durability: [1000, 200],
+      staminaModifiers: { home: -0.2 },
       moveSpeed: 0,
     },
     {
@@ -147,6 +149,7 @@ export const items: Item[] = [
       weight: 3,
       maxLvl: 4,
       durability: [800, 100],
+      staminaModifiers: { home: -0.15 },
       moveSpeed: 0,
     },
   ]),

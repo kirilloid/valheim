@@ -212,7 +212,7 @@ export const carts: Cart[] = [
     },
     piece: {
       target: 'primary',
-      water: true,
+      water: undefined,
       size: [2, 4, 1],
     },
     storage: [6, 4],

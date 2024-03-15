@@ -1,4 +1,4 @@
-import type { AttackAnimation, Shield, Weapon } from '../types';
+import type { AttackAnimation, Bomb, EntityId, Shield, Weapon } from '../types';
 import { SkillType } from '../model/skills';
 import { dmg } from '../model/game';
 
@@ -954,27 +954,16 @@ export const items: (Weapon | Shield)[] = [
   },
 // IRON AGE
   {
-    type: 'weapon', slot: 'primary',
+    type: 'bomb', slot: 'primary',
     id: 'BombOoze',
     emoji: '💣',
     tier: 3,
     stack: 50,
     maxLvl: 1,
     weight: 0.3,
-    moveSpeed: 0,
-    block: 2,
-    parryForce: 0,
-    parryBonus: 1.5,
-    skill: null,
-    damage: [dmg({ poison: 40 }), dmg({})],
-    knockback: 40,
-    backstab: 4, // from effect
     // radius: 4, ttl: 10, interval: 1
-    attacks: [{
-      type: 'proj',
-      animation: 'throw_bomb',
-      projVel: [2, 20],
-      projAcc: [20, 5],
+    // oozebomb_projectile
+    spawns: 'oozebomb_explosion',
       stamina: 8,
       walkSpeed: 0.3,
       rotationSpeed: 0.3,
@@ -2047,7 +2036,7 @@ export const items: (Weapon | Shield)[] = [
     stack: 1,
     maxLvl: 4,
     weight: 2,
-    PointLight: { color: '#38FFC5', range: 3, intensity: 1.5 },
+    PointLight: { color: '#38FFC5', range: 3, intensity: 1 },
     moveSpeed: -0.05,
     block: 39,
     parryForce: [30, 5],
@@ -2057,7 +2046,7 @@ export const items: (Weapon | Shield)[] = [
       dmg({ blunt: 50, pierce: 45 }),
       dmg({ pierce: 6 }),
     ],
-    knockback: 90,
+    knockback: 100,
     backstab: 3,
     attacks: [{
       type: 'melee',
@@ -2200,35 +2189,16 @@ export const items: (Weapon | Shield)[] = [
   },
 // MISTLANDS
   {
-    type: 'weapon', slot: 'primary',
+    type: 'bomb', slot: 'primary',
     id: 'BombBile',
     emoji: '💣',
     tier: 6,
     stack: 50,
-    maxLvl: 1,
     weight: 0.3,
-    moveSpeed: 0,
-    block: 2,
-    parryForce: 0,
-    parryBonus: 1.5,
-    skill: null,
-    damage: [dmg({ poison: 30, fire: 15 }), dmg({})],
-    knockback: 40,
-    backstab: 1, // 4 from effect? doesn't matter
-    // radius: 4, ttl: 10, interval: 1
-    attacks: [{
-      type: 'proj',
-      animation: 'throw_bomb',
-      projVel: [2, 20],
-      projAcc: [20, 5],
+    // bilebomb_projectile
+    // bilebomb_explosion
+    spawns: 'bilebomb_explosion',
       stamina: 8,
-      walkSpeed: 0.3,
-      rotationSpeed: 0.3,
-      startNoise: 0,
-      hitNoise: 0,
-      range: 1.5,
-    }],
-    durability: [Infinity, 0],
   },
   {
     type: 'weapon', slot: 'either',
@@ -2760,8 +2730,8 @@ export const items: (Weapon | Shield)[] = [
     type: 'weapon', slot: 'primary',
     id: 'SwordIronFire',
     emoji: '🗡️',
-    disabled,
-    tier: 8,
+    disabled, // it's enabled, but recipe is disabled
+    tier: 3,
     stack: 1,
     maxLvl: 4,
     weight: 1,

@@ -1,17 +1,13 @@
-import React, { ReactNode, useCallback, useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 
-import type { KeysOfType } from '../../types';
 import type { EditorProps, ValueProps } from '../parts/types';
 import type { WorldMeta } from './types';
-import type { GameSettings } from '../../types/GameSettings';
 
 import { stableHashCode, solve } from '../../model/hash';
 
 import { FileInfo } from '../parts/FileInfo';
 import { Tabs } from '../parts/Tabs';
 import { TranslationContext } from '../../effects';
-import { gameSettings, presets } from '../../data/game-settings';
-import { List } from '../helpers';
 import { BasicWorldSettings } from './WorldSettings';
 
 

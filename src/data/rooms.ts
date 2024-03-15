@@ -631,7 +631,7 @@ export const forestcrypt: DungeonRoomsConfig = {
       weight: 1,
       connections: [{ pos: [0, -1.5, 9] }],
       items: [
-        locItem('Vegvisir', 0.4),
+        locItem('Vegvisir_GDKing', 0.4),
         locItem('MushroomYellow', 0.2, 5),
         locItem('piece_groundtorch_wood', 0.5),
         locItem('BoneFragments', 0.5, 4),
@@ -650,7 +650,7 @@ export const forestcrypt: DungeonRoomsConfig = {
       weight: 1,
       connections: [{ pos: [-10, -1.5, 0] }],
       items: [
-        locItem('Vegvisir', 0.4),
+        locItem('Vegvisir_GDKing', 0.4),
         locItem('MushroomYellow', 0.2, 7),
         locItem('piece_groundtorch_wood', 0.5, 2),
         // spawners
@@ -677,7 +677,7 @@ export const forestcrypt: DungeonRoomsConfig = {
       weight: 1,
       connections: [{ pos: [4, -1.5, 4] }],
       items: [
-        locItem('Vegvisir', 0.4),
+        locItem('Vegvisir_GDKing', 0.4),
         locItem('piece_groundtorch_wood', 0.5, 4),
         locItem('SurtlingCore', 0.5, 5),
         locItem('Pickable_ForestCryptRandom', 0.5, 6),
@@ -697,7 +697,7 @@ export const forestcrypt: DungeonRoomsConfig = {
       weight: 1,
       connections: [{ pos: [4, -1.5, 4] }],
       items: [
-        locItem('Vegvisir', 0.4),
+        locItem('Vegvisir_GDKing', 0.4),
         locItem('piece_groundtorch_wood', 0.5, 4),
         // spawners
         locItem('Skeleton', 0.33, 2),
@@ -780,7 +780,7 @@ export const sunkencrypt: DungeonRoomsConfig = {
       items: [
         locItem('piece_groundtorch_green', 0.5, 6),
         locItem('mudpile2', 0.6, 2),
-        locItem('Vegvisir', 0.4),
+        locItem('Vegvisir_Bonemass', 0.4),
         locItem('TreasureChest_sunkencrypt', 0.5, 3),
       ],
       dist: [0.21, 0.44, 0.19, 0.1, 0.06],
@@ -965,7 +965,7 @@ export const sunkencrypt: DungeonRoomsConfig = {
         { pos: [0, -2.5, -6] },
       ],
       items: [
-        locItem('Vegvisir', 0.5),
+        locItem('Vegvisir_Bonemass', 0.5),
         ROOM_ENEMIES,
         locItem('mudpile2', 0.6, 3),
         ROOM_LOOT,
@@ -1880,7 +1880,7 @@ export const frostCaves: DungeonRoomsConfig = {
       weight: 0.5,
       connections: [{ pos: [0, -3, 0] }],
       items: [
-        locItem('Vegvisir', 0.25),
+        locItem('Vegvisir_DragonQueen', 0.25),
       ],
       dist: [0],
     },
@@ -2067,7 +2067,7 @@ export const frostCaves: DungeonRoomsConfig = {
       weight: 0.5,
       connections: [{ pos: [0, -3, 0] }],
       items: [
-        locItem('Vegvisir', 0.25),
+        locItem('Vegvisir_DragonQueen', 0.25),
       ],
       dist: [0],
     },
@@ -2417,7 +2417,7 @@ export const frostCaves: DungeonRoomsConfig = {
         { pos: [-2.1, -19.25, 0.9], type: 'deeproom' },
       ],
       items: [
-        locItem('Vegvisir', 0.25),
+        locItem('Vegvisir_DragonQueen', 0.25),
         // extraroof (2)/random x2
         locItem('Pickable_MountainCaveCrystal', 0.5 * 0.25, 2),
         // room/pillars
@@ -2983,7 +2983,7 @@ export const dvergrTown: DungeonRoomsConfig = {
         locItem('Spawner_Seeker'),
         locItem('Spawner_Seeker', 0.66, 2),
         // ..
-        locItem('Vegvisir', 0.2),
+        locItem('Vegvisir_SeekerQueen', 0.2),
       ],
       dist: [1],
     },
@@ -3017,7 +3017,7 @@ export const dvergrTown: DungeonRoomsConfig = {
       items: [
         locItem('Spawner_Seeker'),
         locItem('Spawner_Seeker', 0.66, 2),
-        locItem('Vegvisir', 0.2),
+        locItem('Vegvisir_SeekerQueen', 0.2),
       ],
       dist: [1],
     },
@@ -3035,7 +3035,7 @@ export const dvergrTown: DungeonRoomsConfig = {
       items: [
         locItem('Spawner_Seeker'),
         locItem('Spawner_Seeker', 0.66, 2),
-        locItem('Vegvisir', 0.2),
+        locItem('Vegvisir_SeekerQueen', 0.2),
       ],
       dist: [1],
     },
@@ -3053,7 +3053,7 @@ export const dvergrTown: DungeonRoomsConfig = {
         locItem('dvergrprops_lantern', 0.25, 3),
         locItem('Spawner_Seeker'),
         locItem('Spawner_Seeker', 0.66, 2),
-        locItem('Vegvisir', 0.2),
+        locItem('Vegvisir_SeekerQueen', 0.2),
       ],
       dist: [1],
     },
@@ -3302,7 +3302,7 @@ export const dvergrTown: DungeonRoomsConfig = {
       ],
       items: [
         // GameObject (1)/GameObject
-        locItem('Vegvisir', 0.5 * 0.2),
+        locItem('Vegvisir_SeekerQueen', 0.5 * 0.2),
         // wood
         locItem([
           locItem('dvergrtown_wood_pole', 1, 2),
@@ -3341,7 +3341,7 @@ export const dvergrTown: DungeonRoomsConfig = {
       ],
       items: [
         // GameObject (1)/GameObject
-        locItem('Vegvisir', 0.5 * 0.2),
+        locItem('Vegvisir_SeekerQueen', 0.5 * 0.2),
         // wood (1)
         locItem([
           locItem('dvergrtown_wood_pole', 1, 2),
@@ -3390,7 +3390,7 @@ export const dvergrTown: DungeonRoomsConfig = {
         locItem('TreasureChest_dvergrtown'),
         locItem('Pickable_DvergrMineTreasure', 0.5, 2),
         locItem('Pickable_DvergrMineTreasure', 0.33),
-        locItem('Vegvisir', 0.2),
+        locItem('Vegvisir_SeekerQueen', 0.2),
         locItem('Pickable_BlackCoreStand', 0.75, 4),
       ],
       dist: [1],
@@ -3487,7 +3487,7 @@ export const dvergrTown: DungeonRoomsConfig = {
       items: [
         locItem('Spawner_Tick_stared', 1, 2),
         locItem('Spawner_Tick_stared', 0.33, 2),
-        locItem('Vegvisir', 0.2),
+        locItem('Vegvisir_SeekerQueen', 0.2),
       ],
       dist: [1],
     },

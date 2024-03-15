@@ -366,7 +366,7 @@ export const events: GameEvent[] = [
   },
   {
     id: 'hildirboss2',
-    tier: 2,
+    tier: 4,
     icon: 'Fenring_Cultist_Hildir',
     biomes: ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains', 'Ocean', 'Mistlands'],
     killed: ['Fenring_Cultist_Hildir'],
@@ -401,7 +401,7 @@ export const events: GameEvent[] = [
   },
   {
     id: 'hildirboss3',
-    tier: 2,
+    tier: 5,
     icon: 'GoblinBruteBros',
     biomes: ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains', 'Ocean', 'Mistlands'],
     killed: ['GoblinBruteBros'],

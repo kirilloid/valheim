@@ -197,7 +197,7 @@ export function FileEditor<T>(props: Props<T>) {
                 renderer: () => <LinuxFilePaths subpath={props.subpath} />,
               },
             ]} selected={0} />
-            <p>{translate('ui.fileEditor.localNote')}</p>
+            <p className='info'>{translate('ui.fileEditor.localNote')}</p>
           </>
         case 'picking':
           return <>

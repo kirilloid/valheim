@@ -3,15 +3,17 @@ import React, { useContext } from 'react';
 import type * as T from '../../types';
 import { timeI2S } from '../../model/utils';
 import { fullDestructible } from '../../data/objects';
+import { recipes } from '../../data/recipes';
 
-import { TranslationContext } from '../../effects';
-import { Area, List, rangeBy } from '../helpers';
+import { TranslationContext, useSettingsFilter } from '../../effects';
+import { Area, InlineObject, InlineObjectWithIcon, List, rangeBy, showPercent } from '../helpers';
 import { ItemHeader } from '../parts/ItemHeader';
 import { ItemIcon } from '../parts/Icon';
 import { DropTable } from '../parts/DropTable';
 import { GrowSection } from '../parts/Source';
 import { Destructible } from '../parts/Destructible';
 import { ResourceRoot } from '../parts/ResourceRoot';
+import { data } from '../../data/itemDB';
 
 function Grow({ item }: { item: T.PhysicalObject }) {
   return <section>
@@ -42,6 +44,78 @@ function Plant({ plant }: { plant: T.Plantable }) {
   </section>
 }
 
+function TraderRecipes({ id }: { id: 'haldor' | 'hildir' }) {
+  const settingsFilter = useSettingsFilter();
+  const rr = recipes
+    .filter((r): r is T.ItemRecipe & { type: 'haldor' | 'hildir' } => r.type === id)
+    .filter(r => {
+      const obj = data[r.item];
+      return obj && settingsFilter(obj);
+    })
+  return <>
+    <h2>Sells</h2>
+    <dl>
+      {rr.map((r, i) => <React.Fragment key={i}>
+        <dt><InlineObjectWithIcon id={r.item} /></dt><dd>{r.value} <ItemIcon item={data.Coins} /></dd>
+      </React.Fragment>)}
+    </dl>
+  </>
+}
+
+function spawnChance(levels: T.Pair<number>, levelUpChance: number, level: number): number {
+  if (level < levels[0]) return 0;
+  if (level > levels[1]) return 0;
+  if (level === levels[1]) return levelUpChance ** (levels[1] - levels[0]);
+  return (1 - levelUpChance) * levelUpChance ** (level - levels[0]);
+}
+
+function SpawnArea({ params }: { params: T.SpawnArea }) {
+  const translate = useContext(TranslationContext);
+
+  const totalWeight = params.prefabs.reduce((a, prefab) => a + prefab.weight, 0);
+  const minLvl = Math.min(...params.prefabs.map(prefab => prefab.level[0])) || 1;
+  const maxLvl = Math.max(...params.prefabs.map(prefab => prefab.level[1])) || 3;
+  const range = Array.from({ length: maxLvl - minLvl + 1 }, (_, i) => minLvl + i);
+  return <>
+    <h2>Spawner</h2>
+    <table>
+      <colgroup>
+        <col span={2} />
+        <col span={range.length + 1} width={showPercent(0.65 / (range.length + 1))} />
+      </colgroup>
+      <thead>
+        <td></td>
+        <td>{translate('ui.creature')}</td>
+        {range.map(lvl => <td key={lvl}>{lvl - 1}⭐</td>)}
+        <td>{translate('ui.total')}</td>
+      </thead>
+      <tbody>
+        {params.prefabs.map(item => {
+          const weight = item.weight / totalWeight;
+          return <tr key={item.prefab}>
+            <td><ItemIcon item={data[item.prefab]} /></td>
+            <td><InlineObject id={item.prefab} /></td>
+            {range.map(lvl => <td>{showPercent(spawnChance(item.level, params.levelUpChance, lvl) * weight)}</td>)}
+            <td>{showPercent(weight)}</td>
+          </tr>;
+        })}
+      </tbody>
+    </table>
+    <dl>
+      <dt>period</dt><dd>{params.interval}s</dd>
+      <dt>max</dt><dd>{params.maxNear}</dd>
+      <dt>level up chance</dt><dd>{showPercent(params.levelUpChance)}</dd>
+    </dl>
+  </>
+}
+
+function Vegvisir({ to }: { to: T.GameLocationId }) {
+  return <dl>
+    <dt>Leads to location</dt>
+    <dd><Area area={to} /></dd>
+  </dl>
+}
+
 export function PhysicalObject({ item }: { item: T.PhysicalObject }) {
   const full = fullDestructible(item);
 
@@ -50,9 +124,12 @@ export function PhysicalObject({ item }: { item: T.PhysicalObject }) {
       <ItemHeader item={item} noIcon />
       <ItemIcon item={item} size={128} />
       <Grow item={item} />
+      {item.trader && <TraderRecipes id={item.trader} />}
       {item.Plant && <Plant plant={item.Plant} />}
+      {item.Vegvisir && <Vegvisir to={item.Vegvisir} />}
       {item.ResourceRoot && <ResourceRoot params={item.ResourceRoot} />}
       {full?.Destructible && <Destructible item={full.Destructible} />}
+      {item?.SpawnArea && <SpawnArea params={item.SpawnArea} />}
       {item.drop && <Drop drop={item.drop} />}
     </>
   );

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { TranslationContext } from '../../effects';
 
 import type { Armor as TArmor } from '../../types';
-import { durability, ItemSpecial, Resistances, showPair } from '../helpers';
+import { durability, ItemSpecial, Resistances, showPair, showPercent } from '../helpers';
 import { Effect } from '../parts/Effect';
 import { ItemHeader } from '../parts/ItemHeader';
 import { Resource } from '../parts/Resource';
@@ -20,6 +20,11 @@ export function Armor({ item, level }: { item: TArmor, level?: number }) {
           <dt>{translate('ui.slot')}</dt><dd>{translate(`ui.slot.${item.slot}`)}</dd>
           <dt><Link to="/info/combat#armor">{translate('ui.armor')}</Link></dt><dd>{showPair(item.armor, level)}</dd>
           <dt>{translate('ui.maxQuality')}</dt><dd>{item.maxLvl}</dd>
+          {item.staminaModifiers ? <React.Fragment key="staminaMods">
+            {Object.entries(item.staminaModifiers).map(([key, val]) => <React.Fragment key={key}>
+              <dt>stamina: {key}</dt><dd>{showPercent(val)}</dd>
+            </React.Fragment>)}
+          </React.Fragment> : null}
           <dt title="armor loose durability 1:1 to received damage, but only for one randomly chosen piece of armor">{translate('ui.durability')}</dt><dd>{durability(item.durability, level)}</dd>
           {item.moveSpeed ? <React.Fragment key="moveSpeed"><dt title="when equipped">{translate('ui.moveSpeed')}</dt><dd>{item.moveSpeed * 100}%</dd></React.Fragment> : null}
           {item.damageModifiers ? <Resistances mods={item.damageModifiers} /> : null}

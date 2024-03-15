@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+
+import type { GameObject } from '../types';
 import { mapValues } from '../model/utils';
 
 export function read<T>(name: string, defaultValue: T): T {
@@ -51,4 +53,15 @@ export function useGlobalState<K extends GlobalKeys, T = GK[K]>(name: K, initial
     };
   }, [name, setModel]);
   return [value, setValue];
+}
+
+export function useSettingsFilter() {
+  const [spoiler] = useGlobalState('spoiler');
+  const [mods] = useGlobalState('searchInMods');
+  const [disabled] = useGlobalState('searchInDisabled');
+  return useCallback((item: GameObject) => {
+    return item.tier <= spoiler
+        && (mods || item.mod == null)
+        && (disabled || !item.disabled);
+  }, [spoiler, mods, disabled]);
 }

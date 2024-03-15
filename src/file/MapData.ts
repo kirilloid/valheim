@@ -41,7 +41,7 @@ export type Data = {
 export function read(data: Uint8Array): Data {
   let reader = new PackageReader(data);
   const version = reader.readInt();
-  checkVersion(version, MAP);
+  checkVersion('map data', version, MAP);
   if (version >= 7) {
     // unpack gzip
     reader = new PackageReader(inflate(reader.readByteArray()));

@@ -1,11 +1,13 @@
-import type { DamageModifiers, Effect, EntityId, Item, Shield, Weapon } from '../../types';
+import type { Bomb, DamageModifiers, Effect, EntityId, Item, Shield, Weapon } from '../../types';
 
 import { items as armors } from '../../data/armors';
 import { effects } from '../../data/effects';
 import { resources } from '../../data/resources';
 import { items } from '../../data/weapons';
 
-const enabledWeapons = items.filter(i => !i.disabled);
+const enabledWeapons = items
+  .filter(i => !i.disabled)
+  .filter((i): i is Weapon | Shield => i.type !== 'bomb');
 
 export const blockers = {
   shields: [] as Shield[],

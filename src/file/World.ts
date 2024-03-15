@@ -189,7 +189,7 @@ function writeRandEvent(writer: PackageWriter, version: number, event: RandEvent
 export function* read(bytes: Uint8Array): Generator<number, WorldData> {
   let reader = new PackageReader(bytes);
   const version = reader.readInt();
-  checkVersion(version, WORLD);
+  checkVersion('world', version, WORLD);
   const netTime = version >= 4 ? reader.readDouble() : NaN;
   const zdo = yield* readZDOData(reader, version);
   const zoneSystem = version >= 12 ? readZoneSystem(reader, version) : undefined;

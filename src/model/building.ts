@@ -35,14 +35,14 @@ export const ironStructureWear = wearStructure(1000, ironResist, MaterialType.Ir
 export const woodStructureRecipe = (wood: number, type: 'Wood' | 'RoundLog' | 'FineWood' = 'Wood'): Piece['recipe'] =>
   ({ type: 'craft_piece', materials: { [type]: wood }, station: 'piece_workbench', });
 
-export const stoneStructureRecipe = (stone: number): Piece['recipe'] =>
-  ({ type: 'craft_piece', materials: { Stone: stone }, station: 'piece_stonecutter', });
+export const stoneStructureRecipe = (Stone: number): Piece['recipe'] =>
+  ({ type: 'craft_piece', materials: { Stone }, station: 'piece_stonecutter', });
 
 export const darkwoodStructureRecipe = (materials: Record<EntityId, number>): Piece['recipe'] =>
   ({ type: 'craft_piece', materials, station: 'piece_workbench' });
 
-export const ironStructureRecipe = (iron: number): Piece['recipe'] =>
-  ({ type: 'craft_piece', materials: { Iron: iron }, station: 'forge' });
+export const ironStructureRecipe = (Iron: number): Piece['recipe'] =>
+  ({ type: 'craft_piece', materials: { Iron }, station: 'forge' });
 
-export const crystalStructureRecipe = (crystal: number): Piece['recipe'] =>
-  ({ type: 'craft_piece', materials: { Crystal: crystal }, station: 'forge' });
+export const crystalStructureRecipe = (Crystal: number): Piece['recipe'] =>
+  ({ type: 'craft_piece', materials: { Crystal }, station: 'forge' });

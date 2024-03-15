@@ -152,6 +152,7 @@ function ShortRecipe(props: { item: GameObject }) {
     case 'arrow':
     case 'bolt':
     case 'missile':
+    case 'bomb':
     case 'weapon': {
       const recipe = recipes.find(r => r.item === item.id);
       if (recipe == null) return null;
@@ -243,6 +244,12 @@ function ItemExtra({ item }: { item: Resource }) {
           ? <React.Fragment key="health">
               <Icon id="health" alt={translate('ui.health')} size={16} />
               {item.Potion.health[0]} / {item.Potion.health[1]}s
+            </React.Fragment>
+          : null}
+        {item.Potion.healthRegen
+          ? <React.Fragment key="health">
+              <Icon id="health" alt={translate('ui.health')} size={16} />
+              +{(item.Potion.healthRegen - 1) * 100}%
             </React.Fragment>
           : null}
         {item.Potion.stamina
@@ -388,6 +395,13 @@ function SearchObject({ id, text, onClick, duplicates }: BaseSearchItemProps & {
         }</span>
         <ShortRecipe item={item} />
       </div>
+    case 'bomb':
+      return <div className={className}>
+        <ItemIcon item={item} size={32} />
+        <Link to={`/obj/${id}`} onClick={onClick} className={linkClassName}>{text}</Link>
+        <ItemIcon item={data[item.spawns]} size={32} />
+        <ShortRecipe item={item} />
+      </div>
     case 'arrow':
     case 'bolt':
     case 'missile':
@@ -424,7 +438,7 @@ function SearchObject({ id, text, onClick, duplicates }: BaseSearchItemProps & {
         <ShortRecipe item={item} />
       </div>
     case 'structure':
-      return  <div className={className}>
+      return <div className={className}>
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick} className={linkClassName}>{text}</Link>
       </div>

@@ -191,9 +191,9 @@ export const pieces: Piece[] = [
     components: ['Fireplace'],
     subtype: 'fireplace',
     group: 'fire',
-    tier: 0,
+    tier: 2,
     emoji: '🔥',
-    piece: { target: 'random', water: false, onlyOnFlat, allowedInDungeons, size: [NaN, NaN, NaN] },
+    piece: { target: 'random', water: false, onlyOnFlat, allowedInDungeons, size: [1.4, 1.2, 1.4] },
     comfort: { value: 1, group: 'fire' },
     fireplace: {
       fuel: 'Wood',
@@ -215,7 +215,7 @@ export const pieces: Piece[] = [
     Aoe: { damage: dmg({ fire: 10 }), self: 10, backstabBonus: 4 }, // radius: 4
     recipe: {
       type: 'craft_piece',
-      materials: { IronPit: 1, Wood: 1 },
+      materials: { Ironpit: 1, Wood: 1 },
       station: null,
     }
   },
@@ -976,7 +976,7 @@ export const pieces: Piece[] = [
     extends: { id: 'blackforge', distance: 5 },
     wear: {
       hp: 100,
-      damageModifiers: mods([0, 0, 1, 2, 0, 0, 1, 0, 3, 3]),
+      damageModifiers: damageModifieresExtensions,
       noRoof: true,
       noSupport: true,
       materialType: MaterialType.Wood,
@@ -996,7 +996,7 @@ export const pieces: Piece[] = [
       water: false,
       onlyOnFlat,
       requiredSpace: 2,
-      size: [NaN, NaN, NaN],
+      size: [0.7, 1.2, 0.5],
     },
     extends: {
       id: 'blackforge',
@@ -1004,10 +1004,10 @@ export const pieces: Piece[] = [
     },
     wear: {
       hp: 100,
-      damageModifiers: mods([0, 0, 1, 2, 0, 0, 1, 0, 3, 3]),
+      damageModifiers: damageModifieresExtensions,
       noRoof: true,
       noSupport: true,
-      materialType: MaterialType.Wood,
+      materialType: undefined,
     },
     recipe: { type: 'craft_piece', materials: { Iron: 5, Copper: 8, MechanicalSpring: 2 }, station: 'blackforge' }
   },
@@ -1388,7 +1388,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     components: ['Door'],
     subtype: 'structure',
-    tier: 1,
+    tier: 5,
     emoji: '🚪',
     piece: { target: 'random', water: undefined, size: [2, 4, 0.4] },
     wear: woodStructureWear,
@@ -2999,7 +2999,7 @@ export const pieces: Piece[] = [
     },
     wear: {
       hp: 100,
-      damageModifiers: mods([0, 0, 1, 2, 0, 0, 1, 0, 3, 3]),
+      damageModifiers: damageModifieresExtensions,
       noRoof: true,
       noSupport: true,
       materialType: MaterialType.Wood,
@@ -3019,7 +3019,7 @@ export const pieces: Piece[] = [
       water: false,
       onlyOnFlat,
       requiredSpace: 2,
-      size: [NaN, NaN, NaN],
+      size: [0.6, 1.1, 0.6],
     },
     extends: {
       id: 'piece_magetable',
@@ -3027,7 +3027,7 @@ export const pieces: Piece[] = [
     },
     wear: {
       hp: 100,
-      damageModifiers: mods([0, 0, 1, 2, 0, 0, 1, 0, 3, 3]),
+      damageModifiers: damageModifieresExtensions,
       noRoof: true,
       noSupport: true,
       materialType: MaterialType.Wood,

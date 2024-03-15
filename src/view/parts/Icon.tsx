@@ -21,6 +21,7 @@ const iconType = (type: GameObject['type']): IconType => {
     case 'weapon':
     case 'tool':
     case 'shield':
+    case 'bomb':
       return 'weapon';
     case 'arrow':
     case 'bolt':
@@ -150,4 +151,17 @@ export function Icon(props: IconProps) {
     alt={alt}
     width={size}
     height={size} />;
+}
+
+export function CopyIcon({ size }: { size: number }) {
+  return <svg viewBox='0 0 16 16' width={size} style={{ verticalAlign: 'top' }}>
+    <defs>
+      <clipPath id="back">
+        <rect x="4" y="2" width="8" height="2" />
+        <rect x="10" y="4" width="2" height="9" />
+      </clipPath>
+    </defs>
+    <rect x="3" width="6" y="5" height="8" rx="1" style={{ stroke: 'currentColor', fill: 'none' }} />
+    <rect x="5" width="6" y="3" height="8" rx="1" style={{ stroke: 'currentColor', fill: 'none' }} clipPath="url(#back)" />
+  </svg>
 }

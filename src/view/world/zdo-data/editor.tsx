@@ -8,6 +8,7 @@ import { flipV } from '../../../model/utils';
 import { stableHashCode } from '../../../model/hash';
 import { VirtualItem } from '../../../model/zdo-containers';
 import { data, extraData } from '../../../data/itemDB';
+import { locationHashes } from '../../../data/location-hashes';
 import { getId, keys, prefabHashes } from '../../../data/zdo';
 
 import { InterfaceFields } from '../zdo-props';
@@ -33,7 +34,8 @@ function getComponents(id: string | undefined): GameComponent[] {
   return (extraData[id] ?? []).concat(data[id]?.components ?? []);
 }
 
-const variantHash = stableHashCode('variant');
+const VARIANT_HASH = stableHashCode('variant');
+const LOCATION_HASH = stableHashCode('location');
 
 function Editor({ value: zdo, onChange, playersData, time, index, components }: ValueProps<ZDO> & { playersData: PlayersData; time: number; index: number; components: GameComponent[] }) {
   if (components.length === 0) {
@@ -77,17 +79,20 @@ export const ItemEditor = React.memo(({
   const item = currentId != null ? data[currentId] : undefined;
   const components = getComponents(currentId);
   const vItem = VirtualItem(zdo, containerIndex, onChange);
+  const loc = locationHashes.get(zdo.ints.get(LOCATION_HASH) ?? 0);
 
   return <>
     <h2>{
-      vItem
+      currentId === 'LocationProxy'
+      ? <img src={`/icons/location/${loc}.png`} />
+      : vItem
       ? <>
           <ItemIcon item={data[vItem.id]} variant={vItem.variant} />
           {' '}{translate(vItem.id)}{' '}
           <span onClick={() => onItemLinkClicked(zdo)}>(<ItemIcon item={item} />)</span>
         </>
       : <>
-          <ItemIcon item={item} variant={zdo.ints.get(variantHash)} />
+          <ItemIcon item={item} variant={zdo.ints.get(VARIANT_HASH)} />
           {' '}{currentId && translate(currentId)}
         </>
     }</h2>

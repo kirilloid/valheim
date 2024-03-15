@@ -135,6 +135,7 @@ function itemMatches(item: Item | Fish, { slot }: SimpleEffectConfig) {
     case 'missile':
     case 'item':
     case 'fish':
+    case 'bomb':
       return false;
     default:
       return assertNever(item);

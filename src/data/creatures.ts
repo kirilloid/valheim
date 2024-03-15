@@ -338,7 +338,7 @@ export const creatures: Creature[] = [
     hp: 10,
     stagger: {
       factor: 0.5,
-      time: NaN,
+      time: 1,
     },
     damageModifiers: animalDmgModifiers,
     drop: [],
@@ -2739,23 +2739,17 @@ export const creatures: Creature[] = [
     ]),
 
     tolerate: TOLERATE.WATER,
-    speed: {
-      walk: 2,
-      run: 7,
-      swim: 1.5,
-    },
-    turnSpeed: {
-      walk: 200,
-      run: 200,
-      swim: 100,
-    },
+    speed: { walk: 2, run: 7, swim: 1.5 },
+    turnSpeed: { walk: 200, run: 200, swim: 100 },
     hp: 350,
-    stagger: {
-      factor: 0.3,
-      time: 1.68,
-    },
+    stagger: { factor: 0.3, time: 1.68 },
     damageModifiers: animalDmgModifiers,
-    drop: [],
+    drop: [
+      dropEntry('Softtissue', { chance: 0.25, min: 1, max: 2 }),
+      dropEntry('BlackMarble', { chance: 0.5, min: 1, max: 2 }),
+      dropEntry('Coins', { min: 2, max: 15 }),
+      dropTrophy('TrophyDvergr', 0.05),
+    ],
   },
   {
     type: 'creature',
@@ -2807,22 +2801,11 @@ export const creatures: Creature[] = [
     ],
 
     tolerate: TOLERATE.WATER,
-    speed: {
-      walk: 2,
-      run: 7,
-      swim: 1.5,
-    },
-    turnSpeed: {
-      walk: 200,
-      run: 200,
-      swim: 100,
-    },
+    speed: { walk: 2, run: 7, swim: 1.5 },
+    turnSpeed: { walk: 200, run: 200, swim: 100 },
     hp: 350,
-    stagger: {
-      factor: 0.3,
-      time: 1.68,
-    },
-    damageModifiers: animalDmgModifiers,
+    stagger: { factor: 0.3, time: 1.68 },
+    damageModifiers: { ...animalDmgModifiers, fire: 'resistant', frost: 'resistant' },
     drop: [
       dropEntry('Softtissue', { chance: 0.25, max: 2, scale: false }),
       dropEntry('BlackMarble', { chance: 0.5, max: 2, scale: false }),
@@ -3174,18 +3157,9 @@ export const creatures: Creature[] = [
       { dmg: dmg({ slash: 130, chop: 300, pickaxe: 300 }), name: 'slap', force: 250, toolTier: 3 },
       { dmg: dmg({ pierce: 150, chop: 300, pickaxe: 300 }), name: 'pirce_aoe', force: 250, toolTier: 3 }, // area
     ]),
-
     tolerate: TOLERATE.WATER,
-    speed: {
-      walk: 4,
-      run: 8,
-      swim: 4,
-    },
-    turnSpeed: {
-      walk: 50,
-      run: 120,
-      swim: 60,
-    },
+    speed: { walk: 4, run: 8, swim: 4 },
+    turnSpeed: { walk: 50, run: 120, swim: 60, },
     hp: 12500,
     stagger: null,
     damageModifiers: {

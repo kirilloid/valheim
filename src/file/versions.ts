@@ -9,11 +9,11 @@ export const WORLD_GEN = 2; // Version.m_worldGenVersion
 export const LIQUID = 2; // LiquidVolume.liquidSaveVersion
 export const TERRAIN_COMP = 1; // TerrainComp.terrainCompVersion
 
-export function checkVersion(file: number, maxSupported: number) {
+export function checkVersion(section: string, file: number, maxSupported: number) {
   if (file <= 0) {
     throw new Error(`Wrong file version. Most probably the file is corrupted.`);
   }
   if (file > maxSupported) {
-    throw new Error(`Incompatible version.\nProvided: ${file}\nMax supported: ${maxSupported}`);
+    throw new Error(`Incompatible version in ${section}.\nProvided: ${file}\nMax supported: ${maxSupported}`);
   }
 }

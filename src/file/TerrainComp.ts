@@ -20,7 +20,7 @@ export function read(bytes: Uint8Array): Data {
   const data = inflate(bytes);
   const zpackage = new PackageReader(data);
   const version = zpackage.readInt();
-  checkVersion(version, TERRAIN_COMP);
+  checkVersion('terrain comp', version, TERRAIN_COMP);
   const operations = zpackage.readInt();
   const lastOpPoint = zpackage.readVector3();
   const lastOpRadius = zpackage.readFloat();

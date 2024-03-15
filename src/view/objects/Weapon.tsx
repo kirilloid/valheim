@@ -1,23 +1,25 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import {
+import type {
   DamageProfile,
   Weapon as TWeapon,
   Shield as TShield,
   Attack as TAttack,
+  Bomb as TBomb,
 } from '../../types';
 import { SkillType } from '../../model/skills';
 import { assertNever } from '../../model/utils';
 import { effects } from '../../data/effects';
 
 import { TranslationContext } from '../../effects';
-import { durability, InlineObjectWithIcon, ItemSpecial, showPair, showPercent } from '../helpers';
+import { durability, InlineObjectWithIcon, ItemSpecial, ShortWeaponDamage, showPair, showPercent } from '../helpers';
 import { Icon, SkillIcon } from '../parts/Icon';
 import { RecipeSection } from '../parts/Source';
 import { ItemHeader } from '../parts/ItemHeader';
 import { Effect } from '../parts/Effect';
 import { Resource } from '../parts/Resource';
+import { data } from '../../data/itemDB';
 
 function skill(skill: SkillType | null) {
   const str = skill && SkillType[skill];
@@ -35,6 +37,32 @@ function totalDamage(damage: DamageProfile): number {
     .entries(damage)
     .filter(([key]) => key !== 'chop' && key !== 'pickaxe')
     .reduce<number>((a, [_, b]) => a + b!, 0);
+}
+
+function BombStats(props: { item: TBomb }) {
+  const translate = useContext(TranslationContext);
+  const { item } = props;
+  const obj = data[item.spawns];
+  return <section>
+    <h2>{translate('ui.itemType.bomb')}</h2>
+    <dl>
+      <dt>{translate('ui.hands')}</dt><dd>{translate(`ui.slot.${item.slot}`)}</dd>
+      <dt>{translate('ui.stamina')}</dt><dd>{item.stamina}</dd>
+      <dt>{translate('ui.effect')}</dt><dd><InlineObjectWithIcon id={item.spawns} /></dd>
+    </dl>
+    {obj != null && 'Aoe' in obj && obj.Aoe != null && <React.Fragment key="aoe">
+      <h3>AoE</h3>
+      <dl>
+        <dt>{translate('ui.damage')}</dt><dd><ShortWeaponDamage damage={obj.Aoe.damage} skill={null} /></dd>
+        {'radius' in obj.Aoe && <React.Fragment key="radius">
+          <dt>radius</dt><dd>{obj.Aoe.radius} m</dd>
+        </React.Fragment>}
+        {'ttl' in obj.Aoe && obj.Aoe.ttl && <React.Fragment>
+          <dt>{translate('ui.duration')}</dt><dd>{obj.Aoe.ttl} s</dd>
+        </React.Fragment>}
+      </dl>
+    </React.Fragment>}
+  </section>;
 }
 
 function ShieldStats(props: { item: TShield, level?: number }) {
@@ -65,6 +93,9 @@ function WeaponStats({ item, level }: { item: TWeapon, level?: number }) {
       {baseDmg + lvlDmg > 0 && <React.Fragment key="damage">
       <dt>{translate('ui.damage')}</dt><dd>{showPair([baseDmg, lvlDmg], level)}</dd>
       </React.Fragment>}
+      {item.hitEffect ? <>
+        <dt>hit effect</dt><dd>{showPercent(item.hitEffect.chance)} <InlineObjectWithIcon id={item.hitEffect.id} /></dd>
+      </> : null}
       <dt>{translate('ui.backstab')} <Link to="/info/combat#backstab">ℹ️</Link></dt><dd>{item.backstab}×</dd>
       <dt>{translate('ui.hands')}</dt><dd>{translate(`ui.slot.${item.slot}`)}</dd>
       <dt>{translate('ui.maxQuality')}</dt><dd><Icon id="star" alt="" size={16} />{' '}{item.maxLvl}</dd>
@@ -176,6 +207,17 @@ export function Shield({ item, level }: { item: TShield, level?: number }) {
     <>
       <ItemHeader item={item} />
       <ShieldStats item={item} level={level} />
+      <Resource item={item} />
+      <RecipeSection item={item} />
+    </>
+  );
+}
+
+export function Bomb({ item }: { item: TBomb }) {
+  return (
+    <>
+      <ItemHeader item={item} />
+      <BombStats item={item} />
       <Resource item={item} />
       <RecipeSection item={item} />
     </>

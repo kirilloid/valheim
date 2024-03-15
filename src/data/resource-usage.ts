@@ -1,4 +1,4 @@
-import { Cart, EntityId, Item, ItemRecipe, PhysicalObject, Piece, Ship } from '../types';
+import type { Cart, EntityId, Item, ItemRecipe, PhysicalObject, Piece, Ship } from '../types';
 import { pieces } from './building';
 import { objects } from './objects';
 import { ships, carts } from './transport';

@@ -15,6 +15,7 @@ import { averageAttacksDamage, InlineObjectWithIcon, List, yesNo } from './helpe
 import { ItemIcon } from './parts/Icon';
 import { SpoilerAlert } from './parts/Spoiler';
 import { sortBy } from '../model/utils';
+import { useSettingsFilter } from '../effects/globalState.effect';
 
 function ResourceList(props: { list: GameObject[] }) {
   const { list } = props;
@@ -60,6 +61,7 @@ function Weather({ biome }: { biome: BiomeConfig }) {
 
 function Resources({ biome }: { biome: BiomeConfig }) {
   const translate = useContext(TranslationContext);
+  const settingsFilter = useSettingsFilter();
 
   const resources = {
     trophies: [] as Item[],
@@ -75,20 +77,31 @@ function Resources({ biome }: { biome: BiomeConfig }) {
       console.error(`Resource '${res}' from biome '${biome.id}' not found`);
       continue;
     }
-    if (item.type === 'piece'
-    ||  item.type === 'spawner'
-    ||  item.type === 'creature'
-    ||  item.type === 'fish'
-    ) continue;
-    if (item.type === 'object') {
+    if (!settingsFilter(item)) continue;
+    switch (item.type) {
+      case 'piece':
+      case 'spawner':
+      case 'creature':
+      case 'fish':
+        continue;
+      case 'object':
       // they are not here
-    } else if (item.type === 'trophy') {
+        break;
+      case 'trophy':
       resources.trophies.push(item);
-    } else if (item.type === 'ship' || item.type === 'cart') {
+        break;
+      case 'ship':
+      case 'cart':
       // skip them
-    } else if (item.type === 'item' && isFoodOrUsedForFood(item)) {
+        break;
+      case 'item':
+        if (isFoodOrUsedForFood(item)) {
       resources.food.push(item);
     } else {
+          resources.others.push(item);
+        }
+        break;
+      default:
       resources.others.push(item);
     }
   }

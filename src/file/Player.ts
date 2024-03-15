@@ -113,7 +113,7 @@ function writeCustomPoint(pkg: PackageWriter, point?: Vector3): void {
 function* readPlayer(bytes: Uint8Array): Generator<number, Player> {
   const reader = new PackageReader(bytes);
   const version = reader.readInt();
-  checkVersion(version, PLAYER);
+  checkVersion('player', version, PLAYER);
   const stats = readPlayerStats(version, reader)
   const worldsNumber = reader.readInt();
   const worlds = new Map<bigint, World>();
@@ -216,7 +216,7 @@ function* writePlayer(
 
 function readSkills(pkg: PackageReader) {
   const version = pkg.readInt();
-  checkVersion(version, SKILLS);
+  checkVersion('skills', version, SKILLS);
   let size = pkg.readInt();
   const map: SkillData = new Map();
   for (let index = 0; index < size; ++index) {
@@ -279,7 +279,7 @@ function readFoods(pkg: PackageReader, version: number): FoodData[] {
 function readPlayerData(data: Uint8Array): PlayerData {
   const pkg = new PackageReader(data);
   const version = pkg.readInt();
-  checkVersion(version, PLAYER_DATA);
+  checkVersion('player data', version, PLAYER_DATA);
   const maxHealth = version >= 7 ? pkg.readFloat() : NaN;
   const health = pkg.readFloat();
   const maxStamina = version >= 10 ? pkg.readFloat() : NaN;
