@@ -172,6 +172,7 @@ export function Piece({ item }: { item: TPiece }) {
           <dt>{translate('ui.healthStructure')}</dt><dd>{hp}</dd>
           <Resistances mods={damageModifiers} />
           <dt>base <Link to="/info/base">ℹ️</Link></dt><dd>{yesNo(item.base)}</dd>
+          <dt title="can burn to the ground in Ashlands or with 'Flame' world modifier">flammable 🔥</dt><dd>{yesNo(item.burnable ?? true)}</dd>
           <dt>{translate('ui.pieceTarget')}</dt><dd>{translate(`ui.pieceTarget.${target}`)}</dd>
           <dt>degrades w/o roof</dt><dd>{yesNo(noRoof)}</dd>
           {specialReqs?.length ? <React.Fragment key="specific"><dt>specific</dt><dd>{specialReqs.join(', ')}</dd></React.Fragment> : null}

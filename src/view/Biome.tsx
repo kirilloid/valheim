@@ -85,24 +85,25 @@ function Resources({ biome }: { biome: BiomeConfig }) {
       case 'fish':
         continue;
       case 'object':
-      // they are not here
+        // they are not here
         break;
       case 'trophy':
-      resources.trophies.push(item);
+        resources.trophies.push(item);
         break;
       case 'ship':
       case 'cart':
-      // skip them
+      case 'siege':
+        // skip them
         break;
       case 'item':
         if (isFoodOrUsedForFood(item)) {
-      resources.food.push(item);
-    } else {
+          resources.food.push(item);
+        } else {
           resources.others.push(item);
         }
         break;
       default:
-      resources.others.push(item);
+        resources.others.push(item);
     }
   }
   for (const item of biome.destructibles) {

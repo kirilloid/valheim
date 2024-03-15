@@ -13,6 +13,7 @@ import { Tool } from './Tool';
 import { Piece } from './Piece';
 import { Ship } from './Ship';
 import { Cart } from './Cart';
+import { Siege } from './Siege';
 import { PhysicalObject } from './PhysicalObject';
 import { SpoilerAlert } from '../parts/Spoiler';
 import { Structure } from './Structure';
@@ -70,6 +71,8 @@ function Item({ item, level }: { item: T.GameObject, level?: number }) {
       return <Ship item={item} />
     case 'cart':
       return <Cart item={item} />
+    case 'siege':
+      return <Siege item={item} />
     case 'item':
     case 'trophy':
       return <GenericItem item={item} />

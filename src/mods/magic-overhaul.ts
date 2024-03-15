@@ -233,6 +233,7 @@ const buildings: Piece[] = [
   {
     id: 'AltarPrefab',
     base: false,
+    burnable: false,
     type: 'piece',
     subtype: 'structure',
     tier: 1,

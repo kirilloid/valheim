@@ -14,8 +14,8 @@ import type {
 
 import { locItem } from '../model/game';
 import {
+  forestcrypt, frostCaves, fortressRuins, sunkencrypt, charredRuins, hildirCaves, dvergrTown, woodfarm, woodvillage,
   DungeonRoomsConfig, CampConfig,
-  forestcrypt, frostCaves, sunkencrypt, hildirCaves, dvergrTown, woodfarm, woodvillage,
 } from '../data/rooms';
 
 import { fullDestructible, objects } from './objects';
@@ -57,7 +57,7 @@ export const biomes: BiomeConfig[] = [
   biome('🍂', 'Plains', 5, true),
   biome('🌊', 'Ocean', 3, true),
   biome('🌫', 'Mistlands', 6, true),
-  biome('🔥', 'Ashlands', 7, false),
+  biome('🔥', 'Ashlands', 7, true),
   biome('🧊', 'DeepNorth', 8, false),
 ];
 
@@ -69,6 +69,57 @@ export function area(id: Biome | GameLocationId): BiomeConfig | LocationConfig |
   return biomes.find(b => b.id === id)
       ?? locationsTypeIdMap.get(id)
 }
+
+const MorgenHole_exterior = [
+  locItem('asksvin_carrion'),
+  locItem('asksvin_carrion2'),
+  locItem('asksvin_carrion', 0.66, 3),
+  locItem('asksvin_carrion2', 0.66, 5),
+];
+
+const MorgenHole_bones = [
+  locItem('asksvin_carrion', 0.85, 8),
+  locItem('asksvin_carrion2', 0.85, 9),
+  locItem('Pickable_MeatPile', 0.5, 3),
+  locItem('morgenhole_pile', 0.66, 9),
+  locItem('morgenhole_pile', 1, 4),
+];
+
+const MorgenHole_randomwall = [
+  locItem('asksvin_carrion', 0.85, 1),
+  locItem('asksvin_carrion2', 0.85, 2),
+  locItem('Pickable_MeatPile', 0.5, 4),
+  locItem('morgenhole_pile', 0.66, 2),
+  locItem('Pickable_MoltenCoreStand', 0.25),
+];
+
+const MorgenHole_randomwall2 = [
+  locItem('asksvin_carrion', 0.85, 2),
+  locItem('asksvin_carrion2', 0.85, 3),
+  locItem('Pickable_MeatPile', 0.5, 4),
+  locItem('morgenhole_pile', 0.66, 2),
+  locItem('Pickable_MoltenCoreStand', 0.25),
+];
+
+const MorgenHole_randomwall3 = [
+  locItem('asksvin_carrion2', 0.85),
+  locItem('morgenhole_pile', 0.66),
+  locItem('Pickable_MoltenCoreStand', 0.25, 2),
+];
+
+const MorgenHole_randomwall4 = [
+  locItem('Pickable_MeatPile', 0.5, 2),
+  locItem('morgenhole_pile', 0.66, 4),
+  locItem('asksvin_carrion2', 0.85, 2),
+  locItem('asksvin_carrion', 0.85, 1),
+  locItem('Pickable_MoltenCoreStand', 0.25, 2),
+];
+
+const MorgenHole_chest = [
+  locItem('TreasureChest_ashland_stone', 0.5, 2),
+  locItem('TreasureChest_ashland_stone'),
+  locItem('Pickable_MoltenCoreStand', 0.25, 8),
+];
 
 function loc(
   tier: number,
@@ -84,6 +135,7 @@ function loc(
     unique = false,
     group = '',
     minApart = 0,
+    maxApart = 0,
     iconAlways = false,
     iconPlaced = false,
     randomRotation = true,
@@ -109,6 +161,7 @@ function loc(
     unique?: boolean,
     group?: string,
     minApart?: number,
+    maxApart?: number,
     iconAlways?: boolean,
     iconPlaced?: boolean,
     randomRotation?: boolean,
@@ -145,6 +198,7 @@ function loc(
     group,
     type,
     minApart,
+    maxApart,
     iconAlways,
     iconPlaced,
     randomRotation,
@@ -325,15 +379,15 @@ export const locations: LocationConfig[] = [
       items: [locItem('Bonemass')],
     }
   ),
-  loc(
-    7, 'Meteorite', ['Ashlands'],
-    { quantity: 500, terrainDelta: [0, 4], radius: [20, 5.2],
-      items: [
-        locItem('MineRock_Meteorite', 1, 15),
-        locItem('Surtling', 1, 4),
-      ],
-    }
-  ),
+  // loc(
+  //   7, 'Meteorite', ['Ashlands'],
+  //   { quantity: 500, terrainDelta: [0, 4], radius: [20, 5.2],
+  //     items: [
+  //       locItem('MineRock_Meteorite', 1, 15),
+  //       locItem('Surtling', 1, 4),
+  //     ],
+  //   }
+  // ),
   loc(
     2, 'Crypt2', ['BlackForest'],
     { type: 'dungeon', components: ['DungeonGenerator'],
@@ -2097,6 +2151,395 @@ export const locations: LocationConfig[] = [
     },
     'Runestone_Mistlands',
   ),
+  loc(
+    7, 'FaderLocation', ['Ashlands'],
+    { type: 'altar',
+      biomeArea: 2, quantity: 5, prioritized, group: 'FaderBoss', minApart: 2048,
+      slopeRotation,
+      terrainDelta: [0, 40], maxAlt: 300, radius: [32, 12],
+      items: [
+        locItem('Fader'),
+      ],
+    },
+    'FaderLocation',
+  ),
+  loc(
+    7, 'PlaceofMystery1', ['Ashlands'],
+    { type: 'misc',
+      biomeArea: 2, quantity: 1, prioritized, group: 'PlaceofMystery', minApart: 2048,
+      terrainDelta: [0, 5], minAlt: 0, radius: [24, 20],
+      items: [
+        locItem('Pickable_Swordpiece3'),
+        locItem('Spawner_CharredStone_Elite'),
+        locItem('GraveStone_Broken_CharredTwitcherNest', 0.5, 16),
+        locItem('GraveStone_CharredTwitcherNest', 0.5, 20),
+        locItem('Pickable_MoltenCoreStand', 1, 4),
+      ],
+    },
+    'PlaceofMystery',
+  ),
+  loc(
+    7, 'PlaceofMystery2', ['Ashlands'],
+    { type: 'misc',
+      biomeArea: 2, quantity: 1, prioritized, group: 'PlaceofMystery', minApart: 2048,
+      terrainDelta: [0, 5], minAlt: 0, radius: [24, 12],
+      items: [
+        locItem('Pickable_Swordpiece2'),
+        locItem('Spawner_CharredStone_Elite'),
+        locItem('GraveStone_Broken_CharredTwitcherNest', 0.5, 16),
+        locItem('GraveStone_CharredTwitcherNest', 0.5, 20),
+        locItem('Pickable_MoltenCoreStand', 1, 4),
+      ],
+    },
+    'PlaceofMystery',
+  ),
+  loc( // $location_mausoleum
+    7, 'PlaceofMystery3', ['Ashlands'],
+    { type: 'misc',
+      biomeArea: 2, quantity: 1, prioritized, group: 'PlaceofMystery', minApart: 2048,
+      terrainDelta: [0, 5], minAlt: 0, radius: [24, 12],
+      items: [
+        // exterior
+        // graves
+        locItem([
+          locItem('GraveStone_Broken_CharredTwitcherNest', 0.5, 10),  
+          locItem('GraveStone_CharredTwitcherNest', 0.5, 9),
+        ], 0.5),
+        locItem('Spawner_CharredStone_Elite'),
+        // interior
+        locItem('Spawner_Charred_Dyrnwyn'), // Charred_Melee_Dyrnwyn lvl=[3,3]
+      ],
+    },
+    'PlaceofMystery',
+  ),
+  loc(
+    7, 'CharredFortress', ['Ashlands'],
+    { type: 'misc',
+      biomeArea: 7, quantity: 20, group: 'zigg', minApart: 256,
+      terrainDelta: [0, 4], minAlt: 20, radius: [32, 12],
+      items: [
+        locItem('Charred_Mage', 1, 2),
+        // fort
+        // spawners
+        locItem('Spawner_CharredCross', 1, 2),
+        locItem('Charred_Mage'),
+        locItem('Charred_Archer'),
+        locItem('Charred_Archer', 0.6, 4),
+        locItem('Charred_Mage', 0.6, 2),
+        locItem('Spawner_Charred_balista', 0.8, 4),
+        locItem('TreasureChest_charredfortress'),
+        locItem('TreasureChest_charredfortress'),
+        locItem('Vegvisir_Fader', 1, 0.5),
+        locItem('Charred_altar_bellfragment'),
+        // gate
+        locItem('Ashlands_Fortress_Gate_Door', 1, 3),
+        locItem('CharredBanner2', 1, 6),
+        // banner
+        locItem('CharredBanner1', 0.66, 8),
+        locItem('CharredBanner2', 0.66, 8),
+        // gravestones
+        locItem('GraveStone_Broken_CharredTwitcherNest', 0.5, 24),
+        locItem('GraveStone_CharredTwitcherNest', 0.5, 29),
+        // gravestones_outside
+        locItem('GraveStone_Broken_CharredTwitcherNest', 0.5, 22),
+        locItem('GraveStone_CharredTwitcherNest', 0.5, 30),
+        // moltencore
+        locItem('Pickable_MoltenCoreStand', 0.05, 8),
+        locItem('Pickable_MoltenCoreStand', 1, 2),
+      ],
+    },
+    'CharredFortress',
+  ),
+  loc(
+    7, 'FortressRuins', ['Ashlands'],
+    { components: ['DungeonGenerator'],
+      biomeArea: 7, quantity: 200, group: 'zigg', maxApart: 60,
+      terrainDelta: [0, 4], minAlt: 0, radius: [32, 12],
+      items: [],
+      camp: fortressRuins,
+    },
+    'FortressRuins',
+  ),
+  loc(
+    7, 'CharredRuins1', ['Ashlands'],
+    { type: 'misc',
+      biomeArea: 7, quantity: 75, group: 'zigg', minApart: 256,
+      terrainDelta: [0, 6], minAlt: -10, radius: [32, 12],
+      items: [],
+    },
+    'CharredRuins_big',
+  ),
+  loc(
+    7, 'Runestone_Ashlands', ['Ashlands'],
+    { type: 'runestone',
+      biomeArea: 7, quantity: 75, minApart: 128,
+      slopeRotation,
+      terrainDelta: [0, 10], minAlt: 0, radius: [12, 12],
+      items: [locItem('Runestone_Ashlands')],
+    },
+    'Runestone_Ashlands',
+  ),
+  loc(
+    7, 'LeviathanLava', ['Ashlands'],
+    { type: 'misc',
+      biomeArea: 3, quantity: 100,
+      slopeRotation,
+      terrainDelta: [0, 10], minAlt: 10, radius: [12, 12], // lava: true
+      items: [locItem('LeviathanLava')],
+    },
+    'LeviathanLava',
+  ),
+  loc(
+    7, 'SulfurArch', ['Ashlands'],
+    { type: 'misc',
+      biomeArea: 3, quantity: 200, minApart: 40,
+      terrainDelta: [0, 6], minAlt: 10, radius: [30, 12],
+      items: [
+        locItem('Pickable_SulfurRock', 0.4, 20),
+      ],
+    },
+    'SulfurArch',
+  ),
+  loc(
+    7, 'CharredStone_Spawner', ['Ashlands'],
+    { type: 'misc',
+      biomeArea: 3, quantity: 350, minApart: 100,
+      terrainDelta: [0, 10], minAlt: 0, radius: [20, 12],
+      items: [
+        locItem('Spawner_CharredStone'),
+        locItem('GraveStone_Broken_CharredTwitcherNest', 0.5, 12),
+        locItem('GraveStone_CharredTwitcherNest', 0.5, 12),
+      ],
+    },
+    'CharredStone_Spawner',
+  ),
+  loc(
+    7, 'VoltureNest', ['Ashlands'],
+    { type: 'misc',
+      biomeArea: 3, quantity: 350, minApart: 100,
+      terrainDelta: [0, 5], minAlt: 0, radius: [16, 12],
+      items: [
+        locItem('asksvin_carrion'),
+        locItem('asksvin_carrion', 0.5, 2),
+        locItem('asksvin_carrion2', 0.5, 3),
+        locItem('Pickable_VoltureEgg', 0.5, 6),
+        locItem('cliff_ashlands6', 0.4, 16),
+      ],
+    },
+    'VoltureNest',
+  ),
+  loc(
+    7, 'CharredTowerRuins1', ['Ashlands'],
+    { components: ['DungeonGenerator'],
+      biomeArea: 7, quantity: 30, group: 'towerruins', minApart: 100,
+      terrainDelta: [0, 4], minAlt: 0, radius: [22, 12],
+      items: [],
+    },
+    'CharredTowerRuins_big',
+  ),
+  loc(
+    7, 'CharredTowerRuins1_dvergr', ['Ashlands'],
+    { type: 'misc',
+      biomeArea: 7, quantity: 30, group: 'towerruins', minApart: 100,
+      terrainDelta: [0, 4], minAlt: 0, radius: [22, 12],
+      items: [
+/*        locItem([ // pillar
+          locItem('Ashlands_Floor'),
+          locItem('Pickable_SmokePuff', 0.33),
+          locItem([ // pillar2
+            locItem('Ashlands_Pillar4'),
+            locItem([ // pillar3
+              locItem([ // roof1
+                locItem('Ashlands_ArchRoofDamaged_half1', 0.66),
+                locItem('FernAshlands', 0.9),
+                locItem('Pickable_Fiddlehead', 0.5),
+                locItem([ // tip
+                  locItem('Ashlands_Pillar4_tip_broken1'),
+                  locItem('Ashlands_Pillar4_tip_broken2', 0.5),
+                ], 0.5),
+              ], 0.9),
+              locItem([ // roof2
+                locItem('Ashlands_ArchRoofDamaged_half2'),
+                locItem('FernAshlands', 0.9, 2),
+                locItem('Pickable_Fiddlehead', 0.5, 2),
+              ], 0.9),
+              locItem([ // roof1
+                locItem('Ashlands_ArchRoofDamaged_half1', 0.66),
+                locItem('FernAshlands', 0.9, 2),
+                locItem('Pickable_Fiddlehead', 0.5, 2),
+              ], 0.9),
+              locItem([ // roof2
+                locItem('Ashlands_ArchRoofDamaged_half2', 0.66),
+                locItem([ // tip
+                  locItem('Ashlands_Pillar4_tip_broken1'),
+                  locItem('Ashlands_Pillar4_tip_broken2', 0.5),
+                ], 0.5),
+              ], 0.9),
+            ], 0.9, 2),
+          ], 0.9),
+        ], 1, 12 + 0.6 * 4), */
+        locItem('Pickable_SmokePuff', 0.6 * 0.33, 4),
+        locItem('Pickable_Fiddlehead', 0.9 ** 3 * 0.5, 64),
+        locItem('fire_pit_iron'),
+        locItem('DvergerAshlands', 1, 2),
+        locItem('DvergerAshlands', 0.75, 3),
+        locItem('dvergrprops_wood_stakewall', 0.8, 12),
+        locItem('dvergrprops_barrel', 1),
+        locItem('dvergrprops_barrel', 0.5),
+        locItem('dvergrprops_lantern_standing', 0.5, 3),
+        locItem('dvergrprops_stool', 0.5, 4),
+        // floor
+        locItem('Ashlands_Floor', 1, 21),
+        locItem('dvergrprops_crate_ashlands', 1, 5),
+        locItem('dvergrprops_crate_ashlands', 0.5, 4),
+      ],
+    },
+    'CharredTowerRuins_big',
+  ),
+  loc(
+    7, 'CharredTowerRuins2', ['Ashlands'],
+    { type: 'misc',
+      biomeArea: 7, quantity: 40, minApart: 100,
+      terrainDelta: [0, 4], minAlt: 0, radius: [12, 12],
+      items: [
+        // wall
+        locItem([ // pillar
+          locItem('Ashlands_Pillar4'),
+          locItem([ // pillar3
+            locItem('Ashlands_Ruins_twist_PillarBase'),
+            locItem([ // arch
+              locItem('Ashlands_Ruins_twist_PillarBaseSmall'),
+              locItem([ // arch2
+                locItem('Ashlands_Ruins_twist_ArchBig', 0.9, 2),
+              ], 0.9),
+            ], 0.9),
+          ], 0.95),
+        ], 0.95, 8),
+        locItem('Ashlands_WallBlock', 1, 5 * 6),
+        locItem('AshlandsTree6_big', 0.5),
+      ],
+    },
+    'CharredTowerRuins_small',
+  ),
+  loc(
+    7, 'CharredTowerRuins3', ['Ashlands'],
+    { type: 'misc',
+      biomeArea: 7, quantity: 40, minApart: 500,
+      terrainDelta: [0, 4], minAlt: 0, radius: [12, 12],
+      items: [
+        locItem('Spawner_CharredTwitcherNest'),
+        locItem('GraveStone_Broken_CharredTwitcherNest', 0.5, 10),
+        locItem('GraveStone_CharredTwitcherNest', 0.5, 10),
+      ],
+    },
+    'CharredTowerRuins_small',
+  ),
+  loc(
+    7, 'AshlandRuins', ['Ashlands'],
+    { components: ['DungeonGenerator'],
+      biomeArea: 2, quantity: 100, minApart: 16,
+      terrainDelta: [0, 4], minAlt: 0, radius: [12, 12],
+      items: [],
+      camp: charredRuins,
+    },
+    'AshlandRuins',
+  ),
+  loc(
+    7, 'MorgenHole1', ['Ashlands'],
+    { type: 'misc',
+      biomeArea: 2, quantity: 40, group: 'MorgenHole', minApart: 300,
+      terrainDelta: [0, 10], minAlt: 0, radius: [24, 24],
+      items: [
+        // exterior
+        locItem(MorgenHole_exterior),
+        // interior
+        locItem([
+          locItem(MorgenHole_bones),
+          locItem(MorgenHole_randomwall, 0.25),
+          locItem(MorgenHole_randomwall2, 0.25),
+          locItem(MorgenHole_randomwall3, 0.25),
+          locItem(MorgenHole_randomwall4, 0.25),
+          locItem(MorgenHole_chest, 0.25),
+          locItem('Morgen'),
+          locItem('Vegvisir_placeofmystery_1', 0.2),
+        ]),
+      ],
+    },
+    'MorgenHole',
+  ),
+  loc(
+    7, 'MorgenHole2', ['Ashlands'],
+    { type: 'misc',
+      biomeArea: 2, quantity: 40, group: 'MorgenHole', minApart: 200,
+      terrainDelta: [0, 10], minAlt: 0, radius: [24, 24],
+      items: [
+        // exterior
+        locItem(MorgenHole_exterior),
+        // interior
+        locItem([
+          locItem(MorgenHole_bones),
+          locItem(MorgenHole_randomwall2, 0.25),
+          locItem(MorgenHole_randomwall3, 0.5),
+          locItem(MorgenHole_randomwall4, 0.5),
+          locItem(MorgenHole_chest),
+          locItem('Morgen'),
+          locItem('Vegvisir_placeofmystery_2', 0.2),
+        ]),
+      ],
+    },
+    'MorgenHole',
+  ),
+  loc(
+    7, 'MorgenHole3', ['Ashlands'],
+    { type: 'misc',
+      biomeArea: 2, quantity: 40, group: 'MorgenHole', minApart: 200,
+      terrainDelta: [0, 10], minAlt: 0, radius: [24, 24],
+      items: [
+        // exterior
+        locItem(MorgenHole_exterior),
+        // interior
+        locItem([
+          locItem(MorgenHole_bones),
+          locItem(MorgenHole_randomwall, 0.25),
+          locItem(MorgenHole_randomwall3, 0.5),
+          locItem(MorgenHole_randomwall4, 0.5),
+          locItem(MorgenHole_chest),
+          locItem('Morgen'),
+          locItem('Vegvisir_placeofmystery_3', 0.2),
+        ]),
+      ],
+    },
+    'MorgenHole',
+  ),
+  loc(
+    7, 'CharredRuins2', ['Ashlands'],
+    { type: 'misc',
+      biomeArea: 2, quantity: 100,
+      terrainDelta: [0, 6], minAlt: -10, radius: [15, 12],
+      items: [],
+    },
+    'CharredRuins_small',
+  ),
+  loc(
+    7, 'CharredRuins3', ['Ashlands'],
+    { type: 'misc',
+      biomeArea: 2, quantity: 100,
+      terrainDelta: [0, 6], minAlt: -10, radius: [12, 12],
+      items: [
+        locItem('AshCrow', 0.5, 4),
+      ],
+    },
+    'CharredRuins_small',
+  ),
+  loc(
+    7, 'CharredRuins4', ['Ashlands'],
+    { type: 'misc',
+      biomeArea: 2, quantity: 100,
+      terrainDelta: [0, 6], minAlt: -10, radius: [12, 12],
+      items: [],
+    },
+    'CharredRuins_small',
+  ),
 ];
 
 export const dungeons: DungeonGenConfig[] = [
@@ -2184,6 +2627,21 @@ export const dungeons: DungeonGenConfig[] = [
     ],
     doorTypes: [],
     doorChance: 0,
+  },
+  {
+    id: 'FortressRuins',
+    type: 'CampRadial',
+    rooms: [20, 30],
+    maxTilt: 25,
+    radius: [30, 32],
+    perimeterSections: 12,
+    perimeterBuffer: 0,
+  /*minRequiredRooms: 1,
+    requiredRooms: [
+      'FortressRuins23',
+      'FortressRuins_new01',
+      'FortressRuins_shieldgen',
+    ], */
   },
 ];
 
@@ -2475,6 +2933,7 @@ export function getLocationDetails(typeId: GameLocationId): LocationConfig | und
     unique: locs.every(loc => loc.unique),
     group: locs.reduce((total, loc) => total || loc.group, ''),
     minApart: Math.min(...locs.map(loc => loc.minApart)),
+    maxApart: Math.max(...locs.map(loc => loc.maxApart)),
     iconAlways: locs.every(loc => loc.iconAlways),
     iconPlaced: locs.every(loc => loc.iconPlaced),
     randomRotation: locs.some(loc => loc.randomRotation),

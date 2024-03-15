@@ -34,6 +34,7 @@ const iconType = (type: GameObject['type']): IconType => {
       return 'object';
     case 'ship':
     case 'cart':
+    case 'siege':
       return 'transport';
     default: return assertNever(type);
   }

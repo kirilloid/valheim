@@ -13,16 +13,16 @@ import { Wiki } from '../parts/Wiki';
 const baseKeys = [
   ['defeated_eikthyr', 'Eikthyr'],
   ['KilledTroll', 'Troll'],
+  ['BossHildir1', 'Skeleton_Hildir'],
   ['defeated_gdking', 'gd_king'],
   ['killed_surtling', 'Surtling'],
   ['defeated_bonemass', 'Bonemass'],
   ['KilledBat', 'Bat'],
+  ['BossHildir2', 'Fenring_Cultist_Hildir'],
   ['defeated_dragon', 'Dragon'],
+  ['BossHildir3', 'GoblinBruteBros'],
   ['defeated_goblinking', 'GoblinKing'],
   ['defeated_queen', 'SeekerQueen'],
-  ['BossHildir1', 'Skeleton_Hildir'],
-  ['BossHildir2', 'Fenring_Cultist_Hildir'],
-  ['BossHildir3', 'GoblinBruteBros'],
 ] as const;
 
 function Keys({ value, onChange }: ValueProps<string[]>) {

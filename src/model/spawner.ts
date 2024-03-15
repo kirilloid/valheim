@@ -18,6 +18,7 @@ export function spawner(config: {
   altitude?: Pair<number>;
   tilt?: Pair<number>;
   forest?: boolean;
+  lava?: boolean;
   offset?: number;
   levels?: Pair<number>;
   levelUpChance?: number;
@@ -35,6 +36,7 @@ export function spawner(config: {
     altitude: [0, 1000],
     tilt: [0, 35],
     forest: undefined,
+    lava: false,
     offset: 0.5,
     levels: [1, 3],
     minDistance: 0,

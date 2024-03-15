@@ -19,8 +19,10 @@ export const wearStructure = (
 export const woodResist: DamageModifiers = mods([0, 0, 1, 2, 0, 0, 0, 0, 3, 3]);
 export const torchResist: DamageModifiers = mods([0, 0, 1, 0, 0, 3, 3, 0, 3, 3]);
 export const darkwoodResist: DamageModifiers = mods([0, 0, 1, 2, 1, 2, 0, 0, 3, 3]);
+export const ashwoodResist: DamageModifiers = mods([0, 0, 1, 2, 0, 1, 0, 0, 3, 3]);
 export const stoneResist: DamageModifiers = mods([0, 0, 0, 0, 2, 1, 1, 0, 3, 3]);
 export const marbleResist: DamageModifiers = mods([1, 1, 1, 1, 0, 3, 3, 4, 4, 3]);
+export const graustenResist: DamageModifiers = mods([0, 1, 1, 0, 2, 1, 1, 1, 4, 4]);
 export const chestResist: DamageModifiers = mods([1, 1, 1, 1, 1, 1, 1, 0, 3, 3]);
 export const ironResist: DamageModifiers = mods([0, 0, 1, 0, 1, 1, 1, 3, 3, 3]);
 export const craftStationResist: DamageModifiers = mods([1, 1, 1, 1, 0, 3, 3, 0, 3, 3]);
@@ -31,6 +33,7 @@ export const darkwoodStructureWear = wearStructure(400, darkwoodResist, Material
 export const woodRoofStructureWear = { ...woodStructureWear, noRoof: false };
 export const stoneStructureWear = wearStructure(1500, stoneResist, MaterialType.Stone, { noRoof: false });
 export const ironStructureWear = wearStructure(1000, ironResist, MaterialType.Iron);
+export const graustenStructureWear = (hp: number) => wearStructure(hp, graustenResist, MaterialType.Ashstone, { noRoof: false });
 
 export const woodStructureRecipe = (wood: number, type: 'Wood' | 'RoundLog' | 'FineWood' = 'Wood'): Piece['recipe'] =>
   ({ type: 'craft_piece', materials: { [type]: wood }, station: 'piece_workbench', });
@@ -46,3 +49,10 @@ export const ironStructureRecipe = (Iron: number): Piece['recipe'] =>
 
 export const crystalStructureRecipe = (Crystal: number): Piece['recipe'] =>
   ({ type: 'craft_piece', materials: { Crystal }, station: 'forge' });
+
+export const ashwoodStructureRecipe = (Blackwood: number): Piece['recipe'] =>
+  ({ type: 'craft_piece', materials: { Blackwood }, station: 'piece_workbench' });
+
+export const graustenStructureRecipe = (Grausten: number): Piece['recipe'] =>
+  ({ type: 'craft_piece', materials: { Grausten }, station: 'piece_stonecutter', });
+

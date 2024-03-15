@@ -9,7 +9,7 @@ import { spawners } from './spawners';
 import { pieces } from './building';
 import { creatures } from './creatures';
 import { fishes } from './fish';
-import { ships, carts } from './transport';
+import { ships, carts, siege } from './transport';
 import { objects, structures } from './objects';
 import { data as modsData, recipes as modsRecipes } from '../mods';
 
@@ -37,6 +37,7 @@ for (const coll of [
   pieces,
   ships,
   carts,
+  siege,
   objects,
   structures,
   resources,
@@ -109,6 +110,7 @@ export const extraData: Record<string, GameComponent[]> = {
   sapling_seedturnip: ['Plant'],
   sapling_seedcarrot: ['Plant'],
   sapling_seedonion: ['Plant'],
+  VineAsh_sapling: ['Plant'],
 
   TrophyDraugrFem: ['ItemDrop'],
 

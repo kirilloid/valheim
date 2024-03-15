@@ -3,6 +3,7 @@ import type {
   AttackVariety,
   Creature,
   DamageModifiers,
+  EntityId,
   Fish,
 } from '../types';
 import { TOLERATE } from '../types';
@@ -68,6 +69,9 @@ const seekerDamageModifiers: DamageModifiers = {
   spirit: 'immune',
 };
 
+const charredDmgModifiers = mods([0, 0, 1, 4, 4, 5, 0, 0, 3, 2]);
+const charredSummonDmgModifiers = mods([0, 0, 1, 4, 4, 3, 0, 0, 3, 2]);
+
 const unblockable = true;
 const undodgeable = true;
 
@@ -78,6 +82,13 @@ const single = (attacks: AttackProfile[]): [AttackVariety] => {
 export const maxLvl = (creature: Creature | Fish) => {
   return creature.spawners.reduce((l, s) => Math.max(l, s.levels[1]), (creature as Creature).maxLvl ?? 1);
 };
+
+function variations(main: Creature, ...others: (Partial<Omit<Creature, 'id'>> & { id: EntityId })[]): Creature[] {
+  return [
+    main,
+    ...others.map(other => ({ ...main, ...other })),
+  ];
+}
 
 export const creatures: Creature[] = [
 // MEADOWS
@@ -1076,15 +1087,7 @@ export const creatures: Creature[] = [
     tier: 3,
     emoji: '🧨',
     faction: 'Demon',
-    spawners: [spawner({
-      tier: 7,
-      biomes: ['Ashlands'],
-      maxSpawned: 10,
-      interval: 8,
-      chance: 1,
-      distance: 10,
-      levels: [1, 1],
-    })],
+    spawners: [],
     attacks: single([{
       dmg: dmg({ blunt: 10, fire: 40 }),
       name: 'fireball', stagger: 1.14, force: 30,
@@ -2734,6 +2737,18 @@ export const creatures: Creature[] = [
       groupRadius: 3,
       night: false,
       levels: [1, 3],
+    }), spawner({
+      tier: 7,
+      biomes: ['Ashlands'],
+      biomeAreas: 2,
+      maxSpawned: 2,
+      interval: 1000,
+      chance: 0.1,
+      distance: 30,
+      groupSize: [1, 2],
+      groupRadius: 3,
+      night: false,
+      levels: [1, 3],
     })],
     attacks: single([
       { dmg: dmg({ pierce: 110 }), name: 'arbalest', force: 200, stagger: 1.68 },
@@ -3147,14 +3162,17 @@ export const creatures: Creature[] = [
     tags: ['insect'],
     tier: 6,
     emoji: '🐜👑',
-    faction: 'MistlandsMonsters',
+    faction: 'Boss',
     spawners: [],
     attacks: single([
-      // teleport
-      { dmg: dmg({ slash: 100, chop: 300, pickaxe: 300 }), name: 'rush', force: 250, toolTier: 3 },
-      { dmg: dmg({ pierce: 140, chop: 300, pickaxe: 300, poison: 100 }), name: 'bite', force: 250, toolTier: 3 },
-      { spawn: ['Seeker'], number: [1, 3], max: 6, name: 'call' },
-      // SeekerQueen_Spit does a burst of 20x
+      // SeekerQueen_Teleport: aiMaxHp: 0.9
+      // SeekerQueen_Rush
+      { dmg: dmg({ slash: 100, chop: 300, pickaxe: 300 }), name: 'rush', force: 250, toolTier: 3, aiMaxHp: 0.6 },
+      // SeekerQueen_Bite
+      { dmg: dmg({ pierce: 140, chop: 300, pickaxe: 300, poison: 100 }), name: 'bite', force: 250, toolTier: 3, aiMaxHp: 0.7 },
+      // SeekerQueen_Call
+      { spawn: ['Seeker'], number: [1, 3], max: 6, name: 'call', aiMaxHp: 0.99 },
+      // SeekerQueen_Spit does a burst of 20x, aiHp: [0, 0.9]
       // SeekerQueen_projectile_spit, each has 30% spawn on hit
       // SeekerQueen_SpitSpawnAbility, which spawn 1 SeekerBrood
       { spawn: ['SeekerBrood'], number: [4, 8], max: 30, name: 'spit' }, // 20 with p=0.3
@@ -3245,6 +3263,712 @@ export const creatures: Creature[] = [
       dropEntry('SerpentScale', { min: 8, max: 10 }),
       dropEntry('SerpentMeat', { min: 6, max: 8 }),
       dropTrophy('TrophySerpent', 0.33),
+    ],
+  },
+  {
+    type: 'creature',
+    id: 'BonemawSerpent',
+    iconId: 'resource/TrophyBonemawSerpent',
+    ragdollId: '',
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
+    tags: ['animal'],
+    tier: 7,
+    emoji: '🐍',
+    faction: 'SeaMonsters',
+    spawners: [spawner({
+      tier: 7,
+      biomes: ['Ashlands'],
+      biomeAreas: 7,
+      maxSpawned: 1,
+      interval: 1000,
+      chance: 0.2,
+      distance: 50,
+      altitude: [-1000, -5],
+      levels: [1, 1],
+    })],
+    attacks: single([
+      // BonemawSerpent_spit
+      { dmg: dmg({ blunt: 40, fire: 20, poison: 20 }), stagger: NaN, force: 30, name: 'spit' },
+      // BonemawSerpent_taunt
+      // BonemawSerpent_bite
+      { dmg: dmg({ slash: 140 }), stagger: NaN, force: 100, name: 'bite' },
+    ]),
+    tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
+    speed: {
+      walk: 4,
+      run: 4,
+      swim: 12,
+    },
+    turnSpeed: {
+      walk: 20,
+      run: 20,
+      swim: 100,
+    },
+    hp: 1100,
+    stagger: null,
+    damageModifiers: {
+      ...animalDmgModifiers,
+      fire: 'immune',
+      frost: 'weak',
+      poison: 'resistant',
+    },
+    drop: [
+      dropTrophy('TrophyBonemawSerpent', 0.33),
+      dropEntry('BoneMawSerpentMeat', { min: 6, max: 8 }),
+      dropEntry('BonemawSerpentTooth', { min: 8, max: 10 }),
+    ],
+  },
+  {
+    type: 'creature',
+    id: 'Volture',
+    iconId: 'resource/TrophyVolture',
+    ragdollId: '',
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
+    tags: ['animal'],
+    tier: 7,
+    emoji: '🦃',
+    faction: 'Demon',
+    spawners: [spawner({
+      tier: 7,
+      biomes: ['Ashlands'],
+      biomeAreas: 3,
+      maxSpawned: 3,
+      interval: 120,
+      chance: 0.3,
+      distance: 10,
+      groupSize: [1, 2],
+      groupRadius: 3,
+      altitude: [-20, -2],
+      offset: 20,
+      levels: [1, 1],
+    })],
+    attacks: single([
+      // volture_talons
+      { dmg: dmg({ slash: 110 }), stagger: NaN, force: 5, name: 'talons' },
+    ]),
+    tolerate: TOLERATE.WATER,
+    speed: { walk: 7, run: 13, swim: 0 },
+    turnSpeed: { walk: 300, run: 300, swim: 0 },
+    hp: 250,
+    stagger: { factor: 0.5, time: NaN },
+    damageModifiers: {
+      ...animalDmgModifiers,
+      frost: 'weak',
+      poison: 'resistant',
+    },
+    drop: [
+      dropTrophy('TrophyVolture', 0.1),
+      dropEntry('VoltureMeat'),
+      dropEntry('Feathers', { min: 2, max: 3, chance: 0.5 }),
+      dropEntry('VoltureEgg', { min: 1, max: 4 }),
+    ],
+  },
+  {
+    type: 'creature',
+    id: 'Asksvin',
+    iconId: 'resource/TrophyAsksvin',
+    ragdollId: 'Ragdoll_Asksvin',
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI', 'Procreation', 'Tameable'],
+    tags: ['animal'],
+    tier: 1,
+    emoji: '🐗',
+    faction: 'Demon',
+    spawners: [spawner({
+      tier: 7,
+      biomes: ['Ashlands'],
+      biomeAreas: 2,
+      maxSpawned: 3,
+      interval: 220,
+      chance: 0.3,
+      distance: 25,
+      groupSize: [2, 4],
+      groupRadius: 10,
+      night: false,
+      altitude: [9, 1000],
+      tilt: [0, 45],
+      levels: [1, 2],
+    }), spawner({
+      tier: 7,
+      biomes: ['Ashlands'],
+      biomeAreas: 2,
+      maxSpawned: 4,
+      interval: 220,
+      chance: 0.45,
+      distance: 20,
+      groupSize: [2, 4],
+      groupRadius: 10,
+      night: true,
+      altitude: [9, 1000],
+      tilt: [0, 45],
+      levels: [1, 3],
+    })],
+    attacks: single([
+      // Asksvin_Bite
+      { dmg: dmg({ blunt: 75, slash: 75, chop: 50, pickaxe: 50 }), stagger: 1.24, force: 50, name: 'bite' },
+      // Asksvin_Headbutt
+      { dmg: dmg({ blunt: 120, chop: 100, pickaxe: 100 }), toolTier: 4, stagger: 1.24, force: 200, name: 'ram' },
+      // Asksvin_Pounce
+      { dmg: dmg({ blunt: 150, chop: 50, pickaxe: 100 }), stagger: 1.24, force: 100, name: 'pounce' },
+    ]),
+    tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 3,
+      run: 7,
+      swim: 3,
+    },
+    turnSpeed: {
+      walk: 95,
+      run: 120,
+      swim: 50,
+    },
+    hp: 800,
+    stagger: {
+      factor: 0.3,
+      time: 1.24,
+    },
+    damageModifiers: { ...animalDmgModifiers, fire: 'resistant', poison: 'resistant' },
+    drop: [
+      dropTrophy('TrophyAsksvin', 0.5),
+      dropEntry('AskBladder'),
+      dropEntry('AskHide', { min: 2, max: 3 }),
+      dropEntry('AsksvinMeat', { min: 2, max: 3 }),
+    ],
+    tame: { tameTime: 1800, fedTime: 600, commandable: false,
+            eats: ['Vineberry', 'Fiddleheadfern', 'MushroomSmokePuff'] },
+            // eatRange:1.0, searchRange:10, heal:5
+    pregnancy: { points: 3, time: 60, chance: 0.33, grow: 3000, childId: 'Asksvin_hatchling' },
+  },
+  {
+    type: 'creature',
+    id: 'Asksvin_hatchling',
+    iconId: 'resource/TrophyAsksvin',
+    ragdollId: null,
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI', 'Growup'],
+    tags: ['animal'],
+    tier: 7,
+    emoji: '🐗',
+    faction: 'Demon',
+    spawners: [],
+    attacks: [],
+    tolerate: TOLERATE.WATER,
+    speed: { walk: 3, run: 9, swim: 0 },
+    turnSpeed: { walk: 95, run: 120, swim: 0 },
+    hp: 400,
+    stagger: { factor: 0.3, time: NaN },
+    damageModifiers: { ...animalDmgModifiers, fire: 'resistant', poison: 'resistant' },
+    drop: [
+      dropEntry('AskBladder', { chance: 0.2 }),
+      dropEntry('AskHide', { chance: 0.2 }),
+      dropEntry('AsksvinMeat', { chance: 0.2 }),
+    ],
+  },
+  {
+    type: 'creature',
+    id: 'Troll_Summoned',
+    iconId: 'resource/TrophyTroll',
+    ragdollId: null,
+    components: ['Character'],
+    tags: ['animal'],
+    tier: 7,
+    emoji: '💀',
+    faction: 'Players',
+    spawners: [],
+    attacks: [
+      {
+        rate: 1,
+        variety: 'unarmed',
+        attacks: [
+          // troll_summoned_punch
+          { dmg: dmg({ blunt: 60, pickaxe: 40 }), name: '1-hand hit', stagger: 4.4, force: 100, toolTier: 2 },
+          // troll_summoned_groundslam
+          { dmg: dmg({ blunt: 70, chop: 100, pickaxe: 40 }), name: '2-hand smash', stagger: 1.98, force: 100, toolTier: 2 },
+          // troll_summoned_throw
+          { dmg: dmg({ blunt: 80, chop: 60, pickaxe: 40, fire: 20 }), name: 'throw', stagger: 2.16, force: 60, toolTier: 0 },
+        ],
+      }, {
+        rate: 1,
+        variety: 'log',
+        attacks: [
+          // troll_summoned_log_swing_v
+          { dmg: dmg({ blunt: 70, chop: 100, pickaxe: 40 }), name: 'v-swing', stagger: 2.74, force: 80, toolTier: 2 },
+          // troll_summoned_log_swing_h
+          { dmg: dmg({ blunt: 60, chop: 100, pickaxe: 40 }), name: 'h-swing', stagger: 2.74, force: 80, toolTier: 2 },
+        ],
+      },
+    ],
+    tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
+    speed: {
+      walk: 1,
+      run: 4,
+      swim: 0,
+    },
+    turnSpeed: {
+      walk: 300,
+      run: 300,
+      swim: 0,
+    },
+    hp: 2000,
+    stagger: null,
+    damageModifiers: mods([1, 0, 0, 4, 4, 1, 2, 0, 0, 3]),
+    drop: [],
+  },
+  {
+    type: 'creature',
+    id: 'DvergerAshlands',
+    iconId: 'resource/TrophyDvergr',
+    ragdollId: 'Dverger_ragdoll',
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
+    tier: 7,
+    emoji: '🏹',
+    faction: 'Dverger',
+    spawners: [],
+    attacks: single([
+      // visual: DvergerArbalest
+      // DvergerArbalest_shootAshlands
+      { dmg: dmg({ pierce: 210 }), name: 'arbalest', force: 30, stagger: 1.68 },
+      // Dverger_meleeAshlands
+      { dmg: dmg({ blunt: 70 }), name: 'melee', force: 80, stagger: 1.84 },
+      // visual: DvergerSuitArbalest_Ashlands
+    ]),
+
+    tolerate: TOLERATE.WATER,
+    speed: { walk: 2, run: 7, swim: 1.5 },
+    turnSpeed: { walk: 200, run: 200, swim: 100 },
+    hp: 1000,
+    stagger: { factor: 0.3, time: 1.68 },
+    damageModifiers: animalDmgModifiers,
+    drop: [
+      dropEntry('Softtissue', { chance: 0.25, min: 1, max: 2 }),
+      dropEntry('BlackMarble', { chance: 0.5, min: 1, max: 2 }),
+      dropEntry('BlackMarble', { min: 2, max: 15 }),
+      dropTrophy('TrophyDvergr', 0.05),
+    ],
+  },
+  ...variations({
+    type: 'creature',
+    id: 'Charred_Archer',
+    iconId: 'resource/TrophyCharredArcher',
+    ragdollId: null,
+    components: ['Character'],
+    tags: ['skeleton'],
+    tier: 7,
+    emoji: '💀',
+    faction: 'Demon',
+    spawners: [spawner({
+      tier: 7,
+      biomes: ['Ashlands'],
+      biomeAreas: 7,
+      maxSpawned: 4,
+      interval: 120,
+      chance: 0.6,
+      distance: 10,
+      groupSize: [1, 2],
+      groupRadius: 15,
+      altitude: [1, 1000],
+      levels: [1, 2],
+    })],
+    attacks: single([
+      // charred_bow
+      { dmg: dmg({ pierce: 120 }), name: 'bow', force: 15, burst: 10 },
+      // charred_bow_volley
+      { dmg: dmg({ pierce: 60 }), name: 'volley', force: 15 },
+    ]),
+    tolerate: TOLERATE.WATER | TOLERATE.FIRE | TOLERATE.SMOKE,
+    speed: { walk: 1.5, run: 4, swim: 0 },
+    turnSpeed: { walk: 400, run: 300, swim: 0 },
+    hp: 400,
+    stagger: { factor: 0.5, time: 1.5 },
+    damageModifiers: charredDmgModifiers,
+    drop: [
+      dropEntry('CharredBone', { min: 1, max: 3 }),
+      dropTrophy('TrophyCharredArcher', 0.05),
+    ],
+  }, {
+    id: 'Charred_Archer_Fader',
+    damageModifiers: charredSummonDmgModifiers,
+    spawners: [],
+    attacks: single([
+      // charred_bow_Fader
+      { dmg: dmg({ pierce: 60 }), name: 'bow', force: 15 },
+      // charred_bow_volley_Fader
+      { dmg: dmg({ pierce: 30 }), name: 'volley', force: 15 },
+    ]),
+    hp: 50,
+    drop: [],
+  }),
+  {
+    type: 'creature',
+    id: 'Charred_Mage',
+    iconId: 'resource/TrophyCharredMage',
+    ragdollId: null,
+    components: ['Character'],
+    tags: ['skeleton'],
+    tier: 7,
+    emoji: '💀',
+    faction: 'Demon',
+    spawners: [],
+    attacks: single([
+      // Charred_HipCloth
+      // charred_magestaff_fire
+      // Charred_MageCloths
+      // charred_magestaff_summon
+    ]),
+    tolerate: TOLERATE.WATER | TOLERATE.FIRE | TOLERATE.SMOKE,
+    speed: { walk: 1.5, run: 4, swim: 0 },
+    turnSpeed: { walk: 400, run: 300, swim: 0 },
+    hp: 600,
+    stagger: { factor: 0.5, time: 1.5 },
+    damageModifiers: charredDmgModifiers,
+    drop: [
+      dropEntry('CharredBone', { chance: 0.5 }),
+      dropTrophy('TrophyCharredMage', 0.05),
+    ],
+  },
+  ...variations({
+    type: 'creature',
+    id: 'Charred_Melee',
+    iconId: 'resource/TrophyCharredMelee',
+    ragdollId: 'Charred_Melee_Ragdoll',
+    components: ['Character'],
+    tags: ['skeleton'],
+    tier: 7,
+    emoji: '💀',
+    faction: 'Demon',
+    spawners: [spawner({
+      tier: 7,
+      biomes: ['Ashlands'],
+      biomeAreas: 2,
+      maxSpawned: 4,
+      interval: 120,
+      chance: 0.65,
+      distance: 10,
+      groupSize: [1, 2],
+      groupRadius: 15,
+      altitude: [-1000, 1000],
+      levels: [1, 3],
+    })],
+    attacks: single([
+      // Charred_HipCloth
+      // charred_greatsword_swing
+      { dmg: dmg({ slash: 150 }), name: 'swing', force: 40 },
+      // charred_greatsword_thrust
+      { dmg: dmg({ pierce: 160 }), name: 'thrust', force: 40 },
+      // charred_greatsword_feint
+      { dmg: dmg({ slash: 130 }), name: 'feint', force: 40 },
+      // charred_greatsword_thrustfeint
+      { dmg: dmg({ pierce: 160 }), name: 'thrust-feint', force: 40 },
+    ]),
+    tolerate: TOLERATE.WATER | TOLERATE.FIRE | TOLERATE.SMOKE,
+    speed: { walk: 1.5, run: 4, swim: 0 },
+    turnSpeed: { walk: 400, run: 300, swim: 0 },
+    hp: 600,
+    stagger: { factor: 0.5, time: 1.5 },
+    damageModifiers: charredDmgModifiers,
+    drop: [
+      dropEntry('CharredBone', { chance: 0.5 }),
+      dropTrophy('TrophyCharredMelee', 0.05),
+    ],
+  }, {
+    id: 'Charred_Melee_Dyrnwyn',
+    spawners: [],
+    attacks: single([
+      // Charred_HipCloth
+      // charred_dyrnwyn_greatsword_swing
+      { dmg: dmg({ slash: 75 }), name: 'swing', force: 40 },
+      // charred_dyrnwyn_greatsword_thrust
+      { dmg: dmg({ pierce: 80 }), name: 'thrust', force: 40 },
+      // charred_dyrnwyn_greatsword_feint
+      { dmg: dmg({ slash: 65 }), name: 'feint', force: 40 },
+      // charred_dyrnwyn_greatsword_thrustfeint
+      { dmg: dmg({ pierce: 80 }), name: 'thrust-feint', force: 40 },
+      // Charred_Helmet
+      // Charred_Breastplate
+    ]),
+    damageModifiers: mods([0, 0, 1, 4, 4, 1, 1, 0, 3, 2]),
+    drop: [
+      dropEntry('DyrnwynHiltFragment'),
+    ],
+  }, {
+    id: 'Charred_Melee_Fader',
+    spawners: [],
+    attacks: single([
+      // Charred_HipCloth
+      // charred_fader_greatsword_swing
+      { dmg: dmg({ slash: 75 }), name: 'swing', force: 40 },
+      // charred_fader_greatsword_thrust
+      { dmg: dmg({ pierce: 80 }), name: 'thrust', force: 40 },
+      // charred_fader_greatsword_feint
+      { dmg: dmg({ slash: 65 }), name: 'feint', force: 40 },
+      // charred_fader_greatsword_thrustfeint
+      { dmg: dmg({ pierce: 80 }), name: 'thrust-feint', force: 40 },
+    ]),
+    damageModifiers: charredSummonDmgModifiers,
+    hp: 50,
+    drop: [],
+  }),
+  ...variations({
+    type: 'creature',
+    id: 'Charred_Twitcher',
+    iconId: 'resource/TrophyCharredMelee',
+    ragdollId: null,
+    components: ['Character'],
+    tags: ['skeleton'],
+    tier: 7,
+    emoji: '💀',
+    faction: 'Demon',
+    spawners: [spawner({
+      tier: 7,
+      biomes: ['Ashlands'],
+      biomeAreas: 7,
+      maxSpawned: 4,
+      interval: 110,
+      chance: 0.8,
+      distance: 10,
+      groupSize: [2, 4],
+      groupRadius: 15,
+      altitude: [1, 1000],
+      night: false,
+      offset: 20,
+      levels: [1, 2],
+    }), spawner({
+      tier: 7,
+      biomes: ['Ashlands'],
+      biomeAreas: 7,
+      maxSpawned: 5,
+      interval: 100,
+      chance: 0.9,
+      distance: 10,
+      groupSize: [3, 6],
+      groupRadius: 15,
+      altitude: [2, 1000],
+      night: true,
+      offset: 20,
+      levels: [1, 3],
+    })],
+    attacks: single([
+      // charred_twitcher_scratch_l
+      { dmg: dmg({ slash: 100 }), force: 40, name: 'scratch' },
+      // charred_twitcher_scratch_r
+      { dmg: dmg({ slash: 100 }), force: 40, name: 'scratch' },
+      // charred_twitcher_throw
+      { dmg: dmg({ pierce: 75 }), force: 15, name: 'throw' },
+    ]),
+    tolerate: TOLERATE.WATER | TOLERATE.FIRE | TOLERATE.SMOKE,
+    speed: { walk: 2, run: 6, swim: 0 },
+    turnSpeed: { walk: 400, run: 300, swim: 0 },
+    hp: 220,
+    stagger: { factor: 0.5, time: 1.5 },
+    damageModifiers: charredDmgModifiers,
+    drop: [
+      dropEntry('CharredBone', { min: 1, max: 2 }),
+    ],
+  }, {
+    id: 'Charred_Twitcher_Summoned',
+    hp: 50,
+  }),
+  {
+    type: 'creature',
+    id: 'Goblin_Gem',
+    ragdollId: null,
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
+    tier: 7,
+    emoji: '💎',
+    faction: 'ForestMonsters',
+    spawners: [],
+    attacks: single([]),
+    tolerate: TOLERATE.WATER | TOLERATE.FIRE | TOLERATE.SMOKE,
+    speed: { walk: 1.5, run: 12, swim: 2 },
+    turnSpeed: { walk: 80, run: 200, swim: 100 },
+    hp: 1000,
+    stagger: null,
+    damageModifiers: animalDmgModifiers,
+    drop: [
+      dropEntry('GemstoneBlue', { min: 2, max: 4 }),
+      dropEntry('GemstoneGreen', { min: 2, max: 4 }),
+      dropEntry('GemstoneRed', { min: 2, max: 4 }),
+    ],
+  },
+  {
+    type: 'creature',
+    id: 'BlobLava',
+    ragdollId: null,
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
+    tier: 7,
+    emoji: '🦠',
+    faction: 'Demon',
+    spawners: [spawner({
+      tier: 7,
+      biomes: ['Ashlands'],
+      maxSpawned: 2,
+      interval: 120,
+      chance: 0.4,
+      distance: 10,
+      groupSize: [1, 2],
+      groupRadius: 1,
+      altitude: [2, 1000],
+      levels: [1, 1],
+    })],
+    attacks: single([
+      // blobLava_attack_aoe
+      { dmg: dmg({ blunt: 70, chop: 160, pickaxe: 160, fire: 30 }), name: 'explosion' },
+    ]),
+    tolerate: TOLERATE.WATER | TOLERATE.FIRE | TOLERATE.SMOKE,
+    speed: { walk: 1, run: 2, swim: 0 },
+    turnSpeed: { walk: 100, run: 100, swim: 0 },
+    hp: 300,
+    stagger: null,
+    damageModifiers: mods([2, 0, 1, 4, 4, 3, 2, 2, 1, 0]),
+    drop: [
+      dropEntry('ProustitePowder', { min: 1, max: 2 }),
+      dropEntry('SulfurStone', { min: 1, max: 2 }),
+    ],
+  },
+  {
+    type: 'creature',
+    id: 'Morgen',
+    iconId: 'resource/TrophyMorgen',
+    ragdollId: null,
+    components: ['Character'],
+    tier: 7,
+    emoji: '🕷',
+    faction: 'Demon',
+    spawners: [spawner({
+      // Morgen_NonSleeping
+      tier: 7,
+      biomes: ['Ashlands'],
+      maxSpawned: 3,
+      interval: 4000,
+      chance: 0.1,
+      distance: 15,
+      altitude: [0, 1000],
+      levels: [1, 1],
+    })],
+    attacks: single([
+      // Morgen_bite
+      { dmg: dmg({ pierce: 160, chop: 100, pickaxe: 100 }), name: 'bite', force: 70, toolTier: 3 }, // interval: 4
+      // Morgen_roll_right
+      { dmg: dmg({ blunt: 40, chop: 100, pickaxe: 100 }), name: 'roll_right', force: 70, toolTier: 3 }, // interval: 12
+      // Morgen_roll_left
+      { dmg: dmg({ blunt: 40, chop: 100, pickaxe: 100 }), name: 'roll_left', force: 70, toolTier: 3 }, // interval: 12
+      // Morgen_swipe_1
+      { dmg: dmg({ pierce: 160, chop: 100, pickaxe: 100 }), name: 'swipe 1', force: 20, toolTier: 3 }, // interval: 5
+      // Morgen_swipe_2
+      { dmg: dmg({ pierce: 160, chop: 100, pickaxe: 100 }), name: 'swipe 2', force: 20, toolTier: 3 }, // interval: 5
+      // Morgen_swipe_3
+      { dmg: dmg({ pierce: 160, chop: 100, pickaxe: 100 }), name: 'swipe 3', force: 20, toolTier: 3 }, // interval: 5
+      // Morgen_swipe_4
+      { dmg: dmg({ pierce: 160, chop: 100, pickaxe: 100 }), name: 'swipe 4', force: 20, toolTier: 3 }, // interval: 5
+      // Morgen_bodyslam
+      { dmg: dmg({ blunt: 160 }), name: 'bodyslam', force: 70, toolTier: 3 }, // interval: 12
+    ]),
+    tolerate: TOLERATE.WATER | TOLERATE.FIRE,
+    speed: { walk: 3, run: 8.6, swim: 4 },
+    turnSpeed: { walk: 80, run: 150, swim: 60 },
+    hp: 1600,
+    stagger: { factor: 0.3, time: 1.5 },
+    damageModifiers: mods([1, 1, 1, 4, 4, 1, 0, 2, 0, 0]),
+    drop: [
+      dropTrophy('TrophyMorgen', 0.05),
+      dropEntry('MorgenSinew', { chance: 0.5, min: 1, max: 2 }),
+      dropEntry('MorgenHeart', { chance: 0.5 }),
+    ],
+  },
+  {
+    type: 'creature',
+    id: 'FallenValkyrie',
+    iconId: 'resource/TrophyFallenValkyrie',
+    ragdollId: null,
+    components: ['Character'],
+    tags: ['fly'],
+    tier: 7,
+    emoji: '🦅',
+    faction: 'Demon',
+    spawners: [spawner({
+      tier: 7,
+      biomes: ['Ashlands'],
+      biomeAreas: 3,
+      maxSpawned: 1,
+      interval: 4000,
+      chance: 0.2,
+      distance: 50,
+      altitude: [15, 1000],
+      offset: 20,
+      lava: undefined,
+      levels: [1, 1],
+    })],
+    attacks: single([
+      // FallenValkyrie_spit
+      // -> fallenvalkyrie_spit_projectile x3
+      // -> FallenValkyrie_projectile_explosion
+      { dmg: dmg({ fire: 80, poison: 18 }), name: 'spit' }, // interval: 10
+      // FallenValkyrie_claws
+      { dmg: dmg({ slash: 105, pierce: 55 }), name: 'claws' }, // interval: 3
+      // FallenValkyrie_spin
+      { dmg: dmg({ blunt: 80, pierce: 100, chop: 100, pickaxe: 100 }), name: 'spin', force: 250 }, // interval: 10
+      // FallenValkyrie_taunt
+      { dmg: dmg({ slash: 20, pierce: 20 }), name: 'taunt', force: 280 }, // interval: 30
+    ]),
+    tolerate: TOLERATE.WATER | TOLERATE.FIRE,
+    speed: { walk: 10, run: 15, swim: 0 },
+    turnSpeed: { walk: 300, run: 220, swim: 0 },
+    hp: 1500,
+    stagger: { factor: 0.5, time: 1.5 },
+    damageModifiers: mods([0, 0, 0, 4, 4, 1, 0, 0, 3, 2]),
+    drop: [
+      dropTrophy('TrophyFallenValkyrie', 0.05),
+      dropEntry('CelestialFeather', { chance: 0.5, min: 2, max: 4 }),
+    ],
+  },
+  {
+    type: 'creature',
+    id: 'Fader',
+    iconId: 'resource/TrophyFader',
+    ragdollId: null,
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
+    tags: ['dragon'],
+    tier: 7,
+    emoji: '🐉',
+    faction: 'Boss',
+    spawners: [],
+    attacks: single([
+      // Fader_Fissure
+      { dmg: dmg({ pierce: 120, chop: 1000, pickaxe: 1000 }), name: 'fissure', force: 50, toolTier: 3, aiMinHp: 0.35, aiMaxHp: 0.85 }, // interval: 30
+      // Fader_Bite
+      { dmg: dmg({ pierce: 180, chop: 300, pickaxe: 300 }), name: 'bite', force: 100, toolTier: 3 }, // interval: 3
+      // Fader_Claw_Left
+      { dmg: dmg({ pierce: 170, chop: 300, pickaxe: 300 }), name: 'claw-left', force: 100, toolTier: 3 }, // interval: 3
+      // Fader_Claw_Right
+      { dmg: dmg({ pierce: 170, chop: 300, pickaxe: 300 }), name: 'claw-right', force: 100, toolTier: 3 }, // interval: 3
+      // Fader_Spin
+      { dmg: dmg({ pierce: 120, chop: 300, pickaxe: 300 }), name: 'claw-right', force: 130, toolTier: 3 }, // interval: 20
+      // Fader_Flamebreath
+      { dmg: dmg({ chop: 40, pickaxe: 40, fire: 60 }), name: 'flamebreath', force: 0, toolTier: 0, aiMinHp: 0.05, aiMaxHp: 0.75 }, // interval: 25
+      // Fader_Meteors, dodgeable: false, blockable: false
+        // -> spawn_fader_meteors
+        // -> projectile_meteor_fader x10
+      { dmg: dmg({ blunt: 40, chop: 100, pickaxe: 100, fire: 120 }), name: 'meteors', force: 100, toolTier: 0, aiMinHp: 0.05, aiMaxHp: 0.75, burst: 10 }, // interval: 25
+      // Fader_Roar, aiMinHp: 0.35, aiMaxHp: 0.55, interval: 45
+      { dmg: dmg({}), name: 'roar', force: 100, aiMinHp: 0.35, aiMaxHp: 0.55 }, // interval: 45
+      // Fader_WallOfFire, aiMinHp: 0.15, aiMaxHp: 0.9
+      { dmg: dmg({ pierce: 120, chop: 1000, pickaxe: 1000 }), name: 'wall of fire', force: 50, toolTier: 3 }, // interval: 60
+      // Fader_Meteors_Intense, dodgeable: false, blockable: false
+        // -> spawn_fader_meteors
+        // -> projectile_meteor_fader x10
+      { dmg: dmg({ blunt: 40, chop: 100, pickaxe: 100, fire: 120 }), name: 'meteors', force: 100, toolTier: 0, aiMaxHp: 0.25, burst: 10 }, // interval: 18
+      // Fader_Fissure_Intense, aiMaxHp: 0.35
+      { dmg: dmg({ pierce: 120, chop: 1000, pickaxe: 1000 }), name: 'fissure', force: 50, toolTier: 3, aiMaxHp: 0.35 }, // interval: 10
+      // Fader_Roar_Intense, aiMaxHp: 0.35
+      { dmg: dmg({}), name: 'roar', force: 50, aiMaxHp: 0.35 }, // interval: 26
+    ]),
+    tolerate: TOLERATE.WATER | TOLERATE.FIRE,
+    speed: { walk: 12, run: 12, swim: 0 },
+    turnSpeed: { walk: 120, run: 250, swim: 0, },
+    hp: 20000,
+    stagger: null,
+    damageModifiers: mods([0, 0, 1, 4, 4, 3, 0, 0, 0, 3]),
+    drop: [
+      dropTrophy('TrophyFader', 1),
+      dropEntry('FaderDrop', { min: 3, scale: false }),
     ],
   },
 ];

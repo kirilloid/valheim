@@ -130,6 +130,23 @@ export const effects: Effect[] = [
     time: 5,
     moveSpeed: -100,
   },
+  {
+    type: 'effect',
+    id: 'ImmobilizedAshlands',
+    iconId: 'piece/piece_trap_troll',
+    tier: 7,
+    time: 10,
+    moveSpeed: -100,
+  },
+  {
+    type: 'effect',
+    id: 'ImmobilizedLong',
+    disabled: true,
+    iconId: 'piece/piece_trap_troll',
+    tier: 7,
+    time: 60,
+    moveSpeed: -100,
+  },
   // ImmobilizedLong,
   // Lightning,
   // Poison,
@@ -298,6 +315,13 @@ export const effects: Effect[] = [
       frost: 'weak',
       lightning: 'weak',
     }
+  },
+  {
+    type: 'effect',
+    id: 'WindRun',
+    tier: 7,
+    time: 0,
+    windMovementModifier: 5,
   },
   // Wishbone
 ];

@@ -14,6 +14,7 @@ export const mapping = new Map<string, EntityId>([
   ['piece_sapling_magecap', 'Pickable_Mushroom_Magecap'],
   ['Pickable_Flax_Wild', 'Pickable_Flax'],
   ['Pickable_Barley_Wild', 'Pickable_Barley'],
+  ['VineAsh_sapling', 'Vine_Sapling'],
 
   ['Birch2', 'Birch1'],
   ['Birch2_aut', 'Birch1_aut'],

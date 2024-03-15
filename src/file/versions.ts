@@ -1,10 +1,10 @@
 export const SKILLS = 2; // Skills.dataVersion
 // is used for both as primary DB as well as FWL versions
-export const WORLD = 33; // Version.m_worldVersion
+export const WORLD = 34; // Version.m_worldVersion
 export const MAP = 8; // Minimap.MAPVERSION
 export const SHARED_MAP = 2; // Minimap.sharedMapDataVersion, is it used at all?
-export const PLAYER = 38; // Version.m_playerVersion
-export const PLAYER_DATA = 26; // Player.dataVersion
+export const PLAYER = 39; // Version.m_playerVersion
+export const PLAYER_DATA = 27; // Player.dataVersion
 export const INVENTORY = 106; // Version.m_itemDataVersion
 export const WORLD_GEN = 2; // Version.m_worldGenVersion
 export const LIQUID = 2; // LiquidVolume.liquidSaveVersion

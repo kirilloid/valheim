@@ -28,6 +28,9 @@ export type AttackAnimation =
 | 'staff_fireball'
 | 'staff_summon'
 | 'throw_bomb'
+| 'dualaxes'
+| 'dualaxes_secondary'
+| 'recharge_lightningstaff'
 ;
 
 interface BaseAttack {
@@ -35,6 +38,7 @@ interface BaseAttack {
   stamina: number;
   eitr?: number;
   healthPercent?: number;
+  damageMultiplierPerMissingHP?: number;
   walkSpeed: number;
   rotationSpeed: number;
   startNoise: number;
@@ -55,6 +59,7 @@ interface AreaAttack extends BaseAttack {
 interface BowAttack extends BaseAttack {
   projVel: Pair<number>;
   projAcc: Pair<number>;
+  number?: number;
   raiseSkillAmount?: number;
 }
 

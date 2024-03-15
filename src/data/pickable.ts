@@ -207,4 +207,47 @@ export const pickables: {
     item: 'Tankard_dvergr',
     subtype: 'misc',
   },
+  // {
+  //   id: 'Pickable_Swordpiece1', // Charred_Melee_Dyrnwyn
+  //   iconId: 'resource/DyrnwynHiltFragment',
+  //   tier: 7,
+  //   item: 'DyrnwynHiltFragment',
+  //   subtype: 'misc',
+  // },
+  {
+    id: 'Pickable_VoltureEgg',
+    iconId: 'resource/VoltureEgg',
+    tier: 7,
+    item: 'VoltureEgg',
+    subtype: 'misc',
+  },
+  {
+    id: 'Pickable_SulfurRock',
+    iconId: 'resource/SulfurStone',
+    tier: 7,
+    item: 'SulfurStone',
+    number: 3,
+    subtype: 'misc',
+  },
+  {
+    id: 'Pickable_MoltenCoreStand',
+    iconId: 'resource/MoltenCore',
+    tier: 7,
+    item: 'MoltenCore',
+    subtype: 'misc',
+  },
+  {
+    id: 'Pickable_Swordpiece2',
+    iconId: 'resource/DyrnwynBladeFragment',
+    tier: 7,
+    item: 'DyrnwynBladeFragment',
+    subtype: 'misc',
+  },
+  {
+    id: 'Pickable_Swordpiece3',
+    iconId: 'resource/DyrnwynTipFragment',
+    tier: 7,
+    item: 'DyrnwynTipFragment',
+    subtype: 'misc',
+  },
 ];

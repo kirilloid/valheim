@@ -146,6 +146,7 @@ function ShortRecipe(props: { item: GameObject }) {
       return <Materials materials={recipe.materials} iconSize={16} />
     case 'ship':
     case 'cart':
+    case 'siege':
     case 'shield':
     case 'tool':
     case 'armor':
@@ -451,6 +452,11 @@ function SearchObject({ id, text, onClick, duplicates }: BaseSearchItemProps & {
           <Icon id="weight" alt={translate('ui.weight')} size={16} />
           {item.storage[0] * item.storage[1]}
         </span>
+      </div>
+    case 'siege':
+      return <div className={className}>
+        <ItemIcon item={item} size={32} />
+        <Link to={`/obj/${id}`} onClick={onClick} className={linkClassName}>{text}</Link>
       </div>
     default:
       return assertNever(item);

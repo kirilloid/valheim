@@ -32,6 +32,7 @@ export type GameComponent =
 | 'ZNetView' | 'ZSyncTransform'
 
 export type EntityGroup =
+  | 'ashtree'
   | 'banner' | 'bed' | 'beech' | 'berry' | 'birch' | 'bird' | 'blob'
   | 'chair' | 'chest' | 'cook' | 'craft_station'
   | 'demist'
@@ -110,6 +111,7 @@ export type LocationConfig = {
   unique: boolean;
   group: string;
   minApart: number;
+  maxApart: number;
   iconAlways: boolean;
   iconPlaced: boolean;
   randomRotation: boolean;
@@ -190,6 +192,7 @@ export type Effect = {
   eitrRegen?: number;
   xpModifier?: number;
   moveSpeed?: number;
+  windMovementModifier?: number;
 };
 
 export type NormalAttackProfile = {
@@ -202,6 +205,8 @@ export type NormalAttackProfile = {
   // knockback
   force?: number;
   toolTier?: number;
+  aiMinHp?: number;
+  aiMaxHp?: number;
 }
 export type SpawnAttackProfile = {
   spawn: EntityId[];
@@ -388,11 +393,14 @@ export enum MaterialType {
   Iron,
   HardWood,
   Marble,
+  Ashstone,
+  Ancient,
 };
 
 export type ComfortGroup = 'fire' | 'bed' | 'banner' | 'chair' | 'table' | 'carpet';
 
 export interface BasePiece extends GameObjectBase {
+  burnable?: boolean;
   wear: {
     hp: number;
     damageModifiers: DamageModifiers;
@@ -427,6 +435,13 @@ type Wear = {
   materialType?: MaterialType;
 };
 
+type Ignite = {
+  interval: number;
+  chance: number;
+  spread: number;
+  capsuleRadius: number;
+}
+
 export type Piece = BasePiece & {
   type: 'piece';
   base: boolean;
@@ -452,6 +467,7 @@ export type Piece = BasePiece & {
     lightRadius: number;
     smoke: boolean;
     fireworks: boolean;
+    ignite: Ignite;
   };
   comfort?: {
     value: number,
@@ -500,6 +516,15 @@ export interface Structure extends GameObjectBase {
 export interface Transport extends BasePiece {
   type: 'ship' | 'cart';
   storage: [columns: number, rows: number];
+}
+
+export interface Siege extends BasePiece {
+  type: 'siege';
+  Siege?: {
+    fuel: EntityId[];
+    damage: DamageProfile;
+    toolTier: number;
+  };
 }
 
 export interface Ship extends Transport {
@@ -649,6 +674,7 @@ export enum ItemType {
   Attach_Atgeir = 20,
   Fish = 21,
   TwoHandedWeaponLeft = 22,
+  AmmoNonEquipable = 23,
 }
 
 export interface Resource extends BaseItem {
@@ -701,6 +727,7 @@ export interface Weapon extends BaseItem {
   attacks: Attack[];
   durability: Pair<number>;
   durabilityDrainPerSec?: number;
+  damageMultiplierPerMissingHP?: number;
   set?: ItemSet;
   holdDurationMin?: number;
   holdStaminaDrain?: number;
@@ -757,6 +784,6 @@ export type Item = Resource | Weapon | Shield | Bomb | Armor | Arrow | Tool;
 export type ItemSet = { name: string; items: EntityId[]; bonus: (Effect | undefined)[]; };
 export type ItemSpecial = Weapon['special'] | Armor['special'] | Tool['special'];
 
-export type GameObject = Item | Piece | Structure | PhysicalObject | Spawner | Ship | Cart | Creature | Fish;
+export type GameObject = Item | Piece | Structure | PhysicalObject | Spawner | Ship | Cart | Siege | Creature | Fish;
 
 export type KeysOfType<T, TProp> = { [P in keyof T]: T[P] extends TProp? P : never}[keyof T];

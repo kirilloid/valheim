@@ -36,6 +36,27 @@ const infos: Record<string, Article> = {
       },
     ],
   },
+  flame: {
+    header: 'cinder',
+    sections: [
+      {
+        header: 'objects',
+        text: `
+- effect never triggers in water (or tar!)
+- burnable piece when not wet
+- trees burn even wet
+`
+      },
+      {
+        header: 'grass',
+        text: `
+- no burn in Mountain and DeepNorth
+- if it's wet (raining), no grass burn
+- cleared (with hoe) ground doesn't burn
+`
+      }
+    ],
+  },
   trader: {
     header: 'traders',
     sections: [

@@ -257,6 +257,7 @@ export function GrowSection({ item }: { item: GameObject | undefined }) {
     case 'structure':
     case 'ship':
     case 'cart':
+    case 'siege':
       return null;
   }
   const grow = item.grow ?? [];

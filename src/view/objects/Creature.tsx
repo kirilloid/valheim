@@ -13,7 +13,7 @@ import { area, objectLocationMap } from '../../data/location';
 import { maxLvl } from '../../data/creatures';
 
 import { GameSettingsContext, TranslationContext, useGlobalState } from '../../effects';
-import { Area, InlineObjectWithIcon, rangeBy, Resistances, shortCreatureDamage, yesNo } from '../helpers';
+import { Area, InlineObjectWithIcon, rangeBy, Resistances, shortCreatureDamage, showPercent, yesNo } from '../helpers';
 import { EffectIcon, ItemIcon } from '../parts/Icon';
 import { ItemHeader } from '../parts/ItemHeader';
 import { spawnedByMap } from '../../data/spawns';
@@ -29,6 +29,9 @@ function NormalAttack({ attack: a, dmgScale }: { attack: NormalAttackProfile, dm
       {a.unblockable ? ', unblockable' : ''}
       {a.undodgeable ? ', undodgeable' : ''}
       {a.stagger ? ',\u00A0stagger=' + a.stagger : ', no stagger'}
+      {a.aiMinHp != null || a.aiMaxHp != null
+        ? ', only with hp within ' + rangeBy([a.aiMinHp ?? 0, a.aiMaxHp ?? 1], showPercent)
+        : ''}
     </dd>
   </>
 }

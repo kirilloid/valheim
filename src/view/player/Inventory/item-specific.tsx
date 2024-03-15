@@ -43,6 +43,7 @@ function Damage({ item, invItem, epicLoot }: { item: Weapon; invItem: InvItem; e
     {attack?.stamina ? <div>{translate('ui.stamina')}: <span className="InvTooltip__value">{attack.stamina}</span></div> : null}
     {attack?.eitr && <div>{translate('ui.eitr')}: <span className="InvTooltip__value">{attack.eitr}</span></div>}
     {attack?.healthPercent && <div>{translate('ui.health')}: <span className="InvTooltip__value">{attack.healthPercent}%</span></div>}
+    {attack?.damageMultiplierPerMissingHP && <div>{translate('ui.berzerkerBonus')}: <span className="InvTooltip__value">+{attack.damageMultiplierPerMissingHP * 100}%</span></div>}
     <div>{translate('ui.knockback')}: <span className="InvTooltip__value">{item.knockback}</span></div>
     <div>{translate('ui.backstab')}: <span className="InvTooltip__value">{item.backstab}x</span></div>
   </>;

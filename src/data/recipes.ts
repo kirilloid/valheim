@@ -77,6 +77,9 @@ export const recipes: ItemRecipe[] = [
   workbenchRecipe(4, { Needle: 4, Feathers: 2 }, {}, 'ArrowNeedle', 20),
   workbenchRecipe(1, { LeatherScraps: 5, Ooze: 10, Resin: 3 }, {}, 'BombOoze', 5),
   workbenchRecipe(1, { Sap: 1, Bilebag: 1, Resin: 3 }, {}, 'BombBile', 3),
+  workbenchRecipe(1, { AskHide: 1, AskBladder: 1, ProustitePowder: 3 }, {}, 'BombLava', 5),
+  workbenchRecipe(1, { AskHide: 2, SulfurStone: 2, ProustitePowder: 3 }, {}, 'BombSiege', 5),
+  workbenchRecipe(1, { MushroomSmokePuff: 1, AskBladder: 1 }, {}, 'BombSmoke', 10),
   // FIREWORKS
   workbenchRecipe(1, { FireworksRocket_White: 1, Blueberries: 1 }, {}, 'FireworksRocket_Blue'),
   workbenchRecipe(1, { FireworksRocket_White: 1, GreydwarfEye: 1 }, {}, 'FireworksRocket_Cyan'),
@@ -100,6 +103,8 @@ export const recipes: ItemRecipe[] = [
   genericRecipe('piece_cookingstation', 1, 25, { WolfMeat: 1 }, {}, 'CookedWolfMeat'),
   genericRecipe('piece_cookingstation', 1, 25, { HareMeat: 1 }, {}, 'CookedHareMeat'),
   genericRecipe('piece_cookingstation', 1, 25, { ChickenMeat: 1 }, {}, 'CookedChickenMeat'),
+  genericRecipe('piece_cookingstation', 1, 25, { VoltureMeat: 1 }, {}, 'CookedVoltureMeat'),
+  genericRecipe('piece_cookingstation', 1, 25, { AsksvinMeat: 1 }, {}, 'CookedAsksvinMeat'),
   // IRON COOKING STATION
   genericRecipe('piece_cookingstation_iron', 1, 25, { RawMeat: 1 }, {}, 'CookedMeat'),
   genericRecipe('piece_cookingstation_iron', 1, 25, { NeckTail: 1 }, {}, 'NeckTailGrilled'),
@@ -110,6 +115,9 @@ export const recipes: ItemRecipe[] = [
   genericRecipe('piece_cookingstation_iron', 1, 60, { BugMeat: 1 }, {}, 'CookedBugMeat'),
   genericRecipe('piece_cookingstation_iron', 1, 25, { HareMeat: 1 }, {}, 'CookedHareMeat'),
   genericRecipe('piece_cookingstation_iron', 1, 25, { ChickenMeat: 1 }, {}, 'CookedChickenMeat'),
+  genericRecipe('piece_cookingstation_iron', 1, 25, { AsksvinMeat: 1 }, {}, 'CookedAsksvinMeat'),
+  genericRecipe('piece_cookingstation_iron', 1, 25, { VoltureMeat: 1 }, {}, 'CookedVoltureMeat'),
+  genericRecipe('piece_cookingstation_iron', 1, 60, { BoneMawSerpentMeat: 1 }, {}, 'CookedBoneMawSerpentMeat'),
   // CAULDRON
   cauldronRecipe(1, { RawMeat: 1, Honey: 1 }, 'BoarJerky', 2),
   cauldronRecipe(1, { Raspberry: 8, Blueberries: 6 }, 'QueensJam', 4),
@@ -143,6 +151,16 @@ export const recipes: ItemRecipe[] = [
   cauldronRecipe(5, { Fish9: 1, BreadDough: 2 }, 'FishAndBreadUncooked'),
   cauldronRecipe(5, { BugMeat: 1, LoxMeat: 1, HareMeat: 2 }, 'MeatPlatterUncooked'),
   cauldronRecipe(5, { HareMeat: 1, MushroomJotunPuffs: 3, Carrot: 2 }, 'MisthareSupremeUncooked'),
+  // LEVEL 6
+  cauldronRecipe(6, { AsksvinMeat: 1, Vineberry: 2, MushroomSmokePuff: 1 }, 'FierySvinstew'),
+  cauldronRecipe(6, { Sap: 3, MushroomMagecap: 2, Fiddleheadfern: 2, MushroomSmokePuff: 2 }, 'MarinatedGreens'),
+  cauldronRecipe(6, { AsksvinMeat: 1, VoltureMeat: 1, Fiddleheadfern: 1 }, 'MashedMeat'),
+  cauldronRecipe(6, { AsksvinMeat: 2, Vineberry: 2, BarleyFlour: 4 }, 'PiquantPieUncooked'),
+  cauldronRecipe(6, { Vineberry: 2, VoltureEgg: 1, BarleyFlour: 4 }, 'RoastedCrustPieUncooked'),
+  cauldronRecipe(6, { MushroomJotunPuffs: 3, Onion: 3, Fiddleheadfern: 3 }, 'ScorchingMedley', 3),
+  cauldronRecipe(6, { Sap: 3, Fiddleheadfern: 2, Vineberry: 2 }, 'SizzlingBerryBroth'),
+  cauldronRecipe(6, { Sap: 4, Vineberry: 2, MushroomSmokePuff: 2, MushroomMagecap: 2 }, 'SparklingShroomshake'),
+  cauldronRecipe(6, { Vineberry: 3, Honey: 1, Fiddleheadfern: 1 }, 'SpiceInducedMarmalade'),
   // BAITS
   cauldronRecipe(1, { FishingBait: 20, TrophyFrostTroll: 1 }, 'FishingBaitForest', 20),
   cauldronRecipe(1, { FishingBait: 20, TrophySerpent: 1 }, 'FishingBaitOcean', 20),
@@ -197,6 +215,14 @@ export const recipes: ItemRecipe[] = [
     1, { Barley: 10, Cloudberry: 10 },
     'BarleyWineBase', 'BarleyWine'
   ),
+  ...potionRecipe(
+    1, { Sap: 10, Vineberry: 10, MushroomMagecap: 10 },
+    'MeadBaseEitrLingering', 'MeadEitrLingering'
+  ),
+  ...potionRecipe(
+    1, { Sap: 10, Vineberry: 10, MushroomSmokePuff: 10 },
+    'MeadBaseHealthLingering', 'MeadHealthLingering'
+  ),
   // SMELTER
   smelterRecipe('smelter', 'CopperOre', 'Copper'),
   smelterRecipe('smelter', 'CopperScrap', 'Copper'),
@@ -207,7 +233,8 @@ export const recipes: ItemRecipe[] = [
   smelterRecipe('smelter', 'SilverOre', 'Silver'),
   // BLASTFURNACE
   smelterRecipe('blastfurnace', 'BlackMetalScrap', 'BlackMetal'),
-  smelterRecipe('blastfurnace', 'FlametalOre', 'Flametal'),
+  smelterRecipe('blastfurnace', 'FlametalOreNew', 'FlametalNew'),
+  // smelterRecipe('blastfurnace', 'FlametalOre', 'Flametal'),
   genericRecipe('eitrrefinery', 1, 40, { Sap: 1, Softtissue: 1 }, {}, 'Eitr'),
   // FORGE: BRONZE
   forgeRecipe(1, { Wood: 2, Copper: 8 }, { GreydwarfEye: 8, Copper: 4 }, 'KnifeCopper'),
@@ -280,10 +307,15 @@ export const recipes: ItemRecipe[] = [
   genericRecipe('piece_artisanstation', 1, 3, { Eitr: 1, Iron: 3 }, {}, 'MechanicalSpring'),
   genericRecipe('piece_artisanstation', 1, 3, { RoundLog: 5, Feathers: 2 }, {}, 'TurretBoltWood', 20),
   genericRecipe('piece_artisanstation', 1, 3, { Wood: 10, BlackMetal: 1 }, {}, 'TurretBolt', 20),
+  genericRecipe('piece_artisanstation', 1, 3, { Blackwood: 10, FlametalNew: 1 }, {}, 'TurretBoltFlametal', 20),
+  genericRecipe('piece_artisanstation', 2, 3, { BlackMarble: 5 }, {}, 'CeramicPlate', 5),
+  genericRecipe('piece_artisanstation', 2, 3, { BlackCore: 1, SurtlingCore: 1, CeramicPlate: 5 }, {}, 'ShieldCore'),
+
   // BLACK FORGE
   blackForgeRecipe(1, { Bronze: 2, SurtlingCore: 1, Crystal: 1 }, {}, 'Lantern'),
   blackForgeRecipe(1, { YggdrasilWood: 10, Eitr: 15, Silver: 5, Mandible: 2 }, { Eitr: 15, Silver: 5, Mandible: 2 }, 'AtgeirHimminAfl'),
   blackForgeRecipe(1, { YggdrasilWood: 5, Iron: 15, Bilebag: 3, Eitr: 10 }, { Iron: 10, Bilebag: 1, Eitr: 1 }, 'AxeJotunBane'),
+  blackForgeRecipe(1, { BellFragment: 3 }, {}, 'Bell'),
   blackForgeRecipe(1, { FineWood: 10, BoneFragments: 40, Eitr: 10 }, { FineWood: 5, BoneFragments: 20 }, 'BowSpineSnap'),
   blackForgeRecipe(1, { Wood: 10, Iron: 8, Root: 4 }, { Wood: 5, Iron: 4, Root: 1 }, 'CrossbowArbalest'),
   blackForgeRecipe(1, { FineWood: 4, Iron: 10, BlackMetal: 10 }, { Iron: 4, BlackMetal: 4 }, 'KnifeSkollAndHati'),
@@ -301,6 +333,67 @@ export const recipes: ItemRecipe[] = [
   blackForgeRecipe(1, { Wood: 8, Iron: 1, Feathers: 2 }, {}, 'BoltIron', 20),
   blackForgeRecipe(1, { BlackMetal: 2, Wood: 8, Feathers: 2 }, {}, 'BoltBlackmetal', 20),
   blackForgeRecipe(1, { Carapace: 2, Wood: 8, Feathers: 2 }, {}, 'BoltCarapace', 20),
+  blackForgeRecipe(2, { FlametalNew: 6, LinenThread: 20, MorgenSinew: 4 }, {}, 'SaddleAsksvin'),
+  // ASH
+  // BowAshlands
+  blackForgeRecipe(2, { Blackwood: 10, CharredBone: 16, FlametalNew: 5, BonemawSerpentTooth: 5 },
+                      { Blackwood: 5, CharredBone: 10, FlametalNew: 5, BonemawSerpentTooth: 5 }, 'BowAshlands'),
+  blackForgeRecipe(2, { BowAshlands: 1, FlametalNew: 5, GemstoneRed: 1 }, { FlametalNew: 5, GemstoneRed: 1 }, 'BowAshlandsBlood'),
+  blackForgeRecipe(2, { BowAshlands: 1, FlametalNew: 5, GemstoneBlue: 1 }, { FlametalNew: 5, GemstoneBlue: 1 }, 'BowAshlandsLightning'),
+  blackForgeRecipe(2, { BowAshlands: 1, FlametalNew: 5, GemstoneGreen: 1 }, { FlametalNew: 5, GemstoneGreen: 1 }, 'BowAshlandsNature'),
+  // CrossbowRipper
+  blackForgeRecipe(2, { Blackwood: 10, MorgenSinew: 2, FlametalNew: 8, BonemawSerpentTooth: 4 },
+                      { Blackwood: 5, MorgenSinew: 1, FlametalNew: 4, BonemawSerpentTooth: 4 }, 'CrossbowRipper'),
+  blackForgeRecipe(2, { CrossbowRipper: 1, FlametalNew: 8, GemstoneRed: 1 }, { FlametalNew: 8, GemstoneRed: 1 }, 'CrossbowRipperBlood'),
+  blackForgeRecipe(2, { CrossbowRipper: 1, FlametalNew: 8, GemstoneBlue: 1 }, { FlametalNew: 8, GemstoneBlue: 1 }, 'CrossbowRipperLightning'),
+  blackForgeRecipe(2, { CrossbowRipper: 1, FlametalNew: 8, GemstoneGreen: 1 }, { FlametalNew: 8, GemstoneGreen: 1 }, 'CrossbowRipperNature'),
+  // SpearSplitner
+  blackForgeRecipe(2, { Blackwood: 10, FlametalNew: 6, AskHide: 2, BonemawSerpentTooth: 3 },
+                      { Blackwood: 5, FlametalNew: 6, AskHide: 1, BonemawSerpentTooth: 3 }, 'SpearSplitner'),
+  blackForgeRecipe(3, { SpearSplitner: 1, FlametalNew: 6, GemstoneRed: 1 }, { FlametalNew: 6, GemstoneRed: 1 }, 'SpearSplitner_Blood'),
+  blackForgeRecipe(3, { SpearSplitner: 1, FlametalNew: 6, GemstoneBlue: 1 }, { FlametalNew: 6, GemstoneBlue: 1 }, 'SpearSplitner_Lightning'),
+  blackForgeRecipe(3, { SpearSplitner: 1, FlametalNew: 6, GemstoneGreen: 1 }, { FlametalNew: 6, GemstoneGreen: 1 }, 'SpearSplitner_Nature'),
+  // AxeBerzerkr
+  blackForgeRecipe(2, { CharredBone: 15, FlametalNew: 24, AskHide: 3 }, { FlametalNew: 15, AskHide: 1 }, 'AxeBerzerkr'),
+  blackForgeRecipe(3, { AxeBerzerkr: 1, FlametalNew: 5, GemstoneRed: 1 }, { FlametalNew: 5, GemstoneRed: 1 }, 'AxeBerzerkrBlood'),
+  blackForgeRecipe(3, { AxeBerzerkr: 1, FlametalNew: 5, GemstoneBlue: 1 }, { FlametalNew: 5, GemstoneBlue: 1 }, 'AxeBerzerkrLightning'),
+  blackForgeRecipe(3, { AxeBerzerkr: 1, FlametalNew: 5, GemstoneGreen: 1 }, { FlametalNew: 5, GemstoneGreen: 1 }, 'AxeBerzerkrNature'),
+  // MaceEldner
+  blackForgeRecipe(2, { CharredBone: 10, FlametalNew: 15, SulfurStone: 5, AskHide: 3 },
+                      { CharredBone: 5, FlametalNew: 8, SulfurStone: 3, AskHide: 2 }, 'MaceEldner'),
+  blackForgeRecipe(3, { MaceEldner: 1, FlametalNew: 8, GemstoneRed: 1 }, { FlametalNew: 8, GemstoneRed: 1 }, 'MaceEldnerBlood'),
+  blackForgeRecipe(3, { MaceEldner: 1, FlametalNew: 8, GemstoneBlue: 1 }, { FlametalNew: 8, GemstoneBlue: 1 }, 'MaceEldnerLightning'),
+  blackForgeRecipe(3, { MaceEldner: 1, FlametalNew: 8, GemstoneGreen: 1 }, { FlametalNew: 8, GemstoneGreen: 1 }, 'MaceEldnerNature'),
+  // SwordNiedhogg
+  blackForgeRecipe(2, { CharredBone: 3, FlametalNew: 12, AskHide: 3 }, { FlametalNew: 10, AskHide: 2 }, 'SwordNiedhogg'),
+  blackForgeRecipe(3, { SwordNiedhogg: 1, FlametalNew: 6, GemstoneRed: 1 }, { FlametalNew: 6, GemstoneRed: 1 }, 'SwordNiedhoggBlood'),
+  blackForgeRecipe(3, { SwordNiedhogg: 1, FlametalNew: 6, GemstoneBlue: 1 }, { FlametalNew: 6, GemstoneBlue: 1 }, 'SwordNiedhoggLightning'),
+  blackForgeRecipe(3, { SwordNiedhogg: 1, FlametalNew: 6, GemstoneGreen: 1 }, { FlametalNew: 6, GemstoneGreen: 1 }, 'SwordNiedhoggNature'),
+  // SwordSlayer
+  blackForgeRecipe(2, { FlametalNew: 30, AskHide: 5, MorgenSinew: 3 }, { FlametalNew: 15, AskHide: 5, MorgenSinew: 3 }, 'THSwordSlayer'),
+  blackForgeRecipe(3, { SwordSlayer: 1, FlametalNew: 15, GemstoneRed: 1 }, { FlametalNew: 15, GemstoneRed: 1 }, 'THSwordSlayerBlood'),
+  blackForgeRecipe(3, { SwordSlayer: 1, FlametalNew: 15, GemstoneBlue: 1 }, { FlametalNew: 15, GemstoneBlue: 1 }, 'THSwordSlayerLightning'),
+  blackForgeRecipe(3, { SwordSlayer: 1, FlametalNew: 15, GemstoneGreen: 1 }, { FlametalNew: 15, GemstoneGreen: 1 }, 'THSwordSlayerNature'),
+
+  blackForgeRecipe(4, { DyrnwynHiltFragment: 1, DyrnwynBladeFragment: 1, DyrnwynTipFragment: 1,
+                        FlametalNew: 20, AskHide: 2, GemstoneRed: 1 },
+                      { FlametalNew: 2, AskHide: 2, GemstoneRed: 2 }, 'SwordDyrnwyn'),
+
+  blackForgeRecipe(2, { FlametalNew: 20, AskHide: 3, CharredBone: 5 }, { FlametalNew: 10, AskHide: 1 }, 'ArmorFlametalLegs'),
+  blackForgeRecipe(2, { FlametalNew: 20, AskHide: 3, CharredBone: 5 }, { FlametalNew: 10, AskHide: 1 }, 'ArmorFlametalChest'),
+  blackForgeRecipe(2, { FlametalNew: 16, AskHide: 3, CharredBone: 2, Eitr: 4 }, { FlametalNew: 8, AskHide: 1, Eitr: 2 }, 'HelmetFlametal'),
+  blackForgeRecipe(2, { LinenThread: 15, LoxPelt: 4, AskHide: 10 }, { LinenThread: 10, LoxPelt: 2, AskHide: 5 }, 'ArmorAshlandsMediumlegs'),
+  blackForgeRecipe(2, { LinenThread: 15, LoxPelt: 4, AskHide: 10 }, { LinenThread: 10, LoxPelt: 2, AskHide: 5 }, 'ArmorAshlandsMediumChest'),
+  blackForgeRecipe(2, { LinenThread: 15, LoxPelt: 4, AskHide: 10 }, { LinenThread: 10, LoxPelt: 2, AskHide: 5 }, 'HelmetAshlandsMediumHood'),
+  blackForgeRecipe(3, { FlametalNew: 5, MorgenSinew: 2, AskHide: 6 }, { AskHide: 2 }, 'CapeAsh'),
+  // blackForgeRecipe(2, { FlametalNew: 16, AskHide: 3, CharredBone: 2, Eitr: 4 }, { FlametalNew: 8, AskHide: 1, Eitr: 2 }, 'HelmetFlametal'),
+
+  blackForgeRecipe(3, { FineWood: 10, FlametalNew: 8, AskHide: 2 }, { FineWood: 10, FlametalNew: 4, AskHide: 2 }, 'ShieldFlametal'),
+  blackForgeRecipe(1, { FineWood: 15, FlametalNew: 10, AskHide: 5 }, { FineWood: 10, FlametalNew: 4, AskHide: 2 }, 'ShieldFlametalTower'),
+
+  blackForgeRecipe(1, { CharredBone: 2, Blackwood: 8, Feathers: 2 }, {}, 'BoltCharred', 20),
+  blackForgeRecipe(1, { CharredBone: 4, Blackwood: 8, Feathers: 2 }, {}, 'ArrowCharred', 20),
+
   // MAGE TABLE
   mageTableRecipe(1, { LinenThread: 20, Eitr: 20, Feathers: 10, ScaleHide: 5 }, { LinenThread: 2, Eitr: 2, Feathers: 2, ScaleHide: 2 }, 'ArmorMageChest'),
   mageTableRecipe(1, { LinenThread: 20, Eitr: 20, ScaleHide: 5 }, { LinenThread: 2, Eitr: 2, ScaleHide: 2 }, 'ArmorMageLegs'),
@@ -312,6 +405,22 @@ export const recipes: ItemRecipe[] = [
   mageTableRecipe(1, { YggdrasilWood: 20, FreezeGland: 4, Eitr: 16 }, { YggdrasilWood: 10, FreezeGland: 2, Eitr: 8 }, 'StaffIceShards'),
   mageTableRecipe(1, { Crystal: 1, Resin: 1 }, {}, 'TorchMist'), // disabled
   mageTableRecipe(1, { DvergrKeyFragment: 9 }, {}, 'DvergrKey'),
+  mageTableRecipe(2, { LinenThread: 16, Eitr: 15, AskHide: 2 },
+                     { LinenThread: 8, Eitr: 5, }, 'HelmetMage_Ashlands'),
+  mageTableRecipe(2, { LinenThread: 20, Eitr: 20, AskHide: 10, FlametalNew: 5 },
+                     { LinenThread: 10, Eitr: 5, FlametalNew: 2 }, 'ArmorMageChest_Ashlands'),
+  mageTableRecipe(2, { LinenThread: 20, Eitr: 20, AskHide: 10 },
+                     { LinenThread: 10, Eitr: 5, }, 'ArmorMageLegs_Ashlands'),
+  mageTableRecipe(2, { CharredBone: 15, Blackwood: 5, ProustitePowder: 8 },
+                     { CharredBone: 5, Blackwood: 3, ProustitePowder: 1 }, 'StaffClusterbomb'),
+  mageTableRecipe(2, { Blackwood: 15, Fiddleheadfern: 10, CelestialFeather: 3, GemstoneGreen: 1 },
+                     { Blackwood: 5, Fiddleheadfern: 2, CelestialFeather: 3, GemstoneGreen: 1 }, 'StaffGreenRoots'),
+  mageTableRecipe(2, { Blackwood: 10, FlametalNew: 4, CelestialFeather: 3, GemstoneRed: 1 },
+                     { Blackwood: 5, FlametalNew: 2, CelestialFeather: 3, GemstoneRed: 1 }, 'StaffLightning'),
+  mageTableRecipe(2, { AskHide: 6, MorgenSinew: 2 }, { AskHide: 2 }, 'CapeAsksvin'),
+  mageTableRecipe(2, { CharredBone: 15, TrophyFrostTroll: 1, FlametalNew: 3, GemstoneRed: 1 },
+                     { CharredBone: 5, TrophyFrostTroll: 1, FlametalNew: 3, GemstoneRed: 1 }, 'StaffRedTroll'),
+
   // MISC
   genericRecipe('piece_stonecutter', 1, STONECUTTER_TIME, { Stone: 5 }, {}, 'SharpeningStone'),
   genericRecipe('piece_spinningwheel', 1, SPIN_WHEEL_TIME, { Flax: 1 }, {}, 'LinenThread'),
@@ -323,6 +432,8 @@ export const recipes: ItemRecipe[] = [
   genericRecipe('piece_oven', 1, 50, { HoneyGlazedChickenUncooked: 1 }, {}, 'HoneyGlazedChicken'),
   genericRecipe('piece_oven', 1, 50, { MisthareSupremeUncooked: 1 }, {}, 'MisthareSupreme'),
   genericRecipe('piece_oven', 1, 50, { MagicallyStuffedShroomUncooked: 1 }, {}, 'MagicallyStuffedShroom'),
+  genericRecipe('piece_oven', 1, 50, { PiquantPieUncooked: 1 }, {}, 'PiquantPie'),
+  genericRecipe('piece_oven', 1, 50, { RoastedCrustPieUncooked: 1 }, {}, 'PiquantPie'),
   // TRADER
   haldorRecipe(100, 'HelmetYule'),
   haldorRecipe(620, 'HelmetDverger'),

@@ -1,4 +1,5 @@
-import type { Cart, DamageModifiers, Ship } from '../types';
+import { dmg, mods } from '../model/game';
+import type { Cart, DamageModifiers, Ship, Siege } from '../types';
 
 const shipDamageModifiers: DamageModifiers = {
   blunt: 'normal',
@@ -150,6 +151,56 @@ export const ships: Ship[] = [
       station: 'piece_workbench',
     },
   },
+  {
+    type: 'ship',
+    group: 'ship',
+    id: 'VikingShip_Ashlands',
+    components: ['Container', 'Ship', 'Destructible'],
+    tier: 7,
+    emoji: '🚢',
+    wear: {
+      hp: 3000,
+      damageModifiers: {
+        ...shipDamageModifiers,
+        fire: 'resistant',
+      },
+    },
+    piece: {
+      target: 'primary',
+      water: true,
+      size: [12.5, 18, 12.6],
+    },
+    sailWidth: 15.6,
+    sail: {
+      forceDistance: 3,
+      force: 1,
+      damping: 0.05,
+      dampingSideway: 0.15,
+      dampingForward: 0.002,
+      angularDamping: 0.95,
+      sailForceOffset: 2,
+      sailForceFactor: 0.085,
+      rudderForce: 0.5,
+      waterLevelOffset: 2.1,
+      disableLevel: -0.5,
+    },
+    speed: {
+      rudder: NaN,
+      half: [NaN, NaN, NaN, NaN, NaN],
+      full: [NaN, NaN, NaN, NaN, NaN],
+    },
+    storage: [8, 4],
+    recipe: {
+      type: 'craft_piece',
+      materials: {
+        IronNails: 100,
+        CeramicPlate: 30,
+        FineWood: 60,
+        YggdrasilWood: 25,
+      },
+      station: 'piece_workbench',
+    },
+  },
 /*  {
     type: 'ship',
     group: 'ship',
@@ -219,6 +270,56 @@ export const carts: Cart[] = [
     recipe: {
       type: 'craft_piece',
       materials: { Wood: 20, BronzeNails: 10 },
+      station: 'piece_workbench',
+    },
+  },
+];
+
+export const siege: Siege[] = [
+  {
+    type: 'siege',
+    id: 'BatteringRam',
+    components: ['Container', 'Destructible'],
+    tier: 7,
+    emoji: '🐏',
+    wear: {
+      hp: 3000,
+      damageModifiers: mods([0, 0, 1, 0, 0, 4, 1, 0, 3, 3]),
+    },
+    piece: {
+      target: 'primary',
+      water: undefined,
+      size: [4, 3.5, 5.5],
+    },
+    Siege: {
+      fuel: ['Wood', 'FineWood', 'RoundLog'],
+      damage: dmg({ pickaxe: 600 }),
+      toolTier: 5,
+    },
+    recipe: {
+      type: 'craft_piece',
+      materials: { Blackwood: 20, FlametalNew: 10, SurtlingCore: 2 },
+      station: 'piece_workbench',
+    },
+  },
+  {
+    type: 'siege',
+    id: 'Catapult',
+    components: ['Container', 'Destructible'],
+    tier: 7,
+    emoji: '🐱',
+    wear: {
+      hp: 3000,
+      damageModifiers: mods([0, 0, 1, 0, 0, 4, 1, 0, 3, 3]),
+    },
+    piece: {
+      target: 'primary',
+      water: undefined,
+      size: [3.9, 4, 6.5],
+    },
+    recipe: {
+      type: 'craft_piece',
+      materials: { Blackwood: 20, FlametalNew: 10, CharredCogwheel: 1 },
       station: 'piece_workbench',
     },
   },

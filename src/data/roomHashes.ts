@@ -1,6 +1,6 @@
 import { stableHashCode } from '../model/hash';
 import {
-  dvergrTown, forestcrypt, frostCaves, gobvill, sunkencrypt, woodfarm, woodvillage,
+  charredRuins, dvergrTown, forestcrypt, fortressRuins, frostCaves, gobvill, sunkencrypt, woodfarm, woodvillage,
   CampConfig, DungeonRoomsConfig,
 } from './rooms';
 
@@ -30,3 +30,5 @@ addDungeon(frostCaves);
 addCamp(gobvill);
 addCamp(woodfarm);
 addCamp(woodvillage);
+addCamp(charredRuins);
+addCamp(fortressRuins);

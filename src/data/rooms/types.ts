@@ -65,4 +65,6 @@ export enum Theme {
   ForestCryptHildir = 512,
   CaveHildir = 1024,
   PlainsFortHildir = 2048,
+  CharredRuins = 4096,
+  FortressRuins = 8192,
 }

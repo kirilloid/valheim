@@ -93,6 +93,9 @@ function WeaponStats({ item, level }: { item: TWeapon, level?: number }) {
       {baseDmg + lvlDmg > 0 && <React.Fragment key="damage">
       <dt>{translate('ui.damage')}</dt><dd>{showPair([baseDmg, lvlDmg], level)}</dd>
       </React.Fragment>}
+      {item.damageMultiplierPerMissingHP ? <>
+        <dt>hit effect</dt><dd>damage increased by {showPercent(item.damageMultiplierPerMissingHP)} for every hp missing</dd>
+      </> : null}
       {item.hitEffect ? <>
         <dt>hit effect</dt><dd>{showPercent(item.hitEffect.chance)} <InlineObjectWithIcon id={item.hitEffect.id} /></dd>
       </> : null}

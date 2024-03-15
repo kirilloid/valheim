@@ -26,6 +26,7 @@ type MapPin = {
   type: PinType;
   crossed: boolean;
   ownerID: bigint;
+  author: string;
 };
 
 export type Data = {
@@ -71,12 +72,14 @@ export function read(data: Uint8Array): Data {
       const type = reader.readInt();
       const crossed = version >= 3 && reader.readBool();
       const ownerID = version >= 6 ? reader.readLong() : BigInt(0);
+      const author = version >= 8 ? reader.readString() : "";
       pins.push({
         name,
         crossed,
         ownerID,
         pos,
         type,
+        author,
       });
     }
   }
@@ -117,12 +120,13 @@ export function write({
   }
   if (version >= 2) {
     writer.writeInt(pins.length);
-    for (const { name, pos, type, crossed, ownerID } of pins) {
+    for (const { name, pos, type, crossed, ownerID, author } of pins) {
       writer.writeString(name);
       writer.writeVector3(pos);
       writer.writeInt(type);
       if (version >= 3) writer.writeBool(crossed);
       if (version >= 6) writer.writeLong(ownerID);
+      if (version >= 8) writer.writeString(author);
     }
   }
   if (version >= 4) writer.writeBool(sharePosition);
