@@ -27,7 +27,7 @@ export const prefabNames: string[] = [
   'dead_deer',
   'Deathsquito_sting', 'DeerGodExplosion',
   'DevHouse1', 'DevSoundTest',
-  'DG_Cave', 'DG_DvergrBoss', 'DG_DvergrTown', 'DG_ForestCrypt', 'DG_GoblinCamp', 'DG_MeadowsFarm', 'DG_MeadowsVillage', 'DG_SunkenCrypt',
+  'DG_AshlandRuins', 'DG_Cave', 'DG_DvergrBoss', 'DG_DvergrTown', 'DG_ForestCrypt', 'DG_FortressRuins', 'DG_GoblinCamp', 'DG_MeadowsFarm', 'DG_MeadowsVillage', 'DG_SunkenCrypt',
   'DG_Hildir_Cave', 'DG_Hildir_ForestCrypt', 'DG_Hildir_PlainsFortress',
   'DG_MeadowsFarm', 'DG_MeadowsVillage', 'DG_SunkenCrypt',
   'digg', 'digg_v2', 'digg_v3',
