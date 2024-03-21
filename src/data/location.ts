@@ -13,7 +13,7 @@ import type {
 } from '../types';
 
 import { locItem } from '../model/game';
-import { DungeonRoomsConfig, forestcrypt, frostCaves, sunkencrypt } from '../data/rooms';
+import { DungeonRoomsConfig, forestcrypt, frostCaves, sunkencrypt, hildirCaves } from '../data/rooms';
 
 import { fullDestructible, objects } from './objects';
 import { data } from './itemDB';
@@ -171,7 +171,8 @@ export const locations: LocationConfig[] = [
   // locations, sortOrder: 3
   loc(
     1, 'StoneCircle', ['Meadows'],
-    { quantity: 25, minApart: 200, maxDistance: 10000, radius: [20, 16], items: [] },
+    { quantity: 25, minApart: 200, maxDistance: 10000, radius: [20, 16],
+      items: [locItem('Stone1_huge', 1, 5)] },
   ),
   // meadows
   loc(
@@ -183,14 +184,21 @@ export const locations: LocationConfig[] = [
         locItem('BossStone_Eikthyr'),
         locItem('BossStone_TheElder'),
         locItem('BossStone_Yagluth'),
+        locItem('BossStone_TheQueen'),
         locItem('Vegvisir_Eikthyr'),
         locItem('Raspberry', 1, 2),
         locItem('Mushroom', 1, 2),
+        // branches: Pickable_Branch
         locItem('Wood', 1, 2),
-        locItem('Wood', 0.75, 2),
-        locItem('Stone', 0.75, 2),
-        locItem('Stone', 0.125, 2),
+        locItem('Wood', 0.744),
+        locItem('Wood', 0.758),
+        // stone
+        locItem('Stone', 0.5),
+        locItem('Stone', 0.739),
         locItem('Stone', 1, 3),
+        locItem('Stone', 0.506),
+        locItem('Stone', 0.702),
+        locItem('Stone', 0.488),
       ],
     },
   ),
@@ -1003,14 +1011,79 @@ export const locations: LocationConfig[] = [
     2, 'Vendor_BlackForest', ['BlackForest'],
     { biomeArea: 2, quantity: 10, prioritized, unique, minApart: 512, iconPlaced, terrainDelta: [0, 2], minDistance: 1500, radius: [20, 12],
       customMusic: 'Music_Haldor2',
-      items: [locItem('Haldor')]
+      items: [
+        locItem('Halstein'),
+        locItem('trader_wagon'),
+        locItem('Haldor'),
+        locItem('ForceField'), // 25
+        // RuneStones
+        locItem('TraderRune', 1, 4),
+        // stuff
+        locItem([
+          locItem('TraderChest_static', 1, 6),
+          locItem('barrell_static', 1, 5),
+          locItem('fi_vil_container_barrel_small', 1, 7),
+        ]),
+        locItem('TraderTent'),
+        locItem('TraderLamp'),
+        locItem('fire_pit_haldor'),
+        // carrots
+      ]
     },
   ),
   loc(
     2, 'Hildir_camp', ['Meadows'],
     { biomeArea: 3, quantity: 10, prioritized, unique, minApart: 1000, iconPlaced, terrainDelta: [0, 2], minDistance: 3000, radius: [20, 24],
       customMusic: 'Music_Hildir',
-      items: [locItem('Hildir')]
+      items: [
+        locItem('ForceField'), // 32
+        // RuneStones
+        locItem('TraderRune', 1, 4),
+        // chest1
+        locItem([
+          locItem('hildir_chest1'),
+          locItem('hildir_clothesrack1', 1, 2),
+          locItem('hildir_fabricsroll1', 1, 6),
+          locItem('hildir_table1'),
+        ]),
+        // chest2
+        locItem([
+          locItem('hildir_chest2'),
+          locItem('hildir_table2'),
+          locItem('hildir_fabricsroll1', 1, 5),
+          locItem('hildir_fabricsroll2', 1, 6),
+          locItem('hildir_table1'),
+        ]),
+        // chest3
+        locItem([
+          locItem('hildir_chest3'),
+          locItem('hildir_table2'),
+          locItem('hildir_clothesrack2'),
+          locItem('hildir_clothesrack3', 1, 2),
+          locItem('hildir_fabricsroll1', 1, 4),
+          locItem('hildir_table'),
+          locItem('hildir_hatstand'),
+          locItem('hildir_hatstand1'),
+          locItem('hildir_hatstand2'),
+        ]),
+        // stuff
+        locItem([
+          locItem('hildir_tent'),
+          locItem('hildir_maptable'),
+          locItem('hildir_barrel', 1, 6),
+          locItem('hildir_flowergirland', 1, 6),
+          locItem('hildir_divan'),
+          locItem('hildir_divan1'),
+          locItem('hildir_carpet', 1, 9),
+          locItem('hildir_lantern', 1, 3),
+          locItem('hildir_tent2', 1, 2),
+        ]),
+        locItem('fire_pit_hildir'),
+        locItem('Hildir'),
+        locItem('hildir_wagon'),
+        locItem('HildirsLox', 1, 2),
+        // turnips
+      ]
     },
   ),
   loc(
@@ -1037,7 +1110,22 @@ export const locations: LocationConfig[] = [
     { components: [],
       biomeArea: 2, quantity: 3, prioritized,
       minApart: 2000, terrainDelta: [0, 40], minAlt: 200, radius: [32, 15], minDistance: 1000,
-      items: [locItem('Fenring_Cultist_Hildir')],
+      dungeon: hildirCaves,
+      items: [
+        // interior
+        locItem('Fenring_Cultist_Hildir'),
+        // exterior
+        // room
+        locItem('caverock_pillar', 0.75, 4),
+        locItem('caverock_curvedrock', 1, 23),
+        // icegroup
+        locItem([
+          locItem('caverock_ice_stalagmite'),
+          locItem('caverock_ice_stalagtite'),
+        ], 0.75, 4),
+        locItem('MountainKit_brazier_blue', 1, 2),
+        locItem('ice_rock1', 1, 3),
+      ],
     },
     'Hildir_cave',
   ),
@@ -1602,10 +1690,116 @@ export const locations: LocationConfig[] = [
       randomRotation: false, slopeRotation,
       terrainDelta: [2, 40], minAlt: -1, maxAlt: 15, radius: [20, 24],
       items: [
+        locItem([ // GameObject
+          // bridge
+          locItem('blackmarble_arch', 0.9, 12),
+          locItem('blackmarble_2x2x2', 1, 20),
+          locItem('blackmarble_head_big02'),
+          locItem('blackmarble_head_big01'),
+          locItem('iron_floor_2x2', 1, 14),
+          // pillar
+          locItem('blackmarble_outcorner', 1, 8),
+          locItem('blackmarble_out_1', 1, 20),
+          locItem('blackmarble_2x2x2', 1, 21),
+          locItem('blackmarble_2x2_enforced', 1, 8),
+          locItem('cliff_mistlands2'),
+          locItem('iron_wall_2x2', 1, 26),
+          locItem('vines', 1, 89),
+        ]),
+        locItem([ // GameObject (1)
+          // bridge
+          locItem('blackmarble_arch', 0.9, 8),
+          locItem('blackmarble_2x2x2', 1, 16),
+          locItem('blackmarble_2x2x2', 0.5, 4),
+          locItem('vines', 0.5, 14),
+          locItem('iron_floor_2x2', 1, 14),
+          locItem('iron_wall_2x2', 1, 2),
+          locItem([ // random (0) + (1)
+            locItem('blackmarble_arch', 0.9, 2),
+            locItem('blackmarble_2x2x2'),
+            locItem('iron_floor_2x2'),
+          ], 0.5, 2),
+          locItem([ // random (2) + (3)
+            locItem('blackmarble_2x2x2', 0.5),
+            locItem('iron_floor_2x2'),
+          ], 0.5, 2),
+          locItem([ // random
+            locItem('blackmarble_2x2x2', 1, 3),
+            locItem('blackmarble_outcorner', 1, 2),
+            locItem('blackmarble_head_big02'),
+            locItem('blackmarble_arch', 0.9, 2),
+          ], 0.5),
+          locItem([ // random
+            locItem('blackmarble_arch', 0.9, 2),
+            locItem('blackmarble_2x2x2', 1, 2),
+            locItem('blackmarble_head_big01'),
+            locItem('blackmarble_outcorner', 1, 2),
+            locItem('blackmarble_2x2x1'),
+          ], 0.5),
+          locItem('blackmarble_out_1', 1, 7),
+          locItem('blackmarble_2x2x1'),
+          locItem('blackmarble_outcorner', 1, 4),
+          // pillar
+          locItem('blackmarble_out_1', 1, 13),
+          locItem('blackmarble_2x2x2', 1, 18),
+          locItem('blackmarble_2x2_enforced', 1, 8),
+          locItem('blackmarble_column_3', 1, 4),
+          locItem('blackmarble_2x2x1', 1, 2),
+          locItem('iron_wall_2x2', 1, 24),
+          locItem('vines', 1, 75),
+          locItem('cliff_mistlands2'),
+        ], 0.8),
+        locItem([ // GameObject (2)
+          // bridge
+          locItem('vines', 0.5, 36),
+          locItem('blackmarble_arch', 0.9, 4),
+          locItem('blackmarble_2x2x2', 1, 19),
+          locItem('blackmarble_2x2x2', 0.5, 3),
+          locItem([ // random (0) + (1)
+            locItem('blackmarble_arch', 0.9, 2),
+            locItem('blackmarble_2x2x2'),
+            locItem('iron_floor_2x2'),
+          ], 0.5, 2),
+          locItem('iron_floor_2x2', 1, 14),
+          locItem('blackmarble_out_1', 20),
+          locItem('blackmarble_outcorner', 1, 4),
+          locItem('blackmarble_2x2x1', 1, 3),
+          locItem('blackmarble_2x2_enforced', 1, 2),
+          locItem('iron_wall_2x2', 1, 7),
+          locItem([ // random
+            locItem('blackmarble_arch', 0.9, 4),
+            locItem('blackmarble_2x2x2', 1, 3),
+            locItem('blackmarble_2x2x2', 0.5),
+            locItem([
+              locItem('blackmarble_2x2x2', 0.5),
+              locItem('iron_floor_2x2'),
+            ], 0.5, 2),
+          ], 0.5, 2),
+          locItem([ // random
+            locItem('blackmarble_arch', 0.9, 2),
+            locItem('blackmarble_2x2x2', 1, 3),
+            locItem('blackmarble_head_big02'),
+            locItem('blackmarble_outcorner', 1, 2),
+          ], 0.5),
+          locItem([ // random
+            locItem('blackmarble_arch', 0.9, 2),
+            locItem('blackmarble_head_big01'),
+            locItem('blackmarble_2x2x2', 1, 3),
+            locItem('blackmarble_outcorner', 1, 2),
+            locItem('blackmarble_2x2x1'),
+          ], 0.5),
+          // pillar
+          locItem('vines', 1, 53),
+          locItem('blackmarble_2x2_enforced', 1, 6),
+          locItem('cliff_mistlands2'),
+          locItem('blackmarble_column_3', 1, 4),
+          locItem('blackmarble_2x2x2', 1, 11),
+          locItem('iron_wall_2x2', 1, 19),
+        ], 0.8),
         // MIST AREA R=30 chance=0.25
       ],
     },
-    'Mistlands_Harbour',
+    'Mistlands_Viaduct',
   ),
   loc(
     6, 'Mistlands_Viaduct2', ['Mistlands'],
@@ -1613,10 +1807,35 @@ export const locations: LocationConfig[] = [
       biomeArea: 2, quantity: 150, group: 'Harbour', minApart: 64,
       terrainDelta: [4, 40], minAlt: -1, maxAlt: 25, radius: [20, 8],
       items: [
+        // bridge
+        locItem('iron_wall_2x2'),
+        locItem('vines', 1, 12),
+        locItem('blackmarble_out_1', 1, 4),
+        locItem('blackmarble_outcorner', 1, 5),
+        locItem('blackmarble_2x2x2', 1, 19),
+        locItem('blackmarble_2x2x2', 0.5, 7),
+        locItem('blackmarble_arch', 0.9, 12),
+        locItem('blackmarble_head_big02'),
+        locItem('blackmarble_head_big01'),
+        locItem('iron_floor_2x2', 1, 16),
+        locItem([
+          locItem('blackmarble_2x2x2', 0.5),
+          locItem('iron_floor_2x2'),
+        ], 0.5),
+
+        // pillar
+        locItem('blackmarble_out_1', 1, 16),
+        locItem('blackmarble_2x2x2', 1, 19),
+        locItem('blackmarble_2x2_enforced', 1, 8),
+        locItem('blackmarble_column_3', 1, 4),
+        locItem('cliff_mistlands2'),
+        locItem('blackmarble_outcorner', 1, 3),
+        locItem('vines', 1, 87),
+        locItem('iron_wall_2x2', 1, 25),
         // MIST AREA R=20 chance=0.25
       ],
     },
-    'Mistlands_Harbour',
+    'Mistlands_Viaduct',
   ),
   loc(
     6, 'Mistlands_RockSpire1', ['Mistlands'],
@@ -1624,7 +1843,37 @@ export const locations: LocationConfig[] = [
       biomeArea: 2, quantity: 200, minApart: 60,
       terrainDelta: [2, 99], minAlt: -10, radius: [20, 4],
       items: [
-        locItem('cliff_mistlands2', 1, 9),
+        locItem('cliff_mistlands2', 1, 10),
+        locItem([
+          locItem('blackmarble_post01'),
+          locItem('dverger_demister'),
+        ], 0.2, 2),
+        locItem([ // statues
+          // statue (1)
+          locItem('blackmarble_head_big02'),
+          locItem([ // random
+            locItem('blackmarble_floor'),
+            locItem('blackmarble_column_1', 0.5),
+          ], 0.5),
+          locItem('blackmarble_2x2x2'),
+          // statue (2)
+          locItem('blackmarble_head_big01'),
+          locItem('blackmarble_slope_1x2', 0.5),
+          locItem('blackmarble_2x2x2'),
+        ], 0.2),
+        locItem([ // statues
+          // statue (3)
+          locItem('blackmarble_head_big02'),
+          locItem('blackmarble_column_2', 0.5),
+          locItem('blackmarble_2x2x2'),
+          // statue (4)
+          locItem([ // random
+            locItem('blackmarble_floor'),
+            locItem('blackmarble_slope_1x2', 0.5),
+          ], 0.5),
+          locItem('blackmarble_head_big01'),
+          locItem('blackmarble_2x2x2'),
+        ], 0.2),
       ],
     },
     'Mistlands_RockSpire',
@@ -2139,7 +2388,7 @@ export function getLocationDetails(typeId: GameLocationId): LocationConfig | und
   let biomeArea = 0;
   const distance: Pair<number> = [10000, 0];
   const altitude: Pair<number> = [1000, -1000];
-  const terrainDelta: Pair<number> = [10, 0];
+  const terrainDelta: Pair<number> = [90, 0];
   let needsKey: EntityId | undefined;
   for (const loc of locs) {
     if (!computedLocations.has(loc.id)) {

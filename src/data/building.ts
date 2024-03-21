@@ -378,7 +378,7 @@ export const pieces: Piece[] = [
       noSupport: true,
       materialType: MaterialType.Wood,
     },
-    recipe: { type: 'craft_piece', materials: { Coal: 50, }, station: null, }
+    recipe: { type: 'craft_piece', materials: { Stone: 50 }, station: null, }
   },
   {
     id: 'coal_pile',
@@ -387,7 +387,7 @@ export const pieces: Piece[] = [
     subtype: 'misc',
     group: 'stack',
     tier: 1,
-    emoji: '',
+    emoji: '◼',
     piece: { target: 'random', water: undefined, allowedInDungeons, size: [1.5, 1, 1.5] },
     wear: {
       hp: 50,
@@ -395,7 +395,7 @@ export const pieces: Piece[] = [
       noRoof: false,
       noSupport: true,
     },
-    recipe: { type: 'craft_piece', materials: { Stone: 50, }, station: null, }
+    recipe: { type: 'craft_piece', materials: { Coal: 50 }, station: null, }
   },
   {
     id: 'blackmarble_pile',
@@ -404,7 +404,7 @@ export const pieces: Piece[] = [
     subtype: 'misc',
     group: 'stack',
     tier: 6,
-    emoji: '',
+    emoji: '⬛',
     piece: { target: 'random', water: undefined, allowedInDungeons, size: [1.6, 1, 1.6] },
     wear: {
       hp: 100,
@@ -2890,10 +2890,9 @@ export const pieces: Piece[] = [
     components: [],
     subtype: 'decoration',
     emoji: '💈',
-    tier: 5,
+    tier: 2,
     comfort: { value: 2, group: 'chair' },
-    // lightRadius: 4,
-    piece: { target: 'random', water: false, onlyOnFlat, size: [0, 0, 0] },
+    piece: { target: 'random', water: false, onlyOnFlat, size: [2, 1.5, 1.3] },
     wear: wearStructure(200, woodResist, MaterialType.Wood, { noRoof: false }),
     recipe: { type: 'craft_piece', materials: { FineWood: 10, BarberKit: 1, BronzeNails: 5, TrollHide: 5 }, station: 'piece_workbench' },
   },

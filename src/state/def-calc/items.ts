@@ -1,4 +1,4 @@
-import type { Bomb, DamageModifiers, Effect, EntityId, Item, Shield, Weapon } from '../../types';
+import type { DamageModifiers, Effect, EntityId, Item, Shield, Weapon } from '../../types';
 
 import { items as armors } from '../../data/armors';
 import { effects } from '../../data/effects';

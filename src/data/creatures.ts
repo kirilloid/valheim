@@ -468,7 +468,7 @@ export const creatures: Creature[] = [
     group: 'semiboss',
     ragdollId: null,
     components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI', 'VisEquipment'],
-    tier: 3,
+    tier: 2,
     emoji: '☠️',
     faction: 'Undead',
     spawners: [],

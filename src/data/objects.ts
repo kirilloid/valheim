@@ -1107,6 +1107,14 @@ export const objects: PhysicalObject[] = [
     PointLight: { color: '#66CDFF', range: 5, intensity: 1.5 },
     drop: [singleDrop('MushroomMagecap', 3)],
   },
+  {
+    type: 'object',
+    subtype: 'indestructible',
+    id: 'Stone1_huge',
+    tier: 0,
+    grow: [],
+    // size: [6, 13, 6],
+  },
   ...rock({
     id: ['rock4_coast', 'rock4_coast_frac'],
     grow: itemGrow({
@@ -1788,6 +1796,19 @@ export const objects: PhysicalObject[] = [
         { prefab: 'Skeleton', weight: 1, level: [1, 3] },
       ],
     },
+  },
+  {
+    id: 'crypt_skeleton_chest',
+    type: 'object',
+    subtype: 'misc',
+    Destructible: {
+      hp: 50,
+      minToolTier: 0,
+      damageModifiers: mods([0, 0, 0, 0, 0, 0, 0, 1, 4, 4]),
+      parts: [],
+    },
+    drop: [singleDrop('Skeleton')],
+    tier: 2,
   },
   {
     type: 'object',

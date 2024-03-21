@@ -78,6 +78,7 @@ export const extraData: Record<string, GameComponent[]> = {
   BossStone_Eikthyr: ['ItemStand'],
   BossStone_TheElder: ['ItemStand'],
   BossStone_Yagluth: ['ItemStand'],
+  BossStone_TheQueen: ['ItemStand'],
 
   shipwreck_karve_bottomboards: ['Destructible'],
   shipwreck_karve_bow: ['Destructible'],

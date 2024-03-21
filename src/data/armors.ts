@@ -1,7 +1,7 @@
 import type { Item, ItemSet } from '../types';
-import { SkillType } from '../model/skills';
 import { effects } from './effects';
 
+const effectsById = Object.fromEntries(effects.map(e => [e.id, e]));
 
 const trollSet: ItemSet = {
   name: 'troll',
@@ -10,12 +10,7 @@ const trollSet: ItemSet = {
     undefined,
     undefined,
     undefined,
-    {
-      type: 'effect',
-      id: 'trollArmorSet',
-      tier: 2,
-      attackModifier: [SkillType.Sneak, 15],
-    }
+    effectsById.SetEffect_TrollArmor,
   ],
 };
 
@@ -25,12 +20,7 @@ const rootSet: ItemSet = {
   bonus: [
     undefined,
     undefined,
-    {
-      type: 'effect',
-      id: 'rootArmorSet',
-      tier: 3,
-      attackModifier: [SkillType.Bows, 15]
-    }
+    effectsById.SetEffect_RootArmor,
   ],
 };
 
@@ -40,13 +30,7 @@ const fenringSet: ItemSet = {
   bonus: [
     undefined,
     undefined,
-    {
-      type: 'effect',
-      id: 'fenringArmorSet',
-      tier: 4,
-      damageModifiers: { fire: 'resistant' },
-      attackModifier: [SkillType.Unarmed, 15],
-    }
+    effectsById.SetEffect_FenringArmor,
   ],
 };
 
@@ -118,10 +102,10 @@ export const items: Item[] = [
     moveSpeed: 0,
   },
   // decorative dresses
-  ...[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].flatMap((nr): Item[] => [
+  ...[2, 4, 5, 2, 4, 5, 2, 4, 5, 1].map<Item>((tier, i) => (
     {
-      id: `ArmorDress${nr}`,
-      tier: 1,
+      id: `ArmorDress${i + 1}`,
+      tier,
       type: 'armor', slot: 'body',
       armor: [1, 1],
       weight: 10,
@@ -129,10 +113,12 @@ export const items: Item[] = [
       durability: [1000, 200],
       staminaModifiers: { home: -0.2 },
       moveSpeed: 0,
-    },
+    }
+  )),
+  ...[2, 4, 5, 2, 4, 5, 2, 4, 5, 1].map<Item>((tier, i) => (
     {
-      id: `ArmorTunic${nr}`,
-      tier: 1,
+      id: `ArmorTunic${i + 1}`,
+      tier,
       type: 'armor', slot: 'shoulders',
       armor: [1, 1],
       weight: 10,
@@ -140,10 +126,12 @@ export const items: Item[] = [
       durability: [1000, 200],
       staminaModifiers: { home: -0.2 },
       moveSpeed: 0,
-    },
+    }
+  )),
+  ...[2, 4, 2, 4, 1, 4, 5, 5, 5, 1].map<Item>((tier, i) => (
     {
-      id: `HelmetHat${nr}`,
-      tier: 1,
+      id: `HelmetHat${i + 1}`,
+      tier,
       type: 'armor', slot: 'head',
       armor: [1, 2],
       weight: 3,
@@ -151,8 +139,8 @@ export const items: Item[] = [
       durability: [800, 100],
       staminaModifiers: { home: -0.15 },
       moveSpeed: 0,
-    },
-  ]),
+    }
+  )),
   // troll
   { id: 'ArmorTrollLeatherLegs',
     tier: 1,

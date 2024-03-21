@@ -9,7 +9,7 @@ export function ResourceRoot({ params }: { params: T.ResourceRoot }) {
   const translate = useContext(TranslationContext);
   const regenTime = params.maxLevel / params.regenPerSec;
   return <section>
-    <h2>Resource node</h2>
+    <h2>{translate('ygga_root')}</h2>
     <dl>
       <dt>max level</dt><dd>{params.maxLevel}</dd>
       <dt>regenerates in</dt><dd>{showNumber(days(regenTime))} days</dd>
