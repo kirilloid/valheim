@@ -371,9 +371,9 @@ export const recipes: ItemRecipe[] = [
   blackForgeRecipe(3, { SwordNiedhogg: 1, FlametalNew: 6, GemstoneGreen: 1 }, { FlametalNew: 6, GemstoneGreen: 1 }, 'SwordNiedhoggNature'),
   // SwordSlayer
   blackForgeRecipe(2, { FlametalNew: 30, AskHide: 5, MorgenSinew: 3 }, { FlametalNew: 15, AskHide: 5, MorgenSinew: 3 }, 'THSwordSlayer'),
-  blackForgeRecipe(3, { SwordSlayer: 1, FlametalNew: 15, GemstoneRed: 1 }, { FlametalNew: 15, GemstoneRed: 1 }, 'THSwordSlayerBlood'),
-  blackForgeRecipe(3, { SwordSlayer: 1, FlametalNew: 15, GemstoneBlue: 1 }, { FlametalNew: 15, GemstoneBlue: 1 }, 'THSwordSlayerLightning'),
-  blackForgeRecipe(3, { SwordSlayer: 1, FlametalNew: 15, GemstoneGreen: 1 }, { FlametalNew: 15, GemstoneGreen: 1 }, 'THSwordSlayerNature'),
+  blackForgeRecipe(3, { THSwordSlayer: 1, FlametalNew: 15, GemstoneRed: 1 }, { FlametalNew: 15, GemstoneRed: 1 }, 'THSwordSlayerBlood'),
+  blackForgeRecipe(3, { THSwordSlayer: 1, FlametalNew: 15, GemstoneBlue: 1 }, { FlametalNew: 15, GemstoneBlue: 1 }, 'THSwordSlayerLightning'),
+  blackForgeRecipe(3, { THSwordSlayer: 1, FlametalNew: 15, GemstoneGreen: 1 }, { FlametalNew: 15, GemstoneGreen: 1 }, 'THSwordSlayerNature'),
 
   blackForgeRecipe(4, { DyrnwynHiltFragment: 1, DyrnwynBladeFragment: 1, DyrnwynTipFragment: 1,
                         FlametalNew: 20, AskHide: 2, GemstoneRed: 1 },
@@ -433,7 +433,7 @@ export const recipes: ItemRecipe[] = [
   genericRecipe('piece_oven', 1, 50, { MisthareSupremeUncooked: 1 }, {}, 'MisthareSupreme'),
   genericRecipe('piece_oven', 1, 50, { MagicallyStuffedShroomUncooked: 1 }, {}, 'MagicallyStuffedShroom'),
   genericRecipe('piece_oven', 1, 50, { PiquantPieUncooked: 1 }, {}, 'PiquantPie'),
-  genericRecipe('piece_oven', 1, 50, { RoastedCrustPieUncooked: 1 }, {}, 'PiquantPie'),
+  genericRecipe('piece_oven', 1, 50, { RoastedCrustPieUncooked: 1 }, {}, 'RoastedCrustPie'),
   // TRADER
   haldorRecipe(100, 'HelmetYule'),
   haldorRecipe(620, 'HelmetDverger'),

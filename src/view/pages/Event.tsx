@@ -97,6 +97,7 @@ const kills: EntityId[] = [
   'Bat', 'Fenring_Cultist_Hildir', 'Dragon',
   'GoblinBruteBros', 'GoblinKing',
   'SeekerQueen',
+  'Fader',
 ];
 const biomes: Biome[] = ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains', 'Mistlands'];
 

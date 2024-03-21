@@ -1250,13 +1250,21 @@ export const objects: PhysicalObject[] = [
     },
     grow: [],
     drop: [
-      singleDrop('VineBerry', 3),
+      singleDrop('Vineberry', 3),
       {
         chance: 0.2,
         num: [1, 3],
         options: [{ item: 'VineberrySeeds', num: [1, 3] }],
       }
     ],
+  },
+  {
+    type: 'object',
+    subtype: 'indestructible',
+    id: 'Stone1_huge',
+    tier: 0,
+    grow: [],
+    // size: [6, 13, 6],
   },
   ...rock({
     id: ['rock4_coast', 'rock4_coast_frac'],
@@ -3042,7 +3050,7 @@ export const objects: PhysicalObject[] = [
     }),
     children: 67,
     hp: 70,
-    drop: singleDrop('Sulfur', 4, 8),
+    drop: singleDrop('SulfurStone', 4, 8),
   }),
   ...rock({
     id: ['cliff_ashlands4', 'cliff_ashlands4_frac'],
@@ -3416,6 +3424,27 @@ export const objects: PhysicalObject[] = [
     drop: drop?.length === 2 ? [singleDrop('Grausten', ...drop)] : [],
   })),
   {
+    id: 'piece_Charred_Balista',
+    tier: 7,
+    type: 'object',
+    subtype: 'misc',
+    components: ['Turret'],
+    // Turret: {
+    //   attackCooldown: 2,
+    //   allowedAmmo: ['TurretBoltBone'],
+    // },
+    Destructible: {
+      hp: 400,
+      damageModifiers: mods([0, 0, 1, 0, 1, 1, 1, 1, 3, 0]),
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [
+      singleDrop('BoneFragments', 3),
+      singleDrop('CharredCogwheel'),
+    ],
+  },
+  {
     id: 'FernAshlands',
     tier: 7,
     type: 'object',
@@ -3561,6 +3590,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'misc',
     id: 'ashland_pot2_red',
+    // iconId: 'piece/piece_pot2_cracked',
     tier: 7,
     grow: itemGrow({
       num: [1, 2],

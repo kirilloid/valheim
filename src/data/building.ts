@@ -429,7 +429,7 @@ export const pieces: Piece[] = [
     type: 'piece',
     subtype: 'misc',
     group: 'stack',
-    tier: 1,
+    tier: 7,
     emoji: '🪵',
     wear: {
       hp: 10,
@@ -438,7 +438,24 @@ export const pieces: Piece[] = [
       noSupport: true,
     },
     piece: { target: 'random', water: undefined, allowedInDungeons, size: [2, 0.9, 1] },
-    recipe: { type: 'craft_piece', materials: { YggdrasilWood: 50, }, station: null, }
+    recipe: { type: 'craft_piece', materials: { Blackwood: 50 }, station: null, }
+  },
+  {
+    id: 'bone_stack',
+    base: false,
+    type: 'piece',
+    subtype: 'misc',
+    group: 'stack',
+    tier: 1,
+    emoji: '🦴',
+    wear: {
+      hp: 10,
+      damageModifiers: { ...damageModifiersWood },
+      noRoof: true,
+      noSupport: true,
+    },
+    piece: { target: 'random', water: undefined, allowedInDungeons, size: [0.9, 0.5, 0.9] },
+    recipe: { type: 'craft_piece', materials: { BoneFragments: 50 }, station: null, }
   },
   {
     id: 'stone_pile',
@@ -491,6 +508,40 @@ export const pieces: Piece[] = [
       noSupport: true,
     },
     recipe: { type: 'craft_piece', materials: { BlackMarble: 50 }, station: null, }
+  },
+  {
+    id: 'grausten_pile',
+    base: false,
+    type: 'piece',
+    subtype: 'misc',
+    group: 'stack',
+    tier: 7,
+    emoji: '⬜',
+    piece: { target: 'random', water: undefined, allowedInDungeons, size: [2.1, 1.5, 2.3] },
+    wear: {
+      hp: 100,
+      damageModifiers: mods([0, 0, 0, 0, 2, 1, 1, 0, 3, 3]),
+      noRoof: false,
+      noSupport: true,
+    },
+    recipe: { type: 'craft_piece', materials: { Grausten: 50 }, station: null, }
+  },
+  {
+    id: 'skull_pile',
+    base: false,
+    type: 'piece',
+    subtype: 'misc',
+    group: 'stack',
+    tier: 7,
+    emoji: '💀',
+    piece: { target: 'random', water: undefined, allowedInDungeons, size: [1.6, 1, 1.6] },
+    wear: {
+      hp: 50,
+      damageModifiers: mods([0, 0, 0, 0, 2, 1, 0, 0, 4, 4]),
+      noRoof: false,
+      noSupport: true,
+    },
+    recipe: { type: 'craft_piece', materials: { Charredskull: 50 }, station: null, }
   },
   {
     id: 'piece_cookingstation',
@@ -1570,6 +1621,18 @@ export const pieces: Piece[] = [
     piece: { target: 'random', water: undefined, size: [2, 4, 0.4] },
     wear: woodStructureWear,
     recipe: { type: 'craft_piece', materials: { Wood: 16, Iron: 4, Tar: 2 }, station: 'forge', },
+  },
+  {
+    id: 'ashwood_door',
+    base: false,
+    type: 'piece',
+    components: ['Door'],
+    subtype: 'structure',
+    tier: 7,
+    emoji: '🚪',
+    piece: { target: 'random', water: undefined, size: [2, 3, 0.15] },
+    wear: ironStructureWear,
+    recipe: { type: 'craft_piece', materials: { FlametalNew: 1, Blackwood: 3 }, station: 'piece_workbench', },
   },
   {
     id: 'flametal_gate',

@@ -117,3 +117,5 @@ export function itemGrow(...grows: ItemGrowConfig[]): ItemGrow[] {
 };
 
 export const xp = (lvl: number) => lvl ** 1.5 / 2 + 0.5;
+
+export const nonPlayerBuildDrop = (value: number) => Math.max(1, Math.floor(value / 3));

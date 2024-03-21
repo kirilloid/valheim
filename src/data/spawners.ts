@@ -90,6 +90,14 @@ export const spawners: Spawner[] = [
     levels: [1, 1],
     levelUpChance: 0.1,
   },
+  {
+    type: 'spawner',
+    tier: 7,
+    id: 'Spawner_Charred_Dyrnwyn',
+    spawn: 'Charred_Melee_Dyrnwyn',
+    levels: [3, 3],
+    levelUpChance: 0.1,
+  },
 ];
 
 for (const spawner of spawners) {

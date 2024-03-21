@@ -49,6 +49,7 @@ const idPaths: Record<string, string[]> = {
       'RockFingerBroken', 'RockFingerBroken_frac',
       'RockThumb', 'RockThumb_frac',
       'BossStone_TheQueen',
+      'BossStone_Fader',
     ].map(id => [id, ['unique']])
   ),
 };

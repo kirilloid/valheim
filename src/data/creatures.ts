@@ -3436,7 +3436,7 @@ export const creatures: Creature[] = [
     tame: { tameTime: 1800, fedTime: 600, commandable: false,
             eats: ['Vineberry', 'Fiddleheadfern', 'MushroomSmokePuff'] },
             // eatRange:1.0, searchRange:10, heal:5
-    pregnancy: { points: 3, time: 60, chance: 0.33, grow: 3000, childId: 'Asksvin_hatchling' },
+    pregnancy: { points: 3, time: 60, chance: 0.33, grow: 3000, childId: 'AsksvinEgg' },
   },
   {
     type: 'creature',
@@ -3466,7 +3466,7 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Troll_Summoned',
     iconId: 'resource/TrophyTroll',
-    ragdollId: null,
+    ragdollId: 'Troll_summoned_ragdoll',
     components: ['Character'],
     tags: ['animal'],
     tier: 7,
@@ -3770,13 +3770,13 @@ export const creatures: Creature[] = [
     type: 'creature',
     id: 'Goblin_Gem',
     ragdollId: null,
-    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
+    components: ['BaseAI', 'Character', 'MonsterAI'],
     tier: 7,
     emoji: '💎',
     faction: 'ForestMonsters',
     spawners: [],
     attacks: single([]),
-    tolerate: TOLERATE.WATER | TOLERATE.FIRE | TOLERATE.SMOKE,
+    tolerate: TOLERATE.WATER,
     speed: { walk: 1.5, run: 12, swim: 2 },
     turnSpeed: { walk: 80, run: 200, swim: 100 },
     hp: 1000,
@@ -3940,25 +3940,25 @@ export const creatures: Creature[] = [
       // Fader_Claw_Right
       { dmg: dmg({ pierce: 170, chop: 300, pickaxe: 300 }), name: 'claw-right', force: 100, toolTier: 3 }, // interval: 3
       // Fader_Spin
-      { dmg: dmg({ pierce: 120, chop: 300, pickaxe: 300 }), name: 'claw-right', force: 130, toolTier: 3 }, // interval: 20
+      { dmg: dmg({ pierce: 120, chop: 300, pickaxe: 300 }), name: 'spin', force: 130, toolTier: 3 }, // interval: 20
       // Fader_Flamebreath
-      { dmg: dmg({ chop: 40, pickaxe: 40, fire: 60 }), name: 'flamebreath', force: 0, toolTier: 0, aiMinHp: 0.05, aiMaxHp: 0.75 }, // interval: 25
+      { dmg: dmg({ chop: 40, pickaxe: 40, fire: 60 }), name: 'flamebreath', force: 0, toolTier: 0, aiMinHp: 0.05, aiMaxHp: 0.85 }, // interval: 25
       // Fader_Meteors, dodgeable: false, blockable: false
         // -> spawn_fader_meteors
         // -> projectile_meteor_fader x10
       { dmg: dmg({ blunt: 40, chop: 100, pickaxe: 100, fire: 120 }), name: 'meteors', force: 100, toolTier: 0, aiMinHp: 0.05, aiMaxHp: 0.75, burst: 10 }, // interval: 25
-      // Fader_Roar, aiMinHp: 0.35, aiMaxHp: 0.55, interval: 45
-      { dmg: dmg({}), name: 'roar', force: 100, aiMinHp: 0.35, aiMaxHp: 0.55 }, // interval: 45
-      // Fader_WallOfFire, aiMinHp: 0.15, aiMaxHp: 0.9
-      { dmg: dmg({ pierce: 120, chop: 1000, pickaxe: 1000 }), name: 'wall of fire', force: 50, toolTier: 3 }, // interval: 60
+      // Fader_Roar -> Fader_Roar_Projectile -> Fader_Roar_Spawn
+      { spawn: ['Charred_Melee_Fader', 'Charred_Archer_Fader'], name: 'roar', number: [1, 1], max: 7, aiMinHp: 0.35, aiMaxHp: 0.55 }, // interval: 45
+      // Fader_WallOfFire
+      { dmg: dmg({ pierce: 120, chop: 1000, pickaxe: 1000 }), name: 'wall of fire', force: 50, toolTier: 3, aiMinHp: 0.15, aiMaxHp: 0.9 }, // interval: 60
       // Fader_Meteors_Intense, dodgeable: false, blockable: false
         // -> spawn_fader_meteors
         // -> projectile_meteor_fader x10
       { dmg: dmg({ blunt: 40, chop: 100, pickaxe: 100, fire: 120 }), name: 'meteors', force: 100, toolTier: 0, aiMaxHp: 0.25, burst: 10 }, // interval: 18
-      // Fader_Fissure_Intense, aiMaxHp: 0.35
+      // Fader_Fissure_Intense
       { dmg: dmg({ pierce: 120, chop: 1000, pickaxe: 1000 }), name: 'fissure', force: 50, toolTier: 3, aiMaxHp: 0.35 }, // interval: 10
-      // Fader_Roar_Intense, aiMaxHp: 0.35
-      { dmg: dmg({}), name: 'roar', force: 50, aiMaxHp: 0.35 }, // interval: 26
+      // Fader_Roar_Intense -> Fader_Roar_Projectile -> Fader_Roar_Spawn
+      { spawn: ['Charred_Melee_Fader', 'Charred_Archer_Fader'], name: 'roar', number: [1, 1], max: 7, aiMaxHp: 0.35 }, // interval: 26
     ]),
     tolerate: TOLERATE.WATER | TOLERATE.FIRE,
     speed: { walk: 12, run: 12, swim: 0 },

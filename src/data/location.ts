@@ -151,6 +151,7 @@ function loc(
     needsKey,
     dungeon,
     customMusic,
+    camp,
   }: {
     type?: LocationConfig['type'],
     components?: GameComponent[],
@@ -216,6 +217,7 @@ function loc(
     items,
     needsKey,
     dungeon,
+    camp,
   };
 }
 
@@ -244,6 +246,7 @@ export const locations: LocationConfig[] = [
         locItem('BossStone_TheElder'),
         locItem('BossStone_Yagluth'),
         locItem('BossStone_TheQueen'),
+        locItem('BossStone_Fader'),
         locItem('Vegvisir_Eikthyr'),
         locItem('Raspberry', 1, 2),
         locItem('Mushroom', 1, 2),
@@ -2226,7 +2229,7 @@ export const locations: LocationConfig[] = [
         locItem('Charred_Archer'),
         locItem('Charred_Archer', 0.6, 4),
         locItem('Charred_Mage', 0.6, 2),
-        locItem('Spawner_Charred_balista', 0.8, 4),
+        locItem('piece_Charred_Balista', 0.8, 4),
         locItem('TreasureChest_charredfortress'),
         locItem('TreasureChest_charredfortress'),
         locItem('Vegvisir_Fader', 1, 0.5),

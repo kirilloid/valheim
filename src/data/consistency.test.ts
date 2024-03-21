@@ -1,4 +1,4 @@
-import type { Cart, EntityId, GeneralDrop, LocationItem, Piece, Ship } from '../types';
+import type { Cart, EntityId, GeneralDrop, LocationItem, Piece, Ship, Siege } from '../types';
 
 import { creatures } from './creatures';
 import { events } from './events';
@@ -11,7 +11,7 @@ import { items } from './weapons';
 import { spawners } from './spawners';
 import { fishes } from './fish';
 import { pieces } from './building';
-import { ships, carts } from './transport';
+import { ships, carts, siege } from './transport';
 
 import * as rooms from './rooms';
 
@@ -29,6 +29,7 @@ for (const { item } of recipes) {
 for (const p of pieces) if (p.recipe != null) sourced.add(p.id);
 for (const s of ships) if (s.recipe != null) sourced.add(s.id);
 for (const c of carts) if (c.recipe != null) sourced.add(c.id);
+for (const s of siege) if (s.recipe != null) sourced.add(s.id);
 
 for (const s of spawners) {
   sourced.add(s.spawn);
@@ -126,8 +127,8 @@ const exceptions = new Set<EntityId>([
   'Player_tombstone',
   'CargoCrate',
   'Pickable_MountainRemains01_buried',
-  // TODO: why is it not picked from woodvillage?
-  'sign_notext',
+  // TODO: add later
+  'RuneStone',
 ]);
 
 describe('traceability of all objects', () => {
@@ -149,7 +150,7 @@ describe('traceability of all objects', () => {
       if (!(item in data)) failPairs.push([parent, item]);
     }
 
-    function checkPiece(p: Piece | Ship | Cart) {
+    function checkPiece(p: Piece | Ship | Cart | Siege) {
       if (p.recipe != null) {
         for (const key in p.recipe.materials) {
           check(p.id, key);
@@ -169,6 +170,7 @@ describe('traceability of all objects', () => {
     pieces.forEach(checkPiece);
     ships.forEach(checkPiece);
     carts.forEach(checkPiece);
+    siege.forEach(checkPiece);
     expect(failPairs).toEqual([]);
   });
 
@@ -270,4 +272,6 @@ describe('dungeons - rooms', () => {
   testCamp('woodfarm', rooms.woodfarm);
   testCamp('woodvillage', rooms.woodvillage);
   testCamp('gobvill', rooms.gobvill);
+  testCamp('charredRuins', rooms.charredRuins);
+  testCamp('fortressRuins', rooms.fortressRuins);
 });

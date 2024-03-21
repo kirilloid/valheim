@@ -12,7 +12,7 @@ export const prefabNames: string[] = [
   'blob_aoe', 'blob_attack_aoe', 'blobelite_attack_aoe', 'blobtar_attack', 'blobtar_projectile_tarball',
   'boar_base_attack', 'Boar_piggy', 'boar_ragdoll',
   'bonemass_aoe', 'bonemass_attack_aoe', 'bonemass_attack_punch', 'bonemass_attack_spawn', 'bonemass_attack_throw', 'bonemass_spawn', 'bonemass_throw_projectile',
-  'BossStone_Bonemass', 'BossStone_DragonQueen', 'BossStone_Eikthyr', 'BossStone_TheElder', 'BossStone_Yagluth', 'BossStone_TheQueen',
+  'BossStone_Bonemass', 'BossStone_DragonQueen', 'BossStone_Eikthyr', 'BossStone_TheElder', 'BossStone_Yagluth', 'BossStone_TheQueen', 'BossStone_Fader',
   'bow_projectile', 'bow_projectile_fire', 'bow_projectile_frost', 'bow_projectile_needle', 'bow_projectile_poison',
   'bronzespear_projectile',
   'bucket',

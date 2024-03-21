@@ -215,6 +215,13 @@ export const pickables: {
   //   subtype: 'misc',
   // },
   {
+    id: 'Pickable_Fiddlehead',
+    iconId: 'resource/Fiddleheadfern',
+    tier: 7,
+    item: 'Fiddleheadfern',
+    subtype: 'misc',
+  },
+  {
     id: 'Pickable_VoltureEgg',
     iconId: 'resource/VoltureEgg',
     tier: 7,
