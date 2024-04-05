@@ -3,7 +3,7 @@ import React from 'react';
 import { read, write } from '../../file/Player';
 
 import { PlayerInfo } from './Info';
-import { FileEditor } from '../parts/FileEditor';
+import { FileEditor } from '../parts/file';
 
 export function PlayerEditor() {
   return <FileEditor

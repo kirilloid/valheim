@@ -1,6 +1,7 @@
 import React from 'react';
 
 function showSize(size: number): string {
+  if (size < 1000) return `${size} B`;
   if (size < 2e5) return `${(size / 1024).toPrecision(3)} KB`;
   if (size < 2e8) return `${(size / 1024 ** 2).toPrecision(3)} MB`;
   return `${(size / 1024 ** 3).toPrecision(3)} GB`;

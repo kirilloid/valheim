@@ -27,6 +27,7 @@ import { FoodPlanner } from './view/pages/FoodPlanner';
 import { Mining } from './view/pages/Mining';
 import { WorldEditor } from './view/world';
 import { WorldMeta } from './view/WorldMeta';
+import { FwlRecovery } from './view/world/FwlRecovery';
 import { PlayerEditor } from './view/player';
 // import { Weapons } from './view/pages/Weapons';
 import { TranslationContext, GameSettingsContext, useGlobalState, useTranslation } from './effects';
@@ -79,6 +80,7 @@ function App() {
             {/* <Route path="/weapons" children={<Weapons />} /> */}
             <Route path="/world-edit" children={<WorldEditor />} />
             <Route path="/world-meta" children={<WorldMeta />} />
+            <Route path="/world-meta-recovery" children={<FwlRecovery />} />
             <Route path="/player-edit" children={<PlayerEditor />} />
             <Route path="/about" children={<About />} />
             <Route path="/mods" children={<Mods />} />

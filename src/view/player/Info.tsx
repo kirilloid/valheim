@@ -1,9 +1,12 @@
 import React, { useCallback, useContext } from 'react';
 
-import type { Player, Inventory as TInventory } from './types';
+import type { Player, Inventory as TInventory, SkillData } from './types';
 import type { EditorProps } from '../parts/types';
 
-import { FileInfo } from '../parts/FileInfo';
+import { skillTiers } from '../../model/skills';
+import { DEFAULT_MIN_DATE } from '../../model/game';
+
+import { FileInfo } from '../parts/file';
 import { Tabs } from '../parts/Tabs';
 
 import { Worlds } from './Worlds';
@@ -33,9 +36,7 @@ export function PlayerInfo({ value: player, onChange, file, disabled } : EditorP
 
   const onWorldsChange = useCallback((worlds: Player['worlds']) => onChange({ ...player, worlds }), [player, onChange]);
   const onPlayerDataChange = useCallback((playerData: Player['playerData']) => onChange({ ...player, playerData }), [player, onChange]);
-  const onCheatChange = useCallback((player: Player) => {
-    onChange({ ...player, usedCheats: true });
-  }, [onChange]);
+  const onCheatChange = useCallback((player: Player) => onChange({ ...player, usedCheats: true }), [onChange]);
 
   const tabs = [
     {
@@ -75,7 +76,15 @@ export function PlayerInfo({ value: player, onChange, file, disabled } : EditorP
       tabs.push({
         title: translate('ui.character.skills'),
         renderer: () => <Skills skillData={skillData}
-          onChange={sd => onCheatChange({ ...player, playerData: { ...playerData, skillData: sd } })}
+          onChange={skillData => onCheatChange({ ...player, playerData: { ...playerData, skillData } })}
+          onInitSkills={() => {
+            const basicSkills = Object
+              .entries(skillTiers)
+              .filter(([_, tier]) => tier === 0)
+              .map(([key, _]) => Number(key));
+            const skillData: SkillData = new Map(basicSkills.map(skill => [skill, { level: 0, accumulator: 0 }]));
+            onChange({ ...player, playerData: { ...playerData, skillData } });
+          }}
           playerData={playerData} />,
       });
     }
@@ -89,8 +98,23 @@ export function PlayerInfo({ value: player, onChange, file, disabled } : EditorP
     });
   }
 
+  const MIN_TIME = DEFAULT_MIN_DATE.getTime();
+  const MAX_TIME = Date.now();
+
   return <section className={disabled ? 'FileEditor--disabled' : ''}>
     <h1>{player.playerName}</h1>
+    {( player.dateCreated.getTime() > MAX_TIME
+    || player.dateCreated.getTime() < MIN_TIME) && <div className="error">
+      Date created is wrong. Would you like to
+      {' '}
+      <button className="btn btn--primary" onClick={() => {
+        const dateCreated = new Date(player.dateCreated.getTime() / 1000);
+        if (dateCreated.getTime() < MIN_TIME) dateCreated.setTime(MIN_TIME);
+        if (dateCreated.getTime() > MAX_TIME) dateCreated.setTime(MAX_TIME);
+        onChange({ ...player, dateCreated });
+      }}>fix it</button>?
+    </div>}
+    {/* <div>created: {player.dateCreated.toDateString()}</div> */}
     <Tabs tabs={tabs} selected={2} />
   </section>
 }

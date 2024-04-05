@@ -3,7 +3,7 @@ import React, { useCallback } from 'react';
 import type { EditorProps } from '../parts/types';
 import type { WorldData } from './types';
 
-import { FileInfo } from '../parts/FileInfo';
+import { FileInfo } from '../parts/file';
 import { Tabs } from '../parts/Tabs';
 
 import { RandomEvents } from './RandomEvents';

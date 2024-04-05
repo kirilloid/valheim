@@ -1,12 +1,13 @@
 import { defaultMemoize } from 'reselect';
 
 import type { ZDO } from '../file/types';
-import type { Biome as BiomeUnion, EntityId, GameLocationId, Pair } from '../types';
+import { Biome as BiomeUnion, EntityId, GameLocationId, Pair } from '../types';
 import type { WorldData, ZoneSystemData } from '../file/World';
 
 import { Vector2i, Vector3 } from './utils';
+import { BitMap } from './BitMap';
 import { stableHashCode } from './hash';
-import { WORLD_RADIUS, ZONE_SIZE } from './game';
+import { WORLD_RADIUS, ZONE_MAX_CC, ZONE_SIZE } from './game';
 import { WorldGenerator, Biome as BiomeEnum } from './world-generator';
 
 import { getId, prefabHashes } from '../data/zdo';
@@ -60,6 +61,7 @@ for (const [mod, prefabs] of Object.entries(modPrefabNames)) {
 const HASH_ZONE_CTRL = stableHashCode('_ZoneCtrl');
 const HASH_LOCATION = stableHashCode('LocationProxy');
 const HASH_SEED = stableHashCode('seed');
+const HASH_CARTOGRAPHY_TABLE = stableHashCode('piece_cartographytable');
 
 export function zoneId({ x, y }: Vector2i) {
   return (y + 256) * 512 + x + 256;
@@ -75,7 +77,7 @@ export const getZoneIds = (world: WorldData) => {
   return getZoneZdos(world.zdo.zdos).map(z => zoneId(z.sector));
 }
 
-// since active zone
+// since active zone is (2; 2) units away from edge, we just apply edge filter/transform
 export const getActiveZoneIds = (zdos: ZDO[]) => {
   const zones = getZoneZdos(zdos);
   const allZoneIds = new Set<number>(zones.map(zdo => zoneId(zdo.sector)));
@@ -321,15 +323,47 @@ export const getSearcher = (
   }
 };
 
-function getWorldSeed(zdos: ZDO[]) {
+export function getWorldSeed(zdos: ZDO[]) {
+  const seeds = new Map<number, number>();
+  let total = 0;
   for (const zdo of zdos) {
     if (zdo.prefab === HASH_LOCATION) {
       const locationSeed = zdo.ints.get(HASH_SEED);
       if (locationSeed == null) continue;
       const { x, y } = zdo.sector;
-      return (locationSeed - x * 4271 - y * 9187) | 0;    
+      const seed = (locationSeed - x * 4271 - y * 9187) | 0;    
+      const currentTotal = seeds.get(seed);
+      total++;
+      if (currentTotal == null) {
+        seeds.set(seed, 1);
+      } else {
+        seeds.set(seed, currentTotal + 1);
+        if (currentTotal >= 3 && currentTotal * 2 > total) {
+          return seed;
+        }
+      }
     }
   }
+}
+
+export function getZonesBitMap(zdos: ZDO[]): BitMap {
+  const SIZE = ZONE_MAX_CC * 2 + 1;
+  const bitmap = new BitMap(SIZE, SIZE);
+  for (const { sector } of zdos) {
+    if (Math.abs(sector.x) > SIZE || Math.abs(sector.y) > SIZE) continue;
+    bitmap.set(sector.x + ZONE_MAX_CC, sector.y + ZONE_MAX_CC, true);
+  }
+  return bitmap;
+}
+
+export function hasCartographyTable(zdos: ZDO[]) {
+  for (const zdo of zdos) {
+    // zdo-props/map-table
+    if (zdo.prefab === HASH_CARTOGRAPHY_TABLE) {
+      return true;
+    }
+  }
+  return false;
 }
 
 export type DiscoveryStat = { zoneIds: Set<number>; total: number };
@@ -357,11 +391,11 @@ export function* getGeneratedPercent(
   };
 
   let i = 0;
-  for (let y = -164; y <= 164; y += resolutionStep) {
-    for (let x = -164; x <= 164; x += resolutionStep) {
-      if (x * x + y * y > 164 * 164) continue;
+  for (let y = -ZONE_MAX_CC; y <= ZONE_MAX_CC; y += resolutionStep) {
+    for (let x = -ZONE_MAX_CC; x <= ZONE_MAX_CC; x += resolutionStep) {
+      if (x * x + y * y > ZONE_MAX_CC * ZONE_MAX_CC) continue;
       const id = zoneId({ x, y });
-      if ((i++ & 0xFF) === 0) yield (y + 164) / 328;
+      if ((i++ & 0xFF) === 0) yield (y + ZONE_MAX_CC) / (ZONE_MAX_CC << 1);
       if ((x * x + y * y) * ZONE_SIZE * ZONE_SIZE > WORLD_RADIUS * WORLD_RADIUS) continue;
       const biomeInt = gen.getBiome(x * ZONE_SIZE, y * ZONE_SIZE);
       const biomeStr = BiomeEnum[biomeInt] as BiomeUnion;

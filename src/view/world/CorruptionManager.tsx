@@ -4,8 +4,8 @@ import type { ValueProps } from '../parts/types';
 import type { WorldData } from './types';
 import { Mistake, ZDOData, ZDOCorruption, MistakeLevel } from '../../file/types';
 
-import { check } from '../../file/zdo';
 import { groupBy, mapValues, runGenerator } from '../../model/utils';
+import { check } from '../../file/zdo';
 import { MistakeLevels } from '../../file/zdo/check';
 
 function* checkZdos(data: WorldData): Generator<number, WorldData, void> {

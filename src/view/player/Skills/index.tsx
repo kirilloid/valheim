@@ -50,9 +50,10 @@ function Skill({ skill, value, onChange }: {
   </React.Fragment>;
 }
 
-export function Skills({ skillData, onChange, playerData } : {
+export function Skills({ skillData, onChange, onInitSkills, playerData } : {
   skillData: SkillData;
   onChange: (value: SkillData) => void;
+  onInitSkills: () => void;
   playerData: PlayerData;
 }) {
   const entries = [...skillData.entries()];
@@ -70,7 +71,12 @@ export function Skills({ skillData, onChange, playerData } : {
           }} />)
       }
     </dl>
-    {!showAll && <button className="btn btn--sm" onClick={() => setShowAll(true)}>Show all skills</button>}
+    {entries.length === 0 && <div>
+      That's a new character, skill part hasn't beed initialized.
+      {' '}
+      <button className="btn btn--sm" onClick={onInitSkills}>Initialize</button>
+    </div>}
+    {entries.length !== 0 && !showAll && <button className="btn btn--sm" onClick={() => setShowAll(true)}>Show all skills</button>}
     <MagicOverhaul playerData={playerData} />
     <Deadheim playerData={playerData} />
   </div>

@@ -9,7 +9,7 @@ import { SkillType } from '../model/skills';
 import { assertNever, days, groupBy, timeI2S } from '../model/utils';
 import type { SearchEntry } from '../model/search';
 
-import { match } from '../data/search';
+import { match, pages } from '../data/search';
 import { data } from '../data/itemDB';
 import { recipes } from '../data/recipes';
 import { events } from '../data/events';
@@ -87,7 +87,7 @@ function showSpecialIcon(special: ItemSpecial, translate: Translator) {
 function renderItem(entry: SearchEntry, text: string, duplicateNames: Set<EntityId>, onClick: React.MouseEventHandler) {
   switch (entry.type) {
     case 'obj': return <SearchObject id={entry.id} text={text} onClick={onClick} duplicates={duplicateNames} />;
-    case 'page': return renderLink('/', entry, text, onClick);
+    case 'page': return <>{pages.find(p => p.id === entry.id)?.emoji} {renderLink('/', entry, text, onClick)}</>
     case 'loc': return <SearchLocation entry={entry} text={text} onClick={onClick} />;
     case 'biome': return <SearchBiome id={entry.id} text={text} onClick={onClick} />;
     case 'event': return <SearchEvent id={entry.id} text={text} onClick={onClick} />;

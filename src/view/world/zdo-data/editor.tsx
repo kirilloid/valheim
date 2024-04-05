@@ -84,7 +84,7 @@ export const ItemEditor = React.memo(({
   return <>
     <h2>{
       currentId === 'LocationProxy'
-      ? <img src={`/icons/location/${loc}.png`} />
+      ? <img src={`/icons/location/${loc}.png`} alt="location" />
       : vItem
       ? <>
           <ItemIcon item={data[vItem.id]} variant={vItem.variant} />

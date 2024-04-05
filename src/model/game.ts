@@ -1,24 +1,32 @@
 import type { DamageModifier, DamageModifiers, DamageProfile, DropEntry, EntityId, GeneralDrop, ItemGrow, ItemGrowConfig, LocationItem } from '../types';
 import type { EnvId } from '../data/env';
 
+// TIME
 export const FRAME = 1 / 50;
 export const GAME_DAY = 1800;
+export const EVENT_PERIOD = 46 * 60;
+export const REAL_HOUR = 3600;
+
+// WEATHER
 export const INTRO_DURATION = 2040;
 export const INTRO_WEATHER: EnvId = 'ThunderStorm';
 export const WIND_PERIOD = 125;
 export const WEATHER_PERIOD = 666;
+
+// SIZE
 export const WORLD_RADIUS = 10500;
 export const WORLD_SIZE = WORLD_RADIUS * 2;
 export const ZONE_SIZE = 64;
+export const ZONE_MAX_CC = Math.round(WORLD_RADIUS / ZONE_SIZE);
 export const WATER_LEVEL = 30;
-export const EVENT_PERIOD = 46 * 60;
-export const REAL_HOUR = 3600;
 
+// PLAYER
 export const BASE_HEALTH = 25;
 export const BASE_STAMINA = 50;
 export const BASE_EITR = 0;
 export const MAX_PLAYERS = 10;
 export const DODGE_STAMINA = 15;
+export const DEFAULT_MIN_DATE = new Date(2021, 1, 2);
 
 export const WORLD_CONFIG = {
   difficultyScaleMaxPlayers: 5,

@@ -1,10 +1,10 @@
 import { clamp, Vector3 } from '../model/utils';
 import { SkillType } from '../model/skills';
+import { DEFAULT_MIN_DATE } from '../model/game';
 
 import { PackageReader, PackageWriter } from './Package';
 import * as Inventory from './Inventory';
 import { sha512 } from './sha512';
-import * as DATA_VERSION from './versions';
 import { data as itemDB } from '../data/itemDB';
 import { checkVersion, PLAYER, PLAYER_DATA, SKILLS } from './versions';
 import { PlayerStatType } from './PlayerStatType';
@@ -44,7 +44,7 @@ export type PlayerData = {
   shownTutorials: string[];
   uniques: string[];
   trophies: string[];
-  knownBiome: number[]
+  knownBiome: number[];
   knownTexts: Map<string, string>;
   
   beardItem: string;
@@ -171,7 +171,7 @@ function* readPlayer(bytes: Uint8Array): Generator<number, Player> {
       playerID,
       startSeed,
       usedCheats: false,
-      dateCreated: new Date(2021, 1, 2),
+      dateCreated: DEFAULT_MIN_DATE,
       knownWorlds: new Map(),
       knownWorldKeys: new Map(),
       knownCommands: new Map(),
@@ -203,7 +203,7 @@ function* writePlayer(
   writer.writeString(player.startSeed);
   if (player.version >= 38) {
     writer.writeBool(player.usedCheats);
-    writer.writeLong(BigInt(player.dateCreated.getTime()));
+    writer.writeLong(BigInt(player.dateCreated.getTime() / 1000));
     
     writer.writeMap(writer.writeString, writer.writeFloat, player.knownWorlds);
     writer.writeMap(writer.writeString, writer.writeFloat, player.knownWorldKeys);
@@ -231,7 +231,7 @@ function readSkills(pkg: PackageReader) {
 }
 
 function writeSkills(pkg: PackageWriter, skillData: SkillData) {
-  pkg.writeInt(DATA_VERSION.SKILLS);
+  pkg.writeInt(SKILLS);
   pkg.writeInt(skillData.size);
   for (const [key, { level, accumulator }] of skillData) {
     pkg.writeInt(key);

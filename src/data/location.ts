@@ -53,7 +53,7 @@ export const biomes: BiomeConfig[] = [
   biome('🍂', 'Plains', 5, true),
   biome('🌊', 'Ocean', 3, true),
   biome('🌫', 'Mistlands', 6, true),
-  biome('✨', 'Ashlands', 7, false),
+  biome('🔥', 'Ashlands', 7, false),
   biome('🧊', 'DeepNorth', 8, false),
 ];
 

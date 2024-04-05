@@ -463,6 +463,7 @@ function parseLevel(level?: string): number {
 }
 
 export function Skills() {
+  const [modded] = useGlobalState('searchInMods');
   const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
 
@@ -479,6 +480,11 @@ export function Skills() {
   }
 
   const xpToNextLevel = xpTable[level];
+  const skillOptions = skillNames
+    .filter(skill => skillTiers[SkillType[skill]] <= spoiler)
+    .map(skill => <option value={SkillType[skill]} key={skill}>{translate(`ui.skillType.${skill}`)}</option>);
+  const moddedSkillOptions = [...SkillCodeMap.entries()]
+    .map(([id, name]) => <option value={id} key={name}>{translate(`ui.skillType.${name}`)}</option>);
 
   return (<>
     <h2>{translate('ui.page.skills')}</h2>
@@ -488,15 +494,12 @@ export function Skills() {
         <SkillIcon skill={skillStr} useAlt={false} size={24} />
         {' '}
         <select value={skill} onChange={e => setSkill(Number(e.target.value))}>
-          <optgroup label="Vanilla">
-            {skillNames
-              .filter(skill => skillTiers[SkillType[skill]] <= spoiler)
-              .map(skill => <option value={SkillType[skill]} key={skill}>{translate(`ui.skillType.${skill}`)}</option>)}
-          </optgroup>
-          <optgroup label="Modded">
-            {[...SkillCodeMap.entries()]
-              .map(([id, name]) => <option value={id} key={name}>{translate(`ui.skillType.${name}`)}</option>)}
-          </optgroup>
+          {modded
+            ? <>
+              <optgroup label="Vanilla">{skillOptions}</optgroup>
+              <optgroup label="Modded">{moddedSkillOptions}</optgroup>
+            </>
+            : skillOptions}
         </select>
       </dd>
       <dt>{translate('ui.level')}</dt>
@@ -515,7 +518,7 @@ export function Skills() {
     </dl>
     {!isVanillaSkill && <div>Most modded skills could be configured. Default config values are used.</div>}
     <h2>level-up</h2>
-    <div>Those numbers are affected by effects like <Link to="/effect/Rested"><EffectIcon id="Rested" size={16} /> {translate('ui.effect.Rested')}</Link></div>
+    <div>Those numbers are influenced by effects like <Link to="/effect/Rested"><EffectIcon id="Rested" size={16} /> {translate('ui.effect.Rested')}</Link></div>
     <dl>
       {isVanillaSkill
         ? <VanillaSkillLevelUp skill={skill} />

@@ -14,6 +14,7 @@
   --color-text: #000;
   --color-text-light: #555;
   --color-highlight: #bef4;
+  --color-bg-highlight: #d0d0d0;
 }
 
 body {
@@ -45,6 +46,7 @@ body {
     --color-info: #1AAFF4;
     --color-modded: #0cc;
     --color-background: 54, 57, 63;
+    --color-bg-highlight: #2B2D31;
     --color-text: #ddd;
     --color-text-light: #999;
     --color-highlight: #46a4;
@@ -64,6 +66,7 @@ body {
   --color-info: #1AAFF4;
   --color-modded: aqua;
   --color-background: 54, 57, 63;
+  --color-bg-highlight: #2B2D31;
   --color-text: #ddd;
   --color-text-light: #999;
   --color-highlight: #46a4;
@@ -188,6 +191,9 @@ a.Switch__Option {
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  background-color: var(--color-bg-highlight);
+  padding: 4px 2px;
+  border-radius: 2px;
 }
 
 p {
@@ -289,4 +295,18 @@ table .value {
 .music-icon {
   float: right;
   cursor: default;
+}
+
+.panel {
+  box-sizing: border-box;
+  background-color: var(--color-bg-highlight);
+  padding: 0.5rem 1rem;
+  margin: 1rem 0;
+}
+
+.notification-with-icon {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
 }

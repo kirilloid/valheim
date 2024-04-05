@@ -2,7 +2,7 @@ import React from 'react';
 
 import { read, write, Data } from '../file/fwl';
 
-import { FileEditor } from './parts/FileEditor';
+import { FileEditor } from './parts/file';
 import { WorldMetaInfo } from './world/WorldMeta';
 
 /* eslint-disable-next-line require-yield */

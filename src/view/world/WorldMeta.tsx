@@ -5,7 +5,7 @@ import type { WorldMeta } from './types';
 
 import { stableHashCode, solve } from '../../model/hash';
 
-import { FileInfo } from '../parts/FileInfo';
+import { FileInfo } from '../parts/file';
 import { Tabs } from '../parts/Tabs';
 import { TranslationContext } from '../../effects';
 import { BasicWorldSettings } from './WorldSettings';
@@ -38,7 +38,7 @@ function WorldMetaDetails({ value, onChange }: ValueProps<WorldMeta>) {
             });
           }} />
         {' / '}
-        <input type="number" inputMode="numeric" pattern="-?[0-9]*"
+        <input inputMode="numeric" pattern="-?[0-9]*"
           value={value.seed}
           onChange={e => {
             const seed = Number(e.target.value);

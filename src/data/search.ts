@@ -69,27 +69,28 @@ function addArray<T extends { id: string; tier?: number; tags?: string[] }>(
 }
 
 export const pages = [
-  { id: offCalc, category: 'fight' },
-  { id: defCalc, category: 'fight' },
-  { id: 'events', category: 'fight' },
+  { id: offCalc, emoji: '⚔', category: 'fight' },
+  { id: defCalc, emoji: '🛡', category: 'fight' },
+  { id: 'events', emoji: '🗓', category: 'fight' },
 
-  { id: foodTable, category: 'eat' },
-  { id: foodPlanner, category: 'eat' },
+  { id: foodTable, emoji: '🍗', category: 'eat' },
+  { id: foodPlanner, emoji: '🍴', category: 'eat' },
 
-  { id: comfort, category: 'live' },
+  { id: comfort, emoji: '🛋️', category: 'live' },
   // { id: 'build', category: 'build' },
   
-  { id: mining, category: 'plan' },
-  { id: 'weather', category: 'plan' },
-  { id: skills, category: 'plan' },
-  { id: 'world-gen', category: 'plan', beta: true },
+  { id: mining, emoji: '⛏', category: 'plan' },
+  { id: 'weather', emoji: '🌦', category: 'plan' },
+  { id: skills, emoji: '🤹‍♂️', category: 'plan' },
+  { id: 'world-gen', emoji: '🌐', category: 'plan', beta: true },
 
-  { id: 'player-edit', category: 'edit' },
-  { id: 'world-edit', category: 'edit' },
-  { id: 'world-meta', category: 'edit' },
+  { id: 'player-edit', emoji: '🕴', category: 'edit' },
+  { id: 'world-edit', emoji: '🗺', category: 'edit' },
+  { id: 'world-meta', emoji: '🏷️', category: 'edit' },
+  { id: 'world-meta-recovery', emoji: '♻', category: 'edit' },
 
-  { id: 'mods', category: 'misc' },
-  { id: 'about', category: 'misc' },
+  { id: 'mods', emoji: '🖇️', category: 'misc' },
+  { id: 'about', emoji: '📜', category: 'misc' },
 ];
 
 function addObjects(dict: Record<string, string>) {

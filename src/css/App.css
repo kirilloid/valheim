@@ -150,6 +150,7 @@ option.spoiler {
 
 .Dialog__body select {
   width: 60%;
+  margin: 0;
 }
 
 .Dialog__row {
@@ -360,3 +361,23 @@ option.spoiler {
   inset-inline-end: 0;
   top: -16px;
 }
+
+.ExplorationMap {
+  position: relative;
+}
+
+.ExplorationMap__figure {
+  position: absolute;
+}
+
+.ExplorationMap__legend {
+  margin-bottom: 1rem;
+}
+
+.ExplorationMap__legend-marker {
+  width: 1rem;
+  height: 1rem;
+  display: inline-block;
+  vertical-align: middle;
+}
+
