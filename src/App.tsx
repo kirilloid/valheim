@@ -10,6 +10,8 @@ import './css/App.css';
 import { defCalc, offCalc, foodTable, foodPlanner, mining, comfort, skills } from './state';
 
 import { TopBar } from './view/parts/TopBar';
+import { TitleUpdater } from './view/parts/TitleUpdater';
+
 import { Home } from './view/pages/Home';
 import { GameObject } from './view/objects/GameObject';
 import { Location } from './view/Location';
@@ -40,14 +42,17 @@ import { Loader } from './view/parts/Loader';
 function App() {
   const translate = useTranslation();
   const [theme] = useGlobalState('theme');
+
   useLayoutEffect(() => {
     document.documentElement.className = `theme--${theme}`;
   }, [theme]);
+
   return (
     <div className="App">
       <TranslationContext.Provider value={translate}>
       <GameSettingsContext.Provider value={gameSettings}>
         <Router>
+          <TitleUpdater />
           <TopBar />
           <Switch>
             <Route path="/" exact children={<Home />} />

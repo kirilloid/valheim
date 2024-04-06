@@ -141,6 +141,7 @@ export const recipes: ItemRecipe[] = [
   cauldronRecipe(5, { MushroomMagecap: 3, GiantBloodSack: 1, Turnip: 2 }, 'MagicallyStuffedShroomUncooked'),
   cauldronRecipe(5, { Fish9: 1, BreadDough: 2 }, 'FishAndBreadUncooked'),
   cauldronRecipe(5, { BugMeat: 1, LoxMeat: 1, HareMeat: 2 }, 'MeatPlatterUncooked'),
+  cauldronRecipe(5, { HareMeat: 1, MushroomJotunPuffs: 3, Carrot: 2 }, 'MisthareSupremeUncooked'),
   // BAITS
   cauldronRecipe(1, { FishingBait: 20, TrophyFrostTroll: 1 }, 'FishingBaitForest', 20),
   cauldronRecipe(1, { FishingBait: 20, TrophySerpent: 1 }, 'FishingBaitOcean', 20),

@@ -400,7 +400,7 @@ function StepSpecific({ state, setState }: {
 export function FwlRecovery() {
   const [state, setState] = useState<State>({ step: 'start' });
   return <>
-    <h1>Meta-file recovery</h1>
+    <h1>Meta-file recovery wizard</h1>
     <Steps state={state} />
     <StepSpecific state={state} setState={setState} />
   </>;
