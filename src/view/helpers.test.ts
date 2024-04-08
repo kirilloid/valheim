@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { toPrecision } from './helpers';
 
 test('toPrecision', () => {

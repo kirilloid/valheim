@@ -294,19 +294,3 @@ export function downloadFile(array: ArrayBufferView, name: string) {
     link.remove();
   }, 0);
 }
-
-const boldRegex = /\*(.+?)\*/g;
-export function markdown(str: string) {
-  const result: (JSX.Element | string)[] = [];
-  let lastIndex = 0;
-  boldRegex.lastIndex = 0;
-  do {
-    const match = boldRegex.exec(str);
-    if (match == null) break;
-    result.push(str.slice(lastIndex, match.index));
-    result.push(<b>{match[1]}</b>);
-    lastIndex = match.index + match[0]!.length;
-  } while (true);
-  result.push(str.slice(lastIndex));
-  return result;
-}
