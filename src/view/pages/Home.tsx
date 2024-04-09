@@ -9,7 +9,7 @@ import { pages } from '../../data/search';
 import { biomes } from '../../data/location';
 
 import { TranslationContext, useRuneTranslate } from '../../effects';
-import { markdown } from '../helpers';
+import { markdown } from '../markdown';
 
 const pageGroups = groupBy(pages, p => p.category);
 
@@ -24,7 +24,7 @@ export function Home() {
         <h2>{translate('ui.biomes')}</h2>
         <ul>
           {biomes.map(({ id, tier, emoji }) => <li key={id}>
-            {emoji} <Link to={`/biome/${id}`}>{runeTranslate({ tier, type: 'biome', id: `ui.biome.${id}` })}</Link>
+            <span className="Home__emoji-icon">{emoji}</span> <Link to={`/biome/${id}`}>{runeTranslate({ tier, type: 'biome', id: `ui.biome.${id}` })}</Link>
           </li>)}
         </ul>
       </section>
@@ -32,7 +32,7 @@ export function Home() {
         {Object.entries(pageGroups).map(([name, group]) => <div key={name}>
           <h2>{name}</h2>
           <ul>{group.map(({ id, beta, emoji }) => <li key={id}>
-            {emoji} <Link to={`/${id}`}>{translate(`ui.page.${id}`)}</Link>
+            <span className="Home__emoji-icon">{emoji}</span> <Link to={`/${id}`}>{translate(`ui.page.${id}`)}</Link>
             {beta ? <> &beta;</> : null}
           </li>)}
         </ul>

@@ -71,7 +71,7 @@ function addArray<T extends { id: string; tier?: number; tags?: string[] }>(
 export const pages = [
   { id: offCalc, emoji: '⚔', category: 'fight' },
   { id: defCalc, emoji: '🛡', category: 'fight' },
-  { id: 'events', emoji: '🗓', category: 'fight' },
+  { id: 'events', emoji: '📆', category: 'fight' },
 
   { id: foodTable, emoji: '🍗', category: 'eat' },
   { id: foodPlanner, emoji: '🍴', category: 'eat' },

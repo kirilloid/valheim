@@ -18,3 +18,9 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 200px));
 }
+
+.Home__emoji-icon {
+  width: 1.2rem;
+  display: inline-block;
+  text-align: center;
+}

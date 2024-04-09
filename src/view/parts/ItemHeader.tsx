@@ -5,7 +5,8 @@ import { groups } from '../../data/itemDB';
 import { modLinks } from '../../mods';
 
 import { TranslationContext, useGlobalState, useLanguage, useRuneTranslate } from '../../effects';
-import { InlineObjectWithIcon, List, markdown, ModLinks, rangeBy } from '../helpers';
+import { InlineObjectWithIcon, List, ModLinks, rangeBy } from '../helpers';
+import { markdown } from '../markdown';
 import { ItemIcon } from './Icon';
 import { PeriodDate, seasonRange } from '../../data/seasons';
 
