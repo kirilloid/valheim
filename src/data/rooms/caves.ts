@@ -24,7 +24,7 @@ const rooms: RoomConfig[] = [
       locItem('Pickable_ForestCryptRemains01', 0.33, 2),
       locItem('Pickable_Item', 0.2, 3),
     ],
-    dist: [0],
+    dist: [0.818, 0.091, 0.052, 0.026, 0.013],
   },
   {
     id: 'shrine_lootencap05',
@@ -41,7 +41,7 @@ const rooms: RoomConfig[] = [
       locItem('Pickable_MeatPile', 0.66),
       locItem('Pickable_Item', 0.2, 3),
     ],
-    dist: [0],
+    dist: [0.727, 0.195, 0.039, 0.039],
   },
   {
     id: 'shrine_lootencap04',
@@ -58,7 +58,7 @@ const rooms: RoomConfig[] = [
       locItem('Pickable_MeatPile', 0.66),
       locItem('Pickable_Item', 0.2, 3),
     ],
-    dist: [0],
+    dist: [0.909, 0.078, 0.013],
   },
   {
     id: 'shrine_lootencap03',
@@ -72,7 +72,7 @@ const rooms: RoomConfig[] = [
       locItem('Pickable_MountainCaveRandom', 0.75),
       locItem('cloth_hanging_door'),
     ],
-    dist: [0],
+    dist: [0.727, 0.143, 0.130],
   },
   {
     id: 'shrine_lootencap02',
@@ -85,7 +85,7 @@ const rooms: RoomConfig[] = [
     items: [
       locItem('MountainKit_brazier', 0.66),
     ],
-    dist: [0],
+    dist: [0.714, 0.156, 0.078, 0.039, 0.013],
   },
   {
     id: 'shrine_lootencap01',
@@ -99,7 +99,7 @@ const rooms: RoomConfig[] = [
       locItem('Pickable_MountainCaveRandom', 0.75),
       locItem('cloth_hanging_door'),
     ],
-    dist: [0],
+    dist: [0.779, 0.091, 0.117, 0.013],
   },
   {
     id: 'shrine_endcap_noshrine',
@@ -117,7 +117,7 @@ const rooms: RoomConfig[] = [
       locItem('Pickable_MountainCaveRandom'),
       locItem('cloth_hanging_door'),
     ],
-    dist: [0],
+    dist: [0.455, 0.370, 0.091, 0.078, 0.006],
   },
   {
     id: 'shrine_endcap_noshrine02',
@@ -134,7 +134,7 @@ const rooms: RoomConfig[] = [
         locItem('CastleKit_groundtorch_blue', 1, 2),
       ], 0.66),
     ],
-    dist: [0],
+    dist: [0.455, 0.370, 0.091, 0.078, 0.006],
   },
   {
     id: 'shrine_endcap01',
@@ -148,7 +148,7 @@ const rooms: RoomConfig[] = [
       locItem('lox_ribs', 0.5, 2),
       locItem('Pickable_MeatPile', 0.66, 3),
     ],
-    dist: [0],
+    dist: [0.153, 0.286, 0.223, 0.135, 0.112, 0.036, 0.031, 0.008, 0.006, 0.005, 0.005],
   },
   {
     id: 'shrine_endcap02',
@@ -164,7 +164,7 @@ const rooms: RoomConfig[] = [
       locItem('Pickable_ForestCryptRemains03', 0.33),
       locItem('fenrirhide_hanging', 0.5),
     ],
-    dist: [0],
+    dist: [0.153, 0.286, 0.223, 0.135, 0.112, 0.036, 0.031, 0.008, 0.006, 0.005, 0.005],
   },
   {
     id: 'shrine_endcap03',
@@ -179,7 +179,7 @@ const rooms: RoomConfig[] = [
       locItem('mountainkit_chair', 0.5, 3),
       locItem('Fenring_Cultist_Hildir'),
     ],
-    dist: [0],
+    dist: [0.153, 0.286, 0.223, 0.135, 0.112, 0.036, 0.031, 0.008, 0.006, 0.005, 0.005],
   },
   {
     id: 'shrine_endcap04',
@@ -194,7 +194,7 @@ const rooms: RoomConfig[] = [
       locItem('Pickable_MeatPile', 0.66, 3),
       locItem('Fenring_Cultist_Hildir'),
     ],
-    dist: [0],
+    dist: [0.153, 0.286, 0.223, 0.135, 0.112, 0.036, 0.031, 0.008, 0.006, 0.005, 0.005],
   },
   {
     id: 'shrine_endcap05',
@@ -212,7 +212,7 @@ const rooms: RoomConfig[] = [
       ], 0.66),
       locItem('Fenring_Cultist_Hildir'),
     ],
-    dist: [0],
+    dist: [0.312, 0.363, 0.195, 0.065, 0.039, 0.026],
   },
   {
     id: 'shrine_endcap',
@@ -225,7 +225,7 @@ const rooms: RoomConfig[] = [
     items: [
       locItem('Fenring_Cultist_Hildir'),
     ],
-    dist: [0],
+    dist: [0.153, 0.286, 0.223, 0.135, 0.112, 0.036, 0.031, 0.008, 0.006, 0.005, 0.005],
   },
   {
     id: 'new_deeproom_bottom_shrine',
@@ -248,7 +248,7 @@ const rooms: RoomConfig[] = [
       locItem('cloth_hanging_door_double', 0.66, 2),
       locItem('Spawner_Ulv', 0.5, 4),
     ],
-    dist: [0],
+    dist: [0.948, 0.052],
   },
   {
     id: 'shrine_hole01',
@@ -276,7 +276,7 @@ const rooms: RoomConfig[] = [
         locItem('Ulv', 0.5, 3),
       ], 0.5),
     ],
-    dist: [0],
+    dist: [0.831, 0.143, 0.010, 0.009, 0.007],
   },
   {
     id: 'shrine_room01',
@@ -308,7 +308,7 @@ const rooms: RoomConfig[] = [
       locItem('Ulv', 1, 2),
       locItem('Ulv', 0.5, 6),
     ],
-    dist: [0],
+    dist: [0.786, 0.169, 0.039, 0.002, 0.004],
   },
   {
     id: 'shrine_room02',
@@ -340,7 +340,7 @@ const rooms: RoomConfig[] = [
       locItem('Ulv', 1, 2),
       locItem('Ulv', 0.5, 6),
     ],
-    dist: [0],
+    dist: [0.786, 0.169, 0.039, 0.002, 0.004],
   },
   {
     id: 'shrine_shrine03_HILDIR',
@@ -358,7 +358,7 @@ const rooms: RoomConfig[] = [
       // braziers
       locItem('MountainKit_brazier_blue', 1, 6),
       // loot
-      locItem('hanger', 1, 2),
+      locItem('hanging_hairstrands', 1, 2),
       locItem([ // dirtcenter x4
         locItem('Pickable_ForestCryptRemains01', 0.33),
         locItem('Pickable_ForestCryptRemains02', 0.33), // minus one 02
@@ -367,7 +367,7 @@ const rooms: RoomConfig[] = [
       locItem('Fenring_Cultist_Hildir'),
       locItem('Pickable_MeatPile', 0.66, 2),
     ],
-    dist: [0],
+    dist: [0.584, 0.273, 0.117, 0.026],
   },
   {
     id: 'shrine_shrine03',
@@ -386,7 +386,7 @@ const rooms: RoomConfig[] = [
       locItem('MountainKit_brazier', 0.66, 4),
       locItem('MountainKit_brazier_blue', 0.66, 4),
       // loot
-      locItem('hanger', 1, 2),
+      locItem('hanging_hairstrands', 1, 2),
       // SacredPillar x4
       locItem('Pickable_MountainCaveRandom', 1, 4),
       // EnemiesShrine
@@ -401,7 +401,7 @@ const rooms: RoomConfig[] = [
       locItem('Pickable_MeatPile', 0.66, 6),
       locItem('WolfStatue'),
     ],
-    dist: [0],
+    dist: [0.584, 0.273, 0.117, 0.026],
   },
   {
     id: 'shrine_shrine02',
@@ -416,7 +416,7 @@ const rooms: RoomConfig[] = [
       locItem('MountainKit_brazier', 1, 2),
       locItem('MountainKit_brazier_blue', 1, 2),
       // loot
-      locItem('hanger', 1, 2),
+      locItem('hanging_hairstrands', 1, 2),
       // SacredPillar x4
       locItem('Pickable_MountainCaveRandom', 1, 4),
       // EnemiesShrine
@@ -431,7 +431,7 @@ const rooms: RoomConfig[] = [
       locItem('Pickable_MeatPile', 0.66, 6),
       locItem('WolfStatue'),
     ],
-    dist: [0],
+    dist: [0.623, 0.338, 0.039],
   },
   {
     id: 'shrine_shrine01',
@@ -446,7 +446,7 @@ const rooms: RoomConfig[] = [
       locItem('MountainKit_brazier', 1, 2),
       locItem('MountainKit_brazier_blue', 1, 2),
       // loot
-      locItem('hanger', 1, 2),
+      locItem('hanging_hairstrands', 1, 2),
       // SacredPillar x2
       locItem('Pickable_MountainCaveRandom', 1, 2),
       // EnemiesShrine
@@ -461,7 +461,7 @@ const rooms: RoomConfig[] = [
       locItem('Pickable_MeatPile', 0.66, 3),
       locItem('WolfStatue'),
     ],
-    dist: [0],
+    dist: [0.402, 0.390, 0.195, 0.013],
   },
   {
     id: 'shrine_corridor07',
@@ -481,7 +481,7 @@ const rooms: RoomConfig[] = [
       locItem('Spawner_Ulv', 0.66, 2),
       locItem('Pickable_MountainCaveRandom', 0.66),
     ],
-    dist: [0],
+    dist: [0.792, 0.208],
   },
   {
     id: 'shrine_corridor06',
@@ -502,7 +502,7 @@ const rooms: RoomConfig[] = [
       locItem('MountainKit_brazier_blue', 1, 2),
       locItem('Spawner_Ulv', 0.66, 3),
     ],
-    dist: [0],
+    dist: [0.724, 0.242, 0.030, 0.004],
   },
   {
     id: 'shrine_corridor05',
@@ -524,7 +524,7 @@ const rooms: RoomConfig[] = [
       locItem('Spawner_Ulv', 0.66, 2),
       locItem('cloth_hanging_door', 1, 3),
     ],
-    dist: [0],
+    dist: [0.779, 0.195, 0.026],
   },
   {
     id: 'shrine_corridor04',
@@ -559,7 +559,7 @@ const rooms: RoomConfig[] = [
       locItem('Spawner_Ulv', 0.5, 1),
       locItem('Spawner_Ulv', 0.25, 3),
     ],
-    dist: [0],
+    dist: [0.724, 0.242, 0.030, 0.004],
   },
   {
     id: 'shrine_corridor03',
@@ -602,7 +602,7 @@ const rooms: RoomConfig[] = [
       // EnemiesRoom
       locItem('Spawner_Ulv', 0.33, 2),
     ],
-    dist: [0],
+    dist: [0.724, 0.242, 0.030, 0.004],
   },
   {
     id: 'shrine_corridor02',
@@ -625,7 +625,7 @@ const rooms: RoomConfig[] = [
       // EnemiesRoom
       locItem('Spawner_Ulv', 0.66, 2),
     ],
-    dist: [0],
+    dist: [0.792, 0.195, 0.013],
   },
   {
     id: 'shrine_corridor01',
@@ -667,7 +667,7 @@ const rooms: RoomConfig[] = [
       // EnemiesRoom
       locItem('Spawner_Ulv', 0.5, 4),
     ],
-    dist: [0],
+    dist: [0.675, 0.273, 0.052],
   },
   {
     id: 'shrine_start02_ice',
@@ -683,10 +683,11 @@ const rooms: RoomConfig[] = [
       { pos: [0, -4, -10.5], type: 'ice', allowDoor },
     ],
     items: [
+      locItem('MountainKit_wood_gate'),
       // braziers
       locItem('MountainKit_brazier', 0.66, 3),
     ],
-    dist: [0],
+    dist: [0.766, 0.208, 0.026],
   },
   {
     id: 'shrine_start02_ice_corridor',
@@ -702,12 +703,13 @@ const rooms: RoomConfig[] = [
       { pos: [-6, -1.75, 6], type: 'shrine', allowDoor },
     ],
     items: [
+      locItem('MountainKit_wood_gate'),
       // braziers
       locItem('MountainKit_brazier', 0.66),
       // SacredPillar
       locItem('Pickable_MountainCaveRandom', 0.66),
     ],
-    dist: [0],
+    dist: [0.779, 0.130, 0.039, 0.052],
   },
   {
     id: 'shrine_start02',
@@ -723,13 +725,14 @@ const rooms: RoomConfig[] = [
       { pos: [0, -1.25, -10.5], allowDoor },
     ],
     items: [
+      locItem('MountainKit_wood_gate'),
       // braziers
       locItem('MountainKit_brazier', 0.66, 3),
     ],
-    dist: [0],
+    dist: [0.182, 0.467, 0.260, 0.078, 0.013],
   },
   {
-    id: 'shrine_start02',
+    id: 'shrine_start02_corridor',
     theme: Theme.Cave | Theme.CaveHildir,
     type: 'middle',
     size: [12, 12, 24],
@@ -741,12 +744,13 @@ const rooms: RoomConfig[] = [
       { pos: [-6, -4, 6], type: 'shrine', allowDoor },
     ],
     items: [
+      locItem('MountainKit_wood_gate'),
       // braziers
       locItem('MountainKit_brazier', 0.66),
       // GameObject
       locItem('cloth_hanging_door', 1, 2),
     ],
-    dist: [0],
+    dist: [0.312, 0.415, 0.182, 0.065, 0.026],
   },
   {
     id: 'new_deeproom_endcap',
@@ -758,7 +762,7 @@ const rooms: RoomConfig[] = [
     items: [
       locItem('Pickable_MountainCaveCrystal', 0.5, 8),
     ],
-    dist: [0],
+    dist: [0.597, 0.338, 0.065],
   },
   {
     id: 'new_deeproom_bottom_lake',
@@ -774,7 +778,7 @@ const rooms: RoomConfig[] = [
       // GameObject
       locItem([locItem('Pickable_MountainCaveCrystal', 0.66, 6)], 0.75),
     ],
-    dist: [0],
+    dist: [0.974, 0.026],
   },
   {
     id: 'new_deeproom_bottom_ice',
@@ -795,7 +799,7 @@ const rooms: RoomConfig[] = [
       // EnemiesRoom
       locItem('Spawner_Ulv', 0.5, 3),
     ],
-    dist: [0],
+    dist: [0.974, 0.013, 0.013],
   },
   {
     id: 'new_deeproom_bottom',
@@ -816,7 +820,7 @@ const rooms: RoomConfig[] = [
       // EnemiesRoom
       locItem('Spawner_Ulv', 0.5, 3),
     ],
-    dist: [0],
+    dist: [0.961, 0.039],
   },
   {
     id: 'new_deeproom_middle',
@@ -835,7 +839,7 @@ const rooms: RoomConfig[] = [
       // crystals
       locItem('Pickable_MountainCaveCrystal', 0.8, 4),
     ],
-    dist: [0],
+    dist: [1],
   },
   {
     id: 'new_deeproom_top',
@@ -856,7 +860,7 @@ const rooms: RoomConfig[] = [
       // bats x3
       locItem(BATS, 1, 3),
     ],
-    dist: [0],
+    dist: [0.857, 0.143],
   },
   {
     id: 'new_deeproom_roof',
@@ -871,7 +875,7 @@ const rooms: RoomConfig[] = [
       // bats (2)
       ...BATS,
     ],
-    dist: [0],
+    dist: [0.974, 0.026],
   },
   {
     id: 'new_sloperoom05',
@@ -893,7 +897,7 @@ const rooms: RoomConfig[] = [
       ...BATS,
       locItem('Pickable_MountainCaveCrystal', 0.33, 6),
     ],
-    dist: [0],
+    dist: [0.909, 0.091],
   },
   {
     id: 'new_sloperoom04',
@@ -913,7 +917,7 @@ const rooms: RoomConfig[] = [
       ...BATS,
       locItem('Pickable_MountainCaveCrystal', 0.33, 3),
     ],
-    dist: [0],
+    dist: [0.792, 0.195, 0.013],
   },
   {
     id: 'new_sloperoom03',
@@ -933,7 +937,7 @@ const rooms: RoomConfig[] = [
       ...BATS,
       locItem('Pickable_MountainCaveCrystal', 0.33, 3),
     ],
-    dist: [0],
+    dist: [0.831, 0.130, 0.039],
   },
   {
     id: 'new_sloperoom02',
@@ -962,7 +966,7 @@ const rooms: RoomConfig[] = [
       // EnemiesRoom
       locItem('Spawner_Ulv', 0.5, 3),
     ],
-    dist: [0],
+    dist: [0.896, 0.091, 0.013],
   },
   {
     id: 'new_sloperoom01',
@@ -988,7 +992,7 @@ const rooms: RoomConfig[] = [
       // EnemiesRoom
       locItem('Spawner_Ulv', 0.5, 3),
     ],
-    dist: [0],
+    dist: [0.896, 0.091, 0.013],
   },
   {
     id: 'new_sloperoom_w_hole',
@@ -1015,7 +1019,7 @@ const rooms: RoomConfig[] = [
       // EnemiesRoom
       locItem('Spawner_Ulv', 0.5, 3),
     ],
-    dist: [0],
+    dist: [0.896, 0.091, 0.013],
   },
   {
     id: 'new_slope_endcap01',
@@ -1032,7 +1036,7 @@ const rooms: RoomConfig[] = [
         locItem('caverock_ice_stalagtite'),
       ], 0.66, 9),
     ],
-    dist: [0],
+    dist: [1],
   },
   {
     id: 'new_iceendcap02_crystal',
@@ -1047,7 +1051,7 @@ const rooms: RoomConfig[] = [
       // crystals
       locItem('Pickable_MountainCaveCrystal', 0.8, 4),
     ],
-    dist: [0],
+    dist: [0.728, 0.201, 0.065, 0.006],
   },
   {
     id: 'new_iceendcap02',
@@ -1062,7 +1066,7 @@ const rooms: RoomConfig[] = [
       // crystals
       locItem('Pickable_MountainCaveCrystal', 0.8, 4),
     ],
-    dist: [0],
+    dist: [0.728, 0.201, 0.065, 0.006],
   },
   {
     id: 'new_iceendcap_painting04',
@@ -1081,7 +1085,7 @@ const rooms: RoomConfig[] = [
       locItem('RuneStone_Cavepainting4', 0.5),
       locItem('Fenring_Cultist_Hildir'),
     ],
-    dist: [0],
+    dist: [0.860, 0.127, 0.013],
   },
   {
     id: 'new_iceendcap_painting03',
@@ -1100,7 +1104,7 @@ const rooms: RoomConfig[] = [
       locItem('RuneStone_Cavepainting3', 0.5),
       locItem('Fenring_Cultist_Hildir'),
     ],
-    dist: [0],
+    dist: [0.860, 0.127, 0.013],
   },
   {
     id: 'new_iceendcap_painting02',
@@ -1119,7 +1123,7 @@ const rooms: RoomConfig[] = [
       locItem('RuneStone_Cavepainting2', 0.5),
       locItem('Fenring_Cultist_Hildir'),
     ],
-    dist: [0],
+    dist: [0.860, 0.127, 0.013],
   },
   {
     id: 'new_iceendcap_painting01',
@@ -1138,7 +1142,7 @@ const rooms: RoomConfig[] = [
       locItem('RuneStone_Cavepainting1', 0.5),
       locItem('Fenring_Cultist_Hildir'),
     ],
-    dist: [0],
+    dist: [0.860, 0.127, 0.013],
   },
   {
     id: 'new_iceendcap_moderstone',
@@ -1156,7 +1160,7 @@ const rooms: RoomConfig[] = [
       locItem('Vegvisir_DragonQueen', 0.25),
       locItem('Fenring_Cultist_Hildir'),
     ],
-    dist: [0],
+    dist: [0.701, 0.221, 0.065, 0.013],
   },
   {
     id: 'new_icecorridor07',
@@ -1174,7 +1178,7 @@ const rooms: RoomConfig[] = [
       // crystals
       locItem([locItem('Pickable_MountainCaveCrystal', 0.8, 4)], 0.5),
     ],
-    dist: [0],
+    dist: [0.883, 0.078, 0.039],
   },
   {
     id: 'new_icecorridor06',
@@ -1192,7 +1196,7 @@ const rooms: RoomConfig[] = [
         locItem('Pickable_MountainCaveCrystal', 0.75 * 0.5 * 0.5),
       ], 0.5),
     ],
-    dist: [0],
+    dist: [0.956, 0.044],
   },
   {
     id: 'new_icecorridor05',
@@ -1216,7 +1220,7 @@ const rooms: RoomConfig[] = [
       // ..
       locItem('Pickable_MountainCaveCrystal', 0.25),
     ],
-    dist: [0],
+    dist: [0.961, 0.026, 0.013],
   },
   {
     id: 'new_icecorridor04',
@@ -1231,7 +1235,7 @@ const rooms: RoomConfig[] = [
     items: [
       locItem('Pickable_MountainCaveCrystal', 0.25),
     ],
-    dist: [0],
+    dist: [0.956, 0.044],
   },
   {
     id: 'new_icecorridor03',
@@ -1251,7 +1255,7 @@ const rooms: RoomConfig[] = [
       // GameObject
       locItem('Pickable_MountainCaveCrystal', 0.5 * 0.5)
     ],
-    dist: [0],
+    dist: [0.956, 0.044],
   },
   {
     id: 'new_icecorridor02',
@@ -1273,7 +1277,7 @@ const rooms: RoomConfig[] = [
         locItem('Spawner_Ulv', 0.5, 4),
       ], 0.25),
     ],
-    dist: [0],
+    dist: [0.956, 0.044],
   },
   {
     id: 'new_icecorridor01',
@@ -1292,7 +1296,7 @@ const rooms: RoomConfig[] = [
       ], 0.66, 14),
       locItem('Pickable_MountainCaveCrystal', 0.25, 2),
     ],
-    dist: [0],
+    dist: [0.766, 0.208, 0.013, 0.013],
   },
   {
     id: 'new_endcap02_crystal',
@@ -1308,7 +1312,7 @@ const rooms: RoomConfig[] = [
       locItem('Pickable_MountainCaveCrystal', 0.8, 4),
       locItem('Fenring_Cultist_Hildir'),
     ],
-    dist: [0],
+    dist: [0.194, 0.234, 0.234, 0.130, 0.117, 0.013, 0.065, 0.013],
   },
   {
     id: 'new_endcap02',
@@ -1322,7 +1326,7 @@ const rooms: RoomConfig[] = [
     items: [
       locItem('Fenring_Cultist_Hildir'),
     ],
-    dist: [0],
+    dist: [0.117, 0.324, 0.195, 0.195, 0.078, 0.039, 0.039, 0, 0, 0.013],
   },
   {
     id: 'new_endcap_painting_04',
@@ -1340,7 +1344,7 @@ const rooms: RoomConfig[] = [
       locItem('RuneStone_Cavepainting4'),
       locItem('Fenring_Cultist_Hildir'),
     ],
-    dist: [0],
+    dist: [0.9, 0.1],
   },
   {
     id: 'new_endcap_painting_03',
@@ -1358,7 +1362,7 @@ const rooms: RoomConfig[] = [
       locItem('RuneStone_Cavepainting3'),
       locItem('Fenring_Cultist_Hildir'),
     ],
-    dist: [0],
+    dist: [0.9, 0.1],
   },
   {
     id: 'new_endcap_painting_02',
@@ -1376,7 +1380,7 @@ const rooms: RoomConfig[] = [
       locItem('RuneStone_Cavepainting2'),
       locItem('Fenring_Cultist_Hildir'),
     ],
-    dist: [0],
+    dist: [0.9, 0.1],
   },
   {
     id: 'new_endcap_painting_01',
@@ -1394,7 +1398,7 @@ const rooms: RoomConfig[] = [
       locItem('RuneStone_Cavepainting1'),
       locItem('Fenring_Cultist_Hildir'),
     ],
-    dist: [0],
+    dist: [0.9, 0.1],
   },
   {
     id: 'new_endcap_moderstone',
@@ -1412,7 +1416,7 @@ const rooms: RoomConfig[] = [
       locItem('Vegvisir_DragonQueen', 0.25),
       locItem('Fenring_Cultist_Hildir'),
     ],
-    dist: [0],
+    dist: [0.714, 0.234, 0.039, 0, 0.013],
   },
   {
     id: 'new_corridor09',
@@ -1430,7 +1434,7 @@ const rooms: RoomConfig[] = [
     items: [
       locItem('Pickable_MountainCaveCrystal', 0.25, 2),
     ],
-    dist: [0],
+    dist: [0.844, 0.130, 0.026],
   },
   {
     id: 'new_corridor08',
@@ -1447,7 +1451,7 @@ const rooms: RoomConfig[] = [
       // crystals
       locItem([locItem('Pickable_MountainCaveCrystal', 0.8, 4)], 0.5),
     ],
-    dist: [0],
+    dist: [0.558, 0.338, 0.091, 0, 0.013],
   },
   {
     id: 'new_corridor07',
@@ -1464,7 +1468,7 @@ const rooms: RoomConfig[] = [
       // extraroof (2)/random (1)/crystals
       locItem('Pickable_MountainCaveCrystal', 0.5 * 0.25, 2),
     ],
-    dist: [0],
+    dist: [0.584, 0.351, 0.052, 0.013], // [0.682, 0.264, 0.050, 0.003, 0.001]
   },
   {
     id: 'new_corridor06',
@@ -1483,7 +1487,7 @@ const rooms: RoomConfig[] = [
       // ..
       locItem('Spawner_Ulv', 0.5, 4),
     ],
-    dist: [0],
+    dist: [0.714, 0.247, 0.039],
   },
   {
     id: 'new_corridor05',
@@ -1500,7 +1504,7 @@ const rooms: RoomConfig[] = [
       // room/pillars
       locItem([locItem('Pickable_MountainCaveCrystal', 0.25, 2)], 0.5),
     ],
-    dist: [0],
+    dist: [0.779, 0.169, 0.052],
   },
   {
     id: 'new_corridor03',
@@ -1516,7 +1520,7 @@ const rooms: RoomConfig[] = [
     items: [
       locItem('Pickable_MountainCaveCrystal', 0.25, 2),
     ],
-    dist: [0],
+    dist: [0.675, 0.286, 0.039],
   },
   {
     id: 'new_corridor01',
@@ -1533,7 +1537,7 @@ const rooms: RoomConfig[] = [
       // crystals
       locItem('Pickable_MountainCaveCrystal', 0.25, 2),
     ],
-    dist: [0],
+    dist: [0.779, 0.195, 0.026],
   },
   {
     id: 'new_crossroads01_hole',
@@ -1558,7 +1562,7 @@ const rooms: RoomConfig[] = [
       // ..
       locItem('Pickable_MountainCaveCrystal', 0.25),
     ],
-    dist: [0],
+    dist: [0.857, 0.143],
   },
   {
     id: 'new_crossroads01_hole_shrine',
@@ -1584,7 +1588,7 @@ const rooms: RoomConfig[] = [
       // ..
       locItem('Pickable_MountainCaveCrystal', 0.25, 3),
     ],
-    dist: [0],
+    dist: [0.792, 0.169, 0.039],
   },
   {
     id: 'new_crossroads01_hole_long',
@@ -1612,7 +1616,7 @@ const rooms: RoomConfig[] = [
       // ..
       locItem('Pickable_MountainCaveCrystal', 0.25, 4),
     ],
-    dist: [0],
+    dist: [0.948, 0.052],
   },
   {
     id: 'new_crossroads01_hole_ice',
@@ -1637,7 +1641,7 @@ const rooms: RoomConfig[] = [
       // ..
       locItem('Pickable_MountainCaveCrystal', 0.25, 3),
     ],
-    dist: [0],
+    dist: [0.805, 0.156, 0.039],
   },
   {
     id: 'new_crossroads01',
@@ -1656,7 +1660,7 @@ const rooms: RoomConfig[] = [
       // ..
       locItem('Pickable_MountainCaveCrystal', 0.25, 2),
     ],
-    dist: [0],
+    dist: [0.792, 0.182, 0.026],
   },
   {
     id: 'new_crossroads01_ice',
@@ -1673,7 +1677,7 @@ const rooms: RoomConfig[] = [
     ],
     items: [
     ],
-    dist: [0],
+    dist: [0.805, 0.182, 0.013],
   },
   {
     id: 'new_crossroads03',
@@ -1693,7 +1697,7 @@ const rooms: RoomConfig[] = [
         locItem('Spawner_Ulv', 0.25),
       ], 0.5),
     ],
-    dist: [0],
+    dist: [0.506, 0.273, 0.182, 0.013, 0.013, 0.013],
   },
   {
     id: 'new_crossroads02',
@@ -1709,7 +1713,7 @@ const rooms: RoomConfig[] = [
     items: [
       locItem('Pickable_MountainCaveCrystal', 0.25, 2),
     ],
-    dist: [0],
+    dist: [0.636, 0.260, 0.078, 0.026],
   },
   {
     id: 'new_entrance02',
@@ -1726,30 +1730,30 @@ const rooms: RoomConfig[] = [
     items: [
       locItem('Pickable_MountainCaveCrystal', 0.25, 2),
     ],
-    dist: [0],
+    dist: [0, 1],
   },
-  /*{
+  {
     id: 'divider',
     theme: Theme.Cave | Theme.CaveHildir,
-    type: 'divider',
+    type: 'end',
     size: [0, 12, 12],
     endCapPriority: 1,
     weight: 1,
     connections: [{ pos: [0, -5, 0], allowDoor }],
     items: [],
-    dist: [0],
+    dist: [0.935, 0.065],
   },
   {
     id: 'divider02',
     theme: Theme.Cave | Theme.CaveHildir,
-    type: 'divider',
+    type: 'end',
     size: [0, 12, 12],
     endCapPriority: 1,
     weight: 1,
     connections: [{ pos: [0, -5, 0], allowDoor }],
     items: [],
-    dist: [0],
-  },*/
+    dist: [0.948, 0.039, 0.013],
+  },
   {
     id: 'dome_roof',
     theme: Theme.Cave,
@@ -1761,7 +1765,7 @@ const rooms: RoomConfig[] = [
       locItem([locItem('Pickable_MountainCaveCrystal', 0.8, 3)], 0.5),
       ...BATS,
     ],
-    dist: [0],
+    dist: [0.8, 0.2], // guess
   },
   {
     id: 'new_crossroads01_hole_to_deeproom',
@@ -1792,7 +1796,7 @@ const rooms: RoomConfig[] = [
       // bats x3
       locItem(BATS, 3),
     ],
-    dist: [0],
+    dist: [0.727, 0.247, 0.026],
   },
   {
     id: 'dome_roof_from_deeproom_corner1',
@@ -1812,7 +1816,7 @@ const rooms: RoomConfig[] = [
       locItem('Spawner_Bat'),
       locItem('Spawner_Bat', 0.5, 4),
     ],
-    dist: [0],
+    dist: [0.995, 0.005],
   },
   {
     id: 'dome_roof_from_deeproom_corner2',
@@ -1832,7 +1836,7 @@ const rooms: RoomConfig[] = [
       locItem('Spawner_Bat'),
       locItem('Spawner_Bat', 0.5, 4),
     ],
-    dist: [0],
+    dist: [0.995, 0.005],
   },
   {
     id: 'dome_roof_from_deeproom_corner3',
@@ -1852,7 +1856,7 @@ const rooms: RoomConfig[] = [
       locItem('Spawner_Bat'),
       locItem('Spawner_Bat', 0.5, 4),
     ],
-    dist: [0],
+    dist: [0.995, 0.005],
   },
   {
     id: 'dome_roof_from_deeproom_corner4',
@@ -1872,7 +1876,7 @@ const rooms: RoomConfig[] = [
       locItem('Spawner_Bat'),
       locItem('Spawner_Bat', 0.5, 4),
     ],
-    dist: [0],
+    dist: [0.995, 0.005],
   },
   {
     id: 'dome_middle',
@@ -1892,7 +1896,7 @@ const rooms: RoomConfig[] = [
       ...BATS,
       locItem('RuneStone_CaveMan'),
     ],
-    dist: [0],
+    dist: [0.8, 0.2], // guess
   },
   {
     id: 'dome_bottom_lake',
@@ -1928,7 +1932,7 @@ const rooms: RoomConfig[] = [
         locItem('Pickable_MountainCaveCrystal', 1, 3),
       ], 1),
     ],
-    dist: [0],
+    dist: [0.974, 0.026],
   },
   {
     id: 'dome_bottom_endcap',
@@ -1941,7 +1945,7 @@ const rooms: RoomConfig[] = [
     items: [
       locItem('Pickable_MountainCaveCrystal', 0.66, 10),
     ],
-    dist: [0],
+    dist: [0.5, 0.4, 0.1], // guess
   },
 ];
 export const frostCaves: DungeonRoomsConfig = {

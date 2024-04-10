@@ -44,6 +44,14 @@ export const spawners: Spawner[] = [
   {
     type: 'spawner',
     tier: 6,
+    id: 'Spawner_Tick',
+    spawn: 'Tick',
+    levels: [1, 3],
+    levelUpChance: 0.1,
+  },
+  {
+    type: 'spawner',
+    tier: 6,
     id: 'Spawner_Tick_stared',
     spawn: 'Tick',
     levels: [1, 3],
@@ -60,9 +68,26 @@ export const spawners: Spawner[] = [
   {
     type: 'spawner',
     tier: 6,
-    id: 'SpawnerDverger_Arbalets',
+    id: 'Spawner_BlobTar_respawn_30',
+    spawn: 'BlobTar',
+    levels: [1, 1],
+    levelUpChance: 0.15,
+    respawnMinutes: 60,
+  },
+  {
+    type: 'spawner',
+    tier: 6,
+    id: 'Spawner_DvergerArbalest',
     spawn: 'Dverger',
     levels: [1, 3],
+    levelUpChance: 0.1,
+  },
+  {
+    type: 'spawner',
+    tier: 2,
+    id: 'Spawner_Skeleton_hildir',
+    spawn: 'Skeleton_Hildir_nochest',
+    levels: [1, 1],
     levelUpChance: 0.1,
   },
 ];

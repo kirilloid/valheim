@@ -11,7 +11,7 @@ import { WORLD_RADIUS, ZONE_MAX_CC, ZONE_SIZE } from './game';
 import { WorldGenerator, Biome as BiomeEnum } from './world-generator';
 
 import { getId, prefabHashes } from '../data/zdo';
-import { data } from '../data/itemDB';
+import { data, extraData } from '../data/itemDB';
 import { locationHashes } from '../data/location-hashes';
 import { modPrefabNames } from '../data/prefabs';
 
@@ -22,6 +22,7 @@ import { locations, locationsIdMap } from '../data/location';
 import { stripExtraData } from '../mods/epic-loot';
 import { PackageWriter } from '../file/Package';
 import { ticksToSeconds } from '../file/zdo/time';
+import { readRooms } from '../view/world/zdo-props/rooms';
 
 const locationHASH = stableHashCode('location');
 
@@ -406,6 +407,43 @@ export function* getGeneratedPercent(
     }
   }
   return stats;
+}
+
+export function getStatsForDungeons(zdos: ZDO[]) {
+  const dgStats = new Map<number, Record<string, number[]>>();
+  const dgCount: Record<string, number> = {};
+  for (const [id, comps] of Object.entries(extraData)) {
+    if (comps.includes('DungeonGenerator')) {
+      const key = stableHashCode(id);
+      dgCount[key] = 0;
+      dgStats.set(key, {});
+    }
+  }
+  for (const zdo of zdos) {
+    const id = zdo.prefab;
+    const dungeonStats = dgStats.get(id);
+    if (dungeonStats == null) continue;
+    dgCount[id]++;
+    const rooms = readRooms(zdo).map(r => r.room ?? r.hash);
+    const stats: Record<string, number> = {};
+    for (const r of rooms) {
+      if (r in stats) stats[r]++; else stats[r] = 1;
+    }
+    for (const [k, v] of Object.entries(stats)) {
+      const dist = dungeonStats[k] ?? (dungeonStats[k] = []);
+      while (dist.length <= v) dist.push(0);
+      dist[v]++;
+    }
+  }
+  for (const [id, dungeonStats] of dgStats) {
+    for (const dist of Object.values(dungeonStats)) {
+      const totalNonZero = dist.reduce((a, b) => a + b, 0);
+      const total = dgCount[id]!;
+      dist[0] = total - totalNonZero;
+      for (let i = 0; i < dist.length; i++) dist[i] /= total;
+    }
+  }
+  return dgStats;
 }
 
 function removeFromZoneSystem(zoneSystem: ZoneSystemData | undefined, zoneIds: Set<number>): ZoneSystemData | undefined {

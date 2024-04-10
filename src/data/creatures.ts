@@ -1174,7 +1174,12 @@ export const creatures: Creature[] = [
       dropTrophy('TrophyWraith', 0.05),
     ],
   },
-  {
+  ...(function(x: Creature) { return [x, {
+    ...x,
+    id: 'Draugr_Ranged',
+    ragdollId: 'Draugr_ranged_ragdoll',
+    attacks: [x.attacks[1]!],
+  }] }({
     type: 'creature',
     id: 'Draugr',
     ragdollId: 'Draugr_ragdoll',
@@ -1237,7 +1242,7 @@ export const creatures: Creature[] = [
       dropEntry('Entrails'),
       dropTrophy('TrophyDraugr', 0.1),
     ],
-  },
+  })),
   {
     type: 'creature',
     id: 'Draugr_Elite',
@@ -1285,7 +1290,6 @@ export const creatures: Creature[] = [
       dropTrophy('TrophyDraugrElite', 0.1),
     ],
   },
-  // Draugr_Ranged -> Draugr_ranged_ragdoll
   {
     type: 'creature',
     id: 'Abomination',

@@ -97,7 +97,7 @@ export const pickables: {
     id: 'Pickable_ForestCryptRemains03',
     iconId: 'resource/BoneFragments',
     tier: 2,
-    item: 'resource/BoneFragments',
+    item: 'BoneFragments',
     subtype: 'misc',
   },
   {

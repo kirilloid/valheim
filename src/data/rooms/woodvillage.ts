@@ -30,7 +30,7 @@ export const woodvillage: CampConfig = {
         locItem('Spawner_Draugr_Ranged'),
         locItem('Spawner_Draugr', 0.75, 2),
       ],
-      dist: [],
+      dist: [0.73, 0.27],
     },
     {
       id: 'road1',
@@ -42,7 +42,7 @@ export const woodvillage: CampConfig = {
         locItem('wood_pole_log_4', 1, 2),
         locItem('wood_gate', 1, 2),
       ],
-      dist: [],
+      dist: [0.53, 0.40, 0.07],
     },
     {
       id: 'stakewall3',
@@ -53,7 +53,7 @@ export const woodvillage: CampConfig = {
         locItem('stake_wall', 0.66, 3),
         locItem('stake_wall', 0.5, 2),
       ],
-      dist: [],
+      dist: [0.07, 0.13, 0.40, 0.07, 0.33],
     },
     {
       id: 'tower',
@@ -83,7 +83,7 @@ export const woodvillage: CampConfig = {
         locItem('Spawner_Draugr', 0.75, 2),
         locItem('Spawner_Draugr_Ranged', 0.9, 2),
       ],
-      dist: [],
+      dist: [0.67, 0.27, 0.06],
     },
     {
       id: 'towerruin',
@@ -110,7 +110,7 @@ export const woodvillage: CampConfig = {
         // enemies
         locItem('Spawner_Draugr', 0.5, 2),
       ],
-      dist: [],
+      dist: [1],
     },
   ],
   inner: [
@@ -161,7 +161,7 @@ export const woodvillage: CampConfig = {
         locItem('Spawner_Draugr_Elite'),
         locItem('TreasureChest_meadows', 0.75, 3),
       ],
-      dist: [],
+      dist: [0.4, 0.6],
     },
     {
       id: 'greathallruin',
@@ -218,7 +218,7 @@ export const woodvillage: CampConfig = {
         // 
         locItem('Beehive', 0.33),
       ],
-      dist: [],
+      dist: [0.67, 0.27, 0.06],
     },
     {
       id: 'house1',
@@ -246,7 +246,7 @@ export const woodvillage: CampConfig = {
         locItem('Spawner_Draugr_Ranged'),
         locItem('Spawner_Draugr', 0.75, 2),
       ],
-      dist: [],
+      dist: [0.07, 0.20, 0.40, 0.13, 0.20],
     },
     {
       id: 'longhouse',
@@ -298,7 +298,7 @@ export const woodvillage: CampConfig = {
         locItem('Spawner_Draugr_Ranged', 0.75, 2),
         locItem('Spawner_Draugr_Elite', 0.75),
       ],
-      dist: [],
+      dist: [0.33, 0.40, 0.27],
     },
     {
       id: 'longhouseruin',
@@ -330,7 +330,7 @@ export const woodvillage: CampConfig = {
         locItem('Spawner_Draugr', 0.75),
         locItem('Spawner_Draugr_Ranged', 0.75),
       ],
-      dist: [],
+      dist: [0.2, 0.6, 0.2],
     },
   ],
 };

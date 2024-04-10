@@ -11,7 +11,7 @@ const ROOM_ENEMIES = locItem([
 const ROOM_LOOT = locItem([
   locItem('Pickable_SunkenCryptRandom', 0.5, 4),
   locItem('TreasureChest_sunkencrypt', 0.9),
-  locItem('piece_groundtorch_green', 0.5, 4),
+  locItem('CastleKit_groundtorch_green', 0.5, 4),
 ]);
 
 export const sunkencrypt: DungeonRoomsConfig = {
@@ -30,10 +30,10 @@ export const sunkencrypt: DungeonRoomsConfig = {
         { pos: [0, -2.5, -7] },
       ],
       items: [
-        locItem('piece_groundtorch_green', 1, 2),
+        locItem('CastleKit_groundtorch_green', 1, 2),
         locItem('MushroomYellow', 0.5, 6),
       ],
-      dist: [0, 1],
+      dist: [0.017, 0.983],
     },
     {
       id: 'Corridor1',
@@ -46,12 +46,12 @@ export const sunkencrypt: DungeonRoomsConfig = {
         { pos: [-6, -2.5, 0] },
       ],
       items: [
-        locItem('piece_groundtorch_green', 0.5, 6),
+        locItem('CastleKit_groundtorch_green', 0.5, 6),
         locItem('mudpile2', 0.6, 2),
         locItem('Vegvisir_Bonemass', 0.4),
         locItem('TreasureChest_sunkencrypt', 0.5, 3),
       ],
-      dist: [0.21, 0.44, 0.19, 0.1, 0.06],
+      dist: [0.447, 0.336, 0.153, 0.060, 0.004],
     },
     {
       id: 'Corridor2',
@@ -65,11 +65,11 @@ export const sunkencrypt: DungeonRoomsConfig = {
       ],
       items: [
         locItem('Draugr', 0.5, 2),
-        locItem('piece_groundtorch_green', 0.5, 4),
+        locItem('CastleKit_groundtorch_green', 0.5, 4),
         locItem('MushroomYellow', 0.5, 6),
         locItem('mudpile2', 0.6, 2),
       ],
-      dist: [0.21, 0.44, 0.21, 0.12, 0.02],
+      dist: [0.370, 0.328, 0.187, 0.094, 0.013, 0.004, 0.004],
     },
     {
       id: 'Corridor3',
@@ -82,9 +82,9 @@ export const sunkencrypt: DungeonRoomsConfig = {
         { pos: [-6, -3, 0], type: 'water' },
       ],
       items: [
-        locItem('piece_groundtorch_green', 0.5, 2),
+        locItem('CastleKit_groundtorch_green', 0.5, 2),
       ],
-      dist: [0.14, 0.22, 0.22, 0.21, 0.12, 0.06, 0.01, 0.01, 0.01],
+      dist: [0.196, 0.276, 0.268, 0.162, 0.068, 0.017, 0.013],
     },
     {
       id: 'Corridor4',
@@ -101,9 +101,9 @@ export const sunkencrypt: DungeonRoomsConfig = {
         locItem('mudpile2', 0.6, 3),
         locItem('Draugr', 0.5),
         locItem('Blob', 0.5),
-        locItem('piece_groundtorch_green', 0.5, 1),
+        locItem('CastleKit_groundtorch_green', 0.5, 1),
       ],
-      dist: [0.17, 0.3, 0.26, 0.15, 0.07, 0.03, 0.02],
+      dist: [0.285, 0.332, 0.234, 0.123, 0.026],
     },
     {
       id: 'Corridor5',
@@ -120,9 +120,9 @@ export const sunkencrypt: DungeonRoomsConfig = {
       items: [
         locItem('mudpile2', 0.6, 4),
         locItem('Blob', 0.5, 2),
-        locItem('piece_groundtorch_green', 0.5, 2),
+        locItem('CastleKit_groundtorch_green', 0.5, 2),
       ],
-      dist: [0.19, 0.22, 0.13, 0.27, 0.13, 0.03, 0.03],
+      dist: [0.260, 0.264, 0.217, 0.166, 0.064, 0.017, 0.012],
     },
     {
       id: 'Stair1',
@@ -136,9 +136,9 @@ export const sunkencrypt: DungeonRoomsConfig = {
       ],
       items: [
         locItem('mudpile2', 0.6, 2),
-        locItem('piece_groundtorch_green', 0.5, 4),
+        locItem('CastleKit_groundtorch_green', 0.5, 4),
       ],
-      dist: [0.26, 0.29, 0.26, 0.14, 0.04, 0.01],
+      dist: [0.583, 0.370, 0.047],
     },
     {
       id: 'Endcap1',
@@ -150,7 +150,7 @@ export const sunkencrypt: DungeonRoomsConfig = {
       items: [
         locItem('MushroomYellow', 0.5, 5),
       ],
-      dist: [0.16, 0.14, 0.15, 0.19, 0.12, 0.09, 0.07, 0.03, 0.05],
+      dist: [0.992, 0, 0.004, 0, 0.004],
     },
     {
       id: 'Endcap2',
@@ -163,7 +163,7 @@ export const sunkencrypt: DungeonRoomsConfig = {
         locItem('Pickable_SunkenCryptRandom', 0.5),
         locItem('MushroomYellow', 0.5, 4),
       ],
-      dist: [0.07, 0.11, 0.2, 0.22, 0.18, 0.09, 0.05, 0.04, 0.02, 0.02],
+      dist: [0.115, 0.115, 0.2, 0.217, 0.149, 0.115, 0.043, 0.038, 0, 0.004, 0, 0, 0.004],
     },
     {
       id: 'Endcap3',
@@ -173,7 +173,7 @@ export const sunkencrypt: DungeonRoomsConfig = {
       weight: 0.5,
       connections: [{ pos: [0, -2.5, 0] }],
       items: [],
-      dist: [0, 0.02, 0.1, 0.06, 0.11, 0.09, 0.11, 0.18, 0.11, 0.12, 0.03, 0.02, 0.02, 0, 0.03],
+      dist: [0.021, 0.030, 0.055, 0.038, 0.123, 0.119, 0.115, 0.140, 0.119, 0.068, 0.072, 0.030, 0.043, 0.009, 0.009, 0.003, 0.003, 0.003],
     },
     {
       id: 'EndcapWater1',
@@ -183,7 +183,7 @@ export const sunkencrypt: DungeonRoomsConfig = {
       weight: 0.5,
       connections: [{ pos: [0, -2.5, 0], type: 'water' }],
       items: [],
-      dist: [0.37, 0.41, 0.13, 0.07, 0.02],
+      dist: [0.698, 0.272, 0.030],
     },
     {
       id: 'EndcapWater2',
@@ -193,7 +193,7 @@ export const sunkencrypt: DungeonRoomsConfig = {
       weight: 0.5,
       connections: [{ pos: [2, -4, 0], type: 'water' }],
       items: [],
-      dist: [0,45, 0.37, 0.13, 0.05],
+      dist: [0.443, 0.395, 0.111, 0.042, 0.009],
     },
     {
       id: 'Room1',
@@ -213,7 +213,7 @@ export const sunkencrypt: DungeonRoomsConfig = {
         ROOM_LOOT,
         locItem('MushroomYellow', 0.5, 8),
       ],
-      dist: [0.34, 0.29, 0.24, 0.06, 0.07],
+      dist: [0.502, 0.328, 0.111, 0.055, 0.004],
     },
     {
       id: 'Room2',
@@ -233,7 +233,7 @@ export const sunkencrypt: DungeonRoomsConfig = {
         ROOM_LOOT,
         locItem('MushroomYellow', 0.5, 8),
       ],
-      dist: [0.30, 0.31, 0.22, 0.12, 0.04, 0, 0.01],
+      dist: [0.468, 0.370, 0.111, 0.043, 0.008],
     },
     {
       id: 'Room3',
@@ -252,7 +252,7 @@ export const sunkencrypt: DungeonRoomsConfig = {
         ROOM_LOOT,
         locItem('MushroomYellow', 0.5, 8),
       ],
-      dist: [0.25, 0.37, 0.24, 0.1, 0.04],
+      dist: [0.460, 0.336, 0.153, 0.030, 0.017, 0, 0.004],
     },
     {
       id: 'Room4',
@@ -270,7 +270,7 @@ export const sunkencrypt: DungeonRoomsConfig = {
         ROOM_LOOT,
         locItem('MushroomYellow', 0.5, 8),
       ],
-      dist: [0.22, 0.24, 0.23, 0.15, 0.1, 0.03, 0.01, 0, 0.02],
+      dist: [0.396, 0.319, 0.145, 0.094, 0.034, 0.012],
     },
   ],
 };

@@ -46,7 +46,7 @@ export const dvergrTown: DungeonRoomsConfig = {
       items: [
         locItem(EGGS, 0.45, 2),
       ],
-      dist: [0, 0.5],
+      dist: [0.5, 0.5],
     },
     {
       id: 'entrance02',
@@ -64,7 +64,7 @@ export const dvergrTown: DungeonRoomsConfig = {
       items: [
         locItem(EGGS, 0.45, 2),
       ],
-      dist: [0, 0.5],
+      dist: [0.5, 0.5],
     },
     {
       id: 'stair01',

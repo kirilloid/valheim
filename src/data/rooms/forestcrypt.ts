@@ -173,7 +173,7 @@ export const forestcrypt: DungeonRoomsConfig = {
       items: [
         locItem('MushroomYellow', 0.2, 5),
       ],
-      dist: [0.02, 0.01, 0.026, 0.055, 0.112, 0.154, 0.157, 0.146, 0.125, 0.079, 0.048, 0.03, 0.022, 0.013, 0.01, 0.005, 0.004, 0.001, 0.001],
+      dist: [0.003, 0.009, 0.026, 0.055, 0.112, 0.154, 0.157, 0.146, 0.125, 0.079, 0.048, 0.03, 0.022, 0.013, 0.01, 0.005, 0.004, 0.001, 0.001],
     },
     {
       id: 'EndCap2_hildir',
@@ -187,7 +187,7 @@ export const forestcrypt: DungeonRoomsConfig = {
         locItem('MushroomYellow', 0.2, 5),
         locItem('Spawner_Skeleton_hildir'),
       ],
-      dist: [0],
+      dist: [0.003, 0.009, 0.026, 0.055, 0.112, 0.154, 0.157, 0.146, 0.125, 0.079, 0.048, 0.03, 0.022, 0.013, 0.01, 0.005, 0.004, 0.001, 0.001],
     },
     {
       id: 'EndCap3',
@@ -216,7 +216,7 @@ export const forestcrypt: DungeonRoomsConfig = {
         locItem('Spawner_Skeleton_hildir'),
         locItem('CastleKit_groundtorch', 0.8),
       ],
-      dist: [0],
+      dist: [0.001, 0.006, 0.029, 0.048, 0.114, 0.124, 0.155, 0.142, 0.115, 0.093, 0.073, 0.04, 0.028, 0.012, 0.007, 0.008, 0.002, 0.002, 0, 0.001],
     },
     {
       id: 'room_16',
@@ -397,7 +397,7 @@ export const forestcrypt: DungeonRoomsConfig = {
         locItem('CastleKit_groundtorch', 0.8, 2),
         locItem('Spawner_Skeleton_hildir'),
       ],
-      dist: [0],
+      dist: [0, 1],
     },
   ],
 };

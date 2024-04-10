@@ -72,8 +72,7 @@ export const prefabNames: string[] = [
   'guard_stone', 'guard_stone_test',
     
   'Hair1', 'Hair2', 'Hair3', 'Hair4', 'Hair5', 'Hair6', 'Hair7', 'Hair8', 'Hair9', 'Hair10', 'Hair11', 'Hair12', 'Hair13', 'Hair14', 'HairNone',
-  'Haldor',  'Hildir',
-  'hanging_hairstands',
+  'Haldor', 'Hildir',
   'hatchling_cold_projectile', 'hatchling_spit_cold', 'HealthUpgrade_Bonemass', 'HealthUpgrade_GDKing',
   'highstone', 'highstone_frac', 'horizontal_web', 'HugeRoot1', 'HugeStone1',
 

@@ -14,7 +14,7 @@ export const woodfarm: CampConfig = {
       items: [
         locItem('Mushroom', 0.33, 4),
       ],
-      dist: [],
+      dist: [1],
     },
     {
       id: 'tower',
@@ -35,7 +35,7 @@ export const woodfarm: CampConfig = {
         locItem('wood_pole2', 1, 10),
         locItem('Beehive', 0.2),
       ],
-      dist: [],
+      dist: [0.9, 0.1],
     },
     {
       id: 'fence1',
@@ -45,7 +45,7 @@ export const woodfarm: CampConfig = {
       items: [
         locItem('wood_fence', 0.5, 5),
       ],
-      dist: [],
+      dist: [0.4, 0.3, 0.3],
     },
     {
       id: 'fence2',
@@ -55,7 +55,7 @@ export const woodfarm: CampConfig = {
       items: [
         locItem('wood_fence', 0.5, 3),
       ],
-      dist: [],
+      dist: [0.2, 0.1, 0.4, 0.3],
     },
     {
       id: 'road1',
@@ -66,10 +66,10 @@ export const woodfarm: CampConfig = {
         // Signpost
         locItem([
           locItem('wood_pole2', 1, 2),
-          locItem('piece_sign', 1, 3),
+          locItem('sign_notext', 1, 3),
         ], 0.2),
       ],
-      dist: [],
+      dist: [0.7, 0.3],
     },
   ],
   inner: [
@@ -83,7 +83,7 @@ export const woodfarm: CampConfig = {
         locItem('Raspberry', 0.4, 6),
         locItem('Boar', 0.33),
       ],
-      dist: [],
+      dist: [0.1, 0.1, 0.3, 0.3, 0, 0.1, 0, 0.1],
     },
     {
       id: 'farmhouse1',
@@ -102,7 +102,7 @@ export const woodfarm: CampConfig = {
         locItem('wood_wall_roof_top_45', 0.66, 2),
         locItem('wood_floor', 1, 12),
       ],
-      dist: [],
+      dist: [0.5, 0.1, 0.2, 0.2],
     },
     {
       id: 'farmhouse2',
@@ -122,7 +122,7 @@ export const woodfarm: CampConfig = {
         locItem('Beehive', 0.2),
         locItem('TreasureChest_meadows'),
       ],
-      dist: [],
+      dist: [0.3, 0.4, 0.1, 0.1, 0.1],
     },
     {
       id: 'farmhouse3',
@@ -147,7 +147,7 @@ export const woodfarm: CampConfig = {
         locItem('TreasureChest_meadows', 0.9),
         locItem('Beehive', 0.2),
       ],
-      dist: [],
+      dist: [0.6, 0.2, 0.2],
     },
     {
       id: 'signpost',
@@ -156,9 +156,9 @@ export const woodfarm: CampConfig = {
       weight: 0.1,
       items: [
         locItem('wood_pole2', 1, 2),
-        locItem('piece_sign', 1, 3),
+        locItem('sign_notext', 1, 3),
       ],
-      dist: [],
+      dist: [0.4, 0.4, 0.2],
     },
     {
       id: 'woodpile',
@@ -169,7 +169,7 @@ export const woodfarm: CampConfig = {
         locItem('wood_stack'),
         locItem('wood_stack', 0.5, 3),
       ],
-      dist: [],
+      dist: [0.6, 0.3, 0.1],
     },
     {
       id: 'henpen',
@@ -189,7 +189,7 @@ export const woodfarm: CampConfig = {
         locItem('wood_fence', 0.5, 15),
         locItem('Dandelion', 0.2, 6),
       ],
-      dist: [],
+      dist: [0.6, 0.3, 0.1],
     },
     {
       id: 'yard',
@@ -201,7 +201,7 @@ export const woodfarm: CampConfig = {
         locItem('Boar', 0.33, 3),
         locItem('wood_fence', 0.5, 16),
       ],
-      dist: [],
+      dist: [0.7, 0.2, 0.1],
     },
   ],
 };

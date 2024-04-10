@@ -1,7 +1,11 @@
 import { stableHashCode } from '../model/hash';
-import { forestcrypt, gobvill, sunkencrypt, woodfarm, CampConfig, DungeonRoomsConfig } from './rooms';
+import {
+  dvergrTown, forestcrypt, frostCaves, gobvill, sunkencrypt, woodfarm, woodvillage,
+  CampConfig, DungeonRoomsConfig,
+} from './rooms';
 
 export const roomHashes = new Map<number, string>();
+// missing in caves: 1552127445, 1955411972, 389328031
 
 function addRoom(prefix: string, id: string) {
   const key = prefix + id;
@@ -20,6 +24,9 @@ function addCamp(camp: CampConfig) {
 
 addDungeon(forestcrypt);
 addDungeon(sunkencrypt);
+addDungeon(dvergrTown);
+addDungeon(frostCaves);
 
 addCamp(gobvill);
 addCamp(woodfarm);
+addCamp(woodvillage);

@@ -13,7 +13,10 @@ import type {
 } from '../types';
 
 import { locItem } from '../model/game';
-import { DungeonRoomsConfig, forestcrypt, frostCaves, sunkencrypt, hildirCaves } from '../data/rooms';
+import {
+  DungeonRoomsConfig, CampConfig,
+  forestcrypt, frostCaves, sunkencrypt, hildirCaves, dvergrTown, woodfarm, woodvillage,
+} from '../data/rooms';
 
 import { fullDestructible, objects } from './objects';
 import { data } from './itemDB';
@@ -27,6 +30,7 @@ import { mapValues } from '../model/utils';
 import { creatures } from './creatures';
 import { fishes } from './fish';
 import { spawners } from './spawners';
+import { CamplaceConfig, RoomConfig } from './rooms/types';
 
 export const locationBiomes: Record<GameLocationId, Biome> = {};
 
@@ -120,6 +124,7 @@ function loc(
     items: LocationItem[],
     needsKey?: EntityId,
     dungeon?: DungeonRoomsConfig,
+    camp?: CampConfig,
   },
   typeId = id,
 ): LocationConfig {
@@ -258,7 +263,7 @@ export const locations: LocationConfig[] = [
         locItem('TreasureChest_swamp', 0.251),
         locItem('Draugr', 0.5, 2),
         locItem('Draugr_Elite', 0.321),
-        locItem('Spawner_DragurPile', 0.321),
+        locItem('Spawner_DraugrPile', 0.321),
         locItem('Crow', 1, 2),
       ],
     },
@@ -272,7 +277,7 @@ export const locations: LocationConfig[] = [
         locItem('TreasureChest_swamp', 0.251),
         locItem('Draugr', 0.5, 2),
         locItem('Draugr_Elite', 0.321),
-        locItem('Spawner_DragurPile', 0.321),
+        locItem('Spawner_DraugrPile', 0.321),
         locItem('piece_groundtorch_green'),
         locItem('Crow', 1, 2),
       ],
@@ -363,7 +368,7 @@ export const locations: LocationConfig[] = [
         locItem('Greydwarf', 1, 5),
         locItem('Greydwarf', 0.2, 1),
         locItem('TreasureChest_blackforest', 0.3),
-        locItem('barrel', 0.3),
+        locItem('barrell', 0.3),
         locItem('Vegvisir_GDKing', 0.3),
         locItem('Crow', 1, 2),
         /*
@@ -435,6 +440,7 @@ export const locations: LocationConfig[] = [
     { quantity: 50, group: 'Goblintower', minApart: 512, radius: [20, 14],
       customMusic: 'Music_FulingCamp',
       items: [
+        locItem('goblin_totempole'),
         locItem('Goblin', 0.54, 6),
         locItem('GoblinTotem', 1, 1),
         locItem([
@@ -469,7 +475,7 @@ export const locations: LocationConfig[] = [
         locItem([
           locItem('GoblinBrute', 0.5, 2),
           locItem('GoblinBrute', 1, 1),
-          locItem('TreasureChest_heath_stone', 1, 1),
+          locItem('TreasureChest_plains_stone', 1, 1),
           // locItem('Rock_3', 1, 6),
         ], 0.5, 1),
         locItem('Vegvisir_GoblinKing', 0.4),
@@ -486,7 +492,7 @@ export const locations: LocationConfig[] = [
         locItem([
           locItem('GoblinBrute', 0.5, 2),
           locItem('GoblinBrute', 1, 1),
-          locItem('TreasureChest_heath_stone', 1, 1),
+          locItem('TreasureChest_plains_stone', 1, 1),
         ], 0.5, 1),
       ],
     },
@@ -500,7 +506,7 @@ export const locations: LocationConfig[] = [
         locItem([
           locItem('GoblinBrute', 0.5, 2),
           locItem('GoblinBrute', 1, 1),
-          locItem('TreasureChest_heath_stone', 1, 1),
+          locItem('TreasureChest_plains_stone', 1, 1),
         ], 0.5, 1),
         locItem('Vegvisir_GoblinKing', 0.4),
         // locItem([locItem('Rock_3', 1, 3)], 0.5),
@@ -552,6 +558,7 @@ export const locations: LocationConfig[] = [
       items: [
         locItem('Beehive', 0.25),
         locItem('TreasureChest_meadows', 0.5),
+        locItem('goblin_bed', 0.5),
       ],
     },
     'WoodHouse',
@@ -563,6 +570,7 @@ export const locations: LocationConfig[] = [
       items: [
         locItem('Beehive', 0.25),
         locItem('TreasureChest_meadows', 0.5),
+        locItem('goblin_bed', 0.5, 2),
       ],
     },
     'WoodHouse',
@@ -688,16 +696,17 @@ export const locations: LocationConfig[] = [
       customMusic: 'Music_MeadowsVillageFarm',
       quantity: 10, group: 'woodvillage', minApart: 128, terrainDelta: [0, 4], minDistance: 500, maxDistance: 2000, radius: [20, 32],
       items: [],
+      camp: woodfarm,
     },
     'WoodFarm',
   ),
   loc( // draugr village
     1, 'WoodVillage1', ['Meadows'],
-    { quantity: 15, group: 'woodvillage', minApart: 256, terrainDelta: [0, 4], minDistance: 2000, maxDistance: 10000, radius: [20, 32],
+    { components: ['DungeonGenerator'],
       customMusic: 'Music_MeadowsVillageFarm',
-      items: [
-        locItem('Spawner_DraugrPile', 0.5, 10),
-      ],
+      quantity: 15, group: 'woodvillage', minApart: 256, terrainDelta: [0, 4], minDistance: 2000, maxDistance: 10000, radius: [20, 32],
+      items: [],
+      camp: woodvillage,
     },
     'WoodVillage',
   ),
@@ -855,8 +864,8 @@ export const locations: LocationConfig[] = [
         locItem([
           locItem('TreasureChest_blackforest'),
           locItem('Draugr', 1, 2),
-          locItem('Draugr_ranged', 0.2),
-          locItem('Draugr_ranged', 0.3),
+          locItem('Draugr_Ranged', 0.2),
+          locItem('Draugr_Ranged', 0.3),
         ], 0.75),
       ],
     },
@@ -1167,14 +1176,14 @@ export const locations: LocationConfig[] = [
   loc(
     4, 'Waymarker01', ['Mountain'],
     { quantity: 50, terrainDelta: [0, 2], minAlt: 100, radius: [20, 3],
-      items: [locItem('marker')],
+      items: [locItem('marker01')],
     },
     'Waymarker',
   ),
   loc(
     4, 'Waymarker02', ['Mountain'],
     { quantity: 50, terrainDelta: [0, 2], minAlt: 100, radius: [20, 3],
-      items: [locItem('marker')],
+      items: [locItem('marker02')],
     },
     'Waymarker',
   ),
@@ -1224,6 +1233,7 @@ export const locations: LocationConfig[] = [
     {
       quantity: 100, minApart: 50, terrainDelta: [0, 2], minAlt: 100, radius: [20, 3.93],
       items: [
+        // locItem('Pickable_MountainRemains01_buried'),
         locItem('BoneFragments'),
         locItem('SilverNecklace', 0.506),
         locItem('MountainGraveStone01', 1, 3),
@@ -1258,6 +1268,10 @@ export const locations: LocationConfig[] = [
     2, 'ShipWreck01', ['BlackForest', 'Swamp', 'Plains', 'Ocean'],
     { quantity: 25, group: 'Shipwreck', minApart: 1024, terrainDelta: [0, 10], minAlt: -1, maxAlt: 1, radius: [20, 10],
       items: [
+        locItem('shipwreck_karve_bottomboards', 0.5),
+        locItem('shipwreck_karve_bow'),
+        locItem('shipwreck_karve_dragonhead', 0.5),
+        locItem('shipwreck_karve_bottomboards', 0.5),
         locItem('shipwreck_karve_chest', 0.749),
       ]
     },
@@ -1267,7 +1281,10 @@ export const locations: LocationConfig[] = [
     2, 'ShipWreck02', ['BlackForest', 'Swamp', 'Plains', 'Ocean'],
     { quantity: 25, group: 'Shipwreck', minApart: 1024, terrainDelta: [0, 10], minAlt: -1, maxAlt: 1, radius: [20, 10],
       items: [
+        locItem('shipwreck_karve_bow'),
         locItem('shipwreck_karve_chest', 0.749),
+        locItem('shipwreck_karve_stern'),
+        locItem('shipwreck_karve_bottomboards'),
       ]
     },
     'ShipWreck',
@@ -1276,7 +1293,11 @@ export const locations: LocationConfig[] = [
     2, 'ShipWreck03', ['BlackForest', 'Swamp', 'Plains', 'Ocean'],
     { quantity: 25, group: 'Shipwreck', minApart: 1024, terrainDelta: [0, 10], minAlt: -1, maxAlt: 1, radius: [20, 10],
       items: [
+        locItem('shipwreck_karve_bow'),
+        locItem('shipwreck_karve_dragonhead', 0.5),
         locItem('shipwreck_karve_chest', 0.749),
+        locItem('shipwreck_karve_bottomboards', 0.5),
+        locItem('shipwreck_karve_sternpost'),
       ]
     },
     'ShipWreck',
@@ -1285,7 +1306,15 @@ export const locations: LocationConfig[] = [
     2, 'ShipWreck04', ['BlackForest', 'Swamp', 'Plains', 'Ocean'],
     { quantity: 25, group: 'Shipwreck', minApart: 1024, terrainDelta: [0, 10], minAlt: -1, maxAlt: 1, radius: [20, 14],
       items: [
+        locItem('shipwreck_karve_bow'),
         locItem('shipwreck_karve_chest', 0.749),
+        locItem('shipwreck_karve_stern'),
+        locItem('shipwreck_karve_bottomboards', 0.5),
+        locItem('shipwreck_karve_bow'),
+        locItem('shipwreck_karve_dragonhead', 0.5),
+        locItem('shipwreck_karve_bottomboards', 0.5), // double SpawnChance component 0.5
+        locItem('shipwreck_karve_sternpost'),
+        locItem('shipwreck_karve_bottomboards', 0.5),
       ]
     },
     'ShipWreck',
@@ -1337,7 +1366,7 @@ export const locations: LocationConfig[] = [
     { biomeArea: 2, quantity: 100, group: 'tarpit', minApart: 128, terrainDelta: [0, 1.5], minAlt: 5, maxAlt: 60, radius: [20, 20],
       items: [
         locItem('BlobTar', 0.5, 7),
-        // locItem('Spawner_BlobTar_respawn_30', 1, 2),
+        locItem('Spawner_BlobTar_respawn_30', 1, 2),
         locItem('Pickable_TarBig', 1, 4),
         locItem('Pickable_Tar', 1, 12),
       ],
@@ -1349,7 +1378,7 @@ export const locations: LocationConfig[] = [
     { biomeArea: 2, quantity: 100, group: 'tarpit', minApart: 128, terrainDelta: [0, 1.5], minAlt: 5, maxAlt: 60, radius: [20, 25],
       items: [
         locItem('BlobTar', 0.5, 7),
-        // locItem('Spawner_BlobTar_respawn_30', 1, 2),
+        locItem('Spawner_BlobTar_respawn_30', 1, 2),
         locItem('Pickable_TarBig', 1, 4),
         locItem('Pickable_Tar', 1, 8),
       ],
@@ -1361,7 +1390,7 @@ export const locations: LocationConfig[] = [
     { biomeArea: 2, quantity: 100, group: 'tarpit', minApart: 128, terrainDelta: [0, 1.5], minAlt: 5, maxAlt: 60, radius: [20, 14],
       items: [
         locItem('BlobTar', 0.5, 7),
-        // locItem('Spawner_BlobTar_respawn_30', 1, 2),
+        locItem('Spawner_BlobTar_respawn_30', 1, 2),
         locItem('Pickable_TarBig', 1, 4),
         locItem('Pickable_Tar', 1, 8),
       ],
@@ -1513,6 +1542,7 @@ export const locations: LocationConfig[] = [
       terrainDelta: [0, 10], minAlt: 12, radius: [20, 24],
       customMusic: 'Music_DvergrTower2',
       items: [
+        locItem('dvergrprops_barrel', 0.75, 2),
         locItem([
           locItem('dvergrprops_crate', 1, 3),
           locItem('dvergrprops_crate', 0.5, 1),
@@ -1568,7 +1598,7 @@ export const locations: LocationConfig[] = [
         locItem('Spawner_DvergerArbalest', 0.5),
         locItem('Spawner_DvergerMage', 1, 3),
         locItem('dvergrprops_bed', 0.5, 3),
-        locItem('dvergrprops_guardstone'),
+        locItem('dverger_guardstone'),
         locItem('dvergrprops_crate_long'),
       ],
     },
@@ -1915,6 +1945,7 @@ export const locations: LocationConfig[] = [
       items: [
         locItem('Spawner_Seeker', 1, 5),
       ],
+      dungeon: dvergrTown,
     },
     'Mistlands_DvergrTown',
   ),
@@ -1932,6 +1963,7 @@ export const locations: LocationConfig[] = [
         locItem('Spawner_Seeker', 1, 2),
         locItem('Spawner_Seeker', 0.5, 2),
       ],
+      dungeon: dvergrTown,
     },
     'Mistlands_DvergrTown',
   ),
@@ -1942,6 +1974,7 @@ export const locations: LocationConfig[] = [
       randomRotation: false, slopeRotation,
       terrainDelta: [0, 40], maxAlt: 20, radius: [32, 32],
       items: [
+        locItem('dvergrprops_barrel', 1, 2),
         locItem('SeekerQueen'),
         locItem('Spawner_Seeker', 1, 4),
       ],
@@ -2226,9 +2259,9 @@ function collectItems(items: LocationItem[]): DropDist {
   return result;
 }
 
-function collectDungeon(config: DungeonRoomsConfig): DropDist {
+function collectRooms(rooms: (RoomConfig | CamplaceConfig)[]): DropDist {
   const result: DropDist = {};
-  for (const room of config.rooms) {
+  for (const room of rooms) {
     const base = collectItems(room.items);
     for (const [item, dist] of Object.entries(base)) {
       const total = powerDist(dist, room.dist);
@@ -2347,17 +2380,30 @@ function addToMapRec(id: GameLocationId, { item }: LocationItem): void {
 export const musicToLocation: Record<string, GameLocationId[]> = {};
 
 for (const loc of locations) {
-  const { items, dungeon, customMusic } = loc;
+  const { items, dungeon, camp, customMusic } = loc;
   if (customMusic) {
     (musicToLocation[customMusic] ?? (musicToLocation[customMusic] = [])).push(loc.id)
   }
   for (const item of items) {
     addToMapRec(loc.id, item);
   }
-  if (!dungeon) continue;
-  for (const { items } of dungeon.rooms) {
-    for (const item of items) {
-      addToMapRec(loc.id, item);
+  if (dungeon != null) {
+    for (const { items } of dungeon.rooms) {
+      for (const item of items) {
+        addToMapRec(loc.id, item);
+      }
+    }
+  }
+  if (camp != null) {
+    for (const { items } of camp.inner) {
+      for (const item of items) {
+        addToMapRec(loc.id, item);
+      }
+    }
+    for (const { items } of camp.perimeter) {
+      for (const item of items) {
+        addToMapRec(loc.id, item);
+      }
     }
   }
 }
@@ -2393,8 +2439,14 @@ export function getLocationDetails(typeId: GameLocationId): LocationConfig | und
   for (const loc of locs) {
     if (!computedLocations.has(loc.id)) {
       const varDrop = collectItems(loc.items);
-      const { dungeon } = loc;
-      if (dungeon) mergeDist(varDrop, collectDungeon(dungeon));
+      const { dungeon, camp } = loc;
+      if (dungeon) {
+        mergeDist(varDrop, collectRooms(dungeon.rooms));
+      }
+      if (camp) {
+        mergeDist(varDrop, collectRooms(camp.inner));
+        mergeDist(varDrop, collectRooms(camp.perimeter));
+      }
       const variantShare = loc.quantity / quantity;
       total.push(scaleDist(varDrop, variantShare));
       addDistToLocation(loc, varDrop);

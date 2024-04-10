@@ -7,7 +7,7 @@ import type { DamageModifier, DamageModifiers, DamageProfile } from './damage';
 import type { Attack } from './attack';
 
 import { SkillType } from '../model/skills';
-import { DungeonRoomsConfig } from '../data/rooms';
+import { CampConfig, DungeonRoomsConfig } from '../data/rooms';
 import { Deadspeak, EggGrow, Food, PointLight, Potion, Radiation, SapCollector, Turret } from './components';
 import { DropEntry, GeneralDrop } from './drop';
 
@@ -127,6 +127,7 @@ export type LocationConfig = {
   items: LocationItem[],
   needsKey?: EntityId;
   dungeon?: DungeonRoomsConfig,
+  camp?: CampConfig,
 };
 
 export type DungeonGenConfig = {
@@ -228,6 +229,7 @@ export interface Spawner extends GameObjectBase {
   spawn: EntityId;
   levels: Pair<number>;
   levelUpChance: number;
+  respawnMinutes?: number;
 }
 
 export interface SpawnerConfig {

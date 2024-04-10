@@ -505,7 +505,73 @@ const treasures: PhysicalObject[] = [
     iconId: 'piece/piece_chest_wood',
     components: ['Container'],
     tier: 2,
+    disabled: true,
     drop: [singleDrop('HildirKey_forestcrypt')],
+  },
+  // trader objects
+  ...Object.entries({
+    'hildir_table': 'piece/piece_table',
+    'hildir_table1': 'piece/piece_table_oak',
+    'hildir_table2': 'piece/piece_table_round',
+    'hildir_chest1': 'resource/chest_hildir1',
+    'hildir_chest2': 'resource/chest_hildir2',
+    'hildir_chest3': 'resource/chest_hildir3',
+    'fire_pit_haldor': 'piece/fire_pit',
+    'fire_pit_hildir': 'piece/fire_pit_iron',
+    'Halstein': 'creature/Lox',
+    'HildirsLox': 'creature/Lox',
+  }).map<PhysicalObject>(([id, iconId]) => ({
+    type: 'object',
+    subtype: 'indestructible',
+    id,
+    iconId,
+    tier: 2,
+  })),
+  {
+    type: 'object',
+    subtype: 'misc',
+    id: 'dverger_guardstone',
+    iconId: 'piece/guard_stone',
+    tier: 6,
+    Destructible: {
+      hp: 2000,
+      damageModifiers: mods([0, 0, 1, 4, 4, 0, 1, 0, 3, 3]),
+      minToolTier: 0,
+      parts: [],
+    },
+  },
+  {
+    type: 'object',
+    subtype: 'misc',
+    id: 'dvergrtown_stair_corner_wood_left',
+    iconId: 'piece/piece_dvergr_spiralstair',
+    tier: 6,
+    Destructible: {
+      hp: 800,
+      damageModifiers: mods([0, 0, 1, 2, 0, 0, 0, 0, 3, 3]),
+      minToolTier: 0,
+      parts: [],
+    },
+  },
+  {
+    type: 'object',
+    subtype: 'misc',
+    id: 'dvergrprops_crate',
+    iconId: 'objects/CargoCrate',
+    tier: 6,
+    Destructible: {
+      hp: 200,
+      damageModifiers: mods([0, 0, 1, 2, 0, 0, 0, 0, 3, 3]),
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [{
+      num: [1, 4],
+      options: [
+        { item: 'FineWood' },
+        { item: 'Softtissue', num: [2, 4] },
+      ]
+    }],
   },
   {
     type: 'object',
@@ -665,6 +731,7 @@ const treasures: PhysicalObject[] = [
     iconId: 'piece/piece_chest_wood',
     components: ['Container'],
     tier: 4,
+    disabled: true,
     drop: [singleDrop('HildirKey_mountaincave')],
   },
   {
@@ -714,6 +781,7 @@ const treasures: PhysicalObject[] = [
     id: 'TreasureChest_plainsfortress_hildir',
     iconId: 'piece/piece_chest_wood',
     components: ['Container'],
+    disabled: true,
     drop: [singleDrop('HildirKey_plainsfortress')],
   },
   {
@@ -779,10 +847,12 @@ const treasures: PhysicalObject[] = [
     tier: 4,
     drop: [singleDrop('Coins', 3, 10)], // 3-9, but offByOneBug: false
   },
+  // those MountainKit are used in ice caves, but are not very important
   {
     type: 'object',
     subtype: 'indestructible',
     id: 'MountainKit_int_floor_2x2',
+    disabled: true,
     iconId: 'piece/stone_floor_2x2',
     tier: 4,
   },
@@ -790,6 +860,7 @@ const treasures: PhysicalObject[] = [
     type: 'object',
     subtype: 'indestructible',
     id: 'MountainKit_int_wall_4x2',
+    disabled: true,
     iconId: 'piece/stone_wall_4x2',
     tier: 4,
   },
@@ -797,6 +868,7 @@ const treasures: PhysicalObject[] = [
     type: 'object',
     subtype: 'indestructible',
     id: 'MountainKit_int_wall_2x4',
+    disabled: true,
     iconId: 'piece/stone_wall_4x2',
     tier: 4,
   },
@@ -804,6 +876,7 @@ const treasures: PhysicalObject[] = [
     type: 'object',
     subtype: 'indestructible',
     id: 'MountainKit_int_wall_4x4',
+    disabled: true,
     iconId: 'piece/stone_wall_2x2',
     tier: 4,
   },
@@ -811,6 +884,7 @@ const treasures: PhysicalObject[] = [
     type: 'object',
     subtype: 'indestructible',
     id: 'StonePillarTall_mountain',
+    disabled: true,
     iconId: 'piece/stone_wall_4x2',
     tier: 4,
   },
@@ -842,6 +916,7 @@ const treasures: PhysicalObject[] = [
     subtype: 'treasure',
     tier: 6,
     id: 'TreasureChest_dvergrtower',
+    disabled: true,
     iconId: 'piece/piece_chest_wood',
     components: ['Container'],
     drop: [{
@@ -860,6 +935,7 @@ const treasures: PhysicalObject[] = [
     subtype: 'treasure',
     tier: 6,
     id: 'TreasureChest_dvergr_loose_stone',
+    disabled: true,
     iconId: 'resource/Coins',
     components: ['Container'],
     drop: [{
@@ -1837,6 +1913,13 @@ export const objects: PhysicalObject[] = [
       ],
     }]
   },
+  {
+    type: 'object',
+    subtype: 'indestructible',
+    id: 'barrell_static',
+    iconId: 'object/barrell',
+    tier: 4,
+  },
   // SWAMP
   {
     type: 'object',
@@ -1850,10 +1933,12 @@ export const objects: PhysicalObject[] = [
       tilt: [0, 20],
     }),
   },
+  // used in lots of sunken crypt rooms
   {
     type: 'object',
     subtype: 'indestructible',
     id: 'SunkenKit_int_floor_4x4',
+    disabled: true,
     iconId: 'piece/stone_floor_2x2',
     tier: 3,
   },
@@ -2078,6 +2163,31 @@ export const objects: PhysicalObject[] = [
       damageModifiers: mods([0, 0, 0, 0, 0, 1, 2, 3, 3, 3]),
       parts: [],
     },
+    PointLight: { color: '#FF9E7B', intensity: 2, range: 5 },
+    drop: [{
+      num: [1, 2],
+      options: [
+        { item: 'Bronze', num: [1, 1], weight: 0.5 },
+        { item: 'FineWood', num: [1, 2] },
+        { item: 'FineWood', num: [1, 1] },
+      ],
+    }],
+  },
+  {
+    type: 'object',
+    id: 'MountainKit_brazier_blue',
+    iconId: 'piece/piece_brazierfloor01',
+    subtype: 'misc',
+    // lightRadius: 0.5,
+    // warmRadius: 0.5,
+    tier: 4,
+    Destructible: {
+      minToolTier: 0,
+      hp: 50,
+      damageModifiers: mods([0, 0, 0, 0, 0, 1, 2, 3, 3, 3]),
+      parts: [],
+    },
+    PointLight: { color: '#C0FEFF', intensity: 2, range: 5 },
     drop: [{
       num: [1, 2],
       options: [
@@ -2117,7 +2227,7 @@ export const objects: PhysicalObject[] = [
   },
   {
     type: 'object',
-    id: 'hanging_hairstand',
+    id: 'hanging_hairstrands',
     iconId: 'resource/WolfHairBundle',
     subtype: 'misc',
     tier: 4,
@@ -2168,6 +2278,13 @@ export const objects: PhysicalObject[] = [
   {
     type: 'object',
     subtype: 'indestructible',
+    id: 'RuneStone',
+    iconId: 'object/Runestone',
+    tier: 0,
+  },
+  {
+    type: 'object',
+    subtype: 'indestructible',
     id: 'RuneStone_CaveMan',
     tier: 4,
     grow: [],
@@ -2196,6 +2313,7 @@ export const objects: PhysicalObject[] = [
   {
     type: 'object',
     id: 'caverock_ice_pillar',
+    disabled: true, // used in lots of cave rooms
     subtype: 'misc',
     tier: 4,
     Destructible: {
@@ -2538,6 +2656,8 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'indestructible',
     id: 'HugeRoot1',
+    // mentioned in vegetation list, but this entry is disabled
+    disabled: true,
     tier: 6,
   },
   {
@@ -2551,6 +2671,14 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'indestructible',
     id: 'caverock_curvedwallbig',
+    // used in many cave rooms, MorgenHole and also some other locations
+    disabled: true,
+    tier: 6,
+  },
+  {
+    type: 'object',
+    subtype: 'indestructible',
+    id: 'caverock_pillar',
     tier: 6,
   },
   {
@@ -2697,7 +2825,7 @@ export const objects: PhysicalObject[] = [
   {
     type: 'object',
     subtype: 'misc',
-    id: `dvergrprops_hooknchain`, // + dvergrtown_wood_crane
+    id: `dvergrprops_hooknchain`,
     tier: 6,
     grow: [],
     Destructible: {
@@ -2709,6 +2837,27 @@ export const objects: PhysicalObject[] = [
     drop: [{
       num: [1, 2],
       options: [
+        { item: 'CopperScrap' },
+        { item: 'Chain' },
+      ]
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'misc',
+    id: `dvergrtown_wood_crane`,
+    tier: 6,
+    grow: [],
+    Destructible: {
+      hp: 1000,
+      damageModifiers: mods([0, 0, 1, 2, 0, 0, 0, 0, 3, 3]),
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [{
+      num: [1, 8],
+      options: [
+        { item: 'Wood' },
         { item: 'CopperScrap' },
         { item: 'Chain' },
       ]
@@ -2916,6 +3065,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'indestructible',
     id: `root${String(subId).padStart(2, '0')}`,
+    disabled: true, // used in 2 types of crypts
     components: [],
     tier: 2,
   })),
@@ -2943,7 +3093,7 @@ export const objects: PhysicalObject[] = [
     subtype: 'misc',
     tier: 6,
     Destructible: {
-      hp: 100,
+      hp: 800,
       damageModifiers: woodResist,
       minToolTier: 0,
       parts: [],
@@ -3023,6 +3173,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'misc',
     tier: 6,
+    disabled: true, // used in outside Mistlands locations
     Destructible: {
       hp: 500,
       damageModifiers: woodResist,
@@ -3036,6 +3187,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'misc',
     tier: 6,
+    disabled: true, // used in outside Mistlands locations
     Destructible: dvergrPropsDestructible(100),
     drop: [singleDrop('JuteBlue', 1, 2)],
   },
@@ -3044,6 +3196,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'misc',
     tier: 6,
+    disabled: true, // used in outside Mistlands locations
     Destructible: dvergrPropsDestructible(100),
     drop: [singleDrop('JuteBlue', 1, 2)],
   },
@@ -3052,6 +3205,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'misc',
     tier: 6,
+    disabled: true, // used in outside Mistlands locations
     Destructible: {
       hp: 200,
       damageModifiers: torchResist,
@@ -3066,6 +3220,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'misc',
     tier: 6,
+    disabled: true, // used in outside Mistlands locations
     Destructible: {
       hp: 500,
       damageModifiers: {
@@ -3093,6 +3248,22 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'indestructible',
     tier: 6,
+    disabled: true, // used in some dvergrtown rooms
+  },
+  {
+    id: 'dvergrprops_wood_stakewall',
+    iconId: 'piece/piece_dvergr_sharpstakes',
+    type: 'object',
+    subtype: 'misc',
+    tier: 6,
+    disabled: true, // used in some dvergrtown rooms
+    Destructible: {
+      hp: 500,
+      damageModifiers: mods([0, 0, 1, 2, 0, 0, 1, 1, 3, 3]),
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('Wood', 1, 5)],
   },
   {
     id: 'dvergrprops_pickaxe',
@@ -3115,6 +3286,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'indestructible',
     tier: 6,
+    disabled: true, // used in some dvergrtown rooms
   },
   {
     id: 'dvergrtown_2x2x1',
@@ -3122,6 +3294,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'indestructible',
     tier: 6,
+    disabled: true, // used in some dvergrtown rooms
   },
   {
     id: 'dvergrtown_4x2x1',
@@ -3129,6 +3302,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'indestructible',
     tier: 6,
+    disabled: true, // used in some dvergrtown rooms
   },
   {
     id: 'dvergrtown_floor_1x1',
@@ -3136,6 +3310,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'indestructible',
     tier: 6,
+    disabled: true, // used in some dvergrtown rooms
   },
   {
     id: 'dvergrtown_floor_large',
@@ -3143,6 +3318,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'indestructible',
     tier: 6,
+    disabled: true, // used in some dvergrtown rooms
   },
   {
     id: 'dvergrtown_metal_wall_2x2',
@@ -3150,6 +3326,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'indestructible',
     tier: 6,
+    disabled: true, // used in some dvergrtown rooms
   },
   {
     id: 'dvergrtown_secret_door',
@@ -3158,6 +3335,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'indestructible',
     tier: 6,
+    disabled: true, // used in some dvergrtown rooms
   },
   {
     id: 'dvergrtown_wood_support',
@@ -3174,6 +3352,46 @@ export const objects: PhysicalObject[] = [
     tier: 6,
   },
   {
+    id: 'dvergrtown_wood_pole',
+    iconId: 'piece/piece_dvergr_pole',
+    type: 'object',
+    subtype: 'misc',
+    Destructible: {
+      hp: 800,
+      minToolTier: 0,
+      damageModifiers: { ...woodResist, lightning: 'immune' },
+      parts: [],
+    },
+    drop: [{
+      num: [1, 2],
+      options: [
+        { item: 'YggdrasilWood' },
+        { item: 'CopperScrap', weight: 0.5 },
+      ],
+    }],
+    tier: 6,
+  },
+  {
+    id: 'dvergrprops_lantern',
+    iconId: 'weapon/Lantern',
+    type: 'object',
+    subtype: 'misc',
+    Destructible: {
+      hp: 100,
+      minToolTier: 0,
+      damageModifiers: mods([2, 0, 1, 2, 0, 1, 1, 1, 3, 3]),
+      parts: [],
+    },
+    drop: [{
+      num: [1, 2],
+      options: [
+        { item: 'CopperScrap' },
+        { item: 'SurtlingCore' },
+      ],
+    }],
+    tier: 6,
+  },
+  {
     id: 'SeekerEgg',
     type: 'object',
     subtype: 'misc',
@@ -3181,7 +3399,21 @@ export const objects: PhysicalObject[] = [
     Destructible: {
       hp: 1,
       minToolTier: 0,
-      damageModifiers: woodResist,
+      damageModifiers: allNormal,
+      parts: [],
+    },
+    drop: [singleDrop('SeekerBrood')], // + hatchEffect
+    tier: 6,
+  },
+  {
+    id: 'CreepProp_egg_hanging01',
+    type: 'object',
+    subtype: 'misc',
+    PointLight: { color: '#FF5C14', range: 3, intensity: 1.5 },
+    Destructible: {
+      hp: 1,
+      minToolTier: 0,
+      damageModifiers: { ...allNormal, spirit: 'ignore' },
       parts: [],
     },
     drop: [singleDrop('SeekerBrood')],
@@ -3262,6 +3494,7 @@ export const structures: Structure[] = [
     id: 'goblin_banner',
     type: 'structure',
     tier: 5,
+    disabled: true, // used in some goblin locations
     Destructible: {
       hp: 200,
       damageModifiers: allNormal,
@@ -3285,6 +3518,7 @@ export const structures: Structure[] = [
     id: 'goblin_fence',
     type: 'structure',
     tier: 5,
+    disabled: true, // used in some goblin locations
     Destructible: {
       hp: 200,
       damageModifiers: allNormal,
@@ -3296,6 +3530,7 @@ export const structures: Structure[] = [
     id: 'goblin_pole',
     type: 'structure',
     tier: 5,
+    disabled: true, // used in some goblin locations
     Destructible: {
       hp: 200,
       damageModifiers: allNormal,
@@ -3307,6 +3542,7 @@ export const structures: Structure[] = [
     id: 'goblin_pole_small',
     type: 'structure',
     tier: 5,
+    disabled: true, // used in some goblin locations
     Destructible: {
       hp: 200,
       damageModifiers: allNormal,
@@ -3318,6 +3554,7 @@ export const structures: Structure[] = [
     id: 'goblin_roof_45d',
     type: 'structure',
     tier: 5,
+    disabled: true, // used in some goblin locations
     Destructible: {
       hp: 200,
       damageModifiers: allNormal,
@@ -3329,6 +3566,7 @@ export const structures: Structure[] = [
     id: 'goblin_roof_45d_corner',
     type: 'structure',
     tier: 5,
+    disabled: true, // used in some goblin locations
     Destructible: {
       hp: 200,
       damageModifiers: allNormal,
@@ -3340,6 +3578,7 @@ export const structures: Structure[] = [
     id: 'goblin_roof_cap',
     type: 'structure',
     tier: 5,
+    disabled: true, // used in some goblin locations
     Destructible: {
       hp: 200,
       damageModifiers: allNormal,
@@ -3351,6 +3590,7 @@ export const structures: Structure[] = [
     id: 'goblin_stairs',
     type: 'structure',
     tier: 5,
+    disabled: true, // used in some goblin locations
     Destructible: {
       hp: 200,
       damageModifiers: allNormal,
@@ -3362,6 +3602,7 @@ export const structures: Structure[] = [
     id: 'goblin_stepladder',
     type: 'structure',
     tier: 5,
+    disabled: true, // used in some goblin locations
     Destructible: {
       hp: 200,
       damageModifiers: allNormal,
@@ -3378,12 +3619,13 @@ export const structures: Structure[] = [
       damageModifiers: allNormal,
       minToolTier: 0,
       parts: [],
-    }
+    },
   },
   {
     id: 'goblin_woodwall_1m',
     type: 'structure',
     tier: 5,
+    disabled: true, // used in some goblin locations
     Destructible: {
       hp: 200,
       damageModifiers: allNormal,
@@ -3395,6 +3637,7 @@ export const structures: Structure[] = [
     id: 'goblin_woodwall_2m',
     type: 'structure',
     tier: 5,
+    disabled: true, // used in some goblin locations
     Destructible: {
       hp: 200,
       damageModifiers: allNormal,
@@ -3406,6 +3649,7 @@ export const structures: Structure[] = [
     id: 'goblin_woodwall_2m_ribs',
     type: 'structure',
     tier: 5,
+    disabled: true, // used in some goblin locations
     Destructible: {
       hp: 200,
       damageModifiers: allNormal,

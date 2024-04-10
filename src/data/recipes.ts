@@ -12,6 +12,7 @@ import {
   hildirRecipe,
   workbenchRecipe,
 } from '../model/recipe';
+import { GAME_DAY } from '../model/game';
 import { fishes } from './fish';
 
 const allFishes = Object.fromEntries(fishes.map(f => [f.id, 1]));
@@ -65,7 +66,7 @@ export const recipes: ItemRecipe[] = [
   workbenchRecipe(2, { LoxPelt: 6, Silver: 2 }, { LoxPelt: 2 }, 'CapeLox'),
   workbenchRecipe(2, { WolfHairBundle: 20, WolfPelt: 5, LeatherScraps: 10 }, { WolfHairBundle: 5, WolfPelt: 3, LeatherScraps: 4 }, 'ArmorFenringLegs'),
   workbenchRecipe(2, { WolfHairBundle: 20, WolfPelt: 5, LeatherScraps: 10 }, { WolfHairBundle: 5, WolfPelt: 3, LeatherScraps: 4 }, 'ArmorFenringChest'),
-  workbenchRecipe(2, { WolfHairBundle: 20, WolfPelt: 2, TrophyCultist: 1 }, { WolfHairBundle: 5, WolfPelt: 4 }, 'ArmorFenringChest'),
+  workbenchRecipe(2, { WolfHairBundle: 20, WolfPelt: 2, TrophyCultist: 1 }, { WolfHairBundle: 5, WolfPelt: 4 }, 'HelmetFenring'),
   // ARROWS & BOMBS
   workbenchRecipe(1, { Wood: 8 }, {}, 'ArrowWood', 20),
   workbenchRecipe(1, { Wood: 8, Resin: 2, Feathers: 2 }, {}, 'ArrowFire', 20),
@@ -149,7 +150,7 @@ export const recipes: ItemRecipe[] = [
   cauldronRecipe(1, { FishingBait: 20, TrophyAbomination: 1 }, 'FishingBaitSwamp', 20),
   cauldronRecipe(1, { FishingBait: 20, TrophyGoblin: 1 }, 'FishingBaitPlains', 20),
   cauldronRecipe(1, { FishingBait: 20, TrophyLox: 1 }, 'FishingBaitMistlands', 20),
-  cauldronRecipe(1, { FishingBait: 20, TrophySutrling: 1 }, 'FishingBaitAshlands', 20),
+  cauldronRecipe(1, { FishingBait: 20, TrophySurtling: 1 }, 'FishingBaitAshlands', 20),
   cauldronRecipe(1, { FishingBait: 20, TrophyHatchling: 1 }, 'FishingBaitDeepNorth', 20),
   // FERMENTER
   ...potionRecipe(
@@ -281,6 +282,8 @@ export const recipes: ItemRecipe[] = [
   genericRecipe('piece_artisanstation', 1, 3, { Wood: 10, BlackMetal: 1 }, {}, 'TurretBolt', 20),
   // BLACK FORGE
   blackForgeRecipe(1, { Bronze: 2, SurtlingCore: 1, Crystal: 1 }, {}, 'Lantern'),
+  blackForgeRecipe(1, { YggdrasilWood: 10, Eitr: 15, Silver: 5, Mandible: 2 }, { Eitr: 15, Silver: 5, Mandible: 2 }, 'AtgeirHimminAfl'),
+  blackForgeRecipe(1, { YggdrasilWood: 5, Iron: 15, Bilebag: 3, Eitr: 10 }, { Iron: 10, Bilebag: 1, Eitr: 1 }, 'AxeJotunBane'),
   blackForgeRecipe(1, { FineWood: 10, BoneFragments: 40, Eitr: 10 }, { FineWood: 5, BoneFragments: 20 }, 'BowSpineSnap'),
   blackForgeRecipe(1, { Wood: 10, Iron: 8, Root: 4 }, { Wood: 5, Iron: 4, Root: 1 }, 'CrossbowArbalest'),
   blackForgeRecipe(1, { FineWood: 4, Iron: 10, BlackMetal: 10 }, { Iron: 4, BlackMetal: 4 }, 'KnifeSkollAndHati'),
@@ -365,4 +368,8 @@ export const recipes: ItemRecipe[] = [
   hildirRecipe(150, 'Sparkler'),
   hildirRecipe(75, 'Ironpit'),
   hildirRecipe(600, 'BarberKit'),
+  // PRODUCERS
+  genericRecipe('piece_beehive', 1, GAME_DAY, {}, {}, 'Honey', 1),
+  genericRecipe('piece_wisplure', 1, 30, {}, {}, 'Wisp', 1),
+  genericRecipe('piece_sapcollector', 1, 60, {}, {}, 'Sap', 1),
 ];

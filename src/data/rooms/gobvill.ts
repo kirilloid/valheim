@@ -15,7 +15,7 @@ export const gobvill: CampConfig = {
         locItem('GoblinArcher', 1, 2),
         locItem('Goblin', 0.5),
       ],
-      dist: [],
+      dist: [0.529, 0.343, 0.088, 0.030, 0.010],
     },
     {
       id: 'woodwall',
@@ -23,7 +23,7 @@ export const gobvill: CampConfig = {
       size: [10, 8, 2],
       weight: 1,
       items: [], // 5x fence
-      dist: [],
+      dist: [0.186, 0.363, 0.294, 0.098, 0.049, 0.010],
     },
     {
       id: 'woodwall2',
@@ -31,7 +31,7 @@ export const gobvill: CampConfig = {
       size: [10, 8, 2],
       weight: 1,
       items: [], // 5x fence
-      dist: [],
+      dist: [0.205, 0.344, 0.304, 0.137, 0.010],
     },
     {
       id: 'guardplatform',
@@ -42,7 +42,7 @@ export const gobvill: CampConfig = {
         locItem('GoblinArcher', 1),
         locItem('Goblin', 0.5),
       ],
-      dist: [],
+      dist: [0.431, 0.353, 0.177, 0.029, 0.010],
     },
     {
       id: 'stakes',
@@ -54,7 +54,7 @@ export const gobvill: CampConfig = {
         locItem('Goblin', 0.5),
         locItem('piece_sharpstakes', 1, 3),
       ],
-      dist: [],
+      dist: [0.265, 0.392, 0.255, 0.088],
     },
     {
       id: 'platform',
@@ -65,7 +65,7 @@ export const gobvill: CampConfig = {
         locItem('GoblinArcher', 1, 2),
         locItem('Goblin', 0.5),
       ],
-      dist: [],
+      dist: [0.608, 0.275, 0.088, 0.029],
     },
   ],
   inner: [
@@ -78,7 +78,7 @@ export const gobvill: CampConfig = {
         locItem('Goblin', 0.5),
         locItem('Barley', 1, 12),
       ],
-      dist: [],
+      dist: [0.343, 0.363, 0.225, 0.069],
     },
     {
       id: 'flax',
@@ -89,7 +89,7 @@ export const gobvill: CampConfig = {
         locItem('Goblin', 0.5, 2),
         locItem('Flax', 1, 11),
       ],
-      dist: [],
+      dist: [0.471, 0.294, 0.186, 0.030, 0.019],
     },
     {
       id: 'crafting',
@@ -101,7 +101,7 @@ export const gobvill: CampConfig = {
         locItem('piece_workbench_ext2', 1, 2),
         locItem('TreasureChest_heath'),
       ],
-      dist: [],
+      dist: [0.098, 0.137, 0.196, 0.216, 0.167, 0.098, 0.039, 0.020, 0.029],
     },
     {
       id: 'bonfire',
@@ -109,13 +109,14 @@ export const gobvill: CampConfig = {
       size: [8, 8, 8],
       weight: 1,
       items: [
+        locItem('goblin_totempole', 0.5),
         locItem('bonfire'),
         locItem('Goblin', 0.5, 3),
         locItem('GoblinBrute', 0.5),
         locItem('GoblinShaman', 0.5),
         locItem('GoblinTotem', 0.5),
       ],
-      dist: [],
+      dist: [0.402, 0.255, 0.225, 0.088, 0.010, 0.010, 0.010],
     },
     {
       id: 'campfire',
@@ -129,7 +130,7 @@ export const gobvill: CampConfig = {
         locItem('GoblinBrute', 0.5),
         locItem('GoblinShaman', 0.5),
       ],
-      dist: [],
+      dist: [0.206, 0.245, 0.235, 0.186, 0.088, 0.030, 0.010],
     },
     {
       id: 'refusepit',
@@ -143,7 +144,7 @@ export const gobvill: CampConfig = {
         locItem('BoneFragments', 0.5, 4),
         locItem('Goblin', 0.5, 2),
       ],
-      dist: [],
+      dist: [0.235, 0.196, 0.275, 0.206, 0.078, 0.000, 0.010],
     },
     {
       id: 'tent1',
@@ -157,10 +158,10 @@ export const gobvill: CampConfig = {
         locItem('Goblin', 0.5, 3),
         locItem('GoblinShaman', 0.5),
       ],
-      dist: [],
+      dist: [0.539, 0.373, 0.088],
     },
     {
-      id: 'tent2',
+      id: 'tent02',
       theme: Theme.GoblinCamp,
       size: [12, 8, 12],
       weight: 1,
@@ -170,7 +171,7 @@ export const gobvill: CampConfig = {
         locItem('TreasureChest_heath', 0.2),
         locItem('Goblin', 0.5, 3),
       ],
-      dist: [],
+      dist: [0.588, 0.353, 0.030, 0.029],
     },
     {
       id: 'hut1',
@@ -182,7 +183,7 @@ export const gobvill: CampConfig = {
         locItem('wood_wall_log', 0.5, 2),
         locItem('Goblin', 0.5, 3),
       ],
-      dist: [],
+      dist: [0.353, 0.324, 0.235, 0.069, 0.019],
     },
     {
       id: 'hut02',
@@ -197,7 +198,7 @@ export const gobvill: CampConfig = {
         locItem('GoblinBrute', 0.1),
         locItem('GoblinShaman', 0.5),
       ],
-      dist: [],
+      dist: [0.618, 0.314, 0.068],
     },
     {
       id: 'hut03',
@@ -215,7 +216,7 @@ export const gobvill: CampConfig = {
         locItem('GoblinBrute', 0.1),
         locItem('GoblinShaman', 0.5),
       ],
-      dist: [],
+      dist: [0.676, 0.284, 0.030, 0.010],
     },
   ],
 };
