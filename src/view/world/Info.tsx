@@ -1,7 +1,9 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 import type { EditorProps } from '../parts/types';
 import type { WorldData } from './types';
+
+import { getStatsForDungeons } from '../../model/zdo-selectors';
 
 import { FileInfo } from '../parts/file';
 import { Tabs } from '../parts/Tabs';
@@ -18,6 +20,10 @@ export function WorldInfo({ value, onChange, file, disabled }: EditorProps<World
   const { version, netTime, randEvent, zdo, zoneSystem } = value;
   const onZdoChange = useCallback(zdo => onChange({ ...value, zdo }), [value, onChange]);
   const onZoneSystemChange = useCallback(zoneSystem => onChange({ ...value, zoneSystem }), [value, onChange]);
+  useEffect(() => {
+    const stats = getStatsForDungeons(value.zdo.zdos);
+    console.log(stats);
+  }, [value]);
   const tabs = [{
     title: 'File',
     renderer: useCallback(() => <FileInfo file={file} version={version} />, [file, version]),

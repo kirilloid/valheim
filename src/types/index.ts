@@ -16,6 +16,7 @@ export type GameComponent =
 | 'BaseAI' | 'Beacon' | 'Bed' | 'Beehive'
 | 'Chair' | 'Character' | 'Container' | 'CookingStation' | 'Corpse' | 'CraftingStation' | 'CraftingStationExtension' | 'CreatureSpawner'
 | 'Destructible' | 'Door' | 'DungeonGenerator'
+| 'EggGrow'
 | 'Fermenter' | 'Fireplace' | 'Fish' | 'FishingFloat'
 | 'Growup'
 | 'Humanoid'
@@ -25,7 +26,7 @@ export type GameComponent =
 | 'Pickable' | 'PickableItem' | 'Piece' | 'Plant' | 'Player' | 'PrivateArea' | 'Procreation'
 | 'Ragdoll' | 'RandomAnimation' | 'RandomFlyingBird' | 'ResourceRoot' | 'Runestone' /* boss stones */
 | 'Saddle' | 'SapCollector' | 'SEMan' | 'Ship' | 'ShipConstructor' | 'Sign' | 'Smelter'
-| 'Tameable' | 'TeleportWorld' | 'TerrainComp' | 'TombStone' | 'Trader' | 'TreeBase' | 'TreeLog' | 'Turret'
+| 'Tameable' | 'TeleportWorld' | 'TerrainComp' | 'TombStone' | 'Trader' | 'Trap' | 'TreeBase' | 'TreeLog' | 'Turret'
 | 'Vagon' | 'Vegvisir' | 'VisEquipment'
 | 'WearNTear' | 'Windmill' | 'WispSpawner'
 | 'ZNetView' | 'ZSyncTransform'

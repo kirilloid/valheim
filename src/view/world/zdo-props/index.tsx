@@ -107,6 +107,7 @@ export const InterfaceFields: Partial<Record<
   Destructible: [floatComp('health')],
   Door: [enumComp('state', [[1, 'opened'], [0, 'closed'], [-1, 'opened opposite']])],
   DungeonGenerator: [RoomsComp],
+  EggGrow: [timeComp('growStart')],
   Fermenter: [stringComp('Content'), timeComp('StartTime')],
   Fireplace: [floatComp('fuel'), timeComp('lastTime')],
   Fish: [vectorComp('spawnpoint')],
@@ -121,6 +122,7 @@ export const InterfaceFields: Partial<Record<
     BlacksmithingComp,
   ],
   ItemStand: [ItemComp],
+  // ItemStyle: [floatComp('_Style')],
   Leviathan: [boolComp('submerged', { hashFn: crc32 })],
   LiquidVolume: [LiquidComp],
   LocationProxy: [hashedLocationComp('location'), intComp('seed', { readOnly }), ({ value: zdo }) => <>
@@ -129,6 +131,7 @@ export const InterfaceFields: Partial<Record<
   </>],
   // LootSpawner: [timeComp('spawn_time'),],
   MapTable: [MapTable],
+  // MaterialVariation: [intComp('MatVar<number>')],
   MineRock: [floatComp('Health'), floatComp('Health0')],
   MineRock5: [RockHealthComp],
   MonsterAI: [
@@ -205,6 +208,11 @@ export const InterfaceFields: Partial<Record<
     timeComp('timeOfDeath'),
     TombComp,
   ],
+  Trader: [],
+  Trap: [
+    enumComp('state', [[-1, 'initial'], [1, 'armed'], [2, 'active']]),
+    timeComp('triggered'),
+  ],
   TreeBase: [floatComp('health')],
   TreeLog: [floatComp('health')],
   Turret: [
@@ -229,6 +237,7 @@ export const InterfaceFields: Partial<Record<
     hashedItemComp('UtilityItem'),
   ],
   WearNTear: [WearNTearComp],
+  WispSpawner: [timeComp('lastSawn')],
   ZNetView: [vectorComp('scale')],
   ZSyncTransform: [
     vectorComp('vel'),
