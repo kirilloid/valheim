@@ -185,9 +185,9 @@ export const ships: Ship[] = [
       disableLevel: -0.5,
     },
     speed: {
-      rudder: NaN,
-      half: [NaN, NaN, NaN, NaN, NaN],
-      full: [NaN, NaN, NaN, NaN, NaN],
+      rudder: 2.5,
+      half: [3.29, 4.06, 4.9, 5.8, 6.2],
+      full: [4.65, 5.72, 6.89, 7.85, 8.9],
     },
     storage: [8, 4],
     recipe: {

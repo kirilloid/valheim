@@ -8,7 +8,7 @@ import { stationsMap, Produced } from '../../data/resource-usage';
 import { assertNever, days, timeI2S } from '../../model/utils';
 
 import { TranslationContext, useGlobalState } from '../../effects';
-import { InlineObjectWithIcon, Light, List, Resistances, yesNo } from '../helpers';
+import { InlineObjectWithIcon, Light, List, Resistances, showNumber, yesNo } from '../helpers';
 import { ItemHeader } from '../parts/ItemHeader';
 import { Recipe } from '../parts/Source';
 
@@ -198,6 +198,14 @@ export function Piece({ item }: { item: TPiece }) {
               <dt>{translate(`ui.damageType.${key}`)}</dt>
               <dd>{value}</dd>
             </React.Fragment>))}
+        </dl>
+      </section>}
+      {item.ShieldGenerator && <section key="damage">
+        <h2>Shield Generator</h2>
+        <dl>
+          <dt>fuel</dt><dd><List separator=" | ">{item.ShieldGenerator.fuelItems.map(fuel => <InlineObjectWithIcon id={fuel} key={fuel} />)}</List></dd>
+          <dt>max fuel</dt><dd>{item.ShieldGenerator.maxFuel}</dd>
+          <dt>damage per unit of fuel</dt><dd>{showNumber(1 / item.ShieldGenerator.fuelPerDamage)}</dd>
         </dl>
       </section>}
       <section key="specific">

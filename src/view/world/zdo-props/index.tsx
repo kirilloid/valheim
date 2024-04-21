@@ -183,6 +183,7 @@ export const InterfaceFields: Partial<Record<
     enumComp('forward', [[1, 'Back'], [0, 'Stop'], [2, 'Slow'], [3, 'Half'], [4, 'Full']]),
   ],
   ShipConstructor: [timeComp('spawntime'), boolComp('done'),],
+  ShieldGenerator: [floatComp('fuel'), timeComp('StartTime')],
   Sign: [stringComp('text')],
   // SpawnSystem: ['<b_|e_><creature><num>',],
   Smelter: [

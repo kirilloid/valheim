@@ -3349,7 +3349,7 @@ export const creatures: Creature[] = [
     tolerate: TOLERATE.WATER,
     speed: { walk: 7, run: 13, swim: 0 },
     turnSpeed: { walk: 300, run: 300, swim: 0 },
-    hp: 250,
+    hp: 200,
     stagger: { factor: 0.5, time: NaN },
     damageModifiers: {
       ...animalDmgModifiers,
@@ -3360,7 +3360,7 @@ export const creatures: Creature[] = [
       dropTrophy('TrophyVolture', 0.1),
       dropEntry('VoltureMeat'),
       dropEntry('Feathers', { min: 2, max: 3, chance: 0.5 }),
-      dropEntry('VoltureEgg', { min: 1, max: 4 }),
+      dropEntry('VoltureEgg', { min: 1, max: 2, chance: 0.5 }),
     ],
   },
   {

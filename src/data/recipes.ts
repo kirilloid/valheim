@@ -168,7 +168,7 @@ export const recipes: ItemRecipe[] = [
   cauldronRecipe(1, { FishingBait: 20, TrophyAbomination: 1 }, 'FishingBaitSwamp', 20),
   cauldronRecipe(1, { FishingBait: 20, TrophyGoblin: 1 }, 'FishingBaitPlains', 20),
   cauldronRecipe(1, { FishingBait: 20, TrophyLox: 1 }, 'FishingBaitMistlands', 20),
-  cauldronRecipe(1, { FishingBait: 20, TrophySurtling: 1 }, 'FishingBaitAshlands', 20),
+  cauldronRecipe(1, { FishingBait: 20, TrophyCharredMelee: 1 }, 'FishingBaitAshlands', 20),
   cauldronRecipe(1, { FishingBait: 20, TrophyHatchling: 1 }, 'FishingBaitDeepNorth', 20),
   // FERMENTER
   ...potionRecipe(

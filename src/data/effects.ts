@@ -119,7 +119,17 @@ export const effects: Effect[] = [
     time: 300,
     cooldown: 1200,
     attackModifier: [SkillType.Pickaxes, 1.6],
-    eitrRegen: 2, 
+    eitrRegen: 2,
+  },
+  {
+    type: 'effect',
+    id: 'GP_Fader',
+    iconId: 'resource/TrophyFader',
+    tier: 7,
+    time: 300,
+    cooldown: 1200,
+    carryWeight: 300,
+    moveSpeed: 0.1,
   },
   // Harpooned,
   {

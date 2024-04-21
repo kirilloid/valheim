@@ -3341,7 +3341,7 @@ export const objects: PhysicalObject[] = [
     },
     Destructible: {
       hp: 400,
-      damageModifiers: mods([1, 1, 1, 0, 0, 3, 3, 3, 4, 4]),
+      damageModifiers: mods([1, 1, 1, 0, 0, 3, 1, 1, 4, 4]),
       minToolTier: 0,
       parts: [],
     },

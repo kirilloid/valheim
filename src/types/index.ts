@@ -8,7 +8,7 @@ import type { Attack } from './attack';
 
 import { SkillType } from '../model/skills';
 import { CampConfig, DungeonRoomsConfig } from '../data/rooms';
-import { Deadspeak, EggGrow, Food, PointLight, Potion, Radiation, SapCollector, Turret } from './components';
+import { Deadspeak, EggGrow, Food, PointLight, Potion, Radiation, SapCollector, ShieldGenerator, Turret } from './components';
 import { DropEntry, GeneralDrop } from './drop';
 
 export type GameComponent = 
@@ -25,7 +25,7 @@ export type GameComponent =
 | 'MapTable' | 'MineRock' | 'MineRock5' | 'MonsterAI'
 | 'Pickable' | 'PickableItem' | 'Piece' | 'Plant' | 'Player' | 'PrivateArea' | 'Procreation'
 | 'Ragdoll' | 'RandomAnimation' | 'RandomFlyingBird' | 'ResourceRoot' | 'Runestone' /* boss stones */
-| 'Saddle' | 'SapCollector' | 'SEMan' | 'Ship' | 'ShipConstructor' | 'Sign' | 'Smelter'
+| 'Saddle' | 'SapCollector' | 'SEMan' | 'ShieldGenerator' | 'ShipConstructor' | 'Ship' | 'Sign' | 'Smelter'
 | 'Tameable' | 'TeleportWorld' | 'TerrainComp' | 'TombStone' | 'Trader' | 'Trap' | 'TreeBase' | 'TreeLog' | 'Turret'
 | 'Vagon' | 'Vegvisir' | 'VisEquipment'
 | 'WearNTear' | 'Windmill' | 'WispSpawner'
@@ -456,6 +456,7 @@ export type Piece = BasePiece & {
     backstabBonus?: number;
   };
   Turret?: Turret;
+  ShieldGenerator?: ShieldGenerator;
 } & ({
   subtype: 'fireplace';
   fireplace: {

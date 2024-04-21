@@ -63,4 +63,8 @@ export interface Potion {
   cooldown: number;
 }
   
-  
+export interface ShieldGenerator {
+  fuelItems: EntityId[];
+  maxFuel: number;
+  fuelPerDamage: number;
+}

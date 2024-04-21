@@ -1,3 +1,17 @@
+```cs
+  this.m_customTimer++;
+	if (this.HaveControllingPlayer() && this.m_customTimer % 50 == 0)
+	{
+		this.m_customTimer = 0;
+		Vector3 vel = this.m_body.velocity;
+		float mag = Mathf.Sqrt(vel.x * vel.x + vel.z * vel.z);
+		float angle = Mathf.Atan2(vel.z, vel.x);
+		string velocityStr = "V = " + mag.ToString("0.00") + " m/s";
+		string angleStr = "A = " + angle.ToString("0.0") + "°";
+		MessageHud.instance.ShowMessage(MessageHud.MessageType.TopLeft, velocityStr + ", " + angleStr, 0, null);
+	}
+```
+
 Karve
 1st gear: 188 / min = 3.1 m/s
 
@@ -68,3 +82,24 @@ Karve
 50%  7.45  m/s
 75%  8.5   m/s
 99%  9.4   m/s
+
+
+## Drakkar
+
+### rudder
+2.50 m/s
+
+### half-sail
+ 0%  3.29  m/s
+25%  4.06  m/s
+50%  4.9   m/s
+75%  5.8   m/s
+99%  6.2   m/s
+
+### full-sail
+ 0%  4.65  m/s
+25%  5.72  m/s
+50%  6.89  m/s
+75%  7.85  m/s
+99%  8.9   m/s
+;
