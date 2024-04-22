@@ -58,18 +58,18 @@ export const tools: Tool[] = [
     durability: [Infinity, 0],
     produces: fishes.map(f => f.id),
   },
-  {
-    id: 'Chisel',
-    disabled: true,
-    type: 'tool',
-    special: 'build',
-    tier: 3,
-    weight: 1.5,
-    floating: true,
-    maxLvl: 1,
-    durability: [Infinity, 0],
-    produces: pieces.map(p => p.id),
-  },
+  // {
+  //   id: 'Chisel',
+  //   disabled: true,
+  //   type: 'tool',
+  //   special: 'build',
+  //   tier: 3,
+  //   weight: 1.5,
+  //   floating: true,
+  //   maxLvl: 1,
+  //   durability: [Infinity, 0],
+  //   produces: pieces.map(p => p.id),
+  // },
 ];
 
 for (const tool of tools) {

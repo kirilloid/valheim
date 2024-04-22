@@ -3684,6 +3684,7 @@ export const pieces: Piece[] = [
   },
   {
     id: 'CastleKit_metal_groundtorch_unlit',
+    iconId: 'piece/piece_groundtorch',
     base: false,
     type: 'piece',
     subtype: 'external',

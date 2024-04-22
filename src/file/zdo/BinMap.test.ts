@@ -1,4 +1,4 @@
-import { PackageWriter } from '../Package';
+import { PackageReader, PackageWriter } from '../Package';
 import { IntBinMap } from './BinMap';
 
 function save(map: IntBinMap): Uint8Array {
@@ -19,15 +19,19 @@ function fromPairs(pairs: [number, number][]): Uint8Array {
   return bytes;
 }
 
+function intBinMap(pairs: [number, number][]): IntBinMap {
+  return new IntBinMap(fromPairs(pairs), PackageReader.prototype.readChar, PackageWriter.prototype.writeChar);
+}
+
 describe('basic implementation', () => {
   test('saving the same map', () => {
-    const map = new IntBinMap(fromPairs([[1, 1]]));
+    const map = intBinMap([[1, 1]]);
     const result = save(map);
     expect(result).toEqual(fromPairs([[1, 1]]));
   });
 
   test('saving updated value', () => {
-    const map = new IntBinMap(fromPairs([[1, 1]]));
+    const map = intBinMap([[1, 1]]);
     map.set(1, 2);
     expect(map.get(1)).toBe(2);
     const result = save(map);
@@ -35,7 +39,7 @@ describe('basic implementation', () => {
   });
 
   test('saving with new value', () => {
-    const map = new IntBinMap(fromPairs([[1, 1]]));
+    const map = intBinMap([[1, 1]]);
     map.set(2, 2);
     expect(map.get(2)).toBe(2);
     const result = save(map);
@@ -43,7 +47,7 @@ describe('basic implementation', () => {
   });
 
   test('deleting a key', () => {
-    const map = new IntBinMap(fromPairs([[1, 1], [2, 2]]));
+    const map = intBinMap([[1, 1], [2, 2]]);
     map.delete(2);
     map.set(3, 3);
     const result = save(map);
@@ -53,14 +57,14 @@ describe('basic implementation', () => {
 
 describe('iterators', () => {
   test('simpleton', () => {
-    const map = new IntBinMap(fromPairs([[1, 1]]));
+    const map = intBinMap([[1, 1]]);
     expect([...map.keys()]).toEqual([1]);
     expect([...map.values()]).toEqual([1]);
     expect([...map.entries()]).toEqual([[1, 1]]);
   });
 
   test('mutated value', () => {
-    const map = new IntBinMap(fromPairs([[1, 1], [2, 2]]));
+    const map = intBinMap([[1, 1], [2, 2]]);
     map.delete(2);
     map.set(3, 3);
     expect([...map.keys()]).toEqual([1, 3]);

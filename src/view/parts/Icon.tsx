@@ -40,7 +40,7 @@ const iconType = (type: GameObject['type']): IconType => {
   }
 };
 
-const iconPath = (item: GameObject): string => {
+export const iconPath = (item: GameObject): string => {
   if (item.iconId != null) return `/icons/${item.iconId}`;
   if (item.mod != null) return `/icons/${item.mod}/${item.id}`;
   return `/icons/${iconType(item.type)}/${item.id}`;

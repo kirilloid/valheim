@@ -1,5 +1,8 @@
 import type { Cart, EntityId, GeneralDrop, LocationItem, Piece, Ship, Siege } from '../types';
 
+import * as fs from 'fs';
+import { resolve } from 'path';
+
 import { creatures } from './creatures';
 import { events } from './events';
 import { data } from './itemDB';
@@ -14,6 +17,12 @@ import { pieces } from './building';
 import { ships, carts, siege } from './transport';
 
 import * as rooms from './rooms';
+import { iconPath } from '../view/parts/Icon';
+
+function resolvePath(path: string): string {
+  const localPath = `../../public${path}`;
+  return resolve(__dirname, localPath);
+}
 
 // SOURCE_RECIPE
 // SOURCE_GROW
@@ -275,3 +284,59 @@ describe('dungeons - rooms', () => {
   testCamp('charredRuins', rooms.charredRuins);
   testCamp('fortressRuins', rooms.fortressRuins);
 });
+
+xtest('icons', (done) => {
+  const entries = Object.entries(data);
+
+  let fails: EntityId[] = [];
+  let passed = 0;
+  for (const [id, item] of entries) {
+    const path = resolvePath(`${iconPath(item)}.png`);
+    if (item.disabled
+    ||  item.mod
+    ||  item.type === 'spawner'
+    ) {
+      passed++;
+      continue;
+    }
+    fs.stat(path, (err) => {
+      passed++;
+      if (err != null) fails.push(id);
+      if (passed === entries.length) {
+        if (fails.length === 0) {
+          done();
+        } else {
+          const failsStr = fails.join(', ');
+          const arrayStr = `Array (${fails.length}) [${failsStr.slice(0, 1000)}${failsStr.length > 1000 ? '...' : ''}]`;
+          done("Those entities don't have icon: " + arrayStr);
+        }
+      }
+    });
+  }  
+}, 10000);
+
+xtest('l18n', (done) => {
+  const entries = Object.entries(data);
+
+  let fails: EntityId[] = [];
+  let passed = 0;
+  fs.readFile(resolvePath(`/lang/en.json`), 'utf8', (err, data) => {
+    if (err != null) {
+      done(err.message);
+    }
+    const loc = JSON.parse(data);
+    for (const [id, item] of entries) {
+      if (!(id in loc)) {
+        fails.push(id);
+      }
+    }
+    if (fails.length === 0) {
+      done();
+    } else {
+      const failsStr = fails.join(', ');
+      const arrayStr = `Array (${fails.length}) [${failsStr.slice(0, 1000)}${failsStr.length > 1000 ? '...' : ''}]`;
+      done("Those entities don't have translation: " + arrayStr);
+    }
+  });
+
+}, 10000);

@@ -1180,6 +1180,7 @@ export const creatures: Creature[] = [
   ...(function(x: Creature) { return [x, {
     ...x,
     id: 'Draugr_Ranged',
+    iconId: 'creature/Draugr',
     ragdollId: 'Draugr_ranged_ragdoll',
     attacks: [x.attacks[1]!],
   }] }({

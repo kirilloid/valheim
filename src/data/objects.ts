@@ -98,7 +98,6 @@ const dvergrPropsDestructible = (hp: number): Destructible => ({
 
 function tree({
   id: [baseId, stubId, logId, logHalfId],
-  iconId,
   group,
   tier,
   minToolTier,
@@ -108,7 +107,6 @@ function tree({
   Plant,
 }: {
   id: [EntityId, EntityId, EntityId, EntityId];
-  iconId?: EntityId;
   group?: EntityGroup;
   tier: number;
   minToolTier: number;
@@ -123,7 +121,6 @@ function tree({
       subtype: 'tree',
       tags: ['plant'],
       id: baseId,
-      iconId,
       components: ['TreeBase'],
       group,
       tier,
@@ -144,6 +141,7 @@ function tree({
       type: 'object',
       subtype: 'misc',
       id: stubId,
+      iconId: 'object/Stub',
       components: ['Destructible'],
       tier,
       Destructible: {
@@ -159,6 +157,7 @@ function tree({
       type: 'object',
       subtype: 'misc',
       id: logId,
+      iconId: 'object/Log',
       components: ['TreeLog'],
       tier,
       Destructible: {
@@ -177,6 +176,7 @@ function tree({
       type: 'object',
       subtype: 'misc',
       id: logHalfId,
+      iconId: 'object/Log',
       components: ['TreeLog'],
       tier,
       Destructible: {
@@ -234,6 +234,7 @@ function treeSimpler({
       type: 'object',
       subtype: 'misc',
       id: stubId,
+      iconId: 'object/Stub',
       components: ['Destructible'],
       tier,
       Destructible: {
@@ -249,6 +250,7 @@ function treeSimpler({
       type: 'object',
       subtype: 'misc',
       id: logId,
+      iconId: 'object/Log',
       components: ['TreeLog'],
       tier,
       Destructible: {
@@ -307,7 +309,7 @@ function rock({
       type: 'object',
       subtype: 'rock',
       id: fracId,
-      iconId,
+      iconId: iconId ?? `object/${baseId}`,
       components: ['MineRock5'],
       tier,
       Destructible: {
@@ -1950,6 +1952,7 @@ export const objects: PhysicalObject[] = [
   },
   {
     id: 'crypt_skeleton_chest',
+    iconId: 'object/stone_chest',
     type: 'object',
     subtype: 'misc',
     Destructible: {
@@ -1965,6 +1968,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'misc',
     id: 'barrell', // yes, double-l
+    iconId: 'object/barrel',
     tier: 2,
     floating: true,
     Destructible: {
@@ -1992,7 +1996,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'indestructible',
     id: 'barrell_static',
-    iconId: 'object/barrell',
+    iconId: 'object/barrel',
     tier: 4,
   },
   // SWAMP
@@ -2350,7 +2354,7 @@ export const objects: PhysicalObject[] = [
   {
     type: 'object',
     id: 'cloth_hanging_door_double',
-    iconId: 'piece/cloth_hanging_door_double',
+    // iconId: 'piece/cloth_hanging_door_double',
     subtype: 'misc',
     tier: 4,
     Destructible: {
@@ -2690,6 +2694,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'indestructible',
     id: 'vertical_web',
+    disabled: true,
     tier: 6,
     grow: [],
   },
@@ -2718,6 +2723,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'indestructible',
     id: 'horizontal_web',
+    disabled: true,
     tier: 6,
     grow: [],
   },
@@ -2725,11 +2731,13 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'indestructible',
     id: 'tunnel_web',
+    disabled: true,
     tier: 6,
     grow: [],
   },
   {
     type: 'object',
+    disabled: true,
     subtype: 'indestructible',
     id: 'Skull1',
     tier: 6,
@@ -2737,6 +2745,7 @@ export const objects: PhysicalObject[] = [
   },
   {
     type: 'object',
+    disabled: true,
     subtype: 'indestructible',
     id: 'Skull2',
     tier: 6,
@@ -2744,10 +2753,10 @@ export const objects: PhysicalObject[] = [
   },
   {
     type: 'object',
+    disabled: true,
     subtype: 'indestructible',
     id: 'HugeRoot1',
     // mentioned in vegetation list, but this entry is disabled
-    disabled: true,
     tier: 6,
   },
   {
@@ -2830,6 +2839,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'misc',
     id: 'yggashoot_log',
+    iconId: 'object/Log',
     components: ['TreeLog'],
     tier: 6,
     grow: [],
@@ -2845,6 +2855,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'misc',
     id: 'yggashoot_log_half',
+    iconId: 'object/Log',
     components: ['TreeLog'],
     tier: 6,
     grow: [],
@@ -2866,6 +2877,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'tree',
     id: `ShootStump`,
+    iconId: 'object/Stump',
     tier: 6,
     grow: [],
     Destructible: {
@@ -3851,6 +3863,7 @@ export const objects: PhysicalObject[] = [
   },
   {
     id: 'dvergrprops_barrel',
+    iconId: 'piece/Fermenter',
     type: 'object',
     subtype: 'misc',
     tier: 6,
@@ -4029,7 +4042,7 @@ export const objects: PhysicalObject[] = [
   },
   {
     id: 'dvergrprops_pickaxe',
-    iconId: 'weapons/PickaxeBronze',
+    iconId: 'weapon/PickaxeBronze',
     type: 'object',
     subtype: 'misc',
     tier: 6,
@@ -4203,6 +4216,7 @@ export const objects: PhysicalObject[] = [
   },
   {
     id: 'CreepProp_egg_hanging01',
+    iconId: 'object/SeekerEgg',
     type: 'object',
     subtype: 'misc',
     PointLight: { color: '#FF5C14', range: 3, intensity: 1.5 },

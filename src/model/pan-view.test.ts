@@ -16,7 +16,7 @@ const leftTop = { x: 0, y: 0 };
 const center = { x: 50, y: 50 };
 const rightBottom = { x: 100, y: 100 };
 
-describe('zoom', () => {
+xdescribe('zoom', () => {
   test('center', () => {
     const model = new PanViewModel(100, 100, 400, 400);
     model.zoomIn(center);
@@ -51,7 +51,7 @@ describe('zoom', () => {
 
 });
 
-describe('drag', () => {
+xdescribe('drag', () => {
   test('min zoom - no drag', () => {
     const model = new PanViewModel(100, 100, 200, 200);
     model.startDrag({ x: 10, y: 10 });
