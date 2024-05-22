@@ -28,10 +28,7 @@ import {
 } from './epic-loot';
 import { JewelCraftingTooltip } from './jewel-crafting';
 import { EitrRegen } from './eitr-regen';
-
-const INVENTORY_WIDTH = 8;
-const INVENTORY_HEIGHT = 4;
-const INVENTORY_SIZE = INVENTORY_WIDTH * INVENTORY_HEIGHT;
+import { INVENTORY_HEIGHT, INVENTORY_SIZE, INVENTORY_WIDTH } from '../../../model/game';
 
 function Tooltip({ invItem, x, y, equippedItems, moClass }: {
   invItem: InvItem;

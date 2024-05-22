@@ -14,6 +14,8 @@ import { torchResist, woodResist } from '../model/building';
 import { pickables } from './pickable';
 
 const oneOfEach = true;
+const ashResist = true;
+const ashImmune = true;
 
 const allNormal: DamageModifiers = {
   blunt: 'normal',
@@ -104,6 +106,7 @@ function tree({
   grow,
   hp: [baseHp, logHp, logHalfHp],
   drop: [baseDrop, chunkDrop],
+  stubWood = 'Wood',
   Plant,
 }: {
   id: [EntityId, EntityId, EntityId, EntityId];
@@ -113,6 +116,7 @@ function tree({
   grow: ItemGrow[];
   hp: [number, number, number];
   drop: [GeneralDrop, GeneralDrop];
+  stubWood?: EntityId;
   Plant?: Plantable;
 }): PhysicalObject[] {
   return [
@@ -150,7 +154,7 @@ function tree({
         minToolTier,
         parts: [],
       },
-      drop: [singleDrop('Wood', 2)],
+      drop: [singleDrop(stubWood, 2)],
       grow: [],
     },
     {
@@ -2293,6 +2297,31 @@ export const objects: PhysicalObject[] = [
   },
   {
     type: 'object',
+    id: 'MountainKit_brazier_purple',
+    disabled: true,
+    iconId: 'piece/piece_brazierfloor01',
+    subtype: 'misc',
+    // lightRadius: 0.5,
+    // warmRadius: 0.5,
+    tier: 7,
+    Destructible: {
+      minToolTier: 0,
+      hp: 50,
+      damageModifiers: mods([0, 0, 0, 0, 0, 1, 2, 3, 3, 3]),
+      parts: [],
+    },
+    PointLight: { color: '#C0FEFF', intensity: 2, range: 5 },
+    drop: [{
+      num: [1, 2],
+      options: [
+        { item: 'Bronze', num: [1, 1], weight: 0.5 },
+        { item: 'FineWood', num: [1, 2] },
+        { item: 'FineWood', num: [1, 1] },
+      ],
+    }],
+  },
+  {
+    type: 'object',
     id: 'mountainkit_chair',
     iconId: 'piece/piece_chair02',
     subtype: 'misc',
@@ -2645,6 +2674,7 @@ export const objects: PhysicalObject[] = [
       damageModifiers: pickOnly,
       parts: [{ id: 'Barnacle', num: 21 }],
     },
+    Leviathan: { chance: 0.1, delay: 20 },
     drop: [],
   },
   {
@@ -3153,7 +3183,7 @@ export const objects: PhysicalObject[] = [
   ...tree({
     id: ['AshlandsTree1', 'AshlandsTreeStump1', 'AshlandsTreeLog1', 'AshlandsTreeLogHalf1'],
     group: 'ashtree',
-    tier: 1,
+    tier: 7,
     minToolTier: 0,
     grow: itemGrow({
       // tree_ashlands1
@@ -3176,7 +3206,30 @@ export const objects: PhysicalObject[] = [
       num: [5, 8],
       group: [2, 4],
       groupRadius: 40,
+    }),
+    hp: [200, 90, 90],
+    drop: [{
+      chance: 0.5,
+      num: [1, 2],
+      options: [
+        { weight: 2, item: 'Blackwood', num: [1, 2] },
+        { weight: 1, item: 'CharcoalResin', num: [1, 1] },
+      ]
     }, {
+      num: [10, 10],
+      options: [
+        { weight: 2, item: 'Blackwood' },
+        { weight: 1, item: 'Wood' },
+      ],
+    }],
+    stubWood: 'Blackwood',
+  }),
+  ...tree({
+    id: ['AshlandsTree3', 'AshlandsTreeStump2', 'AshlandsTreeLog1', 'AshlandsTreeLogHalf1'],
+    group: 'ashtree',
+    tier: 7,
+    minToolTier: 0,
+    grow: itemGrow({
       // tree_ashlands3
       scale: [1, 2],
       randTilt: 10,
@@ -3187,7 +3240,30 @@ export const objects: PhysicalObject[] = [
       num: [4, 10],
       group: [3, 5],
       groupRadius: 50,
+    }),
+    hp: [200, 90, 90],
+    drop: [{
+      chance: 0.5,
+      num: [1, 2],
+      options: [
+        { weight: 2, item: 'Blackwood', num: [1, 2] },
+        { weight: 1, item: 'CharcoalResin', num: [1, 1] },
+      ]
     }, {
+      num: [10, 10],
+      options: [
+        { weight: 2, item: 'Blackwood' },
+        { weight: 1, item: 'Wood' },
+      ],
+    }],
+    stubWood: 'Blackwood',
+  }),
+  ...tree({
+    id: ['AshlandsTree6', 'AshlandsTreeStump3', 'AshlandsTreeLog2', 'AshlandsTreeLogHalf2'],
+    group: 'ashtree',
+    tier: 7,
+    minToolTier: 0,
+    grow: itemGrow({
       // tree_ashlands4
       scale: [1.5, 2.5],
       randTilt: 10,
@@ -3212,6 +3288,7 @@ export const objects: PhysicalObject[] = [
         { weight: 1, item: 'Wood' },
       ],
     }],
+    stubWood: 'Blackwood',
   }),
   { // rock_ashlands1
     type: 'object',
@@ -3341,8 +3418,9 @@ export const objects: PhysicalObject[] = [
       ],
     },
   },
-  {
-    id: 'Spawner_CharredStone',
+  ...['Spawner_CharredStone', 'Spawner_CharredStone_event'].map<PhysicalObject>(id => ({
+    id,
+    iconId: 'object/Spawner_CharredStone',
     tier: 7,
     type: 'object',
     subtype: 'misc',
@@ -3373,7 +3451,7 @@ export const objects: PhysicalObject[] = [
         { item: 'Charredskull' },
       ],
     }],
-  },
+  })),
   {
     id: 'Spawner_CharredStone_Elite',
     tier: 7,
@@ -3467,7 +3545,7 @@ export const objects: PhysicalObject[] = [
       minToolTier: 0,
       parts: [],
     },
-    drop: [singleDrop('BellFragment', 2, 4)],
+    drop: [],
   },
   {
     id: 'Charred_altar_bellfragment',
@@ -3619,6 +3697,7 @@ export const objects: PhysicalObject[] = [
       hp: 40,
       damageModifiers: mods([0, 0, 0, 0, 0, 1, 1, 1, 3, 3]),
       minToolTier: 0,
+      ashResist,
       parts: [],
     },
     drop: [{
@@ -3638,18 +3717,38 @@ export const objects: PhysicalObject[] = [
   },
   // UnstableLavaRock: UnstableLavaRock
   // mushroom_SmokePuff: Pickable_SmokePuff
-  ...rock({
-    id: ['LeviathanLava', 'LeviathanLava_frac'],
+  {
+    type: 'object',
+    subtype: 'ore',
+    id: 'LeviathanLava',
+    components: ['Leviathan'],
+    tier: 7,
+    grow: [],
+    Destructible: {
+      hp: 0,
+      minToolTier: 0,
+      damageModifiers: pickOnly,
+      parts: [{ id: 'LeviathanLava_default', num: 27 }],
+    },
+    Leviathan: { chance: 0.1, delay: 20 },
+    drop: [],
+  },
+  // this is an artificial object, since game uses mesh collider as map/area
+  {
+    type: 'object',
+    id: 'LeviathanLava_default',
     subtype: 'ore',
     iconId: 'resource/FlametalOreNew',
     tier: 7,
-    minToolTier: 3,
     grow: [],
-    children: 27,
-    hp: 100,
-    // damageModifiers: { ...allImmune, pickaxe: 'normal', lightning: 'normal' },
-    drop: singleDrop('FlametalOreNew', 3, 4),
-  }),
+    Destructible: {
+      hp: 100,
+      minToolTier: 3,
+      damageModifiers: pickOnly,
+      parts: [],
+    },
+    drop: [singleDrop('FlametalOreNew', 3, 4)],
+  },
   {
     type: 'object',
     subtype: 'misc',
@@ -3659,12 +3758,13 @@ export const objects: PhysicalObject[] = [
       hp: 150,
       damageModifiers: mods([0, 0, 1, 2, 0, 1, 0, 1, 4, 4]),
       minToolTier: 0,
+      ashImmune,
       parts: [],
     },
     drop: [{
-      num: [2, 3],
+      num: [1, 2],
       options: [
-        { item: 'BoneFragments', weight: 50 },
+        { item: 'BoneFragments', weight: 50, num: [2, 15] },
         { item: 'AsksvinCarrionSkull' },
         { item: 'AsksvinCarrionRibcage' },
         { item: 'AsksvinCarrionPelvic' },
@@ -3681,12 +3781,13 @@ export const objects: PhysicalObject[] = [
       hp: 150,
       damageModifiers: mods([0, 0, 1, 2, 0, 1, 0, 1, 4, 4]),
       minToolTier: 0,
+      ashImmune,
       parts: [],
     },
     drop: [{
-      num: [2, 3],
+      num: [1, 2],
       options: [
-        { item: 'BoneFragments', weight: 50 },
+        { item: 'BoneFragments', weight: 50, num: [2, 15] },
         { item: 'AsksvinCarrionSkull' },
         { item: 'AsksvinCarrionRibcage' },
         { item: 'AsksvinCarrionPelvic' },
@@ -3843,6 +3944,393 @@ export const objects: PhysicalObject[] = [
     components: [],
     tier: 2,
   })),
+  {
+    id: 'blackmarble_base_2',
+    iconId: 'piece/blackmarble_1x1',
+    type: 'object',
+    subtype: 'misc',
+    tier: 6,
+    // size: [2, 2, 2],
+    Destructible: {
+      hp: 1500,
+      damageModifiers: mods([1, 1, 1, 1, 1, 3, 3, 3, 3, 3]),
+      minToolTier: 0,
+      ashResist,
+      parts: [],
+    },
+    drop: [singleDrop('BlackMarble', 1)],
+  },
+  {
+    id: 'blackmarble_creep_4x1x1',
+    iconId: 'piece/blackmarble_1x1',
+    disabled: true,
+    type: 'object',
+    subtype: 'misc',
+    tier: 6,
+    // size: [4, 1, 1],
+    Destructible: {
+      hp: 500,
+      damageModifiers: mods([1, 1, 1, 1, 1, 3, 3, 3, 3, 3]),
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('BlackMarble', 1)],
+  },
+  {
+    id: 'blackmarble_creep_4x2x1',
+    iconId: 'piece/blackmarble_1x1',
+    disabled: true,
+    type: 'object',
+    subtype: 'misc',
+    tier: 6,
+    // size: [4, 1, 2],
+    Destructible: {
+      hp: 500,
+      damageModifiers: mods([1, 1, 1, 1, 1, 3, 3, 3, 3, 3]),
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('BlackMarble', 1)],
+  },
+  {
+    id: 'blackmarble_creep_slope_inverted_1x1x2',
+    iconId: 'piece/blackmarble_out_1',
+    disabled: true,
+    type: 'object',
+    subtype: 'misc',
+    tier: 6,
+    // size: [1, 1, 2],
+    Destructible: {
+      hp: 500,
+      damageModifiers: mods([1, 1, 1, 1, 1, 3, 3, 3, 3, 3]),
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('BlackMarble', 1)],
+  },
+  {
+    id: 'blackmarble_creep_slope_inverted_2x2x1',
+    iconId: 'piece/blackmarble_out_1',
+    disabled: true,
+    type: 'object',
+    subtype: 'misc',
+    tier: 6,
+    // size: [2, 2, 1],
+    Destructible: {
+      hp: 500,
+      damageModifiers: mods([1, 1, 1, 1, 1, 3, 3, 3, 3, 3]),
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('BlackMarble', 1)],
+  },
+  {
+    id: 'blackmarble_creep_stair',
+    disabled: true,
+    type: 'object',
+    subtype: 'misc',
+    // size: [2, 2, 1],
+    tier: 6,
+    Destructible: {
+      hp: 500,
+      damageModifiers: mods([1, 1, 1, 1, 1, 3, 3, 3, 3, 3]),
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('BlackMarble', 2)],
+  },
+  {
+    id: 'blackmarble_floor_large',
+    iconId: 'piece/stone_floor',
+    type: 'object',
+    subtype: 'misc',
+    tier: 6,
+    // size: [4, 4, 1],
+    Destructible: {
+      hp: 6000,
+      damageModifiers: mods([0, 0, 0, 0, 2, 1, 1, 0, 3, 3]),
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('BlackMarble', 8)],
+  },
+  {
+    id: 'blackmarble_head01',
+    type: 'object',
+    subtype: 'misc',
+    // size: [2, 2, 1],
+    tier: 6,
+    Destructible: {
+      hp: 1500,
+      damageModifiers: mods([1, 1, 1, 1, 1, 3, 3, 3, 3, 3]),
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('Copper', 10)] 
+  },
+  {
+    id: 'blackmarble_head02',
+    type: 'object',
+    subtype: 'misc',
+    // size: [2, 2, 1],
+    tier: 6,
+    Destructible: {
+      hp: 1500,
+      damageModifiers: mods([1, 1, 1, 1, 1, 3, 3, 3, 3, 3]),
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('Copper', 10)] 
+  },
+  {
+    id: 'blackmarble_slope_inverted_1x2',
+    iconId: 'piece/blackmarble_1x1',
+    type: 'object',
+    subtype: 'misc',
+    tier: 6,
+    // size: [2, 2, 1],
+    Destructible: {
+      hp: 1500,
+      damageModifiers: mods([1, 1, 1, 1, 1, 3, 3, 3, 3, 3]),
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('BlackMarble', 1)],
+  },
+  {
+    id: 'blackmarble_stair_corner_left',
+    iconId: 'piece/blackmarble_creep_stair',
+    disabled: true,
+    type: 'object',
+    subtype: 'misc',
+    tier: 6,
+    // size: [2, 2, 1],
+    Destructible: {
+      hp: 1500,
+      damageModifiers: mods([1, 1, 1, 1, 1, 3, 3, 3, 3, 3]),
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('BlackMarble', 2)],
+  },
+  {
+    id: 'blackmarble_stair_corner',
+    iconId: 'piece/blackmarble_creep_stair',
+    type: 'object',
+    subtype: 'misc',
+    tier: 6,
+    // size: [2, 2, 1],
+    Destructible: {
+      hp: 1500,
+      damageModifiers: mods([1, 1, 1, 1, 1, 3, 3, 3, 3, 3]),
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('BlackMarble', 2)],
+  },
+  {
+    id: 'blackmarble_tile_floor_1x1',
+    disabled: true,
+    type: 'object',
+    subtype: 'misc',
+    // size: [1, 1, 1],
+    tier: 6,
+    Destructible: {
+      hp: 200,
+      damageModifiers: mods([1, 1, 1, 1, 1, 3, 3, 3, 3, 3]),
+      minToolTier: 0,
+      ashResist,
+      parts: [],
+    },
+    drop: [singleDrop('BlackMarble', 2)],
+  },
+  {
+    id: 'blackmarble_tile_floor_2x2',
+    disabled: true,
+    type: 'object',
+    subtype: 'misc',
+    // size: [2, 2, 1],
+    tier: 6,
+    Destructible: {
+      hp: 200,
+      damageModifiers: mods([1, 1, 1, 1, 1, 3, 3, 3, 3, 3]),
+      minToolTier: 0,
+      ashResist,
+      parts: [],
+    },
+    drop: [singleDrop('BlackMarble', 2)],
+  },
+  {
+    id: 'blackmarble_tile_wall_1x1',
+    disabled: true,
+    type: 'object',
+    subtype: 'misc',
+    // size: [1, 1, 1],
+    tier: 6,
+    Destructible: {
+      hp: 200,
+      damageModifiers: mods([1, 1, 1, 1, 1, 3, 3, 3, 3, 3]),
+      minToolTier: 0,
+      ashResist,
+      parts: [],
+    },
+    drop: [singleDrop('BlackMarble', 2)],
+  },
+  {
+    id: 'blackmarble_tile_wall_2x2',
+    disabled: true,
+    type: 'object',
+    subtype: 'misc',
+    // size: [2, 2, 1],
+    tier: 6,
+    Destructible: {
+      hp: 200,
+      damageModifiers: mods([1, 1, 1, 1, 1, 3, 3, 3, 3, 3]),
+      minToolTier: 0,
+      ashResist,
+      parts: [],
+    },
+    drop: [singleDrop('BlackMarble', 2)],
+  },
+  {
+    id: 'blackmarble_tile_wall_2x4',
+    disabled: true,
+    type: 'object',
+    subtype: 'misc',
+    // size: [2, 4, 1],
+    tier: 6,
+    Destructible: {
+      hp: 200,
+      damageModifiers: mods([1, 1, 1, 1, 1, 3, 3, 3, 3, 3]),
+      minToolTier: 0,
+      ashResist,
+      parts: [],
+    },
+    drop: [singleDrop('BlackMarble', 2)],
+  },
+  {
+    id: 'blackmarble_out_2',
+    iconId: 'piece/blackmarble_1x1',
+    disabled: true,
+    type: 'object',
+    subtype: 'misc',
+    tier: 6,
+    // size: [2, 2, 1],
+    Destructible: {
+      hp: 1500,
+      damageModifiers: mods([1, 1, 1, 1, 1, 3, 3, 3, 3, 3]),
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('BlackMarble', 1)],
+  },
+  {
+    id: 'blackmarble_2x2_enforced',
+    iconId: 'piece/blackmarble_1x1',
+    type: 'object',
+    subtype: 'misc',
+    tier: 6,
+    // size: [2, 1, 1]
+    Destructible: {
+      hp: 1500,
+      damageModifiers: mods([1, 1, 1, 1, 1, 3, 3, 3, 3, 3]),
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [
+      singleDrop('BlackMarble', 1),
+      singleDrop('CopperScrap', 1),
+    ],
+  },
+  {
+    id: 'blackmarble_2x2x1',
+    iconId: 'piece/blackmarble_1x1',
+    type: 'object',
+    subtype: 'misc',
+    tier: 6,
+    // size: [2, 2, 1]
+    Destructible: {
+      hp: 1500,
+      damageModifiers: mods([1, 1, 1, 1, 1, 3, 3, 3, 3, 3]),
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('BlackMarble', 6)],
+  },
+  {
+    id: 'blackmarble_column_3',
+    iconId: 'piece/blackmarble_1x1',
+    type: 'object',
+    subtype: 'misc',
+    tier: 6,
+    // size: [2, 8, 2]
+    Destructible: {
+      hp: 4000,
+      damageModifiers: mods([1, 1, 1, 1, 1, 3, 3, 3, 3, 3]),
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('BlackMarble', 1)],
+  },
+  {
+    id: 'blackmarble_head_big01',
+    iconId: 'piece/blackmarble_1x1',
+    type: 'object',
+    subtype: 'misc',
+    tier: 6,
+    // size: [2, 2, 2]
+    drop: [singleDrop('BlackMarble', 1)],
+    Destructible: {
+      hp: 1500,
+      damageModifiers: mods([1, 1, 1, 1, 1, 3, 3, 3, 3, 3]),
+      minToolTier: 0,
+      parts: [],
+    },
+  },
+  {
+    id: 'blackmarble_head_big02',
+    iconId: 'piece/blackmarble_1x1',
+    type: 'object',
+    subtype: 'misc',
+    tier: 6,
+    // size: [2, 2, 2]
+    drop: [singleDrop('BlackMarble', 1)],
+    Destructible: {
+      hp: 1500,
+      damageModifiers: mods([1, 1, 1, 1, 1, 3, 3, 3, 3, 3]),
+      minToolTier: 0,
+      parts: [],
+    },
+  },
+  {
+    id: 'blackmarble_post01',
+    type: 'object',
+    subtype: 'misc',
+    tier: 6,
+    // size: [2, 6.5, 2],
+    drop: [singleDrop('BlackMarble', 3, 4)],
+    Destructible: {
+      hp: 2000,
+      damageModifiers: mods([1, 1, 1, 1, 1, 3, 3, 3, 3, 3]),
+      minToolTier: 0,
+      parts: [],
+    },
+  },
+  {
+    id: 'blackmarble_slope_1x2',
+    iconId: 'piece/blackmarble_1x1',
+    type: 'object',
+    subtype: 'misc',
+    tier: 6,
+    // size: [1, 2, 1],
+    drop: [singleDrop('BlackMarble', 1)],
+    Destructible: {
+      hp: 1500,
+      damageModifiers: mods([1, 1, 1, 1, 0, 3, 3, 3, 3, 3]),
+      minToolTier: 0,
+      parts: [],
+    },
+  },
   {
     id: 'dvergrprops_crate_long',
     type: 'object',

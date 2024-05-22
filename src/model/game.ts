@@ -28,6 +28,11 @@ export const MAX_PLAYERS = 10;
 export const DODGE_STAMINA = 15;
 export const DEFAULT_MIN_DATE = new Date(2021, 1, 2);
 
+// INVENTORY
+export const INVENTORY_WIDTH = 8;
+export const INVENTORY_HEIGHT = 4;
+export const INVENTORY_SIZE = INVENTORY_WIDTH * INVENTORY_HEIGHT;
+
 export const WORLD_CONFIG = {
   difficultyScaleMaxPlayers: 5,
   damageScalePerPlayer: 0.04,

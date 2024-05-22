@@ -434,6 +434,7 @@ export const events: GameEvent[] = [
     ],
     base: true,
   },
+/*  disabled: true,
   {
     id: 'gemgoblin',
     tier: 7,
@@ -441,8 +442,8 @@ export const events: GameEvent[] = [
     biomes: ['BlackForest', 'Plains', 'Mistlands', 'Ashlands', 'DeepNorth'],
     killed: ['Fader'],
     notKilled: ['SeekerQueen'],
-    altItems: ['chest_hildir3'],
-    altPlayerKeys: ['BossHildir3'],
+    altItems: [],
+    altPlayerKeys: [],
     duration: 90,
     spawns: [
       {
@@ -454,7 +455,7 @@ export const events: GameEvent[] = [
       },
     ],
     base: false,
-  },
+  }, */
   {
     id: 'army_charred',
     tier: 7,

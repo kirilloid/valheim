@@ -3,7 +3,7 @@ import type { DropDist } from '../model/dist';
 import type { Vector2i } from '../model/utils';
 
 import type { EntityId, Pair } from './base';
-import type { DamageModifier, DamageModifiers, DamageProfile } from './damage';
+import type { DamageModifier, DamageModifiers, DamageProfile, DamageType } from './damage';
 import type { Attack } from './attack';
 
 import { SkillType } from '../model/skills';
@@ -14,7 +14,7 @@ import { DropEntry, GeneralDrop } from './drop';
 export type GameComponent = 
 | 'ArmorStand'
 | 'BaseAI' | 'Beacon' | 'Bed' | 'Beehive'
-| 'Chair' | 'Character' | 'Container' | 'CookingStation' | 'Corpse' | 'CraftingStation' | 'CraftingStationExtension' | 'CreatureSpawner'
+| 'Catapult' | 'Chair' | 'Character' | 'Container' | 'CookingStation' | 'Corpse' | 'CraftingStation' | 'CraftingStationExtension' | 'CreatureSpawner'
 | 'Destructible' | 'Door' | 'DungeonGenerator'
 | 'EggGrow'
 | 'Fermenter' | 'Fireplace' | 'Fish' | 'FishingFloat'
@@ -37,7 +37,7 @@ export type EntityGroup =
   | 'chair' | 'chest' | 'cook' | 'craft_station'
   | 'demist'
   | 'fir' | 'fire' | 'fish'
-  | 'goblin' | 'gray'
+  | 'gem' | 'goblin' | 'gray'
   | 'hide'
   | 'lumber'
   | 'metal'
@@ -181,12 +181,14 @@ export type Effect = {
   absorbDamage?: Pair<number>;
   healthOverTime?: [change: number, interval: number];
   damageModifiers?: Partial<DamageModifiers>;
+  damageValueModifier?: [damage: DamageType, modifier: number];
   attackModifier?: [skill: SkillType, modifier: number];
   skillModifiers?: Partial<Record<SkillType, number>>;
   fallDamage?: number;
   carryWeight?: number;
   runStamina?: number;
   jumpStamina?: number;
+  attackStamina?: number;
   healthRegen?: number;
   staminaRegen?: number;
   eitrRegen?: number;
@@ -333,6 +335,8 @@ export interface Destructible {
   hp: number;
   damageModifiers: DamageModifiers;
   minToolTier: number;
+  ashResist?: boolean;
+  ashImmune?: boolean;
   parts: {
     id: EntityId,
     num: number,
@@ -363,6 +367,11 @@ export interface Plantable {
   biomes: Biome[];
 };
 
+export interface Leviathan {
+  chance: number;
+  delay: number;
+}
+
 export interface SpawnArea {
   levelUpChance: number;
   maxNear: number;
@@ -375,6 +384,7 @@ export type PhysicalObject = GameObjectBase & {
   subtype: 'tree' | 'plant' | 'rock' | 'ore' | 'indestructible' | 'misc' | 'treasure' | 'trader';
   PointLight?: PointLight;
   Destructible?: Destructible;
+  Leviathan?: Leviathan;
   Aoe?: Aoe;
   ResourceRoot?: ResourceRoot;
   drop?: GeneralDrop[];
@@ -399,12 +409,21 @@ export enum MaterialType {
 
 export type ComfortGroup = 'fire' | 'bed' | 'banner' | 'chair' | 'table' | 'carpet';
 
+export type Wear = {
+  hp: number;
+  damageModifiers: DamageModifiers;
+  ashResist?: boolean;
+  ashImmune?: boolean;
+  burnable?: boolean;
+  noRoof?: boolean;
+  noSupport?: boolean;
+  providesSupport?: boolean;
+  materialType?: MaterialType;
+};
+
 export interface BasePiece extends GameObjectBase {
   burnable?: boolean;
-  wear: {
-    hp: number;
-    damageModifiers: DamageModifiers;
-  };
+  wear: Wear;
   piece?: {
     target: 'primary' | 'random' | 'none';
     water: boolean | undefined;
@@ -425,15 +444,6 @@ export interface BasePiece extends GameObjectBase {
     station: EntityId | null;
   }; 
 }
-
-type Wear = {
-  hp: number;
-  damageModifiers: DamageModifiers;
-  noRoof?: boolean;
-  noSupport?: boolean;
-  providesSupport?: boolean;
-  materialType?: MaterialType;
-};
 
 type Ignite = {
   interval: number;

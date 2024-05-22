@@ -3,6 +3,7 @@ import { Link, useHistory, useParams } from 'react-router-dom';
 
 import type { DamageModifiers, EntityId, Pair, PhysicalObject, Weapon } from '../../types';
 import { applyDamageModifiers, getTotalDamage, getWeaponSkillFactor } from '../../model/combat';
+import { isNotDerviedWeapon } from '../../model/derived';
 import { assertNever, groupBy } from '../../model/utils';
 import { mining as pageName } from '../../state';
 
@@ -212,7 +213,13 @@ export function Mining() {
     </div>
     <MiningTable
       id={objectType}
-      tools={(objectType === 'tree' ? allAxes : allPickaxes).filter(settingsFilter)}
+      tools={
+        (objectType === 'tree'
+          ? allAxes
+          : allPickaxes)
+        .filter(isNotDerviedWeapon)
+        .filter(settingsFilter)
+      }
       destructibles={destructibles[objectType]}
       skill={skill}
       stat={stat}

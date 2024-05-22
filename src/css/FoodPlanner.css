@@ -2,7 +2,7 @@
 .FoodPresets {
   display: grid;
   grid-auto-flow: row;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
 }
 
 .FoodPresets__title--initial {
@@ -11,7 +11,7 @@
 
 .FoodPresets__biome {
   font-weight: bold;
-  grid-column: span 3;
+  grid-column: span 4;
   padding-right: 0.5rem;
 }
 
@@ -37,7 +37,7 @@
 @media screen and (min-width: 400px) {
   .FoodPresets {
     grid-auto-flow: row;
-    grid-template-columns: auto repeat(3, minmax(90px, 20%));
+    grid-template-columns: auto repeat(4, minmax(90px, 20%));
   }
 
   .FoodPresets__biome {
@@ -50,10 +50,10 @@
   }
 }
 
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 1024px) {
   .FoodPresets {
     grid-auto-flow: column;
-    grid-template-rows: auto repeat(3, 1fr);
+    grid-template-rows: auto repeat(4, 1fr);
     grid-template-columns: auto;
     grid-auto-columns: calc(42px + 10%);
   }
@@ -158,5 +158,5 @@
 }
 
 .FoodOption--odd {
-  background: var(--color-text-light);
+  background: var(--color-highlight);
 }

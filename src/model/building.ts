@@ -6,12 +6,26 @@ export const wearStructure = (
   hp: number,
   damageModifiers: DamageModifiers,
   materialType: MaterialType | undefined,
-  { noRoof = true, noSupport = true }: { noRoof?: boolean, noSupport?: boolean } = {},
+  { noRoof = true,
+    noSupport = true,
+    ashResist = false,
+    ashImmune = false,
+    burnable = true,
+  }: {
+    noRoof?: boolean;
+    noSupport?: boolean;
+    ashResist?: boolean;
+    ashImmune?: boolean;
+    burnable?: boolean;
+  } = {},
 ) => ({
   hp,
   damageModifiers,
   noRoof,
   noSupport,
+  ashResist,
+  ashImmune,
+  burnable,
   providesSupport: true,
   materialType,
 });
@@ -31,9 +45,9 @@ export const cookingResist: DamageModifiers = mods([0, 0, 1, 0, 0, 1, 0, 0, 3, 3
 export const woodStructureWear = wearStructure(400, woodResist, MaterialType.Wood);
 export const darkwoodStructureWear = wearStructure(400, darkwoodResist, MaterialType.Wood, { noRoof: false });
 export const woodRoofStructureWear = { ...woodStructureWear, noRoof: false };
-export const stoneStructureWear = wearStructure(1500, stoneResist, MaterialType.Stone, { noRoof: false });
+export const stoneStructureWear = wearStructure(1500, stoneResist, MaterialType.Stone, { noRoof: false, ashResist: true, burnable: false });
 export const ironStructureWear = wearStructure(1000, ironResist, MaterialType.Iron);
-export const graustenStructureWear = (hp: number) => wearStructure(hp, graustenResist, MaterialType.Ashstone, { noRoof: false });
+export const graustenStructureWear = (hp: number) => wearStructure(hp, graustenResist, MaterialType.Ashstone, { noRoof: false, ashResist: true, burnable: false });
 
 export const woodStructureRecipe = (wood: number, type: 'Wood' | 'RoundLog' | 'FineWood' = 'Wood'): Piece['recipe'] =>
   ({ type: 'craft_piece', materials: { [type]: wood }, station: 'piece_workbench', });

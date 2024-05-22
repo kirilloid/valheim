@@ -34,16 +34,7 @@ const grayModifiers: DamageModifiers = {
   poison: 'resistant',
 };
 
-const blobDamageModifiers: DamageModifiers = {
-  ...defaultDmgModifiers,
-  blunt: 'weak',
-  slash: 'resistant',
-  pierce: 'resistant',
-  fire: 'resistant',
-  frost: 'weak',
-  lightning: 'weak',
-  poison: 'immune',
-};
+const blobDamageModifiers: DamageModifiers = mods([2, 1, 1, 4, 4, 1, 2, 2, 3, 0]);
 
 const skeletonDamageModifiers: DamageModifiers = {
   ...defaultDmgModifiers,
@@ -381,7 +372,7 @@ export const creatures: Creature[] = [
     },
     hp: 500,
     stagger: null,
-    damageModifiers: animalDmgModifiers,
+    damageModifiers: defaultDmgModifiers,
     drop: [
       dropEntry('HardAntler', { min: 3, max: 3 }),
       dropTrophy('TrophyEikthyr', 1),
@@ -2599,7 +2590,7 @@ export const creatures: Creature[] = [
     tame: { tameTime: 1800, fedTime: 600, commandable: false,
             eats: ['Dandelion', 'Barley', 'BeechSeeds', 'BirchSeeds', 'CarrotSeeds', 'OnionSeeds', 'TurnipSeeds'] },
             // eatRange:1, searchRange:10, heal:20
-    pregnancy: { points: 3, time: 60, chance: 0.33, grow: 1800, childId: 'ChickenEgg' }, // max: 10, range: 3
+    pregnancy: { points: 3, time: 60, chance: 0.33, grow: 60, childId: 'ChickenEgg' }, // max: 10, range: 4
   },
   {
     type: 'creature',
@@ -2871,7 +2862,19 @@ export const creatures: Creature[] = [
     tier: 6,
     emoji: '✔',
     faction: 'MistlandsMonsters',
-    spawners: [],
+    spawners: [spawner({
+      tier: 6,
+      biomes: ['Mistlands'],
+      biomeAreas: 2,
+      maxSpawned: 4,
+      interval: 3000,
+      chance: 0.05,
+      distance: 10,
+      groupSize: [3, 3],
+      groupRadius: 3,
+      night: true,
+      levels: [1, 3],
+    })],
     attacks: single([
       { dmg: dmg({ pierce: 50 }), name: 'stick', stagger: 1.66 },
     ]),
@@ -2999,7 +3002,19 @@ export const creatures: Creature[] = [
     tier: 6,
     emoji: '🐜',
     faction: 'MistlandsMonsters',
-    spawners: [],
+    spawners: [spawner({
+      tier: 6,
+      biomes: ['Mistlands'],
+      biomeAreas: 2,
+      maxSpawned: 5,
+      interval: 3000,
+      chance: 0.05,
+      distance: 10,
+      groupSize: [3, 3],
+      groupRadius: 3,
+      night: true,
+      levels: [1, 1],
+    })],
     attacks: single([
       { dmg: dmg({ pierce: 60 }), name: 'pincers', force: 40, stagger: 1.86 },
     ]),
@@ -3057,6 +3072,18 @@ export const creatures: Creature[] = [
       groupRadius: 6,
       night: true,
       levels: [1, 3],
+    }), spawner({
+      tier: 6,
+      biomes: ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains'],
+      biomeAreas: 2,
+      maxSpawned: 2,
+      interval: 3000,
+      chance: 0.05,
+      distance: 10,
+      groupSize: [3, 3],
+      groupRadius: 3,
+      night: true,
+      levels: [1, 1],
     })],
     attacks: single([
       { dmg: dmg({ pierce: 90 }), name: 'pincers', force: 40, stagger: 2.95 },
@@ -3353,9 +3380,9 @@ export const creatures: Creature[] = [
     hp: 200,
     stagger: { factor: 0.5, time: NaN },
     damageModifiers: {
-      ...animalDmgModifiers,
+      ...defaultDmgModifiers,
       frost: 'weak',
-      poison: 'resistant',
+      poison: 'immune',
     },
     drop: [
       dropTrophy('TrophyVolture', 0.1),
@@ -3429,7 +3456,7 @@ export const creatures: Creature[] = [
     },
     damageModifiers: { ...animalDmgModifiers, fire: 'resistant', poison: 'resistant' },
     drop: [
-      dropTrophy('TrophyAsksvin', 0.5),
+      dropTrophy('TrophyAsksvin', 0.1),
       dropEntry('AskBladder'),
       dropEntry('AskHide', { min: 2, max: 3 }),
       dropEntry('AsksvinMeat', { min: 2, max: 3 }),
@@ -3510,7 +3537,7 @@ export const creatures: Creature[] = [
     },
     hp: 2000,
     stagger: null,
-    damageModifiers: mods([1, 0, 0, 4, 4, 1, 2, 0, 0, 3]),
+    damageModifiers: mods([1, 0, 0, 4, 4, 3, 2, 0, 0, 3]),
     drop: [],
   },
   {
@@ -3522,7 +3549,20 @@ export const creatures: Creature[] = [
     tier: 7,
     emoji: '🏹',
     faction: 'Dverger',
-    spawners: [],
+    spawners: [spawner({
+      tier: 7,
+      biomes: ['Ashlands'],
+      biomeAreas: 2,
+      maxSpawned: 2,
+      interval: 1000,
+      chance: 0.1,
+      distance: 30,
+      groupSize: [1, 2],
+      groupRadius: 3,
+      night: false,
+      tilt: [0, 35],
+      levels: [1, 3],
+    })],
     attacks: single([
       // visual: DvergerArbalest
       // DvergerArbalest_shootAshlands
@@ -3567,6 +3607,19 @@ export const creatures: Creature[] = [
       groupRadius: 15,
       altitude: [1, 1000],
       levels: [1, 2],
+    }), spawner({
+      tier: 7,
+      biomes: ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains'],
+      biomeAreas: 7,
+      maxSpawned: 3,
+      interval: 3000,
+      chance: 0.05,
+      distance: 10,
+      killed: 'Fader',
+      groupSize: [1, 3],
+      groupRadius: 3,
+      night: true,
+      levels: [1, 1],
     })],
     attacks: single([
       // charred_bow
@@ -3647,6 +3700,19 @@ export const creatures: Creature[] = [
       groupRadius: 15,
       altitude: [-1000, 1000],
       levels: [1, 3],
+    }), spawner({
+      tier: 7,
+      biomes: ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains'],
+      biomeAreas: 7,
+      maxSpawned: 3,
+      interval: 3000,
+      chance: 0.05,
+      distance: 10,
+      killed: 'Fader',
+      groupSize: [1, 3],
+      groupRadius: 3,
+      night: true,
+      levels: [1, 1],
     })],
     attacks: single([
       // Charred_HipCloth
@@ -3675,16 +3741,17 @@ export const creatures: Creature[] = [
     attacks: single([
       // Charred_HipCloth
       // charred_dyrnwyn_greatsword_swing
-      { dmg: dmg({ slash: 75 }), name: 'swing', force: 40 },
+      { dmg: dmg({ slash: 240 }), name: 'swing', force: 40 },
       // charred_dyrnwyn_greatsword_thrust
-      { dmg: dmg({ pierce: 80 }), name: 'thrust', force: 40 },
+      { dmg: dmg({ pierce: 230 }), name: 'thrust', force: 40 },
       // charred_dyrnwyn_greatsword_feint
-      { dmg: dmg({ slash: 65 }), name: 'feint', force: 40 },
+      { dmg: dmg({ slash: 250 }), name: 'feint', force: 40 },
       // charred_dyrnwyn_greatsword_thrustfeint
-      { dmg: dmg({ pierce: 80 }), name: 'thrust-feint', force: 40 },
+      { dmg: dmg({ pierce: 210 }), name: 'thrust-feint', force: 40 },
       // Charred_Helmet
       // Charred_Breastplate
     ]),
+    hp: 2500,
     damageModifiers: mods([0, 0, 1, 4, 4, 1, 1, 0, 3, 2]),
     drop: [
       dropEntry('DyrnwynHiltFragment'),
@@ -3769,7 +3836,34 @@ export const creatures: Creature[] = [
   }),
   {
     type: 'creature',
+    id: 'staff_greenroots_tentaroot',
+    ragdollId: null,
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
+    tier: 7,
+    emoji: '🥦',
+    faction: 'Players',
+    spawners: [],
+    attacks: single([
+      // staff_greenroots_tentaroot_attack
+      { dmg: dmg({ blunt: 70, chop: 20, pickaxe: 20, poison: 40 }), name: 'poke', force: 40, toolTier: 4 }
+      // effect: ImmobilizedAshlands, chance: 0.1
+    ]),
+    tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
+    speed: { walk: 0, run: 0, swim: 0 },
+    turnSpeed: { walk: 200, run: 200, swim: 100 },
+    hp: 250,
+    stagger: null,
+    damageModifiers: {
+      ...defaultDmgModifiers,
+      fire: 'resistant',
+      poison: 'immune',
+    },
+    drop: [],
+  },
+  {
+    type: 'creature',
     id: 'Goblin_Gem',
+    disabled: true,
     ragdollId: null,
     components: ['BaseAI', 'Character', 'MonsterAI'],
     tier: 7,
@@ -3841,7 +3935,6 @@ export const creatures: Creature[] = [
       interval: 4000,
       chance: 0.1,
       distance: 15,
-      altitude: [0, 1000],
       levels: [1, 1],
     })],
     attacks: single([
@@ -3933,33 +4026,35 @@ export const creatures: Creature[] = [
     spawners: [],
     attacks: single([
       // Fader_Fissure
-      { dmg: dmg({ pierce: 120, chop: 1000, pickaxe: 1000 }), name: 'fissure', force: 50, toolTier: 3, aiMinHp: 0.35, aiMaxHp: 0.85 }, // interval: 30
+      { dmg: dmg({ pierce: 120, chop: 1000, pickaxe: 1000 }), name: 'fissure', force: 50, toolTier: 3, aiMinHp: 0.35, aiMaxHp: 0.85 }, // interval: 30, range: [0, 40]
       // Fader_Bite
-      { dmg: dmg({ pierce: 180, chop: 300, pickaxe: 300 }), name: 'bite', force: 100, toolTier: 3 }, // interval: 3
+      { dmg: dmg({ pierce: 210, chop: 300, pickaxe: 300 }), name: 'bite', force: 100, toolTier: 3 }, // interval: 3, range: [0, 9]
       // Fader_Claw_Left
-      { dmg: dmg({ pierce: 170, chop: 300, pickaxe: 300 }), name: 'claw-left', force: 100, toolTier: 3 }, // interval: 3
+      { dmg: dmg({ pierce: 200, chop: 300, pickaxe: 300 }), name: 'claw-left', force: 100, toolTier: 3 }, // interval: 3, range: [0, 9]
       // Fader_Claw_Right
-      { dmg: dmg({ pierce: 170, chop: 300, pickaxe: 300 }), name: 'claw-right', force: 100, toolTier: 3 }, // interval: 3
+      { dmg: dmg({ pierce: 200, chop: 300, pickaxe: 300 }), name: 'claw-right', force: 100, toolTier: 3 }, // interval: 3, range: [0, 9]
       // Fader_Spin
-      { dmg: dmg({ pierce: 120, chop: 300, pickaxe: 300 }), name: 'spin', force: 130, toolTier: 3 }, // interval: 20
+      { dmg: dmg({ pierce: 140, chop: 300, pickaxe: 300 }), name: 'spin', force: 130, toolTier: 3 }, // interval: 20, range: [0, 8]
       // Fader_Flamebreath
-      { dmg: dmg({ chop: 40, pickaxe: 40, fire: 60 }), name: 'flamebreath', force: 0, toolTier: 0, aiMinHp: 0.05, aiMaxHp: 0.85 }, // interval: 25
+      { dmg: dmg({ chop: 40, pickaxe: 40, fire: 60 }), name: 'flamebreath', force: 0, toolTier: 0, aiMinHp: 0.05, aiMaxHp: 0.85 }, // interval: 25, range: [2, 20]
       // Fader_Meteors, dodgeable: false, blockable: false
         // -> spawn_fader_meteors
         // -> projectile_meteor_fader x10
-      { dmg: dmg({ blunt: 40, chop: 100, pickaxe: 100, fire: 120 }), name: 'meteors', force: 100, toolTier: 0, aiMinHp: 0.05, aiMaxHp: 0.75, burst: 10 }, // interval: 25
+      { dmg: dmg({ blunt: 40, chop: 100, pickaxe: 100, fire: 120 }), name: 'meteors', force: 100, toolTier: 0, aiMinHp: 0.25, aiMaxHp: 1, burst: 10 }, // interval: 25, range: [0, 30]
       // Fader_Roar -> Fader_Roar_Projectile -> Fader_Roar_Spawn
-      { spawn: ['Charred_Melee_Fader', 'Charred_Archer_Fader'], name: 'roar', number: [1, 1], max: 7, aiMinHp: 0.35, aiMaxHp: 0.55 }, // interval: 45
+      { spawn: ['Charred_Melee_Fader', 'Charred_Archer_Fader'], name: 'roar', number: [1, 1], max: 7, aiMinHp: 0.35, aiMaxHp: 0.55 }, // interval: 45, range: [0, 100]
       // Fader_WallOfFire
-      { dmg: dmg({ pierce: 120, chop: 1000, pickaxe: 1000 }), name: 'wall of fire', force: 50, toolTier: 3, aiMinHp: 0.15, aiMaxHp: 0.9 }, // interval: 60
+      { dmg: dmg({ pierce: 120, chop: 1000, pickaxe: 1000 }), name: 'wall of fire', force: 50, toolTier: 3, aiMinHp: 0.15, aiMaxHp: 0.9 }, // interval: 60, range: [0, 40]
       // Fader_Meteors_Intense, dodgeable: false, blockable: false
         // -> spawn_fader_meteors
         // -> projectile_meteor_fader x10
-      { dmg: dmg({ blunt: 40, chop: 100, pickaxe: 100, fire: 120 }), name: 'meteors', force: 100, toolTier: 0, aiMaxHp: 0.25, burst: 10 }, // interval: 18
+      { dmg: dmg({ blunt: 40, chop: 100, pickaxe: 100, fire: 120 }), name: 'meteors', force: 100, toolTier: 0, aiMaxHp: 0.25, burst: 10 }, // interval: 18, range: [0, 30]
       // Fader_Fissure_Intense
-      { dmg: dmg({ pierce: 120, chop: 1000, pickaxe: 1000 }), name: 'fissure', force: 50, toolTier: 3, aiMaxHp: 0.35 }, // interval: 10
+        // chop: 30, pickaxe: 30, fire: 80, spirit: 80
+        // radius: 4, ttl: 20, hitInterval: 0.5
+      { dmg: dmg({ pierce: 120, chop: 1000, pickaxe: 1000 }), name: 'fissure', force: 50, toolTier: 3, aiMaxHp: 0.35 }, // interval: 20, range: [0, 40]
       // Fader_Roar_Intense -> Fader_Roar_Projectile -> Fader_Roar_Spawn
-      { spawn: ['Charred_Melee_Fader', 'Charred_Archer_Fader'], name: 'roar', number: [1, 1], max: 7, aiMaxHp: 0.35 }, // interval: 26
+      { spawn: ['Charred_Melee_Fader', 'Charred_Archer_Fader'], name: 'roar', number: [1, 1], max: 7, aiMaxHp: 0.35 }, // interval: 26, range: [0, 100]
     ]),
     tolerate: TOLERATE.WATER | TOLERATE.FIRE,
     speed: { walk: 12, run: 12, swim: 0 },

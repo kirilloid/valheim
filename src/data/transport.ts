@@ -164,13 +164,14 @@ export const ships: Ship[] = [
         ...shipDamageModifiers,
         fire: 'resistant',
       },
+      ashImmune: true,
     },
     piece: {
       target: 'primary',
       water: true,
-      size: [12.5, 18, 12.6],
+      size: [12, 20, 36],
     },
-    sailWidth: 15.6,
+    sailWidth: 16,
     sail: {
       forceDistance: 3,
       force: 1,
@@ -195,7 +196,7 @@ export const ships: Ship[] = [
       materials: {
         IronNails: 100,
         CeramicPlate: 30,
-        FineWood: 60,
+        FineWood: 50,
         YggdrasilWood: 25,
       },
       station: 'piece_workbench',
@@ -285,6 +286,7 @@ export const siege: Siege[] = [
     wear: {
       hp: 3000,
       damageModifiers: mods([0, 0, 1, 0, 0, 4, 1, 0, 3, 3]),
+      ashResist: true,
     },
     piece: {
       target: 'primary',
@@ -292,7 +294,7 @@ export const siege: Siege[] = [
       size: [4, 3.5, 5.5],
     },
     Siege: {
-      fuel: ['Wood', 'FineWood', 'RoundLog'],
+      fuel: ['Wood', 'FineWood', 'RoundLog', 'Blackwood'],
       damage: dmg({ pickaxe: 600 }),
       toolTier: 5,
     },
@@ -311,6 +313,7 @@ export const siege: Siege[] = [
     wear: {
       hp: 3000,
       damageModifiers: mods([0, 0, 1, 0, 0, 4, 1, 0, 3, 3]),
+      ashResist: true,
     },
     piece: {
       target: 'primary',

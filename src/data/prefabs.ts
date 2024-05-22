@@ -394,7 +394,7 @@ export const modPrefabNames: Record<string, string[]> = {
     'ThrowingAxeBlackmetal',
     'ThrowingAxeFire',
     'SalamanderFurTH',
-    'PickaxeBlackmetal',
+    'PickaxeBlackMetal',
 
     'HelmetWoodsman_Terraheim_AddCirculets_AddWoodsmanCirculet',
     'BeltMiner_Terraheim_AddCirculets_AddMinersCirculet',

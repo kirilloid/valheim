@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
 import type * as T from '../../types';
 
+import { isNotDerviedWeapon } from '../../model/derived';
+
 import { TranslationContext } from '../../effects';
 import { axes, pickaxes } from '../../data/weapons';
 import { InlineObjectWithIcon, Resistances } from '../helpers';
@@ -20,7 +22,7 @@ export function Destructible({ item }: { item: T.Destructible }) {
     ...(nonImmune(damageModifiers.pickaxe)
       ? pickaxes.filter(w => (w?.toolTier ?? 0) >= minToolTier)
       : []),
-  ];
+  ].filter(isNotDerviedWeapon);
 
   return <section>
     <h2>{translate('ui.destructible')}</h2>

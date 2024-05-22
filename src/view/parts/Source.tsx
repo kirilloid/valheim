@@ -5,7 +5,7 @@ import { EntityId, GameObject, Item, Pair } from '../../types';
 import { assertNever, days, timeI2S } from '../../model/utils';
 
 import { data } from '../../data/itemDB';
-import { recipes } from '../../data/recipes';
+import { getRecipe, recipes } from '../../data/recipes';
 import { creatures } from '../../data/creatures';
 import { miningMap, resourceBuildMap, resourceCraftMap } from '../../data/resource-usage';
 import { locationBiomes, objectLocationMap } from '../../data/location';
@@ -149,19 +149,19 @@ const CraftingSection = React.memo(({ id }: { id: EntityId }) => {
   </>
 });
 
-function getRecipe(item: GameObject) {
+function getItemRecipe(item: GameObject) {
   switch (item.type) {
     case 'piece':
     case 'ship':
     case 'cart':
       return item.recipe;
   }
-  return recipes.find(r => r.item === item.id);
+  return getRecipe(item.id);
 }
 
 export function Recipe({ item }: { item: GameObject }) {
   const translate = useContext(TranslationContext);
-  const recipe = getRecipe(item);
+  const recipe = getItemRecipe(item);
   if (recipe == null) return null;
   switch (recipe.type) {
     case 'haldor':
@@ -206,7 +206,7 @@ export function Recipe({ item }: { item: GameObject }) {
 
 export function RecipeSection({ item }: { item: GameObject | undefined }) {
   const translate = useContext(TranslationContext);
-  return item != null && getRecipe(item) != null
+  return item != null && getItemRecipe(item) != null
     ? <section>
         <h2>{translate('ui.recipe')}</h2>
         <Recipe item={item} />

@@ -44,6 +44,21 @@ function Plant({ plant }: { plant: T.Plantable }) {
   </section>
 }
 
+function Leviathan({ leviathan }: { leviathan: T.Leviathan }) {
+  const { chance, delay } = leviathan;
+  // const translate = useContext(TranslationContext);
+  return <section>
+    <h2>Scareable</h2>
+    <p>This thing might be scared off upon hitting</p>
+    <dl>
+      <dt>chance on hit</dt>
+      <dd>{showPercent(chance)}</dd>
+      <dt>time before start of submerge</dt>
+      <dd>{timeI2S(delay)}</dd>
+    </dl>
+  </section>
+}
+
 function TraderRecipes({ id }: { id: 'haldor' | 'hildir' }) {
   const settingsFilter = useSettingsFilter();
   const rr = recipes
@@ -126,6 +141,7 @@ export function PhysicalObject({ item }: { item: T.PhysicalObject }) {
       <Grow item={item} />
       {item.trader && <TraderRecipes id={item.trader} />}
       {item.Plant && <Plant plant={item.Plant} />}
+      {item.Leviathan && <Leviathan leviathan={item.Leviathan} />}
       {item.Vegvisir && <Vegvisir to={item.Vegvisir} />}
       {item.ResourceRoot && <ResourceRoot params={item.ResourceRoot} />}
       {full?.Destructible && <Destructible item={full.Destructible} />}

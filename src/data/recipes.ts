@@ -1,4 +1,4 @@
-import type { ItemRecipe } from '../types';
+import type { EntityId, ItemRecipe } from '../types';
 import {
   blackForgeRecipe,
   cauldronRecipe,
@@ -152,15 +152,15 @@ export const recipes: ItemRecipe[] = [
   cauldronRecipe(5, { BugMeat: 1, LoxMeat: 1, HareMeat: 2 }, 'MeatPlatterUncooked'),
   cauldronRecipe(5, { HareMeat: 1, MushroomJotunPuffs: 3, Carrot: 2 }, 'MisthareSupremeUncooked'),
   // LEVEL 6
-  cauldronRecipe(6, { AsksvinMeat: 1, Vineberry: 2, MushroomSmokePuff: 1 }, 'FierySvinstew'),
+  cauldronRecipe(5, { AsksvinMeat: 1, Vineberry: 2, MushroomSmokePuff: 1 }, 'FierySvinstew'),
   cauldronRecipe(6, { Sap: 3, MushroomMagecap: 2, Fiddleheadfern: 2, MushroomSmokePuff: 2 }, 'MarinatedGreens'),
   cauldronRecipe(6, { AsksvinMeat: 1, VoltureMeat: 1, Fiddleheadfern: 1 }, 'MashedMeat'),
   cauldronRecipe(6, { AsksvinMeat: 2, Vineberry: 2, BarleyFlour: 4 }, 'PiquantPieUncooked'),
   cauldronRecipe(6, { Vineberry: 2, VoltureEgg: 1, BarleyFlour: 4 }, 'RoastedCrustPieUncooked'),
   cauldronRecipe(6, { MushroomJotunPuffs: 3, Onion: 3, Fiddleheadfern: 3 }, 'ScorchingMedley', 3),
-  cauldronRecipe(6, { Sap: 3, Fiddleheadfern: 2, Vineberry: 2 }, 'SizzlingBerryBroth'),
+  cauldronRecipe(5, { Sap: 3, Fiddleheadfern: 2, Vineberry: 2 }, 'SizzlingBerryBroth'),
   cauldronRecipe(6, { Sap: 4, Vineberry: 2, MushroomSmokePuff: 2, MushroomMagecap: 2 }, 'SparklingShroomshake'),
-  cauldronRecipe(6, { Vineberry: 3, Honey: 1, Fiddleheadfern: 1 }, 'SpiceInducedMarmalade'),
+  cauldronRecipe(5, { Vineberry: 3, Honey: 1, Fiddleheadfern: 1 }, 'SpicyMarmalade'),
   // BAITS
   cauldronRecipe(1, { FishingBait: 20, TrophyFrostTroll: 1 }, 'FishingBaitForest', 20),
   cauldronRecipe(1, { FishingBait: 20, TrophySerpent: 1 }, 'FishingBaitOcean', 20),
@@ -376,20 +376,19 @@ export const recipes: ItemRecipe[] = [
   blackForgeRecipe(3, { THSwordSlayer: 1, FlametalNew: 15, GemstoneGreen: 1 }, { FlametalNew: 15, GemstoneGreen: 1 }, 'THSwordSlayerNature'),
 
   blackForgeRecipe(4, { DyrnwynHiltFragment: 1, DyrnwynBladeFragment: 1, DyrnwynTipFragment: 1,
-                        FlametalNew: 20, AskHide: 2, GemstoneRed: 1 },
-                      { FlametalNew: 2, AskHide: 2, GemstoneRed: 2 }, 'SwordDyrnwyn'),
+                        FlametalNew: 20, GemstoneRed: 1 },
+                      { FlametalNew: 10, GemstoneRed: 1 }, 'SwordDyrnwyn'),
 
-  blackForgeRecipe(2, { FlametalNew: 20, AskHide: 3, CharredBone: 5 }, { FlametalNew: 10, AskHide: 1 }, 'ArmorFlametalLegs'),
-  blackForgeRecipe(2, { FlametalNew: 20, AskHide: 3, CharredBone: 5 }, { FlametalNew: 10, AskHide: 1 }, 'ArmorFlametalChest'),
-  blackForgeRecipe(2, { FlametalNew: 16, AskHide: 3, CharredBone: 2, Eitr: 4 }, { FlametalNew: 8, AskHide: 1, Eitr: 2 }, 'HelmetFlametal'),
-  blackForgeRecipe(2, { LinenThread: 15, LoxPelt: 4, AskHide: 10 }, { LinenThread: 10, LoxPelt: 2, AskHide: 5 }, 'ArmorAshlandsMediumlegs'),
-  blackForgeRecipe(2, { LinenThread: 15, LoxPelt: 4, AskHide: 10 }, { LinenThread: 10, LoxPelt: 2, AskHide: 5 }, 'ArmorAshlandsMediumChest'),
-  blackForgeRecipe(2, { LinenThread: 15, LoxPelt: 4, AskHide: 10 }, { LinenThread: 10, LoxPelt: 2, AskHide: 5 }, 'HelmetAshlandsMediumHood'),
+  blackForgeRecipe(3, { FlametalNew: 20, AskHide: 3, CharredBone: 5 }, { FlametalNew: 10, AskHide: 1 }, 'ArmorFlametalLegs'),
+  blackForgeRecipe(3, { FlametalNew: 20, AskHide: 3, CharredBone: 5, MorgenHeart: 1 }, { FlametalNew: 10, AskHide: 1 }, 'ArmorFlametalChest'),
+  blackForgeRecipe(3, { FlametalNew: 16, AskHide: 3, CharredBone: 2, Eitr: 4 }, { FlametalNew: 8, AskHide: 1, Eitr: 2 }, 'HelmetFlametal'),
+  blackForgeRecipe(3, { LinenThread: 15, LoxPelt: 4, AskHide: 10 }, { LinenThread: 10, LoxPelt: 2, AskHide: 5 }, 'ArmorAshlandsMediumlegs'),
+  blackForgeRecipe(3, { LinenThread: 15, LoxPelt: 4, AskHide: 10 }, { LinenThread: 10, LoxPelt: 2, AskHide: 5 }, 'ArmorAshlandsMediumChest'),
+  blackForgeRecipe(3, { LinenThread: 15, LoxPelt: 4, AskHide: 10 }, { LinenThread: 10, LoxPelt: 2, AskHide: 5 }, 'HelmetAshlandsMediumHood'),
   blackForgeRecipe(3, { FlametalNew: 5, MorgenSinew: 2, AskHide: 6 }, { AskHide: 2 }, 'CapeAsh'),
-  // blackForgeRecipe(2, { FlametalNew: 16, AskHide: 3, CharredBone: 2, Eitr: 4 }, { FlametalNew: 8, AskHide: 1, Eitr: 2 }, 'HelmetFlametal'),
 
-  blackForgeRecipe(3, { FineWood: 10, FlametalNew: 8, AskHide: 2 }, { FineWood: 10, FlametalNew: 4, AskHide: 2 }, 'ShieldFlametal'),
-  blackForgeRecipe(1, { FineWood: 15, FlametalNew: 10, AskHide: 5 }, { FineWood: 10, FlametalNew: 4, AskHide: 2 }, 'ShieldFlametalTower'),
+  blackForgeRecipe(3, { Blackwood: 10, FlametalNew: 8, AskHide: 2 }, { Blackwood: 10, FlametalNew: 4, AskHide: 2 }, 'ShieldFlametal'),
+  blackForgeRecipe(3, { Blackwood: 15, FlametalNew: 10, AskHide: 5 }, { Blackwood: 10, FlametalNew: 4, AskHide: 2 }, 'ShieldFlametalTower'),
 
   blackForgeRecipe(1, { CharredBone: 2, Blackwood: 8, Feathers: 2 }, {}, 'BoltCharred', 20),
   blackForgeRecipe(1, { CharredBone: 4, Blackwood: 8, Feathers: 2 }, {}, 'ArrowCharred', 20),
@@ -484,3 +483,9 @@ export const recipes: ItemRecipe[] = [
   genericRecipe('piece_wisplure', 1, 30, {}, {}, 'Wisp', 1),
   genericRecipe('piece_sapcollector', 1, 60, {}, {}, 'Sap', 1),
 ];
+
+const recipeMap = new Map(recipes.map(r => [r.item, r]));
+
+export function getRecipe(id: EntityId): ItemRecipe | undefined {
+  return recipeMap.get(id);
+}

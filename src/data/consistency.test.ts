@@ -154,9 +154,9 @@ describe('traceability of all objects', () => {
   });
 
   test('all recipes use valid entities', () => {
-    const failPairs: [EntityId, EntityId][] = [];
+    const failPairs: string[] = [];
     function check(parent: EntityId, item: EntityId) {
-      if (!(item in data)) failPairs.push([parent, item]);
+      if (!(item in data)) failPairs.push(`recipe: ${parent}, material: ${item}`);
     }
 
     function checkPiece(p: Piece | Ship | Cart | Siege) {
@@ -184,9 +184,9 @@ describe('traceability of all objects', () => {
   });
 
   test('all drops use valid entities', () => {
-    const failPairs: [EntityId, EntityId][] = [];
+    const failPairs: string[] = [];
     function check(parent: EntityId, item: EntityId) {
-      if (!(item in data)) failPairs.push([parent, item]);
+      if (!(item in data)) failPairs.push(`${parent} drops ${item}`);
     }
     function checkWithDrop<T extends { drop?: GeneralDrop[]; id: EntityId }>(obj: T) {
       if (obj.drop != null) {

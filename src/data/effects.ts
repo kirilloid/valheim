@@ -226,6 +226,17 @@ export const effects: Effect[] = [
   },
   {
     type: 'effect',
+    id: 'SetEffect_AsksvinArmor',
+    iconId: 'armor/HelmetAshlandsMediumHood',
+    tier: 4,
+    damageModifiers: { fire: 'resistant' },
+    runStamina: -0.1,
+    jumpStamina: -0.1,
+    attackStamina: -0.2,
+    damageValueModifier: ['pierce', 0.1],
+  },
+  {
+    type: 'effect',
     id: 'SetEffect_FishingHat',
     iconId: 'armor/HelmetFishingHat',
     tier: 6,

@@ -123,6 +123,7 @@ const bestTypes = {
   maxHp: (item: FoodItem) => item.Food.health,
   balance: (item: FoodItem) => item.Food.health + item.Food.stamina,
   maxSta: (item: FoodItem) => item.Food.stamina,
+  eitr: (item: FoodItem) => item.Food.eitr ?? 0,
 };
 
 function bestFoods(maxTier: number, benefitFn: (food: FoodItem) => number): [FoodItem, FoodItem, FoodItem] {
@@ -177,7 +178,7 @@ export function FoodPlanner() {
   );
   const mul = (nightEat ? 1 : 0.7) * players * daysDuration * repeat;
 
-  const biomes: Biome[] = ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains', 'Mistlands'];
+  const biomes: Biome[] = ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains', 'Mistlands', 'Ashlands'];
 
   return (<>
     <h1>{translate('ui.page.food-planner')}</h1>
@@ -240,7 +241,7 @@ export function FoodPlanner() {
         </tr>
       </tfoot>
     </table>
-    <hr />
+    <hr style={{ width: '100%' }} />
     <div>
       <h2>{translate('ui.repEat')}</h2>
       <input id="nightEat"
@@ -283,17 +284,17 @@ export function FoodPlanner() {
       {' '}
       <label htmlFor="days">{translate('ui.days')}</label>
     </div>
-    <hr />
+    <hr style={{ width: '100%' }} />
     <div className="FoodTotals">
       <div className="FoodTotals__section">
         <h2>{translate('ui.itemType.food')}</h2>
         <ul>{Object.entries(totalFood).map(([key, val]) => 
-          <li><InlineObjectWithIcon id={key} key={key} /> {showNumber(val * mul)}</li>)}</ul>
+          <li key={key}><InlineObjectWithIcon id={key} /> {showNumber(val * mul)}</li>)}</ul>
       </div>
       <div className="FoodTotals__section">
         <h2>{translate('ui.resources')}</h2>
         <ul>{Object.entries(totalRes).map(([key, val]) => 
-          <li><InlineObjectWithIcon id={key} key={key} /> {showNumber(val * mul)}</li>)}</ul>
+          <li key={key}><InlineObjectWithIcon id={key} /> {showNumber(val * mul)}</li>)}</ul>
       </div>
     </div>
   </>);

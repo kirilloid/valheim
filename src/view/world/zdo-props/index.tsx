@@ -64,6 +64,9 @@ export const InterfaceFields: Partial<Record<
     intComp('level'),
     floatComp('product'),
   ],
+  Catapult: [
+    boolComp('Locked'),
+  ],
   Character: [
     floatComp('max_health'),
     floatComp('noise'),

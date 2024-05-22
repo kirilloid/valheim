@@ -2744,17 +2744,18 @@ export const items: (Weapon | Shield | Bomb)[] = [
     parryForce: [20, 5],
     parryBonus: 2,
     skill: SkillType.ElementalMagic,
-    damage: [dmg({ lightning: 20 }), dmg({ pierce: 3 })],
+    damage: [dmg({ lightning: 20 }), dmg({ lightning: 3 })],
     knockback: 210,
-    backstab: 3,
+    backstab: 1,
     attacks: [{
       type: 'proj',
       animation: 'recharge_lightningstaff',
       projVel: [0, 200],
       projAcc: [15, 0],
       number: 12,
-      raiseSkillAmount: 1,
+      raiseSkillAmount: 0.1,
       stamina: 0,
+      // reloadTime: 1.9
       eitr: 25,
       walkSpeed: 0.5,
       rotationSpeed: 1,
@@ -2767,7 +2768,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
   {
     type: 'weapon', slot: 'both',
     id: 'StaffClusterbomb',
-    emoji: '⚡',
+    emoji: '🧨',
     tier: 7,
     stack: 1,
     maxLvl: 4,
@@ -2779,9 +2780,9 @@ export const items: (Weapon | Shield | Bomb)[] = [
     skill: SkillType.ElementalMagic,
     // projectile: staff_clusterbombstaff_projectile
     // spawn on hit: staff_clusterbombstaff_splinter_projectile x12
-    damage: [dmg({ blunt: 10, fire: 10 }), dmg({ fire: 6 })],
+    damage: [dmg({ blunt: 12, fire: 12 }), dmg({ fire: 6 })],
     toolTier: 5,
-    knockback: 20,
+    knockback: 100,
     backstab: 1,
     attacks: [{
       type: 'proj',
@@ -2789,9 +2790,9 @@ export const items: (Weapon | Shield | Bomb)[] = [
       projVel: [2, 20],
       projAcc: [1, 0],
       number: 12,
-      raiseSkillAmount: 1,
+      raiseSkillAmount: 0.1,
       stamina: 0,
-      eitr: 35,
+      eitr: 30,
       walkSpeed: 0.3,
       rotationSpeed: 0.3,
       startNoise: 0,
@@ -2803,7 +2804,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
   {
     type: 'weapon', slot: 'both',
     id: 'StaffRedTroll',
-    emoji: '',
+    emoji: '👹',
     tier: 7,
     stack: 1,
     maxLvl: 4,
@@ -2841,23 +2842,26 @@ export const items: (Weapon | Shield | Bomb)[] = [
     stack: 1,
     maxLvl: 4,
     weight: 0.3,
-    // PointLight: { color: '#DC25E2', range: 4, intensity: 1 },
     moveSpeed: -0.05,
     block: 48,
     parryForce: [20, 5],
     parryBonus: 2,
     skill: SkillType.ElementalMagic,
-    damage: [dmg({ poison: 20 }), dmg({})],
+    damage: [dmg({ blunt: 20, poison: 20 }), dmg({})],
     knockback: 30,
     backstab: 3,
+    // staff_greenroots_projectile ->
+    // staff_greenroots_spawn
     attacks: [{
-      type: 'proj',
+      type: 'summon',
+      summons: 'staff_greenroots_tentaroot',
       animation: 'staff_fireball',
-      projVel: [2, 20],
-      projAcc: [1, 0],
-      raiseSkillAmount: 1,
+      // projVel: [2, 20],
+      // projAcc: [1, 0],
+      skillFactor: 0.02,
+      // raiseSkillAmount: 1,
       stamina: 0,
-      eitr: 35,
+      eitr: 55,
       walkSpeed: 0.2,
       rotationSpeed: 0.2,
       startNoise: 10,
@@ -2895,7 +2899,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
       hitNoise: 8,
       range: 1,
     }],
-    durability: [50, 50],
+    durability: [100, 50],
     holdDurationMin: 2.5,
     holdStaminaDrain: 14,
   }, {
@@ -2903,16 +2907,16 @@ export const items: (Weapon | Shield | Bomb)[] = [
       damageMultiplierPerMissingHP: 0.002,
     },
     'BowAshlandsLightning': {
-      hitEffect: { id: 'ChainLighning', chance: 0.2 },
+      hitEffect: { id: 'ChainLighning', chance: 0.25 },
       damage: [
-        dmg({ pierce: 72, lightning: 10 }),
+        dmg({ pierce: 82, lightning: 10 }),
         dmg({ pierce: 4, spirit: 5 }),
       ],
     },
     'BowAshlandsNature': {
-      hitEffect: { id: 'ImmobilizedAshlands', chance: 0.15 },
+      hitEffect: { id: 'ImmobilizedAshlands', chance: 0.2 },
       damage: [
-        dmg({ pierce: 72, poison: 10 }),
+        dmg({ pierce: 82, poison: 10 }),
         dmg({ pierce: 4, spirit: 5 }),
       ],
     },
@@ -2959,16 +2963,16 @@ export const items: (Weapon | Shield | Bomb)[] = [
       damageMultiplierPerMissingHP: 0.002,
     },
     'CrossbowRipperLightning': {
-      hitEffect: { id: 'ChainLighning', chance: 0.2 },
+      hitEffect: { id: 'ChainLighning', chance: 0.25 },
       damage: [
-        dmg({ pierce: 210, lightning: 10 }),
+        dmg({ pierce: 220, lightning: 10 }),
         dmg({ pierce: 3 }),
       ],
     },
     'CrossbowRipperNature': {
-      hitEffect: { id: 'ImmobilizedAshlands', chance: 0.15 },
+      hitEffect: { id: 'ImmobilizedAshlands', chance: 0.2 },
       damage: [
-        dmg({ pierce: 210, poison: 10 }),
+        dmg({ pierce: 220, poison: 10 }),
         dmg({ pierce: 3 }),
       ],
     },
@@ -3023,16 +3027,16 @@ export const items: (Weapon | Shield | Bomb)[] = [
       damageMultiplierPerMissingHP: 0.002,
     },
     'SpearSplitner_Lightning': {
-      hitEffect: { id: 'ChainLighning', chance: 0.2 },
+      hitEffect: { id: 'ChainLighning', chance: 0.25 },
       damage: [
-        dmg({ pierce: 125, lightning: 10 }),
+        dmg({ pierce: 135, lightning: 10 }),
         dmg({ pierce: 6, }),
       ],
     },
     'SpearSplitner_Nature': {
-      hitEffect: { id: 'ImmobilizedAshlands', chance: 0.15 },
+      hitEffect: { id: 'ImmobilizedAshlands', chance: 0.2 },
       damage: [
-        dmg({ pierce: 125, poison: 10 }),
+        dmg({ pierce: 135, poison: 10 }),
         dmg({ pierce: 6, }),
       ],
     },
@@ -3062,7 +3066,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
       animation: 'dualaxes',
       chain: 4,
       chainCombo: 2,
-      stamina: 14,
+      stamina: 16,
       walkSpeed: 0.2,
       rotationSpeed: 0.3,
       startNoise: 10,
@@ -3090,16 +3094,16 @@ export const items: (Weapon | Shield | Bomb)[] = [
       damageMultiplierPerMissingHP: 0.002,
     },
     'AxeBerzerkrLightning': {
-      hitEffect: { id: 'ChainLighning', chance: 0.2 },
+      hitEffect: { id: 'ChainLighning', chance: 0.25 },
       damage: [
-        dmg({ slash: 130, chop: 80, lightning: 10 }),
+        dmg({ slash: 140, chop: 80, lightning: 10 }),
         dmg({ slash: 5, chop: 3 }),
       ],
     },
     'AxeBerzerkrNature': {
-      hitEffect: { id: 'ImmobilizedAshlands', chance: 0.15 },
+      hitEffect: { id: 'ImmobilizedAshlands', chance: 0.2 },
       damage: [
-        dmg({ slash: 130, chop: 80, poison: 10 }),
+        dmg({ slash: 140, chop: 80, poison: 10 }),
         dmg({ slash: 5, chop: 3 }),
       ],
     },
@@ -3120,7 +3124,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     toolTier: 6,
     damage: [
       dmg({ blunt: 135 }),
-      dmg({ pierce: 6 }),
+      dmg({ blunt: 6 }),
     ],
     knockback: 100,
     backstab: 3,
@@ -3129,7 +3133,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
       animation: 'swing_longsword',
       chain: 3,
       chainCombo: 2,
-      stamina: 14,
+      stamina: 16,
       walkSpeed: 0.3,
       rotationSpeed: 0.3,
       startNoise: 10,
@@ -3154,16 +3158,16 @@ export const items: (Weapon | Shield | Bomb)[] = [
       damageMultiplierPerMissingHP: 0.002,
     },
     'MaceEldnerLightning': {
-      hitEffect: { id: 'ChainLighning', chance: 0.2 },
+      hitEffect: { id: 'ChainLighning', chance: 0.25 },
       damage: [
-        dmg({ blunt: 125, lightning: 10 }),
+        dmg({ blunt: 135, lightning: 10 }),
         dmg({ blunt: 5 }),
       ],
     },
     'MaceEldnerNature': {
-      hitEffect: { id: 'ImmobilizedAshlands', chance: 0.15 },
+      hitEffect: { id: 'ImmobilizedAshlands', chance: 0.2 },
       damage: [
-        dmg({ blunt: 125, chop: 80, poison: 10 }),
+        dmg({ blunt: 135, poison: 10 }),
         dmg({ pierce: 5 }),
       ],
     },
@@ -3217,16 +3221,16 @@ export const items: (Weapon | Shield | Bomb)[] = [
       damageMultiplierPerMissingHP: 0.002,
     },
     'SwordNiedhoggLightning': {
-      hitEffect: { id: 'ChainLighning', chance: 0.2 },
+      hitEffect: { id: 'ChainLighning', chance: 0.25 },
       damage: [
-        dmg({ slash: 125, lightning: 10 }),
+        dmg({ slash: 135, lightning: 10 }),
         dmg({ slash: 5 }),
       ],
     },
     'SwordNiedhoggNature': {
-      hitEffect: { id: 'ImmobilizedAshlands', chance: 0.15 },
+      hitEffect: { id: 'ImmobilizedAshlands', chance: 0.2 },
       damage: [
-        dmg({ slash: 125, chop: 80, poison: 10 }),
+        dmg({ slash: 135, poison: 10 }),
         dmg({ slash: 5 }),
       ],
     },
@@ -3261,9 +3265,6 @@ export const items: (Weapon | Shield | Bomb)[] = [
       startNoise: 10,
       hitNoise: 40,
       range: 2.6,
-      // blood: damageMultiplierPerMissingHP: 0.002
-      // lightning: blunt-10, lightning +10, spawnOnHit: AoE ChainLightning 20% (lightning: 75)
-      // nature: blunt-10, poison +10, 15% to immobilize
     }, {
       type: 'melee',
       animation: 'greatsword_secondary',
@@ -3283,16 +3284,16 @@ export const items: (Weapon | Shield | Bomb)[] = [
       damageMultiplierPerMissingHP: 0.002,
     },
     'THSwordSlayerLightning': {
-      hitEffect: { id: 'ChainLighning', chance: 0.2 },
+      hitEffect: { id: 'ChainLighning', chance: 0.25 },
       damage: [
-        dmg({ slash: 125, lightning: 10 }),
+        dmg({ slash: 170, lightning: 10 }),
         dmg({ slash: 5 }),
       ],
     },
     'THSwordSlayerNature': {
-      hitEffect: { id: 'ImmobilizedAshlands', chance: 0.15 },
+      hitEffect: { id: 'ImmobilizedAshlands', chance: 0.2 },
       damage: [
-        dmg({ slash: 125, chop: 80, poison: 10 }),
+        dmg({ slash: 170, poison: 10 }),
         dmg({ slash: 5 }),
       ],
     },
@@ -3311,9 +3312,9 @@ export const items: (Weapon | Shield | Bomb)[] = [
     parryForce: [20, 5],
     parryBonus: 2,
     skill: SkillType.Swords,
-    toolTier: 0,
+    toolTier: 6,
     damage: [
-      dmg({ slash: 125, fire: 10 }),
+      dmg({ slash: 145, fire: 10 }),
       dmg({ slash: 6 }),
     ],
     knockback: 40,
@@ -3352,7 +3353,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     tier: 7,
     stack: 1,
     maxLvl: 3,
-    variants: 7,
+    variants: 5,
     weight: 5,
     moveSpeed: -0.05,
     block: [114, 6],
@@ -3369,15 +3370,13 @@ export const items: (Weapon | Shield | Bomb)[] = [
     floating: true,
     stack: 1,
     maxLvl: 3,
+    variants: 5,
     weight: 5,
     moveSpeed: -0.2,
-    block: [96, 6],
-    parryForce: [60, 5],
-    parryBonus: 1.5,
+    block: [140, 6],
+    parryForce: [150, 5],
+    parryBonus: 1,
     skill: SkillType.Blocking,
-    damage: [dmg({ blunt: 10 }), dmg({})],
-    knockback: 50,
-    backstab: 4,
     durability: [200, 50],
   },
   {

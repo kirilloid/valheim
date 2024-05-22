@@ -34,6 +34,16 @@ const fenringSet: ItemSet = {
   ],
 };
 
+const asksvinSet: ItemSet = {
+  name: 'asksvin',
+  items: [],
+  bonus: [
+    undefined,
+    undefined,
+    effectsById.SetEffect_AsksvinArmor,
+  ],
+};
+
 const hideHair = true;
 const hideBeard = true;
 
@@ -538,6 +548,7 @@ export const items: Item[] = [
     id: 'ArmorAshlandsMediumlegs',
     tier: 1,
     type: 'armor', slot: 'legs',
+    set: asksvinSet,
     armor: [28, 2],
     weight: 10,
     maxLvl: 4,
@@ -548,6 +559,7 @@ export const items: Item[] = [
     id: 'ArmorAshlandsMediumChest',
     tier: 1,
     type: 'armor', slot: 'body',
+    set: asksvinSet,
     armor: [28, 2],
     weight: 1,
     maxLvl: 4,
@@ -558,6 +570,7 @@ export const items: Item[] = [
     id: 'HelmetAshlandsMediumHood',
     tier: 1,
     type: 'armor', slot: 'head',
+    set: asksvinSet,
     hideHair,
     armor: [28, 2],
     weight: 1,
@@ -575,7 +588,7 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [1000, 200],
     moveSpeed: -0.02,
-    eitrRegen: 0.45,
+    eitrRegen: 0.5,
   },
   {
     id: 'ArmorMageChest_Ashlands',
@@ -586,7 +599,7 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [1000, 200],
     moveSpeed: -0.02,
-    eitrRegen: 0.45,
+    eitrRegen: 0.5,
   },
   {
     id: 'HelmetMage_Ashlands',
@@ -598,7 +611,7 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [1000, 200],
     moveSpeed: 0,
-    eitrRegen: 0.25,
+    eitrRegen: 0.3,
   },
 
   {
@@ -608,6 +621,7 @@ export const items: Item[] = [
     armor: [1, 1],
     weight: 4,
     maxLvl: 4,
+    damageModifiers: { frost: 'resistant' },
     durability: [1500, 50],
     moveSpeed: 0,
     staminaModifiers: { dodge: -0.15 },
@@ -620,7 +634,7 @@ export const items: Item[] = [
     armor: [12, 2],
     weight: 4,
     maxLvl: 4,
-    damageModifiers: { frost: 'resistant' },
+    damageModifiers: { frost: 'resistant', fire: 'weak' },
     durability: [1200, 50],
     moveSpeed: 0,
     staminaModifiers: { attack: -0.1, block: -0.2 },

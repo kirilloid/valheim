@@ -17,6 +17,7 @@ import { Stats, Trophies } from './Stats';
 import { readExtraSlots } from './EquipmentAndQuickSlots';
 
 import { TranslationContext } from '../../effects';
+import { Presets } from './Presets';
 
 function renameCrafter({ version, items }: TInventory, id: bigint, oldName: string, newName: string) {
   return {
@@ -97,6 +98,11 @@ export function PlayerInfo({ value: player, onChange, file, disabled } : EditorP
       renderer: () => <Stats player={player} />,
     });
   }
+
+  tabs.push({
+    title: 'presets',
+    renderer: () => <Presets value={player} onChange={onCheatChange} />,
+  });
 
   const MIN_TIME = DEFAULT_MIN_DATE.getTime();
   const MAX_TIME = Date.now();

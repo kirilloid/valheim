@@ -17,27 +17,39 @@ import { SpoilerAlert } from './parts/Spoiler';
 import { sortBy } from '../model/utils';
 import { useSettingsFilter } from '../effects/globalState.effect';
 
+const foodTracking: Record<EntityId, EntityId[]> = {};
+
 function ResourceList(props: { list: GameObject[] }) {
   const { list } = props;
+  list.sort((a, b) => b.tier - a.tier);
   return <ul className="plainList">
-    {list.map(item => <li key={item.id}>
-      <InlineObjectWithIcon id={item.id} />
-    </li>)}
+    {list.map(item => {
+      const track = foodTracking[item.id] ?? [];
+      return <li key={item.id} title={track.join(' <- ')}>
+        <InlineObjectWithIcon id={item.id} />
+      </li>
+    })}
   </ul>
 }
 
-function isFoodOrUsedForFood(item: Item) {
+function isFoodOrUsedForFood(item: Item, settingsFilter: (item: GameObject) => boolean) {
+  // TODO: maybe this less hacky, but currently buyable ChickenEgg makes coins food ingridient
+  if (item.id === 'Coins') return false;
   const visited = new Set<EntityId>();
-  const queue = [item];
+  const queue: { item: Item; track: EntityId[] }[] = [{ item, track: [] }];
   let idx = 0;
   while (idx < queue.length) {
-    const next = queue[idx++]!;
-    if ((next as Resource).Food != null) return true;
+    const { item: next, track } = queue[idx++]!;
+    if ((next as Resource).Food != null) {
+      foodTracking[item.id] = track.concat(next.id);
+      return true;
+    }
     visited.add(next.id);
     for (const item of resourceCraftMap[next.id] ?? []) {
+      if (!settingsFilter(item)) continue;
       const { id } = item;
       if (!visited.has(id)) {
-        queue.push(item);
+        queue.push({ item, track: track.concat(next.id) });
         visited.add(id);
       }
     }
@@ -96,7 +108,7 @@ function Resources({ biome }: { biome: BiomeConfig }) {
         // skip them
         break;
       case 'item':
-        if (isFoodOrUsedForFood(item)) {
+        if (isFoodOrUsedForFood(item, settingsFilter)) {
           resources.food.push(item);
         } else {
           resources.others.push(item);
@@ -208,7 +220,7 @@ function Locations({ biome }: { biome: BiomeConfig }) {
 function BiomeList({ id }: { id: string }) {
   const translate = useContext(TranslationContext);
 
-  return <div>Biomes: <List separator=" | ">{biomes.map(biome => {
+  return <div>{translate('ui.biomes')}: <List separator=" | ">{biomes.map(biome => {
     const name = translate(`ui.biome.${biome.id}`);
     return biome.active
       ? biome.id === id

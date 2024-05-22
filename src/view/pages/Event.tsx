@@ -8,6 +8,7 @@ import { timeI2S } from '../../model/utils';
 
 import { data } from '../../data/itemDB';
 import { events } from '../../data/events';
+import { biomes } from '../../data/location';
 
 import { TranslationContext, useGlobalState } from '../../effects';
 import { Area, InlineObject, InlineObjectWithIcon, List, yesNo } from '../helpers';
@@ -99,7 +100,7 @@ const kills: EntityId[] = [
   'SeekerQueen',
   'Fader',
 ];
-const biomes: Biome[] = ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains', 'Mistlands'];
+const biomeIds = biomes.filter(b => b.active).map(b => b.id);
 
 export function GameEventFilterTable() {
   const [spoiler] = useGlobalState('spoiler');
@@ -144,7 +145,7 @@ export function GameEventFilterTable() {
         <div className="Events__Control">
           <header>{translate('ui.biome')}</header>
           <ul>
-            {biomes.map(id => <li key={id}>
+            {biomeIds.map(id => <li key={id}>
               <input id={id} type="radio" name="biome" checked={state.biome === id} onChange={onBiomeChange} />
               {' '}
               <label htmlFor={id}>{translate(`ui.biome.${id}`)}</label>
@@ -155,7 +156,7 @@ export function GameEventFilterTable() {
           <table>
             <thead>
               <tr>
-                <th>event</th>
+                <th>{translate('ui.event')}</th>
                 <th>{translate('ui.duration')}</th>
                 <th>spawns (max)</th>
                 <th>base</th>
@@ -196,7 +197,7 @@ export function GameEventTable() {
         <table width="100%">
           <thead>
             <tr>
-              <th>event</th>
+              <th>{translate('ui.event')}</th>
               <th>killed</th>
               <th>not killed</th>
               <th>{translate('ui.duration')}</th>
