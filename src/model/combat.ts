@@ -116,7 +116,7 @@ export function getWeaponSkillFactor(skill: number): Pair<number> {
   return [
     (0.25 + 0.006 * skill),
     Math.min(0.55 + 0.006 * skill, 1)
-   ];
+  ];
 }
 
 export function getResourceUsageSkillFactor(skill: number): number {

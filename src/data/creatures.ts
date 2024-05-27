@@ -936,6 +936,7 @@ export const creatures: Creature[] = [
       poison: 'immune',
     },
     drop: [],
+    timedDestruction: [18, 20],
   },
 // SWAMP
   {
@@ -2852,6 +2853,7 @@ export const creatures: Creature[] = [
     stagger: null,
     damageModifiers: animalDmgModifiers,
     drop: [],
+    timedDestruction: [20, 25],
   },
   {
     type: 'creature',
@@ -3581,7 +3583,7 @@ export const creatures: Creature[] = [
     drop: [
       dropEntry('Softtissue', { chance: 0.25, min: 1, max: 2 }),
       dropEntry('BlackMarble', { chance: 0.5, min: 1, max: 2 }),
-      dropEntry('BlackMarble', { min: 2, max: 15 }),
+      dropEntry('Coins', { min: 2, max: 15 }),
       dropTrophy('TrophyDvergr', 0.05),
     ],
   },
@@ -3882,6 +3884,7 @@ export const creatures: Creature[] = [
       dropEntry('GemstoneGreen', { min: 2, max: 4 }),
       dropEntry('GemstoneRed', { min: 2, max: 4 }),
     ],
+    timedDestruction: [23, 25],
   },
   {
     type: 'creature',

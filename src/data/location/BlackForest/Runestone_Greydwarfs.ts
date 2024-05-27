@@ -6,5 +6,9 @@ export default loc(
   { type: 'runestone',
     quantity: 25, group: 'Runestones', minApart: 128, maxDistance: 2000, radius: [20, 8],
     customMusic: 'Music_GreydwarfCamp',
-    items: [locItem('FirTree_oldLog', 1, 4)] }
+    items: [
+      locItem('RuneStone_Greydwarfs', 1, 4),
+      locItem('FirTree_oldLog', 1, 4),
+    ]
+  }
 );

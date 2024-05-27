@@ -42,7 +42,7 @@ export type EntityGroup =
   | 'lumber'
   | 'metal'
   | 'ore'
-  | 'rug'
+  | 'rug' | 'runestone'
   | 'seedTree' | 'seedVeg' | 'seeker' | 'ship' | 'smelt' | 'stack' | 'stand'
   | 'torch' | 'trader'
   | 'value'
@@ -195,6 +195,7 @@ export type Effect = {
   xpModifier?: number;
   moveSpeed?: number;
   windMovementModifier?: number;
+  Aoe?: Aoe;
 };
 
 export type NormalAttackProfile = {
@@ -303,6 +304,7 @@ export interface Creature extends GameObjectBase {
   weakSpots?: { location: string; damageModifiers: DamageModifiers }[];
   // Gjall, SeekerBrute, TheHive, SeekerQueen 
   drop: DropEntry[];
+  timedDestruction?: Pair<number>;
   tame?: { fedTime: number; tameTime: number; commandable: boolean; eats: EntityId[] };
   pregnancy?: { points: number; time: number; chance: number; grow: number; childId: EntityId };
 }
@@ -355,6 +357,7 @@ export interface Aoe {
   radius: number;
   backstabBonus: number;
   ttl: number;
+  chainTargets?: Pair<number>;
 }
 
 export interface Plantable {
@@ -393,6 +396,7 @@ export type PhysicalObject = GameObjectBase & {
   Plant?: Plantable;
   Beacon?: number;
   Vegvisir?: GameLocationId;
+  RuneStone?: string[];
   SpawnArea?: SpawnArea;
   floating?: true;
 };
@@ -638,7 +642,7 @@ export type ItemRecipe = {
   onlyOneIngredient: boolean;
   materials: Record<EntityId, number>;
   materialsPerLevel: Record<EntityId, number>;
-  source: { station: EntityId | null; level?: number };
+  source: { station: EntityId | null; level: number };
   item: EntityId;
   number: number;
 } | {

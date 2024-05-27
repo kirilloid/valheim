@@ -137,7 +137,7 @@ function ProducedItems({ items }: { items: Map<number, Produced[]> }) {
     <h2>Produces</h2>
     {[...items.entries()]
       .sort((a, b) => a[0] - b[0])
-      .map(([level, levelItems]) => <React.Fragment>
+      .map(([level, levelItems]) => <React.Fragment key={level}>
         <h4>Level {level}</h4>
         <CraftList items={levelItems} />
       </React.Fragment>
@@ -212,7 +212,10 @@ export function Piece({ item }: { item: TPiece }) {
         <h2>{translate(`ui.pieceType.${item.subtype}`)}</h2>
         <PieceSpecific item={item} />
       </section>
-      <Recipe item={item} />
+      <section>
+        <h2>{translate('ui.recipe')}</h2>
+        <Recipe item={item} />
+      </section>
       <ProducedItems items={producedItems} />
     </>
   );

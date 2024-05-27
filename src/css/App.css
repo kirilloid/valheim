@@ -94,7 +94,7 @@ ul {
 }
 
 .disabled {
-  color: gray;
+  color: var(--color-text-light);
 }
 
 .spoiler {
@@ -352,6 +352,8 @@ option.spoiler {
   height: 16px;
   border-radius: 50%;
   margin: 4px;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .LocationIllustration {

@@ -7,7 +7,7 @@ export default loc(
     biomeArea: 7, quantity: 75, minApart: 128,
     slopeRotation: true,
     terrainDelta: [0, 10], minAlt: 0, radius: [12, 12],
-    items: [locItem('Runestone_Ashlands')],
+    items: [locItem('RuneStone_Ashlands')],
   },
   'Runestone_Ashlands',
 );

@@ -5,15 +5,16 @@ import { EntityId, GameObject, Item, Pair } from '../../types';
 import { assertNever, days, timeI2S } from '../../model/utils';
 
 import { data } from '../../data/itemDB';
-import { getRecipe, recipes } from '../../data/recipes';
+import { getRecipe } from '../../data/recipes';
 import { creatures } from '../../data/creatures';
 import { miningMap, resourceBuildMap, resourceCraftMap } from '../../data/resource-usage';
 import { locationBiomes, objectLocationMap } from '../../data/location';
 
-import { TranslationContext, useGlobalState } from '../../effects';
+import { TranslationContext, useGlobalState, useSettingsFilter } from '../../effects';
 import { Area, InlineObject, InlineObjectWithIcon, List, rangeBy } from '../helpers';
-import { Icon, ItemIcon, SkillIcon } from './Icon';
+import { Icon, ItemIcon } from './Icon';
 import { fishes } from '../../data/fish';
+import { pieces } from '../../data/building';
 
 export const SOURCE_CRAFT = 1;
 export const SOURCE_DROP = 2;
@@ -48,53 +49,62 @@ export function DropSection({ sources }: { sources: string[] | undefined }) {
     : null;
 }
 
-function Station({ station }: { station: EntityId | null }) {
-  if (!station) {
-    return <>
-      <SkillIcon skill="Unarmed" useAlt={false} />{' '}
-      inventory
-    </>;
-  }
-  return <InlineObjectWithIcon id={station} />;
-}
-
-const MaterialHeader = ({ cols }: { cols: number }) => {
+const MaterialHeader = ({ cols, maxAccessible }: { cols: number; maxAccessible: number }) => {
   const translate = useContext(TranslationContext);
   return <thead>
     <tr key="header">
       <th key="icon"></th>
       <th key="name">{translate('ui.quality')}</th>
       {Array.from({ length: cols }, (_, i: number) =>
-        <th key={`lvl${i+1}`} className="RecipeItems__value">{i + 1}</th>)}
+        <th key={`lvl${i+1}`} className={`RecipeItems__value ${i >= maxAccessible ? 'disabled' : ''}`}>{i + 1}</th>)}
     </tr>
   </thead>;
 };
 
 function Materials({
-  materials, materialsUp = {}, maxLvl = 1
+  station, level, materials, materialsUp = {}, maxLvl = 1
 }: {
-  materials: Record<EntityId, number>,
-  materialsUp?: Record<EntityId, number>,
-  maxLvl?: number
+  station: EntityId | null;
+  level: number;
+  materials: Record<EntityId, number>;
+  materialsUp?: Record<EntityId, number>;
+  maxLvl?: number;
 }) {
+  const filter = useSettingsFilter();
+  const extNum = pieces
+    .filter(filter)
+    .filter(p => p.subtype === 'craft_ext' && p.extends.id === station)
+    .length;
   const [aggregateSum, setAggregateSum] = useGlobalState('aggregate');
   const keys = Array.from(new Set([
     ...Object.keys(materials),
     ...Object.keys(materialsUp)
   ]));
-  return (
+  const maxAccessible = extNum + 2 - level;
+  return (<>
     <table className="RecipeItems">
       {maxLvl === 1
         ? null
-        : <MaterialHeader cols={maxLvl} />
+        : <MaterialHeader cols={maxLvl} maxAccessible={maxAccessible} />
       }
       <tbody>
+      {station != null && <React.Fragment key="station">
+        <tr>
+          <td key="icon"><ItemIcon item={data[station]} /></td>
+          <td key="name"><InlineObject id={station} /></td>
+          {Array.from({ length: maxLvl }, (_, i: number) =>
+            <td key={`lvl${i+1}`} className={`RecipeItems__value ${i >= maxAccessible ? 'disabled' : ''}`}>{
+              level + i
+            }</td>)}
+        </tr>
+        <tr><td colSpan={maxLvl + 2} style={{ borderBottom: "1px solid" }}></td></tr>
+      </React.Fragment>}
       {keys.map(id =>
         <tr key={id}>
           <td key="icon"><ItemIcon item={data[id]} /></td>
           <td key="name"><InlineObject id={id} /></td>
           {Array.from({ length: maxLvl }, (_, i: number) =>
-            <td key={`lvl${i+1}`} className="RecipeItems__value">{
+            <td key={`lvl${i+1}`} className={`RecipeItems__value ${i >= maxAccessible ? 'disabled' : ''}`}>{
               aggregateSum
                 ? (materials[id] ?? 0) + (materialsUp[id] ?? 0) * i * (i + 1) / 2
                 : (i ? (materialsUp[id] ?? 0) * i : (materials[id] ?? 0))
@@ -115,7 +125,11 @@ function Materials({
           </tr>
         </tfoot>}
     </table>
-  );
+    {maxLvl > maxAccessible && <p className='warning'>
+      Currently max quality of the item is unreachable.<br />
+      This could be changed with subsequent game releases.
+    </p>}
+  </>);
 }
 
 const CraftingSection = React.memo(({ id }: { id: EntityId }) => {
@@ -176,11 +190,10 @@ export function Recipe({ item }: { item: GameObject }) {
         const { station, level } = recipe.source;
         const { number, materials, time } = recipe;
         return <dl>
-          <dt>station</dt><dd><Station station={station} /> {level ? `lvl ${level}` : ''}</dd>
           <dt>{translate('ui.duration')}</dt><dd><Icon id="time" alt="" size={16} />{timeI2S(time)}</dd>
           <dt>{translate('ui.resources')}{recipe.onlyOneIngredient ? ' (any of)' : ''}</dt><dd>{
           Object.keys(materials).length
-            ? <Materials materials={materials} />
+            ? <Materials station={station} level={level} materials={materials} />
             : 'for free'
           }</dd>
           {number === 1 ? null : <><dt>{translate('ui.quantity')}</dt><dd>{number}</dd></>} 
@@ -188,8 +201,9 @@ export function Recipe({ item }: { item: GameObject }) {
       } else {
         const { station, level } = recipe.source;
         return <>
-          Crafted in <Station station={station} /> {level ? `lvl ${level}` : ''} using:{' '}
           <Materials
+            station={station}
+            level={level}
             materials={recipe.materials}
             materialsUp={recipe.materialsPerLevel}
             maxLvl={(item as Item).maxLvl} />
@@ -197,7 +211,7 @@ export function Recipe({ item }: { item: GameObject }) {
       }
     case 'craft_piece':
       return <div>
-        Built near <Station station={recipe.station} /> using: <Materials materials={recipe.materials} />
+        <Materials station={recipe.station} level={0} materials={recipe.materials} />
       </div>
     default:
       return assertNever(recipe);

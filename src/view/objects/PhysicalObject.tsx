@@ -4,6 +4,7 @@ import type * as T from '../../types';
 import { timeI2S } from '../../model/utils';
 import { fullDestructible } from '../../data/objects';
 import { recipes } from '../../data/recipes';
+import { data } from '../../data/itemDB';
 
 import { TranslationContext, useSettingsFilter } from '../../effects';
 import { Area, InlineObject, InlineObjectWithIcon, List, rangeBy, showPercent } from '../helpers';
@@ -13,7 +14,7 @@ import { DropTable } from '../parts/DropTable';
 import { GrowSection } from '../parts/Source';
 import { Destructible } from '../parts/Destructible';
 import { ResourceRoot } from '../parts/ResourceRoot';
-import { data } from '../../data/itemDB';
+import { Tabs } from '../parts/Tabs';
 
 function Grow({ item }: { item: T.PhysicalObject }) {
   return <section>
@@ -49,14 +50,36 @@ function Leviathan({ leviathan }: { leviathan: T.Leviathan }) {
   // const translate = useContext(TranslationContext);
   return <section>
     <h2>Scareable</h2>
-    <p>This thing might be scared off upon hitting</p>
+    <p>This object might be scared off upon hitting</p>
     <dl>
       <dt>chance on hit</dt>
       <dd>{showPercent(chance)}</dd>
       <dt>time before start of submerge</dt>
       <dd>{timeI2S(delay)}</dd>
     </dl>
-  </section>
+  </section>;
+}
+
+function Runestone({ texts }: { texts: string[] }) {
+  const translate = useContext(TranslationContext);
+  return <section>
+    <h2>Texts</h2>
+    {texts.length === 1
+      ? <>
+          <p>This object shows the following text:</p>
+          <p style={{ whiteSpace: 'pre-line' }}>{translate(`lore.${texts[0]}`)}</p>
+        </>
+      : <p>This object shows one of the following text (picked randomly at creation):</p>}
+    
+    {texts.length > 1 && <Tabs tabs={texts.map((text, i) => {
+      return {
+        title: `#${i + 1}`,
+        renderer() {
+          return <p style={{ whiteSpace: 'pre-line' }}>{translate(`lore.${text}`)}</p>
+        }
+      };
+    })} selected={0} />}
+  </section>;
 }
 
 function TraderRecipes({ id }: { id: 'haldor' | 'hildir' }) {
@@ -142,6 +165,7 @@ export function PhysicalObject({ item }: { item: T.PhysicalObject }) {
       {item.trader && <TraderRecipes id={item.trader} />}
       {item.Plant && <Plant plant={item.Plant} />}
       {item.Leviathan && <Leviathan leviathan={item.Leviathan} />}
+      {item.RuneStone && <Runestone texts={item.RuneStone} />}
       {item.Vegvisir && <Vegvisir to={item.Vegvisir} />}
       {item.ResourceRoot && <ResourceRoot params={item.ResourceRoot} />}
       {full?.Destructible && <Destructible item={full.Destructible} />}

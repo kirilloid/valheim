@@ -14,7 +14,7 @@ import { effects } from '../../data/effects';
 
 import { TranslationContext } from '../../effects';
 import { durability, InlineObjectWithIcon, ItemSpecial, ShortWeaponDamage, showPair, showPercent } from '../helpers';
-import { Icon, SkillIcon } from '../parts/Icon';
+import { EffectIcon, Icon, SkillIcon } from '../parts/Icon';
 import { RecipeSection } from '../parts/Source';
 import { ItemHeader } from '../parts/ItemHeader';
 import { Effect } from '../parts/Effect';
@@ -27,7 +27,7 @@ function skill(skill: SkillType | null) {
     ? <>
         <SkillIcon skill={SkillType[skill]} useAlt={false} size={16} />
         {' '}
-        {str}
+        <Link to={`/skills/${str}`}>{str}</Link>
       </>
     : null;
 }
@@ -97,7 +97,16 @@ function WeaponStats({ item, level }: { item: TWeapon, level?: number }) {
         <dt>hit effect</dt><dd>damage increased by {showPercent(item.damageMultiplierPerMissingHP)} for every hp missing</dd>
       </> : null}
       {item.hitEffect ? <>
-        <dt>hit effect</dt><dd>{showPercent(item.hitEffect.chance)} <InlineObjectWithIcon id={item.hitEffect.id} /></dd>
+        <dt>hit effect</dt>
+        <dd>
+          {showPercent(item.hitEffect.chance)}
+          {' '}
+          <EffectIcon id={item.hitEffect.id} />
+          {' '}
+          <Link to={`/effect/${item.hitEffect.id}`}>
+            {translate(`ui.effect.${item.hitEffect.id}`)}
+          </Link>
+        </dd>
       </> : null}
       <dt>{translate('ui.backstab')} <Link to="/info/combat#backstab">ℹ️</Link></dt><dd>{item.backstab}×</dd>
       <dt>{translate('ui.hands')}</dt><dd>{translate(`ui.slot.${item.slot}`)}</dd>

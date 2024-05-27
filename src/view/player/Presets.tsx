@@ -53,11 +53,9 @@ function inventoryFromPreset(preset: PlayerPreset, worldLevel: number): Inventor
       const id = gridPos.x = i.hotbar;
       inventorySlots[id] = true;
       // drop current item
-      items = items.filter(ci => ci.gridPos.x === gridPos.x && ci.gridPos.y === ci.gridPos.y);
+      items = items.filter(ci => ci.gridPos.x === gridPos.x && ci.gridPos.y === gridPos.y);
     } else {
       const id = inventorySlots.findIndex(x => !x);
-      const x = id % INVENTORY_WIDTH;
-      const y = Math.floor(id / INVENTORY_WIDTH);
       inventorySlots[id] = true;
       gridPos = findEmptySlot(inventorySlots, topFirst(item));
     }
@@ -122,7 +120,7 @@ export function Presets({ value, onChange } : ValueProps<Player>) {
         skillData,
       },
     });
-  }, [value, onChange]);
+  }, [value, worldlevel, onChange]);
 
   return <section>
     {Object.entries(itemSets).map(([key, preset]) => {

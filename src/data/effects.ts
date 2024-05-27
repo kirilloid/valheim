@@ -1,5 +1,6 @@
 import type { Effect } from '../types';
 import { SkillType } from '../model/skills';
+import { dmg } from '../model/game';
 
 export const effects: Effect[] = [
   {
@@ -11,6 +12,19 @@ export const effects: Effect[] = [
   },
   // Burning
   // Campfire
+  {
+    type: 'effect',
+    id: 'ChainLightning',
+    iconId: 'icon/lightning_32',
+    tier: 7,
+    Aoe: {
+      damage: dmg({ lightning: 75 }),
+      backstabBonus: 1,
+      radius: 8,
+      ttl: 3,
+      chainTargets: [2, 4],
+    }
+  },
   {
     type: 'effect',
     id: 'Cold',

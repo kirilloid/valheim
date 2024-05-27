@@ -8,8 +8,7 @@ export default loc(
     biomeArea: 2, quantity: 5, prioritized: true, group: 'DvergrBoss', minApart: 2048,
     randomRotation: false, slopeRotation: true,
     terrainDelta: [0, 40], maxAlt: 20, radius: [32, 32],
-    // FIXME
-    dungeon: undefined,
+    dungeon: dvergrTown,
     items: [
       // fort
         // wall
@@ -107,7 +106,7 @@ export default loc(
         locItem('blackmarble_1x1', 1, 12),
         locItem('blackmarble_2x2x2', 1, 3),
       ]),
-      // locItem('RuneStone_Mistlands_bosshint'),
+      locItem('RuneStone_Mistlands_bosshint'),
       locItem([ // furniture
         locItem('dvergrprops_barrel', 1, 3),
         locItem('piece_blackmarble_bench'),

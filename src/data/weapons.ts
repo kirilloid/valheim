@@ -2822,7 +2822,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
       type: 'summon',
       animation: 'staff_summon',
       stamina: 0,
-      eitr: 100,
+      eitr: 120,
       healthPercent: 40,
       walkSpeed: 0.3,
       rotationSpeed: 0.3,
@@ -2907,7 +2907,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
       damageMultiplierPerMissingHP: 0.002,
     },
     'BowAshlandsLightning': {
-      hitEffect: { id: 'ChainLighning', chance: 0.25 },
+      hitEffect: { id: 'ChainLightning', chance: 0.25 },
       damage: [
         dmg({ pierce: 82, lightning: 10 }),
         dmg({ pierce: 4, spirit: 5 }),
@@ -2963,7 +2963,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
       damageMultiplierPerMissingHP: 0.002,
     },
     'CrossbowRipperLightning': {
-      hitEffect: { id: 'ChainLighning', chance: 0.25 },
+      hitEffect: { id: 'ChainLightning', chance: 0.25 },
       damage: [
         dmg({ pierce: 220, lightning: 10 }),
         dmg({ pierce: 3 }),
@@ -3027,7 +3027,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
       damageMultiplierPerMissingHP: 0.002,
     },
     'SpearSplitner_Lightning': {
-      hitEffect: { id: 'ChainLighning', chance: 0.25 },
+      hitEffect: { id: 'ChainLightning', chance: 0.25 },
       damage: [
         dmg({ pierce: 135, lightning: 10 }),
         dmg({ pierce: 6, }),
@@ -3094,7 +3094,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
       damageMultiplierPerMissingHP: 0.002,
     },
     'AxeBerzerkrLightning': {
-      hitEffect: { id: 'ChainLighning', chance: 0.25 },
+      hitEffect: { id: 'ChainLightning', chance: 0.25 },
       damage: [
         dmg({ slash: 140, chop: 80, lightning: 10 }),
         dmg({ slash: 5, chop: 3 }),
@@ -3158,7 +3158,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
       damageMultiplierPerMissingHP: 0.002,
     },
     'MaceEldnerLightning': {
-      hitEffect: { id: 'ChainLighning', chance: 0.25 },
+      hitEffect: { id: 'ChainLightning', chance: 0.25 },
       damage: [
         dmg({ blunt: 135, lightning: 10 }),
         dmg({ blunt: 5 }),
@@ -3221,7 +3221,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
       damageMultiplierPerMissingHP: 0.002,
     },
     'SwordNiedhoggLightning': {
-      hitEffect: { id: 'ChainLighning', chance: 0.25 },
+      hitEffect: { id: 'ChainLightning', chance: 0.25 },
       damage: [
         dmg({ slash: 135, lightning: 10 }),
         dmg({ slash: 5 }),
@@ -3284,7 +3284,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
       damageMultiplierPerMissingHP: 0.002,
     },
     'THSwordSlayerLightning': {
-      hitEffect: { id: 'ChainLighning', chance: 0.25 },
+      hitEffect: { id: 'ChainLightning', chance: 0.25 },
       damage: [
         dmg({ slash: 170, lightning: 10 }),
         dmg({ slash: 5 }),

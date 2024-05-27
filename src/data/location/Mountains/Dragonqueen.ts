@@ -6,6 +6,9 @@ export default loc(
   { type: 'altar',
     biomeArea: 2, quantity: 3, prioritized: true,
     minApart: 3000, terrainDelta: [0, 4], maxDistance: 8000, minAlt: 150, maxAlt: 500, radius: [12, 20],
-    items: [locItem('Dragon')],
+    items: [
+      locItem('Dragon'),
+      locItem('RuneStone_DragonQueen'),
+    ],
   },
 );

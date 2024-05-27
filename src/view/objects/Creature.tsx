@@ -178,6 +178,9 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
         })}
       </ul>
     </section>}
+    {creature.timedDestruction != null && <p>
+      Despawns after {rangeBy(creature.timedDestruction, String)}s
+    </p>}
     {tame != null ? <section key="tame">
       <h2>{translate('ui.tameable')}</h2>
       <dl>

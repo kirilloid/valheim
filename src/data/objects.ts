@@ -326,6 +326,30 @@ function rock({
   ];
 };
 
+function loreTexts(prefix: string, number: number) {
+  return Array.from({ length: number }).map((_, i) => `${prefix}${(i + 1).toString().padStart(2, '0')}`);
+}
+
+function runeStone({
+  id,
+  tier,
+  texts,
+}: {
+  id: EntityId;
+  tier: number;
+  texts: string[];
+}): PhysicalObject {
+  return {
+    type: 'object',
+    subtype: 'indestructible',
+    group: 'runestone',
+    id,
+    RuneStone: texts,
+    iconId: 'object/Runestone',
+    tier,
+  };
+}
+
 const cacheMap: Map<PhysicalObject, PhysicalObject> = new Map();
 
 export function fullDestructible(obj: PhysicalObject | undefined): PhysicalObject | undefined {
@@ -2398,19 +2422,28 @@ export const objects: PhysicalObject[] = [
       options: [{ item: 'JuteRed', num: [1, 1] }]
     }],
   },
+  runeStone({ id: 'RuneStone_Ashlands', tier: 7, texts: loreTexts('ashlands', 13) }),
+  runeStone({ id: 'RuneStone_BlackForest', tier: 2, texts: loreTexts('blackforest', 13) }),
+  runeStone({ id: 'RuneStone_Boars', tier: 1, texts: ['meadows_boartaming'] }),
+  runeStone({ id: 'RuneStone_Bonemass', tier: 3, texts: ['bonemass'] }),
+  runeStone({ id: 'RuneStone_DragonQueen', tier: 4, texts: ['dragonqueen'] }),
+  runeStone({ id: 'RuneStone_Drake', tier: 4, texts: ['drake'] }),
+  runeStone({ id: 'RuneStone_Draugr', tier: 3, texts: ['draugr'] }),
+  runeStone({ id: 'RuneStone_GDKing', tier: 2, texts: ['gdking'] }),
+  runeStone({ id: 'RuneStone_Greydwarfs', tier: 2, texts: ['greydwarfs'] }),
+  runeStone({ id: 'RuneStone_Meadows', tier: 1, texts: loreTexts('meadows', 11) }),
+  runeStone({ id: 'RuneStone_Mistlands_bosshint', tier: 6, texts: ['mistlands_bosshint'] }),
+  runeStone({ id: 'RuneStone_Mistlands', tier: 6, texts: loreTexts('mistlands', 7) }),
+  runeStone({ id: 'RuneStone_Mountains', tier: 4, texts: loreTexts('mountains', 12).concat('mountains_fenring') }),
+  runeStone({ id: 'RuneStone_Plains', tier: 5, texts: loreTexts('plains', 13) }),
+  runeStone({ id: 'RuneStone_Swamps', tier: 3, texts: loreTexts('swamp', 12) }),
   {
     type: 'object',
-    subtype: 'indestructible',
-    id: 'RuneStone',
-    iconId: 'object/Runestone',
-    tier: 0,
-  },
-  {
-    type: 'object',
+    group: 'runestone',
     subtype: 'indestructible',
     id: 'RuneStone_CaveMan',
+    RuneStone: ['caveman01'],
     tier: 4,
-    grow: [],
   },
   {
     type: 'object',

@@ -9,6 +9,7 @@ export default loc(
     items: [
       locItem('StatueSeed'),
       locItem('gd_king'),
+      locItem('RuneStone_GDKing'),
     ],
   }
 );

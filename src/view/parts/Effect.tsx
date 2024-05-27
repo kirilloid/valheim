@@ -4,9 +4,10 @@ import { Link } from 'react-router-dom';
 import type { Effect as TEffect } from '../../types';
 import { SkillType } from '../../model/skills';
 import { assertNever, timeI2S } from '../../model/utils';
+import { getTotalDamage } from '../../model/combat';
 
 import { TranslationContext } from '../../effects';
-import { Resistances, showNumber } from '../helpers';
+import { rangeBy, Resistances, showNumber } from '../helpers';
 import { SkillIcon } from './Icon';
 
 function showDiffPercent(value: number): string {
@@ -50,6 +51,7 @@ export function Effect({ effect, level }: { effect: TEffect; level?: number }) {
     eitrRegen,
     xpModifier,
     moveSpeed,
+    Aoe,
   } = effect;
 
   return <>
@@ -120,6 +122,16 @@ export function Effect({ effect, level }: { effect: TEffect; level?: number }) {
     {moveSpeed != null && <React.Fragment key="moveSpeed">
       <dt>{translate(`ui.moveSpeed`)}</dt>
       <dd>{showDiffPercent(moveSpeed)}</dd>
+    </React.Fragment>}
+    {Aoe != null && <React.Fragment key="Aoe">
+      <dt>{translate(`ui.damage`)}</dt>
+      <dd>{getTotalDamage(Aoe.damage)}</dd>
+      <dt>{translate(`ui.radius`)}</dt>
+      <dd>{Aoe.radius}</dd>
+      {Aoe.chainTargets != null && <>
+        <dt>targets</dt>
+        <dd>{rangeBy(Aoe.chainTargets, String)}</dd>
+      </>}
     </React.Fragment>}
   </>
 }

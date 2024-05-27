@@ -1,16 +1,19 @@
 import React, { useContext, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 
+import type { Weapon } from '../../types';
+
 import { getBlockingSkillFactor, getBowDrawTime, getResourceUsageSkillFactor, getWeaponSkillFactor } from '../../model/combat';
 import { skillTiers, SkillType } from '../../model/skills';
 import { assertNever, clamp, lerp } from '../../model/utils';
-import { skills as pageName } from '../../state';
+import { DODGE_STAMINA } from '../../model/game';
+import { items } from '../../data/weapons';
+import { SkillCodeMap } from '../player/Skills/smoothbrain';
 
+import { skills as pageName } from '../../state';
 import { TranslationContext, useGlobalState } from '../../effects';
 import { EffectIcon, SkillIcon } from '../parts/Icon';
 import { InlineObjectWithIcon, rangeBy, showNumber, showPercent, yesNo } from '../helpers';
-import { SkillCodeMap } from '../player/Skills/smoothbrain';
-import { DODGE_STAMINA } from '../../model/game';
 
 const SkillRevMap = new Map([...SkillCodeMap.entries()].map(([key, val]) => [val, key]));
 
@@ -58,17 +61,36 @@ function VanillaSkillLevelUp({ skill }: { skill: SkillType }) {
         <dt>+1 xp</dt>
         <dd>parry</dd>
       </>
-    case SkillType.ElementalMagic:
+    case SkillType.ElementalMagic: {
+      const skillItems = items
+        .filter<Weapon>((item): item is Weapon => item.type === 'weapon')
+        .filter(item => item.skill === SkillType.ElementalMagic);
       return <>
-        <dt>+1 xp/hit</dt>
-        <dd><InlineObjectWithIcon id="StaffFireball" /></dd>
-        <dt>+0.2 xp/hit</dt>
-        <dd><InlineObjectWithIcon id="StaffIceShards" /></dd>
+        {skillItems.map(item => {
+          const atk = item.attacks[0];
+          const amount = atk?.type === 'proj' ? (atk.raiseSkillAmount ?? 1) : 1;
+          return <React.Fragment key={item.id}>
+            <dt>+{amount} xp/hit</dt>
+            <dd><InlineObjectWithIcon id={item.id} /></dd>
+          </React.Fragment>
+        })}
       </>
+    }
     case SkillType.BloodMagic:
+      const skillItems = items
+        .filter<Weapon>((item): item is Weapon => item.type === 'weapon')
+        .filter(item => item.skill === SkillType.BloodMagic);
       return <>
-        <dt>+0.5 xp</dt>
-        <dd>enemy hit by <InlineObjectWithIcon id="Skeleton_Friendly" /></dd>
+        {skillItems.map(item => {
+          const atk = item.attacks[0];
+          if (atk?.type === 'summon') {
+            return <React.Fragment key={item.id}>
+              <dt>+0.5 xp</dt>
+              <dd>enemy hit by <InlineObjectWithIcon id={atk.summons} /></dd>
+            </React.Fragment>
+          }
+          return null;
+        })}
         <dt>+1 xp</dt>
         <dd>shield from <InlineObjectWithIcon id="StaffShield" /> breaks</dd>
       </>
