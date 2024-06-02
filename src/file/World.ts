@@ -109,7 +109,7 @@ function* readZDOData(reader: PackageReader, version: number): Generator<number,
   };
 }
 
-function* writeZDOData(writer: PackageWriter, zdoData: ZDOData): Generator<number, void> {
+function* writeZDOData(writer: PackageWriter, version: number, zdoData: ZDOData): Generator<number, void> {
   writer.writeLong(zdoData.myid);
   writer.writeUInt(zdoData.nextUid);
   writer.writeInt(zdoData.zdos.length);
@@ -117,10 +117,12 @@ function* writeZDOData(writer: PackageWriter, zdoData: ZDOData): Generator<numbe
     if ((i & 0x7FFF) === 0) yield i / zdoData.zdos.length;
     zdo.save(writer);
   }
-  writer.writeMap(function (key: ZDOID) {
-    this.writeLong(key.userId);
-    this.writeUInt(key.id);
-  }, writer.writeLong, zdoData.deadZdos);
+  if (version < 30) {
+    writer.writeMap(function (key: ZDOID) {
+      this.writeLong(key.userId);
+      this.writeUInt(key.id);
+    }, writer.writeLong, zdoData.deadZdos);
+  }
 }
 
 function readZoneSystem(reader: PackageReader, version: number): ZoneSystemData {
@@ -213,7 +215,7 @@ export function* write({
   let writer = new PackageWriter();
   writer.writeInt(version);
   if (version >= 4) writer.writeDouble(netTime);
-  yield* writeZDOData(writer, zdo);
+  yield* writeZDOData(writer, version, zdo);
   if (version >= 12) writeZoneSystem(writer, version, zoneSystem!);
   if (version >= 15) writeRandEvent(writer, version, randEvent!);
   return writer.flush();

@@ -36,7 +36,7 @@ function writePropMap<T>(
   method: (this: PackageWriter, value: T) => void,
   map: Map<number, T>,
   version: number,
-): Map<number, T> {
+): void {
   if (version < 33) {
     writer.writeByte(map.size);
   } else {
@@ -46,7 +46,6 @@ function writePropMap<T>(
     writer.writeInt(key);
     method.call(writer, value);
   }
-  return map;
 }
 
 function writeZdo_post30(this: ZDO, writer: PackageWriter) {
@@ -56,6 +55,7 @@ function writeZdo_post30(this: ZDO, writer: PackageWriter) {
     &&  this.rotation.y === 0
     &&  this.rotation.z === 0;
   if (!isIdentityRotation) _flags |= 4096;
+  // if (this.connectionData) _flags |= 1;
   if (this.floats.size) _flags |= 2;
   if (this.vec3.size) _flags |= 4;
   if (this.quats.size) _flags |= 8;
@@ -71,6 +71,10 @@ function writeZdo_post30(this: ZDO, writer: PackageWriter) {
   writer.writeVector3(this.position);
   writer.writeInt(this.prefab);
   if (!isIdentityRotation) writer.writeVector3(this.rotation);
+  /* if (this.connectionData) {
+    writer.writeByte(this.connectionData.type);
+    writer.writeInt(this.connectionData.hash);
+  } */
   if (this.floats.size) writePropMap(writer, writer.writeFloat, this.floats, this.version);
   if (this.vec3.size) writePropMap(writer, writer.writeVector3, this.vec3, this.version);
   if (this.quats.size) writePropMap(writer, writer.writeQuaternion, this.quats, this.version);

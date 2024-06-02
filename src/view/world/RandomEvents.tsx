@@ -12,11 +12,19 @@ function showTime(time: number) {
 
 export function RandomEvents({ value }: { value: RandEventData }) {
   const translate = useContext(TranslationContext);
+  if (value.eventTimer < 0) {
+    return <div className="WorldEdit__Events">
+      <h2>Raids</h2>
+      <p>
+        Seems like events never happen at this world. Probably due to world modifiers.
+      </p>
+    </div>
+  }
   if (!value.name) {
     return <div className="WorldEdit__Events">
       <h2>Raids</h2>
       <dl>
-        <dt>timer</dt><dd>{FIGURE_SPACE}{showTime(value.eventTimer)} till next event</dd>
+        <dt>timer</dt><dd>{showTime(value.eventTimer)} till next event</dd>
       </dl>
     </div>
   };
