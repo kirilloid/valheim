@@ -1,11 +1,11 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 
-import type { Weapon } from '../../types';
+import type { Shield, Weapon } from '../../types';
 
 import { getBlockingSkillFactor, getBowDrawTime, getResourceUsageSkillFactor, getWeaponSkillFactor } from '../../model/combat';
 import { skillTiers, SkillType } from '../../model/skills';
-import { assertNever, clamp, lerp } from '../../model/utils';
+import { assertNever, clamp, groupBy, lerp } from '../../model/utils';
 import { DODGE_STAMINA } from '../../model/game';
 import { items } from '../../data/weapons';
 import { SkillCodeMap } from '../player/Skills/smoothbrain';
@@ -13,7 +13,8 @@ import { SkillCodeMap } from '../player/Skills/smoothbrain';
 import { skills as pageName } from '../../state';
 import { TranslationContext, useGlobalState } from '../../effects';
 import { EffectIcon, SkillIcon } from '../parts/Icon';
-import { InlineObjectWithIcon, rangeBy, showNumber, showPercent, yesNo } from '../helpers';
+import { InlineObjectWithIcon, List, rangeBy, showNumber, showPercent, yesNo } from '../helpers';
+import { isNotDerviedWeapon } from '../../model/derived';
 
 const SkillRevMap = new Map([...SkillCodeMap.entries()].map(([key, val]) => [val, key]));
 
@@ -48,6 +49,8 @@ function VanillaSkillLevelUp({ skill }: { skill: SkillType }) {
       </>
     case SkillType.Axes:
       return <>
+        <dt>+1.5 xp</dt>
+        <dd>hitting enemy</dd>
       </>
     case SkillType.Pickaxes:
       return <>
@@ -484,6 +487,17 @@ function parseLevel(level?: string): number {
   return clamp(~~Number(level) || 0, 0, 100);
 }
 
+const itemsWithSkill = items.filter(
+  w => !w.disabled
+    && ((w.type === 'weapon' && isNotDerviedWeapon(w)) || w.type === 'shield')
+) as (Weapon | Shield)[];
+
+const skillItems = groupBy(
+  itemsWithSkill,
+  item => String(item.skill),
+);
+skillItems[SkillType.WoodCutting] = skillItems[SkillType.Axes] ?? [];
+
 export function Skills() {
   const [modded] = useGlobalState('searchInMods');
   const [spoiler] = useGlobalState('spoiler');
@@ -502,11 +516,24 @@ export function Skills() {
   }
 
   const xpToNextLevel = xpTable[level];
-  const skillOptions = skillNames
+  const skillOptions = useMemo(() => skillNames
     .filter(skill => skillTiers[SkillType[skill]] <= spoiler)
-    .map(skill => <option value={SkillType[skill]} key={skill}>{translate(`ui.skillType.${skill}`)}</option>);
-  const moddedSkillOptions = [...SkillCodeMap.entries()]
-    .map(([id, name]) => <option value={id} key={name}>{translate(`ui.skillType.${name}`)}</option>);
+    .map(skill => <option value={SkillType[skill]} key={skill}>
+      {translate(`ui.skillType.${skill}`)}
+    </option>),
+    [translate, spoiler],
+  );
+
+  const moddedSkillOptions = useMemo(
+    () => [...SkillCodeMap.entries()].map(([id, name]) => <option value={id} key={name}>
+      {translate(`ui.skillType.${name}`)}
+    </option>),
+    [translate],
+  );
+
+  const items = useMemo(() => {
+    return groupBy(skillItems[skill] ?? [], i => i.tier);
+  }, [skill]);
 
   return (<>
     <h2>{translate('ui.page.skills')}</h2>
@@ -517,11 +544,11 @@ export function Skills() {
         {' '}
         <select value={skill} onChange={e => setSkill(Number(e.target.value))}>
           {modded
-            ? <>
+          ? <>
               <optgroup label="Vanilla">{skillOptions}</optgroup>
               <optgroup label="Modded">{moddedSkillOptions}</optgroup>
             </>
-            : skillOptions}
+          : skillOptions}
         </select>
       </dd>
       <dt>{translate('ui.level')}</dt>
@@ -552,5 +579,15 @@ export function Skills() {
         ? <VanillaSkillEffect skill={skill} level={level} />
         : <ModdedSkillEffect skill={skill} level={level} />}
     </dl>
+    {Object.keys(items).length > 0 && <React.Fragment key="weapons">
+      <h2>Weapons</h2>
+      <ul>
+        {Object.entries(items).map(([lvl, items]) => items && <li key={lvl}>
+          <List>
+            {items.map(item => <InlineObjectWithIcon id={item.id} />)}
+          </List>
+        </li>)}
+      </ul>
+    </React.Fragment>}
   </>);
 }
