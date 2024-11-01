@@ -49,5 +49,10 @@ if (mistile != null) {
   groupedCreatures.Mistlands.push(mistile);
 }
 
+const lordReto = creatures.find(c => c.id === 'Charred_Melee_Dyrnwyn');
+if (lordReto != null) {
+  groupedCreatures.Ashlands.push(lordReto);
+}
+
 export const defaultCreature = creatures.find(c => c.id === 'Greyling')!;
 export const creatureBiome = (creature: Creature) => creature.spawners[0]?.biomes[0] ?? locationToBiome(objectLocationMap[creature.id]?.[0]!);

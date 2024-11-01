@@ -14,6 +14,16 @@ const trollSet: ItemSet = {
   ],
 };
 
+const harvesterSet: ItemSet = {
+  name: 'harvester',
+  items: [],
+  bonus: [
+    undefined,
+    undefined,
+    effectsById.SetEffect_HarvesterArmor,
+  ],
+};
+
 const rootSet: ItemSet = {
   name: 'root',
   items: [],
@@ -151,6 +161,41 @@ export const items: Item[] = [
       moveSpeed: 0,
     }
   )),
+  {
+    id: 'ArmorHarvester1', // itemType: 7
+    tier: 3,
+    type: 'armor', slot: 'body',
+    set: harvesterSet,
+    armor: [1, 1],
+    weight: 10,
+    maxLvl: 4,
+    durability: [1000, 200],
+    staminaModifiers: { home: -0.2 },
+    moveSpeed: 0,
+  },
+  {
+    id: 'ArmorHarvester2', // itemType: 7
+    tier: 3,
+    type: 'armor', slot: 'body',
+    set: harvesterSet,
+    armor: [1, 1],
+    weight: 10,
+    maxLvl: 4,
+    durability: [1000, 200],
+    staminaModifiers: { home: -0.2 },
+    moveSpeed: 0,
+  },
+  {
+    id: 'HelmetStrawHat', // itemType: 6
+    tier: 3,
+    type: 'armor', slot: 'head',
+    set: harvesterSet,
+    armor: [1, 2],
+    weight: 3,
+    maxLvl: 4,
+    durability: [800, 100],
+    moveSpeed: 0,
+  },
   // troll
   { id: 'ArmorTrollLeatherLegs',
     tier: 1,
@@ -507,7 +552,7 @@ export const items: Item[] = [
     damageModifiers: { frost: 'resistant' },
     durability: [1200, 50],
     moveSpeed: 0,
-    effect: effects.find(e => e.id === 'SlowFall'),
+    effect: effectsById.SlowFall,
   },
   // ASH AGE
   {
@@ -625,7 +670,7 @@ export const items: Item[] = [
     durability: [1500, 50],
     moveSpeed: 0,
     staminaModifiers: { dodge: -0.15 },
-    effect: effects.find(e => e.id === 'WindRun'),
+    effect: effectsById.WindRun,
   },
   {
     id: 'CapeAsh',
@@ -670,7 +715,7 @@ export const items: Item[] = [
     maxLvl: 4,
     durability: [1000, 200],
     moveSpeed: 0,
-    effect: effects.find(e => e.id === 'SetEffect_FishingHat'),
+    effect: effectsById.SetEffect_FishingHat,
   },
   {
     id: 'HelmetDverger',

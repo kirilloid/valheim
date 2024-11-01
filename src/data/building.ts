@@ -25,6 +25,7 @@ import {
   ashwoodResist,
 } from '../model/building';
 import { dmg, mods } from '../model/game';
+import { SkillType } from '../model/skills';
 
 const damageModifiersElementalPart = {
   fire: 'immune',
@@ -561,6 +562,7 @@ export const pieces: Piece[] = [
     tier: 1,
     emoji: '🍳',
     craft: {
+      skill: SkillType.Cooking,
       requiresFire,
       batchSize: 2,
     },
@@ -612,6 +614,7 @@ export const pieces: Piece[] = [
     emoji: '🍳',
     piece: { target: 'primary', water: false, size: [1, 1.4, 1] },
     craft: {
+      skill: SkillType.Cooking,
       requiresFire,
     },
     wear: {
@@ -730,6 +733,42 @@ export const pieces: Piece[] = [
     recipe: { type: 'craft_piece', materials: { Blackwood: 8, FineWood: 6, FlametalNew: 4 }, station: 'piece_workbench', }
   },
   {
+    id: 'piece_preptable',
+    base: false,
+    type: 'piece',
+    subtype: 'craft',
+    craft: { skill: SkillType.Cooking, requiresRoof },
+    components: ['CraftingStation'],
+    tier: 3,
+    emoji: '',
+    piece: { target: 'primary', water: false, size: [0.7, 1.2, 2.5] },
+    wear: {
+      hp: 100,
+      damageModifiers: cookingResist,
+      noRoof: true,
+      noSupport: true,
+    },
+    recipe: { type: 'craft_piece', materials: { Iron: 5, FineWood: 20, LeatherScraps: 15 }, station: 'piece_workbench', }
+  },
+  {
+    id: 'piece_MeadCauldron',
+    base: false,
+    type: 'piece',
+    subtype: 'craft',
+    craft: { skill: SkillType.Cooking, requiresFire },
+    components: ['CraftingStation'],
+    tier: 2,
+    emoji: '',
+    piece: { target: 'primary', water: false, size: [0.8, 1.1, 1.3] },
+    wear: {
+      hp: 100,
+      damageModifiers: cookingResist,
+      noRoof: true,
+      noSupport: true,
+    },
+    recipe: { type: 'craft_piece', materials: { Tin: 4, Copper: 6, LeatherScraps: 2 }, station: 'forge', }
+  },
+  {
     id: 'piece_oven',
     base: false,
     type: 'piece',
@@ -761,6 +800,7 @@ export const pieces: Piece[] = [
     emoji: '🧰',
     piece: { target: 'primary', water: false, size: [3, 1.8, 1.3] },
     craft: {
+      skill: SkillType.Crafting,
       requiresRoof,
     },
     wear: {
@@ -871,6 +911,7 @@ export const pieces: Piece[] = [
     emoji: '⚒️',
     piece: { target: 'primary', water: false, onlyOnFlat, size: [3.3, 2.1, 1.6] },
     craft: {
+      skill: SkillType.Crafting,
       buildRange: 20,
       requiresRoof,
     },
@@ -894,6 +935,7 @@ export const pieces: Piece[] = [
     emoji: '🔬',
     piece: { target: 'primary', water: false, onlyOnFlat, size: [2.8, 2.6, 1.9] },
     craft: {
+      skill: SkillType.Crafting,
       buildRange: 40,
       requiresRoof,
     },
@@ -938,7 +980,11 @@ export const pieces: Piece[] = [
     tier: 2,
     emoji: '🛠️',
     piece: { target: 'primary', water: false, onlyOnFlat, size: [1.8, 0.9, 1] },
-    craft: { buildRange: 20, requiresRoof },
+    craft: {
+      skill: SkillType.Crafting,
+      buildRange: 20,
+      requiresRoof,
+    },
     wear: {
       hp: 200,
       damageModifiers: mods([0, 0, 1, 2, 0, 0, 0, 0, 3, 3]),
@@ -1137,7 +1183,7 @@ export const pieces: Piece[] = [
     tier: 6,
     emoji: '🛠️',
     piece: { target: 'primary', water: false, onlyOnFlat, size: [3.8, 1.1, 1.9] },
-    craft: { requiresRoof },
+    craft: { skill: SkillType.Crafting, requiresRoof },
     wear: {
       hp: 200,
       damageModifiers: mods([0, 0, 1, 2, 0, 0, 0, 0, 3, 3]),
@@ -2185,6 +2231,20 @@ export const pieces: Piece[] = [
     recipe: woodStructureRecipe(10),
   },
   {
+    id: 'piece_chest_barrel',
+    group: 'chest',
+    base: false,
+    type: 'piece',
+    components: ['Container'],
+    subtype: 'chest',
+    tier: 3,
+    emoji: '🛢',
+    space: [6, 2],
+    piece: { target: 'primary', water: false, onlyOnFlat, size: [0.7, 0.9, 0.7] },
+    wear: wearStructure(200, chestResist, undefined, { noRoof: false }),
+    recipe: { type: 'craft_piece', materials: { Wood: 10, BarrelRings: 1 }, station: 'piece_workbench' },
+  },
+  {
     id: 'piece_chest',
     group: 'chest', 
     base: false,
@@ -3025,7 +3085,7 @@ export const pieces: Piece[] = [
     components: ['SapCollector'],
     subtype: 'craft',
     tier: 6,
-    craft: { },
+    craft: {},
     blockingPieces: { pieces: ['piece_sapcollector'], radius: 2 },
     SapCollector: {
       from: 'YggdrasilRoot',
@@ -3460,6 +3520,7 @@ export const pieces: Piece[] = [
     emoji: '🧙‍♂️',
     piece: { target: 'primary', water: false, onlyOnFlat, size: [3.4, 2.7, 3.4] },
     craft: {
+      skill: SkillType.Crafting,
       requiresRoof,
     },
     wear: {
@@ -3496,7 +3557,7 @@ export const pieces: Piece[] = [
       damageModifiers: damageModifieresExtensions,
       noRoof: true,
       noSupport: true,
-      materialType: MaterialType.Wood,
+      materialType: undefined,
     },
     recipe: { type: 'craft_piece', materials: { BlackMarble: 10, TrophySkeleton: 3, Eitr: 10, Resin: 15 }, station: 'piece_workbench' }
   },
@@ -3524,9 +3585,36 @@ export const pieces: Piece[] = [
       damageModifiers: damageModifieresExtensions,
       noRoof: true,
       noSupport: true,
-      materialType: MaterialType.Wood,
+      materialType: undefined,
     },
     recipe: { type: 'craft_piece', materials: { BlackMarble: 10, YggdrasilWood: 5, Eitr: 10, Resin: 15 }, station: 'piece_workbench' }
+  },
+  {
+    id: 'piece_magetable_ext3',
+    base: false,
+    type: 'piece',
+    components: ['CraftingStationExtension'],
+    subtype: 'craft_ext',
+    tier: 7,
+    emoji: '🧰',
+    piece: {
+      target: 'primary',
+      water: false,
+      requiredSpace: 2,
+      size: [0.6, 1.1, 0.6],
+    },
+    extends: {
+      id: 'piece_magetable',
+      distance: 5,
+    },
+    wear: {
+      hp: 100,
+      damageModifiers: damageModifieresExtensions,
+      noRoof: true,
+      noSupport: true,
+      materialType: undefined,
+    },
+    recipe: { type: 'craft_piece', materials: { CelestialFeather: 8, TrophyAsksvin: 1, Eitr: 10, Blackwood: 3 }, station: 'piece_workbench' }
   },
   {
     id: 'piece_wisplure',
@@ -3625,6 +3713,28 @@ export const pieces: Piece[] = [
     piece: { target: 'random', water: false, onlyOnFlat, size: [0.4, 3.5, 1] },
     wear: wearStructure(300, mods([0, 0, 1, 2, 0, 1, 1, 1, 3, 3]), MaterialType.Iron, { noRoof: false }),
     recipe: { type: 'craft_piece', materials: { Copper: 2, Lantern: 1, Chain: 1 }, station: 'blackforge' },
+  },
+  {
+    id: 'Candle_resin',
+    base: false,
+    type: 'piece',
+    subtype: 'fireplace',
+    group: 'torch',
+    tier: 3,
+    fireplace: {
+      fuel: 'Resin',
+      capacity: 3,
+      burnTime: 5000,
+      minHeightAbove: 0.76,
+      warmRadius: 0,
+      lightRadius: 3,
+      smoke: false,
+      fireworks: true,
+      ignite: { interval: 25, chance: 0.0025, spread: 1, capsuleRadius: 0.1 },
+    },
+    piece: { target: 'random', water: undefined, onlyOnFlat, size: [0.15, 0.15, 0.3] },
+    wear: wearStructure(5, mods([2, 2, 2, 2, 2, 1, 3, 3, 3, 3]), undefined, { noRoof: false }),
+    recipe: { type: 'craft_piece', materials: { Resin: 1, CandleWick: 1 }, station: 'piece_workbench' },
   },
   {
     id: 'piece_Lavalantern',

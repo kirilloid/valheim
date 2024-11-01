@@ -13,14 +13,15 @@ import { Wiki } from '../parts/Wiki';
 const baseKeys = [
   ['defeated_eikthyr', 'Eikthyr'],
   ['KilledTroll', 'Troll'],
-  ['BossHildir1', 'Skeleton_Hildir'],
+  ['Hildir1', 'Skeleton_Hildir'],
   ['defeated_gdking', 'gd_king'],
   ['killed_surtling', 'Surtling'],
+  ['kvasturdead', 'BogWitchKvastur'],
   ['defeated_bonemass', 'Bonemass'],
   ['KilledBat', 'Bat'],
-  ['BossHildir2', 'Fenring_Cultist_Hildir'],
+  ['Hildir2', 'Fenring_Cultist_Hildir'],
   ['defeated_dragon', 'Dragon'],
-  ['BossHildir3', 'GoblinBruteBros'],
+  ['Hildir3', 'GoblinBruteBros'],
   ['defeated_goblinking', 'GoblinKing'],
   ['defeated_queen', 'SeekerQueen'],
 ] as const;

@@ -21,3 +21,4 @@ export { default as PlaceofMystery3 } from './PlaceofMystery3';
 export { default as Runestone_Ashlands } from './Runestone_Ashlands';
 export { default as SulfurArch } from './SulfurArch';
 export { default as VoltureNest } from './VoltureNest';
+export { default as BogWitch_Camp } from './BogWitch_Camp';

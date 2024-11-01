@@ -62,7 +62,7 @@ const infos: Record<string, Article> = {
     sections: [
       {
         header: 'traders',
-        text: `There are two traders in Valheim: [/obj/Haldor](Haldor) and [/obj/Hildir](Hildir)`,
+        text: `There are three traders in Valheim: [/obj/Haldor](Haldor), [/obj/Hildir](Hildir) and [/obj/BogWitch](Bog Witch)`,
       },
     ],
   }

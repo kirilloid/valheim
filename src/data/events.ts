@@ -192,6 +192,32 @@ export const events: GameEvent[] = [
     base: true,
   },
   {
+    id: 'ghosts',
+    tier: 3,
+    icon: 'Wraith',
+    biomes: ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains'],
+    killed: ['Bonemass'],
+    notKilled: ['Dragon'],
+    altItems: ['TrophyBonemass', 'Wishbone'],
+    altItemsNot: ['TrophyDragonQueen', 'DragonTear'],
+    altPlayerKeys: ['GP_Bonemass'],
+    altPlayerKeysNot: ['GP_Moder'],
+    duration: 150,
+    spawns: [
+      {
+        id: 'Ghost',
+        max: 3,
+        interval: 10,
+      },
+      {
+        id: 'Wraith',
+        max: 2,
+        interval: 10,
+      },
+    ],
+    base: true,
+  },
+  {
     id: 'wolves',
     tier: 4,
     icon: 'Wolf',

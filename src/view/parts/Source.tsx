@@ -15,6 +15,9 @@ import { Area, InlineObject, InlineObjectWithIcon, List, rangeBy } from '../help
 import { Icon, ItemIcon } from './Icon';
 import { fishes } from '../../data/fish';
 import { pieces } from '../../data/building';
+import { traders } from '../../data/objects';
+
+const tradersByid = Object.fromEntries(traders.map(t => [t.trader, t]));
 
 export const SOURCE_CRAFT = 1;
 export const SOURCE_DROP = 2;
@@ -180,10 +183,13 @@ export function Recipe({ item }: { item: GameObject }) {
   switch (recipe.type) {
     case 'haldor':
     case 'hildir':
+    case 'bogWitch': {
+      const trader = tradersByid[recipe.type];
       return <>
-        Bought from <Link to="/info/trader">{recipe.type}</Link> for {recipe.value} <Icon id="coin" alt={translate('Coins')} size={16} />
+        Bought from <Link to={`/obj/${trader.id}`}>{translate(trader.id)}</Link> for {recipe.value} <Icon id="coin" alt={translate('Coins')} size={16} />
         {recipe.killed && <><br />Available only after killing <InlineObjectWithIcon id={recipe.killed} /></>}
       </>;
+    }
     case 'craft':
       const maxLvl = (item as Item).maxLvl;
       if (maxLvl == null || maxLvl <= 1) {

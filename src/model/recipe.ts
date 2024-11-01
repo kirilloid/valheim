@@ -38,13 +38,21 @@ export const cauldronRecipe = (
   onlyOneIngredient = false,
 ) => genericRecipe('piece_cauldron', level, CAULDRON_TIME, materials, {}, item, number, onlyOneIngredient);
 
+export const prepTableRecipe = (
+  level: number,
+  materials: Record<EntityId, number>,
+  item: EntityId,
+  number = 1,
+  onlyOneIngredient = false,
+) => genericRecipe('piece_preptable', level, CAULDRON_TIME, materials, {}, item, number, onlyOneIngredient);
+
 export const potionRecipe = (
   cauldronLevel: number,
   materials: Record<EntityId, number>,
   meadBase: EntityId,
   mead: EntityId,
 ) => [
-  genericRecipe('piece_cauldron', cauldronLevel, CAULDRON_TIME, materials, {}, meadBase, 1),
+  genericRecipe('piece_MeadCauldron', cauldronLevel, CAULDRON_TIME, materials, {}, meadBase, 1),
   genericRecipe('fermenter', 1, FERMENT_TIME, { [meadBase]: 1 }, {}, mead, 6),
 ];
 
@@ -87,7 +95,7 @@ export const smelterRecipe = (
 ) => genericRecipe(smelter, 1, SMELTER_TIME, { [ore]: 1, Coal: 2 }, {}, metal, 1);
 
 const traderRecipe = (
-  type: 'haldor' | 'hildir',
+  type: 'haldor' | 'hildir' | 'bogWitch',
 ) => (
   value: number,
   item: EntityId,
@@ -102,4 +110,5 @@ const traderRecipe = (
 
 export const haldorRecipe = traderRecipe('haldor');
 export const hildirRecipe = traderRecipe('hildir');
+export const bogWitchRecipe = traderRecipe('bogWitch');
 

@@ -10,7 +10,7 @@ import { allItems, blockers } from '../../state/def-calc/items';
 import { isNotNull } from '../../model/utils';
 import { MAX_PLAYERS, WORLD_CONFIG } from '../../model/game';
 
-import { maxLvl } from '../../data/creatures';
+import { maxLvl, minLvl } from '../../data/creatures';
 import { groupedCreatures } from '../../data/combat_creatures';
 
 import { TranslationContext } from '../../effects/translation.effect';
@@ -83,10 +83,10 @@ function Creature({ creature, biome, onChange }: { creature: T.Creature; biome: 
   </div>
 }
 
-function CreatureStars({ stars, max, onChange }: { stars: number; max: number; onChange: OnChangeI }) {
+function CreatureStars({ stars, max, min = 1, onChange }: { stars: number; max: number; min?: number; onChange: OnChangeI }) {
   return <div className="row" key="stars">
     {Array.from({ length: max }).map((_, s) => {
-      return <React.Fragment key={s}>
+      return s + 1 >= min && <React.Fragment key={s}>
         <input id={`star-${s}`}
           type="radio" name="stars" value={s}
           checked={stars === s} onChange={onChange} />
@@ -227,9 +227,9 @@ function Skill({ shield, onChange }: { shield: BlockerConfig | undefined; onChan
 }
 
 function Armor({ armor, onChange }: { armor: number; onChange: OnChangeI; }) {
-  const [spoiler] = useGlobalState('spoiler');
+  // const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
-  const spoilerArmor = [2, 21, 46, 64, 82, 100, 118];
+  // const spoilerArmor = [2, 21, 46, 64, 82, 100, 118, 138];
   return <div className="row weapon">
     <div className="weapon__label">
       <label htmlFor="armor">{translate('ui.armor')}</label>
@@ -247,15 +247,17 @@ function Armor({ armor, onChange }: { armor: number; onChange: OnChangeI; }) {
         <option value="64" label="Iron" />
         <option value="82" label="Silver" />
         <option value="100" label="Padded" />
+        <option value="118" label="Carapace" />
+        <option value="138" label="Flametal" />
       </datalist>
       <input type="range" id="skill"
         className="range BigInput" list="armor"
-        min="0" max={spoilerArmor[spoiler] ?? 100} value={armor}
+        min="0" max="150" value={armor}
         onChange={onChange} />
     </div>
     <div className="weapon__input-secondary">
       <input type="number" inputMode="numeric" pattern="[0-9]*"
-        min="0" max={spoilerArmor[spoiler] ?? 100} value={armor}
+        min="0" max="150" value={armor}
         onChange={onChange}
         style={{ width: '3em' }} />
     </div>
@@ -339,7 +341,10 @@ export function DefenseCalc() {
   const onItemChange = (resType: string) => (e: React.ChangeEvent<HTMLInputElement>) => dispatch(changeResType(resType, e.target.checked));
   const scale = {
     players: state.players,
-    stars: Math.min(stars, maxLvl(creature) - 1),
+    stars: Math.max(
+      Math.min(stars, maxLvl(creature) - 1),
+      minLvl(creature) - 1
+    ),
   };
   const bonus = dmgBonus(scale);
 
@@ -369,7 +374,7 @@ export function DefenseCalc() {
       <section className="CombatCalc__Creature">
         <h2>{translate('ui.creature')}</h2>
         <Creature creature={creature} biome={biome} onChange={onCreatureChange} />
-        {maxLvl(creature) > 1 && <CreatureStars max={maxLvl(creature)} stars={stars} onChange={onStarsChange} />}
+        {maxLvl(creature) > 1 && <CreatureStars max={maxLvl(creature)} min={minLvl(creature)} stars={stars} onChange={onStarsChange} />}
         {creature.attacks.length > 1 && <CreatureAttackVar creature={creature} variety={variety} onChange={onVarietyChange} />}
       </section>
       <section className="CombatCalc__Player">

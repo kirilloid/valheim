@@ -9,7 +9,7 @@ export enum SkillType {
   Bows,
   ElementalMagic,
   BloodMagic,
-  Unarmed = 11,
+  Unarmed,
   Pickaxes,
   WoodCutting,
   Crossbows,
@@ -18,31 +18,38 @@ export enum SkillType {
   Run,
   Swim,
   Fishing,
+  Cooking,
+  Farming,
+  Crafting,
   Ride = 110,
   All = 999,
 }
 
 export const skillTiers: Record<SkillType, number> = {
-  [SkillType.Swords]: 2,
-  [SkillType.Knives]: 0,
-  [SkillType.Clubs]: 0,
-  [SkillType.Polearms]: 2,
-  [SkillType.Spears]: 1,
-  [SkillType.Blocking]: 0,
-  [SkillType.Axes]: 0,
-  [SkillType.Bows]: 1,
-  [SkillType.ElementalMagic]: 6,
-  [SkillType.BloodMagic]: 6,
-  [SkillType.Unarmed]: 0,
-  [SkillType.Pickaxes]: 2,
-  [SkillType.WoodCutting]: 0,
-  [SkillType.Crossbows]: 6,
-  [SkillType.Jump]: 0,
-  [SkillType.Sneak]: 0,
-  [SkillType.Run]: 0,
-  [SkillType.Swim]: 0,
-  [SkillType.Fishing]: 2,
-  [SkillType.Ride]: 5,
+  // m_increseStep from Player.prefab
+  [SkillType.Swords]: 2, // 1
+  [SkillType.Knives]: 0, // 1
+  [SkillType.Clubs]: 0, // 1
+  [SkillType.Polearms]: 2, // 1
+  [SkillType.Spears]: 1, // 1.5
+  [SkillType.Blocking]: 0, // 0.5
+  [SkillType.Axes]: 0, // 1
+  [SkillType.Bows]: 1, // 1.5
+  [SkillType.ElementalMagic]: 6, // 1
+  [SkillType.BloodMagic]: 6, // 1
+  [SkillType.Unarmed]: 0, // 1
+  [SkillType.Pickaxes]: 2, // 1
+  [SkillType.WoodCutting]: 0, // 1
+  [SkillType.Crossbows]: 6, // 1
+  [SkillType.Jump]: 0, // 0.5
+  [SkillType.Sneak]: 0, // 0.5
+  [SkillType.Run]: 0, // 0.2
+  [SkillType.Swim]: 0, // 0.3
+  [SkillType.Fishing]: 2, // 0.25
+  [SkillType.Cooking]: 0, // 0.25
+  [SkillType.Farming]: 2, // 0.25
+  [SkillType.Crafting]: 0, // 0.25
+  [SkillType.Ride]: 5, // 0.2
   [SkillType.All]: 1000,
 }
 

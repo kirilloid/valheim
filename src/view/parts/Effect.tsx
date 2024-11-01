@@ -7,8 +7,10 @@ import { assertNever, timeI2S } from '../../model/utils';
 import { getTotalDamage } from '../../model/combat';
 
 import { TranslationContext } from '../../effects';
-import { rangeBy, Resistances, showNumber } from '../helpers';
+import { InlineObjectWithIcon, rangeBy, Resistances, showNumber, showPercent } from '../helpers';
 import { SkillIcon } from './Icon';
+import { creatures } from '../../data/creatures';
+import { spawnChance } from '../../model/game';
 
 function showDiffPercent(value: number): string {
   const plusSign = value < 0 ? '' : '+';
@@ -23,9 +25,77 @@ function Special({ type }: { type: TEffect['special'] }) {
       return <><dt>Special</dt><dd>Always tailwind</dd></>;
     case 'Demister':
       return <><dt>Special</dt><dd>Disperse mist around you</dd></>;
+    case 'TameBoost':
+      return <><dt>Special</dt><dd>Doubles the speed of taming</dd></>;
     default:
       return assertNever(type);
   }
+}
+
+function Pheromones({
+  target,
+  levelUpMultiplier = 1,
+  maxInstanceOverride,
+  spawnChanceOverride,
+  spawnMinLevel = 1,
+  flee,
+}: Exclude<TEffect['pheromones'], undefined>) {
+  // const translate = useContext(TranslationContext);
+
+  if (flee) {
+    return <>
+      <dt>repels</dt>
+      <dd><InlineObjectWithIcon id={target} /></dd>
+    </>;
+  }
+  const spawners = creatures.find(c => c.id === target)?.spawners;
+  if (!spawners) return null;
+
+  const minLvl = Math.min(...spawners.map(s => s.levels[0])) || 1;
+  const maxLvl = Math.max(...spawners.map(s => s.levels[1])) || 3;
+  const range = Array.from({ length: maxLvl - minLvl + 1 }, (_, i) => minLvl + i);
+
+  return <>
+    <dt>affects spawn of</dt>
+    <dd><InlineObjectWithIcon id={target} /></dd>
+    {(levelUpMultiplier != 1 || spawnMinLevel != 1) && <React.Fragment key="levelUp">
+      <dt>spawn levels</dt>
+      <dd>
+        <table>
+          <thead>
+            <tr>
+              <td></td>
+              <td>max</td>
+              <td>chance</td>
+              {range.map(lvl => <td key={lvl}>{lvl - 1}⭐</td>)}
+              </tr>
+            </thead>
+          <tbody>
+            {spawners.map((spawner, i) => {
+              return <React.Fragment key={i}>
+                <tr>
+                  <td>#{i + 1} original</td>
+                  <td>{spawner.maxSpawned}</td>
+                  <td>{showPercent(spawner.chance)}</td>
+                  {range.map((lvl, j) => <td key={j}>
+                    {showPercent(spawnChance(spawner.levels, 0.1, lvl))}
+                  </td>)}
+                </tr>
+                <tr>
+                  <td>#{i + 1} modified</td>
+                  <td>{maxInstanceOverride}</td>
+                  <td>{spawnChanceOverride && showPercent(spawnChanceOverride)}</td>
+                  {range.map((lvl, j) => <td key={j}>
+                    {showPercent(spawnChance([Math.max(spawner.levels[0], spawnMinLevel), spawner.levels[1]], 0.1 * levelUpMultiplier, lvl))}
+                  </td>)}
+                </tr>
+              </React.Fragment>;
+            })}
+          </tbody>
+        </table>
+      </dd>
+    </React.Fragment>}
+  </>;
 }
 
 export function Effect({ effect, level }: { effect: TEffect; level?: number }) {
@@ -45,23 +115,30 @@ export function Effect({ effect, level }: { effect: TEffect; level?: number }) {
     carryWeight,
     runStamina,
     jumpStamina,
+    jumpModifier,
+    attackStamina,
+    blockStamina,
+    dodgeStamina,
+    swimStamina,
     fallDamage,
     healthRegen,
     staminaRegen,
     eitrRegen,
     xpModifier,
     moveSpeed,
+    pheromones,
     Aoe,
   } = effect;
 
   return <>
     <Special type={special} />
+    {pheromones != null && <Pheromones {...pheromones} />}
     {time != null ? <React.Fragment key="duration">
       <dt>{translate('ui.duration')}</dt>
       <dd>{timeI2S(time)}</dd>
     </React.Fragment> : null}
     {cooldown != null ? <React.Fragment key="cooldown">
-      <dt>{translate('ui.cooldown')}</dt>
+      <dt>cooldown</dt>
       <dd>{timeI2S(cooldown)}</dd>
     </React.Fragment> : null}
     {healthOverTime != null ? <React.Fragment key="healthOverTime">
@@ -107,9 +184,29 @@ export function Effect({ effect, level }: { effect: TEffect; level?: number }) {
       <dt>run stamina drain</dt>
       <dd>{showDiffPercent(runStamina)}</dd>
     </React.Fragment>}
+    {swimStamina != null && <React.Fragment key="swimStamina">
+      <dt>swim stamina drain</dt>
+      <dd>{showDiffPercent(swimStamina)}</dd>
+    </React.Fragment>}
+    {attackStamina != null && <React.Fragment key="attackStamina">
+      <dt>attack stamina drain</dt>
+      <dd>{showDiffPercent(attackStamina)}</dd>
+    </React.Fragment>}
+    {blockStamina != null && <React.Fragment key="blockStamina">
+      <dt>block stamina drain</dt>
+      <dd>{showDiffPercent(blockStamina)}</dd>
+    </React.Fragment>}
+    {dodgeStamina != null && <React.Fragment key="dodgeStamina">
+      <dt>dodge stamina drain</dt>
+      <dd>{showDiffPercent(dodgeStamina)}</dd>
+    </React.Fragment>}
     {jumpStamina != null && <React.Fragment key="jumpStamina">
       <dt>jump stamina drain</dt>
       <dd>{showDiffPercent(jumpStamina)}</dd>
+    </React.Fragment>}
+    {jumpModifier != null && <React.Fragment key="jumpModifier">
+      <dt>extra jump boost</dt>
+      <dd>+{jumpModifier} m/s (basic is 8–11.4 m/s)</dd>
     </React.Fragment>}
     {fallDamage != null && <React.Fragment key="fallDamage">
       <dt>fall damage</dt>

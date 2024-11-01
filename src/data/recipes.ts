@@ -11,6 +11,8 @@ import {
   haldorRecipe,
   hildirRecipe,
   workbenchRecipe,
+  bogWitchRecipe,
+  prepTableRecipe,
 } from '../model/recipe';
 import { GAME_DAY } from '../model/game';
 import { fishes } from './fish';
@@ -28,6 +30,7 @@ export const recipes: ItemRecipe[] = [
   workbenchRecipe(0, { Wood: 1, Resin: 1 }, {}, 'Torch'),
   // WORKBENCH
   workbenchRecipe(1, { Wood: 5, Stone: 2 }, { Wood: 1, Stone: 1 }, 'Hoe'),
+  workbenchRecipe(1, { DeerHide: 6 }, { DeerHide: 6 }, '-'),
   workbenchRecipe(1, { Wood: 4, Flint: 6 }, { Flint: 3, LeatherScraps: 2 }, 'AxeFlint'),
   workbenchRecipe(1, { Wood: 2, Flint: 4, LeatherScraps: 2 }, { Flint: 2 }, 'KnifeFlint'),
   workbenchRecipe(1, { Wood: 10, LeatherScraps: 8 }, { Wood: 5, LeatherScraps: 4, DeerHide: 1 }, 'Bow'),
@@ -141,22 +144,22 @@ export const recipes: ItemRecipe[] = [
   cauldronRecipe(4, { Bloodbag: 2, BarleyFlour: 4, Thistle: 2 }, 'BloodPudding'),
   cauldronRecipe(4, { BarleyFlour: 10 }, 'BreadDough', 2),
   cauldronRecipe(4, { FishCooked: 2, BarleyFlour: 4 }, 'FishWraps'),
-  cauldronRecipe(4, { Cloudberry: 2, LoxMeat: 2, BarleyFlour: 4 }, 'LoxPieUncooked'),
+  prepTableRecipe(1, { Cloudberry: 2, LoxMeat: 2, BarleyFlour: 4 }, 'LoxPieUncooked'),
   // LEVEL 5
   cauldronRecipe(5, { Sap: 4, Barley: 3, RoyalJelly: 2 }, 'YggdrasilPorridge'),
   cauldronRecipe(5, { BugMeat: 2, MushroomMagecap: 2, RoyalJelly: 2 }, 'SeekerAspic', 2),
-  cauldronRecipe(5, { ChickenMeat: 1, Honey: 3, MushroomJotunPuffs: 2 }, 'HoneyGlazedChickenUncooked'),
+  prepTableRecipe(1, { ChickenMeat: 1, Honey: 3, MushroomJotunPuffs: 2 }, 'HoneyGlazedChickenUncooked'),
   cauldronRecipe(5, { ChickenEgg: 3, MushroomJotunPuffs: 3 }, 'MushroomOmelette'),
-  cauldronRecipe(5, { MushroomMagecap: 3, GiantBloodSack: 1, Turnip: 2 }, 'MagicallyStuffedShroomUncooked'),
-  cauldronRecipe(5, { Fish9: 1, BreadDough: 2 }, 'FishAndBreadUncooked'),
-  cauldronRecipe(5, { BugMeat: 1, LoxMeat: 1, HareMeat: 2 }, 'MeatPlatterUncooked'),
-  cauldronRecipe(5, { HareMeat: 1, MushroomJotunPuffs: 3, Carrot: 2 }, 'MisthareSupremeUncooked'),
+  prepTableRecipe(1, { MushroomMagecap: 3, GiantBloodSack: 1, Turnip: 2 }, 'MagicallyStuffedShroomUncooked'),
+  prepTableRecipe(1, { Fish9: 1, BreadDough: 2 }, 'FishAndBreadUncooked'),
+  prepTableRecipe(1, { BugMeat: 1, LoxMeat: 1, HareMeat: 2 }, 'MeatPlatterUncooked'),
+  prepTableRecipe(1, { HareMeat: 1, MushroomJotunPuffs: 3, Carrot: 2 }, 'MisthareSupremeUncooked'),
   // LEVEL 6
   cauldronRecipe(5, { AsksvinMeat: 1, Vineberry: 2, MushroomSmokePuff: 1 }, 'FierySvinstew'),
   cauldronRecipe(6, { Sap: 3, MushroomMagecap: 2, Fiddleheadfern: 2, MushroomSmokePuff: 2 }, 'MarinatedGreens'),
   cauldronRecipe(6, { AsksvinMeat: 1, VoltureMeat: 1, Fiddleheadfern: 1 }, 'MashedMeat'),
-  cauldronRecipe(6, { AsksvinMeat: 2, Vineberry: 2, BarleyFlour: 4 }, 'PiquantPieUncooked'),
-  cauldronRecipe(6, { Vineberry: 2, VoltureEgg: 1, BarleyFlour: 4 }, 'RoastedCrustPieUncooked'),
+  prepTableRecipe(1, { AsksvinMeat: 2, Vineberry: 2, BarleyFlour: 4 }, 'PiquantPieUncooked'),
+  prepTableRecipe(1, { Vineberry: 2, VoltureEgg: 1, BarleyFlour: 4 }, 'RoastedCrustPieUncooked'),
   cauldronRecipe(6, { MushroomJotunPuffs: 3, Onion: 3, Fiddleheadfern: 3 }, 'ScorchingMedley', 3),
   cauldronRecipe(5, { Sap: 3, Fiddleheadfern: 2, Vineberry: 2 }, 'SizzlingBerryBroth'),
   cauldronRecipe(6, { Sap: 4, Vineberry: 2, MushroomSmokePuff: 2, MushroomMagecap: 2 }, 'SparklingShroomshake'),
@@ -170,6 +173,15 @@ export const recipes: ItemRecipe[] = [
   cauldronRecipe(1, { FishingBait: 20, TrophyLox: 1 }, 'FishingBaitMistlands', 20),
   cauldronRecipe(1, { FishingBait: 20, TrophyCharredMelee: 1 }, 'FishingBaitAshlands', 20),
   cauldronRecipe(1, { FishingBait: 20, TrophyHatchling: 1 }, 'FishingBaitDeepNorth', 20),
+  // prep table
+  prepTableRecipe(1, { CookedDeerMeat: 2, CookedMeat: 5, Dandelion: 4, SpiceForests: 1 }, 'FeastMeadows', 10),
+  prepTableRecipe(1, { DeerStew: 3, Thistle: 5, QueensJam: 4, SpiceForests: 1 }, 'FeastBlackforest', 10),
+  prepTableRecipe(1, { FishCooked: 5, Thistle: 4, SerpentMeatCooked: 2, SpiceOceans: 1 }, 'FeastOceans', 10),
+  prepTableRecipe(1, { Sausages: 8, Bloodbag: 4, TurnipStew: 2, SpiceForests: 1 }, 'FeastSwamps', 10),
+  prepTableRecipe(1, { WolfMeatSkewer: 2, Carrot: 4, SpiceMountains: 1 }, 'FeastMountains', 10),
+  prepTableRecipe(1, { Bread: 3, LoxPie: 2, Cloudberry: 5, SpicePlains: 1 }, 'FeastPlains', 10),
+  prepTableRecipe(1, { MisthareSupreme: 1, CookedBugMeat: 3, YggdrasilPorridge: 1, SpiceMistlands: 1 }, 'FeastMistlands', 10),
+  prepTableRecipe(1, { CookedAsksvinMeat: 3, Vineberry: 5, ScorchingMedley: 2, SpiceAshlands: 1 }, 'FeastAshlands', 10),
   // FERMENTER
   ...potionRecipe(
     1, { Honey: 10, Blueberries: 5, Raspberry: 10, Dandelion: 1 },
@@ -214,6 +226,34 @@ export const recipes: ItemRecipe[] = [
   ...potionRecipe(
     1, { Barley: 10, Cloudberry: 10 },
     'BarleyWineBase', 'BarleyWine'
+  ),
+  ...potionRecipe(
+    1, { Cloudberry: 10, Fish7: 3, FragrantBundle: 1 },
+    'MeadBaseBugRepellent', 'MeadBugRepellent'
+  ),
+  ...potionRecipe(
+    1, { Mushroom: 10, MushroomYellow: 10, MushroomBzerker: 1 },
+    'MeadBaseBzerker', 'MeadBzerker'
+  ),
+  ...potionRecipe(
+    1, { Honey: 10, Blueberries: 10, CuredSquirrelHamstring: 1 },
+    'MeadBaseHasty', 'MeadHasty'
+  ),
+  ...potionRecipe(
+    1, { TrophyHare: 1, Feathers: 10, MushroomMagecap: 5 },
+    'MeadBaseLightfoot', 'MeadLightfoot'
+  ),
+  ...potionRecipe(
+    1, { Fish5: 2, Honey: 10, PowderedDragonEgg: 1 },
+    'MeadBaseStrength', 'MeadStrength'
+  ),
+  ...potionRecipe(
+    1, { Dandelion: 10, Fish1: 2, FreshSeaweed: 1 },
+    'MeadBaseSwimmer', 'MeadSwimmer'
+  ),
+  ...potionRecipe(
+    1, { Onion: 5, Carrot: 10, PungentPebbles: 1 },
+    'MeadBaseTamer', 'MeadTamer'
   ),
   ...potionRecipe(
     1, { Sap: 10, Vineberry: 10, MushroomMagecap: 10 },
@@ -286,6 +326,7 @@ export const recipes: ItemRecipe[] = [
   forgeRecipe(2, { Iron: 10, LinenThread: 20 }, { Iron: 3 }, 'ArmorPaddedGreaves'),
   forgeRecipe(2, { Iron: 10, LinenThread: 20 }, { Iron: 3 }, 'ArmorPaddedCuirass'),
   forgeRecipe(1, { Iron: 10, LinenThread: 15 }, { Iron: 5 }, 'HelmetPadded'),
+  forgeRecipe(2, { ScytheHandle: 1, Silver: 6 }, { Silver: 5 }, 'Scythe'),
   // BLACK METAL
   forgeRecipe(2, { YggdrasilWood: 3, BlackMetal: 25 }, { YggdrasilWood: 1, BlackMetal: 15 }, 'PickaxeBlackMetal'),
   forgeRecipe(4, { FineWood: 10, BlackMetal: 30, LinenThread: 5 }, { BlackMetal: 15, LinenThread: 5 }, 'AtgeirBlackmetal'),
@@ -442,6 +483,7 @@ export const recipes: ItemRecipe[] = [
   haldorRecipe(10, 'FishingBait', { number: 20 }),
   haldorRecipe(50, 'Thunderstone', { killed: 'TheElder' }),
   haldorRecipe(1500, 'ChickenEgg', { killed: 'GoblinKing' }),
+  haldorRecipe(100, 'BarrelRings', { number: 3 }),
   // haldorRecipe(350, 'Chisel'),
   // HILDIR
   hildirRecipe(450, 'ArmorDress2', { killed: 'Fenring_Cultist_Hildir' }),
@@ -464,6 +506,8 @@ export const recipes: ItemRecipe[] = [
   hildirRecipe(350, 'ArmorTunic1', { killed: 'Skeleton_Hildir' }),
   hildirRecipe(350, 'ArmorTunic4', { killed: 'Skeleton_Hildir' }),
   hildirRecipe(350, 'ArmorTunic7', { killed: 'Skeleton_Hildir' }),
+  hildirRecipe(550, 'ArmorHarvester1', { killed: 'Skeleton_Hildir' }),
+  hildirRecipe(550, 'ArmorHarvester2', { killed: 'Skeleton_Hildir' }),
   hildirRecipe(200, 'HelmetHat1', { killed: 'Skeleton_Hildir' }),
   hildirRecipe(250, 'HelmetHat2', { killed: 'Fenring_Cultist_Hildir' }),
   hildirRecipe(200, 'HelmetHat3', { killed: 'Skeleton_Hildir' }),
@@ -474,10 +518,29 @@ export const recipes: ItemRecipe[] = [
   hildirRecipe(300, 'HelmetHat8', { killed: 'GoblinBruteBros' }),
   hildirRecipe(300, 'HelmetHat9', { killed: 'GoblinBruteBros' }),
   hildirRecipe(150, 'HelmetHat10'),
+  hildirRecipe(300, 'HelmetStrawHat', { killed: 'Skeleton_Hildir' }),
   hildirRecipe(50, 'FireworksRocket_White', { killed: 'GoblinBruteBros' }),
   hildirRecipe(150, 'Sparkler'),
   hildirRecipe(75, 'Ironpit'),
   hildirRecipe(600, 'BarberKit'),
+  // BOG WITCH
+  bogWitchRecipe(100, 'CandleWick', { number: 50 }),
+  bogWitchRecipe(200, 'ScytheHandle', { killed: 'GoblinKing' }),
+  bogWitchRecipe(110, 'MeadTrollPheromones', { number: 5 }),
+  bogWitchRecipe(85, 'MushroomBzerker', { killed: 'Dragon' }),
+  bogWitchRecipe(140, 'FragrantBundle', { number: 5, killed: 'Dragon' }),
+  bogWitchRecipe(75, 'FreshSeaweed', { number: 5 }),
+  bogWitchRecipe(80, 'CuredSquirrelHamstring', { number: 5 }),
+  bogWitchRecipe(120, 'PowderedDragonEgg', { number: 5 }),
+  bogWitchRecipe(125, 'PungentPebbles', { number: 5 }),
+  bogWitchRecipe(65, 'VineGreenSeeds', { number: 3 }),
+  bogWitchRecipe(140, 'Feaster'),
+  bogWitchRecipe(120, 'SpiceForests', { number: 5, killed: 'gd_king' }),
+  bogWitchRecipe(130, 'SpiceOceans', { number: 5, killed: 'Serpent' }),
+  bogWitchRecipe(140, 'SpiceMountains', { number: 5, killed: 'Dragon' }),
+  bogWitchRecipe(160, 'SpicePlains', { number: 5, killed: 'GoblinKing' }),
+  bogWitchRecipe(180, 'SpiceMistlands', { number: 5, killed: 'SeekerQueen' }),
+  bogWitchRecipe(200, 'SpiceAshlands', { number: 5, killed: 'Fader' }),
   // PRODUCERS
   genericRecipe('piece_beehive', 1, GAME_DAY, {}, {}, 'Honey', 1),
   genericRecipe('piece_wisplure', 1, 30, {}, {}, 'Wisp', 1),

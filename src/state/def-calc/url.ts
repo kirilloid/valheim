@@ -3,7 +3,7 @@ import { allItems, blockers, getItemById } from './items';
 import type { BlockerConfig } from '../../model/combat';
 import { isNotNull } from '../../model/utils';
 
-import { creatures, maxLvl } from '../../data/creatures';
+import { creatures, maxLvl, minLvl } from '../../data/creatures';
 import { defaultCreature, creatureBiome } from '../../data/combat_creatures';
 
 const defaultEnemy = {
@@ -63,7 +63,7 @@ function parseEnemy(url?: string): State['enemy'] {
     creature,
     biome: creatureBiome(creature),
     variety,
-    stars: Math.min(+stars, maxLvl(creature) - 1),
+    stars: Math.max(minLvl(creature) - 1, Math.min(maxLvl(creature) - 1, +stars)),
   }
 }
 

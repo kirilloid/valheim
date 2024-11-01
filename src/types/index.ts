@@ -26,7 +26,7 @@ export type GameComponent =
 | 'Pickable' | 'PickableItem' | 'Piece' | 'Plant' | 'Player' | 'PrivateArea' | 'Procreation'
 | 'Ragdoll' | 'RandomAnimation' | 'RandomFlyingBird' | 'ResourceRoot' | 'Runestone' /* boss stones */
 | 'Saddle' | 'SapCollector' | 'SEMan' | 'ShieldGenerator' | 'ShipConstructor' | 'Ship' | 'Sign' | 'Smelter'
-| 'Tameable' | 'TeleportWorld' | 'TerrainComp' | 'TombStone' | 'Trader' | 'Trap' | 'TreeBase' | 'TreeLog' | 'Turret'
+| 'Tameable' | 'TeleportWorld' | 'TerrainComp' | 'TerrainModifier' | 'TombStone' | 'Trader' | 'Trap' | 'TreeBase' | 'TreeLog' | 'Turret'
 | 'Vagon' | 'Vegvisir' | 'VisEquipment'
 | 'WearNTear' | 'Windmill' | 'WispSpawner'
 | 'ZNetView' | 'ZSyncTransform'
@@ -174,7 +174,7 @@ export type Effect = {
   disabled?: boolean;
   iconId?: string;
   tier: number;
-  special?: 'Tailwind' | 'Demister';
+  special?: 'Tailwind' | 'Demister' | 'TameBoost';
   time?: number;
   comfort?: { value: number; };
   cooldown?: number;
@@ -189,12 +189,25 @@ export type Effect = {
   runStamina?: number;
   jumpStamina?: number;
   attackStamina?: number;
+  blockStamina?: number;
+  dodgeStamina?: number;
+  swimStamina?: number;
   healthRegen?: number;
   staminaRegen?: number;
   eitrRegen?: number;
   xpModifier?: number;
   moveSpeed?: number;
+  // adds initial y speed?
+  jumpModifier?: number;
   windMovementModifier?: number;
+  pheromones?: {
+    target: EntityId;
+    spawnChanceOverride?: number;
+    spawnMinLevel?: number;
+    levelUpMultiplier?: number;
+    maxInstanceOverride?: number;
+    flee?: boolean;
+  },
   Aoe?: Aoe;
 };
 
@@ -276,6 +289,7 @@ export interface Creature extends GameObjectBase {
   upgradeDistance?: number;
   faction: Faction;
   maxLvl?: number;
+  minLvl?: number;
   spawners: SpawnerConfig[];
   tolerate: number;
   speed: {
@@ -391,7 +405,7 @@ export type PhysicalObject = GameObjectBase & {
   Aoe?: Aoe;
   ResourceRoot?: ResourceRoot;
   drop?: GeneralDrop[];
-  trader?: 'haldor' | 'hildir';
+  trader?: 'haldor' | 'hildir' | 'bogWitch';
   grow?: ItemGrow[];
   Plant?: Plantable;
   Beacon?: number;
@@ -491,6 +505,7 @@ export type Piece = BasePiece & {
 } | {
   subtype: 'craft';
   craft: {
+    skill?: SkillType;
     queueSize?: number;
     batchSize?: number;
     buildRange?: number;
@@ -598,27 +613,41 @@ export interface GameEvent {
 export type Season = 'midsummer' | 'christmas' | 'helloween';
 
 interface GameObjectBase {
+  /** exact id used in actual game DB/code */
   id: EntityId;
+  /** relative path to icon, normally defined to re-use icon from another object */
   iconId?: string;
+  /** used to group things together to show "see also" section with objects from this group */
   group?: EntityGroup;
+  /** used only for text search */
   components?: GameComponent[];
+  /** used only for text search */
   tags?: string[];
   dlc?: 'beta';
+  /** name of the mod where this entity comes from */
   mod?: string;
+  /** some game objects are not available normally, but could be spawned from console */
   disabled?: true;
+  /** some items are seasonable, i.e. enabled only during specific date range @see disabled */
   season?: Season;
+  /** used to organize some spoiler protection, basically reflects biome in which it is available. @see biomes of BiomeConfig[] type */
   tier: number;
+  /** could be useful to show in page title (tab header in a browser) */
   emoji?: string;
 }
 
 export interface ItemGrowConfig {
+  /** [min, max] number */
   num: Pair<number>;
   forcePlacement?: boolean;
+  /** scale range of the visual model */
   scale?: Pair<number>;
   randTilt?: number;
   chanceToUseGroundTilt?: number;
   locations: Biome[];
+  /** bitmask of BiomeArea enum @see BiomeArea */
   biomeArea?: number;
+  /** checks if other objects block the spawn/placement */
   blockCheck?: boolean;
   altitude?: Pair<number>;
   oceanDepth?: Pair<number>;
@@ -630,6 +659,7 @@ export interface ItemGrowConfig {
   groupRadius?: number;
   onSurface?: boolean;
   inForest?: Pair<number> | null;
+  /** number of minutes before it respawns pickables */
   respawn?: number;
   abundance?: number;
 }
@@ -646,7 +676,7 @@ export type ItemRecipe = {
   item: EntityId;
   number: number;
 } | {
-  type: 'haldor' | 'hildir';
+  type: 'haldor' | 'hildir' | 'bogWitch';
   value: number;
   item: EntityId;
   number: number;
@@ -702,6 +732,7 @@ export interface Resource extends BaseItem {
   Food?: Food;
   EggGrow?: EggGrow;
   Potion?: Potion;
+  effect?: Effect;
   Value?: number;
 }
 
@@ -713,7 +744,7 @@ export interface Arrow extends BaseItem {
 
 export interface Tool extends BaseItem {
   type: 'tool';
-  special: 'build' | 'garden' | 'ground' | 'fishing' | 'butcher' | 'demister';
+  special: 'build' | 'garden' | 'ground' | 'fishing' | 'butcher' | 'demister' | 'feast' | 'harvest';
   maxLvl: number;
   durability: Pair<number>;
   produces: EntityId[];

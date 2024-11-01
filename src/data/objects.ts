@@ -393,6 +393,36 @@ export function fullDestructible(obj: PhysicalObject | undefined): PhysicalObjec
   return result;
 }
 
+export const traders: PhysicalObject[] = [
+  {
+    type: 'object',
+    subtype: 'trader',
+    id: 'Haldor',
+    group: 'trader',
+    components: ['Trader'],
+    trader: 'haldor',
+    tier: 2,
+  },
+  {
+    type: 'object',
+    subtype: 'trader',
+    id: 'Hildir',
+    group: 'trader',
+    components: ['Trader'],
+    trader: 'hildir',
+    tier: 2,
+  },
+  {
+    type: 'object',
+    subtype: 'trader',
+    id: 'BogWitch',
+    group: 'trader',
+    components: ['Trader'],
+    trader: 'bogWitch',
+    tier: 3,
+  },
+];
+
 const treasures: PhysicalObject[] = [
   {
     type: 'object',
@@ -512,24 +542,6 @@ const treasures: PhysicalObject[] = [
   },
   {
     type: 'object',
-    subtype: 'trader',
-    id: 'Haldor',
-    group: 'trader',
-    components: ['Trader'],
-    trader: 'haldor',
-    tier: 2,
-  },
-  {
-    type: 'object',
-    subtype: 'trader',
-    id: 'Hildir',
-    group: 'trader',
-    components: ['Trader'],
-    trader: 'hildir',
-    tier: 2,
-  },
-  {
-    type: 'object',
     subtype: 'treasure',
     id: 'TreasureChest_forestcrypt_hildir',
     iconId: 'piece/piece_chest_wood',
@@ -587,7 +599,6 @@ const treasures: PhysicalObject[] = [
     type: 'object',
     subtype: 'misc',
     id: 'dvergrprops_crate',
-    iconId: 'objects/CargoCrate',
     tier: 6,
     Destructible: {
       hp: 200,
@@ -1035,6 +1046,7 @@ export const objects: PhysicalObject[] = [
     drop: [singleDrop(p.item, p.number ?? 1)],
     PointLight: p.PointLight,
   })),
+  ...traders,
   ...treasures,
   {
     type: 'object',
@@ -1262,6 +1274,31 @@ export const objects: PhysicalObject[] = [
     tier: 0,
     grow: [],
     // size: [6, 13, 6],
+  },
+  {
+    type: 'object',
+    subtype: 'plant',
+    id: 'VineGreen',
+    components: ['Pickable', 'Plant'],
+    tier: 3,
+    Plant: {
+      subtype: 'crop',
+      plantedWith: 'VineGreenSeeds',
+      growTime: [4000, 5000],
+      cultivatedGround: true,
+      destroyUnhealthy: true,
+      freeSpaceRadius: 0.8,
+      biomes: ['Ashlands'],
+    },
+    grow: [],
+    drop: [
+      singleDrop('Vineberry', 3),
+      {
+        chance: 0.2,
+        num: [1, 3],
+        options: [{ item: 'VineGreenSeeds', num: [1, 3] }],
+      }
+    ],
   },
   {
     type: 'object',
@@ -1924,6 +1961,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'misc',
     id: 'Spawner_GreydwarfNest',
+    components: ['CreatureSpawner'],
     iconId: 'resource/TrophyGreydwarf',
     tier: 2,
     grow: [],
@@ -1950,6 +1988,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'misc',
     id: 'BonePileSpawner',
+    components: ['CreatureSpawner'],
     tier: 2,
     grow: [],
     Destructible: {
@@ -2248,6 +2287,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'misc',
     id: 'Spawner_DraugrPile',
+    components: ['CreatureSpawner'],
     iconId: 'resource/TrophyDraugr',
     tier: 2,
     grow: [],
@@ -4993,6 +5033,9 @@ export const structures: Structure[] = [
 for (const obj of objects) {
   if (obj.subtype !== 'indestructible') {
     if (!obj.components) obj.components = [];
+    if ('Destructible' in obj) {
+      obj.components.push('Destructible');
+    }
   }
 }
 

@@ -10,6 +10,7 @@ import { Icon } from '../parts/Icon';
 import { Source } from '../parts/Source';
 import { ItemHeader } from '../parts/ItemHeader';
 import { DeadSpeak } from '../parts/DeadSpeak';
+import { Effect } from '../parts/Effect';
 
 function Food({ health, stamina, eitr, duration, regen }: T.Food) {
   const translate = useContext(TranslationContext);
@@ -72,6 +73,7 @@ export function GenericItem({ item }: { item: T.Resource }) {
     <ItemHeader item={item} />
     {item.Food != null && <Food {...item.Food} />}
     {item.Potion != null && <Potion {...item.Potion} />}
+    {item.effect != null && <dl><Effect effect={item.effect} /></dl>}
     {Radiation != null && <section>
       <h2>Radiation hazard ☢️</h2>
       <dl>

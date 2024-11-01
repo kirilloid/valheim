@@ -105,6 +105,7 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
 
   return (<>
     <ItemHeader item={creature} >
+      {/* TODO: take minLvl into account */}
       {maxLvl(creature) > 1
       ? <div className="Switch Creature__Stars">
           {Array.from({ length: maxLvl(creature) }).map((_, stars) => 

@@ -30,6 +30,7 @@ function addToMap<T extends Item | Piece | Ship | Cart | Siege>(map: Record<Enti
   switch (recipe.type) {
     case 'haldor':
     case 'hildir':
+    case 'bogWitch':
       addItem('Coins', item);
       break;
     case 'craft':

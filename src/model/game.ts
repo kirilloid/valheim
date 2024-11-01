@@ -1,4 +1,4 @@
-import type { DamageModifier, DamageModifiers, DamageProfile, DropEntry, EntityId, GeneralDrop, ItemGrow, ItemGrowConfig, LocationItem } from '../types';
+import type { DamageModifier, DamageModifiers, DamageProfile, DropEntry, EntityId, GeneralDrop, ItemGrow, ItemGrowConfig, LocationItem, Pair } from '../types';
 import type { EnvId } from '../data/env';
 
 // TIME
@@ -124,3 +124,10 @@ export function itemGrow(...grows: ItemGrowConfig[]): ItemGrow[] {
 export const xp = (lvl: number) => lvl ** 1.5 / 2 + 0.5;
 
 export const nonPlayerBuildDrop = (value: number) => Math.max(1, Math.floor(value / 3));
+
+export function spawnChance(levels: Pair<number>, levelUpChance: number, level: number): number {
+  if (level < levels[0]) return 0;
+  if (level > levels[1]) return 0;
+  if (level === levels[1]) return levelUpChance ** (levels[1] - levels[0]);
+  return (1 - levelUpChance) * levelUpChance ** (level - levels[0]);
+}

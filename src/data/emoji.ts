@@ -34,6 +34,9 @@ export const skill: Record<SkillType, string> = {
   [SkillType.Run]: '🏃‍♂️',
   [SkillType.Swim]: '🏊',
   [SkillType.Fishing]: '🎣',
+  [SkillType.Cooking]: '👨‍🍳',
+  [SkillType.Farming]: '👨‍🌾',
+  [SkillType.Crafting]: '⚒',
   [SkillType.Ride]: '🏇',
   [SkillType.All]: '*',
 };

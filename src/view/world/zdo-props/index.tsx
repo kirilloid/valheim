@@ -208,6 +208,7 @@ export const InterfaceFields: Partial<Record<
   // Teleport: [zdoidProp('target')],
   TeleportWorld: [stringComp('tag')],
   TerrainComp: [TerrainComp],
+  TerrainModifier: [timeComp('terrainModifierTimeCreated')],
   TombStone: [
     timeComp('timeOfDeath'),
     TombComp,

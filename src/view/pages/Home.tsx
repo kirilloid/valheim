@@ -23,8 +23,14 @@ export function Home() {
       <section className="Home__Biomes">
         <h2>{translate('ui.biomes')}</h2>
         <ul>
-          {biomes.map(({ id, tier, emoji }) => <li key={id}>
-            <span className="Home__emoji-icon">{emoji}</span> <Link to={`/biome/${id}`}>{runeTranslate({ tier, type: 'biome', id: `ui.biome.${id}` })}</Link>
+          {biomes.map(({ id, tier, emoji, active }) => <li key={id}>
+            <span className="Home__emoji-icon">{emoji}</span>
+            {' '}
+            {active
+              ? <Link to={`/biome/${id}`}>
+                  {runeTranslate({ tier, type: 'biome', id: `ui.biome.${id}` })}
+                </Link>
+              : <span className="disabled">{runeTranslate({ tier, type: 'biome', id: `ui.biome.${id}` })}</span>}
           </li>)}
         </ul>
       </section>

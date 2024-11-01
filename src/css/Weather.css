@@ -42,7 +42,7 @@
 }
 
 .Weather__time {
-  width: 50px;
+  width: 40px;
   padding: 0 1%;
   text-align: center;
   flex-shrink: 0;
@@ -68,12 +68,18 @@
 
 .Weather__details > :first-child {
   text-align: center;
+  font-size: 0.75rem;
 }
 
 .Weather__details > :only-child {
   text-align: initial;
   width: 100%;
   padding: 0 0.5rem;
+  font-size: 1rem;
+}
+
+.Weather__type {
+  font-size: 0.75rem;
 }
 
 .Weather__type {

@@ -18,7 +18,7 @@ import { isNotDerviedWeapon } from '../../model/derived';
 
 const SkillRevMap = new Map([...SkillCodeMap.entries()].map(([key, val]) => [val, key]));
 
-const skillNames = ['Swords', 'Knives', 'Clubs', 'Polearms', 'Spears', 'Blocking', 'Axes', 'Bows', 'ElementalMagic', 'BloodMagic', 'Unarmed', 'Pickaxes', 'WoodCutting', 'Crossbows', 'Jump', 'Sneak', 'Run', 'Swim', 'Fishing', 'Ride'] as const;
+const skillNames = ['Swords', 'Knives', 'Clubs', 'Polearms', 'Spears', 'Blocking', 'Axes', 'Bows', 'ElementalMagic', 'BloodMagic', 'Unarmed', 'Pickaxes', 'WoodCutting', 'Crossbows', 'Jump', 'Sneak', 'Run', 'Swim', 'Fishing', 'Cooking', 'Farming', 'Crafting', 'Ride'] as const;
 const xpTable: number[] = [];
 for (let level = 1; level <= 100; level++) {
   xpTable.push(Math.pow(level + 1, 1.5) * 0.5 + 0.5);
@@ -34,7 +34,7 @@ function VanillaSkillLevelUp({ skill }: { skill: SkillType }) {
         <dd>hitting enemy</dd>
         <dt>+1 xp</dt>
         <dd>hitting object (non-zero damage)</dd>
-      </>
+      </>;
     case SkillType.Swords:
     case SkillType.Knives:
     case SkillType.Clubs:
@@ -46,24 +46,24 @@ function VanillaSkillLevelUp({ skill }: { skill: SkillType }) {
         <dd>hitting enemy</dd>
         <dt>+1 xp</dt>
         <dd>hitting object (non-zero damage)</dd>
-      </>
+      </>;
     case SkillType.Axes:
       return <>
         <dt>+1.5 xp</dt>
         <dd>hitting enemy</dd>
-      </>
+      </>;
     case SkillType.Pickaxes:
       return <>
         <dt>+1 xp</dt>
         <dd>hitting object</dd>
-      </>
+      </>;
     case SkillType.Blocking:
       return <>
         <dt>+0.5 xp</dt>
         <dd>block</dd>
         <dt>+1 xp</dt>
         <dd>parry</dd>
-      </>
+      </>;
     case SkillType.ElementalMagic: {
       const skillItems = items
         .filter<Weapon>((item): item is Weapon => item.type === 'weapon')
@@ -77,7 +77,7 @@ function VanillaSkillLevelUp({ skill }: { skill: SkillType }) {
             <dd><InlineObjectWithIcon id={item.id} /></dd>
           </React.Fragment>
         })}
-      </>
+      </>;
     }
     case SkillType.BloodMagic:
       const skillItems = items
@@ -96,46 +96,61 @@ function VanillaSkillLevelUp({ skill }: { skill: SkillType }) {
         })}
         <dt>+1 xp</dt>
         <dd>shield from <InlineObjectWithIcon id="StaffShield" /> breaks</dd>
-      </>
+      </>;
     case SkillType.WoodCutting:
       return <>
         <dt>+1 xp</dt>
         <dd>hitting a tree</dd>
-      </>
+      </>;
     case SkillType.Jump:
       return <>
         <dt>+0.5 xp</dt>
         <dd>1 jump</dd>
-      </>
+      </>;
     case SkillType.Sneak:
       return <>
         <dt>+0.5 xp/s</dt>
         <dd>sneaking near enemy</dd>
         <dt>+0.05 xp/s</dt>
         <dd>sneaking far from enemies</dd>
-      </>
+      </>;
     case SkillType.Run:
       return <>
         <dt>+0.2 xp/s</dt>
         <dd>running</dd>
-      </>
+      </>;
     case SkillType.Swim:
       return <>
         <dt>+0.3 xp/s</dt>
         <dd>swimming</dd>
-      </>
+      </>;
     case SkillType.Fishing:
       return <>
         <dt>+0.25 xp/s</dt>
         <dd>pulling empty</dd>
         <dt>+0.5 xp/s</dt>
         <dd>pulling hooked</dd>
-      </>
+      </>;
+    case SkillType.Cooking:
+      return <>
+        <dt>+0.25 xp</dt>
+        <dd>per cooked item</dd>
+      </>;
+    case SkillType.Farming:
+      return <>
+        <dt>+0.25 xp</dt>
+        <dd>per plant picked</dd>
+      </>;
+    case SkillType.Crafting:
+      return <>
+        <dt>+0.25 xp</dt>
+        <dd>per crafted item</dd>
+      </>;
     case SkillType.Ride:
       return <>
         <dt>+0.2 xp/s</dt>
         <dd>riding</dd>
-      </>
+      </>;
     case SkillType.All:
       return null;
     default:
@@ -150,75 +165,75 @@ function ModdedSkillLevelUp({ skill }: { skill: SkillType }) {
       return <>
         <dt>+10 xp</dt>
         <dd>per crafted/upgraded item: weapon, armor, but not ammo: arrows or bombs</dd>
-      </>
+      </>;
   case 'PackHorse':
       return <>
         <dt>+1 xp</dt>
         <dd>per 1s carrying 90+% of max weight</dd>
-      </>
+      </>;
     case 'Evasion':
       return <>
         <dt>+1 xp</dt>
         <dd>per dodge roll use</dd>
-      </>
+      </>;
     case 'Tenacity':
       return <>
         <dt>+√(damage) xp</dt>
         <dd>for actual damage received all reductions like block</dd>
-      </>
+      </>;
     case 'Vitality':
       return <>
         <dt>+2√(health) xp</dt>
         <dd>of food item consumed</dd>
-      </>
+      </>;
     case 'Lumberjacking':
       return <>
         <dt>+1 xp</dt>
         <dd>per hit of tree(s)</dd>
-      </>
+      </>;
     case 'Building':
       return <>
         <dt>+1 xp</dt>
         <dd>per placed building piece</dd>
-      </>
+      </>;
     case 'Ranching':
       return <>
         <dt>+5 xp</dt>
         <dd>with 10% chance per taming tick (3s)</dd>
         <dt>+35 xp</dt>
         <dd>when tamed creature is killed and any player is within 50m</dd>
-      </>
+      </>;
     case 'Alchemy':
       return <>
         <dt>+1 xp</dt>
         <dd>per gem upgraded</dd>
         <dt>+1 xp</dt>
         <dd>when socketing</dd>
-      </>
+      </>;
     case 'Cooking':
       return <>
         <dt>+5 xp</dt>
         <dd>per item cooked</dd>
         <dt>+5 xp</dt>
         <dd>per new recipe?</dd>
-      </>
+      </>;
     case 'Mining':
       return <>
         <dt>+1 xp</dt>
         <dd>per mineable item hit</dd>
-      </>
+      </>;
     case 'Sailing':
       return <>
         <dt>+1 xp</dt>
         <dd>per 1s of sailing</dd>
         <dt>+35 xp</dt>
         <dd>per ship built</dd>
-      </>
+      </>;
     case 'Farming':
       return <>
         <dt>+1 xp</dt>
         <dd>per plant planted</dd>
-      </>
+      </>;
     case 'Dual Axes':
     case 'Dual Clubs':
     case 'Dual Knives':
@@ -227,7 +242,7 @@ function ModdedSkillLevelUp({ skill }: { skill: SkillType }) {
       return <>
         <dt>+1 xp</dt>
         <dd>per hit</dd>
-      </>
+      </>;
     default:
       return null;
   }
@@ -250,7 +265,7 @@ function VanillaSkillEffect({ skill, level }: { skill: SkillType, level: number 
         <dd>{showPercent(getResourceUsageSkillFactor(level))}</dd>
         <dt>{translate('ui.damage')}</dt>
         <dd>{rangeBy(getWeaponSkillFactor(level), showPercent)}</dd>
-      </>
+      </>;
     case SkillType.Bows:
       return <>
         <dt>{translate('ui.staminaUsage')}</dt>
@@ -259,7 +274,7 @@ function VanillaSkillEffect({ skill, level }: { skill: SkillType, level: number 
         <dd>{rangeBy(getWeaponSkillFactor(level), showPercent)}</dd>
         <dt>draw time</dt>
         <dd>{showPercent(getBowDrawTime(level))}</dd>
-      </>
+      </>;
     case SkillType.Crossbows:
       return <>
         <dt>{translate('ui.staminaUsage')}</dt>
@@ -268,36 +283,36 @@ function VanillaSkillEffect({ skill, level }: { skill: SkillType, level: number 
         <dd>{rangeBy(getWeaponSkillFactor(level), showPercent)}</dd>
         <dt>loading time</dt>
         <dd>{showPercent(1 - 0.5 * level / 100)}</dd>
-      </>
+      </>;
     case SkillType.Blocking:
       return <>
         <dt>block</dt>
         <dd>{showPercent(getBlockingSkillFactor(level))}</dd>
-      </>
+      </>;
     case SkillType.ElementalMagic:
       return <>
         <dt>{translate('ui.eitr')}</dt>
         <dd>{showPercent(getResourceUsageSkillFactor(level))}</dd>
         <dt>{translate('ui.damage')}</dt>
         <dd>{rangeBy(getWeaponSkillFactor(level), showPercent)}</dd>
-      </>
+      </>;
     case SkillType.BloodMagic:
       return <>
         <dt>{translate('ui.eitr')}</dt>
         <dd>{showPercent(getResourceUsageSkillFactor(level))}</dd>
         <dt>{translate('ui.health')}</dt>
         <dd>{showPercent(getResourceUsageSkillFactor(level))}</dd>
-      </>
+      </>;
     case SkillType.WoodCutting:
       return <>
         <dt>{translate('ui.damage')}</dt>
         <dd>{rangeBy(getWeaponSkillFactor(level), showPercent)}</dd>
-      </>
+      </>;
     case SkillType.Jump:
       return <>
         <dt>jump height</dt>
         <dd>{showNumber(2 * (1 + 0.4 * level / 100) ** 2)}m</dd>
-      </>
+      </>;
     case SkillType.Sneak:
       return <>
         <dt>{translate('ui.staminaUsage')}</dt>
@@ -307,31 +322,52 @@ function VanillaSkillEffect({ skill, level }: { skill: SkillType, level: number 
           0.2 + lightFactor * 0.4,
           level
         )); */}
-      </>
+      </>;
     case SkillType.Run:
       return <>
         <dt>{translate('ui.staminaUsage')}</dt>
         <dd>{showNumber(10 - 5 * level / 100)}/s</dd>
         <dt>{translate('ui.moveSpeed')}</dt>
         <dd>{translate('ui.speed.ms', showNumber(7 * (1 + 0.25 * level / 100)))}</dd>
-      </>
+      </>;
     case SkillType.Swim:
       return <>
         <dt>{translate('ui.staminaUsage')}</dt>
         <dd>{showNumber(6 - 3 * level / 100)}/s</dd>
-      </>
+      </>;
     case SkillType.Fishing:
       return <>
         <dt>pull stamina usage</dt>
         <dd>{showPercent(lerp(1, 0.2, level / 100))}</dd>
         <dt>pull speed</dt>
         <dd>{showNumber(lerp(2, 6, level / 100))}/s</dd>
-      </>
+      </>;
+    case SkillType.Cooking:
+      return <>
+        <dt>cooking time</dt>
+        <dd>{showPercent(lerp(1, 0.2, level / 100))}</dd>
+        <dt>chance of extra food item created</dt>
+        <dd>{showPercent(level / 100 * 0.25)}</dd>
+      </>;
+    case SkillType.Farming:
+      return <>
+        <dt>picking up stamina</dt>
+        <dd>{showPercent(lerp(1, 0.5, level / 100))}</dd>
+        <dt>chance of extra item picked</dt>
+        <dd>{showPercent(level / 100 * 0.25)}</dd>
+      </>;
+    case SkillType.Crafting:
+      return <>
+        <dt>crafting time</dt>
+        <dd>{showPercent(lerp(1, 0.5, level / 100))}</dd>
+        <dt>building stamina use</dt>
+        <dd>{showPercent(level / 100 * 0.25)}</dd>
+      </>;
     case SkillType.Ride:
       return <>
         <dt>{translate('ui.moveSpeed')}</dt>
         <dd>+{showPercent(0.25 * level / 100)}</dd>
-      </>
+      </>;
     case SkillType.All:
       return null;
     default:

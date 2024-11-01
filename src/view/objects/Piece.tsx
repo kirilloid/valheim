@@ -11,6 +11,8 @@ import { TranslationContext, useGlobalState } from '../../effects';
 import { InlineObjectWithIcon, Light, List, Resistances, showNumber, yesNo } from '../helpers';
 import { ItemHeader } from '../parts/ItemHeader';
 import { Recipe } from '../parts/Source';
+import { SkillIcon } from '../parts/Icon';
+import { SkillType } from '../../model/skills';
 
 function PieceSpecific({ item }: { item: TPiece }) {
   const translate = useContext(TranslationContext);
@@ -29,10 +31,11 @@ function PieceSpecific({ item }: { item: TPiece }) {
       </dl>);
     }
     case 'craft': {
-      const { requiresFire, requiresRoof, buildRange, queueSize } = item.craft;
+      const { skill, requiresFire, requiresRoof, buildRange, queueSize } = item.craft;
       const extensions = pieces.filter(p => p.subtype === 'craft_ext' && p.extends.id === item.id);
       return (<>
         <dl>
+          {skill != null && <><dt>uses skill</dt><dd><SkillIcon skill={SkillType[skill]} useAlt size={16} /> {translate(`ui.skillType.${SkillType[skill]}`)}</dd></>}
           <dt>{translate('ui.crafting.needsFire')}</dt><dd>{yesNo(requiresFire)}</dd>
           <dt>{translate('ui.crafting.needsRoof')}</dt><dd>{yesNo(requiresRoof)}</dd>
           {buildRange ? <><dt>building radius</dt><dd>{buildRange}m</dd></> : null}

@@ -102,4 +102,5 @@ export const spawners: Spawner[] = [
 
 for (const spawner of spawners) {
   spawner.iconId = `creature/${spawner.spawn}`;
+  spawner.components = ['CreatureSpawner'];
 }

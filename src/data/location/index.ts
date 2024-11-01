@@ -249,6 +249,7 @@ export const locations: LocationConfig[] = [
   L.CharredRuins2,
   L.CharredRuins3,
   L.CharredRuins4,
+  L.BogWitch_Camp,
 ];
 
 

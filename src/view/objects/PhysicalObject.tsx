@@ -15,6 +15,7 @@ import { GrowSection } from '../parts/Source';
 import { Destructible } from '../parts/Destructible';
 import { ResourceRoot } from '../parts/ResourceRoot';
 import { Tabs } from '../parts/Tabs';
+import { spawnChance } from '../../model/game';
 
 function Grow({ item }: { item: T.PhysicalObject }) {
   return <section>
@@ -82,29 +83,37 @@ function Runestone({ texts }: { texts: string[] }) {
   </section>;
 }
 
-function TraderRecipes({ id }: { id: 'haldor' | 'hildir' }) {
+function TraderRecipes({ id }: { id: 'haldor' | 'hildir' | 'bogWitch' }) {
   const settingsFilter = useSettingsFilter();
   const rr = recipes
-    .filter((r): r is T.ItemRecipe & { type: 'haldor' | 'hildir' } => r.type === id)
+    .filter((r): r is T.ItemRecipe & { type: 'haldor' | 'hildir' | 'bogWitch' } => r.type === id)
     .filter(r => {
       const obj = data[r.item];
       return obj && settingsFilter(obj);
     })
   return <>
     <h2>Sells</h2>
-    <dl>
-      {rr.map((r, i) => <React.Fragment key={i}>
-        <dt><InlineObjectWithIcon id={r.item} /></dt><dd>{r.value} <ItemIcon item={data.Coins} /></dd>
-      </React.Fragment>)}
-    </dl>
+    <table>
+      <thead>
+        <tr>
+          <td>item</td>
+          <td>price</td>
+          <td>requires kill</td>
+        </tr>
+      </thead>
+      <tbody>
+        {rr.map((r, i) => <tr key={i}>
+          <td><InlineObjectWithIcon id={r.item} /></td>
+          <td><ItemIcon item={data.Coins} /> {r.value}</td>
+          <td>{r.killed ? <InlineObjectWithIcon id={r.killed} /> : null}</td>
+        </tr>)}
+      </tbody>
+    </table>
   </>
 }
 
-function spawnChance(levels: T.Pair<number>, levelUpChance: number, level: number): number {
-  if (level < levels[0]) return 0;
-  if (level > levels[1]) return 0;
-  if (level === levels[1]) return levelUpChance ** (levels[1] - levels[0]);
-  return (1 - levelUpChance) * levelUpChance ** (level - levels[0]);
+function showRelativePercent(x: number) {
+  return (x * 100).toPrecision(2) + '%';
 }
 
 function SpawnArea({ params }: { params: T.SpawnArea }) {
@@ -122,10 +131,12 @@ function SpawnArea({ params }: { params: T.SpawnArea }) {
         <col span={range.length + 1} width={showPercent(0.65 / (range.length + 1))} />
       </colgroup>
       <thead>
-        <td></td>
-        <td>{translate('ui.creature')}</td>
-        {range.map(lvl => <td key={lvl}>{lvl - 1}⭐</td>)}
-        <td>{translate('ui.total')}</td>
+        <tr>
+          <td></td>
+          <td>{translate('ui.creature')}</td>
+          {range.map(lvl => <td key={lvl}>{lvl - 1}⭐</td>)}
+          <td>{translate('ui.total')}</td>
+        </tr>
       </thead>
       <tbody>
         {params.prefabs.map(item => {
@@ -133,7 +144,7 @@ function SpawnArea({ params }: { params: T.SpawnArea }) {
           return <tr key={item.prefab}>
             <td><ItemIcon item={data[item.prefab]} /></td>
             <td><InlineObject id={item.prefab} /></td>
-            {range.map(lvl => <td>{showPercent(spawnChance(item.level, params.levelUpChance, lvl) * weight)}</td>)}
+            {range.map(lvl => <td>{showRelativePercent(spawnChance(item.level, params.levelUpChance, lvl) * weight)}</td>)}
             <td>{showPercent(weight)}</td>
           </tr>;
         })}

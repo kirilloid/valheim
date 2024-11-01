@@ -51,6 +51,7 @@ function getItemResources(item: GameObject | undefined): SimpleDrop {
       return { [item.id]: 1 };
     case 'haldor':
     case 'hildir':
+    case 'bogWitch':
       return { [item.id]: recipe.number };
     case 'craft':
       return Object.entries(recipe.materials)
@@ -70,6 +71,7 @@ function getFoodResourcesPerDay(item: FoodItem | undefined): SimpleDrop {
     case undefined: 
     case 'haldor':
     case 'hildir':
+    case 'bogWitch':
       return { [item.id]: t };
     case 'craft':
       return mapValues(getItemResources(item), v => v * t);

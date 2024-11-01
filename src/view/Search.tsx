@@ -80,6 +80,8 @@ function showSpecialIcon(special: ItemSpecial, translate: Translator) {
     case 'ground': return <Icon path="piece/raise" alt="terraforming" size={32} />;
     case 'fishing': return null;
     case 'butcher': return null;
+    case 'feast': return null; // TODO
+    case 'harvest': return null; // TODO
     default: return assertNever(special);
   }
 }
@@ -162,6 +164,7 @@ function ShortRecipe(props: { item: GameObject }) {
           return <Materials materials={recipe.materials} iconSize={16} />
         case 'haldor':
         case 'hildir':
+        case 'bogWitch':
           // disabled for now
           return null && <span><Icon id="coin" alt="" size={16} /> {recipe.value}</span>
         default:
