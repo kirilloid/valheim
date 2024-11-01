@@ -181,10 +181,8 @@ export function Recipe({ item }: { item: GameObject }) {
   const recipe = getItemRecipe(item);
   if (recipe == null) return null;
   switch (recipe.type) {
-    case 'haldor':
-    case 'hildir':
-    case 'bogWitch': {
-      const trader = tradersByid[recipe.type];
+    case 'trader': {
+      const trader = tradersByid[recipe.trader];
       return <>
         Bought from <Link to={`/obj/${trader.id}`}>{translate(trader.id)}</Link> for {recipe.value} <Icon id="coin" alt={translate('Coins')} size={16} />
         {recipe.killed && <><br />Available only after killing <InlineObjectWithIcon id={recipe.killed} /></>}

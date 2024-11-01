@@ -396,6 +396,8 @@ export interface SpawnArea {
   prefabs: { prefab: EntityId, weight: number, level: Pair<number> }[],
 };
 
+export type TraderId = 'haldor' | 'hildir' | 'bogWitch';
+
 export type PhysicalObject = GameObjectBase & {
   type: 'object';
   subtype: 'tree' | 'plant' | 'rock' | 'ore' | 'indestructible' | 'misc' | 'treasure' | 'trader';
@@ -405,7 +407,7 @@ export type PhysicalObject = GameObjectBase & {
   Aoe?: Aoe;
   ResourceRoot?: ResourceRoot;
   drop?: GeneralDrop[];
-  trader?: 'haldor' | 'hildir' | 'bogWitch';
+  trader?: TraderId;
   grow?: ItemGrow[];
   Plant?: Plantable;
   Beacon?: number;
@@ -676,7 +678,8 @@ export type ItemRecipe = {
   item: EntityId;
   number: number;
 } | {
-  type: 'haldor' | 'hildir' | 'bogWitch';
+  type: 'trader';
+  trader: TraderId;
   value: number;
   item: EntityId;
   number: number;

@@ -1,4 +1,4 @@
-import type { EntityId, ItemRecipe } from '../types';
+import type { EntityId, ItemRecipe, TraderId } from '../types';
 
 const CAULDRON_TIME = 3;
 const SMELTER_TIME = 30;
@@ -95,13 +95,14 @@ export const smelterRecipe = (
 ) => genericRecipe(smelter, 1, SMELTER_TIME, { [ore]: 1, Coal: 2 }, {}, metal, 1);
 
 const traderRecipe = (
-  type: 'haldor' | 'hildir' | 'bogWitch',
+  trader: TraderId,
 ) => (
   value: number,
   item: EntityId,
   { number = 1, killed }: { number?: number; killed?: EntityId } = {},
 ): ItemRecipe => ({
-  type,
+  type: 'trader',
+  trader,
   value,
   item,
   number,

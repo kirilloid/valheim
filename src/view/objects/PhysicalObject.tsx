@@ -83,10 +83,10 @@ function Runestone({ texts }: { texts: string[] }) {
   </section>;
 }
 
-function TraderRecipes({ id }: { id: 'haldor' | 'hildir' | 'bogWitch' }) {
+function TraderRecipes({ id }: { id: T.TraderId }) {
   const settingsFilter = useSettingsFilter();
   const rr = recipes
-    .filter((r): r is T.ItemRecipe & { type: 'haldor' | 'hildir' | 'bogWitch' } => r.type === id)
+    .filter((r): r is T.ItemRecipe & { type: 'trader' } => r.type === 'trader' && r.trader === id)
     .filter(r => {
       const obj = data[r.item];
       return obj && settingsFilter(obj);

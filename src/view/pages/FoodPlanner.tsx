@@ -49,9 +49,7 @@ function getItemResources(item: GameObject | undefined): SimpleDrop {
   switch (recipe?.type) {
     case undefined: 
       return { [item.id]: 1 };
-    case 'haldor':
-    case 'hildir':
-    case 'bogWitch':
+    case 'trader':
       return { [item.id]: recipe.number };
     case 'craft':
       return Object.entries(recipe.materials)
@@ -69,9 +67,7 @@ function getFoodResourcesPerDay(item: FoodItem | undefined): SimpleDrop {
   const recipe = recipes.find(r => r.item === item.id);
   switch (recipe?.type) {
     case undefined: 
-    case 'haldor':
-    case 'hildir':
-    case 'bogWitch':
+    case 'trader':
       return { [item.id]: t };
     case 'craft':
       return mapValues(getItemResources(item), v => v * t);
