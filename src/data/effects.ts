@@ -194,7 +194,6 @@ export const effects: Effect[] = [
       target: 'Deathsquito',
       flee: true,
     },
-    cooldown: 600,
   },
   {
     type: 'effect',
@@ -205,7 +204,6 @@ export const effects: Effect[] = [
     attackStamina: -0.8,
     blockStamina: -0.8,
     dodgeStamina: -0.8,
-    cooldown: 120,
   },
   {
     type: 'effect',
@@ -242,7 +240,7 @@ export const effects: Effect[] = [
     iconId: 'resource/MeadSwimmer',
     tier: 3,
     time: 300,
-    swimStamina: -0.8,
+    swimStamina: -0.5,
   },
   {
     type: 'effect',
@@ -257,7 +255,7 @@ export const effects: Effect[] = [
     id: 'Potion_TrollPheromones',
     iconId: 'resource/MeadTrollPheromones',
     tier: 3,
-    time: 60,
+    time: 300,
     pheromones: {
       target: 'Troll',
       spawnChanceOverride: 0.25,
@@ -265,7 +263,6 @@ export const effects: Effect[] = [
       levelUpMultiplier: 1.25,
       maxInstanceOverride: 2,
     },
-    cooldown: 300,
   },
   {
     type: 'effect',
@@ -322,10 +319,9 @@ export const effects: Effect[] = [
   },
   {
     type: 'effect',
-    id: 'SetEffect_AsksvinArmor',
+    id: 'SetEffect_AshlandsMediumArmor',
     iconId: 'armor/HelmetAshlandsMediumHood',
     tier: 4,
-    damageModifiers: { fire: 'resistant' },
     runStamina: -0.1,
     jumpStamina: -0.1,
     attackStamina: -0.2,
@@ -443,9 +439,17 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'WindRun',
+    iconId: 'armor/CapeAsksvin',
     tier: 7,
     time: 0,
     windMovementModifier: 5,
   },
-  // Wishbone
+  {
+    type: 'effect',
+    id: 'Wishbone',
+    iconId: 'weapon/Wishbone',
+    tier: 2,
+    special: 'Wishbone',
+    time: 0,
+  },
 ];

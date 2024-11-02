@@ -3132,6 +3132,7 @@ export const creatures: Creature[] = [
       interval: 3000,
       chance: 0.05,
       distance: 10,
+      killed: 'SeekerQueen',
       groupSize: [3, 3],
       groupRadius: 3,
       night: true,
@@ -3810,7 +3811,7 @@ export const creatures: Creature[] = [
     hp: 2500,
     damageModifiers: mods([0, 0, 1, 4, 4, 1, 1, 0, 3, 2]),
     drop: [
-      dropEntry('DyrnwynHiltFragment'),
+      dropEntry('DyrnwynHiltFragment', { scale: false }),
     ],
   }, {
     id: 'Charred_Melee_Fader',

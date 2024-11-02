@@ -10,7 +10,7 @@ import { timeI2S } from '../../model/utils';
 import { data } from '../../data/itemDB';
 import { getSummon } from '../../data/resources';
 import { area, objectLocationMap } from '../../data/location';
-import { maxLvl } from '../../data/creatures';
+import { maxLvl, minLvl } from '../../data/creatures';
 
 import { GameSettingsContext, TranslationContext, useGlobalState } from '../../effects';
 import { Area, InlineObjectWithIcon, rangeBy, Resistances, shortCreatureDamage, showPercent, yesNo } from '../helpers';
@@ -87,7 +87,10 @@ function Attacks({ attacks, dmgScale }: { attacks: AttackVariety[]; dmgScale: nu
   </div>
 }
 
-export function Creature({ creature, level = 1 }: { creature: TCreature, level?: number }) {
+export function Creature({ creature, level }: { creature: TCreature, level?: number }) {
+  const minCreatureLvl = minLvl(creature);
+  const maxCreatureLvl = maxLvl(creature);
+  level = level ?? minCreatureLvl;
   const [spoiler] = useGlobalState('spoiler');
   const translate = useContext(TranslationContext);
   const { worldlevel } = useContext(GameSettingsContext);
@@ -105,13 +108,12 @@ export function Creature({ creature, level = 1 }: { creature: TCreature, level?:
 
   return (<>
     <ItemHeader item={creature} >
-      {/* TODO: take minLvl into account */}
-      {maxLvl(creature) > 1
+      {maxCreatureLvl > 1
       ? <div className="Switch Creature__Stars">
-          {Array.from({ length: maxLvl(creature) }).map((_, stars) => 
-            level === stars + 1
-              ? <span key={stars} className="Switch__Option Creature__Star Switch__Option--selected Creature__Star--selected">{stars}⭐</span>
-              : <Link key={stars} className="Switch__Option Creature__Star" to={`/obj/${id}/${stars + 1}`} replace={true}>{stars}⭐</Link>
+          {Array.from({ length: maxCreatureLvl - minCreatureLvl + 1 }).map((_, stars) => 
+            level === stars + minCreatureLvl
+              ? <span key={stars} className="Switch__Option Creature__Star Switch__Option--selected Creature__Star--selected">{stars + minCreatureLvl - 1}⭐</span>
+              : <Link key={stars} className="Switch__Option Creature__Star" to={`/obj/${id}/${stars + minCreatureLvl}`} replace={true}>{stars + minCreatureLvl - 1}⭐</Link>
           )}
         </div>
       : null}

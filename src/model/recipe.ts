@@ -51,9 +51,10 @@ export const potionRecipe = (
   materials: Record<EntityId, number>,
   meadBase: EntityId,
   mead: EntityId,
+  number: number = 6,
 ) => [
   genericRecipe('piece_MeadCauldron', cauldronLevel, CAULDRON_TIME, materials, {}, meadBase, 1),
-  genericRecipe('fermenter', 1, FERMENT_TIME, { [meadBase]: 1 }, {}, mead, 6),
+  genericRecipe('fermenter', 1, FERMENT_TIME, { [meadBase]: 1 }, {}, mead, number),
 ];
 
 export const workbenchRecipe = (

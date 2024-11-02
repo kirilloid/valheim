@@ -50,7 +50,7 @@ const asksvinSet: ItemSet = {
   bonus: [
     undefined,
     undefined,
-    effectsById.SetEffect_AsksvinArmor,
+    effectsById.SetEffect_AshlandsMediumArmor,
   ],
 };
 

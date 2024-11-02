@@ -27,6 +27,8 @@ function Special({ type }: { type: TEffect['special'] }) {
       return <><dt>Special</dt><dd>Disperse mist around you</dd></>;
     case 'TameBoost':
       return <><dt>Special</dt><dd>Doubles the speed of taming</dd></>;
+    case 'Wishbone':
+      return <><dt>Special</dt><dd>Helps finding hidden treasures</dd></>;
     default:
       return assertNever(type);
   }
@@ -58,8 +60,8 @@ function Pheromones({
   return <>
     <dt>affects spawn of</dt>
     <dd><InlineObjectWithIcon id={target} /></dd>
-    {(levelUpMultiplier != 1 || spawnMinLevel != 1) && <React.Fragment key="levelUp">
-      <dt>spawn levels</dt>
+    {(levelUpMultiplier !== 1 || spawnMinLevel !== 1) && <React.Fragment key="levelUp">
+      <dt>modifies spawn</dt>
       <dd>
         <table>
           <thead>

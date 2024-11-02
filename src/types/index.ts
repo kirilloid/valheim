@@ -120,17 +120,23 @@ export type LocationConfig = {
   inForest: Pair<number> | null;
   distance: Pair<number>;
   altitude: Pair<number>;
-  // interior / exterior
+  /** interior / exterior */
   radius: Pair<number>;
 
   destructibles: DropDist;
   creatures: DropDist;
   resources: DropDist;
   customMusic?: string;
-  items: LocationItem[],
+  /**
+   * Normally locations are LocName1, LocName2 ... and they're united as LocName
+   * generated object LocName doesn't have icon 
+   */
+  hasImageOverride?: boolean;
+  items: LocationItem[];
+  /** Needs having an item to enter */
   needsKey?: EntityId;
-  dungeon?: DungeonRoomsConfig,
-  camp?: CampConfig,
+  dungeon?: DungeonRoomsConfig;
+  camp?: CampConfig;
 };
 
 export type DungeonGenConfig = {
@@ -174,7 +180,7 @@ export type Effect = {
   disabled?: boolean;
   iconId?: string;
   tier: number;
-  special?: 'Tailwind' | 'Demister' | 'TameBoost';
+  special?: 'Tailwind' | 'Demister' | 'TameBoost' | 'Wishbone';
   time?: number;
   comfort?: { value: number; };
   cooldown?: number;
@@ -197,7 +203,7 @@ export type Effect = {
   eitrRegen?: number;
   xpModifier?: number;
   moveSpeed?: number;
-  // adds initial y speed?
+  /** adds initial y speed */
   jumpModifier?: number;
   windMovementModifier?: number;
   pheromones?: {

@@ -657,6 +657,7 @@ export function getLocationDetails(typeId: GameLocationId): LocationConfig | und
     destructibles: {},
     creatures: {},
     resources: {},
+    hasImageOverride: locs.some(l => l.hasImageOverride),
     customMusic: locs.reduce<string | undefined>((a, b) => a ?? b.customMusic, undefined),
     needsKey,
     items: [],

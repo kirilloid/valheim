@@ -118,7 +118,11 @@ function addObjects(dict: Record<string, string>) {
     for (const tag of gobj.tags ?? []) {
       addTag(`ui.tags.${tag}`);
     }
-    addTag(`ui.itemType.${gobj.type}`);
+    if (gobj.type === 'object') {
+      addTag(`ui.itemSubtype.${gobj.subtype}`);
+    } else {
+      addTag(`ui.itemType.${gobj.type}`);
+    }
     if ('PointLight' in gobj) addTag('ui.tags.light');
     switch (gobj.type) {
       case 'weapon':

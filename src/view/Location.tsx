@@ -25,7 +25,7 @@ function SingleLocation({ loc }: { loc: LocationConfig }) {
   const vegvisirChance = 1 - (loc.destructibles.Vevgvisir?.[0] ?? 1);
   return (
     <section style={{ position: 'relative' }}>
-      {loc.id !== loc.typeId &&
+      {(loc.id !== loc.typeId || loc.hasImageOverride) &&
       <img src={`/icons/location/${loc.id}.png`} alt="" className="LocationIllustration" />}
       <dl>
         <dt>{translate('ui.biome')}</dt>

@@ -69,11 +69,15 @@ function Resource({ item }: { item: T.Resource }) {
 
 export function GenericItem({ item }: { item: T.Resource }) {
   const { Deadspeak, Radiation } = item;
+  const translate = useContext(TranslationContext);
   return (<>
     <ItemHeader item={item} />
     {item.Food != null && <Food {...item.Food} />}
     {item.Potion != null && <Potion {...item.Potion} />}
-    {item.effect != null && <dl><Effect effect={item.effect} /></dl>}
+    {item.effect != null && <>
+      <h2>{translate("ui.effect")}</h2>
+      <dl><Effect effect={item.effect} /></dl>
+    </>}
     {Radiation != null && <section>
       <h2>Radiation hazard ☢️</h2>
       <dl>
