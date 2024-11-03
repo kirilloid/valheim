@@ -1,10 +1,10 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback, useContext, useMemo } from 'react';
 
 import type { GameObject } from '../../types';
 import { groups } from '../../data/itemDB';
 import { modLinks } from '../../mods';
 
-import { TranslationContext, useGlobalState, useLanguage, useRuneTranslate } from '../../effects';
+import { TranslationContext, useLanguage, useRuneTranslate, useSettingsFilter } from '../../effects';
 import { InlineObjectWithIcon, List, ModLinks, rangeBy } from '../helpers';
 import { markdown } from '../markdown';
 import { ItemIcon } from './Icon';
@@ -14,7 +14,7 @@ export const ItemHeader = React.memo(({ item, noIcon = false, children }: { item
   const translate = useContext(TranslationContext);
   const { lang } = useLanguage();
   const runeTranslate = useRuneTranslate();
-  const [showDisabled] = useGlobalState('searchInDisabled');
+  const filter = useSettingsFilter();
 
   const intl = React.useMemo(() => new Intl.DateTimeFormat(lang, { month: "numeric", day: "numeric" }), [lang]);
   const dateFormatter = useCallback(({ date, month }: PeriodDate) => {
@@ -23,6 +23,17 @@ export const ItemHeader = React.memo(({ item, noIcon = false, children }: { item
   }, [intl]);
   
   const group = item.group && groups[item.group];
+  const groupItems = useMemo(
+    () => group?.filter(filter)
+      .map(e => e !== item
+        ? <InlineObjectWithIcon key={e.id} id={e.id} nobr />
+        : <React.Fragment key={e.id}>
+          <ItemIcon item={item} useAlt={false} />
+          {' '}
+          {translate(e.id)}
+        </React.Fragment>),
+    [group, filter, item],
+  );
 
   return <>
     {item.disabled && <div className="info" role="banner">{
@@ -58,10 +69,6 @@ export const ItemHeader = React.memo(({ item, noIcon = false, children }: { item
       }</span>
       {children}
     </h1>
-    {group ? <div>See also: <List separator=" | ">{
-      (showDisabled ? group : group.filter(e => !e.disabled))
-        .filter(e => e !== item)
-        .map(e => <InlineObjectWithIcon key={e.id} id={e.id} nobr />)
-    }</List></div> : null}
+    {groupItems && <div>See also: <List separator=" | ">{groupItems}</List></div>}
   </>;
 });

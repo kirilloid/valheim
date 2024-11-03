@@ -35,7 +35,10 @@ function PieceSpecific({ item }: { item: TPiece }) {
       const extensions = pieces.filter(p => p.subtype === 'craft_ext' && p.extends.id === item.id);
       return (<>
         <dl>
-          {skill != null && <><dt>uses skill</dt><dd><SkillIcon skill={SkillType[skill]} useAlt size={16} /> {translate(`ui.skillType.${SkillType[skill]}`)}</dd></>}
+          {skill != null && <>
+            <dt>uses skill</dt>
+            <dd><SkillIcon skill={SkillType[skill]} useAlt size={16} /> <Link to={`/skills/${SkillType[skill]}`}>{translate(`ui.skillType.${SkillType[skill]}`)}</Link></dd>
+          </>}
           <dt>{translate('ui.crafting.needsFire')}</dt><dd>{yesNo(requiresFire)}</dd>
           <dt>{translate('ui.crafting.needsRoof')}</dt><dd>{yesNo(requiresRoof)}</dd>
           {buildRange ? <><dt>building radius</dt><dd>{buildRange}m</dd></> : null}
@@ -123,17 +126,23 @@ function CraftList({ items }: { items: Produced[] }) {
   const [mods] = useGlobalState('searchInMods');
 
   return <ul className="CraftList">
-    {(mods ? items : items.filter(item => item.mod == null)).map(item => <li key={item.id}>
+    {(mods ? items : items
+      .filter(item => item.mod == null))
+      .sort((a, b) => a.tier - b.tier)
+      .map(item => <li key={item.id}>
       <InlineObjectWithIcon id={item.id} />
     </li>)}
-  </ul>
+  </ul>;
 }
 
 function ProducedItems({ items }: { items: Map<number, Produced[]> }) {
   if (items.size === 0) return null;
   if (items.size === 1) {
     for (const perLevelItems of items.values()) {
-      return <CraftList items={perLevelItems} />
+      return <>
+        <h2>Produces</h2>
+        <CraftList items={perLevelItems} />
+      </>;
     }
   }
   return <>

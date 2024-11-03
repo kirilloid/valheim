@@ -52,7 +52,8 @@ function getItemResources(item: GameObject | undefined): SimpleDrop {
     case 'trader':
       return { [item.id]: recipe.number };
     case 'craft':
-      return Object.entries(recipe.materials)
+      const entries = Object.entries(recipe.materials);
+      return (recipe.onlyOneIngredient ? entries.slice(0, 1) : entries)
         .reduce((total, [res, num]) => addDrop(total, getItemResources(data[res]), num / recipe.number), {});
     default:
       return assertNever(recipe);

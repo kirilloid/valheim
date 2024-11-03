@@ -3794,6 +3794,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'ore',
     id: 'LeviathanLava',
+    iconId: 'resource/FlametalNew',
     components: ['Leviathan'],
     tier: 7,
     grow: [],

@@ -603,7 +603,7 @@ export function Skills() {
     </dl>
     {!isVanillaSkill && <div>Most modded skills could be configured. Default config values are used.</div>}
     <h2>level-up</h2>
-    <div>Those numbers are influenced by effects like <Link to="/effect/Rested"><EffectIcon id="Rested" size={16} /> {translate('ui.effect.Rested')}</Link></div>
+    <div>Those numbers are influenced by effects like <EffectIcon id="Rested" size={16} /> <Link to="/effect/Rested">{translate('ui.effect.Rested')}</Link></div>
     <dl>
       {isVanillaSkill
         ? <VanillaSkillLevelUp skill={skill} />

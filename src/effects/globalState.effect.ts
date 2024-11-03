@@ -59,6 +59,7 @@ export function useSettingsFilter() {
   const [spoiler] = useGlobalState('spoiler');
   const [mods] = useGlobalState('searchInMods');
   const [disabled] = useGlobalState('searchInDisabled');
+
   return useCallback((item: GameObject) => {
     return item.tier <= spoiler
         && (mods || item.mod == null)

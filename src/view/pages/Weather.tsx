@@ -191,7 +191,7 @@ const isDay = (time: number) => {
 const showClearMoon = (str: string, time: number) => {
   if (isDay(time)) return str;
   if (str !== '☀️') return str;
-  return '🌕'; 
+  return '🌕';
 };
 
 const formatPercent = (value: number) => Math.round(100 * value) + "%";

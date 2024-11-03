@@ -137,16 +137,16 @@ function Materials({
 
 const CraftingSection = React.memo(({ id }: { id: EntityId }) => {
   const translate = useContext(TranslationContext);
-  const [mods] = useGlobalState('searchInMods');
-  const crafts = resourceCraftMap[id];
-  const builds = resourceBuildMap[id];
+  const filter = useSettingsFilter();
+  const crafts = resourceCraftMap[id]?.filter(filter);
+  const builds = resourceBuildMap[id]?.filter(filter);
   return <>
     {crafts?.length
       ? <section>
           <h2>{translate('ui.crafting')}</h2>
           <div>{translate('ui.usedToCraft')}:</div>
           <ul className="CraftList">
-            {(mods ? crafts : crafts.filter(r => r.mod == null)).sort((a, b) => a.tier - b.tier).map(item => <li key={item.id}>
+            {crafts.sort((a, b) => a.tier - b.tier).map(item => <li key={item.id}>
               <InlineObjectWithIcon id={item.id} />
             </li>)}
           </ul>

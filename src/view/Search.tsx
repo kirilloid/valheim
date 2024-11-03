@@ -220,6 +220,12 @@ function SearchSkill({ id, text, onClick }: BaseSearchItemProps) {
   </div>;
 }
 
+function showRelativePercent(x: number) {
+  x -= 1;
+  const strValue = Math.round(x * 100) + '%';
+  return x > 0 ? `+${strValue}` : strValue;
+}
+
 function ItemExtra({ item }: { item: Resource }) {
   const translate = useContext(TranslationContext);
   const respawn = item.grow?.find(g => g.respawn)?.respawn ?? 0;
@@ -251,7 +257,7 @@ function ItemExtra({ item }: { item: Resource }) {
         {item.Potion.healthRegen
           ? <React.Fragment key="health">
               <Icon id="health" alt={translate('ui.health')} size={16} />
-              +{(item.Potion.healthRegen - 1) * 100}%
+              {showRelativePercent(item.Potion.healthRegen)}
             </React.Fragment>
           : null}
         {item.Potion.stamina
@@ -263,7 +269,7 @@ function ItemExtra({ item }: { item: Resource }) {
         {item.Potion.staminaRegen
           ? <React.Fragment key="staminaRegen">
               <Icon id="walknut" alt={translate('ui.stamina')} size={16} />
-              +{(item.Potion.staminaRegen - 1) * 100}%
+              {showRelativePercent(item.Potion.staminaRegen)}
             </React.Fragment>
           : null}
         {item.Potion.eitr
