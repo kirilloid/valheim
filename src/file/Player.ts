@@ -61,6 +61,7 @@ type PlayerStats = number[] ;
 
 export type Player = {
   version: number;
+  firstSpawn: boolean;
   stats: PlayerStats;
   worlds: Map<bigint, World>;
   playerName: string;
@@ -115,6 +116,7 @@ function* readPlayer(bytes: Uint8Array): Generator<number, Player> {
   const version = reader.readInt();
   checkVersion('player', version, PLAYER);
   const stats = readPlayerStats(version, reader)
+  const firstSpawn = version >= 40 && reader.readBool();
   const worldsNumber = reader.readInt();
   const worlds = new Map<bigint, World>();
   for (let i = 0; i < worldsNumber; i++) {
@@ -150,6 +152,7 @@ function* readPlayer(bytes: Uint8Array): Generator<number, Player> {
     return {
       version,
       stats,
+      firstSpawn,
       worlds,
       playerName,
       playerID,
@@ -166,6 +169,7 @@ function* readPlayer(bytes: Uint8Array): Generator<number, Player> {
     return {
       version,
       stats,
+      firstSpawn,
       worlds,
       playerName,
       playerID,
@@ -188,6 +192,9 @@ function* writePlayer(
   let current = 0;
   writer.writeInt(player.version);
   writePlayerStats(player.version, writer, player.stats);
+  if (player.version >= 40) {
+    writer.writeBool(player.playerData?.firstSpawn ?? false);
+  }
   writer.writeInt(player.worlds.size);
   for (const [key, world] of player.worlds) {
     writer.writeLong(key);
@@ -283,7 +290,7 @@ function readPlayerData(data: Uint8Array): PlayerData {
   const maxHealth = version >= 7 ? pkg.readFloat() : NaN;
   const health = pkg.readFloat();
   const maxStamina = version >= 10 ? pkg.readFloat() : NaN;
-  const firstSpawn = version >= 8 ? pkg.readBool() : false;
+  const firstSpawn = version >= 8 && version < 28 ? pkg.readBool() : false;
   const timeSinceDeath = version >= 20 ? pkg.readFloat() : NaN;
   const guardianPower = version >= 23 ? pkg.readString() : '';
   const guardianPowerCooldown = version >= 24 ? pkg.readFloat() : NaN;
@@ -359,7 +366,7 @@ function writePlayerData(data: PlayerData): Uint8Array {
   if (data.version >= 7) writer.writeFloat(data.maxHealth);
   writer.writeFloat(data.health);
   if (data.version >= 10) writer.writeFloat(data.maxStamina);
-  if (data.version >= 8) writer.writeBool(data.firstSpawn);
+  if (data.version >= 8 && data.version < 28) writer.writeBool(data.firstSpawn);
   if (data.version >= 20) writer.writeFloat(data.timeSinceDeath);
   if (data.version >= 23) writer.writeString(data.guardianPower);
   if (data.version >= 24) writer.writeFloat(data.guardianPowerCooldown);
@@ -413,7 +420,11 @@ export function* read(bytes: Uint8Array): Generator<number, Player> {
   if (computed.some((v, i) => v !== hash[i])) {
     throw new RangeError("Incorrect hash");
   }
-  return yield* readPlayer(data);
+  const player = yield* readPlayer(data);
+  if (player.version < 40) {
+    player.firstSpawn = player.playerData?.firstSpawn ?? false;
+  }
+  return player;
 }
 
 export function* write(

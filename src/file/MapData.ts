@@ -1,7 +1,9 @@
 import { deflate, inflate } from 'pako';
 import type { Vector3 } from '../model/utils';
 import { PackageReader, PackageWriter } from './Package';
-import { checkVersion, MAP } from './versions';
+import { checkVersion, MAP, SHARED_MAP } from './versions';
+
+export const TILE_SIZE = 2048;
 
 enum PinType {
   Icon0,
@@ -18,6 +20,9 @@ enum PinType {
   RandomEvent,
   Ping,
   EventArea,
+  Hildir1,
+  Hildir2,
+  Hildir3,
 };
 
 type MapPin = {
@@ -39,6 +44,52 @@ export type Data = {
   sharePosition: boolean;
 };
 
+type SharedData = {
+  version: number;
+  explored: Uint8Array;
+  pins: MapPin[];
+};
+
+function readExplored(reader: PackageReader, tileSize: number): Uint8Array {
+  const byteSize = tileSize * tileSize / 8;
+  const explored = new Uint8Array(byteSize);
+  for (let index = 0; index < byteSize; ++index) {
+    let byte = 0;
+    for (let bit = 0; bit < 8; ++bit) byte |= reader.readByte() << bit;
+    explored[index] = byte;
+  }
+  return explored;
+}
+
+function writeExplored(writer: PackageWriter, tileSize: number, explored: Uint8Array): void {
+  const byteSize = tileSize * tileSize / 8;
+  for (let index = 0; index < byteSize; ++index) {
+    for (let bit = 0; bit < 8; ++bit) {
+      writer.writeByte((explored[index]! >> bit) & 1);
+    }
+  }
+}
+
+export function readShared(data: Uint8Array): SharedData {
+  const compressedReader = new PackageReader(data);
+  const reader = new PackageReader(inflate(compressedReader.readByteArray()));
+  const version = reader.readInt();
+  checkVersion('shared map data', version, SHARED_MAP);
+  const explored = readExplored(reader, TILE_SIZE);
+  const pins: MapPin[] = [];
+  const pinsNumber = reader.readInt();
+  for (let index = 0; index < pinsNumber; ++index) {
+    const ownerID = reader.readLong();
+    const name = reader.readString();
+    const pos = reader.readVector3();
+    const type: PinType = reader.readInt();
+    const crossed = reader.readBool();
+    const author = version >= 3 ? reader.readString() : "";
+    pins.push({ name, pos, type, crossed, ownerID, author });
+  }
+  return { version, explored, pins };
+}
+
 export function read(data: Uint8Array): Data {
   let reader = new PackageReader(data);
   const version = reader.readInt();
@@ -48,50 +99,25 @@ export function read(data: Uint8Array): Data {
     reader = new PackageReader(inflate(reader.readByteArray()));
   }
   const tileSize = reader.readInt();
-  const byteSize = tileSize * tileSize / 8;
-  const explored = new Uint8Array(byteSize);
-  for (let index = 0; index < byteSize; ++index) {
-    let byte = 0;
-    for (let bit = 0; bit < 8; ++bit) byte |= reader.readByte() << bit;
-    explored[index] = byte;
-  }
-  const exploredOthers = new Uint8Array(byteSize);
-  if (version >= 5) {
-    for (let index = 0; index < byteSize; ++index) {
-      let byte = 0;
-      for (let bit = 0; bit < 8; ++bit) byte |= reader.readByte() << bit;
-      exploredOthers[index] = byte;
-    }
-  }
+  const explored = readExplored(reader, tileSize);
+  const exploredOthers = version >= 5
+    ? readExplored(reader, tileSize)
+    : new Uint8Array(tileSize * tileSize / 8);
   const pins: MapPin[] = [];
   if (version >= 2) {
     const pinsNumber = reader.readInt();
     for (let index = 0; index < pinsNumber; ++index) {
       const name = reader.readString();
       const pos = reader.readVector3();
-      const type = reader.readInt();
+      const type: PinType = reader.readInt();
       const crossed = version >= 3 && reader.readBool();
       const ownerID = version >= 6 ? reader.readLong() : BigInt(0);
       const author = version >= 8 ? reader.readString() : "";
-      pins.push({
-        name,
-        crossed,
-        ownerID,
-        pos,
-        type,
-        author,
-      });
+      pins.push({ name, crossed, ownerID, pos, type, author });
     }
   }
   const sharePosition = version >= 4 && reader.readBool();
-  return {
-    version,
-    tileSize,
-    explored,
-    exploredOthers,
-    pins,
-    sharePosition,
-  }
+  return { version, tileSize, explored, exploredOthers, pins, sharePosition };
 }
 
 export function write({
@@ -105,18 +131,9 @@ export function write({
   let writer = new PackageWriter();
   writer.writeInt(version);
   writer.writeInt(tileSize);
-  const byteSize = tileSize * tileSize / 8;
-  for (let index = 0; index < byteSize; ++index) {
-    for (let bit = 0; bit < 8; ++bit) {
-      writer.writeByte((explored[index]! >> bit) & 1);
-    }
-  }
+  writeExplored(writer, tileSize, explored);
   if (version >= 5) {
-    for (let index = 0; index < byteSize; ++index) {
-      for (let bit = 0; bit < 8; ++bit) {
-        writer.writeByte((exploredOthers[index]! >> bit) & 1);
-      }
-    }
+    writeExplored(writer, tileSize, exploredOthers);
   }
   if (version >= 2) {
     writer.writeInt(pins.length);
