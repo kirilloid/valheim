@@ -686,7 +686,7 @@ export const items: Item[] = [
   },
   // non-systematic
   {
-    id: 'HelmetYule',
+    id: 'HelmetYule', season: 'christmas',
     tier: 0,
     type: 'armor', slot: 'head',
     hideHair,
@@ -697,13 +697,23 @@ export const items: Item[] = [
     moveSpeed: 0,
   },
   {
-    id: 'HelmetMidsummerCrown',
+    id: 'HelmetMidsummerCrown', season: 'midsummer',
     tier: 2,
     type: 'armor', slot: 'head',
     armor: [1, 0],
     weight: 1,
     maxLvl: 1,
     durability: [Infinity, 0],
+    moveSpeed: 0,
+  },
+  {
+    id: 'HelmetPointyHat', season: 'helloween',
+    tier: 3,
+    type: 'armor', slot: 'head',
+    armor: [1, 2],
+    weight: 3,
+    maxLvl: 4,
+    durability: [800, 100],
     moveSpeed: 0,
   },
   {

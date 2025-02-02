@@ -30,7 +30,7 @@ export const recipes: ItemRecipe[] = [
   workbenchRecipe(0, { Wood: 1, Resin: 1 }, {}, 'Torch'),
   // WORKBENCH
   workbenchRecipe(1, { Wood: 5, Stone: 2 }, { Wood: 1, Stone: 1 }, 'Hoe'),
-  workbenchRecipe(1, { DeerHide: 6 }, { DeerHide: 6 }, '-'),
+  // workbenchRecipe(1, { DeerHide: 6 }, { DeerHide: 6 }, 'Feaster'),
   workbenchRecipe(1, { Wood: 4, Flint: 6 }, { Flint: 3, LeatherScraps: 2 }, 'AxeFlint'),
   workbenchRecipe(1, { Wood: 2, Flint: 4, LeatherScraps: 2 }, { Flint: 2 }, 'KnifeFlint'),
   workbenchRecipe(1, { Wood: 10, LeatherScraps: 8 }, { Wood: 5, LeatherScraps: 4, DeerHide: 1 }, 'Bow'),
@@ -49,6 +49,7 @@ export const recipes: ItemRecipe[] = [
   workbenchRecipe(1, { Bronze: 2, TrollHide: 2, Iron: 2 }, {}, 'TankardAnniversary'),
   workbenchRecipe(1, { Silver: 1, Wisp: 1 }, {}, 'Demister'),
   workbenchRecipe(1, { Dandelion: 10 }, {}, 'HelmetMidsummerCrown'),
+  workbenchRecipe(1, { DeerHide: 3, Coal: 5, Bronze: 1 }, { DeerHide: 5 }, 'HelmetPointyHat'),
   workbenchRecipe(1, allFishes, allFishes, 'HelmetFishingHat'),
   // LEVEL 2
   workbenchRecipe(2, { DeerHide: 6 }, { DeerHide: 6, BoneFragments: 5 }, 'ArmorLeatherLegs'),
@@ -225,7 +226,7 @@ export const recipes: ItemRecipe[] = [
   ),
   ...potionRecipe(
     1, { Barley: 10, Cloudberry: 10 },
-    'BarleyWineBase', 'BarleyWine'
+    'MeadBaseBarleyWine', 'BarleyWine'
   ),
   ...potionRecipe(
     1, { Cloudberry: 10, Fish7: 3, FragrantBundle: 1 },
@@ -242,7 +243,7 @@ export const recipes: ItemRecipe[] = [
   ),
   ...potionRecipe(
     1, { TrophyHare: 1, Feathers: 10, MushroomMagecap: 5 },
-    'MeadBaseLightfoot', 'MeadLightfoot'
+    'MeadBaseLightFoot', 'MeadLightfoot'
   ),
   ...potionRecipe(
     1, { Fish5: 2, Honey: 10, PowderedDragonEgg: 1 },

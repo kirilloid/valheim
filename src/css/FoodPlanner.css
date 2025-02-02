@@ -34,7 +34,7 @@
   text-align: center;
 }
 
-@media screen and (min-width: 400px) {
+@media screen and (min-width: 480px) {
   .FoodPresets {
     grid-auto-flow: row;
     grid-template-columns: auto repeat(4, minmax(90px, 20%));
@@ -106,7 +106,7 @@
   text-align: right;
 }
 
-@media screen and (max-width: 319px) {
+@media screen and (max-width: 359px) {
   .FoodPlanner {
     display: block;
   }

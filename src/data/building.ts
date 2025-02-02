@@ -688,7 +688,7 @@ export const pieces: Piece[] = [
       noRoof: true,
       noSupport: true,
     },
-    recipe: { type: 'craft_piece', materials: { Iron: 5, Copper: 5, BlackMetal: 5 }, station: 'piece_workbench', }
+    recipe: { type: 'craft_piece', materials: { Iron: 5, Copper: 5, BlackMetal: 5, FineWood: 10 }, station: 'piece_workbench', }
   },
   {
     id: 'cauldron_ext5_mortarandpestle',
@@ -774,7 +774,7 @@ export const pieces: Piece[] = [
     id: 'piece_oven',
     base: false,
     type: 'piece',
-    components: ['CraftingStation'],
+    components: ['CookingStation'],
     subtype: 'craft',
     group: 'cook',
     tier: 5,
@@ -3096,7 +3096,7 @@ export const pieces: Piece[] = [
       item: 'Sap',
     },
     piece: { target: 'primary', water: false, onlyOnFlat, size: [0.9, 3.3, 0.5] },
-    wear: wearStructure(100, mods([0, 0, 0, 4, 4, 0, 0, 0, 3, 3]), undefined, { noRoof: true }),
+    wear: wearStructure(100, mods([0, 0, 0, 4, 4, 0, 0, 0, 3, 3]), undefined, { noRoof: false }),
     recipe: { type: 'craft_piece', materials: { YggdrasilWood: 10, BlackMetal: 5, DvergrNeedle: 1 }, station: 'piece_workbench' },
   },
   ashwoodStructure('ashwood_wall_2x2', [2, 0.4, 2], 2),

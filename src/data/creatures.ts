@@ -1,4 +1,5 @@
 import type {
+  AttackCollider,
   AttackProfile,
   AttackVariety,
   Creature,
@@ -65,6 +66,8 @@ const charredSummonDmgModifiers = mods([0, 0, 1, 4, 4, 3, 0, 0, 3, 2]);
 
 const unblockable = true;
 const undodgeable = true;
+
+const areaCollider = (radius: number): AttackCollider => ({ type: 'area', radius: 4 });
 
 const single = (attacks: AttackProfile[]): [AttackVariety] => {
   return [{ rate: 1, variety: '', attacks }]; 
@@ -360,8 +363,8 @@ export const creatures: Creature[] = [
     spawners: [],
     attacks: single([
       { dmg: dmg({ pierce: 20, chop: 1000, pickaxe: 1000 }), name: 'antlers', force: 100, toolTier: 0 },
-      { dmg: dmg({ lightning: 15 }), name: 'pew-pew', force: 200 },
-      { dmg: dmg({ lightning: 20 }), name: 'stomp', force: 100 },
+      { dmg: dmg({ lightning: 15 }), name: 'charge', force: 200 },
+      { dmg: dmg({ lightning: 15 }), name: 'stomp', force: 10, collider: areaCollider(10) },
     ]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     speed: {
@@ -882,7 +885,7 @@ export const creatures: Creature[] = [
       // SCREAM
       { spawn: ['TentaRoot'], number: [15, 15], max: 30 },
       { dmg: dmg({ pierce: 35, chop: 20, pickaxe: 20 }), name: 'Vine Shoot', burst: 25, toolTier: 0 },
-      { dmg: dmg({ blunt: 60, chop: 1000, pickaxe: 1000 }), name: 'Stomp', force: 30, toolTier: 0 }, // area
+      { dmg: dmg({ blunt: 60, chop: 1000, pickaxe: 1000 }), name: 'Stomp', force: 30, toolTier: 0, collider: areaCollider(5) },
     ]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     speed: {
@@ -964,7 +967,7 @@ export const creatures: Creature[] = [
       altitude: [-1, 1000],
       levels: [1, 1],
     })],
-    attacks: single([{ dmg: dmg({ poison: 90 }), name: 'poison', unblockable }]),
+    attacks: single([{ dmg: dmg({ poison: 90 }), name: 'poison', unblockable, collider: areaCollider(4) }]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     speed: {
       walk: 1,
@@ -1005,7 +1008,7 @@ export const creatures: Creature[] = [
       altitude: [-1, 1000],
       levels: [1, 1],
     })],
-    attacks: single([{ dmg: dmg({ poison: 115 }), name: 'poison', unblockable }]),
+    attacks: single([{ dmg: dmg({ poison: 115 }), name: 'poison', unblockable, collider: areaCollider(8) }]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     speed: {
       walk: 1,
@@ -1310,8 +1313,8 @@ export const creatures: Creature[] = [
       levels: [1, 1],
     })],
     attacks: single([
-      { dmg: dmg({ blunt: 60, chop: 100, pickaxe: 60 }), name: 'swing', stagger: 2, force: 130, toolTier: 2 },
-      { dmg: dmg({ blunt: 80, chop: 100, pickaxe: 60 }), name: 'slam', stagger: 2, force: 130, toolTier: 2 },
+      { dmg: dmg({ blunt: 60, chop: 100, pickaxe: 60 }), name: 'swing', stagger: 2, force: 130, toolTier: 2, collider: areaCollider(4.3) },
+      { dmg: dmg({ blunt: 80, chop: 100, pickaxe: 60 }), name: 'slam', stagger: 2, force: 130, toolTier: 2, collider: areaCollider(5.4) },
       { dmg: dmg({ blunt: 80, chop: 100, pickaxe: 60 }), name: 'stub', stagger: 2, force: 130, toolTier: 2 },
     ]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
@@ -2070,7 +2073,7 @@ export const creatures: Creature[] = [
     emoji: '',
     faction: 'PlainsMonsters',
     spawners: [spawner({
-      tier: 3,
+      tier: 5,
       biomes: ['Meadows'],
       maxSpawned: 1,
       interval: 120,
@@ -2453,7 +2456,7 @@ export const creatures: Creature[] = [
     })],
     attacks: single([
       { dmg: dmg({ slash: 130 }), name: 'bite', force: 150 },
-      { dmg: dmg({ blunt: 120, chop: 100, pickaxe: 100, }), name: 'stomp', force: 100, toolTier: 0 },
+      { dmg: dmg({ blunt: 120, chop: 100, pickaxe: 100, }), name: 'stomp', force: 100, toolTier: 0, collider: areaCollider(4.5) },
     ]),
     tolerate: TOLERATE.WATER,
     speed: {
@@ -2582,7 +2585,7 @@ export const creatures: Creature[] = [
         pickaxe: 100,
         fire: 65,
         lightning: 65,
-      }), name: 'nova', force: 100, toolTier: 2, unblockable },
+      }), name: 'nova', force: 100, toolTier: 2, unblockable, collider: areaCollider(8) },
       // Taunt
     ]),
     tolerate: TOLERATE.WATER,
@@ -2886,7 +2889,7 @@ export const creatures: Creature[] = [
     faction: 'Dverger',
     spawners: [],
     attacks: single([
-      { dmg: dmg({ blunt: 150 }), name: 'kamikaze', force: 20, toolTier: 0 }
+      { dmg: dmg({ blunt: 150 }), name: 'kamikaze', force: 20, toolTier: 0, collider: areaCollider(1.5) }
     ]),
     tolerate: TOLERATE.WATER | TOLERATE.FIRE | TOLERATE.SMOKE,
     speed: {
@@ -2996,7 +2999,7 @@ export const creatures: Creature[] = [
     attacks: single([
       { dmg: dmg({ blunt: 50, fire: 80 }), name: 'spit', force: 30, burst: 2 }, // interval = 0.7
       { spawn: ['Tick'], number: [1, 3], max: 8, name: 'eggs' },
-      { dmg: dmg({ blunt: 20 }), name: 'shake', force: 150, unblockable, undodgeable },
+      { dmg: dmg({ blunt: 20 }), name: 'shake', force: 150, unblockable, undodgeable, collider: areaCollider(4.81) },
     ]),
 
     tolerate: TOLERATE.WATER,
@@ -3192,7 +3195,7 @@ export const creatures: Creature[] = [
     attacks: single([
       { dmg: dmg({ blunt: 100, chop: 100, pickaxe: 100 }), name: 'ram', force: 200, toolTier: 4, stagger: 2.5 },
       { dmg: dmg({ slash: 100 }), name: 'bite', force: 70, stagger: 2.48 },
-      { dmg: dmg({ blunt: 120, chop: 100, pickaxe: 100 }), name: 'slam', force: 100, stagger: 2.36 },
+      { dmg: dmg({ blunt: 120, chop: 100, pickaxe: 100 }), name: 'slam', force: 100, stagger: 2.36, collider: areaCollider(4) },
     ]),
 
     tolerate: TOLERATE.WATER,
@@ -3258,7 +3261,7 @@ export const creatures: Creature[] = [
       // SeekerQueen_SpitSpawnAbility, which spawn 1 SeekerBrood
       { spawn: ['SeekerBrood'], number: [4, 8], max: 30, name: 'spit' }, // 20 with p=0.3
       { dmg: dmg({ slash: 130, chop: 300, pickaxe: 300 }), name: 'slap', force: 250, toolTier: 3 },
-      { dmg: dmg({ pierce: 150, chop: 300, pickaxe: 300 }), name: 'pirce_aoe', force: 250, toolTier: 3 }, // area
+      { dmg: dmg({ pierce: 150, chop: 300, pickaxe: 300 }), name: 'pirce_aoe', force: 250, toolTier: 3, collider: areaCollider(4.5) },
     ]),
     tolerate: TOLERATE.WATER,
     speed: { walk: 4, run: 8, swim: 4 },
@@ -3689,7 +3692,7 @@ export const creatures: Creature[] = [
     stagger: { factor: 0.5, time: 1.5 },
     damageModifiers: charredDmgModifiers,
     drop: [
-      dropEntry('CharredBone', { min: 1, max: 3 }),
+      dropEntry('CharredBone', { max: 3 }),
       dropTrophy('TrophyCharredArcher', 0.05),
     ],
   }, {
@@ -3729,7 +3732,7 @@ export const creatures: Creature[] = [
     stagger: { factor: 0.5, time: 1.5 },
     damageModifiers: charredDmgModifiers,
     drop: [
-      dropEntry('CharredBone', { chance: 0.5 }),
+      dropEntry('CharredBone', { max: 3 }),
       dropTrophy('TrophyCharredMage', 0.05),
     ],
   },
@@ -3787,7 +3790,7 @@ export const creatures: Creature[] = [
     stagger: { factor: 0.5, time: 1.5 },
     damageModifiers: charredDmgModifiers,
     drop: [
-      dropEntry('CharredBone', { chance: 0.5 }),
+      dropEntry('CharredBone', { max: 3 }),
       dropTrophy('TrophyCharredMelee', 0.05),
     ],
   }, {
@@ -3885,7 +3888,7 @@ export const creatures: Creature[] = [
     stagger: { factor: 0.5, time: 1.5 },
     damageModifiers: charredDmgModifiers,
     drop: [
-      dropEntry('CharredBone', { min: 1, max: 2 }),
+      dropEntry('CharredBone', { max: 2 }),
     ],
   }, {
     id: 'Charred_Twitcher_Summoned',
@@ -3964,7 +3967,7 @@ export const creatures: Creature[] = [
     })],
     attacks: single([
       // blobLava_attack_aoe
-      { dmg: dmg({ blunt: 70, chop: 160, pickaxe: 160, fire: 30 }), name: 'explosion' },
+      { dmg: dmg({ blunt: 70, chop: 160, pickaxe: 160, fire: 30 }), name: 'explosion', collider: areaCollider(4) },
     ]),
     tolerate: TOLERATE.WATER | TOLERATE.FIRE | TOLERATE.SMOKE,
     speed: { walk: 1, run: 2, swim: 0 },
@@ -4001,9 +4004,9 @@ export const creatures: Creature[] = [
       // Morgen_bite
       { dmg: dmg({ pierce: 160, chop: 100, pickaxe: 100 }), name: 'bite', force: 70, toolTier: 3 }, // interval: 4
       // Morgen_roll_right
-      { dmg: dmg({ blunt: 40, chop: 100, pickaxe: 100 }), name: 'roll_right', force: 70, toolTier: 3 }, // interval: 12
+      { dmg: dmg({ blunt: 40, chop: 100, pickaxe: 100 }), name: 'roll_right', force: 70, toolTier: 3, collider: areaCollider(3) }, // interval: 12
       // Morgen_roll_left
-      { dmg: dmg({ blunt: 40, chop: 100, pickaxe: 100 }), name: 'roll_left', force: 70, toolTier: 3 }, // interval: 12
+      { dmg: dmg({ blunt: 40, chop: 100, pickaxe: 100 }), name: 'roll_left', force: 70, toolTier: 3, collider: areaCollider(3) }, // interval: 12
       // Morgen_swipe_1
       { dmg: dmg({ pierce: 160, chop: 100, pickaxe: 100 }), name: 'swipe 1', force: 20, toolTier: 3 }, // interval: 5
       // Morgen_swipe_2
@@ -4059,7 +4062,7 @@ export const creatures: Creature[] = [
       // FallenValkyrie_claws
       { dmg: dmg({ slash: 105, pierce: 55 }), name: 'claws' }, // interval: 3
       // FallenValkyrie_spin
-      { dmg: dmg({ blunt: 80, pierce: 100, chop: 100, pickaxe: 100 }), name: 'spin', force: 250 }, // interval: 10
+      { dmg: dmg({ blunt: 80, pierce: 100, chop: 100, pickaxe: 100 }), name: 'spin', force: 250, collider: areaCollider(5.67) }, // interval: 10
       // FallenValkyrie_taunt
       { dmg: dmg({ slash: 20, pierce: 20 }), name: 'taunt', force: 280 }, // interval: 30
     ]),
@@ -4095,7 +4098,7 @@ export const creatures: Creature[] = [
       // Fader_Claw_Right
       { dmg: dmg({ pierce: 200, chop: 300, pickaxe: 300 }), name: 'claw-right', force: 100, toolTier: 3 }, // interval: 3, range: [0, 9]
       // Fader_Spin
-      { dmg: dmg({ pierce: 140, chop: 300, pickaxe: 300 }), name: 'spin', force: 130, toolTier: 3 }, // interval: 20, range: [0, 8]
+      { dmg: dmg({ pierce: 140, chop: 300, pickaxe: 300 }), name: 'spin', force: 130, toolTier: 3, collider: areaCollider(8.5) }, // interval: 20, range: [0, 8]
       // Fader_Flamebreath
       { dmg: dmg({ chop: 40, pickaxe: 40, fire: 60 }), name: 'flamebreath', force: 0, toolTier: 0, aiMinHp: 0.05, aiMaxHp: 0.85 }, // interval: 25, range: [2, 20]
       // Fader_Meteors, dodgeable: false, blockable: false

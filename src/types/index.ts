@@ -217,8 +217,16 @@ export type Effect = {
   Aoe?: Aoe;
 };
 
+export type AttackCollider = {
+  type: 'horizontal' | 'vertical',
+} | {
+  type: 'area';
+  radius: number; // m_attackRayWidth
+}
+
 export type NormalAttackProfile = {
   dmg: DamageProfile;
+  collider?: AttackCollider;
   burst?: number;
   name: string;
   unblockable?: true;

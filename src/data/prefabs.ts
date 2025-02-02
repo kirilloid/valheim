@@ -4,7 +4,7 @@ export const prefabNames: string[] = [
 
   'acacitree', 'ancientbarkspear_projectile', 'aoe_nova',
   
-  'BarleyWineBase', 'barrell',
+  'BarleyWineBase', 'MeadBaseBarleyWine', 'barrell',
   // 'Beard1', 'Beard2', 'Beard3', 'Beard4', 'Beard5', 'Beard6', 'Beard7', 'Beard8', 'Beard9', 'Beard10', 'BeardNone',
   'bee_aoe',
   'Birch1_aut', 'Birch2_aut', 'Birch2',

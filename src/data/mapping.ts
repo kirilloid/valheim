@@ -5,6 +5,7 @@ export const mapping = new Map<string, EntityId>([
   ['wood_wall', 'woodwall'],
   ['wood_dragon', 'wood_dragon1'],
   ['wood_beam1', 'wood_beam_1'],
+  ['BarleyWineBase', 'MeadBaseBarleyWine'],
  
   ['sapling_turnip', 'Pickable_Turnip'],
   ['sapling_seedturnip', 'Pickable_SeedTurnip'],
