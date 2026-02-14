@@ -21,6 +21,7 @@ export enum SkillType {
   Cooking,
   Farming,
   Crafting,
+  Dodge,
   Ride = 110,
   All = 999,
 }
@@ -50,6 +51,7 @@ export const skillTiers: Record<SkillType, number> = {
   [SkillType.Farming]: 2, // 0.25
   [SkillType.Crafting]: 0, // 0.25
   [SkillType.Ride]: 5, // 0.2
+  [SkillType.Dodge]: 0, // 0.2
   [SkillType.All]: 1000,
 }
 

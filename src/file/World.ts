@@ -87,7 +87,7 @@ function* readZDOData(reader: PackageReader, version: number): Generator<number,
   if (removedPrefabs.size > 0) {
     console.warn('Removed duplicated objects: ', removedPrefabs);
   }
-  const deadZdos = version < 30
+  const deadZdos = version < 31
     ? reader.readMap(function () {
         const userId = this.readLong();
         const id = this.readUInt();

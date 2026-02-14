@@ -20,6 +20,7 @@ const stations: Record<string, string> = {
   '$piece_cauldron': 'piece_cauldron',
   '$piece_stonecutter': 'piece_stonecutter',
   '$piece_artisanstation': 'piece_artisanstation',
+  '$piece_magetable': 'piece_magetable',
 };
 
 const biomes = new Map<number, Biome>([
@@ -145,11 +146,11 @@ export function Stats({ player }: { player: Player }) {
           <dt>World loads</dt><dd>{stats[PlayerStatType.WorldLoads] ?? 0}</dd>
           <dt>Portals taken</dt><dd>{stats[PlayerStatType.PortalsUsed] ?? 0}</dd>
           <dt>Jumps</dt><dd>{stats[PlayerStatType.Jumps] ?? 0}</dd>
-          <dt>Traveled</dt><dd>{(stats[PlayerStatType.DistanceTraveled] ?? 0) / 1000} km</dd>
-          <dt>Walk</dt><dd>{(stats[PlayerStatType.DistanceWalk] ?? 0) / 1000} km</dd>
-          <dt>Run</dt><dd>{(stats[PlayerStatType.DistanceRun] ?? 0) / 1000} km</dd>
-          <dt>Sail</dt><dd>{(stats[PlayerStatType.DistanceSail] ?? 0) / 1000} km</dd>
-          <dt>Air</dt><dd>{(stats[PlayerStatType.DistanceAir] ?? 0) / 1000} km</dd>
+          <dt>Traveled</dt><dd>{Math.round(stats[PlayerStatType.DistanceTraveled] ?? 0)} m</dd>
+          <dt>Walk</dt><dd>{Math.round(stats[PlayerStatType.DistanceWalk] ?? 0)} m</dd>
+          <dt>Run</dt><dd>{Math.round(stats[PlayerStatType.DistanceRun] ?? 0)} m</dd>
+          <dt>Sail</dt><dd>{Math.round(stats[PlayerStatType.DistanceSail] ?? 0)} m</dd>
+          <dt>Air</dt><dd>{Math.round(stats[PlayerStatType.DistanceAir] ?? 0)} m</dd>
         </dl>
       </div>
     },
@@ -188,42 +189,42 @@ export function Stats({ player }: { player: Player }) {
               <td>{stats[PlayerStatType.UseGuardianPower] ?? 0}</td>
             </tr>
             <tr>
-              <td><EffectIcon id="GP_Eikthyr" /> {translate('GP_Eikthyr')}</td>
+              <td><EffectIcon id="GP_Eikthyr" /> {translate('ui.effect.GP_Eikthyr')}</td>
               <td>{stats[PlayerStatType.SetPowerEikthyr] ?? 0}</td>
               <td>{stats[PlayerStatType.UsePowerEikthyr] ?? 0}</td>
             </tr>
             <tr>
-              <td><EffectIcon id="GP_TheElder" /> {translate('GP_TheElder')}</td>
+              <td><EffectIcon id="GP_TheElder" /> {translate('ui.effect.GP_TheElder')}</td>
               <td>{stats[PlayerStatType.SetPowerElder] ?? 0}</td>
               <td>{stats[PlayerStatType.UsePowerElder] ?? 0}</td>
             </tr>
             <tr>
-              <td><EffectIcon id="GP_Bonemass" /> {translate('GP_Bonemass')}</td>
+              <td><EffectIcon id="GP_Bonemass" /> {translate('ui.effect.GP_Bonemass')}</td>
               <td>{stats[PlayerStatType.SetPowerBonemass] ?? 0}</td>
               <td>{stats[PlayerStatType.UsePowerBonemass] ?? 0}</td>
             </tr>
             <tr>
-              <td><EffectIcon id="GP_Moder" /> {translate('GP_Moder')}</td>
+              <td><EffectIcon id="GP_Moder" /> {translate('ui.effect.GP_Moder')}</td>
               <td>{stats[PlayerStatType.SetPowerModer] ?? 0}</td>
               <td>{stats[PlayerStatType.UsePowerModer] ?? 0}</td>
             </tr>
             <tr>
-              <td><EffectIcon id="GP_Yagluth" /> {translate('GP_Yagluth')}</td>
+              <td><EffectIcon id="GP_Yagluth" /> {translate('ui.effect.GP_Yagluth')}</td>
               <td>{stats[PlayerStatType.SetPowerYagluth] ?? 0}</td>
               <td>{stats[PlayerStatType.UsePowerYagluth] ?? 0}</td>
             </tr>
             <tr>
-              <td><EffectIcon id="GP_Queen" /> {translate('GP_Queen')}</td>
+              <td><EffectIcon id="GP_Queen" /> {translate('ui.effect.GP_Queen')}</td>
               <td>{stats[PlayerStatType.SetPowerQueen] ?? 0}</td>
               <td>{stats[PlayerStatType.UsePowerQueen] ?? 0}</td>
             </tr>
-            {/* <tr>
-              <td><EffectIcon id="PowerAshlands" /> {translate('PowerAshlands')}</td>
+            <tr>
+              <td><EffectIcon id="GP_Fader" /> {translate('ui.effect.GP_Fader')}</td>
               <td>{stats[PlayerStatType.SetPowerAshlands] ?? 0}</td>
               <td>{stats[PlayerStatType.UsePowerAshlands] ?? 0}</td>
             </tr>
-            <tr>
-              <td><EffectIcon id="PowerDeepNorth" /> {translate('PowerDeepNorth')}</td>
+            {/* <tr>
+              <td><EffectIcon id="PowerDeepNorth" /> {translate('ui.effect.PowerDeepNorth')}</td>
               <td>{stats[PlayerStatType.SetPowerDeepNorth] ?? 0}</td>
               <td>{stats[PlayerStatType.UsePowerDeepNorth] ?? 0}</td>
             </tr> */}

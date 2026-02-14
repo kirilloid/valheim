@@ -200,11 +200,15 @@ function SearchEvent({ id, text, onClick }: BaseSearchItemProps) {
 }
 
 function SearchEffect({ id, text, onClick }: BaseSearchItemProps) {
+  const translate = useContext(TranslationContext);
   const effect = effects.find(e => e.id === id);
   return effect ? <div className="SearchItem">
     <EffectIcon id={effect.id} size={32} />
     {' '}
-    <Link to={`/effect/${id}`} onClick={onClick}>{text}</Link>
+    <Link to={`/effect/${id}`} onClick={onClick}>
+      {text}
+      <span className="entity-type"> &ndash; {translate(`ui.effect`)}</span>
+     </Link>
   </div> : null;
 }
 
@@ -231,17 +235,23 @@ function ItemExtra({ item }: { item: Resource }) {
   const respawn = item.grow?.find(g => g.respawn)?.respawn ?? 0;
   if (item.summon) return <ItemIcon item={data[item.summon[0]]} useAlt size={32} />;
   if (item.Food != null) {
-    return <span>
-      <Icon id="health" alt={translate('ui.health')} size={16} />
-      {item.Food.health}
-      <Icon id="walknut" alt={translate('ui.stamina')} size={16} />
-      {item.Food.stamina}
-      {item.Food.eitr && <>
+    return <span style={{ display: 'flex', gap: 4 }}>
+      <span>
+        <Icon id="health" alt={translate('ui.health')} size={16} />
+        {item.Food.health}
+      </span>
+      <span>
+        <Icon id="walknut" alt={translate('ui.stamina')} size={16} />
+        {item.Food.stamina}
+      </span>
+      {item.Food.eitr && <span>
         <Icon id="eitr" alt={translate('ui.eitr')} size={16} />
         {item.Food.eitr}
-      </>}
-      <Icon id="time" alt={translate('ui.duration')} size={16} />
-      {Math.round(item.Food.duration / 60)}
+      </span>}
+      <span>
+        <Icon id="time" alt={translate('ui.duration')} size={16} />
+        {Math.round(item.Food.duration / 60)}
+      </span>
     </span>
   }
   if (respawn) return <span>{days(respawn)} <Icon id="time" alt={translate('ui.days')} size={16} /></span>;
@@ -396,10 +406,14 @@ function SearchObject({ id, text, onClick, duplicates }: BaseSearchItemProps & {
         <Link to={`/obj/${id}`} onClick={onClick} className={linkClassName}>{text}</Link>
         <span>{
           showSpecialIcon(item.special, translate) ??
-          <>
-            <Icon id="armor" alt={translate('ui.armor')} size={16} />
-            {first(item.armor)}
-          </>
+          item.adrenaline
+          ? <span style={{ color: '#f4713e' }} title={translate('ui.adrenaline')}>
+              {item.adrenaline?.max}
+            </span>
+          : <>
+              <Icon id="armor" alt={translate('ui.armor')} size={16} />
+              {first(item.armor)}
+            </>
         }</span>
         <ShortRecipe item={item} />
       </div>

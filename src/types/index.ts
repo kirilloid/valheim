@@ -15,7 +15,7 @@ export type GameComponent =
 | 'ArmorStand'
 | 'BaseAI' | 'Beacon' | 'Bed' | 'Beehive'
 | 'Catapult' | 'Chair' | 'Character' | 'Container' | 'CookingStation' | 'Corpse' | 'CraftingStation' | 'CraftingStationExtension' | 'CreatureSpawner'
-| 'Destructible' | 'Door' | 'DungeonGenerator'
+| 'Deadspeak' | 'Destructible' | 'Door' | 'DungeonGenerator'
 | 'EggGrow'
 | 'Fermenter' | 'Fireplace' | 'Fish' | 'FishingFloat'
 | 'Growup'
@@ -80,6 +80,8 @@ export type Faction =
   | 'Boss' // 8 aggressive only to players
   | 'MistlandsMonsters' // 9
   | 'Dverger' // 10
+  | 'PlayerSpawned' // 11
+  | 'TrainingDummy' // 12
   ;
 
 export type BiomeConfig = {
@@ -172,6 +174,8 @@ export const damageModifiersValues: Record<DamageModifier, number> = {
   ignore: 0,
   veryResistant: 0.25,
   veryWeak: 2,
+  slightlyResistant: 0.75,
+  slightlyWeak: 1.25,
 };
 
 export type Effect = {
@@ -185,9 +189,11 @@ export type Effect = {
   comfort?: { value: number; };
   cooldown?: number;
   absorbDamage?: Pair<number>;
+  healthUpfront?: number;
   healthOverTime?: [change: number, interval: number];
   damageModifiers?: Partial<DamageModifiers>;
-  damageValueModifier?: [damage: DamageType, modifier: number];
+  damageValueModifier?: number;
+  damageValueModifiers?: Partial<Record<DamageType, number>>;
   attackModifier?: [skill: SkillType, modifier: number];
   skillModifiers?: Partial<Record<SkillType, number>>;
   fallDamage?: number;
@@ -196,13 +202,21 @@ export type Effect = {
   jumpStamina?: number;
   attackStamina?: number;
   blockStamina?: number;
+  blockStaminaFlat?: number;
   dodgeStamina?: number;
   swimStamina?: number;
+  sneakStamina?: number;
   healthRegen?: number;
   staminaRegen?: number;
+  staminaUpfront?: number;
   eitrRegen?: number;
+  eitrUpfront?: number;
   xpModifier?: number;
+  stagger?: number;
   moveSpeed?: number;
+  swimSpeed?: number;
+  armor?: number;
+  parryBonus?: number;
   /** adds initial y speed */
   jumpModifier?: number;
   windMovementModifier?: number;
@@ -302,6 +316,8 @@ export interface Creature extends GameObjectBase {
   emoji: string;
   upgradeDistance?: number;
   faction: Faction;
+  factionGroup?: string;
+  aggravatable?: boolean;
   maxLvl?: number;
   minLvl?: number;
   spawners: SpawnerConfig[];
@@ -323,6 +339,7 @@ export interface Creature extends GameObjectBase {
     swim: number;
   };
   hp: number;
+  regenAllHPTime?: number;
   stagger: {
     factor: number;
     time: number;
@@ -792,8 +809,6 @@ export interface Weapon extends BaseItem {
   durabilityDrainPerSec?: number;
   damageMultiplierPerMissingHP?: number;
   set?: ItemSet;
-  holdDurationMin?: number;
-  holdStaminaDrain?: number;
 }
 export interface Shield extends BaseItem {
   type: 'shield';
@@ -822,12 +837,13 @@ export interface Bomb extends BaseItem {
 
 export interface Armor extends BaseItem {
   type: 'armor';
-  slot: 'head' | 'shoulders' | 'body' | 'legs'  | 'util' | 'none';
+  slot: 'head' | 'shoulders' | 'body' | 'legs'  | 'util' | 'trinket' | 'none';
   special?: 'light' | 'strength' | 'search' | 'demister';
   hideHair?: boolean;
   hideBeard?: boolean;
   maxLvl: number;
   moveSpeed: number;
+  adrenaline?: { max: number; effect: Effect };
   staminaModifiers?: Partial<Record<'dodge' | 'block' | 'attack' | 'home', number>>;
   armor: Pair<number>;
   damageModifiers?: Partial<DamageModifiers>;

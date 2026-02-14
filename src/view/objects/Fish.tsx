@@ -12,6 +12,7 @@ import { Area, InlineObjectWithIcon } from '../helpers';
 import { ItemHeader } from '../parts/ItemHeader';
 import { Source } from '../parts/Source';
 import { DeadSpeak } from '../parts/DeadSpeak';
+import { DropTable } from '../parts/DropTable';
 
 export function Fish({ fish, level = 1 }: { fish: TFish, level?: number }) {
   const translate = useContext(TranslationContext);
@@ -54,6 +55,7 @@ export function Fish({ fish, level = 1 }: { fish: TFish, level?: number }) {
       </li>)}</ul>
     </section>
     {fish.Deadspeak && <DeadSpeak {...fish.Deadspeak} />}
+    <DropTable drops={[fish.extraDrop]} />
     <Source id={fish.id} />
   </>);
 }

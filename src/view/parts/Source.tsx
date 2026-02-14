@@ -287,7 +287,7 @@ export function GrowSection({ item }: { item: GameObject | undefined }) {
     {' '}
     <List separator={<hr />}>{grow.map((g, i) => <dl key={i}>
       <dt>{translate('ui.locations')}</dt>
-      <dd><List separator="">{g.locations.map(loc => <Area key={loc} area={loc} />)}</List></dd>
+      <dd><List separator=", ">{g.locations.map(loc => <Area key={loc} area={loc} />)}</List></dd>
       <dt>{translate('ui.altitude')}</dt>
       <dd>{showAltitude(g.altitude)}</dd>
       <dt>surface</dt>

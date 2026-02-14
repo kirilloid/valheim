@@ -18,7 +18,32 @@ import { isNotDerviedWeapon } from '../../model/derived';
 
 const SkillRevMap = new Map([...SkillCodeMap.entries()].map(([key, val]) => [val, key]));
 
-const skillNames = ['Swords', 'Knives', 'Clubs', 'Polearms', 'Spears', 'Blocking', 'Axes', 'Bows', 'ElementalMagic', 'BloodMagic', 'Unarmed', 'Pickaxes', 'WoodCutting', 'Crossbows', 'Jump', 'Sneak', 'Run', 'Swim', 'Fishing', 'Cooking', 'Farming', 'Crafting', 'Ride'] as const;
+const skillNames = [
+  'Swords',
+  'Knives',
+  'Clubs',
+  'Polearms',
+  'Spears',
+  'Blocking',
+  'Axes',
+  'Bows',
+  'ElementalMagic',
+  'BloodMagic',
+  'Unarmed',
+  'Pickaxes',
+  'WoodCutting',
+  'Crossbows',
+  'Jump',
+  'Sneak',
+  'Run',
+  'Swim',
+  'Fishing',
+  'Cooking',
+  'Farming',
+  'Crafting',
+  'Dodge',
+  'Ride',
+] as const;
 const xpTable: number[] = [];
 for (let level = 1; level <= 100; level++) {
   xpTable.push(Math.pow(level + 1, 1.5) * 0.5 + 0.5);
@@ -145,6 +170,11 @@ function VanillaSkillLevelUp({ skill }: { skill: SkillType }) {
       return <>
         <dt>+0.25 xp</dt>
         <dd>per crafted item</dd>
+      </>;
+    case SkillType.Dodge:
+      return <>
+        <dt>+0.2 xp/roll</dt>
+        <dd>per attack evaded</dd>
       </>;
     case SkillType.Ride:
       return <>
@@ -366,6 +396,11 @@ function VanillaSkillEffect({ skill, level }: { skill: SkillType, level: number 
     case SkillType.Ride:
       return <>
         <dt>{translate('ui.moveSpeed')}</dt>
+        <dd>+{showPercent(0.25 * level / 100)}</dd>
+      </>;
+    case SkillType.Dodge:
+      return <>
+        <dt>{translate('ui.dodgeStamina')}</dt>
         <dd>+{showPercent(0.25 * level / 100)}</dd>
       </>;
     case SkillType.All:

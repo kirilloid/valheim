@@ -1268,7 +1268,7 @@ export const pieces: Piece[] = [
       noSupport: true,
       materialType: MaterialType.Wood,
     },
-    recipe: { type: 'craft_piece', materials: { BlackMarble: 5, FlametalNew: 5, Blackwood: 5 }, station: 'blackforge' }
+    recipe: { type: 'craft_piece', materials: { BlackMarble: 5, FlametalNew: 5, Blackwood: 5, CharredBone: 4 }, station: 'blackforge' }
   },
   {
     id: 'blackforge_ext4_gemcutter',
@@ -1296,7 +1296,7 @@ export const pieces: Piece[] = [
       noSupport: true,
       materialType: MaterialType.Wood,
     },
-    recipe: { type: 'craft_piece', materials: { FlametalNew: 5, Blackwood: 8, MorgenSinew: 2 }, station: 'blackforge' }
+    recipe: { type: 'craft_piece', materials: { FlametalNew: 5, Blackwood: 8, MorgenSinew: 2, GemstoneRed: 1 }, station: 'blackforge' }
   },
   {
     id: 'charcoal_kiln',
@@ -2161,7 +2161,7 @@ export const pieces: Piece[] = [
     tier: 2,
     Turret: {
       attackCooldown: 2.5,
-      allowedAmmo: ['TurretBoltWood', 'TurretBolt'],
+      allowedAmmo: ['TurretBoltWood', 'TurretBolt', 'TurretBoltFlametal'],
     },
     piece: { target: 'random', water: undefined, groundOnly, allowedInDungeons, size: [1.5, 1.2, 1.3] },
     wear: wearStructure(250, ironResist, undefined),
@@ -2582,7 +2582,7 @@ export const pieces: Piece[] = [
     piece: { target: 'primary', water: undefined, onlyOnFlat, size: [0.25, 0.25, 1.5] },
     wear: wearStructure(200, torchResist, undefined, { noRoof: false }),
     PointLight: { color: '#A1FF7B', range: 10, intensity: 1.5 },
-    recipe: { type: 'craft_piece', materials: { Iron: 2, Resin: 2 }, station: 'forge' },
+    recipe: { type: 'craft_piece', materials: { Iron: 2, Guck: 2 }, station: 'forge' },
   },
   {
     id: 'piece_groundtorch_blue',
@@ -2645,11 +2645,36 @@ export const pieces: Piece[] = [
     },
     comfort: { value: 1, group: 'fire' },
     piece: { target: 'random', water: false, onlyOnFlat, size: [1, 0.8, 1] },
-    wear: wearStructure(100, torchResist, MaterialType.Wood, { noRoof: false, burnable: false }),
-    Aoe: { damage: dmg({ fire: 10 }), self: 0, backstabBonus: 4 },
+    wear: wearStructure(100, torchResist, undefined, { noRoof: false, burnable: false }),
+    Aoe: { damage: dmg({ fire: 10 }), self: 0, backstabBonus: 4 }, // radius: 4
     recipe: { type: 'craft_piece', materials: { Bronze: 5, Coal: 2, WolfClaw: 3 }, station: 'forge' },
   },
-  // piece_brazierfloor02
+  {
+    id: 'piece_brazierfloor02',
+    base: true,
+    burnable: false,
+    type: 'piece',
+    components: ['Fireplace'],
+    subtype: 'fireplace',
+    group: 'torch',
+    tier: 3,
+    fireplace: {
+      fuel: 'GreydwarfEye',
+      capacity: 5,
+      burnTime: 20000,
+      minHeightAbove: 0.28,
+      warmRadius: 8,
+      lightRadius: 8,
+      smoke: false,
+      fireworks: false,
+      ignite: { interval: 5, chance: 0.5, spread: 1, capsuleRadius: 0.3 },
+    },
+    comfort: { value: 1, group: 'fire' },
+    piece: { target: 'random', water: false, onlyOnFlat, size: [1, 0.8, 1] },
+    wear: wearStructure(100, torchResist, undefined, { noRoof: false, burnable: false }),
+    Aoe: { damage: dmg({ fire: 10 }), self: 0, backstabBonus: 4 }, // radius: 4
+    recipe: { type: 'craft_piece', materials: { Bronze: 5, GreydwarfEye: 2, WolfClaw: 3 }, station: 'forge' },
+  },
   {
     id: 'piece_brazierceiling01',
     base: true,
@@ -2815,6 +2840,18 @@ export const pieces: Piece[] = [
     piece: { target: 'none', water: undefined, onlyOnFlat, size: [3.5, 0, 2.5] },
     wear: { ...woodRoofStructureWear, hp: 50 },
     recipe: { type: 'craft_piece', materials: { WolfPelt: 4 }, station: 'piece_workbench' },
+  },
+  {
+    id: 'rug_Bjorn',
+    base: false,
+    type: 'piece',
+    subtype: 'decoration',
+    group: 'rug',
+    tier: 4,
+    comfort: { value: 1, group: 'carpet' },
+    piece: { target: 'none', water: undefined, onlyOnFlat, size: [4, 1, 5] },
+    wear: { ...woodRoofStructureWear, hp: 50 },
+    recipe: { type: 'craft_piece', materials: { BjornHide: 1, BjornPaw: 2, TrophyBjorn: 1 }, station: 'piece_workbench' },
   },
   {
     id: 'rug_deer',
@@ -3040,8 +3077,7 @@ export const pieces: Piece[] = [
     base: false,
     type: 'piece',
     subtype: 'structure',
-    disabled: true,
-    tier: 4,
+    tier: 6,
     emoji: '',
     piece: { target: 'random', water: undefined, size: [0, 2.75, 1.2] },
     wear: wearStructure(50, { ...woodResist, blunt: 'resistant' }, MaterialType.Wood),
@@ -3056,8 +3092,7 @@ export const pieces: Piece[] = [
     base: false,
     type: 'piece',
     subtype: 'structure',
-    disabled: true,
-    tier: 4,
+    tier: 6,
     emoji: '',
     piece: { target: 'random', water: undefined, size: [2, 0.9, 0.1] },
     wear: wearStructure(50, { ...woodResist, blunt: 'resistant' }, MaterialType.Wood),
@@ -3123,6 +3158,13 @@ export const pieces: Piece[] = [
   ashwoodStructure('ashwood_wall_roof_45', [2, 0.4, 2], 1),
   ashwoodStructure('ashwood_wall_roof_45_upsidedown', [2, 0.4, 2], 1),
   ashwoodStructure('ashwood_stair', [2, 1, 1], 2),
+  {
+    ...ashwoodStructure(
+      'piece_stakewall_blackwood', [2, 3, 2], 6,
+      { health: 450, resist: { ...ashwoodResist, fire: 'normal', pickaxe: 'normal' } }
+    ),
+    Aoe: { damage: dmg({ pierce: 120 }), self: 34 },
+  },
 
   graustenStructure('Piece_grausten_stone_ladder', 400, [1, 3, 2], 5),
   graustenStructure('piece_grausten_stonestair', 1500, [2, 1, 2], 8),
@@ -3302,6 +3344,30 @@ export const pieces: Piece[] = [
     recipe: { type: 'craft_piece', materials: { Pot_Shard_Red: 3, CharcoalResin: 1 }, station: null },
   },
   {
+    id: 'Placeable_HardRock',
+    iconId: 'resource/StoneRock',
+    base: false,
+    type: 'piece',
+    components: ['ItemStand', 'Deadspeak', 'Procreation', 'Tameable'],
+    subtype: 'misc',
+    tier: 2,
+    emoji: '🗿',
+    piece: { target: 'none', water: undefined, onlyOnFlat, size: [0.45, 0.3, 0.45] },
+    wear: wearStructure(200, mods([0, 0, 0, 0, 2, 1, 1, 0, 3, 3]), undefined, { ashResist: true, burnable: false }),
+    recipe: { type: 'craft_piece', materials: { StoneRock: 1, Coal: 1 }, station: null },
+  },
+  {
+    id: 'piece_ArcheryTarget',
+    base: false,
+    type: 'piece',
+    tier: 2,
+    emoji: '🎯',
+    subtype: 'misc',
+    piece: { target: 'random', water: false, notOnFloor: true, size: [2, 0.3, 2] },
+    wear: wearStructure(500, mods([0, 0, 3, 2, 0, 0, 0, 0, 3, 3]), undefined, { noRoof: false }),
+    recipe: { type: 'craft_piece', materials: { FineWood: 4, LeatherScraps: 10 }, station: 'piece_workbench' },
+  },
+  {
     id: 'piece_xmastree', season: 'christmas',
     base: false,
     type: 'piece',
@@ -3335,6 +3401,28 @@ export const pieces: Piece[] = [
     piece: { target: 'random', notOnFloor, water: undefined, size: [2.2, 0.6, 0.4] },
     wear: wearStructure(50, woodResist, undefined),
     recipe: { type: 'craft_piece', materials: { FineWood: 2, PineCone: 1 }, station: 'piece_workbench' },
+  },
+  {
+    id: 'piece_CelebrationGarland',
+    base: false,
+    type: 'piece',
+    tier: 2,
+    emoji: '🎀',
+    subtype: 'misc',
+    piece: { target: 'random', notOnFloor, water: undefined, size: [4, 1, 0.4] },
+    wear: wearStructure(50, mods([0, 0, 1, 2, 0, 2, 0, 0, 3, 3]), undefined),
+    recipe: { type: 'craft_piece', materials: { FineWood: 2, Dandelion: 1 }, station: 'piece_workbench' },
+  },
+  {
+    id: 'piece_FairylightGarland',
+    base: false,
+    type: 'piece',
+    tier: 2,
+    emoji: '🎀',
+    subtype: 'misc',
+    piece: { target: 'random', notOnFloor, water: undefined, size: [4, 1, 0.1] },
+    wear: wearStructure(50, mods([0, 0, 1, 2, 0, 2, 0, 0, 3, 3]), undefined),
+    recipe: { type: 'craft_piece', materials: { FineWood: 2, Thistle: 1 }, station: 'piece_workbench' },
   },
   {
     id: 'piece_mistletoe', season: 'christmas',
@@ -3758,7 +3846,7 @@ export const pieces: Piece[] = [
     tier: 7,
     piece: { target: 'random', water: false, onlyOnFlat, size: [2.2, 6.5, 2.2] },
     wear: wearStructure(1500, mods([1, 1, 1, 1, 0, 3, 3, 0, 3, 3]), MaterialType.Stone, { noRoof: false, ashResist: true, burnable: false }),
-    recipe: { type: 'craft_piece', materials: { Stone: 5, ShieldCore: 1, CeramicPlate: 5 }, station: 'piece_workbench' },
+    recipe: { type: 'craft_piece', materials: { Iron: 5, Copper: 5, ShieldCore: 1 }, station: 'piece_workbench' },
     ShieldGenerator: {
       fuelItems: ['BoneFragments', 'CharredBone'],
       maxFuel: 10,

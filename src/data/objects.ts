@@ -423,6 +423,31 @@ export const traders: PhysicalObject[] = [
   },
 ];
 
+function TreasureChest_meadows(id: string, extraDrop?: GeneralDrop['options'][number]): PhysicalObject {
+  return {
+    type: 'object',
+    subtype: 'treasure',
+    id,
+    iconId: 'piece/piece_chest_wood',
+    components: ['Container'],
+    tier: 1,
+    drop: [{
+      offByOneBug: false,
+      oneOfEach: extraDrop != null,
+      num: [2, 3],
+      options: [
+        { item: 'Feathers', num: [1, 3], },
+        { item: 'Coins', num: [5, 15], },
+        { item: 'Amber', num: [1, 1], },
+        { item: 'ArrowFlint', num: [10, 20], },
+        { item: 'Torch', num: [1, 1], },
+        { item: 'Flint', num: [2, 4], },
+        ...(extraDrop ? [extraDrop] : []),
+      ],
+    }],
+  };
+}
+
 const treasures: PhysicalObject[] = [
   {
     type: 'object',
@@ -441,33 +466,16 @@ const treasures: PhysicalObject[] = [
       ],
     }],
   },
-  {
-    type: 'object',
-    subtype: 'treasure',
-    id: 'TreasureChest_meadows',
-    iconId: 'piece/piece_chest_wood',
-    components: ['Container'],
-    tier: 1,
-    drop: [{
-      offByOneBug: false,
-      num: [2, 3],
-      options: [
-        { item: 'Feathers', num: [1, 3], },
-        { item: 'Coins', num: [5, 15], },
-        { item: 'Amber', num: [1, 1], },
-        { item: 'ArrowFlint', num: [10, 20], },
-        { item: 'Torch', num: [1, 1], },
-        { item: 'Flint', num: [2, 4], },
-      ],
-    }],
-  },
+  TreasureChest_meadows('TreasureChest_meadows'),
+  TreasureChest_meadows('TreasureChest_meadows_axe1', { item: 'AxeHead1', weight: 2 }),
+  TreasureChest_meadows('TreasureChest_meadows_axe2', { item: 'AxeHead2', weight: 2 }),
   {
     type: 'object',
     subtype: 'treasure',
     id: 'TreasureChest_meadows_buried',
     iconId: 'piece/piece_chest_wood',
     components: ['Container', 'Beacon'],
-    tier: 4,
+    tier: 3,
     drop: [{
       offByOneBug: false,
       oneOfEach,
@@ -481,6 +489,25 @@ const treasures: PhysicalObject[] = [
       ],
     }],
     Beacon: 40,
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
+    id: 'TreasureChest_meadows_combat',
+    iconId: 'piece/piece_chest_wood',
+    components: ['Container', 'Beacon'],
+    tier: 2,
+    drop: [{
+      offByOneBug: false,
+      oneOfEach,
+      num: [2, 3],
+      options: [
+        { item: 'MaceWood', num: [1, 1], },
+        { item: 'Feathers', num: [1, 3], },
+        { item: 'Torch', num: [1, 1], },
+      ],
+    }],
+    Beacon: 30,
   },
   {
     type: 'object',
@@ -820,10 +847,21 @@ const treasures: PhysicalObject[] = [
     subtype: 'treasure',
     tier: 5,
     id: 'TreasureChest_plainsfortress_hildir',
+    disabled: true,
     iconId: 'piece/piece_chest_wood',
     components: ['Container'],
-    disabled: true,
-    drop: [singleDrop('HildirKey_plainsfortress')],
+    drop: [{
+      offByOneBug: false,
+      oneOfEach,
+      num: [4, 5],
+      options: [
+        { item: 'AmberPearl', num: [2, 4], },
+        { item: 'Chain', num: [2, 5], },
+        { item: 'Coins', num: [11, 66], },
+        { item: 'Coins', num: [33, 99], },
+        { item: 'ChickenEgg', weight: 0.1, },
+      ],
+    }],
   },
   {
     type: 'object',
@@ -2447,7 +2485,7 @@ export const objects: PhysicalObject[] = [
   {
     type: 'object',
     id: 'cloth_hanging_door_double',
-    // iconId: 'piece/cloth_hanging_door_double',
+    iconId: 'piece/piece_cloth_hanging_door_blue',
     subtype: 'misc',
     tier: 4,
     Destructible: {
@@ -3786,6 +3824,30 @@ export const objects: PhysicalObject[] = [
         { item: 'MeadStaminaMinor', weight: 0.1 },
         { item: 'MeadTasty', weight: 0.1 },
       ],
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
+    id: 'morgenhole_pile',
+    iconId: 'resource/RottenMeat',
+    components: ['Destructible'],
+    tier: 7,
+    Destructible: {
+      hp: 100,
+      damageModifiers: mods([0, 0, 0, 0, 0, 0, 0, 0, 3, 3]),
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [{
+      offByOneBug: false,
+      num: [3, 4],
+      chance: 1,
+      options: [
+        { item: 'RottenMeat', num: [1, 0] },
+        { item: 'BoneFragments', num: [5, 15] },
+        { item: 'Softtissue', num: [1, 2] },
+      ]
     }],
   },
   // UnstableLavaRock: UnstableLavaRock

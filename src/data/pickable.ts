@@ -25,6 +25,20 @@ export const pickables: {
     subtype: 'misc',
   },
   {
+    id: 'Pickable_StoneRock',
+    iconId: 'resource/StoneRock',
+    tier: 1,
+    item: 'StoneRock',
+    subtype: 'misc',
+  },
+  {
+    id: 'Pickable_HardRockOffspring',
+    iconId: 'resource/StoneRock',
+    tier: 1,
+    item: 'Stone',
+    subtype: 'misc',
+  },
+  {
     id: 'RaspberryBush',
     tier: 1,
     item: 'Raspberry',

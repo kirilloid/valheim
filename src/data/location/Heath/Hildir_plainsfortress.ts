@@ -5,8 +5,7 @@ export default loc(
   5, 'Hildir_plainsfortress', ['Plains'],
   { components: [],
     biomeArea: 2, quantity: 3, prioritized: true,
-    minApart: 3000, terrainDelta: [0, 4], minAlt: 8, radius: [32, 32],
-    // FIXME camp / dungeon: ?
+    minApart: 3000, terrainDelta: [0, 4], minAlt: 8, radius: [32, 8.75],
     items: [
       locItem('GoblinShaman_Hildir'),
       locItem('GoblinBrute_Hildir'),

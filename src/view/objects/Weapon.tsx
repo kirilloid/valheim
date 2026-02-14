@@ -20,6 +20,8 @@ import { ItemHeader } from '../parts/ItemHeader';
 import { Effect } from '../parts/Effect';
 import { Resource } from '../parts/Resource';
 import { data } from '../../data/itemDB';
+import { animations } from '../../data/weapons';
+import { FRAME } from '../../model/game';
 
 function skill(skill: SkillType | null) {
   const str = skill && SkillType[skill];
@@ -48,7 +50,8 @@ function BombStats(props: { item: TBomb }) {
     <dl>
       <dt>{translate('ui.hands')}</dt><dd>{translate(`ui.slot.${item.slot}`)}</dd>
       <dt>{translate('ui.stamina')}</dt><dd>{item.stamina}</dd>
-      <dt>{translate('ui.effect')}</dt><dd><InlineObjectWithIcon id={item.spawns} /></dd>
+      <dt>{data[item.spawns]?.type === 'creature' ? 'spawns' : translate("ui.effect")}</dt>
+      <dd><InlineObjectWithIcon id={item.spawns} /></dd>
     </dl>
     {obj != null && 'Aoe' in obj && obj.Aoe != null && <React.Fragment key="aoe">
       <h3>AoE</h3>
@@ -160,7 +163,7 @@ function AttackTypeSpecific({ attack }: { attack: TAttack }) {
   }
 }  
 
-function Attack({ item, attack }: { item: TWeapon, attack: TAttack }) {
+function Attack({ attack }: { attack: TAttack }) {
   const translate = useContext(TranslationContext);
   const { damage = 1, force = 1, stagger = 1 } = attack.mul ?? {};
   return <dl>
@@ -170,6 +173,8 @@ function Attack({ item, attack }: { item: TWeapon, attack: TAttack }) {
       <dt>{translate('ui.stamina')}</dt>
       <dd>{attack.stamina}</dd>
     </React.Fragment>}
+    <dt>{translate('ui.adrenaline')}</dt>
+    <dd>{attack.adrenaline}</dd>
     {!!attack.eitr && <React.Fragment key="eitr">
       <dt>{translate('ui.eitr')}</dt>
       <dd>{attack.eitr}</dd>
@@ -187,10 +192,20 @@ function Attack({ item, attack }: { item: TWeapon, attack: TAttack }) {
     <dt>noise</dt>
     <dd>{attack.startNoise} / {attack.hitNoise}</dd>
     <AttackTypeSpecific attack={attack} />
+    {attack.cantUseInDungeon && <><dt>info</dt><dd>Can't be used in dungeons</dd></>}
     {damage !== 1 && <><dt>{translate('ui.damage')}</dt><dd>{damage}×</dd></>}
     {force !== 1 && <><dt>{translate('ui.knockback')}</dt><dd>{force}×</dd></>}
     {stagger !== 1 && <><dt>{translate('ui.stagger')}</dt><dd>{stagger}×</dd></>}
   </dl>;
+}
+
+function AnimationChart({ attack }: { attack: TAttack }) {
+  const mainAnimation = animations[attack.animation];
+  return <section className="sidebar">
+    <h3>Duration</h3>
+    {mainAnimation.map(anim => `${(anim.ticks * FRAME).toFixed(2)}s`).join(' + ')}
+    {mainAnimation.length > 1 && ` = ${mainAnimation.reduce((a, b) => a + b.ticks, 0) * FRAME}s`}
+  </section>
 }
 
 export function Weapon({ item, level }: { item: TWeapon, level?: number }) {
@@ -200,13 +215,17 @@ export function Weapon({ item, level }: { item: TWeapon, level?: number }) {
     <>
       <ItemHeader item={item} />
       <WeaponStats item={item} level={level} />
-      {primaryAttack && <section>
+      {primaryAttack && <section className="with-sidebar">
         <h2>{translate('ui.attack.primary')}</h2>
-        <Attack item={item} attack={primaryAttack} />
+        <Attack attack={primaryAttack} />
+        <AnimationChart attack={primaryAttack} />
       </section>}
-      {secondaryAttack && <section>
+      {secondaryAttack && <section className="with-sidebar">
         <h2>{translate('ui.attack.secondary')}</h2>
-        <Attack item={item} attack={secondaryAttack} />
+        <div>
+          <Attack attack={secondaryAttack} />
+          <AnimationChart attack={secondaryAttack} />
+        </div>
       </section>}
       <Resource item={item}/>
       <RecipeSection item={item} />

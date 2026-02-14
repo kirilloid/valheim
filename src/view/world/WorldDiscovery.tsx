@@ -16,7 +16,7 @@ function showPercent(ratio: number, precision: number) {
     : `≈${Math.round(percent)}%`
 }
 
-const laterReleasedBiome = new Set<Biome>(['Ashlands'/*, 'DeepNorth'*/]);
+const laterReleasedBiome = new Set<Biome>(['DeepNorth']);
 
 type ProgressState = {
   progress: number;

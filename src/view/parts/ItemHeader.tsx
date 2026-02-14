@@ -32,7 +32,7 @@ export const ItemHeader = React.memo(({ item, noIcon = false, children }: { item
           {' '}
           {translate(e.id)}
         </React.Fragment>),
-    [group, filter, item],
+    [group, filter, item, translate],
   );
 
   return <>

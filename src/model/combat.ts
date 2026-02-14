@@ -127,6 +127,10 @@ export function getBowDrawTime(skill: number): number {
   return lerp(1, 0.2, skill / 100);
 }
 
+export function getWeaponLoadingTime(skill: number): number {
+  return lerp(1, 0.5, skill / 100);
+}
+
 export function getTotalDamage(damage: Partial<DamageProfile>): number {
   return Object.values(damage).reduce<number>((a, b) => a + (b ?? 0), 0);
 }
@@ -188,24 +192,44 @@ export function doAttack(
   return { instant: rest, overTime, total, stamina, stagger };
 }
 
-function getAttackStats(weapon: Weapon, attack: Attack, skillLvl: number) {
-  const animationTimes = animations[attack.animation];
-  const drawTime = (weapon.holdDurationMin ?? 0) * getBowDrawTime(skillLvl);
-  const times = animationTimes.map(t => t + drawTime);
+function getAttackStats(attack: Attack, skillLvl: number) {
+  const animationsSummaries = animations[attack.animation];
+  const draw = attack.draw;
+  const reload = attack.reload;
+  const times = animationsSummaries.map(as => as.ticks * FRAME);
+  const hits = animationsSummaries.map(as => as.hits.length);
+  const attackStamina = attack.stamina * getResourceUsageSkillFactor(skillLvl) * hits.length;
+  let totalStamina = attackStamina;
+  let totalEitr = (attack.eitr ?? 0) * getResourceUsageSkillFactor(skillLvl) * hits.length;
+
+  if (draw) {
+    const drawTime = draw.duration * getBowDrawTime(skillLvl);
+    for (let i = 0; i < times.length; i++) {
+      times[i] += drawTime + 3 * FRAME;
+    }
+    totalStamina += drawTime * draw.stamina;
+  }
+
+  if (reload) {
+    const reloadTime = reload.time * getWeaponLoadingTime(skillLvl);
+    for (let i = 0; i < times.length; i++) {
+      times[i] += reloadTime;
+    }
+    totalStamina += reload.stamina ?? 0;
+    totalEitr += reload.eitr ?? 0;
+  }
+
   const totalTime = times.reduce((a, b) => a + b, 0);
 
-  const drawStamina = weapon.holdDurationMin != null ? drawTime * (weapon.holdStaminaDrain ?? 0) + 3 * FRAME : 0;
-  const attackStamina = attack.stamina * getResourceUsageSkillFactor(skillLvl) * times.length;
-  const totalStamina = drawStamina + attackStamina;
-
-  const comboTotal = attack.type === 'melee' && times.length > 1
-    ? times.length + (attack.chainCombo - 1)
-    : 1;
+  const comboTotal = attack.type === 'melee' && hits.length > 1
+    ? hits.reduce((a, b, i) => a + b * (i + 1 === attack.chain ? 2 : 1), 0)
+    : hits.length;
 
   return {
     times,
     totalStamina,
     totalTime,
+    totalEitr,
     comboTotal,
   }
 }
@@ -214,23 +238,28 @@ const wetEffect = effects.find(e => e.id === 'Wet');
 const wetModifiers = wetEffect?.damageModifiers;
 
 /**
- * orig\over No Re We Im Ig VR VW
- *  Normal         x  v        x
- *  Resist         x  v        x
- *  Weak              v         
- *  Immune            v         
- *  Ignore   x  x  x  x  x  x  x
- *  VeRes       x  x  v        x
- *  VeWeak         x  v         
+ * orig\over No Re We Im Ig VR VW SR SW
+ *  Normal            v               
+ *  Resist         x  v        x  x  x
+ *  Weak              v              x
+ *  Immune         x  v        x     x
+ *  Ignore   x  x  x  x  x  x  x  x  x
+ *  VeRes       x  x  v        x  x  x
+ *  VeWeak         x  v              x
+ *  SlRes          x  v        x     x
+ *  SlWeak            v               
  */
 const overrideResistance = (original: DamageModifier, override: DamageModifier | undefined): DamageModifier => {
   if (original === 'ignore') return original;
+  if (override === 'immune') return override;
   if (original === 'veryResistant' && override === 'resistant') return original;
   if (original === 'veryWeak' && override === 'weak') return original;
-  if (original === 'resistant' && override === 'weak') return original;
-  if ((original === 'resistant' || original === 'veryResistant' || original === 'immune')
-  &&  (override === 'weak' || override === 'veryWeak'))
-    return original;
+  if ((original === 'veryResistant' || original === 'resistant')
+    && override === 'slightlyResistant') return original;
+  if ((original === 'veryWeak' || original === 'weak')
+    && override === 'slightlyWeak') return original;
+  if ((original === 'resistant' || original === 'veryResistant' || original === 'slightlyResistant' || original === 'immune')
+  &&  (override === 'weak' || override === 'veryWeak' || override === 'slightlyWeak')) return original;
   return override ?? original;
 };
 
@@ -294,7 +323,7 @@ export function attackCreature(
 
   const damageFixed = getTotalDamage(instant);
 
-  const { times, totalStamina, totalTime, comboTotal } = getAttackStats(item, attack, skill);
+  const { times, totalStamina, totalTime, totalEitr, comboTotal } = getAttackStats(attack, skill);
 
   const multiplier = attack.mul?.damage ?? 1;
   const backstabBonus = backstab && item.skill !== null ? item.backstab : 1;

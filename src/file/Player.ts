@@ -72,6 +72,9 @@ export type Player = {
   knownWorlds: Map<string, number>;
   knownWorldKeys: Map<string, number>;
   knownCommands: Map<string, number>;
+  enemyStats: Map<string, number>;
+  itemPickupStats: Map<string, number>;
+  itemCraftStats: Map<string, number>;
   playerData?: PlayerData;
 };
 
@@ -146,6 +149,9 @@ function* readPlayer(bytes: Uint8Array): Generator<number, Player> {
     const knownWorlds = reader.readMap(reader.readString, reader.readFloat);
     const knownWorldKeys = reader.readMap(reader.readString, reader.readFloat);
     const knownCommands = reader.readMap(reader.readString, reader.readFloat);
+    const enemyStats = version >= 42 ? reader.readMap(reader.readString, reader.readFloat) : new Map();
+    const itemPickupStats = version >= 42 ? reader.readMap(reader.readString, reader.readFloat) : new Map();
+    const itemCraftStats = version >= 42 ? reader.readMap(reader.readString, reader.readFloat) : new Map();
 
     const playerData = reader.readIf(reader.readByteArray);
 
@@ -162,6 +168,9 @@ function* readPlayer(bytes: Uint8Array): Generator<number, Player> {
       knownWorlds,
       knownWorldKeys,
       knownCommands,
+      enemyStats,
+      itemPickupStats,
+      itemCraftStats,
       playerData: playerData && readPlayerData(playerData),
     };
   } else {
@@ -179,6 +188,9 @@ function* readPlayer(bytes: Uint8Array): Generator<number, Player> {
       knownWorlds: new Map(),
       knownWorldKeys: new Map(),
       knownCommands: new Map(),
+      enemyStats: new Map(),
+      itemPickupStats: new Map(),
+      itemCraftStats: new Map(),
       playerData: playerData && readPlayerData(playerData),
     };
   }
@@ -215,6 +227,11 @@ function* writePlayer(
     writer.writeMap(writer.writeString, writer.writeFloat, player.knownWorlds);
     writer.writeMap(writer.writeString, writer.writeFloat, player.knownWorldKeys);
     writer.writeMap(writer.writeString, writer.writeFloat, player.knownCommands);
+  }
+  if (player.version >= 42) {
+    writer.writeMap(writer.writeString, writer.writeFloat, player.enemyStats);
+    writer.writeMap(writer.writeString, writer.writeFloat, player.itemPickupStats);
+    writer.writeMap(writer.writeString, writer.writeFloat, player.itemCraftStats);
   }
   const playerData = player.playerData && writePlayerData(player.playerData);
   writer.writeIf(writer.writeByteArray, playerData);

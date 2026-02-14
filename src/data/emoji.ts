@@ -38,6 +38,7 @@ export const skill: Record<SkillType, string> = {
   [SkillType.Farming]: '👨‍🌾',
   [SkillType.Crafting]: '⚒',
   [SkillType.Ride]: '🏇',
+  [SkillType.Dodge]: '🧻',
   [SkillType.All]: '*',
 };
 

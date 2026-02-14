@@ -13,17 +13,18 @@ import { Wiki } from '../parts/Wiki';
 const baseKeys = [
   ['defeated_eikthyr', 'Eikthyr'],
   ['KilledTroll', 'Troll'],
-  ['Hildir1', 'Skeleton_Hildir'],
+  ['BossHildir1', 'Skeleton_Hildir'],
   ['defeated_gdking', 'gd_king'],
   ['killed_surtling', 'Surtling'],
   ['kvasturdead', 'BogWitchKvastur'],
   ['defeated_bonemass', 'Bonemass'],
   ['KilledBat', 'Bat'],
-  ['Hildir2', 'Fenring_Cultist_Hildir'],
+  ['BossHildir2', 'Fenring_Cultist_Hildir'],
   ['defeated_dragon', 'Dragon'],
-  ['Hildir3', 'GoblinBruteBros'],
+  ['BossHildir3', 'GoblinBruteBros'],
   ['defeated_goblinking', 'GoblinKing'],
   ['defeated_queen', 'SeekerQueen'],
+  ['defeated_fader', 'Fader'],
 ] as const;
 
 function Keys({ value, onChange }: ValueProps<string[]>) {
@@ -42,7 +43,8 @@ function Keys({ value, onChange }: ValueProps<string[]>) {
     <ul>
       {baseKeys.map(([key, id]) => <li key={key}>
         <label>
-          <input type="checkbox" checked={value.includes(key)} onChange={e => onChange(toggleItem(value, key, e.target.checked))} />
+          <input type="checkbox" checked={value.includes(key.toLowerCase())}
+            onChange={e => onChange(toggleItem(value, key.toLowerCase(), e.target.checked))} />
           {' '}
           <ItemIcon item={data[id]} />
           {' '}

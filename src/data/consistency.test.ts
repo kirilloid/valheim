@@ -61,6 +61,9 @@ for (const c of creatures) {
 
 for (const f of fishes) {
   sourced.add(f.id);
+  for (const { item } of f.extraDrop.options) {
+    sourced.add(item);
+  }
 }
 
 for (const r of resources) {
@@ -126,6 +129,11 @@ for (const i of items) {
       if (a.type === 'summon') {
         sourced.add(a.summons);
       }
+    }
+  }
+  if (i.type === 'bomb') {
+    if (i.spawns) {
+      sourced.add(i.spawns);
     }
   }
 }

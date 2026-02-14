@@ -1,3 +1,4 @@
+export { default as CombatRuin01 } from './CombatRuin01';
 export { default as Dolmen01 } from './Dolmen01';
 export { default as Dolmen02 } from './Dolmen02';
 export { default as Dolmen03 } from './Dolmen03';

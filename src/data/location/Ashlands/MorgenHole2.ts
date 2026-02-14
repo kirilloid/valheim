@@ -18,7 +18,7 @@ export default loc(
         locItem(P.randomwall4, 0.5),
         locItem(P.chest),
         locItem('Morgen'),
-        locItem('Vegvisir_placeofmystery_2', 0.2),
+        locItem('Vegvisir_placeofmystery_2', 0.25),
       ]),
     ],
   },

@@ -125,6 +125,9 @@ function addObjects(dict: Record<string, string>) {
     }
     if ('PointLight' in gobj) addTag('ui.tags.light');
     switch (gobj.type) {
+      case 'armor':
+        if (gobj.slot === 'trinket') addTag('ui.slot.trinket');
+        break;
       case 'weapon':
         if (gobj.slot === 'both') addTag('ui.tags.2hand');
         break;

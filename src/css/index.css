@@ -113,6 +113,11 @@ input[type='radio'] {
   min-width: 200px;
 }
 
+::file-selector-button {
+  border-width: 0 1px 0 0;
+  height: 100%;
+}
+
 label {
   font-weight: bold;
 }
@@ -128,7 +133,7 @@ sub, sup {
   border: 0 solid black;
   background-color: var(--color-secondary);
   color: white;
-  border-radius: 0.25em;
+  border-radius: 0.25rem;
 }
 
 .btn--primary {
@@ -153,7 +158,8 @@ sub, sup {
 
 .btn--sm {
   height: 1.5rem;
-  font-size: 0.8em;
+  font-size: 0.75rem;
+  line-height: 1rem;
   padding: 0.25rem 0.75em;
 }
 
@@ -240,6 +246,12 @@ article h3 {
   text-transform: capitalize;
 }
 
+section:first-of-type h1:first-child,
+section:first-of-type h2:first-child,
+section:first-of-type h3:first-child {
+  margin-top: 0;
+}
+
 article *:target,
 article *.active {
   background: var(--color-highlight);
@@ -309,4 +321,24 @@ table .value {
   flex-direction: row;
   align-items: center;
   gap: 0.5rem;
+}
+
+.flex { display: flex; }
+.flex-row { flex-direction: row; }
+.flex-col { flex-direction: column; }
+.gap-4 { gap: 1rem; }
+.gap-2 { gap: 0.5rem; }
+.gap-1 { gap: 0.25rem; }
+
+@media screen and (min-width: 640px) {
+  .with-sidebar {
+    position: relative;
+  }
+
+  .with-sidebar .sidebar {
+    position: absolute;
+    right: 0;
+    width: 50%;
+    top: -0.25rem;
+  } 
 }

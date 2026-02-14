@@ -71,20 +71,20 @@ function Attacks({ attacks, dmgScale }: { attacks: AttackVariety[]; dmgScale: nu
 
   if (attacks.length === 0) return null;
   if (attacks.length === 1) {
-    return <div>
+    return <>
       <h3>{translate('ui.attacks')}</h3>
       <Attack attack={attacks[0]!} dmgScale={dmgScale} />
-    </div>
+    </>
   }
   
   const totalVarietyRates = attacks.reduce((t, a) => t + a.rate, 0);
-  return <div>
+  return <>
     <h3>{translate('ui.attacks')}</h3>
     <Tabs tabs={attacks.map(a => ({
       title: `${a.variety} (${Math.round(100 * a.rate / totalVarietyRates)}%)`,
       renderer: () => <Attack attack={a} dmgScale={dmgScale} />,
     }))} selected={0} />
-  </div>
+  </>
 }
 
 export function Creature({ creature, level }: { creature: TCreature, level?: number }) {
@@ -152,7 +152,7 @@ export function Creature({ creature, level }: { creature: TCreature, level?: num
         {creature.tolerate & TOLERATE.WATER ? null : <><dt>water</dt><dd>vulnerable</dd></>}
         {creature.tolerate & TOLERATE.SMOKE ? null : <><dt>smoke</dt><dd>vulnerable</dd></>}
         {creature.tolerate & TOLERATE.TAR ? <>
-          <dt><Link to="/effect/Tarred">{translate('Tar')}</Link></dt>
+          <dt><Link to="/effect/Tared">{translate('Tar')}</Link></dt>
           <dd>immune</dd>
         </> : null}
       </dl>

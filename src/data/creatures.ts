@@ -67,7 +67,7 @@ const charredSummonDmgModifiers = mods([0, 0, 1, 4, 4, 3, 0, 0, 3, 2]);
 const unblockable = true;
 const undodgeable = true;
 
-const areaCollider = (radius: number): AttackCollider => ({ type: 'area', radius: 4 });
+const areaCollider = (radius: number): AttackCollider => ({ type: 'area', radius });
 
 const single = (attacks: AttackProfile[]): [AttackVariety] => {
   return [{ rate: 1, variety: '', attacks }]; 
@@ -86,6 +86,35 @@ function variations(main: Creature, ...others: (Partial<Omit<Creature, 'id'>> & 
     main,
     ...others.map(other => ({ ...main, ...other })),
   ];
+}
+
+const aggravatable = true;
+
+export const player: Creature = {
+  type: 'creature',
+  id: 'Player',
+  ragdollId: 'Player_ragdoll',
+  components: ['Character'],
+  tier: 0,
+  emoji: '🧑',
+  faction: 'Players',
+  spawners: [],
+  attacks: [],
+  tolerate: TOLERATE.WATER,
+  speed: {
+    walk: 1.6,
+    run: 7,
+    swim: 2,
+  },
+  turnSpeed: {
+    walk: 300,
+    run: 3000,
+    swim: 100,
+  },
+  hp: 100,
+  stagger: null,
+  damageModifiers: mods([0, 0, 0, 3, 3, 0, 0, 0, 0, 3]),
+  drop: [],
 }
 
 export const creatures: Creature[] = [
@@ -280,6 +309,7 @@ export const creatures: Creature[] = [
     upgradeDistance: 800,
     emoji: '🐗',
     faction: 'ForestMonsters',
+    factionGroup: 'boar',
     spawners: [spawner({
       tier: 0,
       biomes: ['Meadows'],
@@ -319,7 +349,6 @@ export const creatures: Creature[] = [
             eats: ['Raspberry', 'Mushroom', 'Blueberries', 'Carrot', 'Turnip', 'Onion'] },
             // eatRange:1.0, searchRange:10, heal:5
     pregnancy: { points: 3, time: 60, chance: 0.33, grow: 3000, childId: 'Boar_piggy' },
-    // Boar_piggy: 10hp
   },
   {
     type: 'creature',
@@ -331,6 +360,7 @@ export const creatures: Creature[] = [
     tier: 1,
     emoji: '🐗',
     faction: 'ForestMonsters',
+    factionGroup: 'boar',
     spawners: [],
     attacks: [],
     tolerate: TOLERATE.WATER,
@@ -612,7 +642,10 @@ export const creatures: Creature[] = [
       poison: 'immune',
       spirit: 'weak',
     },
-    drop: [],
+    drop: [
+      dropEntry('Ectoplasm', { max: 3 }),
+      dropTrophy('TrophyGhost', 0.1),
+    ],
   },
   {
     type: 'creature',
@@ -803,6 +836,78 @@ export const creatures: Creature[] = [
   },
   {
     type: 'creature',
+    id: 'Bjorn',
+    ragdollId: 'Bjorn_ragdoll',
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
+    tags: ['animal'],
+    tier: 2,
+    upgradeDistance: 2000,
+    emoji: '🐻',
+    faction: 'ForestMonsters',
+    factionGroup: 'bjorn',
+    spawners: [spawner({
+      tier: 2,
+      biomes: ['BlackForest'],
+      maxSpawned: 1,
+      interval: 700,
+      chance: 0.3,
+      night: false,
+      levels: [1, 2],
+    }), spawner({
+      tier: 2,
+      biomes: ['BlackForest'],
+      maxSpawned: 1,
+      interval: 700,
+      chance: 0.4,
+      night: true,
+      levels: [1, 3],
+    })],
+    attacks: single([
+      { dmg: dmg({ pierce: 55 }), force: 40, name: 'bite' },
+      { dmg: dmg({ slash: 50, chop: 40 }), force: 40, name: 'claws' },
+      { dmg: dmg({ slash: 25, chop: 40 }), force: 35, name: 'swipe_l' },
+      { dmg: dmg({ slash: 25, chop: 40 }), force: 35, name: 'swipe_r' },
+      { dmg: dmg({ slash: 25, chop: 40 }), force: 40, name: 'swipe_combo' },
+      { dmg: dmg({ blunt: 50, chop: 40, pickaxe: 40 }), force: 100, name: 'slam' },
+    ]),
+    tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 3,
+      run: 6,
+      swim: 1.5,
+    },
+    turnSpeed: {
+      walk: 80,
+      run: 100,
+      swim: 50,
+    },
+    hp: 800,
+    regenAllHPTime: 3000,
+    stagger: {
+      factor: 0.3,
+      time: 2.74,
+    },
+    damageModifiers: {
+      blunt: 'resistant',
+      slash: 'normal',
+      pierce: 'resistant',
+      chop: 'ignore',
+      pickaxe: 'ignore',
+      fire: 'weak',
+      frost: 'resistant',
+      lightning: 'normal',
+      poison: 'normal',
+      spirit: 'immune',
+    },
+    drop: [
+      dropEntry('BjornPaw'),
+      dropEntry('BjornMeat', { min: 2, max: 3 }),
+      dropEntry('BjornHide', { min: 4, max: 5 }),
+      dropTrophy('TrophyBjorn', 0.1),
+    ],
+  },
+  {
+    type: 'creature',
     id: 'Troll',
     ragdollId: 'Troll_ragdoll',
     components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI', 'VisEquipment'],
@@ -823,15 +928,20 @@ export const creatures: Creature[] = [
         rate: 2,
         variety: 'unarmed',
         attacks: [
+          // troll_punch
           { dmg: dmg({ blunt: 60, chop: 100, pickaxe: 40 }), name: '1-hand hit', stagger: 4.4, force: 100, toolTier: 2 },
+          // troll_groundslam
           { dmg: dmg({ blunt: 70, chop: 100, pickaxe: 40 }), name: '2-hand smash', stagger: 1.98, force: 100, toolTier: 2 },
+          // troll_throw
           { dmg: dmg({ blunt: 50, chop: 60, pickaxe: 40 }), name: 'throw', stagger: 2.16, toolTier: 0 },
         ],
       }, {
         rate: 1,
         variety: 'log',
         attacks: [
+          // troll_log_swing_v
           { dmg: dmg({ blunt: 70, chop: 100, pickaxe: 40 }), name: 'v-swing', stagger: 2.74, force: 80, toolTier: 2 },
+          // troll_log_swing_h
           { dmg: dmg({ blunt: 60, chop: 100, pickaxe: 40 }), name: 'h-swing', stagger: 2.74, force: 80, toolTier: 2 },
         ],
       },
@@ -945,6 +1055,14 @@ export const creatures: Creature[] = [
     drop: [],
     timedDestruction: [18, 20],
   },
+  // {
+  //   id: 'piece_TrainingDummy',
+  //   type: 'creature',
+  //   tier: 2,
+  //   emoji: '🥊',
+  //   // piece: { target: 'random', water: false, size: [2, 0.3, 2] },
+  //   // recipe: { type: 'craft_piece', materials: { FineWood: 5, BronzeNails: 10, Ectoplasm: 5 }, station: 'piece_workbench' },
+  // },
 // SWAMP
   {
     type: 'creature',
@@ -1359,6 +1477,7 @@ export const creatures: Creature[] = [
     tier: 3,
     emoji: '🧹',
     faction: 'Dverger',
+    aggravatable,
     spawners: [],
     attacks: single([
       { dmg: dmg({ blunt: 80 }), name: 'attack', force: 30, toolTier: 0 },
@@ -1446,6 +1565,35 @@ export const creatures: Creature[] = [
 // MOUNTAINS
   {
     type: 'creature',
+    group: 'blob',
+    id: 'BlobFrost',
+    ragdollId: null,
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
+    tier: 4,
+    emoji: '🦠',
+    faction: 'PlayerSpawned',
+    spawners: [],
+    attacks: single([{ dmg: dmg({ frost: 100 }), name: 'nova', unblockable, collider: areaCollider(4) }]),
+    tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
+    speed: {
+      walk: 1,
+      run: 2,
+      swim: 2,
+    },
+    turnSpeed: {
+      walk: 100,
+      run: 100,
+      swim: 100,
+    },
+    hp: 50,
+    stagger: null,
+    damageModifiers: { ...blobDamageModifiers, frost: 'veryResistant' },
+    drop: [
+      dropEntry('Crystal', { min: 1, max: 2 }),
+    ],
+  },
+  {
+    type: 'creature',
     id: 'Bat',
     ragdollId: null,
     components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
@@ -1523,6 +1671,7 @@ export const creatures: Creature[] = [
     tier: 4,
     emoji: '🐺',
     faction: 'MountainMonsters',
+    factionGroup: 'wolf',
     spawners: [spawner({
       tier: 4,
       biomes: ['Mountain'],
@@ -1590,6 +1739,7 @@ export const creatures: Creature[] = [
     tier: 4,
     emoji: '🐺',
     faction: 'MountainMonsters',
+    factionGroup: 'wolf',
     spawners: [],
     attacks: [],
     tolerate: TOLERATE.WATER,
@@ -2443,6 +2593,7 @@ export const creatures: Creature[] = [
     tier: 5,
     emoji: '🐂',
     faction: 'PlainsMonsters',
+    factionGroup: 'lox',
     spawners: [spawner({
       tier: 5,
       biomes: ['Plains'],
@@ -2495,6 +2646,7 @@ export const creatures: Creature[] = [
     tier: 5,
     emoji: '🐂',
     faction: 'PlainsMonsters',
+    factionGroup: 'lox',
     spawners: [],
     attacks: [],
     tolerate: TOLERATE.WATER,
@@ -2518,6 +2670,72 @@ export const creatures: Creature[] = [
   },
   {
     type: 'creature',
+    id: 'Unbjorn',
+    ragdollId: 'Unbjorn_ragdoll',
+    components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
+    tier: 5,
+    upgradeDistance: 2000,
+    emoji: '🐻',
+    faction: 'PlainsMonsters',
+    factionGroup: 'bjorn',
+    spawners: [spawner({
+      tier: 5,
+      biomes: ['Plains'],
+      maxSpawned: 1,
+      interval: 4000,
+      chance: 0.25,
+      night: true,
+      minDistance: 2000,
+      levels: [1, 1],
+    })],
+    attacks: single([
+      { dmg: dmg({ slash: 20, pierce: 130 }), force: 40, name: 'bite' },
+      { dmg: dmg({ slash: 130, chop: 40 }), force: 40, name: 'claws' },
+      { dmg: dmg({ slash: 60, chop: 40 }), force: 35, name: 'swipe_l' },
+      { dmg: dmg({ slash: 60, chop: 40 }), force: 35, name: 'swipe_r' },
+      { dmg: dmg({ slash: 60, chop: 40 }), force: 40, name: 'swipe_combo' },
+      { dmg: dmg({ blunt: 150, chop: 40, pickaxe: 40 }), force: 100, name: 'slam' },
+    ]),
+    tolerate: TOLERATE.WATER,
+    speed: {
+      walk: 3,
+      run: 6,
+      swim: 1.5,
+    },
+    turnSpeed: {
+      walk: 80,
+      run: 100,
+      swim: 50,
+    },
+    hp: 1200,
+    regenAllHPTime: 3000,
+    stagger: {
+      factor: 0.3,
+      time: 2.74,
+    },
+    damageModifiers: {
+      blunt: 'resistant',
+      slash: 'normal',
+      pierce: 'resistant',
+      chop: 'ignore',
+      pickaxe: 'ignore',
+      fire: 'weak',
+      frost: 'resistant',
+      lightning: 'normal',
+      poison: 'normal',
+      spirit: 'immune',
+    },
+    drop: [
+      dropTrophy('TrophyBjornUndead', 0.1),
+      dropEntry('BjornMeat', { min: 2, max: 3 }),
+      dropEntry('RottenMeat', { min: 1, max: 2, chance: 0.8 }),
+      dropEntry('UndeadBjornRibcage', { min: 1, max: 3 }),
+      dropEntry('BjornHide', { min: 1, max: 2 }),
+    ],
+  },
+  {
+    type: 'creature',
+    group: 'blob',
     id: 'BlobTar',
     ragdollId: null,
     components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
@@ -2621,6 +2839,7 @@ export const creatures: Creature[] = [
     tier: 6,
     emoji: '🐔',
     faction: 'ForestMonsters',
+    factionGroup: 'chicken',
     spawners: [],
     attacks: single([{ dmg: dmg({ blunt: 10 }), stagger: 1.24, name: 'beak' }]),
     tolerate: TOLERATE.WATER,
@@ -2656,6 +2875,7 @@ export const creatures: Creature[] = [
     tier: 6,
     emoji: '🐤',
     faction: 'ForestMonsters',
+    factionGroup: 'chicken',
     spawners: [],
     attacks: [],
     tolerate: TOLERATE.WATER,
@@ -2730,7 +2950,7 @@ export const creatures: Creature[] = [
     tags: ['animal'],
     tier: 6,
     emoji: '💀',
-    faction: 'Players',
+    faction: 'PlayerSpawned',
     spawners: [],
     attacks: [
       {
@@ -2771,6 +2991,7 @@ export const creatures: Creature[] = [
     tier: 6,
     emoji: '🏹',
     faction: 'Dverger',
+    aggravatable,
     spawners: [spawner({
       tier: 6,
       biomes: ['Mistlands'],
@@ -2825,6 +3046,7 @@ export const creatures: Creature[] = [
     tier: 6,
     emoji: '🧙‍♂️',
     faction: 'Dverger',
+    aggravatable,
     spawners: [],
     // visual: DvergerHairMale
     // visual: DvergerHairFemale
@@ -2885,8 +3107,9 @@ export const creatures: Creature[] = [
     components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],
     PointLight: { color: '#EE433E', range: 10, intensity: 1.5 },
     tier: 2,
-    emoji: '',
+    emoji: '🔵',
     faction: 'Dverger',
+    aggravatable,
     spawners: [],
     attacks: single([
       { dmg: dmg({ blunt: 150 }), name: 'kamikaze', force: 20, toolTier: 0, collider: areaCollider(1.5) }
@@ -3428,13 +3651,13 @@ export const creatures: Creature[] = [
     })],
     attacks: single([
       // volture_talons
-      { dmg: dmg({ slash: 110 }), stagger: NaN, force: 5, name: 'talons' },
+      { dmg: dmg({ slash: 110 }), stagger: 0.9, force: 5, name: 'talons' },
     ]),
     tolerate: TOLERATE.WATER,
     speed: { walk: 7, run: 13, swim: 0 },
     turnSpeed: { walk: 300, run: 300, swim: 0 },
     hp: 200,
-    stagger: { factor: 0.5, time: NaN },
+    stagger: { factor: 0.5, time: 0.9 },
     damageModifiers: {
       ...defaultDmgModifiers,
       frost: 'weak',
@@ -3457,6 +3680,7 @@ export const creatures: Creature[] = [
     tier: 1,
     emoji: '🐗',
     faction: 'Demon',
+    factionGroup: 'asksvin',
     spawners: [spawner({
       tier: 7,
       biomes: ['Ashlands'],
@@ -3533,6 +3757,7 @@ export const creatures: Creature[] = [
     tier: 7,
     emoji: '🐗',
     faction: 'Demon',
+    factionGroup: 'asksvin',
     spawners: [],
     attacks: [],
     tolerate: TOLERATE.WATER,
@@ -3556,7 +3781,7 @@ export const creatures: Creature[] = [
     tags: ['animal'],
     tier: 7,
     emoji: '💀',
-    faction: 'Players',
+    faction: 'PlayerSpawned',
     spawners: [],
     attacks: [
       {
@@ -3606,6 +3831,7 @@ export const creatures: Creature[] = [
     tier: 7,
     emoji: '🏹',
     faction: 'Dverger',
+    aggravatable,
     spawners: [spawner({
       tier: 7,
       biomes: ['Ashlands'],
@@ -3946,6 +4172,7 @@ export const creatures: Creature[] = [
   },
   {
     type: 'creature',
+    group: 'blob',
     id: 'BlobLava',
     ragdollId: null,
     components: ['BaseAI', 'Character', 'Humanoid', 'MonsterAI'],

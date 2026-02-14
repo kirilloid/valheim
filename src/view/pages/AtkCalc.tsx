@@ -336,7 +336,7 @@ export function AttackCalc() {
             {translate('ui.backstab')}
           </label>
           {' '}
-          <Link to="/info/combat#backatb">ℹ️</Link>
+          <Link to="/info/combat#backstab">ℹ️</Link>
         </div>
       </div>
       <div className="CombatCalc__Player">

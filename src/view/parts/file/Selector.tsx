@@ -69,7 +69,7 @@ function LinuxFilePaths({ subpath }: PathsProps) {
       <dt><Icon id="file_legacy" size={28} alt="" /> {translate('ui.fileEditor.type.legacy')}</dt>
       <dd><code>/home<wbr/>/steam<wbr/>/.config<wbr/>/unity3d<wbr/>/IronGate<wbr/>/Valheim<wbr/>/{subpath}</code></dd>
     </dl>
-    <p>Files are visible only by <code>steam</code> user, use <code>chmod</code> or <code>su</code> commands if needed</p>
+    <p>Files are visible only to <code>steam</code> user, use <code>chmod</code> or <code>su</code> commands if needed</p>
   </>);
 }
 

@@ -19,7 +19,7 @@ export const WoodHouse2 = loc(
     customMusic: 'Music_MeadowsVillageFarm',
     items: [
       locItem('Beehive', 0.25),
-      locItem('TreasureChest_meadows', 0.5),
+      locItem('TreasureChest_meadows_axe2', 0.5),
       locItem('goblin_bed', 0.5, 2),
     ],
   },
@@ -61,7 +61,7 @@ export const WoodHouse6 = loc(
     customMusic: 'Music_MeadowsVillageFarm',
     items: [
       locItem('Beehive', 0.25),
-      locItem('TreasureChest_meadows', 1),
+      locItem('TreasureChest_meadows_axe1', 1),
     ],
   },
   'WoodHouse',

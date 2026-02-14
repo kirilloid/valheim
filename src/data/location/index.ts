@@ -187,6 +187,7 @@ export const locations: LocationConfig[] = [
   // DevFloor1: disabled
   // DevGround1: disabled
   // DevGround2: disabled
+  L.CombatRuin01,
 
   // locations_cp1, sortOrder: 3
   L.TarPit1,

@@ -19,6 +19,8 @@ export type DamageModifier =
   | 'ignore'
   | 'veryResistant'
   | 'veryWeak'
+  | 'slightlyResistant'
+  | 'slightlyWeak'
   ;
 
 export type DamageModifiers = Record<DamageType, DamageModifier>;

@@ -111,7 +111,9 @@ export function Effect({ effect, level }: { effect: TEffect; level?: number }) {
     absorbDamage,
     healthOverTime,
     // healthOverTime?: [change: number, interval: number],
+    healthUpfront,
     damageModifiers,
+    damageValueModifiers,
     attackModifier,
     skillModifiers,
     carryWeight,
@@ -120,14 +122,22 @@ export function Effect({ effect, level }: { effect: TEffect; level?: number }) {
     jumpModifier,
     attackStamina,
     blockStamina,
+    blockStaminaFlat,
     dodgeStamina,
     swimStamina,
+    sneakStamina,
     fallDamage,
     healthRegen,
     staminaRegen,
+    staminaUpfront,
     eitrRegen,
+    eitrUpfront,
     xpModifier,
+    stagger,
     moveSpeed,
+    swimSpeed,
+    armor,
+    parryBonus,
     pheromones,
     Aoe,
   } = effect;
@@ -145,8 +155,28 @@ export function Effect({ effect, level }: { effect: TEffect; level?: number }) {
     </React.Fragment> : null}
     {healthOverTime != null ? <React.Fragment key="healthOverTime">
       <dt>{translate('ui.healthRegen')}</dt>
-      <dd>{healthOverTime[0]}</dd>
+      <dd>{healthOverTime[0]} / {healthOverTime[1]}s</dd>
     </React.Fragment> : null}
+    {healthRegen != null && <React.Fragment key="healthRegen">
+      <dt>{translate(`ui.healthRegen`)}</dt>
+      <dd>{showDiffPercent(healthRegen - 1)}</dd>
+    </React.Fragment>}
+    {healthUpfront != null ? <React.Fragment key="healthUpfront">
+      <dt>{translate('ui.health')}</dt>
+      <dd>+{healthUpfront}</dd>
+    </React.Fragment> : null}
+    {carryWeight != null && <React.Fragment key="weight">
+      <dt>{translate(`ui.weight`)}</dt>
+      <dd>+{carryWeight}</dd>
+    </React.Fragment>}
+    {staminaRegen != null && <React.Fragment key="staminaRegen">
+      <dt>{translate(`ui.staminaRegen`)}</dt>
+      <dd>{showDiffPercent(staminaRegen - 1)}</dd>
+    </React.Fragment>}
+    {staminaUpfront != null && <React.Fragment key="staminaUpfront">
+      <dt>{translate(`ui.stamina`)}</dt>
+      <dd>+{staminaUpfront}</dd>
+    </React.Fragment>}
     {absorbDamage && <React.Fragment>
       <dt>shield</dt>
       <dd>{level == null
@@ -155,6 +185,12 @@ export function Effect({ effect, level }: { effect: TEffect; level?: number }) {
       }</dd>
     </React.Fragment>}
     {damageModifiers && <Resistances key="resistances" mods={damageModifiers} />}
+    {damageValueModifiers && <React.Fragment key="damageValueModifiers">
+      {Object.entries(damageValueModifiers).map(([key, value]) => <React.Fragment key={key}>
+        <dt>{translate(`ui.damageType.${key}`)}</dt>
+        <dd>{translate('ui.damage')}: {showDiffPercent(value)}</dd>
+      </React.Fragment>)}
+    </React.Fragment>}
     {attackModifier && <React.Fragment key="attackModifier">
       <dt>{translate(`ui.skillType.${SkillType[attackModifier[0]]}`)}</dt>
       <dd>{translate('ui.damage')}: {showDiffPercent(attackModifier[1] - 1)}</dd>
@@ -166,21 +202,13 @@ export function Effect({ effect, level }: { effect: TEffect; level?: number }) {
         <dd>+{val}</dd>
       </React.Fragment>
     })}
-    {carryWeight != null && <React.Fragment key="weight">
-      <dt>{translate(`ui.weight`)}</dt>
-      <dd>+{carryWeight}</dd>
-    </React.Fragment>}
-    {staminaRegen != null && <React.Fragment key="staminaRegen">
-      <dt>{translate(`ui.stamina`)}</dt>
-      <dd>{showDiffPercent(staminaRegen - 1)}</dd>
-    </React.Fragment>}
-    {healthRegen != null && <React.Fragment key="healthRegen">
-      <dt>{translate(`ui.health`)}</dt>
-      <dd>{showDiffPercent(healthRegen - 1)}</dd>
-    </React.Fragment>}
     {eitrRegen != null && <React.Fragment key="eitrRegen">
       <dt>{translate(`ui.eitr`)}</dt>
       <dd>{showDiffPercent(eitrRegen - 1)}</dd>
+    </React.Fragment>}
+    {eitrUpfront != null && <React.Fragment key="eitrUpfront">
+      <dt>{translate(`ui.eitr`)}</dt>
+      <dd>+{eitrUpfront}</dd>
     </React.Fragment>}
     {runStamina != null && <React.Fragment key="runStamina">
       <dt>run stamina drain</dt>
@@ -190,6 +218,10 @@ export function Effect({ effect, level }: { effect: TEffect; level?: number }) {
       <dt>swim stamina drain</dt>
       <dd>{showDiffPercent(swimStamina)}</dd>
     </React.Fragment>}
+    {sneakStamina != null && <React.Fragment key="sneakStamina">
+      <dt>sneak stamina drain</dt>
+      <dd>{showDiffPercent(sneakStamina)}</dd>
+    </React.Fragment>}
     {attackStamina != null && <React.Fragment key="attackStamina">
       <dt>attack stamina drain</dt>
       <dd>{showDiffPercent(attackStamina)}</dd>
@@ -197,6 +229,10 @@ export function Effect({ effect, level }: { effect: TEffect; level?: number }) {
     {blockStamina != null && <React.Fragment key="blockStamina">
       <dt>block stamina drain</dt>
       <dd>{showDiffPercent(blockStamina)}</dd>
+    </React.Fragment>}
+    {blockStaminaFlat != null && <React.Fragment key="blockStaminaFlat">
+      <dt>block stamina</dt>
+      <dd>{blockStaminaFlat}</dd>
     </React.Fragment>}
     {dodgeStamina != null && <React.Fragment key="dodgeStamina">
       <dt>dodge stamina drain</dt>
@@ -215,17 +251,33 @@ export function Effect({ effect, level }: { effect: TEffect; level?: number }) {
       <dd>{showDiffPercent(fallDamage)}</dd>
     </React.Fragment>}
     {xpModifier != null && <React.Fragment key="xpModifier">
-      <dt>{translate(`ui.xp`)}</dt>
+      <dt>{translate('ui.xp')}</dt>
       <dd>{showDiffPercent(xpModifier - 1)}</dd>
     </React.Fragment>}
+    {stagger != null && <React.Fragment key="stagger">
+      <dt>{translate('ui.stagger')}</dt>
+      <dd>{showDiffPercent(stagger)}</dd>
+    </React.Fragment>}
     {moveSpeed != null && <React.Fragment key="moveSpeed">
-      <dt>{translate(`ui.moveSpeed`)}</dt>
+      <dt>{translate('ui.moveSpeed')}</dt>
       <dd>{showDiffPercent(moveSpeed)}</dd>
     </React.Fragment>}
+    {swimSpeed != null && <React.Fragment key="swimSpeed">
+      <dt>{translate('ui.swimSpeed')}</dt>
+      <dd>{showDiffPercent(swimSpeed)}</dd>
+    </React.Fragment>}
+    {armor != null && <React.Fragment key="armor">
+      <dt>{translate('ui.armor')}</dt>
+      <dd>+{armor}</dd>
+    </React.Fragment>}
+    {parryBonus != null && <React.Fragment key="parryBonus">
+      <dt>{translate('ui.parryBonus')}</dt>
+      <dd>{showDiffPercent(parryBonus)}</dd>
+    </React.Fragment>}
     {Aoe != null && <React.Fragment key="Aoe">
-      <dt>{translate(`ui.damage`)}</dt>
+      <dt>{translate('ui.damage')}</dt>
       <dd>{getTotalDamage(Aoe.damage)}</dd>
-      <dt>{translate(`ui.radius`)}</dt>
+      <dt>{translate('ui.radius')}</dt>
       <dd>{Aoe.radius}</dd>
       {Aoe.chainTargets != null && <>
         <dt>targets</dt>

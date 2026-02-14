@@ -48,6 +48,7 @@
 .SearchItem__recipe {
   width: 100%;
   display: flex;
+  gap: 4px;
   justify-content: flex-end;
   align-items: center;
   margin-bottom: 4px;

@@ -4,7 +4,7 @@
 
 .FileEditor__controls {
   right: 0;
-  margin-top: 1.75rem;
+  margin-top: 0.25rem;
   display: flex;
   gap: 1rem;
 }

@@ -206,13 +206,12 @@ export function InlineObjectWithIcon({ id, variant, nobr, size }: {
 export function Materials(props: { materials: Record<EntityId, number>, iconSize: number }) {
   const { materials } = props;
   // const maxTier = Object.keys(materials).reduce((a, id) => Math.max(a, data[id]?.tier ?? 0), 0);
-  return <span className="SearchItem__recipe">
-    <List separator=''>{Object
-      .entries(materials)
-      // .filter(([key]) => (data[key]?.tier ?? 0) >= maxTier - 2)
-      .map(([key, val]) => <React.Fragment key={key}>
-        <ItemIcon item={data[key]} size={props.iconSize} />{val}
-      </React.Fragment>)}</List>
+  return <span className="SearchItem__recipe">{Object
+    .entries(materials)
+    // .filter(([key]) => (data[key]?.tier ?? 0) >= maxTier - 2)
+    .map(([key, val]) => <span key={key}>
+      <ItemIcon item={data[key]} size={props.iconSize} />{val}
+    </span>)}
   </span>
 }
 
@@ -224,6 +223,8 @@ export function Resistances({ mods }: { mods: Partial<DamageModifiers> }) {
     resistant: [] as DamageType[],
     veryResistant: [] as DamageType[],
     immune: [] as DamageType[],
+    slightlyWeak: [] as DamageType[],
+    slightlyResistant: [] as DamageType[],
   };
   for (const [key, val] of Object.entries(mods)) {
     if (val && val !== 'normal' && val !== 'ignore') {
@@ -233,6 +234,8 @@ export function Resistances({ mods }: { mods: Partial<DamageModifiers> }) {
   const keys = [
     'veryWeak',
     'weak',
+    'slightlyWeak',
+    'slightlyResistant',
     'resistant',
     'veryResistant',
     'immune',

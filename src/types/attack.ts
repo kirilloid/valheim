@@ -15,7 +15,9 @@ export type AttackAnimation =
 | 'spear_poke'
 | 'spear_throw'
 | 'swing_sledge'
+| 'bow_aim'
 | 'bow_fire'
+| 'reload_crossbow'
 | 'crossbow_fire'
 | 'swing_pickaxe'
 | 'atgeir_attack'
@@ -30,12 +32,14 @@ export type AttackAnimation =
 | 'throw_bomb'
 | 'dualaxes'
 | 'dualaxes_secondary'
+| 'staff_lightningshot'
 | 'recharge_lightningstaff'
 ;
 
 interface BaseAttack {
   animation: AttackAnimation;
   stamina: number;
+  adrenaline: number;
   eitr?: number;
   healthPercent?: number;
   damageMultiplierPerMissingHP?: number;
@@ -43,8 +47,11 @@ interface BaseAttack {
   rotationSpeed: number;
   startNoise: number;
   hitNoise: number;
-  mul?: { damage: number, force: number, stagger: number, };
+  mul?: { damage: number; force: number; stagger: number };
+  cantUseInDungeon?: boolean;
   range: number;
+  reload?: { animation: AttackAnimation; time: number; stamina?: number; eitr?: number };
+  draw?: { animation: AttackAnimation; duration: number; stamina: number };
 }
 
 interface MeleeAttack extends BaseAttack {
@@ -78,3 +85,28 @@ export type Attack =
   | BowAttack & { type: 'proj' }
   | SummonAttack & { type: 'summon' }
   | EffectAttack & { type: 'cast' }
+
+export interface Motion {
+  speed: number;
+  exit: number;
+  duration: number;
+  events: MotionEvent[];
+}
+
+export type MotionEvent = {
+  type: 'speed',
+  time: number;
+  value: number;
+} | {
+  type: 'hit',
+  time: number;
+} | {
+  type: 'chain',
+  time: number;
+} | {
+  type: 'trailOn',
+  time: number;
+} | {
+  type: 'trailOff',
+  time: number;
+}

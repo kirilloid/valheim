@@ -18,7 +18,7 @@ function ItemSet({ item, set }: { item: TArmor, set: TItemSet }) {
       <h3>Items</h3>
       <ul>{
         set.items.map(id => id === item.id
-          ? <li key={id}><><ItemIcon item={item} /> {translate(id)}</></li>
+          ? <li key={id}><ItemIcon item={item} /> {translate(id)}</li>
           : <li key={id}><InlineObjectWithIcon id={id} /></li>)
       }</ul>
       {set.bonus.map(effect => effect && <React.Fragment key={effect.id}>
@@ -50,10 +50,18 @@ export function Armor({ item, level }: { item: TArmor, level?: number }) {
           <dt title="armor loose durability 1:1 to received damage, but only for one randomly chosen piece of armor">{translate('ui.durability')}</dt><dd>{durability(item.durability, level)}</dd>
           {item.moveSpeed ? <React.Fragment key="moveSpeed"><dt title="when equipped">{translate('ui.moveSpeed')}</dt><dd>{item.moveSpeed * 100}%</dd></React.Fragment> : null}
           {item.damageModifiers ? <Resistances mods={item.damageModifiers} /> : null}
-          {item.eitrRegen ? <React.Fragment key="eitr"><dt>eitr</dt><dd>{item.eitrRegen} / s</dd></React.Fragment> : null}
+          {item.eitrRegen ? <React.Fragment key="eitr"><dt>eitr</dt><dd>{showPercent(item.eitrRegen)}</dd></React.Fragment> : null}
           <ItemSpecial special={item.special} />
         </dl>
       </section>
+      {item.adrenaline ? <section key="adrenaline">
+        <h2>{translate('ui.slot.trinket')}</h2>
+        <dl>
+          <dt>{translate('ui.adrenaline')}</dt>
+          <dd>{item.adrenaline.max}</dd>
+          <Effect effect={item.adrenaline.effect} />
+        </dl>
+      </section> : null}
       {item.set ? <ItemSet item={item} set={item.set} /> : null}
       {item.effect ? <React.Fragment key="effect">
         <section>
