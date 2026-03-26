@@ -8,7 +8,7 @@ import { data } from '../../data/itemDB';
 import { getRecipe } from '../../data/recipes';
 import { creatures } from '../../data/creatures';
 import { miningMap, resourceBuildMap, resourceCraftMap } from '../../data/resource-usage';
-import { locationBiomes, objectLocationMap } from '../../data/location';
+import { locationBiomes, locationsByTypeId, objectLocationMap, objectLocationUniqueMap } from '../../data/location';
 
 import { TranslationContext, useGlobalState, useSettingsFilter } from '../../effects';
 import { Area, InlineObject, InlineObjectWithIcon, List, rangeBy } from '../helpers';
@@ -280,6 +280,7 @@ export function GrowSection({ item }: { item: GameObject | undefined }) {
   }
   const grow = item.grow ?? [];
   const locations = objectLocationMap[item.id] ?? [];
+  const uniqueLocations = objectLocationUniqueMap[item.id];
   if (!grow.length && !locations.length) return null;
   const respawn = grow?.find(g => g.respawn)?.respawn ?? 0;
   return <>
@@ -301,7 +302,13 @@ export function GrowSection({ item }: { item: GameObject | undefined }) {
     </dl>)}</List>
     {grow.length && locations.length ? <hr /> : null}
     <List separator="">{
-      locations.map(loc => <div key={loc}><Area area={loc} /></div>)
+      locations.map(loc => {
+        const uniqlo = uniqueLocations?.[loc];
+        const index = uniqlo?.size === 1 && locationsByTypeId[loc]?.length !== 1
+          ? uniqlo[Symbol.iterator]().next().value
+          : undefined;
+        return <div key={loc}><Area area={loc} index={index} /></div>
+      })
     }</List>
   </>;
 }

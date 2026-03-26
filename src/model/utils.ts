@@ -117,6 +117,18 @@ export function toggleItem<T>(array: T[], value: T, add: boolean): T[] {
   return add ? array.concat(value) : array.filter(v => v !== value);
 }
 
+type PickByType<T, Value> = {
+  [P in keyof T as T[P] extends Value | undefined ? P : never]: T[P];
+}
+
+export function maybePush<T, K extends keyof PickByType<T, any[]>, V>(obj: T, key: K, item: V): V {
+  if (!obj[key]) {
+    obj[key] = [] as any as T[K];
+  }
+  (obj[key] as any as any[])?.push(item);
+  return item;
+}
+
 export class StatCounter {
   _min = 1e9;
   _max = -1e9;

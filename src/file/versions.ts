@@ -1,6 +1,6 @@
 export const SKILLS = 2; // Skills.c_SaveFileDataVersion
 // is used for both as primary DB as well as FWL versions
-export const WORLD = 36; // Version.m_worldVersion
+export const WORLD = 37; // Version.m_worldVersion
 export const MAP = 8; // Minimap.MAPVERSION
 export const SHARED_MAP = 3; // Minimap.sharedMapDataVersion
 export const PLAYER = 42; // Version.m_playerVersion

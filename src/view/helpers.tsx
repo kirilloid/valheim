@@ -20,7 +20,7 @@ import {
 import { applyDamageModifiers, getTotalDamage, playerDamageModifiers } from '../model/combat';
 import { SkillType } from '../model/skills';
 
-import { locationBiomes } from '../data/location';
+import { locationBiomes, locationsTypeIdMap } from '../data/location';
 import { data } from '../data/itemDB';
 import { creatures } from '../data/creatures';
 import { effects } from '../data/effects';
@@ -250,12 +250,13 @@ export function Resistances({ mods }: { mods: Partial<DamageModifiers> }) {
   }</>;
 }
 
-export function Area({ area }: { area: Biome | GameLocationId }) {
+export function Area({ area, index }: { area: Biome | GameLocationId; index?: number }) {
   const translate = useContext(TranslationContext);
-  if (area in locationBiomes) {
-    const biome = locationBiomes[area as GameLocationId];
+  if (area as GameLocationId in locationBiomes) {
+    const biome = locationBiomes[area];
+    const locationNr = index ? '#' + index : '';
     return <>
-      <Link to={`/loc/${area}`}>{translate(`ui.location.${area}`)}</Link>
+      <Link to={`/loc/${area}${locationNr}`}>{translate(`ui.location.${area}`)} {locationNr}</Link>
       {' '}
       (<Link to={`/biome/${biome}`}>{translate(`ui.biome.${biome}`)}</Link>)
     </>;

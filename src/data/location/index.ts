@@ -21,7 +21,7 @@ import {
   mergeDist, power, powerDist, scaleDist,
   sum, sumDist, gatherDrop, mul, weightedAdd
 } from '../../model/dist';
-import { mapValues } from '../../model/utils';
+import { groupBy, mapValues, maybePush } from '../../model/utils';
 import { creatures } from '../creatures';
 import { fishes } from '../fish';
 import { spawners } from '../spawners';
@@ -359,6 +359,7 @@ export const dungeons: DungeonGenConfig[] = [
 
 export const locationsIdMap = new Map(locations.map(l => [l.id, l]));
 export const locationsTypeIdMap = new Map(locations.map(l => [l.typeId, l]));
+export const locationsByTypeId = groupBy(locations, l => l.typeId);
 
 for (const loc of locations) {
   for (const lb of loc.biomes) {
@@ -416,6 +417,7 @@ for (const { id, grow } of resources) {
 }
 
 export const objectLocationMap: Record<EntityId, GameLocationId[]> = {};
+export const objectLocationUniqueMap: Record<EntityId, Record<GameLocationId, Set<number>>> = {};
 
 function collectItems(items: LocationItem[]): DropDist {
   const result: DropDist = {};
@@ -469,7 +471,7 @@ function addDistToLocation(loc: LocationConfig, drop: DropDist) {
           addToDist(loc.resources, tItem, powerDist(tDist, dist));
         }
         if ('Vegvisir' in obj) {
-          (loc.tags ?? (loc.tags = [])).push('vegvisir');
+          maybePush(loc, 'tags', 'vegvisir');
         }
         break;
       case 'creature':
@@ -496,12 +498,14 @@ function addDistToLocation(loc: LocationConfig, drop: DropDist) {
   }
 }
 
-function addToMap(id: GameLocationId, item: EntityId): void {
+function addToMap(id: GameLocationId, index: number, item: EntityId): void {
   const obj = data[item];
   if (obj == null) return;
   const typeId = locationsIdMap.get(id)?.typeId;
   if (typeId != null) {
     (objectLocationMap[item] ?? (objectLocationMap[item] = [])).push(typeId);
+    const uniqueProp = (objectLocationUniqueMap[item] ?? (objectLocationUniqueMap[item] = {}));
+    (uniqueProp[typeId] ?? (uniqueProp[typeId] = new Set())).add(index);
   }
   const loc = locationsIdMap.get(id);
   if (!loc) return;
@@ -516,11 +520,11 @@ function addToMap(id: GameLocationId, item: EntityId): void {
         addToBiomes(loc.biomes, b => b.destructibles, item);
         for (const drop of obj.drop ?? []) {
           for (const option of drop.options) {
-            addToMap(id, option.item);
+            addToMap(id, index, option.item);
           }
         }
         if ('Vegvisir' in obj) {
-          (loc.tags ?? (loc.tags = [])).push('vegvisir');
+          maybePush(loc, 'tags', 'vegvisir');
         }
         break;
       case 'spawner':
@@ -539,40 +543,48 @@ function addToMap(id: GameLocationId, item: EntityId): void {
   }
 }
 
-function addToMapRec(id: GameLocationId, { item }: LocationItem): void {
+function addToMapRec(id: GameLocationId, index: number, { item }: LocationItem): void {
   if (typeof item === 'string') {
-    addToMap(id, item);
+    addToMap(id, index, item);
   } else {
-    item.forEach(child => addToMapRec(id, child));
+    item.forEach(child => addToMapRec(id, index, child));
   }
 }
 
 export const musicToLocation: Record<string, GameLocationId[]> = {};
 
+let lastTypeId = '';
+let index = 1;
 for (const loc of locations) {
-  const { items, dungeon, camp, customMusic } = loc;
+  const { items, dungeon, camp, customMusic, typeId } = loc;
+  if (lastTypeId === typeId) {
+    index++;
+  } else {
+    lastTypeId = typeId;
+    index = 1;
+  }
   if (customMusic) {
-    (musicToLocation[customMusic] ?? (musicToLocation[customMusic] = [])).push(loc.id)
+    maybePush(musicToLocation, customMusic, loc.id);
   }
   for (const item of items) {
-    addToMapRec(loc.id, item);
+    addToMapRec(loc.id, index, item);
   }
   if (dungeon != null) {
     for (const { items } of dungeon.rooms) {
       for (const item of items) {
-        addToMapRec(loc.id, item);
+        addToMapRec(loc.id, index, item);
       }
     }
   }
   if (camp != null) {
     for (const { items } of camp.inner) {
       for (const item of items) {
-        addToMapRec(loc.id, item);
+        addToMapRec(loc.id, index, item);
       }
     }
     for (const { items } of camp.perimeter) {
       for (const item of items) {
-        addToMapRec(loc.id, item);
+        addToMapRec(loc.id, index, item);
       }
     }
   }

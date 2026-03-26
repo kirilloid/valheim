@@ -3,6 +3,10 @@
   overflow-y: scroll;
   flex-grow: 1;
 }
+.App:has(.Weather) {
+  display: flex;
+  flex-direction: column;
+}
 
 .Weather__controls {
   position: sticky;

@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import type { GameLocationId, LocationConfig } from '../types';
 
 import { isEmpty } from '../model/utils';
-import { getLocationDetails, locations, musicToLocation } from '../data/location';
+import { getLocationDetails, locationsByTypeId, musicToLocation } from '../data/location';
 
 import { TranslationContext } from '../effects';
 import { Area, InlineObjectWithIcon, List, rangeBy, showNumber } from './helpers';
@@ -81,6 +81,7 @@ function CustomMusic({ id }: { id?: string }) {
 
 export function Location() {
   const { id } = useParams<{ id: string }>();
+  const initialSelected = React.useMemo(() => parseInt(window.location.hash.replace(/^#/, '')) || 0, []);
 
   const summary = getLocationDetails(id);
   if (summary == null) {
@@ -88,7 +89,7 @@ export function Location() {
       Location "{id}" not found
     </div>
   }
-  const locs = locations.filter(loc => loc.typeId === id);
+  const locs = locationsByTypeId[id] ?? [];
 
   if (locs.length === 1) {
     return (
@@ -105,12 +106,12 @@ export function Location() {
   }, ...locs.map((loc, i) => ({
     title: `#${i + 1}`,
     renderer: () => <SingleLocation loc={loc} />
-  }))]
+  }))];
 
   return (
     <>
       <LocationHeader id={id} customMusic={summary.customMusic} />
-      <Tabs tabs={tabs} selected={0} key={id} />
+      <Tabs tabs={tabs} selected={initialSelected} key={id} onSelect={i => window.location.hash = i ? String(i) : ''} />
     </>
   );
 }

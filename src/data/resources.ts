@@ -257,6 +257,7 @@ export const resources: Resource[] = [
   { type: 'trophy', id: 'TrophyGreydwarfBrute', trophyPos: { x: 1, y: 1 }, tier: 2, weight: 1.5, stack: 20 },
   { type: 'trophy', id: 'TrophyGreydwarfShaman', trophyPos: { x: 2, y: 1 }, tier: 2, weight: 1, stack: 20 },
   { type: 'trophy', id: 'TrophyFrostTroll', trophyPos: { x: 4, y: 1 }, tier: 2, weight: 4, stack: 20 },
+  { type: 'trophy', id: 'TrophyForestTroll', trophyPos: { x: 5, y: 1 }, tier: 2, weight: 4, stack: 20, disabled },
   { type: 'trophy', id: 'TrophyBjorn', trophyPos: { x: 4, y: 8 }, tier: 2, weight: 2, stack: 20 },
   { type: 'trophy', id: 'TrophyTheElder', trophyPos: { x: 3, y: 1 }, tier: 3, weight: 4, stack: 20, floating, power: 'GP_TheElder',
     Deadspeak: deadSpeakBoss('ui.deadspeak.elder'), },
