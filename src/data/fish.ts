@@ -13,6 +13,8 @@ function deadSpeakFish(texts: string[]): Deadspeak {
   };
 }
 
+export const QUALITY_AMOUNT_MULTIPLIER = 3;
+
 export const fishes: Fish[] = [
   {
     type: 'fish',
@@ -42,7 +44,7 @@ export const fishes: Fish[] = [
     })],
     speed: 3,
     turnSpeed: 100,
-    baits: baitsNormal,
+    bait: 'FishingBait',
     staminaUse: 3,
     escapeStaminaUse: 10,
     extraDrop: {
@@ -86,7 +88,7 @@ export const fishes: Fish[] = [
     })],
     speed: 5,
     turnSpeed: 100,
-    baits: baitsNormal,
+    bait: 'FishingBait',
     staminaUse: 5,
     escapeStaminaUse: 15,
     extraDrop: {
@@ -131,7 +133,7 @@ export const fishes: Fish[] = [
     })],
     speed: 10,
     turnSpeed: 80,
-    baits: { FishingBaitOcean: 1 },
+    bait: 'FishingBaitOcean',
     staminaUse: 7,
     escapeStaminaUse: 20,
     extraDrop: {
@@ -161,7 +163,7 @@ export const fishes: Fish[] = [
     spawners: [],
     speed: 10,
     turnSpeed: 80,
-    baits: { FishingBaitCave: 1 },
+    bait: 'FishingBaitCave',
     staminaUse: 11,
     escapeStaminaUse: 28,
     extraDrop: {
@@ -206,7 +208,7 @@ export const fishes: Fish[] = [
     })],
     speed: 10,
     turnSpeed: 80,
-    baits: { FishingBaitForest: 1 },
+    bait: 'FishingBaitForest',
     staminaUse: 9,
     escapeStaminaUse: 25,
     extraDrop: {
@@ -251,7 +253,7 @@ export const fishes: Fish[] = [
     })],
     speed: 10,
     turnSpeed: 80,
-    baits: { FishingBaitSwamp: 1 },
+    bait: 'FishingBaitSwamp',
     staminaUse: 10,
     escapeStaminaUse: 30,
     extraDrop: {
@@ -296,7 +298,7 @@ export const fishes: Fish[] = [
     })],
     speed: 10,
     turnSpeed: 80,
-    baits: { FishingBaitPlains: 1 },
+    bait: 'FishingBaitPlains',
     staminaUse: 12,
     escapeStaminaUse: 32,
     extraDrop: {
@@ -341,7 +343,7 @@ export const fishes: Fish[] = [
     })],
     speed: 10,
     turnSpeed: 80,
-    baits: { FishingBaitOcean: 1 },
+    bait: 'FishingBaitOcean',
     staminaUse: 12,
     escapeStaminaUse: 34,
     extraDrop: {
@@ -386,7 +388,7 @@ export const fishes: Fish[] = [
     })],
     speed: 10,
     turnSpeed: 80,
-    baits: { FishingBaitMistlands: 1 },
+    bait: 'FishingBaitMistlands',
     staminaUse: 14,
     escapeStaminaUse: 38,
     extraDrop: {
@@ -431,7 +433,7 @@ export const fishes: Fish[] = [
     })],
     speed: 10,
     turnSpeed: 80,
-    baits: { FishingBaitMistlands: 1 },
+    bait: 'FishingBaitMistlands',
     staminaUse: 14,
     escapeStaminaUse: 40,
     extraDrop: {
@@ -476,7 +478,7 @@ export const fishes: Fish[] = [
     })],
     speed: 10,
     turnSpeed: 80,
-    baits: { FishingBaitDeepNorth: 1 },
+    bait: 'FishingBaitDeepNorth',
     staminaUse: 20,
     escapeStaminaUse: 60,
     extraDrop: {
@@ -521,7 +523,7 @@ export const fishes: Fish[] = [
     })],
     speed: 10,
     turnSpeed: 80,
-    baits: { FishingBaitAshlands: 1 },
+    bait: 'FishingBaitAshlands',
     staminaUse: 18,
     escapeStaminaUse: 50,
     extraDrop: {

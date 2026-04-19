@@ -162,9 +162,9 @@ describe('drop', () => {
         ]
       };
       const dist = distributeDrop(drop);
-      expect(Math.abs(dist['bar']![1]! - 130/168)).toBeLessThan(1e-10);
-      expect(Math.abs(dist['baz']![1]! -  80/168)).toBeLessThan(1e-10);
-      expect(Math.abs(dist['foo']![1]! -  42/168)).toBeLessThan(1e-10);
+      expect(dist['bar']![1]!).toBeCloseTo(130/168, 10);
+      expect(dist['baz']![1]!).toBeCloseTo( 80/168, 10);
+      expect(dist['foo']![1]!).toBeCloseTo( 42/168, 10);
     });
     test('one of each: weights 1-3', () => {
       const drop: GeneralDrop = {
@@ -178,9 +178,9 @@ describe('drop', () => {
         ]
       };
       const dist = distributeDrop(drop);
-      expect(Math.abs(dist['bar']![1]! - 428/504)).toBeLessThan(1e-10);
-      expect(Math.abs(dist['baz']![1]! - 328/504)).toBeLessThan(1e-10);
-      expect(Math.abs(dist['foo']![1]! - 252/504)).toBeLessThan(1e-10);
+      expect(dist['bar']![1]!).toBeCloseTo(428/504, 10);
+      expect(dist['baz']![1]!).toBeCloseTo(328/504, 10);
+      expect(dist['foo']![1]!).toBeCloseTo(252/504, 10);
     });
     test('one of each: weights 1-4', () => {
       const drop: GeneralDrop = {
@@ -194,9 +194,9 @@ describe('drop', () => {
         ]
       };
       const dist = distributeDrop(drop);
-      expect(Math.abs(dist['bar']![1]! - 149/168)).toBeLessThan(1e-10);
-      expect(Math.abs(dist['baz']![1]! - 124/168)).toBeLessThan(1e-10);
-      expect(Math.abs(dist['foo']![1]! - 105/168)).toBeLessThan(1e-10);
+      expect(dist['bar']![1]!).toBeCloseTo(149/168, 10);
+      expect(dist['baz']![1]!).toBeCloseTo(124/168, 10);
+      expect(dist['foo']![1]!).toBeCloseTo(105/168, 10);
     });
     test('one of each: weights 1-2 same items', () => {
       const drop: GeneralDrop = {
@@ -210,9 +210,9 @@ describe('drop', () => {
         ]
       };
       const dist = distributeDrop(drop);
-      expect(Math.abs(dist['bar']![1]! - 130/168)).toBeLessThan(1e-10);
-      expect(Math.abs(dist['foo']![1]! -  82/168)).toBeLessThan(1e-10);
-      expect(Math.abs(dist['foo']![2]! -  20/168)).toBeLessThan(1e-10);
+      expect(dist['bar']![1]!).toBeCloseTo(130/168, 10);
+      expect(dist['foo']![1]!).toBeCloseTo(82/168, 10);
+      expect(dist['foo']![2]!).toBeCloseTo(20/168, 10);
     });
   });
 });

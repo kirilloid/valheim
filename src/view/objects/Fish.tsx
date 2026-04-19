@@ -46,13 +46,9 @@ export function Fish({ fish, level = 1 }: { fish: TFish, level?: number }) {
         <dd>{fish.speed}</dd>
         <dt>{translate('stamina')}</dt>
         <dd>{fish.staminaUse} / {fish.escapeStaminaUse}</dd>
+        <dt>baits</dt>
+        <dd><InlineObjectWithIcon id={fish.bait} /></dd>
       </dl>
-    </section>
-    <section>
-      <h2>baits</h2>
-      <ul className="CraftList">{Object.entries(fish.baits).map(([id, chance]) => <li key={id}>
-        <InlineObjectWithIcon id={id} /> - {Math.round(chance * 100)}%
-      </li>)}</ul>
     </section>
     {fish.Deadspeak && <DeadSpeak {...fish.Deadspeak} />}
     <DropTable drops={[fish.extraDrop]} />

@@ -33,7 +33,7 @@ export type GameComponent =
 
 export type EntityGroup =
   | 'ashtree'
-  | 'banner' | 'bed' | 'beech' | 'berry' | 'birch' | 'bird' | 'blob'
+  | 'bait' | 'banner' | 'bed' | 'beech' | 'berry' | 'birch' | 'bird' | 'blob'
   | 'chair' | 'chest' | 'cook' | 'craft_station'
   | 'demist'
   | 'fir' | 'fire' | 'fish'
@@ -363,7 +363,7 @@ export interface Fish extends GameObjectBase {
   spawners: SpawnerConfig[];
   speed: number;
   turnSpeed: number;
-  baits: Record<EntityId, number>;
+  bait: EntityId;
   staminaUse: number;
   escapeStaminaUse: number;
   extraDrop: GeneralDrop;
@@ -703,6 +703,8 @@ export type ItemRecipe = {
   type: 'craft';
   time: number;
   onlyOneIngredient: boolean;
+  qualityAmountMultiplier: number;
+  extraAmount: Record<EntityId, number>;
   materials: Record<EntityId, number>;
   materialsPerLevel: Record<EntityId, number>;
   source: { station: EntityId | null; level: number };

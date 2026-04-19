@@ -196,23 +196,42 @@ describe('traceability of all objects', () => {
     function check(parent: EntityId, item: EntityId) {
       if (!(item in data)) failPairs.push(`${parent} drops ${item}`);
     }
-    function checkWithDrop<T extends { drop?: GeneralDrop[]; id: EntityId }>(obj: T) {
-      if (obj.drop != null) {
-        for (const drop of obj.drop) {
-          for (const { item } of drop.options) {
-            check(obj.id, item);
-          }
+    function checkWithDrop(parent: EntityId, drops?: GeneralDrop[]) {
+      if (drops == null) return;
+      for (const drop of drops) {
+        for (const { item } of drop.options) {
+          check(parent, item);
         }
       }
     }
-
     for (const c of creatures) {
       for (const entry of c.drop) {
         check(c.id, entry.item);
       }
     }
-    objects.forEach(checkWithDrop);
+    objects.forEach(obj => checkWithDrop(obj.id, obj.drop));
+    fishes.forEach(fish => checkWithDrop(fish.id, [fish.extraDrop]));
+    expect(failPairs).toEqual([]);
+  });
 
+  test('no unstackable item has multi-drop', () => {
+    const failPairs: string[] = [];
+    function checkDrop(parent: EntityId, drops?: GeneralDrop[]) {
+      if (drops == null) return;
+      for (const drop of drops) {
+        for (const option of drop.options) {
+          const item = data[option.item];
+          if (item == null) continue;
+          const isStackable = 'stack' in item && typeof item.stack === 'number' && item.stack > 1;
+          const canBeMultiple = option.num != null && (option.num[0] !== 1 || option.num[1] !== 1);
+          if (!isStackable && canBeMultiple) {
+            failPairs.push(`${parent} drops ${option.item}`);
+          }
+        }
+      }
+    }
+    objects.forEach(obj => checkDrop(obj.id, obj.drop));
+    fishes.forEach(f => checkDrop(f.id, [f.extraDrop]));
     expect(failPairs).toEqual([]);
   });
 
@@ -230,7 +249,7 @@ describe('traceability of all objects', () => {
     }
     
     for (const l of locations) {
-      // to many undeclared objects
+      // too many undeclared objects
       if (l.id === 'Hildir_camp') continue;
       l.items.forEach(walkCheckItem);
       if (l.dungeon) {

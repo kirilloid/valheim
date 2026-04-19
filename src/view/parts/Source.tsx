@@ -329,7 +329,7 @@ function MiningSection({ id }: { id: EntityId }) {
 }
 
 function BaitSection({ id }: { id: EntityId }) {
-  const fish = fishes.filter(f => id in f.baits);
+  const fish = fishes.filter(f => f.bait === id);
   return fish.length
     ? <section>
         <h2>Baits</h2>

@@ -13,10 +13,14 @@ export const genericRecipe = (
   item: EntityId,
   number = 1,
   onlyOneIngredient = false,
+  qualityAmountMultiplier = 1,
+  extraAmount: Record<EntityId, number> = {},
 ): ItemRecipe => ({
   type: 'craft',
   time,
-  onlyOneIngredient: onlyOneIngredient,
+  onlyOneIngredient,
+  qualityAmountMultiplier,
+  extraAmount,
   materials,
   materialsPerLevel,
   source: { station, level },
@@ -44,7 +48,9 @@ export const prepTableRecipe = (
   item: EntityId,
   number = 1,
   onlyOneIngredient = false,
-) => genericRecipe('piece_preptable', level, CAULDRON_TIME, materials, {}, item, number, onlyOneIngredient);
+  qualityAmountMultiplier = 1,
+  extraAmount: Record<EntityId, number> = {},
+) => genericRecipe('piece_preptable', level, CAULDRON_TIME, materials, {}, item, number, onlyOneIngredient, qualityAmountMultiplier, extraAmount);
 
 export const potionRecipe = (
   cauldronLevel: number,

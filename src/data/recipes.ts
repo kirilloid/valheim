@@ -152,13 +152,15 @@ export const recipes: ItemRecipe[] = [
   cauldronRecipe(1, { CookedDeerMeat: 1, Blueberries: 1, Carrot: 1 }, 'DeerStew'),
   cauldronRecipe(1, { RawMeat: 1, NeckTail: 1, Carrot: 1 }, 'MinceMeatSauce'),
   cauldronRecipe(1, { ChickenEgg: 1 }, 'CookedEgg'),
-  cauldronRecipe(1, allFishes, 'FishRaw', 1, true),
   // LEVEL 2
   cauldronRecipe(2, { RawMeat: 1, Turnip: 3 }, 'TurnipStew'),
   cauldronRecipe(2, { Bloodbag: 1, Honey: 1, Turnip: 1 }, 'BlackSoup'),
   cauldronRecipe(2, { Ooze: 1, Raspberry: 2, Blueberries: 2 }, 'ShocklateSmoothie'),
   cauldronRecipe(2, { Entrails: 2, RawMeat: 1, Thistle: 4 }, 'Sausages', 4),
   cauldronRecipe(2, { Mushroom: 1, SerpentMeatCooked: 1, Honey: 2 }, 'SerpentStew'),
+  prepTableRecipe(1, allFishes, 'FishRaw', 1, true, 3, {
+    Fish1: 0, Fish2: 0, Fish3: 1, Fish4_cave: 0, Fish5: 0, Fish6: 1, Fish7: 0, Fish8: 1, Fish9: 2, Fish10: 2, Fish11: 2, Fish12: 2,
+  }),
   // LEVEL 3
   cauldronRecipe(3, { WolfMeat: 1, Mushroom: 2, Onion: 1 }, 'WolfMeatSkewer'),
   cauldronRecipe(3, { WolfMeat: 1, Honey: 1 }, 'WolfJerky', 2),
