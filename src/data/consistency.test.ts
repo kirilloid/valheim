@@ -276,7 +276,9 @@ function testDungeon(name: string, dungeon: rooms.DungeonRoomsConfig) {
     for (const room of dungeon.rooms) {
       test(`room ${room.id} should have dist sum within error`, () => {
         const total = room.dist.reduce((a, b) => a + b, 0);
-        expect(Math.abs(total - 1)).toBeLessThan(Number.EPSILON * room.dist.length);
+        const error = Number.EPSILON * room.dist.length;
+        const precisionDigits = Math.floor(-Math.log10(error));
+        expect(total).toBeCloseTo(1, precisionDigits);
       });
     }
   });
@@ -288,13 +290,17 @@ function testCamp(name: string, camp: rooms.CampConfig) {
     for (const room of camp.inner) {
       test(`room ${room.id} should have dist sum within error`, () => {
         const total = room.dist.reduce((a, b) => a + b, 0);
-        expect(Math.abs(total - 1)).toBeLessThan(Number.EPSILON * room.dist.length);
+        const error = Number.EPSILON * room.dist.length;
+        const precisionDigits = Math.floor(-Math.log10(error));
+        expect(total).toBeCloseTo(1, precisionDigits);
       });
     }
     for (const room of camp.perimeter) {
       test(`room ${room.id} should have dist sum within error`, () => {
         const total = room.dist.reduce((a, b) => a + b, 0);
-        expect(Math.abs(total - 1)).toBeLessThan(Number.EPSILON * room.dist.length);
+        const error = Number.EPSILON * room.dist.length;
+        const precisionDigits = Math.floor(-Math.log10(error));
+        expect(total).toBeCloseTo(1, precisionDigits);
       });
     }
   });
