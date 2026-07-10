@@ -40,6 +40,10 @@ export class PackageReader {
     this.view = new DataView(bytes.buffer);
   }
 
+  public subarray(start: number, end?: number): Uint8Array {
+    return this.bytes.subarray(start, end);
+  }
+
   public getOffset(): number {
     return this.offset;
   }
@@ -71,11 +75,18 @@ export class PackageReader {
     return result;
   }
 
+  public readUShort(): number {
+    const result = this.view.getUint16(this.offset, true);
+    this.offset += 2;
+    return result;
+  }
+
   public readInt(): number {
     const result = this.view.getInt32(this.offset, true);
     this.offset += 4;
     return result;
   }
+  public skipInt(): void { this.offset += 4; }
 
   public readUInt(): number {
     const result = this.view.getUint32(this.offset, true);
@@ -88,12 +99,14 @@ export class PackageReader {
     this.offset += 8;
     return result;
   }
+  public skipLong(): void { this.offset += 8; }
 
   public readFloat(): number {
     const result = this.view.getFloat32(this.offset, true);
     this.offset += 4;
     return result;
   }
+  public skipFloat(): void { this.offset += 4; }
 
   public readDouble(): number {
     const result = this.view.getFloat64(this.offset, true);
@@ -119,6 +132,7 @@ export class PackageReader {
     const z = this.readFloat();
     return { x, y, z };
   }
+  public skipVector3() { this.offset += 12; }
 
   public readQuaternion(): Quaternion {
     const x = this.readFloat();
@@ -127,6 +141,7 @@ export class PackageReader {
     const w = this.readFloat();
     return { x, y, z, w };
   }
+  public skipQuaternion() { this.offset += 16; }
 
   public readChar(): number {
     const offset = this.offset;
@@ -176,6 +191,10 @@ export class PackageReader {
     const end = this.offset += length;
     return decode(this.bytes.subarray(start - base, end - base));
   }
+  public skipString(): void {
+    const length = this.read7BitInt();
+    this.skipBytes(length);
+  }
 
   public readByteArray(): Uint8Array {
     const length = this.readInt();
@@ -186,6 +205,10 @@ export class PackageReader {
     const start = this.offset;
     const end = this.offset += length;
     return this.bytes.subarray(start - base, end - base);
+  }
+  public skipByteArray(): void {
+    const length = this.readInt();
+    this.skipBytes(length);
   }
 
   public skipBytes(n: number): void {
@@ -221,6 +244,17 @@ export class PackageReader {
     return result;
   }
 
+  public skipMap(
+    keyReader: (this: PackageReader) => void,
+    valueReader: (this: PackageReader) => void,
+  ): void {
+    const length = this.readInt();
+    for (let i = 0; i < length; i++) {
+      keyReader.call(this);
+      valueReader.call(this);
+    }
+  }
+
   public readIf<T>(reader: (this: PackageReader) => T): T | undefined {
     const has = this.readBool();
     if (!has) return undefined;
@@ -228,11 +262,12 @@ export class PackageReader {
   }
 
   public readShortMap<K, V>(
+    sizeReader: (this: PackageReader) => number,
     keyReader: (this: PackageReader) => K,
     valueReader: (this: PackageReader) => V,
   ): Map<K, V> {
     const result = new Map<K, V>();
-    const length = this.readNumItems();
+    const length = sizeReader.call(this);
     for (let i = 0; i < length; i++) {
       const key = keyReader.call(this);
       const value = valueReader.call(this);
@@ -293,8 +328,10 @@ export class PackageWriter {
 
   public writeNumItems(value: number): void {
     if (value < 128) {
+      this.ensureSpace(1);
       this.view.setUint8(this.offset++, value);
     } else {
+      this.ensureSpace(2);
       this.view.setUint8(this.offset++, ((value >> 8) | 128));
       this.view.setUint8(this.offset++, value & 0xFF);
     }
@@ -303,6 +340,12 @@ export class PackageWriter {
   public writeShort(value: number): void {
     this.ensureSpace(2);
     this.view.setInt16(this.offset, value, true);
+    this.offset += 2;
+  }
+
+  public writeUShort(value: number): void {
+    this.ensureSpace(2);
+    this.view.setUint16(this.offset, value, true);
     this.offset += 2;
   }
 
@@ -451,12 +494,12 @@ export class PackageWriter {
   }
 
   public writeShortMap<K, V>(
+    sizeWriter: (this: PackageWriter, value: number) => void,
     keyWriter: (this: PackageWriter, value: K) => void,
     valueWriter: (this: PackageWriter, value: V) => void,
     values: Map<K, V>,
   ): void {
-    const length = values.size;
-    this.writeNumItems(length);
+    sizeWriter.call(this, values.size);
     for (const [key, value] of values) {
       keyWriter.call(this, key);
       valueWriter.call(this, value);

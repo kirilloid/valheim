@@ -4,7 +4,7 @@ import type { Vector2i, Vector3 } from '../model/utils';
 import { PackageReader, PackageWriter } from './Package';
 import {
   readZdoMmapOld as readZdoOld,
-  readZdo_post30 as readZdoNew,
+  readZdoMmap as readZdoNew,
   setVersion,
   errorToMistake,
 } from './zdo';
@@ -58,8 +58,8 @@ function* readZDOData(reader: PackageReader, version: number): Generator<number,
     try {
       const zdo = readZdo(reader, version);
       // if (zdo._bytes.length > 10000) debugger;
-      if (zdos.length > 1 && zdo._bytes.length !== 0) {
-        const last = zdos.at(-1)!;
+      if (zdos.length > 2 && zdo._bytes.length !== 0) {
+        const last = zdos.at(-2)!; // check only for multiple repeats
         if (
           // last.id.userId === zdo.id.userId &&
           last._bytes.length === zdo._bytes.length &&

@@ -48,7 +48,7 @@ function writePropMap<T>(
   }
 }
 
-function writeZdo_post30(this: ZDO, writer: PackageWriter) {
+export function writeZdo_post30(this: ZDO, writer: PackageWriter) {
   let _flags = 0;
   const isIdentityRotation =
         this.rotation.x === 0
@@ -92,7 +92,7 @@ export function readZdo_post30(reader: PackageReader, version: number): ZDO {
     userId: BigInt(0),
     id: loadId++,
   };
-  const _flags = reader.readShort();
+  const _flags = reader.readUShort();
   const persistent = (_flags & 256) !== 0;
   const distant = (_flags & 512) !== 0;
   const type = (_flags >> 10) & 3;

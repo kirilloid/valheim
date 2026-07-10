@@ -49,10 +49,9 @@ export type ZDOCorruption = {
   index: number;
 };
 
-export interface ZDO {
+export interface ZDOValues {
   // id: ZDOID;
   version: number;
-  _bytes: Uint8Array;
   // ownerRevision: number;
   // dataRevision: number;
   persistent: boolean;
@@ -73,6 +72,10 @@ export interface ZDO {
   readonly longs: Map<number, bigint>; // int -> long
   readonly strings: Map<number, string>; // int -> string
   readonly byteArrays: Map<number, Uint8Array>; // int -> byte[]
+}
+
+export interface ZDO extends ZDOValues {
+  readonly _bytes: Readonly<Uint8Array>;
   readonly _offset: number;
   save(writer: PackageWriter): void;
 }

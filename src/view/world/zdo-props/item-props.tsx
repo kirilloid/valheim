@@ -5,18 +5,21 @@ import type { ZDO } from '../types';
 import type { Item } from '../../../types';
 
 import { stableHashCode } from '../../../model/hash';
+import { nop } from '../../../model/utils';
 import { prefabHashes } from '../../../data/zdo';
+import { data } from '../../../data/itemDB';
 import { floatComp } from './float';
 import { intComp } from './int';
-import { data } from '../../../data/itemDB';
 
 const Durability = floatComp('durability'); // only for wearables
 const Stack = intComp('stack'); // maxStack
 const Quality = intComp('quality'); // only if maxQuality 
 const Variant = intComp('variant'); // shields and linen capes
+const WorldLevel = intComp('worldLevel', { min: 0, max: 10, readOnly: true });
 
 const QUALITY = stableHashCode('quality');
 const WORLD_LEVEL = stableHashCode('worldLevel');
+
 
 export function ItemPropsComp({ value: zdo, onChange }: ValueProps<ZDO>) {
   const id = prefabHashes.get(zdo.prefab);
@@ -32,6 +35,6 @@ export function ItemPropsComp({ value: zdo, onChange }: ValueProps<ZDO>) {
     {maxStack > 1 && <Stack value={zdo} onChange={onChange} max={maxStack} />}
     {maxQuality > 1 && <Quality value={zdo} onChange={onChange} max={maxQuality} />}
     {variants > 0 && <Variant value={zdo} onChange={onChange} max={variants - 1} />}
-    {worldLevel != null && intComp('worldLevel', { min: 0, max: 10, readOnly: true })}
+    {worldLevel != null && <WorldLevel value={zdo} onChange={nop} />}
   </React.Fragment>;
 };
