@@ -288,6 +288,7 @@
     "TurretBoltWood": "item_turretboltwood",
     "TurretBolt": "item_turretbolt",
     "TurretBoltFlametal": "item_turretbolt_flametal",
+    "Catapult_ammo": "item_catapult_training_ammo",
 
     "Wood": "item_wood",
     "Coal": "item_coal",

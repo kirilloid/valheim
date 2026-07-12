@@ -58,6 +58,7 @@ function Item({ item, level }: { item: T.GameObject, level?: number }) {
     case 'arrow':
     case 'bolt':
     case 'missile':
+    case 'catapult':
       return <Arrow item={item} />
     case 'tool':
       return <Tool item={item} level={level} />

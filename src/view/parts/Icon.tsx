@@ -26,6 +26,7 @@ const iconType = (type: GameObject['type']): IconType => {
     case 'arrow':
     case 'bolt':
     case 'missile':
+    case 'catapult':
       return 'arrow';
     case 'item':
     case 'trophy':

@@ -2399,14 +2399,14 @@ export const items: (Weapon | Shield | Bomb)[] = [
     'BowAshlandsBlood': {
       damageMultiplierPerMissingHP: 0.002,
     },
-    'BowAshlandsLightning': {
+    'BowAshlandsStorm': {
       hitEffect: { id: 'ChainLightning', chance: 0.25 },
       damage: [
         dmg({ pierce: 82, lightning: 10 }),
         dmg({ pierce: 4, spirit: 5 }),
       ],
     },
-    'BowAshlandsNature': {
+    'BowAshlandsRoot': {
       hitEffect: { id: 'ImmobilizedAshlands', chance: 0.2 },
       damage: [
         dmg({ pierce: 82, poison: 10 }),

@@ -74,6 +74,8 @@ export const extraData: Record<string, GameComponent[]> = {
   mud_road_v2: ['TerrainModifier'],
   paved_road: ['TerrainModifier'],
   paved_road_v2: ['TerrainModifier'],
+  // digg_siegebomb: ['TerrainOp'],
+  // digg_UnstableLavaRock: ['TerrainOp'],
 
   DG_ForestCrypt: ['DungeonGenerator'],
   DG_GoblinCamp: ['DungeonGenerator'],

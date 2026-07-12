@@ -112,6 +112,7 @@ export const InterfaceFields: Partial<Record<
   DungeonGenerator: [RoomsComp],
   EggGrow: [timeComp('growStart')],
   Fermenter: [stringComp('Content'), timeComp('StartTime')],
+  Feast: [intComp('Value')],
   Fireplace: [floatComp('fuel'), timeComp('lastTime')],
   Fish: [vectorComp('spawnpoint')],
   FishingFloat: [idComp('RodOwner'), hashedItemComp('CatchID')],

@@ -62,6 +62,9 @@ export const arrows: Arrow[] = [
   { type: 'missile', id: 'TurretBoltFlametal', tier: 7, weight: 0.5, stack: 100,
     damage: dmg({ pierce: 140 }), knockback: 60,
   },
+  { type: 'catapult', id: 'Catapult_ammo', tier: 7, weight: 0.3, stack: 50,
+    damage: dmg({ pierce: 140 }), knockback: 60,
+  },
   /*{ type: 'ammo', id: 'draugr_arrow', tier: -1, weight: 1, stack: 20,
     damage: dmg({ pierce: 15 }), knockback: 35,
   },*/

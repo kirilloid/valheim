@@ -493,7 +493,7 @@ export interface BasePiece extends GameObjectBase {
     type: 'craft_piece',
     materials: Record<EntityId, number>;
     station: EntityId | null;
-  }; 
+  };
 }
 
 type Ignite = {
@@ -773,7 +773,7 @@ export interface Resource extends BaseItem {
 }
 
 export interface Arrow extends BaseItem {
-  type: 'arrow' | 'bolt' | 'missile';
+  type: 'arrow' | 'bolt' | 'missile' | 'catapult';
   damage: DamageProfile;
   knockback: number;
 }

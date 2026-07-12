@@ -18,7 +18,7 @@ import { effects } from '../data/effects';
 import { biome } from '../data/emoji';
 
 import { TranslationContext, Translator, useGlobalState } from '../effects';
-import { averageAttacksDamage, findDropChanceFromCreature, itemClasses, List, Materials, ShortWeaponDamage } from './helpers';
+import { averageAttacksDamage, findDropChanceFromCreature, itemClasses, List, Materials, rangeBy, ShortWeaponDamage } from './helpers';
 import { EffectIcon, Icon, ItemIcon, SkillIcon } from './parts/Icon';
 
 function first(val: number | [number, number]) {
@@ -155,6 +155,7 @@ function ShortRecipe(props: { item: GameObject }) {
     case 'arrow':
     case 'bolt':
     case 'missile':
+    case 'catapult':
     case 'bomb':
     case 'weapon': {
       const recipe = recipes.find(r => r.item === item.id);
@@ -427,6 +428,7 @@ function SearchObject({ id, text, onClick, duplicates }: BaseSearchItemProps & {
     case 'arrow':
     case 'bolt':
     case 'missile':
+    case 'catapult':
       return <div className={className}>
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick} className={linkClassName}>{text}</Link>
@@ -443,9 +445,7 @@ function SearchObject({ id, text, onClick, duplicates }: BaseSearchItemProps & {
         {
           item.Plant
             ? <span>
-                {days(item.Plant.growTime[0]).toFixed(1)}
-                –
-                {days(item.Plant.growTime[1]).toFixed(1)}
+                {rangeBy(item.Plant.growTime, t => days(t).toFixed(1))}
                 {' '}
                 <Icon id="time" alt={translate('ui.days')} size={16} />
               </span>

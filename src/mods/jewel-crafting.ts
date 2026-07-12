@@ -133,6 +133,7 @@ function itemMatches(item: Item | Fish, { slot }: SimpleEffectConfig) {
     case 'arrow':
     case 'bolt':
     case 'missile':
+    case 'catapult':
     case 'item':
     case 'fish':
     case 'bomb':

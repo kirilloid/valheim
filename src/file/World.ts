@@ -39,7 +39,7 @@ export type WorldData = {
   randEvent?: RandEventData;
 }
 
-function* readZDOData(reader: PackageReader, version: number): Generator<number, ZDOData> {
+function* readZDOData(reader: PackageReader, version: number, options: { removeDuplicates?: boolean } = {}): Generator<number, ZDOData> {
   const myid = reader.readLong();
   const nextUid = reader.readUInt();
   const zdos: ZDO[] = [];
@@ -57,9 +57,8 @@ function* readZDOData(reader: PackageReader, version: number): Generator<number,
     }
     try {
       const zdo = readZdo(reader, version);
-      // if (zdo._bytes.length > 10000) debugger;
-      if (zdos.length > 2 && zdo._bytes.length !== 0) {
-        const last = zdos.at(-2)!; // check only for multiple repeats
+      if (options.removeDuplicates && zdos.length > 1 && zdo._bytes.length !== 0) {
+        const last = zdos.at(-1)!;
         if (
           // last.id.userId === zdo.id.userId &&
           last._bytes.length === zdo._bytes.length &&

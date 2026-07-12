@@ -91,6 +91,7 @@ export const recipes: ItemRecipe[] = [
   workbenchRecipe(1, { Wood: 8 }, {}, 'ArrowWood', 20),
   workbenchRecipe(1, { Wood: 8, Resin: 2, Feathers: 2 }, {}, 'ArrowFire', 20),
   workbenchRecipe(1, { Wood: 8, Flint: 2, Feathers: 2 }, {}, 'ArrowFlint', 20),
+  workbenchRecipe(1, { Grausten: 10 }, {}, 'Catapult_ammo', 5),
   workbenchRecipe(3, { Wood: 8, Obsidian: 4, Feathers: 2 }, {}, 'ArrowObsidian', 20),
   workbenchRecipe(3, { Wood: 8, Obsidian: 4, Feathers: 2, Ooze: 2 }, {}, 'ArrowPoison', 20),
   workbenchRecipe(4, { Wood: 8, Obsidian: 4, Feathers: 2, FreezeGland: 1 }, {}, 'ArrowFrost', 20),
@@ -426,8 +427,8 @@ export const recipes: ItemRecipe[] = [
   blackForgeRecipe(3, { Blackwood: 10, CharredBone: 16, FlametalNew: 5, BonemawSerpentTooth: 5 },
                       { Blackwood: 5, CharredBone: 10, FlametalNew: 5, BonemawSerpentTooth: 5 }, 'BowAshlands'),
   blackForgeRecipe(4, { BowAshlands: 1, FlametalNew: 5, GemstoneRed: 1 }, { FlametalNew: 5, GemstoneRed: 1 }, 'BowAshlandsBlood'),
-  blackForgeRecipe(4, { BowAshlands: 1, FlametalNew: 5, GemstoneBlue: 1 }, { FlametalNew: 5, GemstoneBlue: 1 }, 'BowAshlandsLightning'),
-  blackForgeRecipe(4, { BowAshlands: 1, FlametalNew: 5, GemstoneGreen: 1 }, { FlametalNew: 5, GemstoneGreen: 1 }, 'BowAshlandsNature'),
+  blackForgeRecipe(4, { BowAshlands: 1, FlametalNew: 5, GemstoneBlue: 1 }, { FlametalNew: 5, GemstoneBlue: 1 }, 'BowAshlandsStorm'),
+  blackForgeRecipe(4, { BowAshlands: 1, FlametalNew: 5, GemstoneGreen: 1 }, { FlametalNew: 5, GemstoneGreen: 1 }, 'BowAshlandsRoot'),
   // CrossbowRipper
   blackForgeRecipe(3, { Blackwood: 10, MorgenSinew: 2, FlametalNew: 8, BonemawSerpentTooth: 4 },
                       { Blackwood: 5, MorgenSinew: 1, FlametalNew: 4, BonemawSerpentTooth: 4 }, 'CrossbowRipper'),

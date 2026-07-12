@@ -3,10 +3,35 @@ import { SkillType } from '../../model/skills';
 import { TranslationContext } from '../../effects';
 
 import type { Arrow as TArrow } from '../../types';
-import { ShortWeaponDamage, yesNo } from '../helpers';
-import { Icon } from '../parts/Icon';
+import { List, ShortWeaponDamage, yesNo } from '../helpers';
+import { Icon, ItemIcon } from '../parts/Icon';
 import { ItemHeader } from '../parts/ItemHeader';
 import { Source } from '../parts/Source';
+
+import { items } from '../../data/weapons';
+import { siege } from '../../data/transport';
+import { pieces } from '../../data/building';
+import { assertNever } from '../../model/utils';
+
+const bows = items.filter(item => item.type === 'weapon' && item.skill === SkillType.Bows);
+const crossbows = items.filter(item => item.type === 'weapon' && item.skill === SkillType.Crossbows);
+const turrets = pieces.filter(item => 'Turret' in item);
+const catapults = siege.filter(item => item.id === 'Catapult');
+
+function AmmoType({ type }: { type: TArrow['type'] }) {
+  switch (type) {
+    case 'arrow':
+      return <List separator="">{bows.map(item => <ItemIcon item={item} />)}</List>
+    case 'bolt':
+      return <List separator="">{crossbows.map(item => <ItemIcon item={item} />)}</List>
+    case 'missile':
+      return <List separator="">{turrets.map(item => <ItemIcon item={item} />)}</List>
+    case 'catapult':
+      return <List separator="">{catapults.map(item => <ItemIcon item={item} />)}</List>
+    default:
+      return assertNever(type);
+  }
+}
 
 export function Arrow({ item }: { item: TArrow }) {
   const translate = useContext(TranslationContext);
@@ -18,6 +43,8 @@ export function Arrow({ item }: { item: TArrow }) {
         <dl>
           <dt>{translate('ui.damage')}</dt>
           <dd><ShortWeaponDamage damage={item.damage} skill={SkillType.Bows} /></dd>
+          <dt>used for</dt>
+          <dd><AmmoType type={item.type} /></dd>
         </dl>
       </section>
       <section>
