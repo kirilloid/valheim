@@ -1,19 +1,20 @@
-import type { Cart, EntityId, Item, ItemRecipe, PhysicalObject, Piece, Ship, Siege } from '../types';
+import type { Cart, EntityId, Feast, Item, ItemRecipe, PhysicalObject, Piece, Ship, Siege } from '../types';
 import { pieces } from './building';
 import { objects } from './objects';
 import { ships, carts, siege } from './transport';
+import { feasts } from './feasts';
 import { assertNever } from '../model/utils';
 import { recipes } from './recipes';
 import { recipes as modsRecipes } from '../mods';
 import { data } from './itemDB';
 
-export const resourceCraftMap: Record<EntityId, Item[]> = {};
-export const resourceBuildMap: Record<EntityId, (Piece | Ship | Cart | Siege)[]> = {};
-export type Produced = Item | Piece | Ship | Cart | Siege;
+export const resourceCraftMap: Record<EntityId, (Item | Feast)[]> = {};
+export const resourceBuildMap: Record<EntityId, (Piece | Ship | Cart | Siege | Feast)[]> = {};
+export type Produced = Item | Piece | Ship | Cart | Siege | Feast;
 export const stationsMap = new Map<EntityId | null, Map<number, Produced[]>>();
 export const miningMap = new Map<EntityId, PhysicalObject[]>();
 
-function addToMap<T extends Item | Piece | Ship | Cart | Siege>(map: Record<EntityId, T[]>, item: T, recipe: ItemRecipe | Piece['recipe']) {
+function addToMap<T extends Item | Piece | Ship | Cart | Siege | Feast>(map: Record<EntityId, T[]>, item: T, recipe: ItemRecipe | Piece['recipe']) {
   if (item.disabled) return;
   if (recipe == null) return;
   function addItem(res: EntityId, item: T) {
@@ -69,6 +70,7 @@ for (const modRecipes of Object.values(modsRecipes)) {
 }
 
 pieces.forEach(p => addToMap(resourceBuildMap, p, p.recipe));
+feasts.forEach(f => addToMap(resourceCraftMap, f, f.recipe));
 ships.forEach(s => addToMap(resourceBuildMap, s, s.recipe));
 carts.forEach(c => addToMap(resourceBuildMap, c, c.recipe));
 siege.forEach(c => addToMap(resourceBuildMap, c, c.recipe));

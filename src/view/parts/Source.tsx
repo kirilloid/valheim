@@ -171,6 +171,7 @@ function getItemRecipe(item: GameObject) {
     case 'piece':
     case 'ship':
     case 'cart':
+    case 'feast':
       return item.recipe;
   }
   return getRecipe(item.id);
@@ -276,6 +277,7 @@ export function GrowSection({ item }: { item: GameObject | undefined }) {
     case 'ship':
     case 'cart':
     case 'siege':
+    case 'feast':
       return null;
   }
   const grow = item.grow ?? [];

@@ -203,14 +203,14 @@ export const recipes: ItemRecipe[] = [
   prepTableRecipe(1, { FishingBait: 20, TrophyCharredMelee: 1 }, 'FishingBaitAshlands', 20),
   prepTableRecipe(1, { FishingBait: 20, TrophyHatchling: 1 }, 'FishingBaitDeepNorth', 20),
   // prep table
-  prepTableRecipe(1, { CookedDeerMeat: 2, CookedMeat: 5, Dandelion: 4, SpiceForests: 1 }, 'FeastMeadows', 10),
-  prepTableRecipe(1, { DeerStew: 3, Thistle: 5, QueensJam: 4, SpiceForests: 1 }, 'FeastBlackforest', 10),
-  prepTableRecipe(1, { FishCooked: 5, Thistle: 4, SerpentMeatCooked: 2, SpiceOceans: 1 }, 'FeastOceans', 10),
-  prepTableRecipe(1, { Sausages: 8, Bloodbag: 4, TurnipStew: 2, SpiceForests: 1 }, 'FeastSwamps', 10),
-  prepTableRecipe(1, { WolfMeatSkewer: 2, Carrot: 4, SpiceMountains: 1 }, 'FeastMountains', 10),
-  prepTableRecipe(1, { Bread: 3, LoxPie: 2, Cloudberry: 5, SpicePlains: 1 }, 'FeastPlains', 10),
-  prepTableRecipe(1, { MisthareSupreme: 1, CookedBugMeat: 3, YggdrasilPorridge: 1, SpiceMistlands: 1 }, 'FeastMistlands', 10),
-  prepTableRecipe(1, { CookedAsksvinMeat: 3, Vineberry: 5, ScorchingMedley: 2, SpiceAshlands: 1 }, 'FeastAshlands', 10),
+  prepTableRecipe(1, { CookedDeerMeat: 2, CookedMeat: 5, Dandelion: 4, SpiceForests: 1 }, 'FeastMeadows_Material', 10),
+  prepTableRecipe(1, { DeerStew: 3, Thistle: 5, QueensJam: 4, SpiceForests: 1 }, 'FeastBlackforest_Material', 10),
+  prepTableRecipe(1, { FishCooked: 5, Thistle: 4, SerpentMeatCooked: 2, SpiceOceans: 1 }, 'FeastOceans_Material', 10),
+  prepTableRecipe(1, { Sausages: 8, Bloodbag: 4, TurnipStew: 2, SpiceForests: 1 }, 'FeastSwamps_Material', 10),
+  prepTableRecipe(1, { WolfMeatSkewer: 2, Carrot: 4, SpiceMountains: 1 }, 'FeastMountains_Material', 10),
+  prepTableRecipe(1, { Bread: 3, LoxPie: 2, Cloudberry: 5, SpicePlains: 1 }, 'FeastPlains_Material', 10),
+  prepTableRecipe(1, { MisthareSupreme: 1, CookedBugMeat: 3, YggdrasilPorridge: 1, SpiceMistlands: 1 }, 'FeastMistlands_Material', 10),
+  prepTableRecipe(1, { CookedAsksvinMeat: 3, Vineberry: 5, ScorchingMedley: 2, SpiceAshlands: 1 }, 'FeastAshlands_Material', 10),
   // FERMENTER
   ...potionRecipe(
     1, { Honey: 10, Blueberries: 5, Raspberry: 10, Dandelion: 1 },

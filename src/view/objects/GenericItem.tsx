@@ -8,25 +8,10 @@ import { TranslationContext } from '../../effects';
 import { Light, rangeBy, ShortWeaponDamage, yesNo } from '../helpers';
 import { Icon } from '../parts/Icon';
 import { Source } from '../parts/Source';
+import { Food } from '../parts/Food';
 import { ItemHeader } from '../parts/ItemHeader';
 import { DeadSpeak } from '../parts/DeadSpeak';
 import { Effect } from '../parts/Effect';
-
-function Food({ health, stamina, eitr, duration, regen }: T.Food) {
-  const translate = useContext(TranslationContext);
-  return <section>
-    <h2>{translate('ui.itemType.food')}</h2>
-    <dl>
-      <dt>{translate('ui.health')}</dt><dd><Icon id="health" alt="" size={16} />{' '}{health}</dd>
-      <dt>{translate('ui.stamina')}</dt><dd><Icon id="walknut" alt="" size={16} />{' '}{stamina}</dd>
-      {eitr != null && <>
-        <dt>{translate('ui.eitr')}</dt><dd><Icon id="eitr" alt="" size={16} />{' '}{eitr}</dd>
-      </>}
-      <dt>{translate('ui.duration')}</dt><dd>{timeI2S(duration)}</dd>
-      <dt>{translate('ui.regen')}</dt><dd>{regen}</dd>
-    </dl>
-  </section>
-}
 
 function Potion({ health, stamina, healthRegen, staminaRegen, damageModifiers, cooldown }: T.Potion) {
   const translate = useContext(TranslationContext);

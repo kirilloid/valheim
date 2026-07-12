@@ -17,7 +17,7 @@ export type GameComponent =
 | 'Catapult' | 'Chair' | 'Character' | 'Container' | 'CookingStation' | 'Corpse' | 'CraftingStation' | 'CraftingStationExtension' | 'CreatureSpawner'
 | 'Deadspeak' | 'Destructible' | 'Door' | 'DungeonGenerator'
 | 'EggGrow'
-| 'Fermenter' | 'Fireplace' | 'Fish' | 'FishingFloat'
+| 'Feast' | 'Fermenter' | 'Fireplace' | 'Fish' | 'FishingFloat'
 | 'Growup'
 | 'Humanoid'
 | 'ItemDrop' | 'ItemStand' // also boss stones & parts of some altars
@@ -571,6 +571,17 @@ export type Piece = BasePiece & {
   subtype: 'external';
 });
 
+export interface Feast extends BasePiece {
+  type: 'feast';
+  stack: number;
+  Food: Food;
+  recipe?: {
+    type: 'craft_piece',
+    materials: Record<EntityId, number>;
+    station: null;
+  };
+}
+
 export interface Structure extends GameObjectBase {
   type: 'structure';
   Destructible?: Destructible;
@@ -865,6 +876,6 @@ export type Item = Resource | Weapon | Shield | Bomb | Armor | Arrow | Tool;
 export type ItemSet = { name: string; items: EntityId[]; bonus: (Effect | undefined)[]; };
 export type ItemSpecial = Weapon['special'] | Armor['special'] | Tool['special'];
 
-export type GameObject = Item | Piece | Structure | PhysicalObject | Spawner | Ship | Cart | Siege | Creature | Fish;
+export type GameObject = Item | Piece | Structure | PhysicalObject | Spawner | Ship | Cart | Siege | Creature | Fish | Feast;
 
 export type KeysOfType<T, TProp> = { [P in keyof T]: T[P] extends TProp? P : never}[keyof T];

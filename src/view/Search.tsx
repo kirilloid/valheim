@@ -143,6 +143,7 @@ function ShortRecipe(props: { item: GameObject }) {
     case 'trophy':
       return null;
     case 'piece':
+    case 'feast':
       const recipe = item.recipe;
       if (recipe == null) return null;
       return <Materials materials={recipe.materials} iconSize={16} />
@@ -457,6 +458,12 @@ function SearchObject({ id, text, onClick, duplicates }: BaseSearchItemProps & {
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick} className={linkClassName}>{text}</Link>
         {pieceExtra(item, translate)}
+        <ShortRecipe item={item} />
+      </div>
+    case 'feast':
+      return <div className={className}>
+        <ItemIcon item={item} size={32} />
+        <Link to={`/obj/${id}`} onClick={onClick} className={linkClassName}>{text}</Link>
         <ShortRecipe item={item} />
       </div>
     case 'structure':

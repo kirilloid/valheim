@@ -30,6 +30,7 @@ const iconType = (type: GameObject['type']): IconType => {
       return 'arrow';
     case 'item':
     case 'trophy':
+    case 'feast':
       return 'resource';
     case 'object':
       return 'object';

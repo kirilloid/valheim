@@ -62,6 +62,8 @@ export const ItemHeader = React.memo(({ item, noIcon = false, children }: { item
           ? `ui.itemSubtype.${item.subtype}`
           : item.type === 'armor'
           ? `ui.armorSlot.${item.slot}`
+          : item.type === 'feast'
+          ? `feast`
           : 'Food' in item
           ? `ui.itemType.food`
           : `ui.itemType.${item.type}`

@@ -1,4 +1,5 @@
 import { resources } from './resources';
+import { feasts } from './feasts';
 import { recipes } from './recipes';
 import { items as weapons } from './weapons';
 import { items as armors } from './armors';
@@ -41,6 +42,7 @@ for (const coll of [
   objects,
   structures,
   resources,
+  feasts,
 ]) {
   addCollection(coll);
 }

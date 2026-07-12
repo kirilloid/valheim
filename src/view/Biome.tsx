@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 
 import '../css/Biome.css';
 
-import type { BiomeConfig, EntityId, GameObject, Item, PhysicalObject, Resource, Structure } from '../types';
+import type { BiomeConfig, EntityId, Feast, GameObject, Item, PhysicalObject, Resource, Structure } from '../types';
 import { biomes } from '../data/location';
 import { maxLvl } from '../data/creatures';
 import { data } from '../data/itemDB';
@@ -36,7 +36,7 @@ function isFoodOrUsedForFood(item: Item, settingsFilter: (item: GameObject) => b
   // TODO: maybe this less hacky, but currently buyable ChickenEgg makes coins food ingridient
   if (item.id === 'Coins') return false;
   const visited = new Set<EntityId>();
-  const queue: { item: Item; track: EntityId[] }[] = [{ item, track: [] }];
+  const queue: { item: (Item | Feast); track: EntityId[] }[] = [{ item, track: [] }];
   let idx = 0;
   while (idx < queue.length) {
     const { item: next, track } = queue[idx++]!;
@@ -77,7 +77,7 @@ function Resources({ biome }: { biome: BiomeConfig }) {
 
   const resources = {
     trophies: [] as Item[],
-    food: [] as Resource[],
+    food: [] as (Resource | Feast)[],
     others: [] as (Item | Structure)[],
     rock: [] as PhysicalObject[],
     tree: [] as PhysicalObject[],
@@ -113,6 +113,9 @@ function Resources({ biome }: { biome: BiomeConfig }) {
         } else {
           resources.others.push(item);
         }
+        break;
+      case 'feast':
+        resources.food.push(item);
         break;
       default:
         resources.others.push(item);

@@ -19,6 +19,7 @@ import { SpoilerAlert } from '../parts/Spoiler';
 import { Structure } from './Structure';
 import { Fish } from './Fish';
 import { Spawner } from './Spawner';
+import { Feast } from './Feast';
 
 function parseLevel(level: string | undefined): number | undefined {
   if (level == null) return undefined;
@@ -74,6 +75,8 @@ function Item({ item, level }: { item: T.GameObject, level?: number }) {
       return <Cart item={item} />
     case 'siege':
       return <Siege item={item} />
+    case 'feast':
+      return <Feast item={item} />
     case 'item':
     case 'trophy':
       return <GenericItem item={item} />
