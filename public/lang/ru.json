@@ -2320,6 +2320,7 @@
     "ui.itemType.bolt": "болт",
     "ui.itemType.bomb": "бомба",
     "ui.itemType.cart": "телега",
+    "ui.itemType.catapult": "снаряд катапульты",
     "ui.itemType.creature": "монстр",
     "ui.itemType.fish": "рыба",
     "ui.itemType.food": "еда",

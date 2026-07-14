@@ -2729,18 +2729,6 @@ export const items: (Weapon | Shield | Bomb)[] = [
   },
   {
     type: 'bomb', slot: 'primary',
-    id: 'BombSiege',
-    emoji: '💣',
-    tier: 7,
-    stack: 50,
-    weight: 0.3,
-    // toolTier: 6,
-    spawns: 'siegebomb_explosion',
-    // { pickaxe: 600 }
-    stamina: 8,
-  },
-  {
-    type: 'bomb', slot: 'primary',
     id: 'BombLava',
     emoji: '💣',
     tier: 7,

@@ -63,8 +63,14 @@ export const arrows: Arrow[] = [
     damage: dmg({ pierce: 140 }), knockback: 60,
   },
   { type: 'catapult', id: 'Catapult_ammo', tier: 7, weight: 0.3, stack: 50,
-    damage: dmg({ pierce: 140 }), knockback: 60,
+    // toolTier: 5, radius: 3
+    damage: dmg({ blunt: 5, chop: 5, pickaxe: 5 }), knockback: 0,
   },
+  { type: 'catapult', id: 'BombSiege', emoji: '💣', tier: 7, weight: 0.3, stack: 50,
+    // toolTier: 5, radius: 2
+    damage: dmg({ pickaxe: 400, chop: 100/*, damage: 100*/ }), knockback: 0,
+  },
+
   /*{ type: 'ammo', id: 'draugr_arrow', tier: -1, weight: 1, stack: 20,
     damage: dmg({ pierce: 15 }), knockback: 35,
   },*/

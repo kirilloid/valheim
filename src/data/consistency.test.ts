@@ -18,6 +18,7 @@ import { ships, carts, siege } from './transport';
 
 import * as rooms from './rooms';
 import { iconPath } from '../view/parts/Icon';
+import { feasts } from './feasts';
 
 function resolvePath(path: string): string {
   const localPath = `../../public${path}`;
@@ -36,6 +37,7 @@ for (const { item } of recipes) {
 }
 
 for (const p of pieces) if (p.recipe != null) sourced.add(p.id);
+for (const f of feasts) if (f.recipe != null) sourced.add(f.id);
 for (const s of ships) if (s.recipe != null) sourced.add(s.id);
 for (const c of carts) if (c.recipe != null) sourced.add(c.id);
 for (const s of siege) if (s.recipe != null) sourced.add(s.id);

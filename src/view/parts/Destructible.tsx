@@ -13,7 +13,7 @@ const nonImmune = (mod: T.DamageModifier): boolean => {
 
 export function Destructible({ item }: { item: T.Destructible }) {
   const translate = useContext(TranslationContext);
-  const { hp, damageModifiers, minToolTier } = item;
+  const { hp, damageModifiers, minToolTier, ttl } = item;
 
   const onlyDamagers: T.Weapon[] = [
     ...(nonImmune(damageModifiers.chop)
@@ -28,6 +28,7 @@ export function Destructible({ item }: { item: T.Destructible }) {
     <h2>{translate('ui.destructible')}</h2>
     <dl>
       <dt>{translate('ui.durability')}</dt><dd>{hp}</dd>
+      {ttl && <><dt>ttl</dt><dd>{ttl}</dd></>}
       <Resistances mods={damageModifiers} />
       {item.minToolTier > 0 || Object.values(damageModifiers).filter(mod => mod === 'immune' || mod === 'ignore').length > 5 ? <>
         <dt>can be damaged only by</dt>

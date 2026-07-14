@@ -25,7 +25,7 @@ export type GameComponent =
 | 'MapTable' | 'MineRock' | 'MineRock5' | 'MonsterAI'
 | 'Pickable' | 'PickableItem' | 'Piece' | 'Plant' | 'Player' | 'PrivateArea' | 'Procreation'
 | 'Ragdoll' | 'RandomAnimation' | 'RandomFlyingBird' | 'ResourceRoot' | 'Runestone' /* boss stones */
-| 'Saddle' | 'SapCollector' | 'SEMan' | 'ShieldGenerator' | 'ShipConstructor' | 'Ship' | 'Sign' | 'Smelter'
+| 'Saddle' | 'SapCollector' | 'SEMan' | 'ShieldGenerator' | 'ShipConstructor' | 'Ship' | 'SiegeMachine' | 'Sign' | 'Smelter'
 | 'Tameable' | 'TeleportWorld' | 'TerrainComp' | 'TerrainModifier' | 'TombStone' | 'Trader' | 'Trap' | 'TreeBase' | 'TreeLog' | 'Turret'
 | 'Vagon' | 'Vegvisir' | 'VisEquipment'
 | 'WearNTear' | 'Windmill' | 'WispSpawner'
@@ -384,6 +384,7 @@ export interface Destructible {
   minToolTier: number;
   ashResist?: boolean;
   ashImmune?: boolean;
+  ttl?: number;
   parts: {
     id: EntityId,
     num: number,
@@ -442,6 +443,7 @@ export type PhysicalObject = GameObjectBase & {
   grow?: ItemGrow[];
   Plant?: Plantable;
   Beacon?: number;
+  Smoke?: number;
   Vegvisir?: GameLocationId;
   RuneStone?: string[];
   SpawnArea?: SpawnArea;
@@ -594,11 +596,14 @@ export interface Transport extends BasePiece {
 
 export interface Siege extends BasePiece {
   type: 'siege';
-  Siege?: {
+  SiegeMachine?: {
     fuel: EntityId[];
     damage: DamageProfile;
     toolTier: number;
   };
+  Catapult?: {
+    ammo: EntityId[];
+  }
 }
 
 export interface Ship extends Transport {

@@ -1955,6 +1955,7 @@
     "ui.itemType.bolt": "Bolz",
     "ui.itemType.bomb": "Bomb",
     "ui.itemType.cart": "Karren",
+    "ui.itemType.catapult": "Katapultladung",
     "ui.itemType.creature": "Monster",
     "ui.itemType.fish": "Fisch",
     "ui.itemType.food": "Essen",

@@ -188,6 +188,7 @@ export const InterfaceFields: Partial<Record<
   ],
   ShipConstructor: [timeComp('spawntime'), boolComp('done'),],
   ShieldGenerator: [floatComp('fuel'), timeComp('StartTime')],
+  SiegeMachine: [],
   Sign: [stringComp('text')],
   // SpawnSystem: ['<b_|e_><creature><num>',],
   Smelter: [

@@ -1717,6 +1717,7 @@
     "ui.itemType.bolt": "ammo_bolts",
     "ui.itemType.missile": "",
     "ui.itemType.cart": "tool_cart",
+    "ui.itemType.catapult": "tool_cart",
     "ui.itemType.creature": "",
     "ui.itemType.food": "item_food",
     "ui.itemType.item": "",

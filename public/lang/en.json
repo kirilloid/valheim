@@ -2397,6 +2397,7 @@
     "ui.itemType.bolt": "bolt",
     "ui.itemType.bomb": "bomb",
     "ui.itemType.cart": "cart",
+    "ui.itemType.catapult": "catapult ammo",
     "ui.itemType.creature": "creature",
     "ui.itemType.fish": "fish",
     "ui.itemType.food": "food",

@@ -280,7 +280,7 @@ export const siege: Siege[] = [
   {
     type: 'siege',
     id: 'BatteringRam',
-    components: ['Container', 'Destructible'],
+    components: ['Destructible', 'SiegeMachine', 'Vagon'],
     tier: 7,
     emoji: '🐏',
     wear: {
@@ -293,7 +293,7 @@ export const siege: Siege[] = [
       water: undefined,
       size: [4, 3.5, 5.5],
     },
-    Siege: {
+    SiegeMachine: {
       fuel: ['Wood', 'FineWood', 'RoundLog', 'Blackwood'],
       damage: dmg({ pickaxe: 600 }),
       toolTier: 5,
@@ -307,7 +307,7 @@ export const siege: Siege[] = [
   {
     type: 'siege',
     id: 'Catapult',
-    components: ['Container', 'Destructible'],
+    components: ['Destructible', 'Vagon', 'Catapult'],
     tier: 7,
     emoji: '🐱',
     wear: {
@@ -319,6 +319,9 @@ export const siege: Siege[] = [
       target: 'primary',
       water: undefined,
       size: [3.9, 4, 6.5],
+    },
+    Catapult: {
+      ammo: ['BombSiege', 'Catapult_ammo'],
     },
     recipe: {
       type: 'craft_piece',
