@@ -26,7 +26,8 @@
         elt.innerHTML = html;
       };
       var features = [];
-      if (typeof [].at === 'undefined') features.push('Array.prototype.at');
+      if (typeof Array.prototype.at === 'undefined') features.push('Array.prototype.at');
+      if (typeof Iterator.prototype.reduce === 'undefined') features.push('Iterator.prototype.reduce');
       if (features.length > 0) {
         const script = document.createElement('script');
         script.src = 'https://polyfill.io/v3/polyfill.min.js?features=' + features.join(',');

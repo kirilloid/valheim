@@ -1,8 +1,6 @@
 import type { Deadspeak, Fish } from '../types';
 import { spawner } from '../model/spawner';
 
-const baitsNormal = { FishingBait: 1 };
-
 function deadSpeakFish(texts: string[]): Deadspeak {
   return {
     interval: 60,

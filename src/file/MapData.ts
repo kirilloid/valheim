@@ -1,4 +1,4 @@
-import { deflate, inflate } from 'pako';
+import { gzipSync, decompressSync, inflateSync } from 'fflate';
 import type { Vector3 } from '../model/utils';
 import { PackageReader, PackageWriter } from './Package';
 import { checkVersion, MAP, SHARED_MAP } from './versions';
@@ -72,7 +72,7 @@ function writeExplored(writer: PackageWriter, tileSize: number, explored: Uint8A
 
 export function readShared(data: Uint8Array): SharedData {
   const compressedReader = new PackageReader(data);
-  const reader = new PackageReader(inflate(compressedReader.readByteArray()));
+  const reader = new PackageReader(inflateSync(compressedReader.readByteArray()));
   const version = reader.readInt();
   checkVersion('shared map data', version, SHARED_MAP);
   const explored = readExplored(reader, TILE_SIZE);
@@ -96,7 +96,7 @@ export function read(data: Uint8Array): Data {
   checkVersion('map data', version, MAP);
   if (version >= 7) {
     // unpack gzip
-    reader = new PackageReader(inflate(reader.readByteArray()));
+    reader = new PackageReader(decompressSync(reader.readByteArray()));
   }
   const tileSize = reader.readInt();
   const explored = readExplored(reader, tileSize);
@@ -152,7 +152,7 @@ export function write({
   }
   const gzipped = new PackageWriter();
   gzipped.writeInt(version);
-  const bytes = deflate(writer.flush(), { level: 1 });
+  const bytes = gzipSync(writer.flush(), { level: 1 });
   gzipped.writeByteArray(bytes);
   return gzipped.flush();
 }

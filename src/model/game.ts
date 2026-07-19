@@ -1,5 +1,6 @@
 import type { DamageModifier, DamageModifiers, DamageProfile, DropEntry, EntityId, GeneralDrop, ItemGrow, ItemGrowConfig, LocationItem, Pair } from '../types';
 import type { EnvId } from '../data/env';
+import type { Vector2i } from './utils';
 
 // TIME
 export const FRAME = 1 / 50;
@@ -49,6 +50,8 @@ export const WORLD_CONFIG = {
   worldLevelPieceHPMultiplier: 1,
   worldLevelMineHPMultiplier: 4,
 };
+
+export const zoneHash = ({ x, y }: Vector2i) => x * 4271 + y * 9187;
 
 export const singleDrop = (item: EntityId, min: number = 1, max: number = min): GeneralDrop => ({
   num: [min, max],

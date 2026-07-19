@@ -1,4 +1,5 @@
 import { GAME_DAY } from './game';
+import { stableHashCode } from './hash';
 
 // copied from .net
 
@@ -184,4 +185,23 @@ export function runGenerator<T>(
   }());
 }
 
+export async function runAsyncGenerator<T>(
+  gen: AsyncGenerator<number, T, void>,
+  onProgress: (progress: number) => void,
+): Promise<T> {
+  while (true) {
+    const iter = await gen.next();
+    if (iter.done) {
+      return iter.value;
+    } else {
+      await new Promise(resolve => setTimeout(resolve, 3));
+      onProgress(iter.value);
+    }
+  }
+}
+
 export const FIGURE_SPACE = ' ';
+
+export function hashPrefab(name: string) {
+  return /_unknown_$/.test(name) ? parseInt(name) : stableHashCode(name);
+}

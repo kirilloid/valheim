@@ -1,4 +1,4 @@
-import { inflate, deflate } from 'pako';
+import { inflateSync, deflateSync } from 'fflate';
 
 import type { Vector3 } from '../model/utils';
 import { PackageReader, PackageWriter } from './Package';
@@ -17,7 +17,7 @@ export type Data = {
 };
 
 export function read(bytes: Uint8Array): Data {
-  const data = inflate(bytes);
+  const data = inflateSync(bytes);
   const zpackage = new PackageReader(data);
   const version = zpackage.readInt();
   checkVersion('terrain comp', version, TERRAIN_COMP);
@@ -86,5 +86,5 @@ export function write(tcData: Data): Uint8Array {
       zpackage.writeFloat(tcData.paintMask.data[index * 4 + 3]! / 255);
     }
   }
-  return deflate(zpackage.flush(), { level: 1 });
+  return deflateSync(zpackage.flush(), { level: 1 });
 }

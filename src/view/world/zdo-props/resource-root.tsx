@@ -22,6 +22,16 @@ export function ResourceRootComp({ value: zdo, time }: ValueProps<ZDO> & { time:
     emptyTreshold: 10,
     regenPerSec: 1,
   }; // values come from default ResourceRoot.cs, but should actually never be used
+  if (isNaN(time)) {
+    return <>
+      <dt>level</dt>
+      <dd>
+        ??? / {ResourceRoot.maxLevel}
+        {/* {currentLevel > ResourceRoot.highThreshold && ' (high)'}
+        {currentLevel < ResourceRoot.emptyTreshold && ' (low)'} */}
+      </dd>
+    </>
+  }
   const lastTime = zdo.longs.get(LAST_TIME_HASH);
   const dt = lastTime == null ? 0 : (time - ticksToSeconds(lastTime));
   const lastLevel = zdo.floats.get(LEVEL_HASH) ?? ResourceRoot.maxLevel;

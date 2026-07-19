@@ -30,6 +30,12 @@ function getGrowTime(zdo: ZDO) {
 const PLANT_TIME_HASH = hash('plantTime');
 
 export function PlantComp({ value: zdo, time }: ValueProps<ZDO> & { time: number }) {
+  if (isNaN(time)) {
+    return <>
+      <dt>grown</dt>
+      <dd>???</dd>
+    </>;
+  }
   const growTime = getGrowTime(zdo);
   
   const plantTimeTicks = zdo.longs.get(PLANT_TIME_HASH) ?? BigInt(0);

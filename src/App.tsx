@@ -28,6 +28,7 @@ import { FoodTable } from './view/pages/FoodTable';
 import { FoodPlanner } from './view/pages/FoodPlanner';
 import { Mining } from './view/pages/Mining';
 import { WorldEditor } from './view/world';
+import { ChunkEditor } from './view/world/ChunkEditor';
 import { WorldMeta } from './view/WorldMeta';
 import { FwlRecovery } from './view/world/FwlRecovery';
 import { PlayerEditor } from './view/player';
@@ -84,6 +85,7 @@ function App() {
             <Route path={`/${skills}`} children={<Skills />} />
             {/* <Route path="/weapons" children={<Weapons />} /> */}
             <Route path="/world-edit" children={<WorldEditor />} />
+            <Route path="/chunk-edit" children={<ChunkEditor />} />
             <Route path="/world-meta" children={<WorldMeta />} />
             <Route path="/world-meta-recovery" children={<FwlRecovery />} />
             <Route path="/player-edit" children={<PlayerEditor />} />

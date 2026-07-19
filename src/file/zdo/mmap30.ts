@@ -1,7 +1,9 @@
 import type { ZDO } from '../types';
-import { Quaternion, Vector2i, Vector3 } from '../../model/utils';
+import type { Quaternion, Vector3 } from '../../model/utils';
 import { PackageReader, PackageWriter } from '../Package';
 import { EmptyBinMap, FloatBinMap, IntBinMap, LongBinMap, QuaternionBinMap, Vector3BinMap } from './BinMap';
+import { ZONE_SIZE } from '../../model/game';
+import { fromZoneId, zoneId } from '../../model/zdo-selectors';
 
 const TYPE_OFFSET = 10;
 
@@ -9,11 +11,21 @@ const DEFAULT_ROTATION: Vector3 = { x: 0, y: 0, z: 0 };
 
 type MappedMap<T> = Map<number, T> & { byteSize: number; save(pkg: PackageWriter): void }
 
+/**
+ * version | 30+ | 40  |
+ * flag    |     2     |
+ * sector  |  4  |  0  |
+ * position| 12  | 4/12|
+ * prefab  |     4     |
+ * rotation| 12  | 2/4 |
+ * connect |     5     |
+ * maps...
+ */
 export class ZdoMmapView implements ZDO {
   public _bytes: Uint8Array;
   private view: DataView;
   private _flag: number;
-  private offset01Sector = 0;
+  private offset01Sector = 2; // flags
   private offset02Position = 0;
   private offset03Prefab = 0;
   private offset04Rotation = 0;
@@ -26,6 +38,7 @@ export class ZdoMmapView implements ZDO {
   private offset11Strings = 0;
   private offset12ByteArrays = 0;
   _rotation: Vector3 | null = null;
+  _position: Vector3 | null = null;
   _znetThing: boolean = false;
   _floats: MappedMap<number> | null = null;
   _vec3: MappedMap<Vector3> | null = null;
@@ -62,10 +75,13 @@ export class ZdoMmapView implements ZDO {
     this.view = new DataView(this._bytes.buffer, this._bytes.byteOffset, this._bytes.byteLength);
     this._flag = this.view.getUint16(0, true);
     this.offset01Sector = 2;
-    this.offset02Position = this.offset01Sector + 4;
-    this.offset03Prefab = this.offset02Position + 12;
+    this.offset02Position = this.offset01Sector + (version >= 40 ? 0 : 4);
+    this.offset03Prefab = this.offset02Position + (this._flag & 8192 ? 4 : 12);
     this.offset04Rotation = this.offset03Prefab + 4;
-    this.offset05Connection = this.offset04Rotation + (this._flag & 4096 ? 12 : 0);
+    const _rotation = (this._flag >> 12) & 1;
+    this.offset05Connection = this.offset04Rotation + (_rotation
+      ? (version >= 40 ? (this.view.getUint16(this.offset04Rotation, true) & 32768 ? 2 : 4) : 12)
+      : 0);
     this.offset06Floats = this.offset05Connection + (this._flag & 1 ? 5 : 0);
     reader.skipBytes(this.offset06Floats);
     if (this._flag & 2) this.skipMap(reader, reader.skipFloat);
@@ -106,28 +122,31 @@ export class ZdoMmapView implements ZDO {
     this._flag |= (value << TYPE_OFFSET);
   }
 
-  get sector(): Readonly<Vector2i> {
-    return {
-      x: this.view.getInt16(this.offset01Sector, true),
-      y: this.view.getInt16(this.offset01Sector + 2, true),
-    }
-  }
-  set sector(value: Vector2i) {
-    this.view.setInt16(this.offset01Sector, value.x, true);
-    this.view.setInt16(this.offset01Sector + 4, value.y, true);
+  get sector(): number {
+    const x = this.version >= 40
+      ? Math.round(this.position.x / ZONE_SIZE)
+      : this.view.getInt16(this.offset01Sector, true);
+    const y = this.version >= 40
+      ? Math.round(this.position.z / ZONE_SIZE)
+      : this.view.getInt16(this.offset01Sector + 2, true);
+    return zoneId({ x, y });
   }
 
   get position(): Readonly<Vector3> {
-    return {
+    return this._position ?? (this.version >= 40 && (this._flag & 8192)
+    ? {
+      x: this.view.getInt16(this.offset02Position, true),
+      y: 0,
+      z: this.view.getInt16(this.offset02Position + 2, true),
+    }
+    : {
       x: this.view.getFloat32(this.offset02Position, true),
       y: this.view.getFloat32(this.offset02Position + 4, true),
       z: this.view.getFloat32(this.offset02Position + 8, true),
-    }
+    });
   }
   set position(value: Vector3) {
-    this.view.setFloat32(this.offset02Position, value.x, true);
-    this.view.setFloat32(this.offset02Position + 4, value.y, true);
-    this.view.setFloat32(this.offset02Position + 8, value.z, true);
+    this._position = value;
   }
 
   get prefab(): number {
@@ -139,14 +158,26 @@ export class ZdoMmapView implements ZDO {
 
   get rotation(): Readonly<Vector3> {
     if (this._rotation !== null) return this._rotation;
-    if ((this._flag >> 12) & 1) {
-      this._rotation = {
+    if (((this._flag >> 12) & 1) === 0) {
+      return this._rotation = DEFAULT_ROTATION;
+    }
+    if (this.version < 40) {
+      return this._rotation = {
         x: this.view.getFloat32(this.offset04Rotation, true),
         y: this.view.getFloat32(this.offset04Rotation + 4, true),
         z: this.view.getFloat32(this.offset04Rotation + 8, true),
       }
+    }
+    const n1 = this.view.getUint16(this.offset04Rotation, true);
+    if (n1 & 32768) {
+      this._rotation = { x: 0, y: (n1 & 32767) * 0.5, z: 0 };
     } else {
-      this._rotation = DEFAULT_ROTATION;
+      const n2 = (n1 << 16) | this.view.getUint16(this.offset04Rotation + 2, true);
+      this._rotation = {
+        x: (n2 & 1023) * 0.5,
+        y: ((n2 >> 10) & 1023) * 0.5,
+        z: ((n2 >> 20) & 1023) * 0.5,
+      };
     }
     return this._rotation;
   }
@@ -160,7 +191,7 @@ export class ZdoMmapView implements ZDO {
       return this._floats = new EmptyBinMap(this.writeSize, PackageWriter.prototype.writeFloat);
     }
     return this._floats = new FloatBinMap(
-      this._bytes.subarray(this.offset06Floats),
+      this._bytes.subarray(this.offset06Floats, this.offset07Vec3),
       this.readSize,
       this.writeSize,
     );
@@ -172,7 +203,7 @@ export class ZdoMmapView implements ZDO {
       return this._vec3 = new EmptyBinMap(this.writeSize, PackageWriter.prototype.writeVector3);
     }
     return this._vec3 = new Vector3BinMap(
-      this._bytes.subarray(this.offset07Vec3),
+      this._bytes.subarray(this.offset07Vec3, this.offset08Quats),
       this.readSize,
       this.writeSize,
     );
@@ -184,7 +215,7 @@ export class ZdoMmapView implements ZDO {
       return this._quats = new EmptyBinMap(this.writeSize, PackageWriter.prototype.writeQuaternion);
     }
     return this._quats = new QuaternionBinMap(
-      this._bytes.subarray(this.offset08Quats),
+      this._bytes.subarray(this.offset08Quats, this.offset09Ints),
       this.readSize,
       this.writeSize,
     );
@@ -196,7 +227,7 @@ export class ZdoMmapView implements ZDO {
       return this._ints = new EmptyBinMap(this.writeSize, PackageWriter.prototype.writeInt);
     }
     return this._ints = new IntBinMap(
-      this._bytes.subarray(this.offset09Ints),
+      this._bytes.subarray(this.offset09Ints, this.offset10Longs),
       this.readSize,
       this.writeSize,
     );
@@ -208,7 +239,7 @@ export class ZdoMmapView implements ZDO {
       return this._longs = new EmptyBinMap(this.writeSize, PackageWriter.prototype.writeLong);
     }
     return this._longs = new LongBinMap(
-      this._bytes.subarray(this.offset10Longs),
+      this._bytes.subarray(this.offset10Longs, this.offset11Strings),
       this.readSize,
       this.writeSize,
     );
@@ -243,6 +274,13 @@ export class ZdoMmapView implements ZDO {
         this._flag &= ~4096;
       }
     }
+    if (this._position) {
+      if (this.version >= 40 && this._position.y === 0) {
+        this._flag |= 8192;
+      } else {
+        this._flag &= ~8192;
+      }
+    }
     if (this._floats) if (this._floats.size) this._flag |= 2; else this._flag &= ~2;
     if (this._vec3) if (this._vec3.size) this._flag |= 4; else this._flag &= ~4;
     if (this._quats) if (this._quats.size) this._flag |= 8; else this._flag &= ~8;
@@ -252,10 +290,23 @@ export class ZdoMmapView implements ZDO {
     if (this._byteArrays) if (this._byteArrays.size) this._flag |= 128; else this._flag &= ~128;
       
     pkg.writeUShort(this._flag);
-    pkg.writeVector2s(this.sector);
-    pkg.writeVector3(this.position);
+    if (this.version < 40) pkg.writeVector2s(fromZoneId(this.sector));
+    if (this._flag & 8192) {
+      pkg.writeShort(this.position.x);
+      pkg.writeShort(this.position.z);
+    } else {
+      pkg.writeVector3(this.position);
+    }
     pkg.writeInt(this.prefab);
-    if (this._flag & 4096) if (this._rotation) pkg.writeVector3(this._rotation); else pkg.writeBytes(this._bytes.subarray(this.offset04Rotation, this.offset05Connection))
+    if (this._flag & 4096) if (this._rotation) {
+      if (this.version >= 40) {
+        pkg.writeSmallRotation(this._rotation);
+      } else {
+        pkg.writeVector3(this._rotation);
+      }
+    } else {
+      pkg.writeBytes(this._bytes.subarray(this.offset04Rotation, this.offset05Connection));
+    }
 
     // copy SetConnectionData byte + int
     if (this._flag & 1) {

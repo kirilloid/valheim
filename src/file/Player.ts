@@ -429,11 +429,11 @@ function writePlayerData(data: PlayerData): Uint8Array {
   return writer.flush();
 }
 
-export function* read(bytes: Uint8Array): Generator<number, Player> {
+export async function* read(bytes: Uint8Array): AsyncGenerator<number, Player> {
   const reader = new PackageReader(bytes);
   const data = reader.readByteArray();
   const hash = reader.readByteArray();
-  const computed = new Uint8Array(sha512.arrayBuffer(data));
+  const computed = await sha512(data);
   if (computed.some((v, i) => v !== hash[i])) {
     throw new RangeError("Incorrect hash");
   }
@@ -444,16 +444,16 @@ export function* read(bytes: Uint8Array): Generator<number, Player> {
   return player;
 }
 
-export function* write(
+export async function* write(
   player: Player,
   sizeHint: number = 10e6, // 10 megabytes
-): Generator<number, Uint8Array> {
+): AsyncGenerator<number, Uint8Array> {
   const writer = new PackageWriter(sizeHint);
   yield* writePlayer(player, writer);
   const data = writer.flush();
   const pkg = new PackageWriter(data.length + 512 / 8);
   pkg.writeByteArray(data);
-  const hash = sha512.arrayBuffer(data);
-  pkg.writeByteArray(new Uint8Array(hash));
+  const hash = await sha512(data);
+  pkg.writeByteArray(hash);
   return pkg.flush();
 }

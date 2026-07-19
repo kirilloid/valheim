@@ -134,6 +134,20 @@ export class PackageReader {
   }
   public skipVector3() { this.offset += 12; }
 
+  public readSmallRotation(): Vector3 {
+    const n1 = this.readUShort();
+    if (n1 & 32768) {
+      return { x: 0, y: (n1 & 32767) * 0.5, z: 0 };
+    } else {
+      const n2 = (n1 << 16) | this.readUShort();
+      return {
+        x: (n2 & 1023) * 0.5,
+        y: ((n2 >> 10) & 1023) * 0.5,
+        z: ((n2 >> 20) & 1023) * 0.5,
+      };
+    }
+  }
+
   public readQuaternion(): Quaternion {
     const x = this.readFloat();
     const y = this.readFloat();
@@ -399,6 +413,19 @@ export class PackageWriter {
     this.view.setFloat32(this.offset += 4, value.y, true);
     this.view.setFloat32(this.offset += 4, value.z, true);
     this.offset += 4;
+  }
+
+  public writeSmallRotation(value: Vector3): void {
+    const x = Math.floor(value.x * 2);
+    const y = Math.floor(value.y * 2);
+    const z = Math.floor(value.z * 2);
+    if ((x <= 1 || x >= 719) && (z <= 1 || z >= 719)) {
+      this.writeShort(y | 32768);
+    } else {
+      const num = x | (y << 10) | (z << 20);
+      this.writeUShort(num >> 16);
+      this.writeUShort(num & 65535);
+    }
   }
 
   public writeQuaternion(value: Quaternion): void {

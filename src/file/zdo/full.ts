@@ -1,8 +1,11 @@
 import type { ZDO } from '../types';
+import type { Quaternion, Vector3 } from '../../model/utils';
+
 import { PackageReader, PackageWriter } from '../Package';
 import { stableHashCode } from '../../model/hash';
-import { Quaternion, Vector3 } from '../../model/utils';
+import { ZONE_SIZE } from '../../model/game';
 import { fromEulerAngles } from '../../model/euler';
+import { fromZoneId, zoneId } from '../../model/zdo-selectors';
 
 const PREFAB_HASH = stableHashCode('prefab');
 
@@ -13,8 +16,6 @@ export function readZdo(reader: PackageReader, version: number): ZDO {
     return readZdo_pre30(reader, version);
   }
 }
-
-let loadId = 0;
 
 function readPropMap<T>(
   reader: PackageReader,
@@ -54,8 +55,9 @@ export function writeZdo_post30(this: ZDO, writer: PackageWriter) {
         this.rotation.x === 0
     &&  this.rotation.y === 0
     &&  this.rotation.z === 0;
+  if (this.version >= 40 && this.position.y === 0) _flags |= 8192;
   if (!isIdentityRotation) _flags |= 4096;
-  // if (this.connectionData) _flags |= 1;
+  if (this.connectionData) _flags |= 1;
   if (this.floats.size) _flags |= 2;
   if (this.vec3.size) _flags |= 4;
   if (this.quats.size) _flags |= 8;
@@ -66,15 +68,26 @@ export function writeZdo_post30(this: ZDO, writer: PackageWriter) {
   _flags |= (this.type << 10);
   if (this.persistent) _flags |= 256;
   if (this.distant) _flags |= 512;
-  writer.writeShort(_flags);
-  writer.writeVector2s(this.sector);
-  writer.writeVector3(this.position);
+  writer.writeUShort(_flags);
+  if (this.version < 40) writer.writeVector2s(fromZoneId(this.sector));
+  if (_flags & 8192) {
+    writer.writeShort(this.position.x);
+    writer.writeShort(this.position.z);
+  } else {
+    writer.writeVector3(this.position);
+  }
   writer.writeInt(this.prefab);
-  if (!isIdentityRotation) writer.writeVector3(this.rotation);
-  /* if (this.connectionData) {
+  if (!isIdentityRotation) {
+    if (this.version >= 40) {
+      writer.writeSmallRotation(this.rotation);
+    } else {
+      writer.writeVector3(this.rotation);
+    }
+  }
+  if (this.connectionData) {
     writer.writeByte(this.connectionData.type);
     writer.writeInt(this.connectionData.hash);
-  } */
+  }
   if (this.floats.size) writePropMap(writer, writer.writeFloat, this.floats, this.version);
   if (this.vec3.size) writePropMap(writer, writer.writeVector3, this.vec3, this.version);
   if (this.quats.size) writePropMap(writer, writer.writeQuaternion, this.quats, this.version);
@@ -86,20 +99,40 @@ export function writeZdo_post30(this: ZDO, writer: PackageWriter) {
 
 const ZERO_VECTOR: Vector3 = { x: 0, y: 0, z: 0 };
 
+function readZonePosition_pre40(reader: PackageReader) {
+  const sector = zoneId(reader.readVector2s());
+  const position = reader.readVector3();
+  return { sector, position };
+}
+
+function readZonePosition_post40(reader: PackageReader, shortPos: boolean) {
+  let position = ZERO_VECTOR;
+  if (shortPos) {
+    const { x, y } = reader.readVector2s();
+    position = { x, y: 0, z: y };
+  } else {
+    position = reader.readVector3();
+  }
+  const sector = zoneId({
+    x: Math.round(position.x / ZONE_SIZE),
+    y: Math.round(position.z / ZONE_SIZE),
+  });
+  return { position, sector };
+}
+
 export function readZdo_post30(reader: PackageReader, version: number): ZDO {
   const _offset = reader.getOffset();
-  const id = {
-    userId: BigInt(0),
-    id: loadId++,
-  };
   const _flags = reader.readUShort();
   const persistent = (_flags & 256) !== 0;
   const distant = (_flags & 512) !== 0;
   const type = (_flags >> 10) & 3;
-  const sector = reader.readVector2s();
-  const position = reader.readVector3();
+  const { sector, position } = version < 40
+    ? readZonePosition_pre40(reader)
+    : readZonePosition_post40(reader, !!(_flags & 8192));
   const prefab = reader.readInt();
-  const rotation = (_flags & 4096) ? reader.readVector3() : ZERO_VECTOR;
+  const rotation = (_flags & 4096)
+    ? (version >= 40 ? reader.readSmallRotation() : reader.readVector3())
+    : ZERO_VECTOR;
   const connectionData = (_flags & 1) ? {
     type: reader.readByte(),
     hash: reader.readInt(),
@@ -125,7 +158,8 @@ export function readZdo_post30(reader: PackageReader, version: number): ZDO {
   const byteArrays = (_flags & 128)
     ? readPropMap(reader, reader.readByteArray, version)
     : new Map<number, Uint8Array>();
-  
+  const _bytes = reader.subarray(_offset, reader.getOffset());
+
   const result: ZDO = {
     // id,
     version,
@@ -145,12 +179,10 @@ export function readZdo_post30(reader: PackageReader, version: number): ZDO {
     strings,
     byteArrays,
     _offset,
-    _bytes: new Uint8Array(),
+    _bytes,
     save: writeZdo_post30,
   }
-  // if (num1 === 0) {
-    return result;
-  // }
+  return result;
 }
 
 function writeZdo_pre30(this: ZDO, writer: PackageWriter) {
@@ -166,8 +198,7 @@ function writeZdo_pre30(this: ZDO, writer: PackageWriter) {
   pkg.writeByte(this.type);
   pkg.writeBool(this.distant);
   pkg.writeInt(this.prefab);
-  pkg.writeInt(this.sector.x);
-  pkg.writeInt(this.sector.y);
+  pkg.writeVector2i(fromZoneId(this.sector));
   pkg.writeVector3(this.position);
   pkg.writeQuaternion(fromEulerAngles(this.rotation));
   pkg.writeIfSmallMap(pkg.writeInt, pkg.writeFloat, this.floats);
@@ -182,10 +213,9 @@ function writeZdo_pre30(this: ZDO, writer: PackageWriter) {
 
 function readZdo_pre30(reader: PackageReader, version: number): ZDO {
   const offset = reader.getOffset();
-  const id = {
-    userId: reader.readLong(),
-    id: reader.readUInt(),
-  };
+  // ZDOID
+  reader.readLong();
+  reader.readUInt();
   const _bytes = reader.readByteArray();
   const pkg = new PackageReader(_bytes);
   pkg.readUInt(); // ownerRevision
@@ -199,7 +229,7 @@ function readZdo_pre30(reader: PackageReader, version: number): ZDO {
   const type = version >= 23 ? pkg.readByte() : 0;
   const distant = version >= 22 ? pkg.readBool() : false;
   let prefab = version >= 17 ? pkg.readInt() : 0;
-  const sector = pkg.readVector2i();
+  const sector = zoneId(pkg.readVector2i());
   const position = pkg.readVector3();
   const rotation = pkg.readQuaternion();
 

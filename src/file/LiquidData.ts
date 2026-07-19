@@ -1,4 +1,4 @@
-import { deflate, inflate } from 'pako';
+import { deflateSync, inflateSync } from 'fflate';
 import { PackageReader, PackageWriter } from './Package';
 import { checkVersion, LIQUID } from './versions';
 
@@ -9,7 +9,7 @@ export type Data = {
 };
 
 export function read(zbytes: Uint8Array): Data {
-  const bytes = inflate(zbytes);
+  const bytes = inflateSync(zbytes);
   const pkg = new PackageReader(bytes);
   // read
   const version = pkg.readInt();
@@ -33,5 +33,5 @@ export function write(data: Data): Uint8Array {
     pkg.writeShort(depth);
   }
   pkg.writeFloat(data.total);
-  return deflate(pkg.flush(), { level: 1 })
+  return deflateSync(pkg.flush(), { level: 1 })
 }

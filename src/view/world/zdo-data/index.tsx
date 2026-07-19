@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import '../../../css/ZdoData.css';
 
 import type { ValueProps } from '../../parts/types';
-import type { ZDOData } from '../types';
+import type { ZDODataLike } from '../../../file/types';
 
 import { EMPTY_RESULT, getSearcher, getPlayersData, SearchEntry, SearchIndex } from '../../../model/zdo-selectors';
 
@@ -15,14 +15,18 @@ import { ZdoLike, ZdoMap } from './map';
 import { ItemEditor } from './editor';
 import { lerp, lerpStep } from '../../../model/utils';
 import { prefabHashes } from '../../../data/zdo';
+import { getZdoInChunk, iterateZdos, removeZdoAtChunkIndex } from '../../../file/types';
 
-const getItems = createSelector<{ zdos: ZdoLike[], indices: number[] }, ZdoLike[], number[], ZdoLike[]>(
-  obj => obj.zdos,
-  obj => obj.indices,
-  (zdos, indices) => indices.map(i => zdos[i]!),
+const getItems = createSelector(
+  (obj: { zdoData: ZDODataLike; indices: SearchIndex[] }) => obj.zdoData,
+  (obj: { zdoData: ZDODataLike; indices: SearchIndex[] }) => obj.indices,
+  (zdoData, indices) => indices.map((si) => {
+    const zdo = getZdoInChunk(zdoData, si);
+    return zdo ? { position: zdo.position, prefab: zdo.prefab } : undefined;
+  }).filter((item): item is ZdoLike => item !== undefined),
 );
 
-function MapUI({ zdos, selected, current, size }: { zdos: ZdoLike[]; selected: ZdoLike[]; current?: ZdoLike; size: number }) {
+function MapUI({ zdos, selected, current, size, total }: { zdos: Iterable<ZdoLike>; selected: ZdoLike[]; current?: ZdoLike; size: number; total: number }) {
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const [progress, setProgress] = useState<number | undefined>(0);
   const outerRef = useRef<HTMLDivElement>(null);
@@ -38,7 +42,7 @@ function MapUI({ zdos, selected, current, size }: { zdos: ZdoLike[]; selected: Z
       <PanView onMouseMove={setPos} size={size}>
         <ZdoMap zdos={zdos} selected={selected} current={current} markerSize={markerSize} onProgress={setProgress} />
       </PanView>
-      {progress != null && <progress max={zdos.length} value={progress} className="Map__progress" />}
+      {progress != null && <progress max={total} value={progress} className="Map__progress" />}
     </div>
     <div>x: {Math.round((pos.x - 1312) * 8)} y: {Math.round((1312 - pos.y) * 8)}</div>
   </>;
@@ -46,34 +50,33 @@ function MapUI({ zdos, selected, current, size }: { zdos: ZdoLike[]; selected: Z
 
 const getSearcherCached = defaultMemoize(getSearcher);
 const getPlayersDataCached = defaultMemoize(getPlayersData);
-const searchItemsCached = defaultMemoize((indices: SearchIndex[]) => indices.map(i => i.item))
-const searchSliceCached = defaultMemoize((indices: SearchIndex[], zdos: ZdoLike[]) => indices.slice(0, 1000)
-  .map((globalIdx, typeIdx) => {
-    const item = zdos[globalIdx.item]!;
-    return <option key={`${globalIdx.item}_${globalIdx.container}`} value={typeIdx}>
-      {item.position.x.toFixed(3)} / {item.position.z.toFixed(3)}
-      {globalIdx.container > -1 ? ` [${globalIdx.container}]` : null}
+const searchSliceCached = defaultMemoize((indices: SearchIndex[], zdoData: ZDODataLike) => indices.slice(0, 1000)
+  .map((searchIndex, typeIdx) => {
+    const zdo = getZdoInChunk(zdoData, searchIndex);
+    const position = zdo?.position;
+    return <option key={`${searchIndex.chunkId}_${searchIndex.index}_${searchIndex.container}`} value={typeIdx}>
+      {position ? `${position.x.toFixed(3)} / ${position.z.toFixed(3)}` : '[missing]'}
+      {searchIndex.container > -1 ? ` [${searchIndex.container}]` : null}
     </option>
   }));
 
 const getWidth = () => document.querySelector<HTMLDivElement>('div.App')?.offsetWidth ?? Math.min(window.innerWidth, 960);
 
-export const ZdoData = React.memo(function ZdoData(props: ValueProps<ZDOData> & { time: number }) {
+export const ZdoData = React.memo(function ZdoData(props: ValueProps<ZDODataLike> & { time: number; allowDelete?: boolean }) {
   const translate = useContext(TranslationContext);
 
-  const zdos = props.value.zdos;
   const [entry, setEntry] = useState<SearchEntry | undefined>();
   const [term, setTerm] = useState('');
   const [index, setIndex] = useState(0); // last mile
   const [version, setVersion] = useState(0);
   const [mapExpanded, setMapExpanded] = useState(false);
   const [width, setWidth] = useState(0);
-  const players = getPlayersDataCached(zdos);
+  const players = getPlayersDataCached(iterateZdos(props.value));
 
-  const zdoSearcher = getSearcherCached(zdos, translate);
+  const zdoSearcher = getSearcherCached(props.value, translate);
   const searchIndices = entry?.indices ?? EMPTY_RESULT;
   const searchIndex = searchIndices[index];
-  const zdo = searchIndex ? zdos[searchIndex.item] : undefined;
+  const zdo = searchIndex ? getZdoInChunk(props.value, searchIndex) : undefined;
 
   useLayoutEffect(() => {
     setWidth(getWidth());
@@ -99,8 +102,9 @@ export const ZdoData = React.memo(function ZdoData(props: ValueProps<ZDOData> & 
       <div style={{ position: 'absolute', right: 0, zIndex: 1 }} onClick={() => setMapExpanded(s => !s)}>{mapExpanded ? 'Collapse' : 'Expand'}</div>
       <MapUI
         size={mapExpanded ? width : 329}
-        zdos={zdos}
-        selected={getItems({ zdos, indices: searchItemsCached(searchIndices) })}
+        total={props.value.totalZDOs}
+        zdos={iterateZdos(props.value)}
+        selected={getItems({ zdoData: props.value, indices: searchIndices })}
         current={zdo} />
     </div>
     <div className="ZdoData__Selector">
@@ -122,7 +126,7 @@ export const ZdoData = React.memo(function ZdoData(props: ValueProps<ZDOData> & 
         {searchIndices.length > 1000 && <><br/><em>Only first 1000 objects are listed</em></>}
         <br />
         <select onChange={updateIndex} value={index}>
-          {searchSliceCached(searchIndices, zdos)}
+          {searchSliceCached(searchIndices, props.value)}
         </select>
       </>}
     </div>
@@ -141,31 +145,30 @@ export const ZdoData = React.memo(function ZdoData(props: ValueProps<ZDOData> & 
           if (id == null) return;
           const se = zdoSearcher(translate(id))[0];
           if (se == null) return;
-          const index = se.indices.findIndex(si => zdos[si.item] === zdo);
+          const index = se.indices.findIndex(si => getZdoInChunk(props.value, si) === zdo);
           setEntry(se);
           setIndex(index === -1 ? 0 : index);
         }}
         version={version}
       />
-      <hr style={{ width: '100%' }} />
-      <section>
-        <button className="btn btn--danger"
-          onClick={() => {
-            const newValue = {
-              ...props.value,
-              zdos: props.value.zdos.filter((_, i) => i !== index),
-            };
-            if (searchIndices.length === 1) {
-              setEntry(undefined);
-              setIndex(0);
-            } else if (index + 1 === searchIndices.length) {
-              setIndex(index - 1);
-            }
-            props.onChange(newValue);
-          }}>
-          {translate('ui.delete')}
-        </button>
-      </section>
+      {props.allowDelete && <>
+        <hr style={{ width: '100%' }} />
+        <section>
+          <button className="btn btn--danger"
+            onClick={() => {
+              const newValue = removeZdoAtChunkIndex(props.value, searchIndex);
+              if (searchIndices.length === 1) {
+                setEntry(undefined);
+                setIndex(0);
+              } else if (index + 1 === searchIndices.length) {
+                setIndex(index - 1);
+              }
+              props.onChange(newValue);
+            }}>
+            {translate('ui.delete')}
+          </button>
+        </section>
+      </>}
     </div>}
   </div>;
 });

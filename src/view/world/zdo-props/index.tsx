@@ -4,6 +4,7 @@ import type { GameComponent } from '../../../types';
 import type { ValueProps } from '../../parts/types';
 import type { ZDO } from '../types';
 import { crc32, stableHashCode } from '../../../model/hash';
+import { zoneHash } from '../../../model/game';
 
 import { boolComp } from './bool';
 import { colorComp } from './color';
@@ -29,7 +30,7 @@ import { WearNTearComp } from './wear-n-tear';
 import { ItemPropsComp } from './item-props';
 import { LiquidComp } from './liquid';
 import { EpicLootComp } from './epic-loot';
-import { PlayersData } from '../../../model/zdo-selectors';
+import { fromZoneId, PlayersData } from '../../../model/zdo-selectors';
 import { TombComp } from './tomb';
 import { ResourceRootComp } from './resource-root';
 import { PlantComp } from './plant';
@@ -131,7 +132,7 @@ export const InterfaceFields: Partial<Record<
   LiquidVolume: [LiquidComp],
   LocationProxy: [hashedLocationComp('location'), intComp('seed', { readOnly }), ({ value: zdo }) => <>
     <dt>world seed</dt>
-    <dd>{(zdo.ints.get(stableHashCode('seed')) ?? 0) - zdo.sector.x * 4271 - zdo.sector.y * 9187}</dd>
+    <dd>{(zdo.ints.get(stableHashCode('seed')) ?? 0) - zoneHash(fromZoneId(zdo.sector))}</dd>
   </>],
   // LootSpawner: [timeComp('spawn_time'),],
   MapTable: [MapTable],

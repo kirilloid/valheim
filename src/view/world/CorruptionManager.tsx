@@ -1,58 +1,49 @@
 import React, { useState } from 'react';
 
 import type { ValueProps } from '../parts/types';
-import type { WorldData } from './types';
-import { Mistake, ZDOData, ZDOCorruption, MistakeLevel } from '../../file/types';
+import { Mistake, ZDODataLike, ZDOCorruption, MistakeLevel, removeZdosAtChunkIndices } from '../../file/types';
 
 import { groupBy, mapValues, runGenerator } from '../../model/utils';
 import { check } from '../../file/zdo';
 import { MistakeLevels } from '../../file/zdo/check';
 
-function* checkZdos(data: WorldData): Generator<number, WorldData, void> {
+function* checkZdos(zdo: ZDODataLike): Generator<number, ZDODataLike, void> {
   const mistakes: ZDOCorruption[] = [];
-  for (const [index, zdo] of data.zdo.zdos.entries()) {
-    if ((index & 0x3FFF) === 0) yield index;
-    const { mistake, offset } = check(data, zdo);
-    if (mistake !== Mistake.None) {
-      mistakes.push({ mistake, offset, index });
+  let processed = 0;
+  for (const [chunkId, { zdos }] of zdo.chunks.entries()) {
+    for (const [index, current] of zdos.entries()) {
+      if ((processed & 0x3FFF) === 0) yield processed;
+      const { mistake, offset } = check(current, chunkId);
+      if (mistake !== Mistake.None) {
+        mistakes.push({ mistake, offset, index, chunkId });
+      }
+      processed++;
     }
   }
   if (mistakes.length === 0) {
-    data.zdo._checked = true;
-    return data;
+    return { ...zdo, _checked: true };
   }
   return {
-    ...data,
-    zdo: {
-      ...data.zdo,
-      corruptions: data.zdo.corruptions.concat(mistakes),
-      _checked: true,
-    }
+    ...zdo,
+    corruptions: (zdo.corruptions ?? []).concat(mistakes),
+    _checked: true,
   };
 }
 
-function deleteBadObjects(zdo: ZDOData): ZDOData {
-  const { zdos } = zdo;
-  const indicesToDelete = [];
+function deleteBadObjects(zdo: ZDODataLike): ZDODataLike {
+  const deletions: { chunkId: number; indexInChunk: number }[] = [];
   const corruptions: ZDOCorruption[] = [];
-  for (const corr of zdo.corruptions) {
+  for (const corr of zdo.corruptions ?? []) {
     const level = MistakeLevels[corr.mistake];
     if (level === MistakeLevel.ERROR) {
-      indicesToDelete.push(corr.index);
+      deletions.push({ chunkId: corr.chunkId, indexInChunk: corr.index });
     } else {
       corruptions.push(corr);
     }
   }
-  while (indicesToDelete.length > 0) {
-    const index = indicesToDelete.pop()!;
-    if (index === zdos.length - 1) {
-      zdos.pop();
-    } else {
-      zdos[index] = zdos.pop()!;
-    }
-  }
+  const newZdo = removeZdosAtChunkIndices(zdo, deletions);
   return {
-    ...zdo,
+    ...newZdo,
     corruptions,
   };
 }
@@ -66,9 +57,9 @@ function Problems({ problems, title, color }: { problems: Partial<Record<Mistake
   </section>
 }
 
-function Corruptions({ value, onChange }: ValueProps<ZDOData>) {
+function Corruptions({ value, onChange }: ValueProps<ZDODataLike>) {
   const problems = mapValues(
-    groupBy(value.corruptions, cor => MistakeLevels[cor.mistake]),
+    groupBy(value.corruptions ?? [], cor => MistakeLevels[cor.mistake]),
     corrs => groupBy(corrs, cor => cor.mistake),
   );
   const {
@@ -107,16 +98,16 @@ type State = {
   step: 'checked';
 }
 
-export function CorruptionManager({ value, onChange }: ValueProps<WorldData>) {
-  const [state, setState] = useState<State>({ step: value.zdo._checked ? 'checked' : 'unchecked' });
+export function CorruptionManager({ value, onChange }: ValueProps<ZDODataLike>) {
+  const [state, setState] = useState<State>({ step: value._checked ? 'checked' : 'unchecked' });
   return <>
     {state.step === 'progress' && 
       <section>
         Scanning for problems &hellip;
-        <progress value={state.progress} max={value.zdo.zdos.length} style={{ width: '100%' }} />
+        <progress value={state.progress} max={value.totalZDOs} style={{ width: '100%' }} />
       </section>
     }
-    <Corruptions value={value.zdo} onChange={zdo => onChange({ ...value, zdo })} />
+    <Corruptions value={value} onChange={onChange} />
     {state.step === 'unchecked' && <section>
       <input type="button"
         className="btn btn--primary"
@@ -130,7 +121,7 @@ export function CorruptionManager({ value, onChange }: ValueProps<WorldData>) {
             setState({ step: 'checked' });
             if (newValue !== value) {
               onChange(newValue);
-            }  
+            }
           } catch {
             alert("There was an error");
           }

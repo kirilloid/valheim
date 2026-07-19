@@ -3,7 +3,7 @@ import { random } from './random';
 import type { Quaternion, Vector2i, Vector3 } from './utils';
 import { LocationConfig } from '../types';
 import { stableHashCode } from './hash';
-import { WATER_LEVEL, ZONE_SIZE } from './game';
+import { WATER_LEVEL, zoneHash, ZONE_SIZE } from './game';
 import { Biome as BiomeEnum, WorldGenerator } from './world-generator';
 import { zoneId } from './zdo-selectors';
 import { Heightmap } from './heightmap';
@@ -70,7 +70,7 @@ export class ZoneSystem {
       for (let x = -156; x <= 156; x++) {
         if (x * x + y * y > INNER_SIZE_2) continue;
         if (this.worldGenerator._getZoneBiomeMask(x, y) === (1 << BiomeEnum.Ocean)) {
-          random.init(seed + x * 4271 + y * 9187 + prefabHash);
+          random.init(seed + zoneHash({ x, y }) + prefabHash);
           if (random.random() > veg.num[1]) continue;
           const groupSize = random.rangeInt(veg.group[0], veg.group[1] + 1);
           const p = {
@@ -316,7 +316,7 @@ export class ZoneSystem {
       ++num2;
       if (zoneVegetation.disabled) continue;
       for (const grow of zoneVegetation.grow ?? []) {
-        const _seed = seed + zone.x * 4271 + zone.y * 9187 + stableHashCode(zoneVegetation.id);
+        const _seed = seed + zoneHash(zone) + stableHashCode(zoneVegetation.id);
         random.init(_seed);
         let number = 1;
         if (grow.num[1] < 1.0) {

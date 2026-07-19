@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 
-import type { EditorProps, ValueProps } from '../parts/types';
+import type { SingleEditorProps, ValueProps } from '../parts/types';
 import type { WorldMeta } from './types';
 
 import { stableHashCode, solve } from '../../model/hash';
@@ -73,7 +73,7 @@ function WorldMetaDetails({ value, onChange }: ValueProps<WorldMeta>) {
   </div>
 }
 
-export function WorldMetaInfo({ value, onChange, file }: EditorProps<WorldMeta>) {
+export function WorldMetaInfo({ value, onChange, file }: SingleEditorProps<WorldMeta>) {
   const translate = useContext(TranslationContext);
 
   const tabs = [{

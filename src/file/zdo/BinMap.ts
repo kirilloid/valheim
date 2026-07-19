@@ -75,6 +75,25 @@ abstract class FixedBinMap<V> implements Map<number, V> {
     return this.readValue(index);
   }
 
+  getOrInsert(key: number, defaultValue: V): V {
+    if (this.has(key)) {
+      return this.get(key)!;
+    } else {
+      this.set(key, defaultValue);
+      return defaultValue;
+    }
+  }
+
+  getOrInsertComputed(key: number, callback: (key: number) => V): V {
+    if (this.has(key)) {
+      return this.get(key)!;
+    } else {
+      const defaultValue = callback(key);
+      this.set(key, defaultValue);
+      return defaultValue;
+    }
+  }
+
   has(key: number): boolean {
     return this.getIndices().has(key) || (this.newValues?.has(key) ?? false);
   }
@@ -179,6 +198,17 @@ export class EmptyBinMap<V> implements Map<number, V> {
 
   get(key: number): V | undefined {
     return this._map.get(key);
+  }
+
+  getOrInsert(key: number, defaultValue: V): V {
+    this.set(key, defaultValue);
+    return defaultValue;
+  }
+
+  getOrInsertComputed(key: number, callback: (key: number) => V): V {
+    const defaultValue = callback(key);
+    this.set(key, defaultValue);
+    return defaultValue;
   }
 
   has(key: number): boolean {

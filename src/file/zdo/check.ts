@@ -1,11 +1,18 @@
 import type { ZDO, ZDOCorruption } from '../types';
-import type { WorldData } from '../World';
 import { Mistake, MistakeLevel } from '../types';
 import { offsets } from './offset';
 import { data, extraData } from '../../data/itemDB';
 import { stableHashCode } from '../../model/hash';
 import { prefabHashes } from '../../data/zdo';
 import { GameComponent } from '../../types';
+import { fromZoneId } from '../../model/zdo-selectors';
+import { pieces } from '../../data/building';
+import { ChunkIndex, ChunkPortal, fromChunkIndex } from '../chunks/chunk-save-mapping';
+
+const portals = new Set(pieces
+  .filter(p => p.components?.includes('TeleportWorld'))
+  .map(p => stableHashCode(p.id))
+);
 
 export const MistakeLevels: Record<Mistake, MistakeLevel> = {
   [Mistake.None]: MistakeLevel.OK,
@@ -35,7 +42,7 @@ export function errorToMistake(e: unknown): Mistake {
   }
 }
 
-type CorruptionType = Omit<ZDOCorruption, 'index'>;
+type CorruptionType = Omit<ZDOCorruption, 'index' | 'chunkId'>;
 
 const HEADER_SIZE = 16; // ZDOID: long (8), int (4) & byte array length: int (4)
 const IN_USE = stableHashCode('InUse');
@@ -63,7 +70,7 @@ const componentChecks: Partial<Record<GameComponent, (zdo: ZDO) => CorruptionTyp
   },
 }
 
-export function check(world: WorldData, zdo: ZDO): CorruptionType {
+export function check(zdo: ZDO, chunkIndex: ChunkIndex): CorruptionType {
   try {
     // force-read last map, this might throw an exception
     const bytes = zdo.byteArrays.get(0);
@@ -92,19 +99,40 @@ export function check(world: WorldData, zdo: ZDO): CorruptionType {
     //   };
     // }
 
-    const { sector, position } = zdo;
-    if (sector.x !== Math.round(position.x / 64)
-    ||  sector.y !== Math.round(position.z / 64)) {
-      return {
-        mistake: Mistake.CoordinatesInconsistent,
-        offset: zdo._offset + offsets.sector + HEADER_SIZE,
-      };
+    const { position } = zdo;
+    if (zdo.version < 40) {
+      const pos = fromZoneId(zdo.sector);
+      if (pos.x !== Math.round(position.x / 64)
+      ||  pos.y !== Math.round(position.z / 64)) {
+        return {
+          mistake: Mistake.CoordinatesInconsistent,
+          offset: zdo._offset + zdo.version >= 30
+            ? 2 // offset position
+            : offsets.sector + HEADER_SIZE,
+        };
+      }
+    } else {
+      const { chunk, size } = fromChunkIndex(chunkIndex);
+      if (!portals.has(zdo.prefab) && chunk !== ChunkPortal) {
+        const y = chunk >> 8;
+        const x = chunk & 255;
+        const left = -32 + (x - 32) * 512;
+        const right = left + (512 << size);
+        const top = -32 + (y - 32) * 512;
+        const bottom = top + (512 << size);
+        if (position.x < left || position.x > right
+        ||  position.z < top || position.z > bottom) {
+          return {
+            mistake: Mistake.CoordinatesInconsistent,
+            offset: zdo._offset + 2, // offset position
+          };
+        }
+      }
     }
 
     if (position.x * position.x + position.z * position.z > 11500 * 11500
     ||  position.y < -100
-    || (position.y > 1000
-    && Math.abs(position.y - 5000) > 500)) {
+    || (position.y > 1000 && Math.abs(position.y - 5000) > 500)) {
       return {
         mistake: Mistake.CoordinatesTooFar,
         offset: zdo._offset + offsets.position + HEADER_SIZE,

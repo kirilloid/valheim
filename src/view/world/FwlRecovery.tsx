@@ -6,9 +6,11 @@ import { BitMap, getMatchScore } from '../../model/BitMap';
 import { assertNever } from '../../model/utils';
 
 import { read as readWorld } from '../../file/World';
-import { read as readPlayer } from '../../file/Player';
+import { read as readPlayer, write as writePlayer } from '../../file/Player';
 import { read as readMapData } from '../../file/MapData';
 import { write as writeFwl, Data as FwlData } from '../../file/fwl';
+import { iterateZdos } from '../../file/types';
+import { readWriteFirstFile } from '../../file/files-wrapper';
 
 import { downloadFile } from '../helpers';
 import { FilePeeker } from '../parts/file';
@@ -160,9 +162,9 @@ function PreWorldStep({ setState }: StepProps<'pre-world'>) {
         reader={readWorld}
         onLoad={(value, name) => {
           const { version } = value;
-          const seed = getWorldSeed(value.zdo.zdos);
-          const hasTable = hasCartographyTable(value.zdo.zdos);
-          const explored = getZonesBitMap(value.zdo.zdos);
+          const seed = getWorldSeed(iterateZdos(value.zdo));
+          const hasTable = hasCartographyTable(iterateZdos(value.zdo));
+          const explored = getZonesBitMap(iterateZdos(value.zdo));
           setState({
             step: 'world',
             version,
@@ -220,6 +222,8 @@ function WorldStep({ state, setState }: StepProps<'world'>) {
   </>;
 }
 
+const [readPlayerM] = readWriteFirstFile(readPlayer, writePlayer, ['fch']);
+
 function PrePlayerStep({ state, setState }: StepProps<'pre-player'>) {
   return <>
     <p>
@@ -230,7 +234,7 @@ function PrePlayerStep({ state, setState }: StepProps<'pre-player'>) {
         key="player"
         defaultFileName="player.fch"
         extension="fch"
-        reader={readPlayer}
+        reader={readPlayerM}
         onLoad={value => {
           const worlds = [];
           for (const [id, { mapData }] of value.worlds.entries()) {

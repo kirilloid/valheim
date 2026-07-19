@@ -1,7 +1,12 @@
-export function nativeSha512(bytes: Uint8Array): Promise<Uint8Array> {
-  return crypto.subtle.digest('SHA-512', bytes.buffer).then(buf => {
-    return new Uint8Array(buf);
-  });
+export async function sha512(bytes: Uint8Array): Promise<Uint8Array> {
+  return Promise.resolve(new Uint8Array(sha512js.arrayBuffer(bytes)));
+  try {
+    return crypto.subtle.digest('SHA-512', bytes.buffer).then(buf => {
+      return new Uint8Array(buf);
+    });
+  } catch (e) {
+    
+  }
 }
 
 /**
@@ -909,11 +914,4 @@ class HmacSha512 extends Sha512 {
   }
 };
 
-export const sha512 = createMethod(512);
-export const sha384 = createMethod(384);
-export const sha512_256 = createMethod(256);
-export const sha512_224 = createMethod(224);
-export const sha512_hmac = createHmacMethod(512);
-export const sha384_hmac = createHmacMethod(384);
-export const sha512_256_hmac = createHmacMethod(256);
-export const sha512_224_hmac = createHmacMethod(224);
+const sha512js = createMethod(512);

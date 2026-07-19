@@ -63,7 +63,7 @@ export type ZdoLike = { position: Vector3; prefab: number };
 
 function useDrawMap(
   ref: React.MutableRefObject<HTMLCanvasElement | null>,
-  zdos: ZdoLike[],
+  zdos: Iterable<ZdoLike>,
   SIZE: number,
   setProgress: (progress: number | undefined) => void = nop,
 ) {
@@ -152,7 +152,7 @@ function useDrawSelected(
 }
 
 export function ZdoMap({ zdos, selected, current, markerSize, onProgress }: {
-  zdos: ZdoLike[],
+  zdos: Iterable<ZdoLike>,
   selected?: ZdoLike[],
   current?: ZdoLike,
   markerSize: number,

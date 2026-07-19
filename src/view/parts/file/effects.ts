@@ -3,31 +3,35 @@ import React, { useState, useCallback } from 'react';
 import type { Reader } from '../types';
 import type { FileEditorState } from './types';
 
-import { getMemUsage, runGenerator } from '../../../model/utils';
+import { getMemUsage, runAsyncGenerator } from '../../../model/utils';
 
 import { Translator } from '../../../effects';
 
 export function useFileProcessors<T>(
   setState: React.Dispatch<React.SetStateAction<FileEditorState<T>>>,
   reader: Reader<T>,
-  ext: string,
   translate: Translator,
-): [
-  (file: File) => Promise<void>,
-  (files: FileList | null) => Promise<void>,
-] {
-  const processFile = useCallback(async (file: File) => {
+): (files: FileList | null) => Promise<void> {
+  return useCallback(async (fileList: FileList | null) => {
+    if (fileList == null) {
+      return setState({ state: 'empty', message: translate('ui.fileEditor.noFile') });
+    }
+    const files = new Map([...fileList].map(file => [file.name, file] as const));
+    if (files.size === 0) {
+      return setState(state => state.state === 'done'
+        ? state
+        : { state: 'empty', message: translate('ui.fileEditor.noFile') }
+      );
+    }
     try {
       // sometimes people click on image in content and drag it
-      if (file.type.startsWith('image/')) return;
-
-      const buffer = await file.arrayBuffer();
-      setState({ state: 'reading', file, progress: 0 });
-      const value = await runGenerator(
-        reader(new Uint8Array(buffer)),
-        progress => setState({ state: 'reading', file, progress })
+      if (fileList[0]?.type.startsWith('image/')) return;
+      setState({ state: 'reading', files, progress: 0 });
+      const value = await runAsyncGenerator(
+        reader(files),
+        progress => setState({ state: 'reading', files, progress })
       );
-      setState({ state: 'done', file, value, changed: false });
+      setState({ state: 'done', files, value, changed: false });
       const mem = getMemUsage();
       const memStr = mem >= 512
         ? (mem / 1024).toPrecision(3) + ' GB'
@@ -36,36 +40,7 @@ export function useFileProcessors<T>(
     } catch (e: any) {
       setState({ state: 'empty', message: e?.message });
     }
-  }, [setState, reader]);
-
-  const processFiles = useCallback(async (files: FileList | null) => {
-    if (files == null) {
-      return setState({ state: 'empty', message: translate('ui.fileEditor.noFile') });
-    }
-    const allFiles = [...files];
-    const matchingFiles = allFiles.filter(
-      file => file.name.endsWith(`.${ext}`)
-           || file.name.endsWith(`.${ext}.old`)
-    );
-    if (matchingFiles.length > 1) return setState({ state: 'picking', files: matchingFiles });
-    if (matchingFiles.length === 1) return processFile(matchingFiles[0]!);
-    if (allFiles.length === 0) {
-      return setState(state => state.state === 'done'
-        ? state
-        : { state: 'empty', message: translate('ui.fileEditor.noFile') }
-      );
-    }
-    if (!window.confirm(translate('ui.fileEditor.wrongExtensionWarning'))) {
-      return;
-    }
-    if (allFiles.length === 1) {
-      processFile(allFiles[0]!);
-    } else {
-      setState({ state: 'picking', files: allFiles });
-    }
-  }, [ext, setState, processFile, translate]);
-
-  return [processFile, processFiles];
+  }, [reader, setState, translate]);
 }
 
 export function useDndCallbacks<E extends HTMLElement>(processFiles: (files: FileList | null) => Promise<void>) {

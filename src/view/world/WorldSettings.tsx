@@ -6,12 +6,15 @@ import type { WorldMeta } from './types';
 import type { GameSettings } from '../../types/GameSettings';
 
 import { TranslationContext } from '../../effects';
-import { gameSettings, presets } from '../../data/game-settings';
+import { Difficulty, gameSettings, presets } from '../../data/game-settings';
 import { List } from '../helpers';
+import classNames from 'classnames';
 
 const worldLevelEnemyLevelUpExponent = 1.15;
 
-const _levelUp = (keys: Partial<GameSettings>, f = 10) => {
+type Preset = Partial<GameSettings>;
+
+const _levelUp = (keys: Preset, f = 10) => {
   const {
     worldlevel = gameSettings.worldlevel,
     enemyleveluprate = gameSettings.enemyleveluprate,
@@ -34,7 +37,7 @@ const enemyleveluprateRenderer = (val: number) => {
 }
 
 function BoolInput<K extends KeysOfType<GameSettings, boolean>>({ keys, prop, onChange, disabled }: {
-  keys: Partial<GameSettings>;
+  keys: Preset;
   prop: K;
   onChange: (prop: K, value: boolean) => void;
   disabled?: boolean;
@@ -54,7 +57,7 @@ function NumInput<K extends KeysOfType<GameSettings, number>>({
   renderer = (value) => `${value}%`,
   disabled = false,
 }: {
-  keys: Partial<GameSettings>;
+  keys: Preset;
   prop: K;
   onChange: (key: K, value: number) => void;
   min?: number;
@@ -77,13 +80,13 @@ function NumInput<K extends KeysOfType<GameSettings, number>>({
 }
 
 function OptionsInput<K extends KeysOfType<GameSettings, boolean>>({ keys, name, props, onChangeKeys }: {
-  keys: Partial<GameSettings>;
+  keys: Preset;
   name: string;
   props: (K | '')[];
-  onChangeKeys: (keys: Partial<GameSettings>) => void;
+  onChangeKeys: (keys: Preset) => void;
 }) {
   const allProps = props.filter<K>((p: K | ""): p is K => p !== '');
-  const rec = Object.fromEntries(allProps.map(p => [p, false])) as Partial<GameSettings>;
+  const rec = Object.fromEntries(allProps.map(p => [p, false])) as Preset;
   return <List separator=" | ">
     {props.map(prop => 
       <label>
@@ -99,11 +102,32 @@ function OptionsInput<K extends KeysOfType<GameSettings, boolean>>({ keys, name,
   </List>
 }
 
+function isSamePreset(a: Preset, b: Preset): boolean {
+  const isEmptyA = Object.keys(a).length === 0;
+  const isEmptyB = Object.keys(b).length === 0;
+  if (isEmptyA || isEmptyB) return isEmptyA && isEmptyB;
+  return a.preset === b.preset;
+}
+
+interface PresetButtonProps extends ValueProps<Partial<GameSettings>> {
+  preset: Difficulty
+}
+
+function PresetButton({ value, onChange, preset }: PresetButtonProps) {
+  const translate = useContext(TranslationContext);
+  const newValue = presets[preset];
+  const selected = isSamePreset(value, newValue);
+  
+  return <button className={classNames('btn', { 'btn--primary': selected })}
+    onClick={() => { if (!selected) { onChange(newValue); }}}>
+    {translate(`ui.serverOptions.${preset}`)}
+  </button>
+}
 
 export function BasicWorldSettings({ value, onChange }: ValueProps<WorldMeta>) {
   const translate = useContext(TranslationContext);
 
-  const setKeys = useCallback((keys: Partial<GameSettings>) => {
+  const setKeys = useCallback((keys: Preset) => {
     onChange({ ...value, keys });
   }, [value, onChange]);
 
@@ -111,27 +135,27 @@ export function BasicWorldSettings({ value, onChange }: ValueProps<WorldMeta>) {
     onChange({ ...value, keys: { ...value.keys, [key]: val } });
   };
   
-  const onChangeKeys = (keys: Partial<GameSettings>) => {
+  const onChangeKeys = (keys: Preset) => {
     onChange({ ...value, keys: { ...value.keys, ...keys } });
   };
   
-  const setPreset = (preset: keyof typeof presets) => {
-    setKeys(presets[preset]);
-  }
-
   const { keys } = value;
+  const isCustom = !Object.values(presets).find(p => isSamePreset(p, keys));
 
   return <div>
     <h3>{translate("ui.serverOptions.presets")}</h3>
-    <div>
-      <button onClick={() => setPreset('easy')}>{translate("ui.serverOptions.easy")}</button>
-      <button onClick={() => setPreset('hard')}>{translate("ui.serverOptions.hard")}</button>
-      <button onClick={() => setPreset('hardcore')}>{translate("ui.serverOptions.hardcore")}</button>
-      <button onClick={() => setPreset('casual')}>{translate("ui.serverOptions.casual")}</button>
-      <button onClick={() => setPreset('hammer')}>{translate("ui.serverOptions.hammer")}</button>
-      <button onClick={() => setPreset('immersive')}>{translate("ui.serverOptions.immersive")}</button>
+    <div style={{ display: 'flex', gap: '0.5rem' }}>
+      <PresetButton value={keys} onChange={setKeys} preset="default" />
+      <PresetButton value={keys} onChange={setKeys} preset="easy" />
+      <PresetButton value={keys} onChange={setKeys} preset="hard" />
+      <PresetButton value={keys} onChange={setKeys} preset="hardcore" />
+      <PresetButton value={keys} onChange={setKeys} preset="casual" />
+      <PresetButton value={keys} onChange={setKeys} preset="hammer" />
+      <PresetButton value={keys} onChange={setKeys} preset="immersive" />
+      {isCustom && <button className="btn btn--primary">
+        {translate('ui.serverOptions.custom')}
+      </button>}
     </div>
-    <button onClick={() => setKeys({})}>{translate("ui.serverOptions.default")}</button>
     <h3>{translate("ui.serverOptions.customize")}</h3>
     <h4>{translate("ui.serverOptions.combat")}</h4>
     <dl>

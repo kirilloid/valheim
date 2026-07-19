@@ -6,6 +6,7 @@ export const gameSettings = {
   resourcerate: 100,
 
   staminarate: 100,
+  adrenalinerate: 100,
   movestaminarate: 100,
   staminaregenrate: 100,
 
@@ -49,16 +50,19 @@ export const gameSettings = {
   // KilledBat,
 };
 
-type Difficulty = 'easy' | 'hard' | 'hardcore' | 'casual' | 'hammer' | 'immersive';
+export type Difficulty = 'default' | 'easy' | 'hard' | 'hardcore' | 'casual' | 'hammer' | 'immersive';
 
 export const presets: Record<Difficulty, Partial<typeof gameSettings>> = {
+  default: {},
   easy: {
+    preset: 'easy',
     playerdamage: 110,
     enemydamage: 75,
     eventrate: 150,
     enemyspeedsize: 95,
   },
   hard: {
+    preset: 'hard',
     playerdamage: 85,
     enemydamage: 150,
     eventrate: 60,
@@ -66,6 +70,7 @@ export const presets: Record<Difficulty, Partial<typeof gameSettings>> = {
     enemyleveluprate: 120,
   },
   hardcore: {
+    preset: 'hardcore',
     playerdamage: 70,
     enemydamage: 200,
     eventrate: 60,
@@ -77,6 +82,7 @@ export const presets: Record<Difficulty, Partial<typeof gameSettings>> = {
     enemyleveluprate: 140,
   },
   casual: {
+    preset: 'casual',
     passivemobs: true,
     eventrate: 0,
     resourcerate: 150,
@@ -89,11 +95,13 @@ export const presets: Record<Difficulty, Partial<typeof gameSettings>> = {
     enemyspeedsize: 90,
   },
   hammer: {
+    preset: 'hammer',
     nobuildcost: true,
     passivemobs: true,
     eventrate: 0,
   },
   immersive: {
+    preset: 'immersive',
     nomap: true,
     noportals: true,
   },

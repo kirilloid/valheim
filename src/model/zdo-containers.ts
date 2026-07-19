@@ -1,11 +1,9 @@
 import type { ZDO } from '../file/types';
 
-import { readBase64, writeBase64 } from '../file/base64';
-import * as Inventory from '../file/Inventory';
 import { stableHashCode } from './hash';
-import { PackageWriter } from '../file/Package';
 import { prefabHashes } from '../data/zdo';
 import { data } from '../data/itemDB';
+import { extractInventory } from '../file/zdo/Inventory';
 
 export type Item = {
   readonly id: string;
@@ -86,19 +84,13 @@ function ArmorStand(zdo: ZDO, index: number, onChange: (zdo: ZDO) => void): Item
   };
 };
 
-const ITEMS_HASH = stableHashCode('items');
-
 function Container(zdo: ZDO, index: number, onChange: (zdo: ZDO) => void): Item | undefined {
-  const value = zdo.strings.get(ITEMS_HASH);
-  if (value == null) return undefined;
-  const inventory = Inventory.read(readBase64(value));
-  const item = inventory.items[index];
+  const { items, save } = extractInventory(zdo);
+  if (items.length === 0) return undefined;
+  const item = items[index];
   if (item == null) return undefined;
   function saveInventory() {
-    const pkg = new PackageWriter();
-    Inventory.write(pkg, inventory);
-    const base64 = writeBase64(pkg);
-    zdo.strings.set(ITEMS_HASH, base64);
+    save();
     onChange(zdo);
   }
 

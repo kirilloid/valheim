@@ -86,7 +86,7 @@ export function FileSelector({ ext, subpath, state, processFiles }: {
     {state.message ? <p className="warning">{state.message}</p> : null}
     <p>{translate('ui.fileEditor.initial', ext)}</p>
     <p><input type="file"
-      accept={`.${ext},.${ext}.old`}
+      multiple
       onChange={e => processFiles(e.target.files)} /></p>
     <p>{translate('ui.fileEditor.pathComment')}</p>
     <Tabs tabs={[

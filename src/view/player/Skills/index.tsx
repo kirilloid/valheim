@@ -52,8 +52,8 @@ function Skill({ skill, value, onChange }: {
 
 export function Skills({ skillData, onChange, onInitSkills, playerData } : {
   skillData: SkillData;
-  onChange: (value: SkillData) => void;
-  onInitSkills: () => void;
+  onChange?: (value: SkillData) => void;
+  onInitSkills?: () => void;
   playerData: PlayerData;
 }) {
   const entries = [...skillData.entries()];
@@ -65,6 +65,7 @@ export function Skills({ skillData, onChange, onInitSkills, playerData } : {
       {(showAll ? entries : nonZeroEntries)
         .map(([skill, value]) => <Skill skill={skill} value={value} key={skill}
           onChange={value => {
+            if (!onChange) return;
             const pair = { level: value, accumulator: 0 };
             const newSkills = new Map([...skillData.entries(), [skill, pair]]);
             onChange(newSkills);

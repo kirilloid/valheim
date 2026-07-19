@@ -1,6 +1,7 @@
 import type { ZDO, ZDOID } from '../types';
-import { Quaternion, Vector2i, Vector3 } from '../../model/utils';
+import type { Quaternion, Vector3 } from '../../model/utils';
 import { stableHashCode } from '../../model/hash';
+import { zoneId } from '../../model/zdo-selectors';
 import { PackageReader, PackageWriter } from '../Package';
 import { FloatBinMap, IntBinMap, LongBinMap, QuaternionBinMap, Vector3BinMap } from './BinMap';
 import { offsets } from './offset';
@@ -90,15 +91,10 @@ class ZdoMmapView implements ZDO {
     }
   }
 
-  get sector(): Readonly<Vector2i> {
-    return {
-      x: this.view.getInt32(offsets.sector, true),
-      y: this.view.getInt32(offsets.sector + 4, true),
-    }
-  }
-  set sector(value: Vector2i) {
-    this.view.setInt32(offsets.sector, value.x, true);
-    this.view.setInt32(offsets.sector + 4, value.y, true);
+  get sector(): number {
+    const x = this.view.getInt32(offsets.sector, true);
+    const y = this.view.getInt32(offsets.sector + 4, true);
+    return zoneId({ x, y });
   }
 
   get position(): Readonly<Vector3> {

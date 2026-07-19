@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
+import { zip } from 'fflate';
 
 import type { Writer } from '../types';
 import type { DoneState, FileEditorState } from './types';
 
-import { runGenerator } from '../../../model/utils';
+import { runAsyncGenerator } from '../../../model/utils';
 import { downloadFile } from '../../helpers';
 
 import { TranslationContext } from '../../../effects';
@@ -18,17 +19,38 @@ export function FileWriter<T>({ state, setState, writer }: {
   return <div className="FileEditor__controls">
     <button className="btn btn--primary" disabled={!state.changed && !!writer}
       onClick={() => {
-        const sizeHint = Math.round(state.file.size * 1.1);
-        const { file } = state;
-        runGenerator(
-          writer(state.value, sizeHint),
-          progress => setState({ state: 'saving', file, value: state.value, progress }),
+        const { files } = state;
+        runAsyncGenerator(
+          writer(state.value),
+          progress => setState({ state: 'saving', files, value: state.value, progress }),
         ).then(result => {
-          downloadFile(result, file.name);
+          switch (result.size) {
+            case 0:
+              alert(translate('ui.fileEditor.saveFailed', translate('ui.fileEditor.noFile')));
+              return;
+            case 1:
+              const iteration = result.entries().next();
+              if (iteration.done) {
+                alert(translate('ui.fileEditor.saveFailed', translate('ui.fileEditor.noFile')));
+                return;
+              }
+              const [name, buffer] = iteration.value;
+              downloadFile(buffer, name);
+              break;
+            default:
+              const filesRecord = Object.fromEntries([...result.entries()]);
+              zip(filesRecord, (err, data) => {
+                if (err) {
+                  alert(translate('ui.fileEditor.saveFailed', err.message));
+                  return;
+                }
+                downloadFile(data, 'files.zip');
+              });
+          }
         }).catch(e => {
-          alert("There was a problem with saving: " + e.message);
+          alert(translate('ui.fileEditor.saveFailed', e.message));
         }).finally(() => {
-          setState({ state: 'done', file, value: state.value, changed: false });
+          setState({ state: 'done', files, value: state.value, changed: false });
         });
       }}>
       {translate('ui.fileEditor.save')}

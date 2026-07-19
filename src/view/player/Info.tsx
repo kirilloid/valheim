@@ -1,7 +1,7 @@
 import React, { useCallback, useContext } from 'react';
 
 import type { Player, Inventory as TInventory, SkillData } from './types';
-import type { EditorProps } from '../parts/types';
+import type { SingleEditorProps } from '../parts/types';
 
 import { skillTiers } from '../../model/skills';
 import { DEFAULT_MIN_DATE } from '../../model/game';
@@ -32,7 +32,7 @@ function renameCrafter({ version, items }: TInventory, id: bigint, oldName: stri
   }
 }
 
-export function PlayerInfo({ value: player, onChange, file, disabled } : EditorProps<Player>) {
+export function PlayerInfo({ value: player, onChange, file, disabled }: SingleEditorProps<Player>) {
   const translate = useContext(TranslationContext);
 
   const onWorldsChange = useCallback((worlds: Player['worlds']) => onChange({ ...player, worlds }), [player, onChange]);

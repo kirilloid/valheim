@@ -86,6 +86,7 @@ export const pages = [
 
   { id: 'player-edit', emoji: '🕴', category: 'edit' },
   { id: 'world-edit', emoji: '🗺', category: 'edit' },
+  { id: 'chunk-edit', emoji: '📄', category: 'edit' },
   { id: 'world-meta', emoji: '🏷️', category: 'edit' },
   { id: 'world-meta-recovery', emoji: '♻', category: 'edit' },
 

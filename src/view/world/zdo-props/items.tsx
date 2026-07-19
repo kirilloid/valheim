@@ -6,20 +6,16 @@ import type { Item } from '../../../types';
 
 import { stableHashCode } from '../../../model/hash';
 import { VirtualItem } from '../../../model/zdo-containers';
-import * as Inventory from '../../../file/Inventory';
-import { readBase64 } from '../../../file/base64';
 import { data } from '../../../data/itemDB';
 
 import { TranslationContext } from '../../../effects';
 import { ItemIcon } from '../../parts/Icon';
 import { getEpicLootData, getMaxDurability } from '../../../mods/epic-loot';
-
-const itemsHash = stableHashCode('items');
+import { extractInventory } from '../../../file/zdo/Inventory';
 
 export function ItemsComp({ value: zdo }: ValueProps<ZDO>) {
   const translate = useContext(TranslationContext);
-  const value = zdo.strings.get(itemsHash);
-  const items = value ? Inventory.read(readBase64(value)).items : [];
+  const { items } = extractInventory(zdo);
   return <React.Fragment key="items">
     <dt>items</dt>
     <dd>{items.length > 1

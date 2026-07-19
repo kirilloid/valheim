@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 
 import type { GameComponent } from '../../../types';
 import type { ZDO } from '../types';
-import type { PlayersData } from '../../../model/zdo-selectors';
+import { fromZoneId, PlayersData } from '../../../model/zdo-selectors';
 
 import { flipV } from '../../../model/utils';
 import { stableHashCode } from '../../../model/hash';
@@ -80,6 +80,7 @@ export const ItemEditor = React.memo(({
   const components = getComponents(currentId);
   const vItem = VirtualItem(zdo, containerIndex, onChange);
   const loc = locationHashes.get(zdo.ints.get(LOCATION_HASH) ?? 0);
+  const pos = fromZoneId(zdo.sector);
 
   return <>
     <h2>{
@@ -107,7 +108,7 @@ export const ItemEditor = React.memo(({
           }}>flip it back</button>
         </dd>
       </>}
-      <dt>zone</dt><dd>{zdo.sector.x} / {zdo.sector.y}</dd>
+      <dt>zone</dt><dd>{zdo.sector ? `${pos.x} / ${pos.y}` : 'in spirit world'}</dd>
       <Editor value={zdo} onChange={onChange} playersData={playersData} time={time} components={components} index={containerIndex} />
     </dl>
   </>;

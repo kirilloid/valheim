@@ -8,10 +8,22 @@ function showSize(size: number): string {
 }
 
 export function FileInfo({ version, file }: { version: number, file: File }) {
+  const { name, size, lastModified } = file;
   return <dl>
-    <dt>name</dt><dd>{file.name}</dd>
+    <dt>name</dt><dd>{name}</dd>
     <dt>version</dt><dd>{version}</dd>
-    <dt>size</dt><dd>{showSize(file.size)}</dd>
-    <dt>modified</dt><dd>{new Date(file.lastModified).toString()}</dd>
+    <dt>size</dt><dd>{showSize(size)}</dd>
+    <dt>modified</dt><dd>{new Date(lastModified).toString()}</dd>
+  </dl>;
+}
+
+export function FilesInfo({ version, files }: { version: number, files: File[] }) {
+  const size = files.reduce((a, f) => f.size + a, 0);
+  const lastModified = Math.max(...files.map(f => f.lastModified));
+  return <dl>
+    <dt>files</dt><dd>{files.length}</dd>
+    <dt>version</dt><dd>{version}</dd>
+    <dt>size</dt><dd>{showSize(size)}</dd>
+    <dt>modified</dt><dd>{new Date(lastModified).toString()}</dd>
   </dl>;
 }

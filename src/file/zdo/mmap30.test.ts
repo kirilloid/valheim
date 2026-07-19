@@ -3,6 +3,7 @@ import { ZDO, ZDOObjectType, ZDOValues } from '../types';
 import { readZdo } from './mmap30';
 import { writeZdo_post30 } from './full';
 import { nop, Quaternion, Vector3 } from '../../model/utils';
+import { zoneId } from '../../model/zdo-selectors';
 import { PackageReader, PackageWriter } from '../Package';
 
 function getDefaultZDO(version: number): ZDO {
@@ -13,7 +14,7 @@ function getDefaultZDO(version: number): ZDO {
     type: ZDOObjectType.Default,
     distant: false,
     prefab: -1,
-    sector: { x: 0, y: 0 },
+    sector: zoneId({ x: 0, y: 0 }),
     position: { x: 0, y: 0, z: 0 },
     rotation: { x: 0, y: 0, z: 0 },
     floats: new Map<number, number>(),
@@ -84,22 +85,31 @@ const connectionData = { type: 1, hash: 123456 };
 
 // testing by comparing to simpler implementation
 describe('mmap', () => {
-  describe('read', () => {
+  describe('read - 30', () => {
     testReadMmap('basic', 30, {});
-    testReadMmap('rotation', 30, { rotation: { x: 1, y: 0, z: 0 } });
+    testReadMmap('rotation', 30, { rotation: { x: 0, y: 1, z: 0 } });
+    testReadMmap('position', 30, { rotation: { x: 0, y: 1, z: 0 } });
     testReadMmap('connectionData', 30, { connectionData });
     testReadMmap('ints', 30, { ints: new Map([[0, 0]]) });
     testReadMmap('strings', 30, { strings: new Map([[0, 'foo']]) });
   });
-  describe('basic write', () => {
+  describe('read - 40', () => {
+    testReadMmap('rotation', 40, { rotation: { x: 0, y: 1, z: 0 } });
+    testReadMmap('position', 40, { rotation: { x: 0, y: 1, z: 0 } });
+  });
+  describe('basic write - 30', () => {
     testWriteMmap('basic', 30, {}, nop);
     testWriteMmap('persistent', 30, {}, zdo => zdo.persistent = true);
     testWriteMmap('distant', 30, {}, zdo => zdo.distant = true);
     testWriteMmap('type', 30, {}, zdo => zdo.type = ZDOObjectType.Prioritized);
     testWriteMmap('prefab', 30, {}, zdo => zdo.prefab = 1);
     testWriteMmap('connectionData', 30, { connectionData }, nop);
-    testWriteMmap('position', 30, {}, zdo => zdo.position = { x: 1, y: 0, z: 0 });
-    testWriteMmap('rotation', 30, {}, zdo => zdo.rotation = { x: 1, y: 0, z: 0 });
+    testWriteMmap('position', 30, {}, zdo => zdo.position = { x: 0, y: 1, z: 0 });
+    testWriteMmap('rotation', 30, {}, zdo => zdo.rotation = { x: 0, y: 1, z: 0 });
+  });
+  describe('basic write - 40', () => {
+    testWriteMmap('position', 40, {}, zdo => zdo.position = { x: 0, y: 1, z: 0 });
+    testWriteMmap('rotation', 40, {}, zdo => zdo.rotation = { x: 0, y: 1, z: 0 });
   });
 
   describe('fixed map mutations', () => {

@@ -13,11 +13,14 @@ import { fishes } from './fish';
 import { ships, carts, siege } from './transport';
 import { objects, structures } from './objects';
 import { data as modsData, recipes as modsRecipes } from '../mods';
+import { stableHashCode } from '../model/hash';
 
 export const data: Record<string, GameObject> = {};
+export const itemHashes = new Map<number, string>();
 
 function addCollection(coll: GameObject[]) {
   for (const e of coll) {
+    itemHashes.set(stableHashCode(e.id), e.id);
     data[e.id] = e;
     if (e.group) {
       (groups[e.group] ?? (groups[e.group] = [])).push(e);

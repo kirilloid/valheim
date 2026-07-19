@@ -1,13 +1,13 @@
 import { defaultMemoize } from 'reselect';
 
-import type { ZDO } from '../file/types';
+import { iterateZdos, ZDO, ZDODataLike } from '../file/types';
 import { Biome as BiomeUnion, EntityId, GameLocationId, Pair } from '../types';
 import type { WorldData, ZoneSystemData } from '../file/World';
 
 import { Vector2i, Vector3 } from './utils';
 import { BitMap } from './BitMap';
 import { stableHashCode } from './hash';
-import { WORLD_RADIUS, ZONE_MAX_CC, ZONE_SIZE } from './game';
+import { WORLD_RADIUS, zoneHash, ZONE_MAX_CC, ZONE_SIZE } from './game';
 import { WorldGenerator, Biome as BiomeEnum } from './world-generator';
 
 import { getId, prefabHashes } from '../data/zdo';
@@ -15,13 +15,12 @@ import { data, extraData } from '../data/itemDB';
 import { locationHashes } from '../data/location-hashes';
 import { modPrefabNames } from '../data/prefabs';
 
-import { readBase64, writeBase64 } from '../file/base64';
-import { read, write } from '../file/Inventory';
+import type { Chunk } from '../file/chunks/chunk-save-mapping';
 import { match } from '../data/search';
 import { locations, locationsIdMap } from '../data/location';
 import { stripExtraData } from '../mods/epic-loot';
-import { PackageWriter } from '../file/Package';
 import { ticksToSeconds } from '../file/zdo/time';
+import { extractInventory } from '../file/zdo/Inventory';
 import { readRooms } from '../view/world/zdo-props/rooms';
 
 const locationHASH = stableHashCode('location');
@@ -40,6 +39,7 @@ const idPaths: Record<string, string[]> = {
     [
       'Haldor',
       'Hildir',
+      'BogWitch',
       'BossStone_Bonemass',
       'BossStone_DragonQueen', 'dragoneggcup',
       'BossStone_Eikthyr',
@@ -65,38 +65,31 @@ const HASH_LOCATION = stableHashCode('LocationProxy');
 const HASH_SEED = stableHashCode('seed');
 const HASH_CARTOGRAPHY_TABLE = stableHashCode('piece_cartographytable');
 
-export function zoneId({ x, y }: Vector2i) {
-  return (y + 256) * 512 + x + 256;
+export function zoneId({ x, y }: Vector2i): number {
+  return ((y + 256) << 9) + x + 256;
 }
 
-const getZoneZdos = defaultMemoize((zdos: ZDO[]) => zdos.filter(zdo => zdo.prefab === HASH_ZONE_CTRL));
+export function fromZoneId(sector: number): Vector2i {
+  const x = (sector & 511) - 256;
+  const y = (sector >> 9) - 256;
+  return { x, y };
+}
+
+const getZoneZdos = defaultMemoize((chunks: Map<number, { zdos: ZDO[] }>) => {
+  const result: ZDO[] = [];
+  for (const chunk of chunks.values()) {
+    result.push(...chunk.zdos.filter(zdo => zdo.prefab === HASH_ZONE_CTRL))
+  }
+  return result;
+});
 
 export const getZoneIds = (world: WorldData) => {
   const { zoneSystem } = world;
   if (zoneSystem != null) {
     return zoneSystem.generatedZones.map(zoneId);
   }
-  return getZoneZdos(world.zdo.zdos).map(z => zoneId(z.sector));
+  return getZoneZdos(world.zdo.chunks).map(z => z.sector);
 }
-
-// since active zone is (2; 2) units away from edge, we just apply edge filter/transform
-export const getActiveZoneIds = (zdos: ZDO[]) => {
-  const zones = getZoneZdos(zdos);
-  const allZoneIds = new Set<number>(zones.map(zdo => zoneId(zdo.sector)));
-  const activeZoneIds = new Set<number>();
-  outer:
-  for (const id of allZoneIds) {
-    for (let dy = -2; dy <= 2; dy++) {
-      for (let dx = -2; dx <= 2; dx++) {
-        if (!allZoneIds.has(id + dx + dy * 512)) {
-          continue outer;
-        }
-      }
-    }
-    activeZoneIds.add(id);
-  }
-  return activeZoneIds;
-};
 
 const OWNER = stableHashCode('owner');
 const OWNER_NAME = stableHashCode('ownerName');
@@ -113,7 +106,7 @@ export type PlayersData = {
 const LOCATION_PROXY_HASH = stableHashCode('LocationProxy');
 const LOCATION_HASH = stableHashCode('location');
 
-export const getPlayersData = (zdos: ZDO[]): PlayersData => {
+export const getPlayersData = (zdos: Iterable<ZDO>): PlayersData => {
   const result: PlayersData = {
     names: new Map(),
     beds: new Map(),
@@ -215,32 +208,26 @@ export const renamePlayer = (zdo: ZDO, playerId: bigint, oldName: string, newNam
     }
   }
   if (components?.includes('Container')) {
-    const value = zdo.strings.get(ITEMS_HASH);
-    if (value != null) {
-      const inv = read(readBase64(value));
-      let changed = 0;
-      for (const item of inv.items) {
-        if (item.crafterID === playerId) {
-          item.crafterName = item.crafterName.replace(oldName, newName);
-          changed++;
-        }
-      }
-      if (changed > 0) {
-        const pkg = new PackageWriter();
-        write(pkg, inv);
-        const base64 = writeBase64(pkg);
-        zdo.strings.set(ITEMS_HASH, base64);
+    const { items, save } = extractInventory(zdo);
+    let changed = 0;
+    for (const item of items) {
+      if (item.crafterID === playerId) {
+        item.crafterName = item.crafterName.replace(oldName, newName);
+        changed++;
       }
     }
+    if (changed > 0) save();
   }
   return zdo;
 };
 
 const LWT_HASH = stableHashCode('lastWorldTime');
-export function* getMaxTime(zdos: ZDO[]): Generator<number, number, void> {
+export function* getMaxTime(zdoData: ZDODataLike): Generator<number, number, void> {
   let maxTime = 0;
-  for (const [i, zdo] of zdos.entries()) {
-    if ((i & 0xFFF) === 0) yield i / zdos.length;
+  let i = 0;
+  for (const zdo of iterateZdos(zdoData)) {
+    if ((i & 0xFFF) === 0) yield i / zdoData.totalZDOs;
+    i++;
     const id = prefabHashes.get(zdo.prefab);
     const obj = id != null ? data[id] : undefined;
     if (obj == null || obj.components?.includes('BaseAI')) continue;
@@ -253,50 +240,49 @@ export function* getMaxTime(zdos: ZDO[]): Generator<number, number, void> {
   return maxTime;
 };
 
-export type SearchIndex = { item: number; container: number; };
+export type SearchIndex = { chunkId: number; index: number; container: number; };
 export type SearchEntry = { id: string; text: string; subtype: string; indices: SearchIndex[] };
-
-const ITEMS_HASH = stableHashCode('items');
 
 export const EMPTY_RESULT: SearchIndex[] = [];
 
 export const getSearcher = (
-  zdos: ZDO[],
+  zdoData: ZDODataLike,
   translate: (arg: string) => string
 ): (term: string) => SearchEntry[] => {
   const idMap: Record<EntityId, SearchIndex[]> = {};
-  function add(id: string, idx: number, cIdx: number) {
+  function add(id: string, chunkId: number, index: number, cIdx: number) {
     if (idMap[id] == null) idMap[id] = [];
-    idMap[id]?.push({ item: idx, container: cIdx });
+    idMap[id]?.push({ chunkId, index, container: cIdx });
   }
-  for (const [i, zdo] of zdos.entries()) {
-    const id = getId(prefabHashes, zdo.prefab);
-    if (id === 'LocationProxy') {
-      const locationHashed = zdo.ints.get(locationHASH) ?? 0;
-      const location = locationHashes.get(locationHashed) ?? `_unknown_${(locationHashed >>> 0).toString(16)}`;
-      const typeId = locationsIdMap.get(location)?.typeId;
-      if (typeId != null) {
-        add(typeId, i, -1);
-      } else {
-        add(id, i, -1);
-      }
-    } else {
-      add(id, i, -1);
-      if (data[id]?.components?.includes('Container')) {
-        const value = zdo.strings.get(ITEMS_HASH);
-        const items = value ? read(readBase64(value)).items : [];      
-        for (const [ci, { id }] of items.entries()) add(id, i, ci);
-      }
-      if (data[id]?.components?.includes('ArmorStand')) {
-        for (const ci of [0, 1, 2, 3, 4, 5, 6]) {
-          const id = zdo.strings.get(stableHashCode(`${i}_item`));
-          if (id == null) continue;
-          add(id, i, ci);
+  for (const [chunkId, chunk] of zdoData.chunks) {
+    for (const [index, zdo] of chunk.zdos.entries()) {
+      const id = getId(prefabHashes, zdo.prefab);
+      if (id === 'LocationProxy') {
+        const locationHashed = zdo.ints.get(locationHASH) ?? 0;
+        const location = locationHashes.get(locationHashed) ?? `_unknown_${(locationHashed >>> 0).toString(16)}`;
+        const typeId = locationsIdMap.get(location)?.typeId;
+        if (typeId != null) {
+          add(typeId, chunkId, index, -1);
+        } else {
+          add(id, chunkId, index, -1);
         }
-      }
-      if (data[id]?.components?.includes('ItemStand')) {
-        const id = zdo.strings.get(stableHashCode('item'));
-        if (id) add(id, i, 0);
+      } else {
+        add(id, chunkId, index, -1);
+        if (data[id]?.components?.includes('Container')) {
+          const { items } = extractInventory(zdo);
+          for (const [ci, { id }] of items.entries()) add(id, chunkId, index, ci);
+        }
+        if (data[id]?.components?.includes('ArmorStand')) {
+          for (const ci of [0, 1, 2, 3, 4, 5, 6]) {
+            const id = zdo.strings.get(stableHashCode(`${index}_item`));
+            if (id == null) continue;
+            add(id, chunkId, index, ci);
+          }
+        }
+        if (data[id]?.components?.includes('ItemStand')) {
+          const id = zdo.strings.get(stableHashCode('item'));
+          if (id) add(id, chunkId, index, 0);
+        }
       }
     }
   }
@@ -325,15 +311,14 @@ export const getSearcher = (
   }
 };
 
-export function getWorldSeed(zdos: ZDO[]) {
+export function getWorldSeed(zdos: Iterable<ZDO>) {
   const seeds = new Map<number, number>();
   let total = 0;
   for (const zdo of zdos) {
     if (zdo.prefab === HASH_LOCATION) {
       const locationSeed = zdo.ints.get(HASH_SEED);
       if (locationSeed == null) continue;
-      const { x, y } = zdo.sector;
-      const seed = (locationSeed - x * 4271 - y * 9187) | 0;    
+      const seed = (locationSeed - zoneHash(fromZoneId(zdo.sector))) | 0;    
       const currentTotal = seeds.get(seed);
       total++;
       if (currentTotal == null) {
@@ -348,17 +333,18 @@ export function getWorldSeed(zdos: ZDO[]) {
   }
 }
 
-export function getZonesBitMap(zdos: ZDO[]): BitMap {
+export function getZonesBitMap(zdos: Iterable<ZDO>): BitMap {
   const SIZE = ZONE_MAX_CC * 2 + 1;
   const bitmap = new BitMap(SIZE, SIZE);
   for (const { sector } of zdos) {
-    if (Math.abs(sector.x) > SIZE || Math.abs(sector.y) > SIZE) continue;
-    bitmap.set(sector.x + ZONE_MAX_CC, sector.y + ZONE_MAX_CC, true);
+    const { x, y } = fromZoneId(sector);
+    if (Math.abs(x) > SIZE || Math.abs(y) > SIZE) continue;
+    bitmap.set(x + ZONE_MAX_CC, y + ZONE_MAX_CC, true);
   }
   return bitmap;
 }
 
-export function hasCartographyTable(zdos: ZDO[]) {
+export function hasCartographyTable(zdos: Iterable<ZDO>) {
   for (const zdo of zdos) {
     // zdo-props/map-table
     if (zdo.prefab === HASH_CARTOGRAPHY_TABLE) {
@@ -375,7 +361,7 @@ export function* getGeneratedPercent(
   world: WorldData,
   resolutionStep: number
 ): Generator<number, DiscoveryStats | undefined, void> {
-  const seed = getWorldSeed(world.zdo.zdos);
+  const seed = getWorldSeed(iterateZdos(world.zdo));
   if (seed == null) return undefined;
   const gen = new WorldGenerator(seed);
   const allZoneIds = new Set<number>(getZoneIds(world));
@@ -410,7 +396,7 @@ export function* getGeneratedPercent(
   return stats;
 }
 
-export function getStatsForDungeons(zdos: ZDO[]) {
+export function getStatsForDungeons(zdos: Iterable<ZDO>) {
   const dgStats = new Map<number, Record<string, number[]>>();
   const dgCount: Record<string, number> = {};
   for (const [id, comps] of Object.entries(extraData)) {
@@ -458,14 +444,20 @@ function removeFromZoneSystem(zoneSystem: ZoneSystemData | undefined, zoneIds: S
 
 export function* removeZoneIds(value: WorldData, zoneIds: Set<number>): Generator<number, WorldData, void> {
   const zoneSystem = removeFromZoneSystem(value.zoneSystem, zoneIds);
-  const zdos: ZDO[] = [];
-  for (const [i, zdo] of value.zdo.zdos.entries()) {
-    if ((i & 0xFFF) === 0) yield i / value.zdo.zdos.length;
-    if (!zoneIds.has(zoneId(zdo.sector))) zdos.push(zdo);
+  let i = 0;
+  const chunks = new Map<number, Chunk>();
+  for (const [index, chunk] of value.zdo.chunks) {
+    const newZdos: ZDO[] = [];
+    for (const zdo of chunk.zdos) {
+      if ((i & 0xFFF) === 0) yield i / value.zdo.totalZDOs;
+      if (!zoneIds.has(zdo.sector)) newZdos.push(zdo);
+      i++;
+    }
+    chunks.set(index, { ...chunk, zdos: newZdos });
   }
   return {
     ...value,
-    zdo: { ...value.zdo, zdos },
+    zdo: { ...value.zdo, chunks },
     zoneSystem,
   };
 }

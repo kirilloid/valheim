@@ -3,7 +3,7 @@ import React from 'react';
 import { read, write } from '../../file/World';
 
 import { FileEditor } from '../parts/file';
-import { WorldInfo } from './Info';
+import { WorldInfo as WorldInfoMulti } from './Info';
 
 export function WorldEditor() {
   return <FileEditor
@@ -11,7 +11,7 @@ export function WorldEditor() {
     extension="db"
     reader={read}
     writer={write}
-    Child={WorldInfo}
+    Child={WorldInfoMulti}
     subpath="worlds"
   />;
 }
