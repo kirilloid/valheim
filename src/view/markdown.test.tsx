@@ -1,11 +1,23 @@
 import React from 'react';
+import { cleanup, render } from '@testing-library/react';
 
 import { markdown } from './markdown';
 
-test('markdown', () => {
-  expect(markdown('foo *bar*')).toEqual(['foo ', <b>bar</b>]);
-  expect(markdown('foo _baz_')).toEqual(['foo ', <i>baz</i>]);
-  expect(markdown('foo *bar* _baz_')).toEqual(['foo ', <b>bar</b>, ' ', <i>baz</i>]);
-  expect(markdown('[link](href)')).toEqual([<a rel="noreferrer" href="href">link</a>]);
-  expect(markdown('*_nested_*')).toEqual([<b><i>nested</i></b>]);
+function renderMarkdown(input: string) {
+  const { container } = render(<>{markdown(input)}</>);
+  return container;
+}
+
+describe('markdown', () => {
+  test.each([
+    ['foo *bar*', 'foo <b>bar</b>', 'basic bold'],
+    ['foo _baz_', 'foo <i>baz</i>', 'basic italics'],
+    ['foo *bar* _baz_', 'foo <b>bar</b> <i>baz</i>', 'both b+i'],
+    ['[link](href)', '<a rel="noreferrer" href="href">link</a>', 'link'],
+    ['*_nested_*', '<b><i>nested</i></b>', 'nested tags'],
+  ])('%s renders to %s (%s)', (markdown, html) => {
+    const content = renderMarkdown(markdown);
+    expect(content.innerHTML).toBe(html);
+    cleanup();
+  });
 });

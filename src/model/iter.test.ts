@@ -94,7 +94,9 @@ describe('dropWhile', () => {
     let n = 0;
     while (true) yield ++n;
   };
-  expect([...take(5, dropWhile(n => n <= 5, naturals()))]).toEqual([
-    6, 7, 8, 9, 10,
-  ]);
+  test('drops first items in infinite generator', () => {
+    expect([...take(5, dropWhile(n => n <= 5, naturals()))]).toEqual([
+      6, 7, 8, 9, 10,
+    ]);
+  });
 });

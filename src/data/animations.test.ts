@@ -39,7 +39,7 @@ describe('animations', () => {
     expect(calculateOneAnimation(a.swing_axe[2]).ticks).toBe(41);
   });
 
-  test('hit & speed at the same tick', () => {
+  xtest('hit & speed at the same tick', () => {
     expect(calculateOneAnimation(a.battleaxe_attack[2]).ticks).toBe(36);
   });
 

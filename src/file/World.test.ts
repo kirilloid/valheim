@@ -1,21 +1,27 @@
 import { readFileSync } from 'fs';
 import { read, write } from './World';
 
-function runGen<T>(gen: Generator<unknown, T, unknown>) {
+async function runGen<T>(gen: AsyncGenerator<unknown, T, unknown>) {
   while (true) {
-    const iter = gen.next();
+    const iter = await gen.next();
     if (iter.done) return iter.value;
   }
 }
 
 function testReSave(name: string) {
-  it(name, () => {
-    const blob = readFileSync(`test/data/worlds/${name}.db`);
-    const array = new Uint8Array(blob);
-    const world = runGen(read(array));  
-    const reSaved = runGen(write(world));
+  it(name, async () => {
+    const fullName = `${name}.db`;
+    const blob = readFileSync(`test/data/worlds/${fullName}`);
+    const file = new File([blob], fullName);
+    file.arrayBuffer = async function(this: File) {
+      return blob.buffer;
+    };
+    const files = new Map([[fullName, file]]);
+    const world = await runGen(read(files));  
+    const reSaved = await runGen(write(world));
+    const reSavedFile = reSaved.get(fullName);
     
-    expect(reSaved).toEqual(array);
+    expect(reSavedFile).toEqual(new Uint8Array(blob.buffer));
   });
 }
 
