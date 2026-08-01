@@ -3,10 +3,6 @@ import { addToTree, lookupInTree, SearchEntry, treeNode } from '../model/search'
 import { data } from '../data/itemDB';
 import { locations, biomes } from '../data/location';
 import { events } from '../data/events';
-
-import { preloadLanguage } from '../effects';
-import { read } from '../effects/globalState.effect';
-import { getDefaultUserLanguage } from '../effects/translation.effect';
 import { effects } from '../data/effects';
 import { comfort, defCalc, foodPlanner, foodTable, mining, offCalc, skills } from '../state';
 import { skillTiers, SkillType } from '../model/skills';
@@ -188,9 +184,7 @@ function addObjects(dict: Record<string, string>) {
   }
 }
 
-const lang = read('language', getDefaultUserLanguage());
-
-preloadLanguage(lang).then(dict => {
+export function setLanguageDict(dict: Record<string, string>) {
   addArray(pages, 'page', '/', dict, id => `ui.page.${id}`);
   addArray(locations, 'loc', '/loc/', dict, id => `ui.location.${id}`, { id: ({ typeId }) => typeId });
   addArray(biomes, 'biome', '/biome/', dict, id => `ui.biome.${id}`, { tags: 'ui.biome', disabled: (b) => !b.active });
@@ -202,7 +196,8 @@ preloadLanguage(lang).then(dict => {
     tier,
   }));
   addArray(skills, 'skill', '/skills/', dict, id => `ui.skillType.${id}`, { tags: 'ui.skill' });
-});
+}
+
 
 const emptyResults: SearchEntry[] = [];
 

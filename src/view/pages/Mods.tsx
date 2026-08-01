@@ -17,13 +17,16 @@ function ModList({ mods }: { mods: [string, ModConfig][] }) {
         <td>links</td>
       </tr>
     </thead>
+    <tbody>
     {mods.map(([modId, linkData]) =>
-    <tr key={modId}>
-      <td>{modId}</td>
-      <td>{linkData.version}</td>
-      <td><ModLinks {...linkData} /></td>
-    </tr>
-  )}</table>;
+      <tr key={modId}>
+        <td>{modId}</td>
+        <td>{linkData.version}</td>
+        <td><ModLinks {...linkData} /></td>
+      </tr>
+    )}
+    </tbody>
+  </table>;
 }
 
 export function Mods() {

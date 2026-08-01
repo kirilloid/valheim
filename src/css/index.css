@@ -329,6 +329,7 @@ table .value {
 .gap-4 { gap: 1rem; }
 .gap-2 { gap: 0.5rem; }
 .gap-1 { gap: 0.25rem; }
+.align-center { align-items: center; }
 
 @media screen and (min-width: 640px) {
   .with-sidebar {

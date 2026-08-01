@@ -1,8 +1,8 @@
 export let encodeInto: (source: string, destination: Uint8Array) => TextEncoderEncodeIntoResult;
 export let encode: (input?: string) => Uint8Array;
-export let decode: (source: BufferSource) => string;
+export let decode: (source: Uint8Array) => string;
 
-if (typeof global.TextEncoder !== 'undefined') {
+if (typeof globalThis.TextEncoder !== 'undefined') {
   // browser
   const encoder = new TextEncoder();
   const decoder = new TextDecoder();
@@ -10,7 +10,7 @@ if (typeof global.TextEncoder !== 'undefined') {
   encode = encoder.encode.bind(encoder);
   decode = decoder.decode.bind(decoder);
 } else {
-  // node
+  // old node
   encodeInto = (source: string, destination: Uint8Array) => {
     const bytes = Buffer.from(source, 'utf8');
     destination.set(bytes);
@@ -22,7 +22,7 @@ if (typeof global.TextEncoder !== 'undefined') {
   encode = (source: string = '') => {
     return Buffer.from(source, 'utf8');
   }
-  decode = (source: BufferSource) => {
-    return Buffer.from(source).toString('utf8');
+  decode = (bytes: Uint8Array) => {
+    return Buffer.from(bytes).toString('utf8');
   };
 }

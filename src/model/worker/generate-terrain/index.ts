@@ -6,7 +6,7 @@ export function generateTerrain(
   iterations: number,
   onProgress: (data: MessageFromWorker) => void,
 ): () => void {
-  const worker = new Worker('./worker.ts', { name: 'terrain', type: 'module' });
+  const worker = new Worker(new URL('./worker-terrain.ts', import.meta.url), { name: 'terrain', type: 'module' });
 
   function sendMessage(message: MessageToWorker) {
     worker.postMessage(message);

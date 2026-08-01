@@ -9,7 +9,7 @@ import { SkillType } from '../model/skills';
 import { assertNever, days, groupBy, timeI2S } from '../model/utils';
 import type { SearchEntry } from '../model/search';
 
-import { match, pages } from '../data/search';
+import { match, pages, setLanguageDict } from '../data/search';
 import { data } from '../data/itemDB';
 import { recipes } from '../data/recipes';
 import { events } from '../data/events';
@@ -17,7 +17,7 @@ import { biomes, locationsTypeIdMap } from '../data/location';
 import { effects } from '../data/effects';
 import { biome } from '../data/emoji';
 
-import { TranslationContext, Translator, useGlobalState } from '../effects';
+import { TranslationContext, Translator, useGlobalState, useLanguage } from '../effects';
 import { averageAttacksDamage, findDropChanceFromCreature, itemClasses, List, Materials, rangeBy, ShortWeaponDamage } from './helpers';
 import { EffectIcon, Icon, ItemIcon, SkillIcon } from './parts/Icon';
 
@@ -529,6 +529,10 @@ export const Search = () => {
   const [spoiler] = useGlobalState('spoiler');
   const [mods] = useGlobalState('searchInMods');
   const [disabled] = useGlobalState('searchInDisabled');
+  const { dict } = useLanguage();
+  useEffect(() => {
+    if (dict) setLanguageDict(dict);
+  }, [dict]);
 
   const [len, setLen] = useState(0);
   const [index, setIndex] = useState(0);

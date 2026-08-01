@@ -10,7 +10,7 @@ export function generateZones(
     leviathans: Vector3[];
   }) => void,
 ): () => void {
-  const worker = new Worker('./worker.ts', { name: 'locations', type: 'module' });
+  const worker = new Worker(new URL('./worker-zones.ts', import.meta.url), { name: 'locations', type: 'module' });
 
   function sendMessage(message: MessageToWorker) {
     worker.postMessage(message);

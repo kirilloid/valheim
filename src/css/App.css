@@ -337,6 +337,7 @@ option.spoiler {
 
 .overlay {
   background-color: rgba(var(--color-background), 0.75);
+  position: relative;
   z-index: 1;
 }
 

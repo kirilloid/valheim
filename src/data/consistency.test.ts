@@ -237,7 +237,7 @@ describe('traceability of all objects', () => {
     expect(failPairs).toEqual([]);
   });
 
-  xtest('all location items are valid entities', () => {
+  test.skip('all location items are valid entities', () => {
     const failItems = new Set<EntityId>();
 
     function walkCheckItem({ item }: LocationItem) {
@@ -320,7 +320,7 @@ describe('dungeons - rooms', () => {
   testCamp('fortressRuins', rooms.fortressRuins);
 });
 
-xtest('icons', (done) => {
+test.skip('icons', (done) => {
   const entries = Object.entries(data);
 
   let fails: EntityId[] = [];
@@ -350,7 +350,7 @@ xtest('icons', (done) => {
   }  
 }, 10000);
 
-xtest('l18n', (done) => {
+test.skip('l18n', (done) => {
   const entries = Object.entries(data);
 
   let fails: EntityId[] = [];

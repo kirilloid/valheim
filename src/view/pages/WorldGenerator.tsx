@@ -140,7 +140,7 @@ const WorldMap = React.memo((props: { seed: string }) => {
       </ul>
     </div>
     <div className="WorldGen">
-      <PanView maxZoom={20} onZoomChange={setZoom} onMouseMove={setPos} size={1}>
+      <PanView maxZoom={20} minZoom={0.5} onZoomChange={setZoom} onMouseMove={setPos} size={1}>
         <canvas className="WorldGen__Map" width={SIZE} height={SIZE} ref={canvasRef}
           style={{ width: `${SIZE}px`, height: `${SIZE}px` }} />
         {selectedLocations.map(key => {
@@ -177,16 +177,19 @@ export function WorldGenerator() {
 
   return (<>
     <section className="overlay">
-      <h1>World Generator</h1>
-      <label>{translate('ui.seed')}: <input ref={inputRef} type="text" placeholder={translate('ui.seedEnter')} /></label>
-      <button className="btn" onClick={() => {
-        const newSeed = inputRef.current?.value ?? '';
-        const path = newSeed.length ? `/world-gen/${newSeed}` : '/world-gen';
-        if (history.location.pathname !== path) {
-          history.replace(path);
-        }
-        setSeed(newSeed);
-      }}>Generate</button>
+      <h1>{translate('ui.page.world-gen')}</h1>
+      <div className="flex flex-row gap-2 align-center">
+        <label htmlFor="seed">{translate('ui.seed')}</label>
+        <input id="seed" ref={inputRef} type="text" placeholder={translate('ui.seedEnter')} />
+        <button className="btn btn--sm" onClick={() => {
+          const newSeed = inputRef.current?.value ?? '';
+          const path = newSeed.length ? `/world-gen/${newSeed}` : '/world-gen';
+          if (history.location.pathname !== path) {
+            history.replace(path);
+          }
+          setSeed(newSeed);
+        }}>Generate</button>
+      </div>
     </section>
     <WorldMap seed={seed} />
   </>);

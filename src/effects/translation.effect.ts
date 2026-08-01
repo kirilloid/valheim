@@ -25,16 +25,21 @@ export type Translator = {
 }
 export type RuneTranslator = (object: { tier: number, type: string, id: string }, ...extraArgs: (string | number)[]) => string;
 
-export function preloadLanguage(userLang: string): Promise<Dictionary> {
+function loadLanguage(userLang: string): Promise<Dictionary> {
   return langCache[userLang]
-     ?? (langCache[userLang] = fetch(`/lang/${userLang}.json`).then(r => r.json()));
+     ?? (langCache[userLang] = typeof process !== 'undefined'
+          ? require('node:fs/promises')
+              .readFile(process.cwd() + `/public/lang/${userLang}.json`, { encoding: 'utf8' })
+              .then((text: string) => JSON.parse(text))
+          : fetch(`/lang/${userLang}.json`)
+              .then(r => r.json()));
 }
 
 export function useLanguage() {
   const [lang, setLang] = useGlobalState('language', getDefaultUserLanguage());
   const [dict, setDict] = useState<Dictionary | null>(null);
   useEffect(() => {
-    preloadLanguage(lang).then(dict => {
+    loadLanguage(lang).then(dict => {
       window.document.documentElement.lang = lang;
       setDict(dict);
     });

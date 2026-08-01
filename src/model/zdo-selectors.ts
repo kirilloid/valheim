@@ -21,7 +21,7 @@ import { locations, locationsIdMap } from '../data/location';
 import { stripExtraData } from '../mods/epic-loot';
 import { ticksToSeconds } from '../file/zdo/time';
 import { extractInventory } from '../file/zdo/Inventory';
-import { readRooms } from '../view/world/zdo-props/rooms';
+import { readRooms } from '../file/zdo/rooms';
 
 const locationHASH = stableHashCode('location');
 
