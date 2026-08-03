@@ -118,38 +118,38 @@ abstract class FixedBinMap<V> implements Map<number, V> {
     return this.sizeOffset + this.initialSize * this.baseByteSize;
   }
 
-  entries(): IterableIterator<[number, V]> {
+  entries(): MapIterator<[number, V]> {
     if (this.indices !== null) {
-      return (function*(self): Generator<[number, V], void> {
+      return (function*(self): Generator<[number, V], undefined> {
         for (const [key, index] of self.indices?.entries() ?? []) yield [key, self.readValue(index)];
         for (const pair of self.newValues?.entries() ?? []) yield pair;
       }(this));
     }
-    return (function*(self): Generator<[number, V], void> {
+    return (function*(self): Generator<[number, V], undefined> {
       for (let i = 0; i < self.initialSize; i++) yield [self.readKey(i), self.readValue(i)];
     }(this));
   }
 
-  keys(): IterableIterator<number> {
+  keys(): MapIterator<number> {
     if (this.indices !== null) {
-      return (function*(self) {
+      return (function*(self): Generator<number, undefined> {
         if (self.indices !== null) yield* self.indices.keys();
         if (self.newValues) yield* self.newValues.keys();
       }(this));
     }
-    return (function*(self) {
+    return (function*(self): Generator<number, undefined> {
       for (let i = 0; i < self.initialSize; i++) yield self.readKey(i);
     }(this));
   }
 
-  values(): IterableIterator<V> {
+  values(): MapIterator<V> {
     if (this.indices !== null) {
-      return (function*(self) {
+      return (function*(self): Generator<V, undefined> {
         for (const index of self.indices?.values() ?? []) yield self.readValue(index);
         yield* (self.newValues ?? []).values();
       }(this));
     }
-    return (function*(self) {
+    return (function*(self): Generator<V, undefined> {
       for (let i = 0; i < self.initialSize; i++) yield self.readValue(i);
     }(this));
   }
@@ -228,15 +228,15 @@ export class EmptyBinMap<V> implements Map<number, V> {
     return 0;
   }
 
-  entries(): IterableIterator<[number, V]> {
+  entries(): MapIterator<[number, V]> {
     return this._map.entries();
   }
 
-  keys(): IterableIterator<number> {
+  keys(): MapIterator<number> {
     return this._map.keys();
   }
 
-  values(): IterableIterator<V> {
+  values(): MapIterator<V> {
     return this._map.values();
   }
 

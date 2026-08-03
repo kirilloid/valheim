@@ -165,8 +165,7 @@ function ShortRecipe(props: { item: GameObject }) {
         case 'craft':
           return <Materials materials={recipe.materials} iconSize={16} />
         case 'trader':
-          // disabled for now
-          return null && <span><Icon id="coin" alt="" size={16} /> {recipe.value}</span>
+          return <span><Icon id="coin" alt="" size={16} /> {recipe.value}</span>
         default:
           return assertNever(recipe);
       }

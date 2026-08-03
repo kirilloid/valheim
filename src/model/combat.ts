@@ -205,7 +205,7 @@ function getAttackStats(attack: Attack, skillLvl: number) {
   if (draw) {
     const drawTime = draw.duration * getBowDrawTime(skillLvl);
     for (let i = 0; i < times.length; i++) {
-      times[i] += drawTime + 3 * FRAME;
+      times[i]! += drawTime + 3 * FRAME;
     }
     totalStamina += drawTime * draw.stamina;
   }
@@ -213,7 +213,7 @@ function getAttackStats(attack: Attack, skillLvl: number) {
   if (reload) {
     const reloadTime = reload.time * getWeaponLoadingTime(skillLvl);
     for (let i = 0; i < times.length; i++) {
-      times[i] += reloadTime;
+      times[i]! += reloadTime;
     }
     totalStamina += reload.stamina ?? 0;
     totalEitr += reload.eitr ?? 0;

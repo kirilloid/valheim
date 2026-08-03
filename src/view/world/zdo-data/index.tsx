@@ -88,12 +88,12 @@ export const ZdoData = React.memo(function ZdoData(props: ValueProps<ZDODataLike
     return () => window.removeEventListener('resize', onResize, false);
   }, [setWidth]);
 
-  const updateTerm = useCallback(e => setTerm(e.target.value), [setTerm]);
+  const updateTerm = useCallback((e: React.ChangeEvent<HTMLInputElement>) => setTerm(e.target.value), [setTerm]);
   const clearEntry = useCallback(() => {
     setEntry(undefined);
     setIndex(0);
   }, [setEntry, setIndex]);
-  const updateIndex = useCallback(e => setIndex(+e.target.value), [setIndex]);
+  const updateIndex = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => setIndex(+e.target.value), [setIndex]);
 
   return <div className={classNames('ZdoData', {
     'ZdoData--map-expanded': mapExpanded,
