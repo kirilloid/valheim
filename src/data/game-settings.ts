@@ -50,9 +50,11 @@ export const gameSettings = {
   // KilledBat,
 };
 
+type GameSettings = typeof gameSettings;
+
 export type Difficulty = 'default' | 'easy' | 'hard' | 'hardcore' | 'casual' | 'hammer' | 'immersive';
 
-export const presets: Record<Difficulty, Partial<typeof gameSettings>> = {
+export const presets = {
   default: {},
   easy: {
     preset: 'easy',
@@ -105,15 +107,15 @@ export const presets: Record<Difficulty, Partial<typeof gameSettings>> = {
     nomap: true,
     noportals: true,
   },
-  // veryhard: {
-  //   playerdamage: 70,
-  //   enemydamage: 200,
-  //   enemyspeedsize: 120,
-  //   enemyleveluprate: 140,
-  // },
-  // veryeasy: {
-  //   playerdamage: 125,
-  //   enemydamage: 50,
-  //   enemyspeedsize: 90,
-  // },
-}/* as const satisfies Record<string, Partial<GameSettings>>*/;
+  veryhard: {
+    playerdamage: 70,
+    enemydamage: 200,
+    enemyspeedsize: 120,
+    enemyleveluprate: 140,
+  },
+  veryeasy: {
+    playerdamage: 125,
+    enemydamage: 50,
+    enemyspeedsize: 90,
+  },
+} as const satisfies Record<string, Partial<GameSettings>>;

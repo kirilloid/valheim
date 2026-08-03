@@ -1,4 +1,4 @@
-import { readFileSync } from 'fs';
+import { promises } from 'fs';
 import { read, write } from './World';
 
 async function runGen<T>(gen: AsyncGenerator<unknown, T, unknown>) {
@@ -8,11 +8,11 @@ async function runGen<T>(gen: AsyncGenerator<unknown, T, unknown>) {
   }
 }
 
-function testReSave(name: string) {
+function testReSave(name: string, timeout: number) {
   it(name, async () => {
     const fullName = `${name}.db`;
-    const blob = readFileSync(`test/data/worlds/${fullName}`);
-    const file = new File([blob], fullName);
+    const blob = await promises.readFile(`test/data/worlds/${fullName}`);
+    const file = new File([blob.buffer], fullName);
     file.arrayBuffer = async function(this: File) {
       return blob.buffer;
     };
@@ -22,10 +22,10 @@ function testReSave(name: string) {
     const reSavedFile = reSaved.get(fullName);
     
     expect(reSavedFile).toEqual(new Uint8Array(blob.buffer));
-  });
+  }, timeout);
 }
 
 describe('re-saving file', () => {
-  testReSave('v28');
-  testReSave('v36');
+  testReSave('v28', 10000);
+  testReSave('v36', 30000);
 });

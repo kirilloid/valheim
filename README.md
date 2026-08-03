@@ -8,6 +8,13 @@ If you want to see this project in action, go to valheim.kirilloid.ru
 
 ## Developers
 
+### Development
+
+- Install dependencies with `npm install`
+- Start the Vite dev server with `npm run dev`
+- Build the production bundle with `npm run build`
+- Run the test suite with `npm test`
+
 If you're looking for the object database, which is convenient to use for developers, go to the project site: valheim.kirilloid.ru, open browser DevTools / JavaScript console, and inspect content of an `objectDB` global variable. "Schema" could be found in `types.ts`
 
 I do not change the data structure every month, but compatibility between project updates is still not guaranteed.
