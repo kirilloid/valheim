@@ -36,9 +36,9 @@ export class BitMap {
     const byte = offset >> 3;
     const bit = offset & 7;
     if (value) {
-      this.bits[byte] |= (1 << bit);
+      this.bits[byte]! |= (1 << bit);
     } else {
-      this.bits[byte] &= (255 & (1 << bit));
+      this.bits[byte]! &= (255 & (1 << bit));
     }
   }
 }

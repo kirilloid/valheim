@@ -31,7 +31,7 @@ export function mul(a: Distribution, b: Distribution): Distribution {
   const c = Array.from({ length: len }, () => 0);
   for (let i = 0; i < a.length; i++) {
     for (let j = 0; j < b.length; j++) {
-      c[i + j] += a[i]! * b[j]!;
+      c[i + j]! += a[i]! * b[j]!;
     }
   }
   return c;
@@ -191,7 +191,7 @@ function materializeDropNoReturn(drop: GeneralDrop): SimpleDrop {
     const totalWeight = currentOptions.reduce((accumWeight, option) => accumWeight + (option.weight ?? 1), 0);
     for (const option of currentOptions) {
       const p = (option.weight ?? 1) / totalWeight;
-      result[option.item] += p * probability;
+      result[option.item]! += p * probability;
       if (remaining > 1) {
         const restOptions = currentOptions.filter(op => op !== option);
         walk(restOptions, remaining - 1, probability * p);
@@ -202,7 +202,7 @@ function materializeDropNoReturn(drop: GeneralDrop): SimpleDrop {
     if (n < options.length) {
       walk(options, n, prob);
     } else {
-      options.forEach(({ item }) => { result[item] += prob; });
+      options.forEach(({ item }) => { result[item]! += prob; });
     }
   }
   return result;
@@ -226,7 +226,7 @@ export function addDrop(dropBase: SimpleDrop, dropAdd: SimpleDrop, numAdd: numbe
   const copy: SimpleDrop = { ...dropBase };
   for (const [key, val] of Object.entries(dropAdd)) {
     if (!(key in copy)) copy[key] = 0;
-    copy[key] += val * numAdd;
+    copy[key]! += val * numAdd;
   }
   return copy;
 }

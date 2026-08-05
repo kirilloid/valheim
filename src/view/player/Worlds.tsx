@@ -35,7 +35,7 @@ function MapData({ mapData, id, onChange }: {
         const offset = ((SIZE - y - 1) * tileSize + x) * (tileSize / SIZE);
         const bitThey = (mapData.exploredOthers[offset >> 3]! >> (offset & 7)) & 1;
         const bitMe = (mapData.explored[offset >> 3]! >> (offset & 7)) & 1;
-        imageData.data[(y * SIZE + x) * 4 + 3] += bitMe ? 255 : bitThey ? 128 : 0;
+        imageData.data[(y * SIZE + x) * 4 + 3]! += bitMe ? 255 : bitThey ? 128 : 0;
       }
     }
     ctx.putImageData(imageData, 0, 0);

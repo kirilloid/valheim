@@ -3,7 +3,7 @@ import { lerp, Vector2i, Vector3 } from './utils';
 import { WATER_LEVEL, ZONE_SIZE } from './game';
 
 export class Heightmap {
-  private cornerBiomes: [Biome, Biome, Biome, Biome] = [-1, -1, -1, -1];
+  private cornerBiomes = [-1, -1, -1, -1] as unknown as [Biome, Biome, Biome, Biome];
   private oceanDepth: [number, number, number, number];
   private sector: Vector2i;
 
@@ -41,7 +41,7 @@ export class Heightmap {
     }
     const x = (point.x / ZONE_SIZE) - this.sector.x + 0.5;
     const y = (point.z / ZONE_SIZE) - this.sector.y + 0.5;
-    const tempBiomeWeights = [0, 0, 0, 0];
+    const tempBiomeWeights: [number, number, number, number] = [0, 0, 0, 0];
     tempBiomeWeights[0] += this.distance(x, y, 0, 0);
     tempBiomeWeights[1] += this.distance(x, y, 1, 0);
     tempBiomeWeights[2] += this.distance(x, y, 0, 1);

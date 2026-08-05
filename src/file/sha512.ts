@@ -297,26 +297,26 @@ class Sha512 {
 
       if (typeof message !== 'string') {
         for (i = this.start; index < length && i < 128; ++index) {
-          blocks[i >> 2] |= message[index]! << SHIFT[i++ & 3]!;
+          blocks[i >> 2]! |= message[index]! << SHIFT[i++ & 3]!;
         }
       } else {
         for (i = this.start; index < length && i < 128; ++index) {
           code = message.charCodeAt(index);
           if (code < 0x80) {
-            blocks[i >> 2] |= code << SHIFT[i++ & 3]!;
+            blocks[i >> 2]! |= code << SHIFT[i++ & 3]!;
           } else if (code < 0x800) {
-            blocks[i >> 2] |= (0xc0 | (code >> 6)) << SHIFT[i++ & 3]!;
-            blocks[i >> 2] |= (0x80 | (code & 0x3f)) << SHIFT[i++ & 3]!;
+            blocks[i >> 2]! |= (0xc0 | (code >> 6)) << SHIFT[i++ & 3]!;
+            blocks[i >> 2]! |= (0x80 | (code & 0x3f)) << SHIFT[i++ & 3]!;
           } else if (code < 0xd800 || code >= 0xe000) {
-            blocks[i >> 2] |= (0xe0 | (code >> 12)) << SHIFT[i++ & 3]!;
-            blocks[i >> 2] |= (0x80 | ((code >> 6) & 0x3f)) << SHIFT[i++ & 3]!;
-            blocks[i >> 2] |= (0x80 | (code & 0x3f)) << SHIFT[i++ & 3]!;
+            blocks[i >> 2]! |= (0xe0 | (code >> 12)) << SHIFT[i++ & 3]!;
+            blocks[i >> 2]! |= (0x80 | ((code >> 6) & 0x3f)) << SHIFT[i++ & 3]!;
+            blocks[i >> 2]! |= (0x80 | (code & 0x3f)) << SHIFT[i++ & 3]!;
           } else {
             code = 0x10000 + (((code & 0x3ff) << 10) | (message.charCodeAt(++index) & 0x3ff));
-            blocks[i >> 2] |= (0xf0 | (code >> 18)) << SHIFT[i++ & 3]!;
-            blocks[i >> 2] |= (0x80 | ((code >> 12) & 0x3f)) << SHIFT[i++ & 3]!;
-            blocks[i >> 2] |= (0x80 | ((code >> 6) & 0x3f)) << SHIFT[i++ & 3]!;
-            blocks[i >> 2] |= (0x80 | (code & 0x3f)) << SHIFT[i++ & 3]!;
+            blocks[i >> 2]! |= (0xf0 | (code >> 18)) << SHIFT[i++ & 3]!;
+            blocks[i >> 2]! |= (0x80 | ((code >> 12) & 0x3f)) << SHIFT[i++ & 3]!;
+            blocks[i >> 2]! |= (0x80 | ((code >> 6) & 0x3f)) << SHIFT[i++ & 3]!;
+            blocks[i >> 2]! |= (0x80 | (code & 0x3f)) << SHIFT[i++ & 3]!;
           }
         }
       }
@@ -346,7 +346,7 @@ class Sha512 {
     this.finalized = true;
     var blocks = this.blocks, i = this.lastByteIndex;
     blocks[32] = this.block;
-    blocks[i >> 2] |= EXTRA[i & 3]!;
+    blocks[i >> 2]! |= EXTRA[i & 3]!;
     this.block = blocks[32];
     if (i >= 112) {
       if (!this.hashed) {

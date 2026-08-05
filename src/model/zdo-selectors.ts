@@ -394,16 +394,16 @@ export function getStatsForDungeons(zdos: Iterable<ZDO>) {
     const id = zdo.prefab;
     const dungeonStats = dgStats.get(id);
     if (dungeonStats == null) continue;
-    dgCount[id]++;
+    dgCount[id]!++;
     const rooms = readRooms(zdo).map(r => r.room ?? r.hash);
     const stats: Record<string, number> = {};
     for (const r of rooms) {
-      if (r in stats) stats[r]++; else stats[r] = 1;
+      if (r in stats) stats[r]!++; else stats[r] = 1;
     }
     for (const [k, v] of Object.entries(stats)) {
       const dist = dungeonStats[k] ?? (dungeonStats[k] = []);
       while (dist.length <= v) dist.push(0);
-      dist[v]++;
+      dist[v]!++;
     }
   }
   for (const [id, dungeonStats] of dgStats) {
@@ -411,7 +411,7 @@ export function getStatsForDungeons(zdos: Iterable<ZDO>) {
       const totalNonZero = dist.reduce((a, b) => a + b, 0);
       const total = dgCount[id]!;
       dist[0] = total - totalNonZero;
-      for (let i = 0; i < dist.length; i++) dist[i] /= total;
+      for (let i = 0; i < dist.length; i++) dist[i]! /= total;
     }
   }
   return dgStats;

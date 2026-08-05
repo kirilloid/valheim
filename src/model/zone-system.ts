@@ -276,7 +276,7 @@ export class ZoneSystem {
     biomeArea: number,
     hmap?: Heightmap,
   } {
-    let biome: BiomeEnum = -1;
+    let biome = -1 as BiomeEnum;
     let biomeArea = 3;
     let normal = { x: 0, y: 0, z: 0 };
     let hmap: Heightmap | undefined = undefined;
