@@ -3,8 +3,9 @@ import React from 'react';
 import type { GameComponent } from '../../../types';
 import type { ValueProps } from '../../parts/types';
 import type { ZDO } from '../types';
+import type { PlayersData } from '../../../model/utils';
 import { crc32, stableHashCode } from '../../../model/hash';
-import { zoneHash } from '../../../model/game';
+import { zoneHash, fromZoneId } from '../../../model/game';
 
 import { boolComp } from './bool';
 import { colorComp } from './color';
@@ -30,7 +31,6 @@ import { WearNTearComp } from './wear-n-tear';
 import { ItemPropsComp } from './item-props';
 import { LiquidComp } from './liquid';
 import { EpicLootComp } from './epic-loot';
-import { fromZoneId, PlayersData } from '../../../model/zdo-selectors';
 import { TombComp } from './tomb';
 import { ResourceRootComp } from './resource-root';
 import { PlantComp } from './plant';

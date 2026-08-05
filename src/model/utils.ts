@@ -205,3 +205,9 @@ export const FIGURE_SPACE = ' ';
 export function hashPrefab(name: string) {
   return /_unknown_$/.test(name) ? parseInt(name) : stableHashCode(name);
 }
+
+export interface PlayersData {
+  names: Map<bigint, string>;
+  beds: Map<bigint, Vector3>;
+  startLocation: Vector3;
+}

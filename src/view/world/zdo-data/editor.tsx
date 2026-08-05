@@ -2,8 +2,9 @@ import React, { useContext } from 'react';
 
 import type { GameComponent } from '../../../types';
 import type { ZDO } from '../types';
-import { fromZoneId, PlayersData } from '../../../model/zdo-selectors';
+import type { PlayersData } from '../../../model/utils';
 
+import { fromZoneId } from '../../../model/game';
 import { flipV } from '../../../model/utils';
 import { stableHashCode } from '../../../model/hash';
 import { VirtualItem } from '../../../model/zdo-containers';

@@ -2,8 +2,7 @@ import type { ZDO } from '../types';
 import type { Quaternion, Vector3 } from '../../model/utils';
 import { PackageReader, PackageWriter } from '../Package';
 import { EmptyBinMap, FloatBinMap, IntBinMap, LongBinMap, QuaternionBinMap, Vector3BinMap } from './BinMap';
-import { ZONE_SIZE } from '../../model/game';
-import { fromZoneId, zoneId } from '../../model/zdo-selectors';
+import { fromZoneId, zoneId, ZONE_SIZE } from '../../model/game';
 
 const TYPE_OFFSET = 10;
 

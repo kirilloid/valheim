@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 
 import type { ValueProps } from '../../parts/types';
 import type { ZDO } from '../types';
-import type { PlayersData } from '../../../model/zdo-selectors';
+import type { PlayersData } from '../../../model/utils';
 
 import { stableHashCode } from '../../../model/hash';
 

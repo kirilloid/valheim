@@ -3,11 +3,11 @@ import { defaultMemoize } from 'reselect';
 import { iterateZdos, ZDO, ZDODataLike } from '../file/types';
 import { Biome as BiomeUnion, EntityId, GameLocationId, Pair } from '../types';
 import type { WorldData, ZoneSystemData } from '../file/World';
+import type { PlayersData } from './utils';
 
-import { Vector2i, Vector3 } from './utils';
 import { BitMap } from './BitMap';
 import { stableHashCode } from './hash';
-import { WORLD_RADIUS, zoneHash, ZONE_MAX_CC, ZONE_SIZE } from './game';
+import { WORLD_RADIUS, zoneHash, ZONE_MAX_CC, ZONE_SIZE, zoneId, fromZoneId } from './game';
 import { WorldGenerator, Biome as BiomeEnum } from './world-generator';
 
 import { getId, prefabHashes } from '../data/zdo';
@@ -65,16 +65,6 @@ const HASH_LOCATION = stableHashCode('LocationProxy');
 const HASH_SEED = stableHashCode('seed');
 const HASH_CARTOGRAPHY_TABLE = stableHashCode('piece_cartographytable');
 
-export function zoneId({ x, y }: Vector2i): number {
-  return ((y + 256) << 9) + x + 256;
-}
-
-export function fromZoneId(sector: number): Vector2i {
-  const x = (sector & 511) - 256;
-  const y = (sector >> 9) - 256;
-  return { x, y };
-}
-
 const getZoneZdos = defaultMemoize((chunks: Map<number, { zdos: ZDO[] }>) => {
   const result: ZDO[] = [];
   for (const chunk of chunks.values()) {
@@ -96,12 +86,6 @@ const OWNER_NAME = stableHashCode('ownerName');
 
 const CRAFTER_ID = stableHashCode('crafterID');
 const CRAFTER_NAME = stableHashCode('crafterName');
-
-export type PlayersData = {
-  names: Map<bigint, string>;
-  beds: Map<bigint, Vector3>;
-  startLocation: Vector3;
-}
 
 const LOCATION_PROXY_HASH = stableHashCode('LocationProxy');
 const LOCATION_HASH = stableHashCode('location');

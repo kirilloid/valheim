@@ -3,9 +3,8 @@ import type { Quaternion, Vector3 } from '../../model/utils';
 
 import { PackageReader, PackageWriter } from '../Package';
 import { stableHashCode } from '../../model/hash';
-import { ZONE_SIZE } from '../../model/game';
+import { fromZoneId, zoneId, ZONE_SIZE } from '../../model/game';
 import { fromEulerAngles } from '../../model/euler';
-import { fromZoneId, zoneId } from '../../model/zdo-selectors';
 
 const PREFAB_HASH = stableHashCode('prefab');
 

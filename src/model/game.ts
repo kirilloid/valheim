@@ -134,3 +134,13 @@ export function spawnChance(levels: Pair<number>, levelUpChance: number, level: 
   if (level === levels[1]) return levelUpChance ** (levels[1] - levels[0]);
   return (1 - levelUpChance) * levelUpChance ** (level - levels[0]);
 }
+
+export function zoneId({ x, y }: Vector2i): number {
+  return ((y + 256) << 9) + x + 256;
+}
+
+export function fromZoneId(sector: number): Vector2i {
+  const x = (sector & 511) - 256;
+  const y = (sector >> 9) - 256;
+  return { x, y };
+}

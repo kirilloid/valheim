@@ -5,7 +5,7 @@ import { data, extraData } from '../../data/itemDB';
 import { stableHashCode } from '../../model/hash';
 import { prefabHashes } from '../../data/zdo';
 import { GameComponent } from '../../types';
-import { fromZoneId } from '../../model/zdo-selectors';
+import { fromZoneId } from '../../model/game';
 import { pieces } from '../../data/building';
 import { ChunkIndex, ChunkPortal, fromChunkIndex } from '../chunks/chunk-save-mapping';
 

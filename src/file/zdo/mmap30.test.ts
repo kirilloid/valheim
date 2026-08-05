@@ -3,7 +3,7 @@ import { ZDO, ZDOObjectType, ZDOValues } from '../types';
 import { readZdo } from './mmap30';
 import { writeZdo_post30 } from './full';
 import { nop, Quaternion, Vector3 } from '../../model/utils';
-import { zoneId } from '../../model/zdo-selectors';
+import { zoneId } from '../../model/game';
 import { PackageReader, PackageWriter } from '../Package';
 
 function getDefaultZDO(version: number): ZDO {
