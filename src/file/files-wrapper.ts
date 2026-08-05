@@ -10,8 +10,8 @@ export function getFirstFile<T>(files: Map<string, T>, matches: (name: string) =
 }
 
 export function readWriteFirstFile<T>(
-  read: (bytes: Uint8Array) => AsyncGenerator<number, T>,
-  write: (data: T) => AsyncGenerator<number, Uint8Array>,
+  read: (bytes: Uint8Array<ArrayBuffer>) => AsyncGenerator<number, T>,
+  write: (data: T) => AsyncGenerator<number, Uint8Array<ArrayBuffer>>,
   extensions: string[],
 ): [Reader<T>, Writer<T>] {
   let fileName = `file.${extensions[0]!}`;
@@ -19,9 +19,9 @@ export function readWriteFirstFile<T>(
     const [name, file] = getFirstFile(files, name => extensions.some(ext => name.endsWith(`.${ext}`)));
     fileName = name;
     const buffer = await file.arrayBuffer();
-    return yield* read(new Uint8Array(buffer));
+    return yield* read(new Uint8Array<ArrayBuffer>(buffer));
   }
-  async function* writeWrapped(data: T): AsyncGenerator<number, Map<string, Uint8Array>> {
+  async function* writeWrapped(data: T): AsyncGenerator<number, Map<string, Uint8Array<ArrayBuffer>>> {
     const result = yield* write(data);
     return new Map([[fileName, result]]);
   }

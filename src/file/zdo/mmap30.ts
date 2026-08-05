@@ -22,7 +22,7 @@ type MappedMap<T> = Map<number, T> & { byteSize: number; save(pkg: PackageWriter
  * maps...
  */
 export class ZdoMmapView implements ZDO {
-  public _bytes: Uint8Array;
+  public _bytes: Uint8Array<ArrayBuffer>;
   private view: DataView;
   private _flag: number;
   private offset01Sector = 2; // flags

@@ -1,4 +1,4 @@
-import { deflateSync, inflateSync } from 'fflate';
+import { deflate, inflate } from '../model/fflate';
 import { PackageReader, PackageWriter } from './Package';
 import { checkVersion, LIQUID } from './versions';
 
@@ -8,8 +8,8 @@ export type Data = {
   total: number;
 };
 
-export function read(zbytes: Uint8Array): Data {
-  const bytes = inflateSync(zbytes);
+export async function read(zbytes: Uint8Array<ArrayBuffer>): Promise<Data> {
+  const bytes = await inflate(zbytes);
   const pkg = new PackageReader(bytes);
   // read
   const version = pkg.readInt();
@@ -25,7 +25,7 @@ export function read(zbytes: Uint8Array): Data {
   };
 }
 
-export function write(data: Data): Uint8Array {
+export async function write(data: Data): Promise<Uint8Array<ArrayBuffer>> {
   const pkg = new PackageWriter();
   pkg.writeInt(data.version);
   pkg.writeInt(data.depths.length);
@@ -33,5 +33,5 @@ export function write(data: Data): Uint8Array {
     pkg.writeShort(depth);
   }
   pkg.writeFloat(data.total);
-  return deflateSync(pkg.flush(), { level: 1 })
+  return await deflate(pkg.flush(), { level: 1 });
 }

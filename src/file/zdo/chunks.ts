@@ -12,7 +12,7 @@ import { read as readMeta, write as writeMeta } from '../fwl';
 import { readZdo } from './mmap30';
 import { getFirstFile } from '../files-wrapper';
 
-export function readChunkData(bytes: Uint8Array, name = '', chunkIndex = ChunkZero): Chunk {
+export function readChunkData(bytes: Uint8Array<ArrayBuffer>, name = '', chunkIndex = ChunkZero): Chunk {
   const pkg = new PackageReader(bytes);
   const version = pkg.readShort();
   const num = pkg.readInt();
@@ -24,7 +24,7 @@ export function readChunkData(bytes: Uint8Array, name = '', chunkIndex = ChunkZe
   return { zdos, name, info };
 }
 
-export function writeChunkData(chunk: Chunk): Uint8Array {
+export function writeChunkData(chunk: Chunk): Uint8Array<ArrayBuffer> {
   const pkg = new PackageWriter();
   pkg.writeShort(chunk.info.version);
   pkg.writeInt(chunk.zdos.length);
@@ -32,7 +32,7 @@ export function writeChunkData(chunk: Chunk): Uint8Array {
   return pkg.flush();
 }
 
-function writeOkFile(version: number): Uint8Array {
+function writeOkFile(version: number): Uint8Array<ArrayBuffer> {
   const pkg = new PackageWriter();
   pkg.writeInt(version);
   return pkg.flush();
@@ -82,7 +82,7 @@ export async function read(source: Map<string, File>, version: number): Promise<
 // chunks: ChunkMapping,
 // objectsByChunk: Map<ChunkIndex, ZDO[]>,
 export function write(
-  files: Map<string, Uint8Array>,
+  files: Map<string, Uint8Array<ArrayBuffer>>,
   version: number,
   { chunks, revision, meta }: ZDOData,
 ) {

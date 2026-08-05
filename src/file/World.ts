@@ -1,8 +1,7 @@
-import { gunzipSync, gzipSync } from 'fflate';
-
 import type { ZDO, ZDOCorruption, ZDOData, ZDOID } from './types';
 import type { Vector2i, Vector3 } from '../model/utils';
 
+import { gunzip, gzip } from '../model/fflate';
 import { hashPrefab } from '../model/utils';
 import { locationHashes } from '../data/location-hashes';
 import { PackageReader, PackageWriter } from './Package';
@@ -141,9 +140,9 @@ function* writeZDOData(writer: PackageWriter, version: number, zdoData: ZDOData)
   }
 }
 
-function readZoneSystem(reader: PackageReader, version: number): ZoneSystemData {
+async function readZoneSystem(reader: PackageReader, version: number): Promise<ZoneSystemData> {
   if (version >= 40) {
-    reader = new PackageReader(gunzipSync(reader.readByteArray()));
+    reader = new PackageReader(await gunzip(reader.readByteArray()));
   }
   const result: ZoneSystemData = {
     generatedZones: reader.readArray(version >= 40 ? reader.readVector2s : reader.readVector2i),
@@ -180,12 +179,12 @@ function readZoneSystem(reader: PackageReader, version: number): ZoneSystemData 
   return result;
 }
 
-function writeZoneSystem(writer: PackageWriter, version: number, zoneSystem: ZoneSystemData): void {
+async function writeZoneSystem(writer: PackageWriter, version: number, zoneSystem: ZoneSystemData): Promise<void> {
   if (version >= 40) {
     const zpkg = new PackageWriter();
     writeZoneSystemInternal(zpkg, version, zoneSystem);
     const bytes = zpkg.flush();
-    const compressed = gzipSync(bytes);
+    const compressed = await gzip(bytes);
     writer.writeByteArray(compressed);
   } else {
     writeZoneSystemInternal(writer, version, zoneSystem);
@@ -245,7 +244,7 @@ export async function* read(files: Map<string, File>): AsyncGenerator<number, Wo
   const zdo = version >= 40
     ? await readZDOChunks(files, version)
     : yield* readZDOData(reader, version);
-  const zoneSystem = version >= 12 ? readZoneSystem(reader, version) : undefined;
+  const zoneSystem = version >= 12 ? await readZoneSystem(reader, version) : undefined;
   const randEvent = version >= 15 ? readRandEvent(reader, version) : undefined;
   return {
     _name,
@@ -264,17 +263,17 @@ export async function* write({
   zdo,
   zoneSystem,
   randEvent,
-}: WorldData): AsyncGenerator<number, Map<string, Uint8Array>> {
+}: WorldData): AsyncGenerator<number, Map<string, Uint8Array<ArrayBuffer>>> {
   const writer = new PackageWriter();
   writer.writeInt(version);
-  const files = new Map<string, Uint8Array>();
+  const files = new Map<string, Uint8Array<ArrayBuffer>>();
   if (version >= 4) writer.writeDouble(netTime);
   if (version >= 40) {
     writeZDOChunks(files, version, zdo);
   } else {
     yield* writeZDOData(writer, version, zdo);
   }
-  if (version >= 12) writeZoneSystem(writer, version, zoneSystem!);
+  if (version >= 12) await writeZoneSystem(writer, version, zoneSystem!);
   if (version >= 15) writeRandEvent(writer, version, randEvent!);
   files.set(_name, writer.flush());
   return files;

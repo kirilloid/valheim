@@ -157,7 +157,7 @@ export function readZdo_post30(reader: PackageReader, version: number): ZDO {
     : new Map<number, string>();
   const byteArrays = (_flags & 128)
     ? readPropMap(reader, reader.readByteArray, version)
-    : new Map<number, Uint8Array>();
+    : new Map<number, Uint8Array<ArrayBuffer>>();
   const _bytes = reader.subarray(_offset, reader.getOffset());
 
   const result: ZDO = {
@@ -239,7 +239,7 @@ function readZdo_pre30(reader: PackageReader, version: number): ZDO {
   const ints = pkg.readIfSmallMap(pkg.readInt, pkg.readInt) ?? new Map<number, number>();
   const longs = pkg.readIfSmallMap(pkg.readInt, pkg.readLong) ?? new Map<number, bigint>();
   const strings = pkg.readIfSmallMap(pkg.readInt, pkg.readString) ?? new Map<number, string>();
-  const byteArrays = (version >= 27 && pkg.readIfSmallMap(pkg.readInt, pkg.readByteArray)) || new Map<number, Uint8Array>();
+  const byteArrays = (version >= 27 && pkg.readIfSmallMap(pkg.readInt, pkg.readByteArray)) || new Map<number, Uint8Array<ArrayBuffer>>();
 
   return {
     // id,

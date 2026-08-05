@@ -30,17 +30,17 @@ if (typeof DataView.prototype.setBigInt64 === 'undefined') {
   } as any;
 }
 
-export class PackageReader {
+export class PackageReader<A extends ArrayBufferLike = ArrayBuffer> {
   private offset: number;
-  private bytes: Uint8Array;
+  private bytes: Uint8Array<A>;
   private view: DataView;
-  constructor(bytes: Uint8Array) {
+  constructor(bytes: Uint8Array<A>) {
     this.bytes = bytes;
     this.offset = bytes.byteOffset;
     this.view = new DataView(bytes.buffer);
   }
 
-  public subarray(start: number, end?: number): Uint8Array {
+  public subarray(start: number, end?: number): Uint8Array<A> {
     return this.bytes.subarray(start, end);
   }
 
@@ -210,7 +210,7 @@ export class PackageReader {
     this.skipBytes(length);
   }
 
-  public readByteArray(): Uint8Array {
+  public readByteArray(): Uint8Array<A> {
     const length = this.readInt();
     if (length < 0) {
       throw new RangeError(`Negative byte array length at ${this.offset}`);
@@ -235,7 +235,7 @@ export class PackageReader {
     }
   }
 
-  public readArray<T>(reader: (this: PackageReader) => T): T[] {
+  public readArray<T>(reader: (this: PackageReader<A>) => T): T[] {
     const length = this.readInt();
     const result = [];
     for (let i = 0; i < length; i++) {
@@ -245,8 +245,8 @@ export class PackageReader {
   }
 
   public readMap<K, V>(
-    keyReader: (this: PackageReader) => K,
-    valueReader: (this: PackageReader) => V,
+    keyReader: (this: PackageReader<A>) => K,
+    valueReader: (this: PackageReader<A>) => V,
   ): Map<K, V> {
     const length = this.readInt();
     const result = new Map<K, V>();
@@ -259,8 +259,8 @@ export class PackageReader {
   }
 
   public skipMap(
-    keyReader: (this: PackageReader) => void,
-    valueReader: (this: PackageReader) => void,
+    keyReader: (this: PackageReader<A>) => void,
+    valueReader: (this: PackageReader<A>) => void,
   ): void {
     const length = this.readInt();
     for (let i = 0; i < length; i++) {
@@ -269,16 +269,16 @@ export class PackageReader {
     }
   }
 
-  public readIf<T>(reader: (this: PackageReader) => T): T | undefined {
+  public readIf<T>(reader: (this: PackageReader<A>) => T): T | undefined {
     const has = this.readBool();
     if (!has) return undefined;
     return reader.call(this);
   }
 
   public readShortMap<K, V>(
-    sizeReader: (this: PackageReader) => number,
-    keyReader: (this: PackageReader) => K,
-    valueReader: (this: PackageReader) => V,
+    sizeReader: (this: PackageReader<A>) => number,
+    keyReader: (this: PackageReader<A>) => K,
+    valueReader: (this: PackageReader<A>) => V,
   ): Map<K, V> {
     const result = new Map<K, V>();
     const length = sizeReader.call(this);
@@ -291,8 +291,8 @@ export class PackageReader {
   }
 
   public readIfSmallMap<K, V>(
-    keyReader: (this: PackageReader) => K,
-    valueReader: (this: PackageReader) => V,
+    keyReader: (this: PackageReader<A>) => K,
+    valueReader: (this: PackageReader<A>) => V,
   ): Map<K, V> | undefined {
     const length = this.readChar();
     if (length === 0) return;
@@ -550,7 +550,7 @@ export class PackageWriter {
     }
   }
 
-  public flush(): Uint8Array {
+  public flush(): Uint8Array<ArrayBuffer> {
     return this.bytes.slice(0, this.offset);
   }
 }

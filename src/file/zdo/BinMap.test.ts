@@ -1,13 +1,13 @@
 import { PackageReader, PackageWriter } from '../Package';
 import { IntBinMap } from './BinMap';
 
-function save(map: IntBinMap): Uint8Array {
+function save(map: IntBinMap): Uint8Array<ArrayBuffer> {
   const writer = new PackageWriter();
   map.save(writer);
   return writer.flush();
 }
 
-function fromPairs(pairs: [number, number][]): Uint8Array {
+function fromPairs(pairs: [number, number][]): Uint8Array<ArrayBuffer> {
   const size = pairs.length;
   const bytes = new Uint8Array(size * 8 + 1);
   const view = new DataView(bytes.buffer, 1);

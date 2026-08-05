@@ -85,7 +85,7 @@ export interface ZDOValues {
   readonly ints: Map<number, number>; // int -> int
   readonly longs: Map<number, bigint>; // int -> long
   readonly strings: Map<number, string>; // int -> string
-  readonly byteArrays: Map<number, Uint8Array>; // int -> byte[]
+  readonly byteArrays: Map<number, Uint8Array<ArrayBuffer>>; // int -> byte[]
 }
 
 export interface ZDO extends ZDOValues {

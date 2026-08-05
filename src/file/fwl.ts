@@ -53,7 +53,7 @@ function writeKeys(writer: PackageWriter, keys: Partial<GameSettings>) {
   writer.writeArray(writer.writeString, strKeys);
 }
 
-export function read(data: Uint8Array): Data {
+export function read(data: Uint8Array<ArrayBuffer>): Data {
   const zpkg = new PackageReader(data);
   const bytes = zpkg.readByteArray();
   const reader = new PackageReader(bytes);
@@ -78,7 +78,7 @@ export function read(data: Uint8Array): Data {
   };
 }
 
-export function write(data: Data): Uint8Array {
+export function write(data: Data): Uint8Array<ArrayBuffer> {
   const writer = new PackageWriter();
   writer.writeInt(data.version);
   writer.writeString(data.name);

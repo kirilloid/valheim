@@ -9,7 +9,7 @@ import { offsets } from './offset';
 const PREFAB_HASH = stableHashCode('prefab');
 
 class ZdoMmapView implements ZDO {
-  public _bytes: Uint8Array;
+  public _bytes: Uint8Array<ArrayBuffer>;
   private view: DataView;
   private offsetFloats = 0;
   private offsetVec3 = 0;

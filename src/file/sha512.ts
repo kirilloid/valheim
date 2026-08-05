@@ -1,4 +1,4 @@
-export async function sha512(bytes: Uint8Array): Promise<Uint8Array> {
+export async function sha512(bytes: Uint8Array<ArrayBuffer>): Promise<Uint8Array> {
   return Promise.resolve(new Uint8Array(sha512js.arrayBuffer(bytes)));
   try {
     return crypto.subtle.digest('SHA-512', bytes.buffer).then(buf => {

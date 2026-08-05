@@ -280,7 +280,7 @@ export function Light({ color, intensity, range }: PointLight) {
   }} />
 }
 
-export function downloadFile(array: ArrayBufferView, name: string) {
+export function downloadFile(array: Uint8Array<ArrayBuffer>, name: string) {
   // Create a link and set the URL using `createObjectURL`
   const link = document.createElement('a');
   link.style.display = 'none';

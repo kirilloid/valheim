@@ -74,13 +74,14 @@ export function Worlds({ value: worlds, onChange } : ValueProps<Player['worlds']
       setMapData(undefined);
       return;
     }
-    const mapDataUnpacked = read(mapDataPacked);
-    mapDataCache.set(hash, mapDataUnpacked);
-    setMapData(mapDataUnpacked);
+    read(mapDataPacked).then(mapDataUnpacked => {
+      mapDataCache.set(hash, mapDataUnpacked);
+      setMapData(mapDataUnpacked);
+    });
   }, [worlds, hash]);
 
-  const updateMapData = useCallback((md: TMapData) => {
-    const mapData = write(md);
+  const updateMapData = useCallback(async (md: TMapData) => {
+    const mapData = await write(md);
     const world = worlds.get(hash);
     if (world != null) {
       worlds.set(hash, { ...world, mapData });

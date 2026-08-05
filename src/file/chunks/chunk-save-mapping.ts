@@ -34,7 +34,7 @@ export function getChunkFilename(chunkInfo: ChunkInfo): string {
   return `${hi}_${lo}__${size}_${version}.chunk`;
 }
 
-export function read(bytes: Uint8Array): [ChunkMapping, number] {
+export function read(bytes: Uint8Array<ArrayBuffer>): [ChunkMapping, number] {
   const pkg = new PackageReader(bytes);
   pkg.readUShort(); // sub-version?
   const totalZDOs = pkg.readInt();
@@ -58,7 +58,7 @@ export function read(bytes: Uint8Array): [ChunkMapping, number] {
   return [chunks, totalZDOs];
 }
 
-export function write(chunks: ChunkMapping): Uint8Array {
+export function write(chunks: ChunkMapping): Uint8Array<ArrayBuffer> {
   const pkg = new PackageWriter();
   let totalZDOs = 0;
   for (const { numZDOs } of chunks.values()) {

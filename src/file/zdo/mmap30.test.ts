@@ -23,7 +23,7 @@ function getDefaultZDO(version: number): ZDO {
     ints: new Map<number, number>(),
     longs: new Map<number, bigint>(),
     strings: new Map<number, string>(),
-    byteArrays: new Map<number, Uint8Array>(),
+    byteArrays: new Map<number, Uint8Array<ArrayBuffer>>(),
     _offset: 0,
     save: writeZdo_post30,
   }
@@ -43,12 +43,12 @@ const extractFields = ({
   byteArrays: new Map([...byteArrays.entries()]),
 });
 
-function load(bytes: Uint8Array, version: number): ZDO {
+function load(bytes: Uint8Array<ArrayBuffer>, version: number): ZDO {
   const reader = new PackageReader(bytes);
   return readZdo(reader, version);  
 }
 
-function save(zdo: ZDO): Uint8Array {
+function save(zdo: ZDO): Uint8Array<ArrayBuffer> {
   const writer = new PackageWriter(1024);
   zdo.save(writer);
   return writer.flush();

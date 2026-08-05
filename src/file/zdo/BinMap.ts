@@ -15,7 +15,7 @@ abstract class FixedBinMap<V> implements Map<number, V> {
   protected abstract baseByteSize: number;
 
   constructor(
-    bytes: Uint8Array,
+    bytes: Uint8Array<ArrayBuffer>,
     private readSize: (this: PackageReader) => number,
     private writeSize: (this: PackageWriter, value: number) => void,
   ) {

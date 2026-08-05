@@ -2,7 +2,7 @@ import type { MessageFromWorker, MessageToWorker } from './types';
 
 import { assertNever, wait } from '../../utils';
 import { WorldGenerator } from '../../world-generator';
-import { ZoneSystem, RegisteredLocation } from '../../zone-system';
+import { ZoneSystem, type RegisteredLocation } from '../../zone-system';
 
 /* eslint-disable no-restricted-globals */
 const ctx: Worker = self as any;

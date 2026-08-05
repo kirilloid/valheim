@@ -8,7 +8,7 @@ import adaptSingleToMulti from './parts/file/transformer';
 import { WorldMetaInfo as SingleWorldMetaInfo } from './world/WorldMeta';
 
 /* eslint-disable-next-line require-yield */
-async function* genRead(data: Uint8Array) {
+async function* genRead(data: Uint8Array<ArrayBuffer>) {
   return read(data);
 }
 

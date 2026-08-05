@@ -14,7 +14,7 @@ type World = {
   logoutPoint?: Vector3;
   deathPoint?: Vector3;
   homePoint: Vector3;
-  mapData?: Uint8Array;
+  mapData?: Uint8Array<ArrayBuffer>;
 };
 
 export type SkillDatum = { level: number, accumulator: number };
@@ -114,7 +114,7 @@ function writeCustomPoint(pkg: PackageWriter, point?: Vector3): void {
   pkg.writeVector3(point ?? { x: 0, y: 0, z: 0 });
 }
 
-function* readPlayer(bytes: Uint8Array): Generator<number, Player> {
+function* readPlayer(bytes: Uint8Array<ArrayBuffer>): Generator<number, Player> {
   const reader = new PackageReader(bytes);
   const version = reader.readInt();
   checkVersion('player', version, PLAYER);
@@ -300,7 +300,7 @@ function readFoods(pkg: PackageReader, version: number): FoodData[] {
   return result;
 }
 
-function readPlayerData(data: Uint8Array): PlayerData {
+function readPlayerData(data: Uint8Array<ArrayBuffer>): PlayerData {
   const pkg = new PackageReader(data);
   const version = pkg.readInt();
   checkVersion('player data', version, PLAYER_DATA);
@@ -377,7 +377,7 @@ function readPlayerData(data: Uint8Array): PlayerData {
   };
 }
 
-function writePlayerData(data: PlayerData): Uint8Array {
+function writePlayerData(data: PlayerData): Uint8Array<ArrayBuffer> {
   const writer = new PackageWriter();
   writer.writeInt(data.version);
   if (data.version >= 7) writer.writeFloat(data.maxHealth);
@@ -429,7 +429,7 @@ function writePlayerData(data: PlayerData): Uint8Array {
   return writer.flush();
 }
 
-export async function* read(bytes: Uint8Array): AsyncGenerator<number, Player> {
+export async function* read(bytes: Uint8Array<ArrayBuffer>): AsyncGenerator<number, Player> {
   const reader = new PackageReader(bytes);
   const data = reader.readByteArray();
   const hash = reader.readByteArray();
@@ -447,7 +447,7 @@ export async function* read(bytes: Uint8Array): AsyncGenerator<number, Player> {
 export async function* write(
   player: Player,
   sizeHint: number = 10e6, // 10 megabytes
-): AsyncGenerator<number, Uint8Array> {
+): AsyncGenerator<number, Uint8Array<ArrayBuffer>> {
   const writer = new PackageWriter(sizeHint);
   yield* writePlayer(player, writer);
   const data = writer.flush();

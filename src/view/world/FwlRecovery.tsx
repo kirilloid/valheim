@@ -235,11 +235,11 @@ function PrePlayerStep({ state, setState }: StepProps<'pre-player'>) {
         defaultFileName="player.fch"
         extension="fch"
         reader={readPlayerM}
-        onLoad={value => {
+        onLoad={async (value) => {
           const worlds = [];
           for (const [id, { mapData }] of value.worlds.entries()) {
             if (mapData == null) continue;
-            const data = readMapData(mapData);
+            const data = await readMapData(mapData);
             const bitmap = new BitMap(data.tileSize, data.tileSize, data.explored);
             const matchScore = getMatchScore(state.explored, bitmap);
             if (matchScore > 0) {

@@ -7,7 +7,7 @@ import { readWriteFirstFile } from '../../file/files-wrapper';
 import adaptSingleToMulti from '../parts/file/transformer';
 import { ChunkInfoView as SingleChunkInfoView } from './ChunkInfo';
 
-async function* genRead(bytes: Uint8Array) {
+async function* genRead(bytes: Uint8Array<ArrayBuffer>) {
   return readChunkData(bytes);
 }
 
