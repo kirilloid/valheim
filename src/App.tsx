@@ -1,9 +1,11 @@
 import React, { useLayoutEffect } from 'react';
 import {
-  BrowserRouter as Router,
+  BrowserRouter as RouterBase,
   Switch,
   Route,
 } from 'react-router-dom';
+
+const Router = RouterBase as React.ComponentType<React.PropsWithChildren>;
 
 import './css/App.css';
 

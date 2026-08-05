@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import type { MultiEditorProps } from '../parts/types';
-import type { WorldData } from './types';
+import type { WorldData, ZDOData, ZoneSystemData } from './types';
 
 import { getStatsForDungeons } from '../../model/zdo-selectors';
 import { iterateZdos } from '../../file/types';
@@ -34,8 +34,8 @@ async function getName(files: Map<string, File>): Promise<string> {
 
 export function WorldInfo({ value, onChange, files, disabled }: MultiEditorProps<WorldData>) {
   const { version, netTime, randEvent, zdo, zoneSystem } = value;
-  const onZdoChange = useCallback(zdo => onChange({ ...value, zdo }), [value, onChange]);
-  const onZoneSystemChange = useCallback(zoneSystem => onChange({ ...value, zoneSystem }), [value, onChange]);
+  const onZdoChange = useCallback((zdo: ZDOData) => onChange({ ...value, zdo }), [value, onChange]);
+  const onZoneSystemChange = useCallback((zoneSystem: ZoneSystemData) => onChange({ ...value, zoneSystem }), [value, onChange]);
   const [name, setName] = useState('');
 
   useEffect(() => { getName(files).then(setName); }, [files]);

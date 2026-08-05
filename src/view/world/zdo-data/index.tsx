@@ -62,7 +62,11 @@ const searchSliceCached = defaultMemoize((indices: SearchIndex[], zdoData: ZDODa
 
 const getWidth = () => document.querySelector<HTMLDivElement>('div.App')?.offsetWidth ?? Math.min(window.innerWidth, 960);
 
-export const ZdoData = React.memo(function ZdoData(props: ValueProps<ZDODataLike> & { time: number; allowDelete?: boolean }) {
+function typedMemo<T>(component: T): T {
+  return React.memo(component as any) as any;
+}
+
+export const ZdoData = typedMemo(function ZdoData<T extends ZDODataLike>(props: ValueProps<T> & { time: number; allowDelete?: boolean }) {
   const translate = useContext(TranslationContext);
 
   const [entry, setEntry] = useState<SearchEntry | undefined>();
