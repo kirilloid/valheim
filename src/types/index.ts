@@ -178,9 +178,12 @@ export const damageModifiersValues: Record<DamageModifier, number> = {
   slightlyWeak: 1.25,
 };
 
+type EffectGroup = 'power' | 'potion' | 'trinket' | 'armor' | 'status' | 'mobs';
+
 export type Effect = {
   type: 'effect';
   id: EntityId;
+  group?: EffectGroup;
   disabled?: boolean;
   iconId?: string;
   tier: number;

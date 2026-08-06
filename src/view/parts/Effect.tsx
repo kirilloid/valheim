@@ -7,10 +7,14 @@ import { assertNever, timeI2S } from '../../model/utils';
 import { getTotalDamage } from '../../model/combat';
 
 import { TranslationContext } from '../../effects';
-import { InlineObjectWithIcon, rangeBy, Resistances, showNumber, showPercent } from '../helpers';
+import { InlineObjectWithIcon, List, rangeBy, Resistances, showNumber, showPercent } from '../helpers';
 import { SkillIcon } from './Icon';
 import { creatures } from '../../data/creatures';
 import { spawnChance } from '../../model/game';
+import { objects } from '../../data/objects';
+import { effects } from '../../data/effects';
+
+const findables = objects.filter(o => o.Beacon != null);
 
 function showDiffPercent(value: number): string {
   const plusSign = value < 0 ? '' : '+';
@@ -28,7 +32,11 @@ function Special({ type }: { type: TEffect['special'] }) {
     case 'TameBoost':
       return <><dt>Special</dt><dd>Doubles the speed of taming</dd></>;
     case 'Wishbone':
-      return <><dt>Special</dt><dd>Helps finding hidden treasures</dd></>;
+      return <>
+        <dt>Special</dt>
+        <dd>Helps finding hidden treasures</dd>
+        <ul>{findables.map(obj => <li key={obj.id}><InlineObjectWithIcon id={obj.id} /></li>)}</ul>
+      </>;
     default:
       return assertNever(type);
   }
@@ -109,8 +117,7 @@ export function Effect({ effect, level }: { effect: TEffect; level?: number }) {
     // comfort?: { value: number; };
     cooldown,
     absorbDamage,
-    healthOverTime,
-    // healthOverTime?: [change: number, interval: number],
+    healthOverTime, // [change: number, interval: number],
     healthUpfront,
     damageModifiers,
     damageValueModifiers,
@@ -284,5 +291,80 @@ export function Effect({ effect, level }: { effect: TEffect; level?: number }) {
         <dd>{rangeBy(Aoe.chainTargets, String)}</dd>
       </>}
     </React.Fragment>}
+  </>
+}
+
+type EffectField = keyof Omit<TEffect, 'type' | 'id' | 'disabled' | 'iconId' | 'tier' | 'time' | 'comfort' | 'cooldown' | 'special' | 'pheromones' | 'Aoe' | 'absorbDamage' | 'fallDamage'>;
+type EffectGroup = 'health' | 'combat' | 'skills' | 'weight' | 'move' | 'stamina' | 'eitr' | 'resistance';
+
+const similarEffectGroups = new Map<EffectField, EffectGroup[]>([
+  ['healthOverTime', ['health']],
+  ['healthUpfront', ['health']],
+  ['damageModifiers', ['resistance']],
+  ['damageValueModifiers', ['resistance']],
+  ['attackModifier', ['skills']],
+  ['skillModifiers', ['skills']],
+  ['carryWeight', ['weight']],
+  ['runStamina', ['move', 'stamina']],
+  ['jumpStamina', ['move', 'stamina']],
+  ['jumpModifier', ['move']],
+  ['attackStamina', ['combat', 'stamina']],
+  ['blockStamina', ['combat', 'stamina']],
+  ['blockStaminaFlat', ['combat', 'stamina']],
+  ['dodgeStamina', ['combat', 'stamina']],
+  ['swimStamina', ['move', 'stamina']],
+  ['sneakStamina', ['move', 'stamina']],
+  ['healthRegen', ['health']],
+  ['staminaRegen', ['stamina']],
+  ['staminaUpfront', ['stamina']],
+  ['eitrRegen', ['eitr']],
+  ['eitrUpfront', ['eitr']],
+  ['xpModifier', ['skills']],
+  ['stagger', ['combat']],
+  ['moveSpeed', ['move']],
+  ['swimSpeed', ['move']],
+  ['armor', ['combat']],
+  ['parryBonus', ['combat']],
+]);
+
+function getEffectGroups(eff: TEffect): Set<EffectGroup> {
+  const groups = new Set<EffectGroup>();
+  for (const [field, group] of similarEffectGroups.entries()) {
+    if (eff[field] != null) {
+      group.forEach(g => groups.add(g));
+    }
+  }
+  return groups;
+}
+
+function getSimilarEffets(eff: TEffect): Record<string, TEffect[]> {
+  const results: Partial<Record<EffectGroup, TEffect[]>> = {};
+  const groups = getEffectGroups(eff);
+  for (const e of effects) {
+    if (e.id === eff.id) continue;
+    const matchingGroup = [...getEffectGroups(e)].find(g => groups.has(g));
+    if (matchingGroup != null) {
+      (results[matchingGroup] ??= []).push(e);
+    }
+  }
+  return results;
+}
+
+export function SimilarEffects({ effect }: { effect: TEffect }) {
+  const similarEffects = getSimilarEffets(effect);
+  const translate = useContext(TranslationContext);
+  const similarGroups = Object.entries(similarEffects);
+  return similarGroups.length > 0 && <>
+    <h2>Similar effects</h2>
+    <dl>
+      {similarGroups.map(([group, effects]) => <React.Fragment key={group}>
+        <dt>{group}</dt>
+        <dd>
+          <List separator=" | ">
+            {effects.map(({ id }) => <Link key={id} to={`/effect/${id}`}>{translate(`ui.effect.${id}`)}</Link>)}
+          </List>
+        </dd>
+      </React.Fragment>)}
+    </dl>
   </>
 }

@@ -1,4 +1,4 @@
-import type { Item, ItemSet } from '../types';
+import type { Armor, ItemSet } from '../types';
 import { effects } from './effects';
 
 const effectsById = Object.fromEntries(effects.map(e => [e.id, e]));
@@ -77,7 +77,7 @@ const asksvinSet: ItemSet = {
 const hideHair = true;
 const hideBeard = true;
 
-export const items: Item[] = [
+export const items: Armor[] = [
 // PRE-CRAFT AGE
   {
     id: 'ArmorRagsLegs',
@@ -142,7 +142,7 @@ export const items: Item[] = [
     moveSpeed: 0,
   },
   // decorative dresses
-  ...[2, 4, 5, 2, 4, 5, 2, 4, 5, 1].map<Item>((tier, i) => (
+  ...[2, 4, 5, 2, 4, 5, 2, 4, 5, 1].map<Armor>((tier, i) => (
     {
       id: `ArmorDress${i + 1}`,
       tier,
@@ -155,7 +155,7 @@ export const items: Item[] = [
       moveSpeed: 0,
     }
   )),
-  ...[2, 4, 5, 2, 4, 5, 2, 4, 5, 1].map<Item>((tier, i) => (
+  ...[2, 4, 5, 2, 4, 5, 2, 4, 5, 1].map<Armor>((tier, i) => (
     {
       id: `ArmorTunic${i + 1}`,
       tier,
@@ -168,7 +168,7 @@ export const items: Item[] = [
       moveSpeed: 0,
     }
   )),
-  ...[2, 4, 2, 4, 1, 4, 5, 5, 5, 1].map<Item>((tier, i) => (
+  ...[2, 4, 2, 4, 1, 4, 5, 5, 5, 1].map<Armor>((tier, i) => (
     {
       id: `HelmetHat${i + 1}`,
       tier,
@@ -1037,6 +1037,7 @@ export const items: Item[] = [
     weight: 2,
     maxLvl: 1,
     durability: [Infinity, 0],
+    effect: effectsById.SetEffect_BeltStrength,
     moveSpeed: 0,
   },
   {

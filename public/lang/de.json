@@ -1861,7 +1861,7 @@
     "ui.effect.SetEffect_FenringArmor": "Fenris Segen",
     "ui.effect.SetEffect_FishingHat": "Fischerhut",
     "ui.effect.SetEffect_HarvesterArmor": "Ernter",
-    "ui.effect.SetEffect_MageArmorArmor": "Mit Eitr durchdrungen",
+    "ui.effect.SetEffect_MageArmor": "Mit Eitr durchdrungen",
     "ui.effect.SetEffect_RootArmor": "Wurzelrüstung",
     "ui.effect.SetEffect_TrollArmor": "Hinterhältig",
     "ui.effect.SetEffect_WolfArmor": "Resistenza al gelo",

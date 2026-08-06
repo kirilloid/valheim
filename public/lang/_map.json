@@ -1634,7 +1634,7 @@
     "ui.effect.SetEffect_FenringArmor": "se_fenringseteffect_name",
     "ui.effect.SetEffect_FishingHat": "item_helmet_fishinghat",
     "ui.effect.SetEffect_HarvesterArmor": "se_harvesterseteffect_name",
-    "ui.effect.SetEffect_MageArmorArmor": "se_mageseteffect_name",
+    "ui.effect.SetEffect_MageArmor": "se_mageseteffect_name",
     "ui.effect.SetEffect_RootArmor": "se_rootseteffect_name",
     "ui.effect.SetEffect_TrollArmor": "se_trollseteffect_name",
     "ui.effect.SetEffect_WolfArmor": "se_frostres_name",

@@ -6,6 +6,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'BeltStrength',
+    group: 'armor',
     iconId: 'armor/BeltStrength',
     tier: 2,
     carryWeight: 150,
@@ -28,6 +29,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'Cold',
+    group: 'status',
     tier: 0,
     healthRegen: 0.5,
     staminaRegen: 0.75,
@@ -49,7 +51,6 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'Demister',
-    iconId: 'armor/BeltStrength',
     tier: 6,
     special: 'Demister',
   },
@@ -57,6 +58,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'Freezing',
+    group: 'status',
     tier: 4,
     healthOverTime: [-1, 1],
     healthRegen: 0,
@@ -76,6 +78,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'GP_Eikthyr',
+    group: 'power',
     iconId: 'resource/TrophyEikthyr',
     tier: 2,
     time: 300,
@@ -87,6 +90,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'GP_TheElder',
+    group: 'power',
     iconId: 'resource/TrophyTheElder',
     tier: 3,
     time: 300,
@@ -97,6 +101,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'GP_Bonemass',
+    group: 'power',
     iconId: 'resource/TrophyBonemass',
     tier: 4,
     time: 300,
@@ -112,6 +117,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'GP_Moder',
+    group: 'power',
     iconId: 'resource/TrophyDragonQueen',
     tier: 5,
     time: 300,
@@ -124,6 +130,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'GP_Yagluth',
+    group: 'power',
     iconId: 'resource/TrophyGoblinKing',
     tier: 5,
     time: 300,
@@ -134,6 +141,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'GP_Queen',
+    group: 'power',
     iconId: 'resource/TrophySeekerQueen',
     tier: 6,
     time: 300,
@@ -145,6 +153,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'GP_Fader',
+    group: 'power',
     iconId: 'resource/TrophyFader',
     tier: 7,
     time: 300,
@@ -154,11 +163,82 @@ export const effects: Effect[] = [
   },
   {
     type: 'effect',
+    id: 'TrinketBronzeHealth',
+    group: 'trinket',
+    iconId: 'armor/TrinketBronzeHealth',
+    tier: 2,
+    time: 60,
+    healthRegen: 1.25,
+  },
+  {
+    type: 'effect',
+    id: 'TrinketBronzeStamina',
+    group: 'trinket',
+    iconId: 'armor/TrinketBronzeStamina',
+    tier: 2,
+    time: 60,
+    staminaRegen: 1.25,
+  },
+  {
+    type: 'effect',
+    id: 'TrinketIronHealth',
+    group: 'trinket',
+    iconId: 'armor/TrinketIronHealth',
+    tier: 3,
+    time: 30,
+    healthUpfront: 50,
+    armor: 20,
+  },
+  {
+    type: 'effect',
+    id: 'TrinketIronStamina',
+    group: 'trinket',
+    iconId: 'armor/TrinketIronStamina',
+    tier: 3,
+    time: 30,
+    staminaUpfront: 50,
+    moveSpeed: 0.15,
+  },
+  {
+    type: 'effect',
+    id: 'TrinketScaleStaminaDamage',
+    group: 'trinket',
+    iconId: 'armor/TrinketScaleStaminaDamage',
+    tier: 6,
+    time: 60,
+    staminaUpfront: 50,
+    moveSpeed: 0.15,
+  },
+  {
+    type: 'effect',
+    id: 'TrinketSilverDamage',
+    group: 'trinket',
+    iconId: 'armor/TrinketSilverDamage',
+    tier: 6,
+    time: 30,
+    skillModifiers: { [SkillType.Bows]: 20, [SkillType.Spears]: 20 },
+    damageValueModifiers: { pierce: 0.1 },
+  },
+  {
+    type: 'effect',
+    id: 'TrinketSilverResist',
+    group: 'trinket',
+    iconId: 'armor/TrinketSilverResist',
+    tier: 4,
+    time: 50,
+    damageModifiers: {
+      blunt: 'slightlyResistant',
+      slash: 'slightlyResistant',
+      pierce: 'slightlyResistant',
+    },
+  },
+  {
+    type: 'effect',
     id: 'TrinketBlackDamageHealth',
+    group: 'trinket',
     iconId: 'armor/TrinketBlackDamageHealth',
     tier: 5,
     time: 60,
-    cooldown: 0,
     healthUpfront: 100,
     skillModifiers: { [SkillType.Clubs]: 20 },
     damageValueModifiers: { blunt: 0.1 },
@@ -166,58 +246,40 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'TrinketBlackStamina',
+    group: 'trinket',
     iconId: 'armor/TrinketBlackStamina',
     tier: 5,
     time: 120,
-    cooldown: 0,
     blockStamina: -0.5,
     parryBonus: 0.5,
     skillModifiers: { [SkillType.Dodge]: 20 },
   },
   {
     type: 'effect',
-    id: 'TrinketBronzeHealth',
-    iconId: 'armor/TrinketBronzeHealth',
-    tier: 2,
-    time: 60,
-    cooldown: 0,
-    healthRegen: 1.25,
-  },
-  {
-    type: 'effect',
-    id: 'TrinketBronzeStamina',
-    iconId: 'armor/TrinketBronzeStamina',
-    tier: 2,
-    time: 60,
-    cooldown: 0,
-    staminaRegen: 1.25,
-  },
-  {
-    type: 'effect',
     id: 'TrinketCarapaceEitr',
+    group: 'trinket',
     iconId: 'armor/TrinketCarapaceEitr',
     tier: 6,
     time: 60,
-    cooldown: 0,
     eitrRegen: 1.25,
   },
   {
     type: 'effect',
     id: 'TrinketChitinSwim',
+    group: 'trinket',
     iconId: 'armor/TrinketChitinSwim',
     tier: 6,
     time: 60,
-    cooldown: 0,
     swimStamina: -0.8,
     swimSpeed: 0.5,
   },
   {
     type: 'effect',
     id: 'TrinketFlametalEitr',
+    group: 'trinket',
     iconId: 'armor/TrinketFlametalEitr',
     tier: 7,
     time: 60,
-    cooldown: 0,
     eitrUpfront: 100,
     skillModifiers: { [SkillType.ElementalMagic]: 20, [SkillType.BloodMagic]: 20 },
     eitrRegen: 1.25,
@@ -225,65 +287,12 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'TrinketFlametalStaminaHealth',
+    group: 'trinket',
     iconId: 'armor/TrinketFlametalStaminaHealth',
     tier: 7,
     time: 60,
-    cooldown: 0,
     healthUpfront: 100,
     staminaUpfront: 100,
-  },
-  {
-    type: 'effect',
-    id: 'TrinketIronHealth',
-    iconId: 'armor/TrinketIronHealth',
-    tier: 3,
-    time: 30,
-    cooldown: 0,
-    healthUpfront: 50,
-    armor: 20,
-  },
-  {
-    type: 'effect',
-    id: 'TrinketIronStamina',
-    iconId: 'armor/TrinketIronStamina',
-    tier: 3,
-    time: 30,
-    cooldown: 0,
-    staminaUpfront: 50,
-    moveSpeed: 0.15,
-  },
-  {
-    type: 'effect',
-    id: 'TrinketScaleStaminaDamage',
-    iconId: 'armor/TrinketScaleStaminaDamage',
-    tier: 6,
-    time: 60,
-    cooldown: 0,
-    staminaUpfront: 50,
-    moveSpeed: 0.15,
-  },
-  {
-    type: 'effect',
-    id: 'TrinketSilverDamage',
-    iconId: 'armor/TrinketSilverDamage',
-    tier: 6,
-    time: 30,
-    cooldown: 0,
-    skillModifiers: { [SkillType.Bows]: 20, [SkillType.Spears]: 20 },
-    damageValueModifiers: { pierce: 0.1 },
-  },
-  {
-    type: 'effect',
-    id: 'TrinketSilverResist',
-    iconId: 'armor/TrinketSilverResist',
-    tier: 4,
-    time: 50,
-    cooldown: 0,
-    damageModifiers: {
-      blunt: 'slightlyResistant',
-      slash: 'slightlyResistant',
-      pierce: 'slightlyResistant',
-    },
   },
   // Harpooned,
   {
@@ -327,6 +336,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'Potion_BugRepellent',
+    group: 'potion',
     iconId: 'resource/MeadBugRepellent',
     tier: 3,
     time: 600,
@@ -338,6 +348,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'Potion_Bzerker',
+    group: 'potion',
     iconId: 'resource/MeadBzerker',
     tier: 3,
     time: 20,
@@ -350,6 +361,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'Potion_hasty',
+    group: 'potion',
     iconId: 'resource/MeadHasty',
     tier: 3,
     time: 600,
@@ -361,6 +373,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'Potion_LightFoot',
+    group: 'potion',
     iconId: 'resource/MeadLightfoot',
     tier: 3,
     time: 600,
@@ -370,6 +383,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'Potion_strength',
+    group: 'potion',
     iconId: 'resource/MeadStrength',
     tier: 3,
     time: 300,
@@ -379,6 +393,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'Potion_swimmer',
+    group: 'potion',
     iconId: 'resource/MeadSwimmer',
     tier: 3,
     time: 300,
@@ -387,6 +402,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'Potion_tamer',
+    group: 'potion',
     iconId: 'resource/MeadTamer',
     tier: 3,
     time: 600,
@@ -395,6 +411,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'Potion_TrollPheromones',
+    group: 'potion',
     iconId: 'resource/MeadTrollPheromones',
     tier: 3,
     time: 300,
@@ -409,6 +426,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'Rested',
+    group: 'status',
     tier: 1,
     time: 480, // +60 per comfort
     healthRegen: 1.5,
@@ -419,6 +437,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'Resting',
+    group: 'status',
     tier: 1,
     healthRegen: 3,
     staminaRegen: 4,
@@ -427,6 +446,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'SE_Dvergr_buff',
+    group: 'mobs',
     iconId: 'effect/Rested',
     tier: 6,
     time: 20,
@@ -435,6 +455,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'SE_Dvergr_heal',
+    group: 'mobs',
     iconId: 'effect/heal',
     disabled: true,
     tier: 6,
@@ -445,6 +466,7 @@ export const effects: Effect[] = [
     // radius = 4.32
     type: 'effect',
     id: 'SE_Greydwarf_shaman_heal',
+    group: 'mobs',
     iconId: 'effect/heal',
     disabled: true,
     tier: 2,
@@ -454,6 +476,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'SetEffect_FenringArmor',
+    group: 'armor',
     iconId: 'armor/HelmetFenring',
     tier: 4,
     damageModifiers: { fire: 'resistant' },
@@ -462,6 +485,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'SetEffect_AshlandsMediumArmor',
+    group: 'armor',
     iconId: 'armor/HelmetAshlandsMediumHood',
     tier: 7,
     runStamina: -0.1,
@@ -472,6 +496,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'SetEffect_BerserkerArmor',
+    group: 'armor',
     iconId: 'armor/HelmetBerserkerHood',
     tier: 2,
     healthRegen: 1.3,
@@ -486,6 +511,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'SetEffect_BerserkerUndeadArmor',
+    group: 'armor',
     iconId: 'armor/HelmetBerserkerUndead',
     tier: 5,
     healthRegen: 1.2,
@@ -500,6 +526,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'SetEffect_FishingHat',
+    group: 'armor',
     iconId: 'armor/HelmetFishingHat',
     tier: 6,
     skillModifiers: { [SkillType.Fishing]: 20, [SkillType.Swim]: 20 },
@@ -507,6 +534,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'SetEffect_MageArmor',
+    group: 'armor',
     iconId: 'armor/HelmetMage',
     disabled: true,
     tier: 6,
@@ -516,6 +544,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'SetEffect_RootArmor',
+    group: 'armor',
     iconId: 'armor/HelmetRoot',
     tier: 3,
     skillModifiers: { [SkillType.Bows]: 15 },
@@ -523,6 +552,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'SetEffect_TrollArmor',
+    group: 'armor',
     iconId: 'armor/HelmetTrollLeather',
     tier: 2,
     skillModifiers: { [SkillType.Sneak]: 15 },
@@ -530,6 +560,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'SetEffect_HarvesterArmor',
+    group: 'armor',
     iconId: 'armor/HelmetStrawHat',
     tier: 2,
     skillModifiers: { [SkillType.Farming]: 25 },
@@ -538,12 +569,14 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'Shelter',
+    group: 'status',
     tier: 1,
     comfort: { value: 2 }
   },
   {
     type: 'effect',
     id: 'Slimed',
+    group: 'mobs',
     tier: 6,
     time: 1,
     damageModifiers: { fire: 'veryWeak' },
@@ -552,12 +585,14 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'SlowFall',
+    group: 'mobs',
     tier: 6,
     fallDamage: 0,
   },
   {
     type: 'effect',
     id: 'Smoked',
+    group: 'status',
     tier: 1,
     healthOverTime: [-2, 1],
   },
@@ -573,6 +608,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'Tared',
+    group: 'mobs',
     tier: 5,
     time: 10,
     damageModifiers: {
@@ -583,12 +619,14 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'SoftDeath',
+    group: 'status',
     tier: 0,
     time: 600,
   },
   {
     type: 'effect',
     id: 'Warm',
+    group: 'status',
     tier: 0,
     staminaRegen: 2,
     eitrRegen: 2,
@@ -596,6 +634,7 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'Wet',
+    group: 'status',
     tier: 0,
     time: 120,
     healthRegen: 0.75,
@@ -610,17 +649,17 @@ export const effects: Effect[] = [
   {
     type: 'effect',
     id: 'WindRun',
+    group: 'armor',
     iconId: 'armor/CapeAsksvin',
     tier: 7,
-    time: 0,
     windMovementModifier: 5,
   },
   {
     type: 'effect',
     id: 'Wishbone',
-    iconId: 'weapon/Wishbone',
+    group: 'armor',
+    iconId: 'armor/Wishbone',
     tier: 2,
     special: 'Wishbone',
-    time: 0,
   },
 ];
