@@ -7,9 +7,10 @@ import type {
   EntityId,
   Fish,
 } from '../types';
+
 import { TOLERATE } from '../types';
 import { mods, dmg, dropEntry, dropTrophy } from '../model/game';
-import { spawner } from '../model/spawner';
+import { creaturesById } from './spawn-list';
 
 const defaultDmgModifiers: DamageModifiers = {
   blunt: 'normal',
@@ -74,11 +75,13 @@ const single = (attacks: AttackProfile[]): [AttackVariety] => {
 };
 
 export const maxLvl = (creature: Creature | Fish) => {
-  return creature.spawners.reduce((l, s) => Math.max(l, s.levels[1]), (creature as Creature).maxLvl ?? 1);
+  return creaturesById[creature.id]
+    ?.reduce((l, s) => Math.max(l, (s.levels ?? [1, 3])[1]), creature.maxLvl ?? 1) ?? 1;
 };
 
 export const minLvl = (creature: Creature | Fish) => {
-  return creature.spawners.reduce((l, s) => Math.min(l, s.levels[1]), (creature as Creature).minLvl ?? 1);
+  return creaturesById[creature.id]
+    ?.reduce((l, s) => Math.min(l, (s.levels ?? [1, 3])[1]), creature.minLvl ?? 1) ?? 1; 
 };
 
 function variations(main: Creature, ...others: (Partial<Omit<Creature, 'id'>> & { id: EntityId })[]): Creature[] {
@@ -98,7 +101,6 @@ export const player: Creature = {
   tier: 0,
   emoji: '🧑',
   faction: 'Players',
-  spawners: [],
   attacks: [],
   tolerate: TOLERATE.WATER,
   speed: {
@@ -128,18 +130,6 @@ export const creatures: Creature[] = [
     tier: 1,
     emoji: '🦌',
     faction: 'ForestMonsters',
-    spawners: [spawner({
-      tier: 0,
-      biomes: ['Meadows', 'BlackForest'],
-      maxSpawned: 4,
-      interval: 100,
-      chance: 0.5,
-      distance: 64,
-      envs: [],
-      groupSize: [1, 3],
-      groupRadius: 5,
-      forest: true,
-    })],
     attacks: [],
     tolerate: TOLERATE.WATER,
     speed: {
@@ -171,18 +161,6 @@ export const creatures: Creature[] = [
     tier: 1,
     emoji: '🦆',
     faction: 'ForestMonsters',
-    spawners: [spawner({
-      tier: 0,
-      biomes: ['Meadows', 'BlackForest', 'Plains', 'Ocean'],
-      maxSpawned: 5,
-      interval: 120,
-      chance: 0.5,
-      distance: 51,
-      groupSize: [1, 2],
-      groupRadius: 2,
-      altitude: [-4, 0.2],
-      levels: [1, 1],
-    })],
     attacks: [],
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     speed: {
@@ -210,15 +188,6 @@ export const creatures: Creature[] = [
     tier: 1,
     emoji: '🐀',
     faction: 'ForestMonsters',
-    spawners: [spawner({
-      tier: 0,
-      biomes: ['Meadows'],
-      maxSpawned: 2,
-      interval: 300,
-      chance: 0.5,
-      distance: 30,
-      levels: [1, 1],
-    })],
     // ['Meadows'],
     attacks: single([{ dmg: dmg({ slash: 5 }), stagger: 1.94, name: 'bite' }]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
@@ -252,30 +221,6 @@ export const creatures: Creature[] = [
     upgradeDistance: 800,
     emoji: '🦎',
     faction: 'ForestMonsters',
-    spawners: [spawner({
-      tier: 0,
-      biomes: ['Meadows'],
-      maxSpawned: 6,
-      interval: 100,
-      chance: 0.5,
-      distance: 5,
-      groupSize: [2, 4],
-      groupRadius: 5,
-      altitude: [-1.5, 0.5],
-      minDistance: 800,
-    }), spawner({
-      tier: 0,
-      biomes: ['Meadows'],
-      maxSpawned: 8,
-      interval: 30,
-      chance: 1,
-      distance: 32,
-      envs: ['Rain', 'ThunderStorm', 'LightRain'],
-      groupSize: [2, 4],
-      groupRadius: 5,
-      altitude: [0, 10],
-      minDistance: 800,
-    })],
     attacks: single([{ dmg: dmg({ slash: 6 }), stagger: 1.66, name: 'bite' }]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     speed: {
@@ -310,18 +255,6 @@ export const creatures: Creature[] = [
     emoji: '🐗',
     faction: 'ForestMonsters',
     factionGroup: 'boar',
-    spawners: [spawner({
-      tier: 0,
-      biomes: ['Meadows'],
-      biomeAreas: 7,
-      maxSpawned: 4,
-      interval: 150,
-      chance: 0.5,
-      distance: 64,
-      groupSize: [1, 3],
-      groupRadius: 5,
-      minDistance: 800,
-    })],
     attacks: single([{ dmg: dmg({ blunt: 10 }), stagger: 1.24, name: 'tusks' }]),
     tolerate: TOLERATE.WATER,
     speed: {
@@ -361,7 +294,6 @@ export const creatures: Creature[] = [
     emoji: '🐗',
     faction: 'ForestMonsters',
     factionGroup: 'boar',
-    spawners: [],
     attacks: [],
     tolerate: TOLERATE.WATER,
     speed: {
@@ -390,7 +322,6 @@ export const creatures: Creature[] = [
     tier: 1,
     emoji: '🦌',
     faction: 'Boss',
-    spawners: [],
     attacks: single([
       { dmg: dmg({ pierce: 20, chop: 1000, pickaxe: 1000 }), name: 'antlers', force: 100, toolTier: 0 },
       { dmg: dmg({ lightning: 15 }), name: 'charge', force: 200 },
@@ -426,7 +357,6 @@ export const creatures: Creature[] = [
     tier: 2,
     emoji: '🐦',
     faction: 'ForestMonsters',
-    spawners: [],
     attacks: [],
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     speed: {
@@ -454,26 +384,6 @@ export const creatures: Creature[] = [
     tier: 2,
     emoji: '💀',
     faction: 'Undead',
-    spawners: [spawner({
-      tier: 4,
-      biomes: ['Swamp'],
-      maxSpawned: 4,
-      interval: 400,
-      distance: 15,
-      chance: 0.25,
-      groupSize: [2, 4],
-      altitude: [-1, 10],
-    }), spawner({
-      tier: 4,
-      biomes: ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains'],
-      maxSpawned: 3,
-      interval: 300,
-      chance: 0.25,
-      killed: 'Bonemass',
-      groupSize: [1, 3],
-      night: true,
-      levels: [1, 1],
-    })],
     attacks: [
       { rate: 4, variety: 'sword', attacks: [{ dmg: dmg({ slash: 25 }), stagger: 2.48, name: 'sword' }] },
       { rate: 1, variety: 'bow', attacks: [{ dmg: dmg({ pierce: 20 }), stagger: 2.48, name: 'bow' }] },
@@ -510,7 +420,6 @@ export const creatures: Creature[] = [
     tier: 2,
     emoji: '☠️',
     faction: 'Undead',
-    spawners: [],
     attacks: single([
       { dmg: dmg({ fire: 75 }), name: 'skeleton_hildir_firenova', force: 40, toolTier: 0 }, // AoE
       { dmg: dmg({ slash: 60, fire: 20 }), name: 'skeleton_sword_hildir', force: 40, toolTier: 0 },
@@ -546,7 +455,6 @@ export const creatures: Creature[] = [
     tier: 3,
     emoji: '☠️',
     faction: 'Undead',
-    spawners: [],
     attacks: single([
       { dmg: dmg({ fire: 75 }), name: 'skeleton_hildir_firenova', force: 40, toolTier: 0 }, // AoE
       { dmg: dmg({ slash: 60, fire: 20 }), name: 'skeleton_sword_hildir', force: 40, toolTier: 0 },
@@ -580,7 +488,6 @@ export const creatures: Creature[] = [
     tier: 2,
     emoji: '☠️',
     faction: 'Undead',
-    spawners: [],
     attacks: single([{
       dmg: dmg({ blunt: 20, poison: 30 }),
       stagger: 3.96, 
@@ -616,7 +523,6 @@ export const creatures: Creature[] = [
     tier: 2,
     emoji: '👻',
     faction: 'Undead',
-    spawners: [],
     attacks: single([ { dmg: dmg({ slash: 25 }), stagger: 1.64, name: 'slash' } ]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     speed: {
@@ -656,46 +562,6 @@ export const creatures: Creature[] = [
     tier: 2,
     emoji: '',
     faction: 'ForestMonsters',
-    spawners: [spawner({
-      tier: 1,
-      biomes: ['BlackForest'],
-      maxSpawned: 3,
-      interval: 120,
-      chance: 0.3,
-      groupSize: [2, 3],
-      night: false,
-    }), spawner({
-      tier: 2,
-      biomes: ['Meadows'],
-      maxSpawned: 1,
-      interval: 120,
-      chance: 0.3,
-      killed: 'Eikthyr',
-      groupSize: [2, 3],
-      night: true,
-      forest: true,
-      levels: [1, 1],
-    }), spawner({
-      tier: 2,
-      biomes: ['BlackForest'],
-      biomeAreas: 7,
-      maxSpawned: 6,
-      interval: 60,
-      chance: 1,
-      groupSize: [3, 4],
-      groupRadius: 10,
-      night: true,
-    }), spawner({
-      tier: 2,
-      biomes: ['Meadows'],
-      maxSpawned: 2,
-      interval: 200,
-      chance: 0.5,
-      distance: 20,
-      killed: 'Eikthyr',
-      night: true,
-      levels: [1, 1],
-    })],
     attacks: single([
       { dmg: dmg({ slash: 14 }), stagger: 1.94, name: 'hit' },
       { dmg: dmg({ blunt: 10 }), stagger: 1.94, name: 'stone' },
@@ -734,16 +600,6 @@ export const creatures: Creature[] = [
     tier: 2,
     emoji: '',
     faction: 'ForestMonsters',
-    spawners: [spawner({
-      tier: 2,
-      biomes: ['BlackForest'],
-      maxSpawned: 2,
-      interval: 60,
-      chance: 0.506,
-      groupRadius: 10,
-      night: true,
-      levels: [1, 3],
-    })],
     attacks: single([
       { dmg: dmg({ poison: 30 }), name: 'poison breath' },
       { dmg: dmg({ slash: 14 }), stagger: 1.12, name: 'slash' },
@@ -785,26 +641,6 @@ export const creatures: Creature[] = [
     upgradeDistance: 2000,
     emoji: '',
     faction: 'ForestMonsters',
-    spawners: [spawner({
-      tier: 2,
-      biomes: ['BlackForest'],
-      maxSpawned: 1,
-      interval: 120,
-      chance: 0.506,
-      groupRadius: 10,
-      night: true,
-      minDistance: 2000,
-    }), spawner({
-      tier: 3,
-      biomes: ['Meadows'],
-      maxSpawned: 1,
-      interval: 120,
-      chance: 0.506,
-      killed: 'gd_king',
-      groupRadius: 1,
-      night: true,
-      levels: [1, 1],
-    })],
     attacks: single([
       { dmg: dmg({ slash: 30 }), stagger: 1.34, name: 'bite' },
     ]),
@@ -845,23 +681,6 @@ export const creatures: Creature[] = [
     emoji: '🐻',
     faction: 'ForestMonsters',
     factionGroup: 'bjorn',
-    spawners: [spawner({
-      tier: 2,
-      biomes: ['BlackForest'],
-      maxSpawned: 1,
-      interval: 700,
-      chance: 0.3,
-      night: false,
-      levels: [1, 2],
-    }), spawner({
-      tier: 2,
-      biomes: ['BlackForest'],
-      maxSpawned: 1,
-      interval: 700,
-      chance: 0.4,
-      night: true,
-      levels: [1, 3],
-    })],
     attacks: single([
       { dmg: dmg({ pierce: 55 }), force: 40, name: 'bite' },
       { dmg: dmg({ slash: 50, chop: 40 }), force: 40, name: 'claws' },
@@ -915,14 +734,6 @@ export const creatures: Creature[] = [
     upgradeDistance: 2000,
     emoji: '',
     faction: 'ForestMonsters',
-    spawners: [spawner({
-      tier: 2,
-      biomes: ['BlackForest'],
-      maxSpawned: 1,
-      interval: 4000,
-      chance: 0.05,
-      minDistance: 2000,
-    })],
     attacks: [
       {
         rate: 2,
@@ -990,7 +801,6 @@ export const creatures: Creature[] = [
     tier: 2,
     emoji: '🥦',
     faction: 'Boss',
-    spawners: [],
     attacks: single([
       // SCREAM
       { spawn: ['TentaRoot'], number: [15, 15], max: 30 },
@@ -1029,7 +839,6 @@ export const creatures: Creature[] = [
     tier: 2,
     emoji: '🥦',
     faction: 'Boss',
-    spawners: [],
     attacks: single([
       { dmg: dmg({ blunt: 55, chop: 20, pickaxe: 20 }), name: 'poke', force: 40, toolTier: 0 }
     ]),
@@ -1073,18 +882,6 @@ export const creatures: Creature[] = [
     tier: 3,
     emoji: '🦠',
     faction: 'Undead',
-    spawners: [spawner({
-      tier: 3,
-      biomes: ['Swamp'],
-      maxSpawned: 2,
-      interval: 500,
-      chance: 0.2,
-      distance: 20,
-      groupSize: [1, 2],
-      groupRadius: 1,
-      altitude: [-1, 1000],
-      levels: [1, 1],
-    })],
     attacks: single([{ dmg: dmg({ poison: 90 }), name: 'poison', unblockable, collider: areaCollider(4) }]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     speed: {
@@ -1114,18 +911,6 @@ export const creatures: Creature[] = [
     tier: 3,
     emoji: '🦠',
     faction: 'Undead',
-    spawners: [spawner({
-      tier: 3,
-      biomes: ['Swamp'],
-      maxSpawned: 1,
-      interval: 120,
-      chance: 0.2,
-      distance: 20,
-      groupRadius: 1,
-      night: true,
-      altitude: [-1, 1000],
-      levels: [1, 1],
-    })],
     attacks: single([{ dmg: dmg({ poison: 115 }), name: 'poison', unblockable, collider: areaCollider(8) }]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     speed: {
@@ -1156,16 +941,6 @@ export const creatures: Creature[] = [
     tier: 3,
     emoji: '🧛',
     faction: 'Undead',
-    spawners: [spawner({
-      tier: 3,
-      biomes: ['Swamp'],
-      maxSpawned: 10,
-      interval: 200,
-      chance: 0.5,
-      distance: 5,
-      groupRadius: 2,
-      altitude: [-3, -0.1],
-    })],
     attacks: single([{ dmg: dmg({
       pierce: 20,
       poison: 70,
@@ -1204,7 +979,6 @@ export const creatures: Creature[] = [
     tier: 3,
     emoji: '🧨',
     faction: 'Demon',
-    spawners: [],
     attacks: single([{
       dmg: dmg({ blunt: 10, fire: 40 }),
       name: 'fireball', stagger: 1.14, force: 30,
@@ -1247,19 +1021,6 @@ export const creatures: Creature[] = [
     tier: 3,
     emoji: '👻',
     faction: 'Undead',
-    spawners: [spawner({
-      tier: 3,
-      biomes: ['Swamp'],
-      maxSpawned: 2,
-      interval: 200,
-      chance: 0.3,
-      distance: 20,
-      groupRadius: 1,
-      night: true,
-      altitude: [-2, 1000],
-      offset: 50,
-      levels: [1, 1],
-    })],
     attacks: single([{ dmg: dmg({ slash: 60, }), name: 'slash', stagger: 2.04, force: 60 }]),
     tolerate: TOLERATE.WATER,
     speed: {
@@ -1294,13 +1055,7 @@ export const creatures: Creature[] = [
       dropTrophy('TrophyWraith', 0.05),
     ],
   },
-  ...(function(x: Creature) { return [x, {
-    ...x,
-    id: 'Draugr_Ranged',
-    iconId: 'creature/Draugr',
-    ragdollId: 'Draugr_ranged_ragdoll',
-    attacks: [x.attacks[1]!],
-  }] }({
+  ...variations({
     type: 'creature',
     id: 'Draugr',
     ragdollId: 'Draugr_ragdoll',
@@ -1308,26 +1063,6 @@ export const creatures: Creature[] = [
     tier: 3,
     emoji: '🧟',
     faction: 'Undead',
-    spawners: [spawner({
-      tier: 3,
-      biomes: ['Swamp'],
-      maxSpawned: 4,
-      interval: 120,
-      chance: 0.5,
-      groupSize: [1, 2],
-      altitude: [-1.5, 10],
-    }), spawner({
-      tier: 3,
-      biomes: ['Meadows', 'BlackForest', 'Mountain', 'Plains'],
-      maxSpawned: 3,
-      interval: 300,
-      chance: 0.05,
-      killed: 'gd_king',
-      envs: ['Misty'],
-      groupSize: [1, 3],
-      night: true,
-      levels: [1, 1],
-    })],
     attacks: [
       { variety: 'axe',
         rate: 3,
@@ -1363,7 +1098,14 @@ export const creatures: Creature[] = [
       dropEntry('Entrails'),
       dropTrophy('TrophyDraugr', 0.1),
     ],
-  })),
+  }, {
+    id: 'Draugr_Ranged',
+    iconId: 'creature/Draugr',
+    ragdollId: 'Draugr_ranged_ragdoll',
+    attacks: single([
+      { dmg: dmg({ pierce: 48 }), name: 'bow', stagger: 2.8, force: 18 },
+    ]),
+  }),
   {
     type: 'creature',
     id: 'Draugr_Elite',
@@ -1372,18 +1114,6 @@ export const creatures: Creature[] = [
     tier: 3,
     emoji: '🧟',
     faction: 'Undead',
-    spawners: [spawner({
-      tier: 3,
-      biomes: ['Swamp'],
-      biomeAreas: 2,
-      maxSpawned: 1,
-      interval: 300,
-      chance: 0.05,
-      distance: 15,
-      night: true,
-      altitude: [-1.5, 10],
-      levels: [1, 1],
-    })],
     attacks: single([ { dmg: dmg({ slash: 58, }), name: 'sword', stagger: 2.8, force: 60 } ]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     speed: {
@@ -1419,17 +1149,6 @@ export const creatures: Creature[] = [
     tier: 3,
     emoji: '🥦',
     faction: 'Undead',
-    spawners: [spawner({
-      tier: 3,
-      biomes: ['Swamp'],
-      biomeAreas: 2,
-      maxSpawned: 1,
-      interval: 4000,
-      chance: 0.35,
-      distance: 30,
-      altitude: [-2, 5],
-      levels: [1, 1],
-    })],
     attacks: single([
       { dmg: dmg({ blunt: 60, chop: 100, pickaxe: 60 }), name: 'swing', stagger: 2, force: 130, toolTier: 2, collider: areaCollider(4.3) },
       { dmg: dmg({ blunt: 80, chop: 100, pickaxe: 60 }), name: 'slam', stagger: 2, force: 130, toolTier: 2, collider: areaCollider(5.4) },
@@ -1478,7 +1197,6 @@ export const creatures: Creature[] = [
     emoji: '🧹',
     faction: 'Dverger',
     aggravatable,
-    spawners: [],
     attacks: single([
       { dmg: dmg({ blunt: 80 }), name: 'attack', force: 30, toolTier: 0 },
     ]),
@@ -1524,7 +1242,6 @@ export const creatures: Creature[] = [
     tier: 3,
     emoji: '🦠',
     faction: 'Boss',
-    spawners: [],
     attacks: single([
       { dmg: dmg({ poison: 130 }), name: 'poison', force: 0, unblockable, undodgeable },
       { dmg: dmg({
@@ -1572,7 +1289,6 @@ export const creatures: Creature[] = [
     tier: 4,
     emoji: '🦠',
     faction: 'PlayerSpawned',
-    spawners: [],
     attacks: single([{ dmg: dmg({ frost: 100 }), name: 'nova', unblockable, collider: areaCollider(4) }]),
     tolerate: TOLERATE.WATER | TOLERATE.SMOKE,
     speed: {
@@ -1601,7 +1317,6 @@ export const creatures: Creature[] = [
     tier: 4,
     emoji: '',
     faction: 'MountainMonsters',
-    spawners: [],
     attacks: single([
       { dmg: dmg({ slash: 20 }), name: 'bite', stagger: 1.68, force: 30 },
     ]),
@@ -1635,7 +1350,6 @@ export const creatures: Creature[] = [
     tier: 4,
     emoji: '🐺',
     faction: 'MountainMonsters',
-    spawners: [],
     attacks: single([
       { dmg: dmg({ slash: 80 }), name: 'bite', stagger: 1.4, force: 30 },
       { dmg: dmg({ slash: 70 }), name: 'slash', stagger: 1.4, force: 130 },
@@ -1672,32 +1386,6 @@ export const creatures: Creature[] = [
     emoji: '🐺',
     faction: 'MountainMonsters',
     factionGroup: 'wolf',
-    spawners: [spawner({
-      tier: 4,
-      biomes: ['Mountain'],
-      biomeAreas: 6,
-      maxSpawned: 3,
-      interval: 400,
-      chance: 0.256,
-      distance: 30,
-      groupSize: [1, 2],
-      groupRadius: 5,
-      night: false,
-      tilt: [0, 45],
-      levels: [1, 1],
-    }), spawner({
-      tier: 4,
-      biomes: ['Mountain'],
-      biomeAreas: 6,
-      maxSpawned: 6,
-      interval: 120,
-      chance: 0.5,
-      distance: 30,
-      groupSize: [2, 4],
-      groupRadius: 5,
-      night: true,
-      tilt: [0, 45],
-    })],
     attacks: single([
       { dmg: dmg({ slash: 70 }), name: 'bite', stagger: 4.8, force: 30 }, // 3 different animations, same stats
     ]),
@@ -1740,7 +1428,6 @@ export const creatures: Creature[] = [
     emoji: '🐺',
     faction: 'MountainMonsters',
     factionGroup: 'wolf',
-    spawners: [],
     attacks: [],
     tolerate: TOLERATE.WATER,
     speed: {
@@ -1766,17 +1453,6 @@ export const creatures: Creature[] = [
     tier: 4,
     emoji: '🐺',
     faction: 'MountainMonsters',
-    spawners: [spawner({
-      tier: 4,
-      biomes: ['Mountain'],
-      biomeAreas: 2,
-      maxSpawned: 2,
-      interval: 400,
-      chance: 0.2,
-      groupRadius: 1,
-      night: true,
-      levels: [1, 1],
-    })],
     attacks: single([
       { dmg: dmg({ slash: 85 }), name: 'hit', stagger: 1.12, force: 60 },
       { dmg: dmg({ slash: 95 }), name: 'jump', stagger: 1.32, force: 100 },
@@ -1815,17 +1491,6 @@ export const creatures: Creature[] = [
     tier: 4,
     emoji: '🐺',
     faction: 'MountainMonsters',
-    spawners: [spawner({
-      tier: 4,
-      biomes: [],
-      biomeAreas: 2,
-      maxSpawned: 2,
-      interval: 400,
-      chance: 0.2,
-      groupRadius: 1,
-      night: true,
-      levels: [1, 1],
-    })],
     attacks: single([
       { dmg: dmg({ slash: 35, fire: 40 }), name: 'claw', stagger: 1.32, force: 60 },
       { dmg: dmg({ slash: 35, fire: 40 }), name: 'claw2', stagger: 1.12, force: 60 },
@@ -1868,7 +1533,6 @@ export const creatures: Creature[] = [
     tier: 4,
     emoji: '🐺',
     faction: 'MountainMonsters',
-    spawners: [],
     attacks: single([
       // Fenring_attack_iceclaw_double
       { dmg: dmg({ slash: 60, frost: 70 }), name: 'claw', stagger: 1.32, force: 60 },
@@ -1914,7 +1578,6 @@ export const creatures: Creature[] = [
     tier: 4,
     emoji: '🐺',
     faction: 'MountainMonsters',
-    spawners: [],
     attacks: single([
       // Fenring_attack_iceclaw_double
       { dmg: dmg({ slash: 60, frost: 70 }), name: 'claw', stagger: 1.32, force: 60 },
@@ -1958,18 +1621,6 @@ export const creatures: Creature[] = [
     tier: 4,
     emoji: '🗿',
     faction: 'ForestMonsters',
-    spawners: [spawner({
-      tier: 4,
-      biomes: ['Mountain'],
-      biomeAreas: 6,
-      maxSpawned: 1,
-      interval: 120,
-      chance: 0.256,
-      groupRadius: 4,
-      night: true,
-      altitude: [120, 1000],
-      levels: [1, 1],
-    })],
     attacks: [
       { rate: 1,
         variety: 'spike',
@@ -2046,20 +1697,6 @@ export const creatures: Creature[] = [
     tier: 4,
     emoji: '🐉',
     faction: 'MountainMonsters',
-    spawners: [spawner({
-      tier: 4,
-      biomes: ['Mountain'],
-      biomeAreas: 6,
-      maxSpawned: 2,
-      interval: 120,
-      chance: 0.256,
-      groupRadius: 4,
-      night: true,
-      altitude: [100, 1000],
-      tilt: [0, 66],
-      offset: 10,
-      levels: [1, 1],
-    })],
     attacks: single([{ dmg: dmg({ frost: 90 }), burst: 3, name: 'ice shards', force: 30, }]), // burst interval: 0.3
     tolerate: TOLERATE.WATER,
     speed: {
@@ -2093,7 +1730,6 @@ export const creatures: Creature[] = [
     tier: 4,
     emoji: '🐲',
     faction: 'Boss',
-    spawners: [],
     attacks: single([
       // taunt,
       { dmg: dmg({
@@ -2151,35 +1787,6 @@ export const creatures: Creature[] = [
     tier: 5,
     emoji: '',
     faction: 'PlainsMonsters',
-    spawners: [spawner({
-      tier: 5,
-      biomes: ['Plains'],
-      maxSpawned: 2,
-      interval: 1000,
-      chance: 0.33,
-      distance: 30,
-      groupSize: [1, 2],
-      night: false,
-    }), spawner({
-      tier: 5,
-      biomes: ['Plains'],
-      maxSpawned: 5,
-      interval: 60,
-      chance: 0.33,
-      distance: 30,
-      groupSize: [3, 5],
-      night: true,
-    }), spawner({
-      tier: 6,
-      biomes: ['Meadows', 'BlackForest', 'Mountain'],
-      maxSpawned: 3,
-      interval: 3000,
-      chance: 0.05,
-      killed: 'GoblinKing',
-      groupSize: [3, 3],
-      night: true,
-      levels: [1, 1],
-    })],
     // weapon: 2 club, 1 spear, 2 sword, 1 torch
     // shield: 1 wood, 2 <null>
     attacks: [
@@ -2222,17 +1829,6 @@ export const creatures: Creature[] = [
     tier: 5,
     emoji: '',
     faction: 'PlainsMonsters',
-    spawners: [spawner({
-      tier: 5,
-      biomes: ['Meadows'],
-      maxSpawned: 1,
-      interval: 120,
-      chance: 0.506,
-      killed: 'gd_king',
-      groupRadius: 1,
-      night: true,
-      levels: [1, 1],
-    })],
     attacks: single([
       { dmg: dmg({ blunt: 100 }), name: 'staff', stagger: 3.2 },
       { dmg: dmg({ blunt: 20, fire: 100 }), name: 'fireball', stagger: 3.2 },
@@ -2272,7 +1868,6 @@ export const creatures: Creature[] = [
     tier: 5,
     emoji: '',
     faction: 'PlainsMonsters',
-    spawners: [],
     attacks: single([
       { dmg: dmg({ blunt: 100 }), name: 'staff', stagger: 3.2 },
       { dmg: dmg({ blunt: 20, fire: 100 }), name: 'fireball', stagger: 3.2 },
@@ -2309,7 +1904,6 @@ export const creatures: Creature[] = [
     tier: 5,
     emoji: '',
     faction: 'PlainsMonsters',
-    spawners: [],
     attacks: single([
       { dmg: dmg({ blunt: 100 }), name: 'staff', stagger: 3.2 },
       { dmg: dmg({ blunt: 20, fire: 100 }), name: 'fireball', stagger: 3.2 },
@@ -2346,7 +1940,6 @@ export const creatures: Creature[] = [
     emoji: '',
     faction: 'PlainsMonsters',
     maxLvl: 3,
-    spawners: [],
     attacks: single([
       { dmg: dmg({
         blunt: 130,
@@ -2396,7 +1989,6 @@ export const creatures: Creature[] = [
     emoji: '💪',
     faction: 'PlainsMonsters',
     maxLvl: 1,
-    spawners: [],
     attacks: single([
       { dmg: dmg({
         blunt: 150,
@@ -2444,7 +2036,6 @@ export const creatures: Creature[] = [
     emoji: '',
     faction: 'PlainsMonsters',
     maxLvl: 1,
-    spawners: [],
     attacks: single([
       { dmg: dmg({
         blunt: 150,
@@ -2498,7 +2089,6 @@ export const creatures: Creature[] = [
     emoji: '',
     faction: 'PlainsMonsters',
     maxLvl: 1,
-    spawners: [],
     attacks: single([
       { dmg: dmg({
         blunt: 150,
@@ -2551,19 +2141,6 @@ export const creatures: Creature[] = [
     tier: 5,
     emoji: '🦟',
     faction: 'PlainsMonsters',
-    spawners: [spawner({
-      tier: 5,
-      biomes: ['Plains'],
-      maxSpawned: 3,
-      interval: 500,
-      chance: 0.2,
-      distance: 30,
-      groupSize: [1, 2],
-      groupRadius: 10,
-      altitude: [1, 1000],
-      tilt: [0, 99],
-      levels: [1, 1],
-    })],
     attacks: single([{ dmg: dmg({ pierce: 90 }), name: 'bite' }]),
     tolerate: TOLERATE.WATER,
     speed: {
@@ -2594,17 +2171,6 @@ export const creatures: Creature[] = [
     emoji: '🐂',
     faction: 'PlainsMonsters',
     factionGroup: 'lox',
-    spawners: [spawner({
-      tier: 5,
-      biomes: ['Plains'],
-      maxSpawned: 3,
-      interval: 1000,
-      chance: 0.05,
-      distance: 100,
-      groupSize: [2, 4],
-      groupRadius: 10,
-      levels: [1, 1],
-    })],
     attacks: single([
       { dmg: dmg({ slash: 130 }), name: 'bite', force: 150 },
       { dmg: dmg({ blunt: 120, chop: 100, pickaxe: 100, }), name: 'stomp', force: 100, toolTier: 0, collider: areaCollider(4.5) },
@@ -2647,7 +2213,6 @@ export const creatures: Creature[] = [
     emoji: '🐂',
     faction: 'PlainsMonsters',
     factionGroup: 'lox',
-    spawners: [],
     attacks: [],
     tolerate: TOLERATE.WATER,
     speed: {
@@ -2678,16 +2243,6 @@ export const creatures: Creature[] = [
     emoji: '🐻',
     faction: 'PlainsMonsters',
     factionGroup: 'bjorn',
-    spawners: [spawner({
-      tier: 5,
-      biomes: ['Plains'],
-      maxSpawned: 1,
-      interval: 4000,
-      chance: 0.25,
-      night: true,
-      minDistance: 2000,
-      levels: [1, 1],
-    })],
     attacks: single([
       { dmg: dmg({ slash: 20, pierce: 130 }), force: 40, name: 'bite' },
       { dmg: dmg({ slash: 130, chop: 40 }), force: 40, name: 'claws' },
@@ -2742,7 +2297,6 @@ export const creatures: Creature[] = [
     tier: 5,
     emoji: '🦠',
     faction: 'Undead',
-    spawners: [],
     attacks: single([
       { dmg: dmg({ blunt: 45, poison: 50, }), name: 'stomp', force: 80, toolTier: 0 },
     ]),
@@ -2784,7 +2338,6 @@ export const creatures: Creature[] = [
     tier: 5,
     emoji: '🦴',
     faction: 'Boss',
-    spawners: [],
     attacks: single([
       { dmg: dmg({ // 10 meteors
         blunt: 40,
@@ -2840,7 +2393,6 @@ export const creatures: Creature[] = [
     emoji: '🐔',
     faction: 'ForestMonsters',
     factionGroup: 'chicken',
-    spawners: [],
     attacks: single([{ dmg: dmg({ blunt: 10 }), stagger: 1.24, name: 'beak' }]),
     tolerate: TOLERATE.WATER,
     speed: {
@@ -2876,7 +2428,6 @@ export const creatures: Creature[] = [
     emoji: '🐤',
     faction: 'ForestMonsters',
     factionGroup: 'chicken',
-    spawners: [],
     attacks: [],
     tolerate: TOLERATE.WATER,
     speed: {
@@ -2907,18 +2458,6 @@ export const creatures: Creature[] = [
     tier: 6,
     emoji: '🐇',
     faction: 'AnimalsVeg',
-    spawners: [spawner({
-      tier: 6,
-      biomes: ['Mistlands'],
-      biomeAreas: 3,
-      maxSpawned: 10,
-      interval: 100,
-      chance: 0.5,
-      distance: 10,
-      groupSize: [1, 3],
-      groupRadius: 6,
-      levels: [1, 3],
-    })],
     attacks: [],
 
     tolerate: TOLERATE.WATER,
@@ -2951,7 +2490,6 @@ export const creatures: Creature[] = [
     tier: 6,
     emoji: '💀',
     faction: 'PlayerSpawned',
-    spawners: [],
     attacks: [
       {
         variety: 'melee',
@@ -2992,31 +2530,6 @@ export const creatures: Creature[] = [
     emoji: '🏹',
     faction: 'Dverger',
     aggravatable,
-    spawners: [spawner({
-      tier: 6,
-      biomes: ['Mistlands'],
-      biomeAreas: 2,
-      maxSpawned: 2,
-      interval: 1000,
-      chance: 0.3,
-      distance: 30,
-      groupSize: [1, 2],
-      groupRadius: 3,
-      night: false,
-      levels: [1, 3],
-    }), spawner({
-      tier: 7,
-      biomes: ['Ashlands'],
-      biomeAreas: 2,
-      maxSpawned: 2,
-      interval: 1000,
-      chance: 0.1,
-      distance: 30,
-      groupSize: [1, 2],
-      groupRadius: 3,
-      night: false,
-      levels: [1, 3],
-    })],
     attacks: single([
       { dmg: dmg({ pierce: 110 }), name: 'arbalest', force: 200, stagger: 1.68 },
       { dmg: dmg({ blunt: 70 }), name: 'melee', force: 80, stagger: 1.84 },
@@ -3047,7 +2560,6 @@ export const creatures: Creature[] = [
     emoji: '🧙‍♂️',
     faction: 'Dverger',
     aggravatable,
-    spawners: [],
     // visual: DvergerHairMale
     // visual: DvergerHairFemale
     attacks: [
@@ -3110,7 +2622,6 @@ export const creatures: Creature[] = [
     emoji: '🔵',
     faction: 'Dverger',
     aggravatable,
-    spawners: [],
     attacks: single([
       { dmg: dmg({ blunt: 150 }), name: 'kamikaze', force: 20, toolTier: 0, collider: areaCollider(1.5) }
     ]),
@@ -3140,19 +2651,6 @@ export const creatures: Creature[] = [
     tier: 6,
     emoji: '✔',
     faction: 'MistlandsMonsters',
-    spawners: [spawner({
-      tier: 6,
-      biomes: ['Mistlands'],
-      biomeAreas: 2,
-      maxSpawned: 4,
-      interval: 3000,
-      chance: 0.05,
-      distance: 10,
-      groupSize: [3, 3],
-      groupRadius: 3,
-      night: true,
-      levels: [1, 3],
-    })],
     attacks: single([
       { dmg: dmg({ pierce: 50 }), name: 'stick', stagger: 1.66 },
     ]),
@@ -3192,33 +2690,6 @@ export const creatures: Creature[] = [
     tier: 6,
     emoji: '🎈',
     faction: 'MistlandsMonsters',
-    spawners: [spawner({
-      tier: 6,
-      biomes: ['Mistlands'],
-      biomeAreas: 2,
-      maxSpawned: 1,
-      interval: 4000,
-      chance: 0.1,
-      distance: 50,
-      groupRadius: 1,
-      night: false,
-      tilt: [0, 90],
-      offset: 6,
-      levels: [1, 1],
-    }), spawner({
-      tier: 6,
-      biomes: ['Mistlands'],
-      biomeAreas: 2,
-      maxSpawned: 1,
-      interval: 4000,
-      chance: 0.1,
-      distance: 50,
-      groupRadius: 1,
-      night: true,
-      tilt: [0, 90],
-      offset: 6,
-      levels: [1, 3],
-    })],
     attacks: single([
       { dmg: dmg({ blunt: 50, fire: 80 }), name: 'spit', force: 30, burst: 2 }, // interval = 0.7
       { spawn: ['Tick'], number: [1, 3], max: 8, name: 'eggs' },
@@ -3280,19 +2751,6 @@ export const creatures: Creature[] = [
     tier: 6,
     emoji: '🐜',
     faction: 'MistlandsMonsters',
-    spawners: [spawner({
-      tier: 6,
-      biomes: ['Mistlands'],
-      biomeAreas: 2,
-      maxSpawned: 5,
-      interval: 3000,
-      chance: 0.05,
-      distance: 10,
-      groupSize: [3, 3],
-      groupRadius: 3,
-      night: true,
-      levels: [1, 1],
-    })],
     attacks: single([
       { dmg: dmg({ pierce: 60 }), name: 'pincers', force: 40, stagger: 1.86 },
     ]),
@@ -3326,44 +2784,6 @@ export const creatures: Creature[] = [
     tier: 6,
     emoji: '🐜',
     faction: 'MistlandsMonsters',
-    spawners: [spawner({
-      tier: 6,
-      biomes: ['Mistlands'],
-      biomeAreas: 2,
-      maxSpawned: 2,
-      interval: 200,
-      chance: 0.3,
-      distance: 30,
-      groupSize: [2, 3],
-      groupRadius: 6,
-      night: false,
-      levels: [1, 2],
-    }), spawner({
-      tier: 6,
-      biomes: ['Mistlands'],
-      biomeAreas: 2,
-      maxSpawned: 6,
-      interval: 300,
-      chance: 0.2,
-      distance: 40,
-      groupSize: [2, 3],
-      groupRadius: 6,
-      night: true,
-      levels: [1, 3],
-    }), spawner({
-      tier: 6,
-      biomes: ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains'],
-      biomeAreas: 2,
-      maxSpawned: 2,
-      interval: 3000,
-      chance: 0.05,
-      distance: 10,
-      killed: 'SeekerQueen',
-      groupSize: [3, 3],
-      groupRadius: 3,
-      night: true,
-      levels: [1, 1],
-    })],
     attacks: single([
       { dmg: dmg({ pierce: 90 }), name: 'pincers', force: 40, stagger: 2.95 },
       { dmg: dmg({ pierce: 120 }), name: 'claw', force: 20, stagger: 2.95 },
@@ -3404,17 +2824,6 @@ export const creatures: Creature[] = [
     tier: 6,
     emoji: '🐜',
     faction: 'MistlandsMonsters',
-    spawners: [spawner({
-      tier: 6,
-      biomes: ['Mistlands'],
-      biomeAreas: 2,
-      maxSpawned: 1,
-      interval: 4000,
-      chance: 0.1,
-      distance: 40,
-      groupRadius: 12,
-      levels: [1, 3],
-    })],
     attacks: single([
       { dmg: dmg({ blunt: 100, chop: 100, pickaxe: 100 }), name: 'ram', force: 200, toolTier: 4, stagger: 2.5 },
       { dmg: dmg({ slash: 100 }), name: 'bite', force: 70, stagger: 2.48 },
@@ -3470,7 +2879,6 @@ export const creatures: Creature[] = [
     tier: 6,
     emoji: '🐜👑',
     faction: 'Boss',
-    spawners: [],
     attacks: single([
       // SeekerQueen_Teleport: aiMaxHp: 0.9
       // SeekerQueen_Rush
@@ -3518,29 +2926,6 @@ export const creatures: Creature[] = [
     tier: 2,
     emoji: '🐍',
     faction: 'SeaMonsters',
-    spawners: [spawner({
-      tier: 2,
-      biomes: ['Ocean'],
-      biomeAreas: 2,
-      maxSpawned: 1,
-      interval: 1000,
-      chance: 0.05,
-      distance: 50,
-      night: true,
-      altitude: [-1000, -5],
-      levels: [1, 1],
-    }), spawner({
-      tier: 2,
-      biomes: ['Ocean'],
-      biomeAreas: 2,
-      maxSpawned: 1,
-      interval: 1000,
-      chance: 0.05,
-      distance: 50,
-      envs: ['ThunderStorm', 'Rain'],
-      altitude: [-1000, -5],
-      levels: [1, 1],
-    })],
     attacks: single([
       { dmg: dmg({ slash: 70, }),
         name: 'attack', force: 100,
@@ -3582,17 +2967,6 @@ export const creatures: Creature[] = [
     tier: 7,
     emoji: '🐍',
     faction: 'SeaMonsters',
-    spawners: [spawner({
-      tier: 7,
-      biomes: ['Ashlands'],
-      biomeAreas: 7,
-      maxSpawned: 1,
-      interval: 1000,
-      chance: 0.2,
-      distance: 50,
-      altitude: [-1000, -5],
-      levels: [1, 1],
-    })],
     attacks: single([
       // BonemawSerpent_spit
       { dmg: dmg({ blunt: 40, fire: 20, poison: 20 }), stagger: NaN, force: 30, name: 'spit' },
@@ -3635,20 +3009,6 @@ export const creatures: Creature[] = [
     tier: 7,
     emoji: '🦃',
     faction: 'Demon',
-    spawners: [spawner({
-      tier: 7,
-      biomes: ['Ashlands'],
-      biomeAreas: 3,
-      maxSpawned: 3,
-      interval: 120,
-      chance: 0.2,
-      distance: 10,
-      groupSize: [1, 2],
-      groupRadius: 3,
-      altitude: [-20, -2],
-      offset: 20,
-      levels: [1, 1],
-    })],
     attacks: single([
       // volture_talons
       { dmg: dmg({ slash: 110 }), stagger: 0.9, force: 5, name: 'talons' },
@@ -3681,36 +3041,6 @@ export const creatures: Creature[] = [
     emoji: '🐗',
     faction: 'Demon',
     factionGroup: 'asksvin',
-    spawners: [spawner({
-      tier: 7,
-      biomes: ['Ashlands'],
-      biomeAreas: 2,
-      maxSpawned: 3,
-      interval: 220,
-      chance: 0.3,
-      distance: 25,
-      radius: [50, 0],
-      groupSize: [2, 4],
-      groupRadius: 10,
-      night: false,
-      altitude: [9, 1000],
-      tilt: [0, 45],
-      levels: [1, 2],
-    }), spawner({
-      tier: 7,
-      biomes: ['Ashlands'],
-      biomeAreas: 2,
-      maxSpawned: 4,
-      interval: 220,
-      chance: 0.45,
-      distance: 20,
-      groupSize: [2, 4],
-      groupRadius: 10,
-      night: true,
-      altitude: [9, 1000],
-      tilt: [0, 45],
-      levels: [1, 3],
-    })],
     attacks: single([
       // Asksvin_Bite
       { dmg: dmg({ blunt: 75, slash: 75, chop: 50, pickaxe: 50 }), stagger: 1.24, force: 50, name: 'bite' },
@@ -3758,7 +3088,6 @@ export const creatures: Creature[] = [
     emoji: '🐗',
     faction: 'Demon',
     factionGroup: 'asksvin',
-    spawners: [],
     attacks: [],
     tolerate: TOLERATE.WATER,
     speed: { walk: 3, run: 9, swim: 0 },
@@ -3782,7 +3111,6 @@ export const creatures: Creature[] = [
     tier: 7,
     emoji: '💀',
     faction: 'PlayerSpawned',
-    spawners: [],
     attacks: [
       {
         rate: 1,
@@ -3832,21 +3160,6 @@ export const creatures: Creature[] = [
     emoji: '🏹',
     faction: 'Dverger',
     aggravatable,
-    spawners: [spawner({
-      tier: 7,
-      biomes: ['Ashlands'],
-      biomeAreas: 2,
-      maxSpawned: 2,
-      interval: 1000,
-      chance: 0.1,
-      distance: 30,
-      groupSize: [1, 2],
-      groupRadius: 3,
-      radius: [50, 0],
-      night: false,
-      tilt: [0, 35],
-      levels: [1, 3],
-    })],
     attacks: single([
       // visual: DvergerArbalest
       // DvergerArbalest_shootAshlands
@@ -3879,32 +3192,6 @@ export const creatures: Creature[] = [
     tier: 7,
     emoji: '💀',
     faction: 'Demon',
-    spawners: [spawner({
-      tier: 7,
-      biomes: ['Ashlands'],
-      biomeAreas: 7,
-      maxSpawned: 4,
-      interval: 320,
-      chance: 0.2,
-      distance: 10,
-      groupSize: [1, 2],
-      groupRadius: 15,
-      altitude: [1, 1000],
-      levels: [1, 2],
-    }), spawner({
-      tier: 7,
-      biomes: ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains'],
-      biomeAreas: 7,
-      maxSpawned: 3,
-      interval: 3000,
-      chance: 0.05,
-      distance: 10,
-      killed: 'Fader',
-      groupSize: [1, 3],
-      groupRadius: 3,
-      night: true,
-      levels: [1, 1],
-    })],
     attacks: single([
       // charred_bow
       { dmg: dmg({ pierce: 120 }), name: 'bow', force: 15, burst: 10 },
@@ -3924,7 +3211,6 @@ export const creatures: Creature[] = [
   }, {
     id: 'Charred_Archer_Fader',
     damageModifiers: charredSummonDmgModifiers,
-    spawners: [],
     attacks: single([
       // charred_bow_Fader
       { dmg: dmg({ pierce: 60 }), name: 'bow', force: 15 },
@@ -3944,12 +3230,12 @@ export const creatures: Creature[] = [
     tier: 7,
     emoji: '💀',
     faction: 'Demon',
-    spawners: [],
     attacks: single([
       // Charred_HipCloth
       // charred_magestaff_fire
       // Charred_MageCloths
       // charred_magestaff_summon
+      { spawn: ['Charred_Twitcher_Summoned'], number: [1, 3], max: 5 },
     ]),
     tolerate: TOLERATE.WATER | TOLERATE.FIRE | TOLERATE.SMOKE,
     speed: { walk: 1.5, run: 4, swim: 0 },
@@ -3972,32 +3258,6 @@ export const creatures: Creature[] = [
     tier: 7,
     emoji: '💀',
     faction: 'Demon',
-    spawners: [spawner({
-      tier: 7,
-      biomes: ['Ashlands'],
-      biomeAreas: 2,
-      maxSpawned: 4,
-      interval: 320,
-      chance: 0.2,
-      distance: 10,
-      groupSize: [1, 2],
-      groupRadius: 15,
-      altitude: [-1000, 1000],
-      levels: [1, 3],
-    }), spawner({
-      tier: 7,
-      biomes: ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains'],
-      biomeAreas: 7,
-      maxSpawned: 3,
-      interval: 3000,
-      chance: 0.05,
-      distance: 10,
-      killed: 'Fader',
-      groupSize: [1, 3],
-      groupRadius: 3,
-      night: true,
-      levels: [1, 1],
-    })],
     attacks: single([
       // Charred_HipCloth
       // charred_greatsword_swing
@@ -4023,7 +3283,6 @@ export const creatures: Creature[] = [
     id: 'Charred_Melee_Dyrnwyn',
     minLvl: 3,
     maxLvl: 3,
-    spawners: [],
     attacks: single([
       // Charred_HipCloth
       // charred_dyrnwyn_greatsword_swing
@@ -4044,7 +3303,6 @@ export const creatures: Creature[] = [
     ],
   }, {
     id: 'Charred_Melee_Fader',
-    spawners: [],
     attacks: single([
       // Charred_HipCloth
       // charred_fader_greatsword_swing
@@ -4070,35 +3328,6 @@ export const creatures: Creature[] = [
     tier: 7,
     emoji: '💀',
     faction: 'Demon',
-    spawners: [spawner({
-      tier: 7,
-      biomes: ['Ashlands'],
-      biomeAreas: 7,
-      maxSpawned: 3,
-      interval: 200,
-      chance: 0.25,
-      distance: 10,
-      groupSize: [2, 4],
-      groupRadius: 15,
-      altitude: [1, 1000],
-      night: false,
-      offset: 20,
-      levels: [1, 2],
-    }), spawner({
-      tier: 7,
-      biomes: ['Ashlands'],
-      biomeAreas: 7,
-      maxSpawned: 5,
-      interval: 160,
-      chance: 0.3,
-      distance: 10,
-      groupSize: [3, 6],
-      groupRadius: 15,
-      altitude: [2, 1000],
-      night: true,
-      offset: 20,
-      levels: [1, 3],
-    })],
     attacks: single([
       // charred_twitcher_scratch_l
       { dmg: dmg({ slash: 100 }), force: 40, name: 'scratch' },
@@ -4128,7 +3357,6 @@ export const creatures: Creature[] = [
     tier: 7,
     emoji: '🥦',
     faction: 'Players',
-    spawners: [],
     attacks: single([
       // staff_greenroots_tentaroot_attack
       { dmg: dmg({ blunt: 70, chop: 20, pickaxe: 20, poison: 40 }), name: 'poke', force: 40, toolTier: 4 }
@@ -4155,7 +3383,6 @@ export const creatures: Creature[] = [
     tier: 7,
     emoji: '💎',
     faction: 'ForestMonsters',
-    spawners: [],
     attacks: single([]),
     tolerate: TOLERATE.WATER,
     speed: { walk: 1.5, run: 12, swim: 2 },
@@ -4179,19 +3406,6 @@ export const creatures: Creature[] = [
     tier: 7,
     emoji: '🦠',
     faction: 'Demon',
-    spawners: [spawner({
-      tier: 7,
-      biomes: ['Ashlands'],
-      maxSpawned: 2,
-      interval: 260,
-      chance: 0.25,
-      distance: 10,
-      groupSize: [1, 2],
-      groupRadius: 1,
-      radius: [50, 0],
-      altitude: [2, 1000],
-      levels: [1, 1],
-    })],
     attacks: single([
       // blobLava_attack_aoe
       { dmg: dmg({ blunt: 70, chop: 160, pickaxe: 160, fire: 30 }), name: 'explosion', collider: areaCollider(4) },
@@ -4216,17 +3430,6 @@ export const creatures: Creature[] = [
     tier: 7,
     emoji: '🕷',
     faction: 'Demon',
-    spawners: [spawner({
-      // Morgen_NonSleeping
-      tier: 7,
-      biomes: ['Ashlands'],
-      maxSpawned: 3,
-      interval: 4000,
-      chance: 0.1,
-      distance: 15,
-      radius: [50, 0],
-      levels: [1, 1],
-    })],
     attacks: single([
       // Morgen_bite
       { dmg: dmg({ pierce: 160, chop: 100, pickaxe: 100 }), name: 'bite', force: 70, toolTier: 3 }, // interval: 4
@@ -4267,20 +3470,6 @@ export const creatures: Creature[] = [
     tier: 7,
     emoji: '🦅',
     faction: 'Demon',
-    spawners: [spawner({
-      tier: 7,
-      biomes: ['Ashlands'],
-      biomeAreas: 3,
-      maxSpawned: 1,
-      interval: 4000,
-      chance: 0.2,
-      distance: 15,
-      radius: [50, 0],
-      altitude: [15, 1000],
-      offset: 20,
-      lava: undefined,
-      levels: [1, 1],
-    })],
     attacks: single([
       // FallenValkyrie_spit
       // -> fallenvalkyrie_spit_projectile x3
@@ -4314,7 +3503,6 @@ export const creatures: Creature[] = [
     tier: 7,
     emoji: '🐉',
     faction: 'Boss',
-    spawners: [],
     attacks: single([
       // Fader_Fissure
       { dmg: dmg({ pierce: 120, chop: 1000, pickaxe: 1000 }), name: 'fissure', force: 50, toolTier: 3, aiMinHp: 0.35, aiMaxHp: 0.85 }, // interval: 30, range: [0, 40]

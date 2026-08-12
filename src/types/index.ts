@@ -286,6 +286,7 @@ export interface Spawner extends GameObjectBase {
 }
 
 export interface SpawnerConfig {
+  prefab: EntityId;
   tier: number;
   biomes: Biome[];
   biomeAreas: number;
@@ -323,7 +324,6 @@ export interface Creature extends GameObjectBase {
   aggravatable?: boolean;
   maxLvl?: number;
   minLvl?: number;
-  spawners: SpawnerConfig[];
   tolerate: number;
   speed: {
     // m_speed || m_flySlowSpeed
@@ -359,11 +359,12 @@ export interface Creature extends GameObjectBase {
 
 export interface Fish extends GameObjectBase {
   type: 'fish';
+  minLvl?: number;
+  maxLvl?: number;
   components: GameComponent[];
   emoji: string;
   stack: number;
   weight: Pair<number>;
-  spawners: SpawnerConfig[];
   speed: number;
   turnSpeed: number;
   bait: EntityId;
@@ -443,7 +444,6 @@ export type PhysicalObject = GameObjectBase & {
   ResourceRoot?: ResourceRoot;
   drop?: GeneralDrop[];
   trader?: TraderId;
-  grow?: ItemGrow[];
   Plant?: Plantable;
   Beacon?: number;
   Smoke?: number;
@@ -689,6 +689,7 @@ interface GameObjectBase {
 }
 
 export interface ItemGrowConfig {
+  prefab: EntityId;
   /** [min, max] number */
   num: Pair<number>;
   forcePlacement?: boolean;

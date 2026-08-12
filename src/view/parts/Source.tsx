@@ -16,6 +16,7 @@ import { Icon, ItemIcon } from './Icon';
 import { fishes } from '../../data/fish';
 import { pieces } from '../../data/building';
 import { traders } from '../../data/objects';
+import { vegetationById } from '../../data/spawn-list';
 
 const tradersByid = Object.fromEntries(traders.map(t => [t.trader, t]));
 
@@ -280,7 +281,7 @@ export function GrowSection({ item }: { item: GameObject | undefined }) {
     case 'feast':
       return null;
   }
-  const grow = item.grow ?? [];
+  const grow = vegetationById[item.id] ?? [];
   const locations = objectLocationMap[item.id] ?? [];
   const uniqueLocations = objectLocationUniqueMap[item.id];
   if (!grow.length && !locations.length) return null;

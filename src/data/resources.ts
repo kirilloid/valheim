@@ -1,5 +1,5 @@
 import type { Deadspeak, EntityId, Resource } from '../types';
-import { dmg, itemGrow, REAL_HOUR as HOUR } from '../model/game';
+import { dmg } from '../model/game';
 import { effects } from './effects';
 
 // Meadows = 1
@@ -29,25 +29,13 @@ const floating = true;
 
 export const resources: Resource[] = [
 // MEADOWS
-  { type: 'item', group: 'lumber', id: 'Wood', emoji: '🪵', tier: 0, weight: 2, stack: 50, floating,
-    grow: itemGrow({ locations: ['Meadows', 'Swamp', 'BlackForest'], altitude: [0, 1000], inForest: [0, 1.1], num: [15, 15] })
-  },
+  { type: 'item', group: 'lumber', id: 'Wood', emoji: '🪵', tier: 0, weight: 2, stack: 50, floating },
   { type: 'item', id: 'Coal', tier: 2, weight: 2, stack: 50 },
   { type: 'item', id: 'Resin', tier: 1, weight: 0.3, stack: 50 },
   { type: 'item', id: 'Feathers', emoji: '🪶', tier: 1, weight: 0.1, stack: 50 },
-  { type: 'item', id: 'Stone', emoji: '🪨', tier: 0, weight: 2, stack: 50,
-    grow: itemGrow(
-      { locations: ['Meadows', 'Swamp'], altitude: [-3, 1000], num: [5, 5], },
-      { locations: ['Meadows', 'Swamp', 'BlackForest', 'Plains'], altitude: [0, 1000], num: [30, 30], group: [2, 3], tilt: [22, 90] }
-    ),
-  },
-  { type: 'item', id: 'Flint', tier: 1, weight: 2, stack: 30,
-    grow: itemGrow({ locations: ['Meadows'], altitude: [-2, 1], num: [30, 30], respawn: 4 * HOUR }),
-  },
-  { type: 'item', id: 'StoneRock', tier: 1, weight: 2, stack: 30,
-    grow: itemGrow({ locations: ['Meadows', 'BlackForest', 'Swamp', 'Mountain'], randTilt: 0, chanceToUseGroundTilt: 1, biomeArea: 6,
-      altitude: [5, 20], groupRadius: 1, num: [0, 1] }), // minDistanceFromCenter: 1000
-  },
+  { type: 'item', id: 'Stone', emoji: '🪨', tier: 0, weight: 2, stack: 50 },
+  { type: 'item', id: 'Flint', tier: 1, weight: 2, stack: 30 },
+  { type: 'item', id: 'StoneRock', tier: 1, weight: 2, stack: 30 },
   { type: 'item', group: 'hide', id: 'LeatherScraps', tier: 1, weight: 0.5, stack: 50 },
   { type: 'item', group: 'hide', id: 'DeerHide', tier: 1, weight: 1, stack: 50 },
   { type: 'item', id: 'QueenBee', emoji: '🐝', tier: 1, weight: 0.2, stack: 20 },
@@ -57,13 +45,8 @@ export const resources: Resource[] = [
   },
   { type: 'item', id: 'Mushroom', emoji: '🍄🔴', tier: 1, weight: 0.1, stack: 50,
     Food: { health: 15, stamina: 15, duration: 900, regen: 1 },
-    grow: itemGrow({
-      locations: ['Meadows', 'BlackForest', 'Swamp' /* 11, also 'Swamp', but minAlt=1 */],
-      altitude: [1, 1000], tilt: [0, 25], num: [1, 2], group: [3, 6], inForest: [0, 1], respawn: 4 * HOUR,
-    }),
   },
-  { type: 'item', id: 'Dandelion', tier: 0, weight: 0.1, stack: 50, tags: ['plant', 'herb'],
-    grow: itemGrow({ locations: ['Meadows'], tilt: [0, 15], num: [8, 10], group: [1, 3], respawn: 4 * HOUR }), },
+  { type: 'item', id: 'Dandelion', tier: 0, weight: 0.1, stack: 50, tags: ['plant', 'herb'] },
   { type: 'item', id: 'AxeHead1', tier: 1, weight: 2, stack: 10 },
   { type: 'item', id: 'AxeHead2', tier: 1, weight: 2, stack: 10 },
   { type: 'item', id: 'Honey', emoji: '🍯', tier: 1, weight: 0.2, stack: 50,
@@ -226,12 +209,8 @@ export const resources: Resource[] = [
   { type: 'item', id: 'MeadPoisonResist', emoji: '\u{1F9EA}', tier: 2, weight: 1, stack: 10,
     Potion: { damageModifiers: { poison: 'veryResistant' }, cooldown: 600 },
   },
-  { type: 'item', id: 'Thistle', emoji: '🌿', tier: 2, weight: 0.1, stack: 50, tags: ['plant', 'herb'],
-    grow: itemGrow({ locations: ['BlackForest', 'Swamp'], altitude: [0, 1000], tilt: [0, 20], num: [1, 2], group: [2, 5], respawn: 4 * HOUR }),
-  },
-  { type: 'item', group: 'seedVeg', id: 'CarrotSeeds', tier: 2, weight: 0.1, stack: 100, tags: ['plant', 'vegetable'],
-    grow: itemGrow({ locations: ['BlackForest'], num: [0, 0.5], group: [1, 2], tilt: [0, 25] }),
-  },
+  { type: 'item', id: 'Thistle', emoji: '🌿', tier: 2, weight: 0.1, stack: 50, tags: ['plant', 'herb'] },
+  { type: 'item', group: 'seedVeg', id: 'CarrotSeeds', tier: 2, weight: 0.1, stack: 100, tags: ['plant', 'vegetable'] },
   { type: 'item', id: 'Carrot', emoji: '🥕', tier: 2, weight: 0.3, stack: 50, tags: ['plant', 'vegetable'],
     Food: { health: 10, stamina: 32, duration: 900, regen: 1 },
   },
@@ -267,8 +246,7 @@ export const resources: Resource[] = [
   { type: 'item', id: 'Chain', emoji: '⛓️', tier: 3, weight: 2, stack: 50 },
   { type: 'item', id: 'Bloodbag', emoji: '🩸', tier: 3, weight: 0.5, stack: 50 },
   { type: 'item', id: 'Turnip', tier: 3, emoji: '🍆', weight: 0.3, stack: 50, tags: ['plant', 'vegetable'] },
-  { type: 'item', group: 'seedVeg', id: 'TurnipSeeds', tier: 3, weight: 0.1, stack: 100, tags: ['plant', 'vegetable'],
-    grow: itemGrow({ locations: ['Swamp'], altitude: [0, 1000], num: [0, 0.5], group: [1, 2], tilt: [0, 25] }) },
+  { type: 'item', group: 'seedVeg', id: 'TurnipSeeds', tier: 3, weight: 0.1, stack: 100, tags: ['plant', 'vegetable'] },
   { type: 'item', id: 'TurnipStew', emoji: '🍲', tier: 3, weight: 1, stack: 10,
     Food: { health: 18, stamina: 55, duration: 1500, regen: 2 },
   },
@@ -560,7 +538,6 @@ export const resources: Resource[] = [
   },
   { type: 'item', id: 'MushroomSmokePuff', tier: 7, weight: 0.1, stack: 50,
     Food: { health: 15, stamina: 15, duration: 900, regen: 1 },
-    grow: itemGrow({ locations: ['Ashlands'], randTilt: 0, altitude: [2, 1000], tilt: [0, 60], num: [2, 2], group: [1, 3], groupRadius: 5 }),
   },
   { type: 'item', id: 'Vineberry', tier: 7, weight: 0.1, stack: 50,
     Food: { health: 30, stamina: 30, duration: 900, regen: 1 }

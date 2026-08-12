@@ -1,15 +1,16 @@
-import { itemGrow, REAL_HOUR as HOUR } from '../model/game';
-import type { EntityId, ItemGrowConfig, PointLight } from '../types';
+import { REAL_HOUR as HOUR } from '../model/game';
+import type { EntityId, PointLight } from '../types';
 
 export const pickables: {
   id: string;
+  disabled?: boolean;
   iconId?: string;
   tier: number;
   item: EntityId;
   number?: number;
-  grow?: ItemGrowConfig[];
   PointLight?: PointLight;
   subtype: 'misc' | 'plant';
+  respawn?: number;
 }[] = [
   {
     id: 'Pickable_Branch',
@@ -43,14 +44,7 @@ export const pickables: {
     tier: 1,
     item: 'Raspberry',
     subtype: 'plant',
-    grow: itemGrow({
-      locations: ['Meadows'],
-      tilt: [0, 45],
-      num: [1, 2],
-      group: [3, 8],
-      inForest: [1, 1.2],
-      respawn: 5 * HOUR,
-    }),
+    respawn: 5 * HOUR,
   },
   {
     id: 'Pickable_Mushroom',
@@ -58,6 +52,7 @@ export const pickables: {
     tier: 1,
     item: 'Mushroom',
     subtype: 'plant',
+    respawn: 4 * HOUR,
   },
   {
     id: 'Pickable_Dandelion',
@@ -65,6 +60,7 @@ export const pickables: {
     tier: 1,
     item: 'Dandelion',
     subtype: 'plant',
+    respawn: 4 * HOUR,
   },
   {
     id: 'Pickable_Flint',
@@ -72,18 +68,14 @@ export const pickables: {
     tier: 1,
     item: 'Flint',
     subtype: 'misc',
+    respawn: 4 * HOUR,
   },
   {
     id: 'BlueberryBush',
     tier: 2,
     item: 'Blueberries',
     subtype: 'plant',
-    grow: itemGrow({
-      locations: ['BlackForest'],
-      num: [1, 1],
-      group: [1, 8],
-      respawn: 5 * HOUR,
-    })
+    respawn: 5 * HOUR,
   },
   {
     id: 'Pickable_Thistle',
@@ -92,6 +84,7 @@ export const pickables: {
     item: 'Thistle',
     PointLight: { color: '#B2FFF9', range: 2, intensity: 1.5 },
     subtype: 'plant',
+    respawn: 4 * HOUR,
   },
   {
     id: 'Pickable_ForestCryptRemains01',
@@ -131,6 +124,7 @@ export const pickables: {
   },
   {
     id: 'Pickable_Mushroom_blue',
+    disabled: true,
     iconId: 'resource/MushroomBlue',
     tier: 2,
     item: 'MushroomBlue',
@@ -191,14 +185,7 @@ export const pickables: {
     tier: 5,
     item: 'Cloudberry',
     subtype: 'plant',
-    grow: itemGrow({
-      locations: ['Plains'],
-      altitude: [2, 50],
-      tilt: [0, 30],
-      num: [1, 3],
-      group: [15, 20],
-      respawn: 5 * HOUR,
-    }),
+    respawn: 5 * HOUR,
   },
   {
     id: 'Pickable_BlackCoreStand',

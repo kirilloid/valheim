@@ -13,6 +13,7 @@ import { axes as allAxes, pickaxes as allPickaxes } from '../../data/weapons';
 
 import { TranslationContext, useSettingsFilter } from '../../effects';
 import { ItemIcon, SkillIcon } from '../parts/Icon';
+import { vegetationById } from '../../data/spawn-list';
 
 const objectMap: Record<EntityId, PhysicalObject> = {};
 const objectTypes = ['tree', 'ore', 'rock', 'misc'] as const;
@@ -43,8 +44,9 @@ for (const obj of objects) {
   objectMap[obj.id] = obj;
 }
 for (const obj of objects) {
+  const grow = vegetationById[obj.id];
   if (!obj.Destructible) continue;
-  if (!obj.grow?.length && !objectLocationMap[obj.id]?.length) continue;
+  if (!grow?.length && !objectLocationMap[obj.id]?.length) continue;
   const type = getObjectType(obj);
   if (type) {
     root[type][obj.id] = [...walk(obj, 1)];

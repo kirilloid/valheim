@@ -1,4 +1,4 @@
-import { Creature, EntityId, Fish, GameComponent, GameObject, Item, ItemRecipe, MaterialType, Piece } from '../types';
+import { Creature, EntityId, Fish, GameComponent, GameObject, Item, ItemGrow, ItemRecipe, MaterialType, Piece } from '../types';
 import type { InvItem } from '../view/player/Inventory/types';
 import { genericRecipe, smelterRecipe } from '../model/recipe';
 import { assertNever, groupBy, isNotNull } from '../model/utils';
@@ -482,12 +482,6 @@ const objects: GameObject[] = [
     id: `${color}_Stone_Formation`,
     iconId: `Shattered_${color}_Crystal`,
     tier: 1,
-    grow: [
-      ...itemGrow({
-        locations: ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains'],
-        num: [2, 5],
-      }),
-    ],
     Destructible: {
       hp: 25,
       damageModifiers: pickOnly,
@@ -503,7 +497,6 @@ const firendlySkeleton: Creature = {
   ...skeleton,
   id: 'JC_Skeleton',
   iconId: 'resource/TrophySkeleton',
-  spawners: [],
   faction: 'Players',
 };
 
@@ -536,4 +529,12 @@ export const recipes: ItemRecipe[] = [
   transmuteRecipe(2, { Perfect_Green_Socket: 1, Chain: 1 }, { Coins: 500 }, 'JC_Ring_Green'),
   transmuteRecipe(2, { Perfect_Red_Socket: 1, Chain: 1 }, { Coins: 500 }, 'JC_Ring_Red'),
   transmuteRecipe(2, { Perfect_Blue_Socket: 1, Chain: 1 }, { Coins: 500 }, 'JC_Ring_Blue'),
+];
+
+export const vegetation: ItemGrow[] = [
+  ...COLORS.filter(c => c !== 'Cyan').flatMap(color => itemGrow({
+    prefab: `${color}_Stone_Formation`,
+    locations: ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains'],
+    num: [2, 5],
+  })),
 ];

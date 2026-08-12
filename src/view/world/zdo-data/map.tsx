@@ -7,9 +7,8 @@ import { WORLD_SIZE } from '../../../model/game';
 import { nop, runGenerator, Vector3 } from '../../../model/utils';
 import { stableHashCode } from '../../../model/hash';
 
-import { creatures } from '../../../data/creatures';
 import { resources } from '../../../data/resources';
-import { objects } from '../../../data/objects';
+import { creaturesById, vegetationById } from '../../../data/spawn-list';
 
 const HIGHLIGHT_MARKER_LIMIT = 1000;
 
@@ -38,9 +37,9 @@ function addBiome(biomes: Set<Biome>, id: EntityId): void {
   }
 }
 
-for (const creature of creatures) {
-  const biomes = new Set(creature.spawners.flatMap(spawner => spawner.biomes));
-  addBiome(biomes, creature.id);
+for (const [id, spawners] of Object.entries(creaturesById)) {
+  const biomes = new Set(spawners.flatMap(s => s.biomes));
+  addBiome(biomes, id);
 }
 
 for (const resource of resources) {
@@ -48,9 +47,9 @@ for (const resource of resources) {
   addBiome(biomes, resource.id);
 }
 
-for (const object of objects) {
-  const biomes = new Set(object.grow?.flatMap(g => g.locations));
-  addBiome(biomes, object.id);
+for (const [id, grow] of Object.entries(vegetationById)) {
+  const biomes = new Set(grow.flatMap(g => g.locations));
+  addBiome(biomes, id);
 }
 
 prefabToBiomeColor.set(stableHashCode('Fish1'), blueWater);

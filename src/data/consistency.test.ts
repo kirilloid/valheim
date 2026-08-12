@@ -19,6 +19,7 @@ import { ships, carts, siege } from './transport';
 import * as rooms from './rooms';
 import { iconPath } from '../view/parts/Icon';
 import { feasts } from './feasts';
+import { spawnList } from './spawn-list';
 
 function resolvePath(path: string): string {
   const localPath = `../../public${path}`;
@@ -42,14 +43,14 @@ for (const s of ships) if (s.recipe != null) sourced.add(s.id);
 for (const c of carts) if (c.recipe != null) sourced.add(c.id);
 for (const s of siege) if (s.recipe != null) sourced.add(s.id);
 
-for (const s of spawners) {
-  sourced.add(s.spawn);
-}
+for (const s of spawners) sourced.add(s.spawn);
+
+for (const s of spawnList.creatures) sourced.add(s.prefab);
+for (const s of spawnList.vegetation) sourced.add(s.prefab);
 
 // SOURCE_DROP
 for (const c of creatures) {
   for (const { item } of c.drop) sourced.add(item);
-  if (c.spawners.length > 0) sourced.add(c.id);
   for (const av of c.attacks) {
     for (const ap of av.attacks) {
       if ('spawn' in ap) {
@@ -79,7 +80,6 @@ for (const o of objects) {
     for (const { item } of gd.options) sourced.add(item);
   }
   for (const { id } of (o.Destructible?.parts ?? [])) sourced.add(id);
-  if (o.grow) sourced.add(o.id);
   if (o.Plant) sourced.add(o.id);
 }
 

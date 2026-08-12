@@ -23,9 +23,9 @@ import {
 } from '../../model/dist';
 import { groupBy, mapValues, maybePush } from '../../model/utils';
 import { creatures } from '../creatures';
-import { fishes } from '../fish';
 import { spawners } from '../spawners';
 import { CamplaceConfig, RoomConfig } from '../rooms/types';
+import { spawnList } from '../spawn-list';
 
 export const locationBiomes: Record<GameLocationId, Biome> = {};
 
@@ -384,28 +384,22 @@ function addToBiome(
   }
 }
 
-for (const obj of objects) {
-  for (const loc of (obj.grow ?? []).flatMap(g => g.locations)) {
-    addToBiome(loc, [], [], [obj.id]);
+for (const s of spawnList.vegetation) {
+  for (const loc of s.locations) {
+    addToBiome(loc, [], [], [s.prefab]);
   }
 }
 
-for (const creature of creatures) {
-  for (const spawner of creature.spawners) {
-    for (const biome of spawner.biomes) {
-      const killed = spawner.killed;
-      const biomeConfig = biomes.find(b => b.id === biome);
-      if (!biomeConfig) continue;
-      if (killed != null && (data[killed]?.tier ?? 0) >= biomeConfig.tier) continue;
-      const items = creature.drop.map(drop => drop.item);
-      addToBiome(biome, items, [creature], []);
-    }
-  }
-}
-
-for (const fish of fishes) {
-  for (const biome of fish.spawners.flatMap(g => g.biomes)) {
-    addToBiome(biome, [], [fish], []);
+for (const spawner of spawnList.creatures) {
+  for (const biome of spawner.biomes) {
+    const killed = spawner.killed;
+    const biomeConfig = biomes.find(b => b.id === biome);
+    if (!biomeConfig) continue;
+    if (killed != null && (data[killed]?.tier ?? 0) >= biomeConfig.tier) continue;
+    const creature = creatures.find(c => c.id === spawner.prefab);
+    if (creature == null) continue;
+    const items = creature.drop.map(drop => drop.item);
+    addToBiome(biome, items, [creature], []);
   }
 }
 

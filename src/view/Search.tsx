@@ -20,6 +20,7 @@ import { biome } from '../data/emoji';
 import { TranslationContext, Translator, useGlobalState, useLanguage } from '../effects';
 import { averageAttacksDamage, findDropChanceFromCreature, itemClasses, List, Materials, rangeBy, ShortWeaponDamage } from './helpers';
 import { EffectIcon, Icon, ItemIcon, SkillIcon } from './parts/Icon';
+import { creaturesById } from '../data/spawn-list';
 
 function first(val: number | [number, number]) {
   if (typeof val === 'number') return val;
@@ -350,9 +351,10 @@ function SearchObject({ id, text, onClick, duplicates }: BaseSearchItemProps & {
         <ItemIcon item={item} size={32} />
         <Link to={`/obj/${id}`} onClick={onClick} className={linkClassName}>{text}</Link>
         <span>
-          <List separator="">{item.spawners
-            .flatMap(s => s.biomes)
+          <List separator="">{creaturesById[item.id]
+            ?.flatMap(s => s.biomes)
             .map(b => <span title={translate(`ui.biome.${b}`)} key={b}>{biome[b]}</span>)
+            ?? []
           }</List>
         </span>
       </div>

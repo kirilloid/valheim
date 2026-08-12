@@ -6,8 +6,9 @@ import { stableHashCode } from './hash';
 import { WATER_LEVEL, zoneHash, zoneId, ZONE_SIZE } from './game';
 import { Biome as BiomeEnum, WorldGenerator } from './world-generator';
 import { Heightmap } from './heightmap';
-import { objects } from '../data/objects';
 import { locationsSorted } from '../data/location';
+import { spawnList, vegetationById } from '../data/spawn-list';
+import { data } from '../data/itemDB';
 
 export type RegisteredLocation = {
   location: LocationConfig;
@@ -59,7 +60,7 @@ export class ZoneSystem {
 
   public _getLeviathans(seed: number): Vector3[] {
     const result: Vector3[] = [];
-    const veg = objects.find(d => d.id === 'Leviathan')?.grow?.[0];
+    const veg = vegetationById.Leviathan?.[0];
     if (veg == null) return [];
     const INNER_SIZE_2 = Math.ceil((10000 / ZONE_SIZE + Math.SQRT2) ** 2);
     const prefabHash = stableHashCode('Leviathan');
@@ -311,88 +312,88 @@ export class ZoneSystem {
     const state = random.getState();
     const ZONE_SIZE_2 = ZONE_SIZE / 2;
     let num2 = 1;
-    for (const zoneVegetation of objects) {
+    for (const grow of spawnList.vegetation) {
       ++num2;
-      if (zoneVegetation.disabled) continue;
-      for (const grow of zoneVegetation.grow ?? []) {
-        const _seed = seed + zoneHash(zone) + stableHashCode(zoneVegetation.id);
-        random.init(_seed);
-        let number = 1;
-        if (grow.num[1] < 1.0) {
-          if (random.random() > grow.num[1])
+      const item = data[grow.prefab];
+      if (item == null) continue;
+      if (item?.disabled) continue;
+      const _seed = seed + zoneHash(zone) + stableHashCode(grow.prefab);
+      random.init(_seed);
+      let number = 1;
+      if (grow.num[1] < 1.0) {
+        if (random.random() > grow.num[1])
+          continue;
+      } else {
+        number = random.rangeInt(grow.num[0], grow.num[1] + 1);
+      }
+      const flag1 = item.components?.includes('ZNetView');
+      const minSideNormal = Math.cos(Math.PI * grow.tilt[0] / 180);
+      const maxSideNormal = Math.cos(Math.PI * grow.tilt[1] / 180);
+      const margin = ZONE_SIZE_2 - grow.groupRadius;
+      const attempts = grow.forcePlacement ? number * 50 : number;
+      let placedNumber = 0;
+      for (let index1 = 0; index1 < attempts; ++index1) {
+        const center: Vector3 = {
+          x: zoneCenterPos.x + random.rangeFloat(-margin, margin),
+          y: 0,
+          z: zoneCenterPos.z + random.rangeFloat(-margin, margin),
+        };
+        const groupSize = random.rangeInt(grow.group[0], grow.group[1] + 1);
+        let placed = false;
+        for (let index2 = 0; index2 < groupSize; ++index2) {
+          const p = index2 === 0 ? center : this.getRandomPointInRadius(center, grow.groupRadius);
+          const angle = random.rangeInt(0, 360);
+          const scale = random.rangeFloat(grow.scale[0], grow.scale[1]);
+          const { randTilt } = grow;
+          const x = random.rangeFloat(-randTilt, randTilt);
+          const z = random.rangeFloat(-randTilt, randTilt);
+          if (grow.blockCheck && this.isBlocked(p)) {
             continue;
-        } else {
-          number = random.rangeInt(grow.num[0], grow.num[1] + 1);
-        }
-        const flag1 = zoneVegetation.components?.includes('ZNetView');
-        const minSideNormal = Math.cos(Math.PI * grow.tilt[0] / 180);
-        const maxSideNormal = Math.cos(Math.PI * grow.tilt[1] / 180);
-        const margin = ZONE_SIZE_2 - grow.groupRadius;
-        const attempts = grow.forcePlacement ? number * 50 : number;
-        let placedNumber = 0;
-        for (let index1 = 0; index1 < attempts; ++index1) {
-          const center: Vector3 = {
-            x: zoneCenterPos.x + random.rangeFloat(-margin, margin),
-            y: 0,
-            z: zoneCenterPos.z + random.rangeFloat(-margin, margin),
-          };
-          const groupSize = random.rangeInt(grow.group[0], grow.group[1] + 1);
-          let placed = false;
-          for (let index2 = 0; index2 < groupSize; ++index2) {
-            const p = index2 === 0 ? center : this.getRandomPointInRadius(center, grow.groupRadius);
-            const angle = random.rangeInt(0, 360);
-            const scale = random.rangeFloat(grow.scale[0], grow.scale[1]);
-            const { randTilt } = grow;
-            const x = random.rangeFloat(-randTilt, randTilt);
-            const z = random.rangeFloat(-randTilt, randTilt);
-            if (grow.blockCheck && this.isBlocked(p)) {
-              continue;
-            }
-            const { normal, biome, biomeArea, hmap } = this.getGroundData(p);
-            if (!grow.locations.includes(BiomeEnum[biome] as any)
-            ||  !(grow.biomeArea & biomeArea)) {
-              continue;
-            }
-            const altitude = p.y - WATER_LEVEL;
-            if (altitude < grow.altitude[0] || altitude > grow.altitude[1]) {
-              continue;
-            }
-            if (grow.oceanDepth[0] != grow.oceanDepth[1]) {
-              const oceanDepth = hmap?.getOceanDepth(p) ?? 0;
-              if (oceanDepth < grow.oceanDepth[0] || oceanDepth > grow.oceanDepth[1])
-                continue;
-            }
-            if (normal.y < minSideNormal || normal.y > maxSideNormal) continue;
-            if (grow.terrainDeltaRadius > 0) {
-              const delta = this.worldGenerator.getTerrainDelta(p, grow.terrainDeltaRadius);
-              if (delta > grow.terrainDelta[1] || delta < grow.terrainDelta[0])
-                continue;
-            }
-
-            if (grow.inForest) {
-              const forestFactor = this.worldGenerator.getForestFactor(p.x, p.z);
-              if (forestFactor < grow.inForest[0] || forestFactor > grow.inForest[1])
-                continue;
-            }
-
-            if (!this.insideClearArea(clearAreas, p)) {
-              if (grow.onSurface) p.y = WATER_LEVEL;
-              p.y += grow.offset;
-              const rotation: Quaternion = grow.chanceToUseGroundTilt <= 0.0 || random.random() > grow.chanceToUseGroundTilt
-                // this is complete BS, but we don't use angles now
-                ? { x, y: angle, z, w: 0 }
-                : { ...normal, w: angle };
-              const veg = {
-                id: zoneVegetation.id,
-                pos: p,
-                rotation
-              };
-              placed = true;
-            }
           }
-          if (placed) ++placedNumber;
-          if (placedNumber >= number) break;
+          const { normal, biome, biomeArea, hmap } = this.getGroundData(p);
+          if (!grow.locations.includes(BiomeEnum[biome] as any)
+          ||  !(grow.biomeArea & biomeArea)) {
+            continue;
+          }
+          const altitude = p.y - WATER_LEVEL;
+          if (altitude < grow.altitude[0] || altitude > grow.altitude[1]) {
+            continue;
+          }
+          if (grow.oceanDepth[0] != grow.oceanDepth[1]) {
+            const oceanDepth = hmap?.getOceanDepth(p) ?? 0;
+            if (oceanDepth < grow.oceanDepth[0] || oceanDepth > grow.oceanDepth[1])
+              continue;
+          }
+          if (normal.y < minSideNormal || normal.y > maxSideNormal) continue;
+          if (grow.terrainDeltaRadius > 0) {
+            const delta = this.worldGenerator.getTerrainDelta(p, grow.terrainDeltaRadius);
+            if (delta > grow.terrainDelta[1] || delta < grow.terrainDelta[0])
+              continue;
+          }
+
+          if (grow.inForest) {
+            const forestFactor = this.worldGenerator.getForestFactor(p.x, p.z);
+            if (forestFactor < grow.inForest[0] || forestFactor > grow.inForest[1])
+              continue;
+          }
+
+          if (!this.insideClearArea(clearAreas, p)) {
+            if (grow.onSurface) p.y = WATER_LEVEL;
+            p.y += grow.offset;
+            const rotation: Quaternion = grow.chanceToUseGroundTilt <= 0.0 || random.random() > grow.chanceToUseGroundTilt
+              // this is complete BS, but we don't use angles now
+              ? { x, y: angle, z, w: 0 }
+              : { ...normal, w: angle };
+            const veg = {
+              id: grow.prefab,
+              pos: p,
+              rotation
+            };
+            placed = true;
+          }
         }
+        if (placed) ++placedNumber;
+        if (placedNumber >= number) break;
       }
     }
     random.setState(state);

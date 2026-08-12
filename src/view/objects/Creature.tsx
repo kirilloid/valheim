@@ -11,6 +11,7 @@ import { data } from '../../data/itemDB';
 import { getSummon } from '../../data/resources';
 import { area, objectLocationMap } from '../../data/location';
 import { maxLvl, minLvl } from '../../data/creatures';
+import { creaturesById } from '../../data/spawn-list';
 
 import { GameSettingsContext, TranslationContext, useGlobalState } from '../../effects';
 import { Area, InlineObjectWithIcon, rangeBy, Resistances, shortCreatureDamage, showPercent, yesNo } from '../helpers';
@@ -101,8 +102,8 @@ export function Creature({ creature, level }: { creature: TCreature, level?: num
   const dropGlobalScale = 2 ** (level - 1);
   const [sid, snr] = getSummon(id) ?? ['', 0];
   const locations = [
-    ...new Set(creature.spawners.flatMap(s => s.biomes)),
-    ...(objectLocationMap[creature.id] ?? [])
+    ...new Set(creaturesById[creature.id]?.flatMap(s => s.biomes) ?? []),
+    ...(objectLocationMap[creature.id] ?? []),
   ];
   const spawnedBy = spawnedByMap[id];
 

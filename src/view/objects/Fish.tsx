@@ -13,12 +13,13 @@ import { ItemHeader } from '../parts/ItemHeader';
 import { Source } from '../parts/Source';
 import { DeadSpeak } from '../parts/DeadSpeak';
 import { DropTable } from '../parts/DropTable';
+import { creaturesById } from '../../data/spawn-list';
 
 export function Fish({ fish, level = 1 }: { fish: TFish, level?: number }) {
   const translate = useContext(TranslationContext);
   const { id } = fish;
   const locations = [
-    ...new Set(fish.spawners.flatMap(s => s.biomes)),
+    ...new Set(creaturesById[fish.id]?.flatMap(s => s.biomes)),
     ...(objectLocationMap[fish.id] ?? [])
   ];
   return (<>

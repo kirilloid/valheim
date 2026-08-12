@@ -1,7 +1,8 @@
 import type { EnvId } from '../data/env';
 import type { Biome, EntityId, Pair, SpawnerConfig } from '../types';
 
-export function spawner(config: {
+export interface SpawnerSetup {
+  prefab: EntityId;
   tier: number;
   biomes: Biome[];
   biomeAreas?: number;
@@ -23,7 +24,9 @@ export function spawner(config: {
   levels?: Pair<number>;
   levelUpChance?: number;
   minDistance?: number;
-}): SpawnerConfig {
+}
+
+export function spawner(config: SpawnerSetup): SpawnerConfig {
   return {
     biomeAreas: 7,
     distance: 10,

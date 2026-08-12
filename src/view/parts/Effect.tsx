@@ -9,7 +9,7 @@ import { getTotalDamage } from '../../model/combat';
 import { TranslationContext } from '../../effects';
 import { InlineObjectWithIcon, List, rangeBy, Resistances, showNumber, showPercent } from '../helpers';
 import { SkillIcon } from './Icon';
-import { creatures } from '../../data/creatures';
+import { creaturesById } from '../../data/spawn-list';
 import { spawnChance } from '../../model/game';
 import { objects } from '../../data/objects';
 import { effects } from '../../data/effects';
@@ -58,7 +58,7 @@ function Pheromones({
       <dd><InlineObjectWithIcon id={target} /></dd>
     </>;
   }
-  const spawners = creatures.find(c => c.id === target)?.spawners;
+  const spawners = creaturesById[target];
   if (!spawners) return null;
 
   const minLvl = Math.min(...spawners.map(s => s.levels[0])) || 1;
