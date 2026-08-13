@@ -13,7 +13,7 @@ export default loc(
       locItem('BoneFragments', 0.66, 3),
       locItem('Troll', 0.33, 1),
       // growing
-      locItem('MushroomYellow', 0.5, 12),
+      locItem('Pickable_Mushroom_yellow', 0.5, 12),
       locItem([
         locItem('TreasureChest_trollcave', 0.75, 2),
         locItem('Troll', 1, 1),

@@ -3,7 +3,7 @@ import type { EntityId, PointLight } from '../types';
 
 export const pickables: {
   id: string;
-  disabled?: boolean;
+  disabled?: true;
   iconId?: string;
   tier: number;
   item: EntityId;
@@ -109,6 +109,7 @@ export const pickables: {
   },
   {
     id: 'Pickable_ForestCryptRemains04',
+    disabled: true, // used only in disabled forestcrypt_new_BurialChamber02
     iconId: 'resource/BoneFragments',
     tier: 2,
     item: 'BoneFragments',

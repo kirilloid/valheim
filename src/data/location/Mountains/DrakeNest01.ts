@@ -6,7 +6,7 @@ export default loc(
   { quantity: 200, minApart: 100, minAlt: 100, maxAlt: 2000, radius: [20, 5],
     items: [
       locItem('Hatchling', 0.66, 3),
-      locItem('DragonEgg'),
+      locItem('Pickable_DragonEgg'),
     ],
   },
   'DrakeNest',

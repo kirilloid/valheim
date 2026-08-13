@@ -1066,6 +1066,7 @@ const treasures: PhysicalObject[] = [
 export const objects: PhysicalObject[] = [
   ...pickables.map<PhysicalObject>(p => ({
     type: 'object',
+    disabled: p.disabled,
     subtype: p.subtype,
     id: p.id,
     iconId: p.iconId,
@@ -1672,6 +1673,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'indestructible',
     id: `RockDolmen_${subId}`,
+    disabled: subId === 4 || undefined,
     tier: 1,
   })),
   {
@@ -3232,7 +3234,7 @@ export const objects: PhysicalObject[] = [
   {
     type: 'object',
     subtype: 'misc',
-    id: 'Pickable_Ash_Stone',
+    id: 'Pickable_Ashstone',
     tier: 7,
     drop: [singleDrop('Grausten')],
   },

@@ -712,6 +712,7 @@ export interface ItemGrowConfig {
   groupRadius?: number;
   onSurface?: boolean;
   inForest?: Pair<number> | null;
+  distanceFromCenter?: Pair<number>;
   /** number of minutes before it respawns pickables */
   respawn?: number;
   abundance?: number;

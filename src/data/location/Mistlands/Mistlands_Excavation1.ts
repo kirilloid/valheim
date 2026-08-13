@@ -26,6 +26,7 @@ export default loc(
       locItem('Spawner_DvergerArbalest', 0.33, 6),
       locItem('Spawner_DvergerArbalest', 0.66, 2),
       locItem('dvergrprops_crate_long'),
+      locItem('dvergrprops_hooknchain'),
     ],
   },
   'Mistlands_Excavation',

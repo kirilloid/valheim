@@ -51,7 +51,6 @@ export const resources: Resource[] = [
   { type: 'item', id: 'AxeHead2', tier: 1, weight: 2, stack: 10 },
   { type: 'item', id: 'Honey', emoji: '🍯', tier: 1, weight: 0.2, stack: 50,
     Food: { health: 8, stamina: 35, duration: 900, regen: 1 },
-    // recipe: { type: 'craft_one', time: GAME_DAY, materials: {}, source: { station: 'BeeHive' }, number: 1 },
   },
   { type: 'item', id: 'RawMeat', emoji: '🥩', tier: 0, weight: 1, stack: 20 },
   { type: 'item', id: 'CookedMeat', emoji: '🍗', tier: 1, weight: 1, stack: 20,
@@ -239,7 +238,7 @@ export const resources: Resource[] = [
   { type: 'item', id: 'CryptKey', emoji: '🗝️', tier: 3, weight: 0.1, stack: 1, floating,
     PointLight: { range: 3, intensity: 1, color: '#39FFFF' },
   },
-  // SWAMP
+// SWAMP
   { type: 'item', id: 'Ooze', tier: 3, weight: 0.5, stack: 50 },
   { type: 'item', id: 'Guck', tier: 3, weight: 0.5, stack: 50 },
   { type: 'item', id: 'Root', tier: 3, weight: 0.3, stack: 50, floating },
@@ -353,15 +352,9 @@ export const resources: Resource[] = [
     PointLight: { color: '#87DCFF', range: 3, intensity: 1.5 },
   },
 // PLAINS
-  { type: 'item', id: 'Flax', tier: 5, weight: 0.2, stack: 100, tags: ['plant', 'crop'],
-/*    recipe: { type: 'craft_one', time: 4500, materials: { Flax: 1 },
-              source: { station: CraftingStation.Cultivator }, number: 2 },*/
-  },
+  { type: 'item', id: 'Flax', tier: 5, weight: 0.2, stack: 100, tags: ['plant', 'crop'] },
   { type: 'item', id: 'LinenThread', tier: 5, weight: 2, stack: 50 },
-  { type: 'item', id: 'Barley', emoji: '🌾', tier: 5, weight: 0.2, stack: 100, tags: ['plant', 'crop'],
-/*    recipe: { type: 'craft_one', time: 4500, materials: { Barley: 1 },
-              source: { station: CraftingStation.Cultivator }, number: 2 },*/
-  },
+  { type: 'item', id: 'Barley', emoji: '🌾', tier: 5, weight: 0.2, stack: 100, tags: ['plant', 'crop'] },
   { type: 'item', id: 'BarleyFlour', tier: 5, weight: 0.2, stack: 50 },
   { type: 'item', group: 'berry', id: 'Cloudberry', emoji: '🟠', tier: 5, weight: 0.1, stack: 50, tags: ['plant'],
     Food: { health: 13, stamina: 40, duration: 900, regen: 1 },

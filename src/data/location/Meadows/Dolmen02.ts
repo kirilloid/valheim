@@ -6,10 +6,16 @@ export default loc(
   { biomeArea: 3, quantity: 100, terrainDelta: [0, 2], radius: [20, 8],
     customMusic: 'BlackForestLocationMusic',
     items: [
-      locItem('BoneFragments', 0.5, 1),
+      locItem('Spawner_Skeleton_Meadows_night_noarcher', 0.5),
+      locItem('stone_wall_2x1'),
+      // dolmen
+      locItem('RockDolmen_2'),
+      locItem('Rock_7', 1, 4),
+      // loot
       locItem('Pickable_DolmenTreasure', 0.2),
-      // locItem('Rock_4', 1, 4),
-      // locItem('Rock_4', 0.5, 1),
+      // -
+      locItem('Pickable_ForestCryptRemains01', 0.5),
+      locItem('Rock_7', 0.5),
     ],
   },
   'Dolmen',

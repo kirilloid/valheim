@@ -22,7 +22,7 @@ export const forestcrypt: DungeonRoomsConfig = {
         { pos: [6, -3.5, 4] },
       ],
       items: [
-        locItem('MushroomYellow', 0.2, 12),
+        locItem('Pickable_Mushroom_yellow', 0.2, 12),
       ],
       dist: [0, 1],
     },
@@ -40,7 +40,7 @@ export const forestcrypt: DungeonRoomsConfig = {
       ],
       items: [
         locItem([locItem('Skeleton', 1, 3)], 0.5),
-        locItem('MushroomYellow', 0.2, 5),
+        locItem('Pickable_Mushroom_yellow', 0.2, 5),
         locItem('piece_groundtorch_wood', 0.44),
         locItem('TreasureChest_forestcrypt'),
       ],
@@ -80,7 +80,7 @@ export const forestcrypt: DungeonRoomsConfig = {
       ],
       items: [
         locItem('Skeleton', 0.33),
-        locItem('MushroomYellow', 0.2, 5),
+        locItem('Pickable_Mushroom_yellow', 0.2, 5),
       ],
       dist: [0.108, 0.278, 0.28, 0.167, 0.103, 0.033, 0.023, 0.003, 0.005],
     },
@@ -98,7 +98,7 @@ export const forestcrypt: DungeonRoomsConfig = {
       ],
       items: [
         locItem([locItem('Skeleton', 1, 3)], 0.5),
-        locItem('MushroomYellow', 0.2, 9),
+        locItem('Pickable_Mushroom_yellow', 0.2, 9),
         locItem('Pickable_ForestCryptRandom', 0.5, 2),
       ],
       dist: [0.133, 0.264, 0.305, 0.172, 0.083, 0.021, 0.017, 0.004, 0.001],
@@ -115,7 +115,7 @@ export const forestcrypt: DungeonRoomsConfig = {
         { pos: [-3, -1, -1] },
       ],
       items: [
-        locItem('MushroomYellow', 0.2, 6),
+        locItem('Pickable_Mushroom_yellow', 0.2, 6),
       ],
       dist: [0.087, 0.208, 0.265, 0.237, 0.122, 0.055, 0.016, 0.005, 0.004, 0.001],
     },
@@ -132,7 +132,7 @@ export const forestcrypt: DungeonRoomsConfig = {
       ],
       items: [
         locItem('Skeleton', 0.33),
-        locItem('MushroomYellow', 0.2, 6),
+        locItem('Pickable_Mushroom_yellow', 0.2, 6),
       ],
       dist: [0.501, 0.331, 0.124, 0.037, 0.004, 0.002, 0.001],
     },
@@ -171,7 +171,7 @@ export const forestcrypt: DungeonRoomsConfig = {
       endCapPriority: 1,
       connections: [{ pos: [0, -1.5, -1] }],
       items: [
-        locItem('MushroomYellow', 0.2, 5),
+        locItem('Pickable_Mushroom_yellow', 0.2, 5),
       ],
       dist: [0.003, 0.009, 0.026, 0.055, 0.112, 0.154, 0.157, 0.146, 0.125, 0.079, 0.048, 0.03, 0.022, 0.013, 0.01, 0.005, 0.004, 0.001, 0.001],
     },
@@ -184,7 +184,7 @@ export const forestcrypt: DungeonRoomsConfig = {
       endCapPriority: 1,
       connections: [{ pos: [0, -1.5, -1] }],
       items: [
-        locItem('MushroomYellow', 0.2, 5),
+        locItem('Pickable_Mushroom_yellow', 0.2, 5),
         locItem('Spawner_Skeleton_hildir'),
       ],
       dist: [0.003, 0.009, 0.026, 0.055, 0.112, 0.154, 0.157, 0.146, 0.125, 0.079, 0.048, 0.03, 0.022, 0.013, 0.01, 0.005, 0.004, 0.001, 0.001],
@@ -199,7 +199,7 @@ export const forestcrypt: DungeonRoomsConfig = {
       connections: [{ pos: [0, -1.5, -1] }],
       items: [
         locItem('BoneFragments', 0.33),
-        locItem('SurtlingCore', 0.33),
+        locItem('Pickable_SurtlingCoreStand', 0.33),
       ],
       dist: [0.001, 0.006, 0.029, 0.048, 0.114, 0.124, 0.155, 0.142, 0.115, 0.093, 0.073, 0.04, 0.028, 0.012, 0.007, 0.008, 0.002, 0.002, 0, 0.001],
     },
@@ -234,7 +234,7 @@ export const forestcrypt: DungeonRoomsConfig = {
       items: [
         locItem('BonePileSpawner', 0.2, 2),
         locItem([locItem('Skeleton', 1, 3)], 0.779),
-        locItem('MushroomYellow', 0.2, 13),
+        locItem('Pickable_Mushroom_yellow', 0.2, 13),
       ],
       dist: [0.179, 0.318, 0.284, 0.149, 0.052, 0.013, 0.004, 0.001],
     },
@@ -254,7 +254,7 @@ export const forestcrypt: DungeonRoomsConfig = {
       items: [
         locItem([locItem('Skeleton', 1, 3)], 0.779),
         locItem('Ghost', 0.5),
-        locItem('MushroomYellow', 0.2, 17),
+        locItem('Pickable_Mushroom_yellow', 0.2, 17),
         locItem('piece_groundtorch_wood', 0.5),
       ],
       dist: [0.640, 0.273, 0.07, 0.01, 0.005, 0, 0.001, 0.001],
@@ -269,13 +269,13 @@ export const forestcrypt: DungeonRoomsConfig = {
       connections: [{ pos: [0, -1.5, 9] }],
       items: [
         locItem('Vegvisir_GDKing', 0.4),
-        locItem('MushroomYellow', 0.2, 5),
+        locItem('Pickable_Mushroom_yellow', 0.2, 5),
         locItem('piece_groundtorch_wood', 0.5),
         locItem('BoneFragments', 0.5, 4),
         locItem('Pickable_ForestCryptRandom', 0.5, 4),
-        locItem('SurtlingCore', 0.757),
-        locItem('SurtlingCore', 0.751),
-        locItem('SurtlingCore', 0.55, 2),
+        locItem('Pickable_SurtlingCoreStand', 0.757),
+        locItem('Pickable_SurtlingCoreStand', 0.751),
+        locItem('Pickable_SurtlingCoreStand', 0.55, 2),
       ],
       dist: [0.349, 0.486, 0.141, 0.019, 0.003, 0.002],
     },
@@ -289,7 +289,7 @@ export const forestcrypt: DungeonRoomsConfig = {
       connections: [{ pos: [-10, -1.5, 0] }],
       items: [
         locItem('Vegvisir_GDKing', 0.4),
-        locItem('MushroomYellow', 0.2, 7),
+        locItem('Pickable_Mushroom_yellow', 0.2, 7),
         locItem('piece_groundtorch_wood', 0.5, 2),
         // spawners
         locItem('Skeleton', 0.33, 2),
@@ -298,11 +298,11 @@ export const forestcrypt: DungeonRoomsConfig = {
         // loot
         locItem('BoneFragments', 0.5),
         locItem('Pickable_ForestCryptRandom', 0.5, 7),
-        locItem('SurtlingCore', 0.702, 2),
-        locItem('SurtlingCore', 0.646, 2),
-        locItem('SurtlingCore', 0.726),
-        locItem('SurtlingCore', 0.55, 2),
-        locItem('SurtlingCore', 0.504),
+        locItem('Pickable_SurtlingCoreStand', 0.702, 2),
+        locItem('Pickable_SurtlingCoreStand', 0.646, 2),
+        locItem('Pickable_SurtlingCoreStand', 0.726),
+        locItem('Pickable_SurtlingCoreStand', 0.55, 2),
+        locItem('Pickable_SurtlingCoreStand', 0.504),
         locItem('TreasureChest_forestcrypt'),
       ],
       dist: [0.459, 0.421, 0.102, 0.018],
@@ -318,7 +318,7 @@ export const forestcrypt: DungeonRoomsConfig = {
       items: [
         locItem('Vegvisir_GDKing', 0.4),
         locItem('piece_groundtorch_wood', 0.5, 4),
-        locItem('SurtlingCore', 0.5, 5),
+        locItem('Pickable_SurtlingCoreStand', 0.5, 5),
         locItem('Pickable_ForestCryptRandom', 0.5, 6),
         locItem('TreasureChest_forestcrypt'),
         // spawners
@@ -344,7 +344,7 @@ export const forestcrypt: DungeonRoomsConfig = {
         locItem('BonePileSpawner'),
         locItem('Skeleton_Poison', 0.2),
         // loot
-        locItem('SurtlingCore', 0.5, 5),
+        locItem('Pickable_SurtlingCoreStand', 0.5, 5),
         locItem('Pickable_ForestCryptRandom', 0.5, 7),
         locItem('TreasureChest_forestcrypt'),
       ],
@@ -362,13 +362,13 @@ export const forestcrypt: DungeonRoomsConfig = {
         { pos: [-5, -1.5, -8] },
       ],
       items: [
-        locItem('MushroomYellow', 0.2, 13),
+        locItem('Pickable_Mushroom_yellow', 0.2, 13),
         // spawners
         locItem('Skeleton', 0.33, 4),
         locItem('Skeleton_Poison', 0.33),
         locItem('BonePileSpawner', 0.25),
         // loot
-        locItem('SurtlingCore', 0.55, 6),
+        locItem('Pickable_SurtlingCoreStand', 0.55, 6),
         locItem('Pickable_ForestCryptRandom', 0.5, 6),
         locItem('TreasureChest_forestcrypt'),
       ],
@@ -387,7 +387,7 @@ export const forestcrypt: DungeonRoomsConfig = {
       ],
       items: [
         // Props
-        locItem('MushroomYellow', 0.2, 10),
+        locItem('Pickable_Mushroom_yellow', 0.2, 10),
         // Treasure / Loot
         locItem('Pickable_ForestCryptRandom', 0.5, 9),
         // chests
