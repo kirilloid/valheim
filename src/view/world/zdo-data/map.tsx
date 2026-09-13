@@ -8,7 +8,7 @@ import { nop, runGenerator, Vector3 } from '../../../model/utils';
 import { stableHashCode } from '../../../model/hash';
 
 import { resources } from '../../../data/resources';
-import { creaturesById, vegetationById } from '../../../data/spawn-list';
+import { creaturesById, spawnList, vegetationById } from '../../../data/spawn-list';
 
 const HIGHLIGHT_MARKER_LIMIT = 1000;
 
@@ -40,11 +40,6 @@ function addBiome(biomes: Set<Biome>, id: EntityId): void {
 for (const [id, spawners] of Object.entries(creaturesById)) {
   const biomes = new Set(spawners.flatMap(s => s.biomes));
   addBiome(biomes, id);
-}
-
-for (const resource of resources) {
-  const biomes = new Set(resource.grow?.flatMap(g => g.locations));
-  addBiome(biomes, resource.id);
 }
 
 for (const [id, grow] of Object.entries(vegetationById)) {

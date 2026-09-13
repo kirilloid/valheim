@@ -4,14 +4,15 @@ import type {
   EntityGroup,
   EntityId,
   GeneralDrop,
-  ItemGrow,
   PhysicalObject,
   Plantable,
   Structure,
 } from '../types';
+import { PlayerStatType } from '../file/PlayerStatType';
 import { singleDrop, mods, dmg } from '../model/game';
 import { torchResist, woodResist } from '../model/building';
 import { pickables } from './pickable';
+import { variations } from '../model/utils';
 
 const oneOfEach = true;
 const ashResist = true;
@@ -103,7 +104,8 @@ function tree({
   group,
   tier,
   minToolTier,
-  hp: [baseHp, logHp, logHalfHp],
+  statType,
+  hp: [baseHp, logHp, logHalfHp, stubHp = 80],
   drop: [baseDrop, chunkDrop],
   stubWood = 'Wood',
   Plant,
@@ -112,7 +114,8 @@ function tree({
   group?: EntityGroup;
   tier: number;
   minToolTier: number;
-  hp: [number, number, number];
+  statType: PlayerStatType;
+  hp: [number, number, number] | [number, number, number, number];
   drop: [GeneralDrop, GeneralDrop];
   stubWood?: EntityId;
   Plant?: Plantable;
@@ -126,6 +129,7 @@ function tree({
       components: ['TreeBase'],
       group,
       tier,
+      statType,
       Destructible: {
         hp: baseHp,
         damageModifiers: chopOnly,
@@ -146,7 +150,7 @@ function tree({
       components: ['Destructible'],
       tier,
       Destructible: {
-        hp: 80,
+        hp: stubHp,
         damageModifiers: chopOnly,
         minToolTier,
         parts: [],
@@ -262,7 +266,7 @@ function rock({
   subtype = 'rock',
   id: [baseId, fracId],
   iconId,
-  tier = 1,
+  tier,
   minToolTier = 0,
   children,
   hp: fracHp,
@@ -272,7 +276,7 @@ function rock({
   subtype?: PhysicalObject['subtype'],
   id: [EntityId, EntityId];
   iconId?: string;
-  tier?: number;
+  tier: number;
   minToolTier?: number;
   children: number;
   hp: number;
@@ -402,7 +406,7 @@ export const traders: PhysicalObject[] = [
   },
 ];
 
-function TreasureChest_meadows(id: string, extraDrop?: GeneralDrop['options'][number]): PhysicalObject {
+function TreasureChest_meadows(id: string, ...extraDrop: GeneralDrop['options']): PhysicalObject {
   return {
     type: 'object',
     subtype: 'treasure',
@@ -421,7 +425,7 @@ function TreasureChest_meadows(id: string, extraDrop?: GeneralDrop['options'][nu
         { item: 'ArrowFlint', num: [10, 20] },
         { item: 'Torch' },
         { item: 'Flint', num: [2, 4] },
-        ...(extraDrop ? [extraDrop] : []),
+        ...extraDrop,
       ],
     }],
   };
@@ -445,7 +449,13 @@ const treasures: PhysicalObject[] = [
       ],
     }],
   },
-  TreasureChest_meadows('TreasureChest_meadows'),
+  TreasureChest_meadows(
+    'TreasureChest_meadows',
+    { item: 'Upgrader0Armor', weight: 0.1 },
+    { item: 'Upgrader0Weapon', weight: 0.05 },
+    { item: 'Upgrader1Armor', weight: 0.01 },
+    { item: 'Upgrader1Weapon', weight: 0.01 },
+  ),
   // TreasureChest_meadows_01
   TreasureChest_meadows('TreasureChest_meadows_axe1', { item: 'AxeHead1', weight: 2 }),
   // TreasureChest_meadows_02
@@ -469,6 +479,10 @@ const treasures: PhysicalObject[] = [
         { item: 'SilverNecklace' },
         { item: 'KnifeWood' },
         { item: 'AxeWood' },
+        { item: 'Upgrader0Weapon', weight: 0.1 },
+        { item: 'Upgrader0Armor', weight: 0.05 },
+        { item: 'Upgrader1Armor', weight: 0.01 },
+        { item: 'Upgrader1Weapon', weight: 0.01 },
       ],
     }],
     Beacon: 40,
@@ -485,9 +499,11 @@ const treasures: PhysicalObject[] = [
       oneOfEach,
       num: [2, 3],
       options: [
-        { item: 'MaceWood' },
+        { item: 'MaceWood', weight: 0.1 },
         { item: 'Feathers', num: [1, 3] },
         { item: 'Torch' },
+        { item: 'ArrowFlint', num: [10, 20] },
+        { item: 'LeatherScraps', num: [2, 3] },
       ],
     }],
     Beacon: 30,
@@ -506,7 +522,8 @@ const treasures: PhysicalObject[] = [
       options: [
         { item: 'Coins', num: [50, 100], weight: 5 },
         { item: 'AmberPearl', num: [1, 10], weight: 2 },
-        { item: 'Ruby', num: [1, 2], },
+        { item: 'Ruby', num: [1, 2] },
+        { item: 'Feathers', num: [3, 13] },
       ],
     }],  
   },
@@ -527,7 +544,11 @@ const treasures: PhysicalObject[] = [
         { item: 'ArrowFlint', num: [5, 10] },
         { item: 'Coins', num: [5, 30] },
         { item: 'Amber', num: [1, 2] },
-        { item: 'SpearWood' }, // real config is 1-2, but non-stackable items always yield 1
+        { item: 'SpearWood', weight: 0.2 }, // real config is 1-2, but non-stackable items always yield 1
+        { item: 'Upgrader1Armor', weight: 0.1 },
+        { item: 'Upgrader1Weapon', weight: 0.05 },
+        { item: 'Upgrader2Armor', weight: 0.01 },
+        { item: 'Upgrader2Weapon', weight: 0.01 },
       ],
     }],
   },
@@ -548,6 +569,11 @@ const treasures: PhysicalObject[] = [
         { item: 'Ruby', num: [1, 2] },
         { item: 'Coins', num: [10, 30] },
         { item: 'Amber', num: [1, 3] },
+        { item: 'SilverNecklace', weight: 0.2 },
+        { item: 'Upgrader1Armor', weight: 0.1 },
+        { item: 'Upgrader1Weapon', weight: 0.05 },
+        { item: 'Upgrader2Armor', weight: 0.01 },
+        { item: 'Upgrader2Weapon', weight: 0.01 },
       ],
     }],
   },
@@ -637,13 +663,18 @@ const treasures: PhysicalObject[] = [
       oneOfEach,
       num: [3, 5],
       options: [
-        { item: 'Wood', num: [10, 30] },
-        { item: 'Stone', num: [10, 30] },
+        { item: 'Wood', num: [10, 30], weight: 0.5 },
+        { item: 'Stone', num: [10, 30], weight: 0.5 },
         { item: 'Ruby', num: [1, 2] },
         { item: 'Coins', num: [20, 50] },
         { item: 'DeerHide', num: [2, 4] },
         { item: 'BoneFragments', num: [10, 15] },
         { item: 'LeatherScraps', num: [3, 5] },
+        { item: 'SilverNecklace', weight: 0.2 },
+        { item: 'Upgrader1Armor', weight: 0.1 },
+        { item: 'Upgrader1Weapon', weight: 0.05 },
+        { item: 'Upgrader2Armor', weight: 0.01 },
+        { item: 'Upgrader2Weapon', weight: 0.01 },
       ],
     }],
   },
@@ -675,7 +706,7 @@ const treasures: PhysicalObject[] = [
     drop: [{
       offByOneBug: false,
       oneOfEach,
-      num: [2, 3],
+      num: [3, 5],
       options: [
         { item: 'WitheredBone', num: [1, 1], weight: 0.5 },
         { item: 'ArrowIron', num: [10, 15] },
@@ -686,7 +717,11 @@ const treasures: PhysicalObject[] = [
         { item: 'Ruby', num: [1, 3] },
         { item: 'Chain' },
         { item: 'ElderBark', num: [20, 30] },
-        { item: 'SledgeWood' },
+        { item: 'SledgeWood', weight: 0.5 },
+        { item: 'Upgrader2Armor', weight: 0.1 },
+        { item: 'Upgrader2Weapon', weight: 0.05 },
+        { item: 'Upgrader3Armor', weight: 0.01 },
+        { item: 'Upgrader3Weapon', weight: 0.01 },
       ],
     }],
   },
@@ -700,7 +735,7 @@ const treasures: PhysicalObject[] = [
     drop: [{
       offByOneBug: false,
       oneOfEach,
-      num: [2, 3],
+      num: [4, 5],
       options: [
         { item: 'WitheredBone', weight: 0.5 },
         { item: 'ArrowIron', num: [10, 15] },
@@ -712,6 +747,10 @@ const treasures: PhysicalObject[] = [
         { item: 'Chain', num: [1, 3] },
         { item: 'ElderBark', num: [20, 30] },
         { item: 'IronScrap', num: [10, 20], weight: 2 },
+        { item: 'Upgrader2Armor', weight: 0.1 },
+        { item: 'Upgrader2Weapon', weight: 0.05 },
+        { item: 'Upgrader3Armor', weight: 0.01 },
+        { item: 'Upgrader3Weapon', weight: 0.01 },
       ],
     }],
   },
@@ -744,7 +783,7 @@ const treasures: PhysicalObject[] = [
     drop: [{
       offByOneBug: false,
       oneOfEach,
-      num: [2, 4],
+      num: [3, 5],
       options: [
         { item: 'OnionSeeds', num: [3, 9] },
         { item: 'Amber', num: [1, 6] },
@@ -753,7 +792,11 @@ const treasures: PhysicalObject[] = [
         { item: 'Ruby', num: [1, 2] },
         { item: 'Obsidian', num: [5, 10] },
         { item: 'ArrowFrost', num: [5, 10] },
-        { item: 'BattleaxeWood' },
+        { item: 'BattleaxeWood', weight: 0.2 },
+        { item: 'Upgrader3Armor', weight: 0.1 },
+        { item: 'Upgrader3Weapon', weight: 0.05 },
+        { item: 'Upgrader4Armor', weight: 0.01 },
+        { item: 'Upgrader4Weapon', weight: 0.01 },
       ],
     }],
   },
@@ -767,7 +810,7 @@ const treasures: PhysicalObject[] = [
     drop: [{
       offByOneBug: false,
       oneOfEach,
-      num: [2, 5],
+      num: [3, 5],
       options: [
         { item: 'Obsidian', num: [3, 9], weight: 0.5 },
         { item: 'SilverNecklace', num: [1, 1], weight: 0.1 },
@@ -775,6 +818,10 @@ const treasures: PhysicalObject[] = [
         { item: 'Coins', num: [15, 35] },
         { item: 'Coins', num: [15, 35] },
         { item: 'Obsidian', num: [1, 5] },
+        { item: 'Upgrader3Armor', weight: 0.1 },
+        { item: 'Upgrader3Weapon', weight: 0.05 },
+        { item: 'Upgrader4Armor', weight: 0.01 },
+        { item: 'Upgrader4Weapon', weight: 0.01 },
       ],
     }],
   },
@@ -798,18 +845,44 @@ const treasures: PhysicalObject[] = [
     drop: [{
       offByOneBug: false,
       oneOfEach,
-      num: [2, 3],
+      num: [3, 4],
       options: [
         { item: 'Barley', num: [2, 4], weight: 0.5 },
         { item: 'BlackMetalScrap', num: [2, 5] },
         { item: 'Needle', num: [2, 5] },
         { item: 'Coins', num: [10, 40] },
         { item: 'SharpeningStone', weight: 0.1 },
-        { item: 'AtgeirWood', weight: 0.1 },
+        { item: 'AtgeirWood', weight: 0.2 },
+        { item: 'Upgrader4Armor', weight: 0.1 },
+        { item: 'Upgrader4Weapon', weight: 0.05 },
+        { item: 'Upgrader5Armor', weight: 0.01 },
+        { item: 'Upgrader5Weapon', weight: 0.01 },
       ],
     }],
   },
-  // TreasureChest_heath_hildir
+  {
+    type: 'object',
+    subtype: 'treasure',
+    tier: 5,
+    disabled: true,
+    id: 'TreasureChest_heath_hildir',
+    iconId: 'piece/piece_chest_wood',
+    components: ['Container'],
+    drop: [{
+      offByOneBug: false,
+      oneOfEach,
+      num: [4, 5],
+      options: [
+        { item: 'AmberPearl', num: [2, 4] },
+        { item: 'Chain', num: [2, 5] },
+        { item: 'Coins', num: [11, 66] },
+        { item: 'Coins', num: [33, 99] },
+        { item: 'ChickenEgg', weight: 0.1 },
+        { item: 'Upgrader4Armor', weight: 0.3 },
+        { item: 'Upgrader4Weapon', weight: 0.2 },
+      ],
+    }],
+  },
   {
     type: 'object',
     subtype: 'treasure',
@@ -826,7 +899,7 @@ const treasures: PhysicalObject[] = [
         { item: 'ArrowObsidian', num: [5, 10] },
         { item: 'SilverNecklace', weight: 0.5 },
         { item: 'Coins', num: [66, 99] },
-        { item: 'GoblinTotem', weight: 0.1 },
+        { item: 'GoblinTotem', weight: 0.1 },        
       ],
     }],
   },
@@ -914,6 +987,50 @@ const treasures: PhysicalObject[] = [
     tier: 4,
     drop: [singleDrop('Coins', 3, 10)], // 3-9, but offByOneBug: false
   },
+  {
+    type: 'object',
+    subtype: 'treasure',
+    id: 'Pickable_MorkHallaTreasure_Group',
+    iconId: 'resource/AncientCoin',
+    components: ['PickableItem'],
+    tier: 8,
+    Beacon: 20,
+    drop: [
+      { num: [1, 1], chance: 0.75, options: [
+        { item: 'AncientGemstoneBlack' },
+        { item: 'AncientGemstoneGreen' },
+        { item: 'AncientGemstoneOrange' },
+        { item: 'AncientGemstonePurple' },
+      ]},
+      { num: [1, 1], chance: 0.5, options: [
+        { item: 'AncientGemstoneBlack' },
+        { item: 'AncientGemstoneGreen' },
+        { item: 'AncientGemstoneOrange' },
+        { item: 'AncientGemstonePurple' },
+      ]},
+      { num: [1, 1], chance: 0.25, options: [
+        { item: 'AncientGemstoneBlack' },
+        { item: 'AncientGemstoneGreen' },
+        { item: 'AncientGemstoneOrange' },
+        { item: 'AncientGemstonePurple' },
+      ]},
+    ],
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
+    id: 'Pickable_MorkHallaTreasure',
+    iconId: 'resource/AncientCoin',
+    components: ['PickableItem'],
+    tier: 8,
+    Beacon: 20,
+    drop: [{ num: [1, 1], options: [
+      { item: 'AncientGemstoneBlack' },
+      { item: 'AncientGemstoneGreen' },
+      { item: 'AncientGemstoneOrange' },
+      { item: 'AncientGemstonePurple' },
+    ]}],
+  },
   // those MountainKit are used in ice caves, but are not very important
   {
     type: 'object',
@@ -965,7 +1082,7 @@ const treasures: PhysicalObject[] = [
     drop: [{
       offByOneBug: false,
       oneOfEach,
-      num: [3, 4],
+      num: [4, 5],
       options: [
         { item: 'MeadHealthMinor', num: [1, 2] },
         { item: 'MeadStaminaMinor', num: [1, 2] },
@@ -974,8 +1091,12 @@ const treasures: PhysicalObject[] = [
         { item: 'Tankard_dvergr', weight: 0.1 },
         { item: 'Coins', num: [33, 66] },
         { item: 'Coins', num: [33, 66] },
-        { item: 'Coins', num: [33, 66] },
-        { item: 'THSwordWood' },
+        { item: 'THSwordWood', weight: 0.2 },
+        { item: 'Hook', weight: 0.5 },
+        { item: 'Upgrader5Armor', weight: 0.1 },
+        { item: 'Upgrader5Weapon', weight: 0.05 },
+        { item: 'Upgrader6Armor', weight: 0.01 },
+        { item: 'Upgrader6Weapon', weight: 0.01 },
       ],
     }],
   },
@@ -990,12 +1111,15 @@ const treasures: PhysicalObject[] = [
     drop: [{
       offByOneBug: false,
       oneOfEach,
-      num: [3, 3],
+      num: [2, 3],
       options: [
         { item: 'Coins', num: [12, 54] },
-        { item: 'Softtissue', num: [1, 8] },
-        { item: 'DvergrNeedle', num: [1, 3] },
-        { item: 'THSwordWood' },
+        { item: 'THSwordWood', weight: 0.1 },
+        { item: 'Hook', weight: 0.5 },
+        { item: 'Upgrader5Armor', weight: 0.1 },
+        { item: 'Upgrader5Weapon', weight: 0.05 },
+        { item: 'Upgrader6Armor', weight: 0.01 },
+        { item: 'Upgrader6Weapon', weight: 0.01 },
       ],
     }],
   },
@@ -1030,11 +1154,15 @@ const treasures: PhysicalObject[] = [
       oneOfEach,
       num: [2, 4],
       options: [
-        { item: 'MoltenCore', num: [1, 2] },
-        { item: 'CharredBone', num: [3, 12] },
-        { item: 'ArrowCarapace', num: [3, 12] },
-        { item: 'Coins', num: [99, 199] },
-        { item: 'Blackwood', num: [1, 2] },
+        { item: 'MoltenCore', num: [1, 2], weight: 0.5 },
+        { item: 'CharredBone', num: [3, 12], weight: 0.5 },
+        { item: 'ArrowCarapace', num: [3, 12], weight: 0.5 },
+        { item: 'Coins', num: [99, 199], weight: 0.5 },
+        { item: 'Blackwood', num: [1, 2], weight: 0.5 },
+        { item: 'Upgrader5Armor', weight: 0.1 },
+        { item: 'Upgrader5Weapon', weight: 0.05 },
+        { item: 'Upgrader6Armor', weight: 0.01 },
+        { item: 'Upgrader6Weapon', weight: 0.01 },
       ],
     }],
   },
@@ -1058,6 +1186,176 @@ const treasures: PhysicalObject[] = [
         { item: 'CelestialFeather', num: [1, 1], weight: 0.1 },
         { item: 'MoltenCore', num: [1, 2], weight: 0.5 },
         { item: 'FlametalOreNew', num: [10, 20] },
+        { item: 'Upgrader5Armor', weight: 0.2 },
+        { item: 'Upgrader5Weapon', weight: 0.1 },
+        { item: 'Upgrader6Armor', weight: 0.02 },
+        { item: 'Upgrader6Weapon', weight: 0.02 },
+      ],
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
+    tier: 8,
+    id: 'loot_deepNorth_Granary',
+    iconId: 'resource/Coins',
+    components: ['Container'], // 6x2
+    drop: [{
+      offByOneBug: false,
+      oneOfEach,
+      num: [3, 6],
+      options: [
+        { item: 'MoldAxe', weight: 0.2 },
+        { item: 'MoldBow', weight: 0.2 },
+        { item: 'MoldMace', weight: 0.2 },
+        { item: 'MoldSword', weight: 0.2 },
+        { item: 'MoldSpear', weight: 0.2 },
+        { item: 'Barley', num: [1, 10], weight: 0.5 },
+        { item: 'Flax', num: [1, 10], weight: 0.5 },
+        { item: 'TurnipSeeds', num: [1, 10], weight: 0.5 },
+        { item: 'CarrotSeeds', num: [1, 10], weight: 0.5 },
+        { item: 'OatSeeds', num: [4, 10], weight: 5 },
+        { item: 'PoteitrSeeds', num: [1, 10], weight: 3 },
+        { item: 'KaleSeeds', num: [2, 4], weight: 1 },
+      ],
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
+    tier: 8,
+    id: 'loot_deepNorth_TimberHall',
+    iconId: 'resource/Coins',
+    components: ['Container'], // 6x2
+    drop: [{
+      offByOneBug: false,
+      oneOfEach,
+      num: [2, 3],
+      options: [
+        { item: 'MoldAxe', weight: 0.1 },
+        { item: 'MoldBow', weight: 0.1 },
+        { item: 'MoldMace', weight: 0.1 },
+        { item: 'MoldSword', weight: 0.1 },
+        { item: 'MoldSpear', weight: 0.1 },
+        { item: 'MeadTasty', num: [1, 5] },
+        { item: 'BjornMeat', num: [1, 3] },
+        { item: 'Bread', num: [1, 2] },
+        { item: 'Onion', num: [1, 3] },
+        { item: 'Upgrader6Armor', weight: 0.1 },
+        { item: 'Upgrader6Weapon', weight: 0.05 },
+      ],
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
+    tier: 8,
+    id: 'TreasureChest_deepnorth_village',
+    iconId: 'resource/Coins',
+    components: ['Container'], // 4x2
+    drop: [{
+      offByOneBug: false,
+      oneOfEach,
+      num: [3, 4],
+      options: [
+        { item: 'ArrowCharred', num: [5, 11] },
+        { item: 'BoltCharred', num: [5, 11] },
+        { item: 'Coins', num: [22, 99] },
+        { item: 'Torch', num: [1, 1] },
+        { item: 'Feathers', num: [5, 13] },
+        { item: 'Upgrader6Armor', weight: 0.01 },
+        { item: 'Upgrader6Weapon', weight: 0.05 },
+        { item: 'Upgrader7Armor', weight: 0.01 },
+        { item: 'Upgrader7Weapon', weight: 0.01 },
+      ],
+    }],
+    Beacon: 30,
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
+    tier: 8,
+    id: 'TreasureChest_memorial_buried',
+    iconId: 'resource/Coins',
+    components: ['Container'], // 4x2
+    drop: [{
+      offByOneBug: false,
+      oneOfEach,
+      num: [1, 1],
+      options: [
+        { item: 'SilverNecklace' },
+        { item: 'MoldAtgeir' },
+        { item: 'MoldAxe' },
+        { item: 'MoldAxe2H' },
+        { item: 'MoldBow' },
+        { item: 'MoldCrossbow' },
+        { item: 'MoldFistweapon' },
+        { item: 'MoldKnife' },
+        { item: 'MoldMace' },
+        { item: 'MoldMace2H' },
+        { item: 'MoldShieldBuckler' },
+        { item: 'MoldShieldRound' },
+        { item: 'MoldShieldTower' },
+        { item: 'MoldSpear' },
+        { item: 'MoldSword' },
+        { item: 'MoldSword2H' },
+        { item: 'MoldStafffrostorbs' },
+        { item: 'MoldStaffOrbofAhri' },
+        { item: 'MoldStaffspiritcaller' },
+        { item: 'MoldStaffthunderblood' },
+      ],
+    }],
+    Beacon: 40,
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
+    tier: 8,
+    id: 'TreasureChest_morkhalla',
+    iconId: 'resource/Coins',
+    components: ['Container'], // 4x2
+    drop: [{
+      offByOneBug: false,
+      oneOfEach,
+      num: [2, 4],
+      options: [
+        { item: 'AncientCoin', num: [4, 10] },
+        { item: 'MeadStaminaMedium' },
+        { item: 'MeadHealthMedium' },
+        { item: 'MeadEitrMinor' },
+        { item: 'ArrowCharred', num: [5, 11] },
+        { item: 'Upgrader6Armor', weight: 0.05 },
+        { item: 'Upgrader6Weapon', weight: 0.025 },
+        { item: 'Upgrader7Armor', weight: 0.01 },
+        { item: 'Upgrader7Weapon', weight: 0.01 },
+      ],
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'treasure',
+    tier: 8,
+    id: 'shipwreck_vikingship_chest',
+    iconId: 'resource/Coins',
+    components: ['Container'], // 5x2
+    drop: [{
+      offByOneBug: false,
+      oneOfEach,
+      num: [2, 4],
+      options: [
+        { item: 'Coins', num: [50, 100], weight: 5 },
+        { item: 'SilverNecklace', num: [1, 10], weight: 0.5 },
+        { item: 'Feathers', num: [3, 13] },
+        { item: 'ArrowCharred', num: [3, 13], weight: 0.5 },
+        { item: 'BoltCharred', num: [3, 13], weight: 0.5 },
+        { item: 'AncientGemstoneBlack', weight: 0.2 },
+        { item: 'AncientGemstoneGreen', weight: 0.2 },
+        { item: 'AncientGemstoneOrange', weight: 0.2 },
+        { item: 'AncientGemstonePurple', weight: 0.2 },
+        { item: 'Upgrader6Armor', weight: 0.1 },
+        { item: 'Upgrader6Weapon', weight: 0.05 },
+        { item: 'Upgrader7Armor', weight: 0.02 },
+        { item: 'Upgrader7Weapon', weight: 0.01 },
       ],
     }],
   },
@@ -1280,6 +1578,60 @@ export const objects: PhysicalObject[] = [
   },
   {
     type: 'object',
+    subtype: 'plant',
+    id: 'Pickable_Kale',
+    iconId: 'resource/Kale',
+    components: ['Pickable', 'Plant'],
+    tier: 8,
+    Plant: {
+      subtype: 'vegetable',
+      plantedWith: 'KaleSeeds',
+      growTime: [4000, 5000],
+      cultivatedGround: true,
+      destroyUnhealthy: true,
+      freeSpaceRadius: 0.5,
+      biomes: ['Meadows', 'BlackForest', 'Swamp', 'Plains'],
+    },
+    drop: [singleDrop('Kale', 3)],
+  },
+  {
+    type: 'object',
+    subtype: 'plant',
+    id: 'Pickable_SeedKale',
+    iconId: 'resource/KaleSeeds',
+    components: ['Pickable', 'Plant'],
+    tier: 8,
+    Plant: {
+      subtype: 'vegetable',
+      plantedWith: 'Kale',
+      growTime: [4000, 5000],
+      cultivatedGround: true,
+      destroyUnhealthy: true,
+      freeSpaceRadius: 0.5,
+      biomes: ['Meadows', 'BlackForest', 'Swamp', 'Plains'],
+    },
+    drop: [singleDrop('KaleSeeds', 3)],
+  },
+  {
+    type: 'object',
+    subtype: 'plant',
+    id: 'Pickable_Poteitr',
+    iconId: 'resource/Poteitr',
+    components: ['Pickable', 'Plant'],
+    tier: 8,
+    Plant: {
+      subtype: 'vegetable',
+      plantedWith: 'PoteitrSeeds',
+      growTime: [4000, 5000],
+      cultivatedGround: true,
+      destroyUnhealthy: true,
+      freeSpaceRadius: 0.5,
+      biomes: ['Meadows', 'BlackForest', 'Swamp', 'Plains'],
+    },
+    drop: [singleDrop('Poteitr', 3), singleDrop('PoteitrSeeds')],
+  },
+  {
+    type: 'object',
     subtype: 'indestructible',
     id: 'Stone1_huge',
     tier: 0,
@@ -1342,6 +1694,7 @@ export const objects: PhysicalObject[] = [
   },
   ...rock({
     id: ['rock4_coast', 'rock4_coast_frac'],
+    tier: 1,
     children: 132,
     hp: 50,
     drop: singleDrop('Stone', 4, 8),
@@ -1432,6 +1785,7 @@ export const objects: PhysicalObject[] = [
     group: 'beech',
     tier: 1,
     minToolTier: 0,
+    statType: PlayerStatType.TreeBeech,
     hp: [80, 60, 60],
     drop: [{
       chance: 0.5,
@@ -1469,7 +1823,6 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'tree',
     id: 'FirTree_oldLog',
-    iconId: 'object/FirTree_oldLog',
     tier: 0,
     Destructible: {
       hp: 40,
@@ -1484,6 +1837,7 @@ export const objects: PhysicalObject[] = [
     group: 'fir',
     tier: 1,
     minToolTier: 0,
+    statType: PlayerStatType.TreeFir,
     hp: [80, 60, 40],
     drop: [{
       chance: 0.5,
@@ -1543,6 +1897,7 @@ export const objects: PhysicalObject[] = [
     id: ['Pinetree_01', 'Pinetree_01_Stub', 'PineTree_log', 'PineTree_log_half'],
     tier: 2,
     minToolTier: 0,
+    statType: PlayerStatType.TreePine,
     hp: [120, 60, 40],
     drop: [{
       chance: 0.5,
@@ -1574,6 +1929,7 @@ export const objects: PhysicalObject[] = [
     group: 'birch',
     tier: 2,
     minToolTier: 2,
+    statType: PlayerStatType.TreeBirch,
     hp: [80, 60, 60],
     drop: [{
       chance: 0.5,
@@ -1599,6 +1955,37 @@ export const objects: PhysicalObject[] = [
       freeSpaceRadius: 2,
       biomes: ['Meadows', 'BlackForest', 'Plains'],
     },
+  }),
+  ...variations<PhysicalObject>({
+    type: 'object',
+    subtype: 'tree',
+    tags: ['plant'],
+    id: 'Birch2',
+    group: 'birch',
+    components: ['TreeBase'],
+    tier: 2,
+    statType: PlayerStatType.TreeBirch,
+    Destructible: {
+      hp: 80,
+      damageModifiers: chopOnly,
+      minToolTier: 2,
+      parts: [
+        { id: 'BirchStub', num: 1 },
+        { id: 'Birch_log', num: 1 },
+      ],
+    },
+    drop: [{
+      chance: 0.5,
+      num: [2, 2],
+      options: [
+        { weight: 1, item: 'Resin', num: [1, 2] },
+        { weight: 1, item: 'Feathers', num: [1, 2] },
+        { weight: 2, item: 'BirchSeeds', num: [1, 2] },
+      ],
+    }],
+  }, {
+    Birch1_aut: { tier: 5 },
+    Birch2_aut: { tier: 5 },
   }),
   {
     // tags: ['plant'],
@@ -1630,6 +2017,7 @@ export const objects: PhysicalObject[] = [
     id: ['Oak1', 'OakStub', 'Oak_log', 'Oak_log_half'],
     tier: 2,
     minToolTier: 2,
+    statType: PlayerStatType.TreeOak,
     hp: [200, 160, 140],
     drop: [{
       chance: 0.5,
@@ -1688,38 +2076,34 @@ export const objects: PhysicalObject[] = [
     id: 'SwampTree2_log',
     tier: 3,
   },
-  {
+  ...[1, 2, 3].map<PhysicalObject>(id => ({
     type: 'object',
-    subtype: 'tree',
-    id: 'shrub_2',
-    tier: 2,
-  },
-  {
-    type: 'object',
-    subtype: 'tree',
-    id: 'shrub_2_heath',
-    tier: 5,
-  },
-  {
+    subtype: 'indestructible',
+    id: `BogWitch_Talisman${id}`,
+    tier: 3,
+  })),
+  ...variations<PhysicalObject>({
     type: 'object',
     subtype: 'tree',
     id: 'Bush01',
     tier: 1,
-  },
-  {
-    type: 'object',
-    subtype: 'tree',
-    id: 'Bush02_en',
-    tier: 1,
-  },
-  {
-    type: 'object',
-    subtype: 'tree',
-    id: 'Bush01_heath',
-    tier: 5,
-  },
+    Destructible: {
+      minToolTier: 0,
+      hp: 30,
+      damageModifiers: mods([0, 0, 1, 2, 0, 0, 0, 0, 3, 3]),
+      parts: [],
+    },
+    drop: [singleDrop('Wood', 1, 2)],
+  }, {
+    'Bush02_en': {},
+    'shrub_2': {},
+    'Bush01_heath': { tier: 5 },
+    'shrub_2_heath': { tier: 5 },
+    'Bush01_deepnorth': { tier: 8 },
+  }),
   ...rock({
     id: ['rock4_forest', 'rock4_forest_frac'],
+    tier: 2,
     hp: 50,
     children: 132,
     drop: singleDrop('Stone', 4, 8),
@@ -1800,7 +2184,7 @@ export const objects: PhysicalObject[] = [
     type: 'object',
     subtype: 'misc',
     id: 'BonePileSpawner',
-    components: ['CreatureSpawner'],
+    components: ['SpawnArea'],
     tier: 2,
     Destructible: {
       minToolTier: 0,
@@ -2008,6 +2392,20 @@ export const objects: PhysicalObject[] = [
   {
     type: 'object',
     subtype: 'misc',
+    id: 'bombdynamite_explosion',
+    iconId: 'weapon/BombDynamite',
+    tier: 8,
+    Aoe: {
+      damage: dmg({ blunt: 140, chop: 100, pickaxe: 50 }),
+      toolTier: 6,
+      backstabBonus: 1,
+      radius: 3,
+      ttl: 3,
+    },
+  },
+  {
+    type: 'object',
+    subtype: 'misc',
     id: 'GuckSack',
     iconId: 'resource/Guck',
     tier: 3,
@@ -2019,20 +2417,7 @@ export const objects: PhysicalObject[] = [
     },
     drop: [singleDrop('Guck', 4, 7)],
   },
-  {
-    type: 'object',
-    subtype: 'rock',
-    id: 'Rock_4_plains',
-    tier: 1,
-    Destructible: {
-      hp: 30,
-      damageModifiers: pickOnly,
-      minToolTier: 0,
-      parts: [],
-    },
-    drop: [singleDrop('Stone', 3, 6)],
-  },
-  {
+  ...variations<PhysicalObject>({
     type: 'object',
     subtype: 'rock',
     id: 'Rock_4',
@@ -2045,15 +2430,27 @@ export const objects: PhysicalObject[] = [
     },
     drop: [singleDrop('Stone', 3, 6)],
   },
+  {
+    'Rock_4_plains': { tier: 5 },
+    'Rock_4_deepnorth': { tier: 8 },
+  }),
   ...rock({
     id: ['Rock_3', 'Rock_3_frac'],
     tier: 1,
     minToolTier: 0,
     children: 5,
-    hp: 15,
+    hp: 30,
     drop: singleDrop('Stone', 3, 6),
   }),
-  {
+  ...rock({
+    id: ['Rock_3_deepnorth', 'Rock_3_deepnorth_frac'],
+    tier: 8,
+    minToolTier: 0,
+    children: 5,
+    hp: 30,
+    drop: singleDrop('Stone', 3, 6),
+  }),
+  ...variations<PhysicalObject>({
     type: 'object',
     subtype: 'rock',
     id: 'Rock_7',
@@ -2066,7 +2463,10 @@ export const objects: PhysicalObject[] = [
       parts: [],
     },
     drop: [singleDrop('Stone', 3, 6)],
-  },
+  }, {
+    'Rock_7_deepnorth': { tier: 8 },
+    'Rock_7_meadows': { disabled: true },
+  }),
   {
     type: 'object',
     subtype: 'misc',
@@ -2249,6 +2649,7 @@ export const objects: PhysicalObject[] = [
   runeStone({ id: 'RuneStone_BlackForest', tier: 2, texts: loreTexts('blackforest', 13) }),
   runeStone({ id: 'RuneStone_Boars', tier: 1, texts: ['meadows_boartaming'] }),
   runeStone({ id: 'RuneStone_Bonemass', tier: 3, texts: ['bonemass'] }),
+  runeStone({ id: 'RuneStone_DeepNorth', tier: 8, texts: loreTexts('deepnorth', 18) }),
   runeStone({ id: 'RuneStone_DragonQueen', tier: 4, texts: ['dragonqueen'] }),
   runeStone({ id: 'RuneStone_Drake', tier: 4, texts: ['drake'] }),
   runeStone({ id: 'RuneStone_Draugr', tier: 3, texts: ['draugr'] }),
@@ -2260,6 +2661,7 @@ export const objects: PhysicalObject[] = [
   runeStone({ id: 'RuneStone_Mountains', tier: 4, texts: loreTexts('mountains', 12).concat('mountains_fenring') }),
   runeStone({ id: 'RuneStone_Plains', tier: 5, texts: loreTexts('plains', 13) }),
   runeStone({ id: 'RuneStone_Swamps', tier: 3, texts: loreTexts('swamp', 12) }),
+  runeStone({ id: 'RuneStone_UpgradeStation', tier: 4, texts: ['$lore_upgradestation_label'] }),
   {
     type: 'object',
     group: 'runestone',
@@ -2268,6 +2670,23 @@ export const objects: PhysicalObject[] = [
     RuneStone: ['caveman01'],
     tier: 4,
   },
+  ...[
+    { id: 'BossStone_Eikthyr', item: 'TrophyEikthyr', power: 'GP_Eikthyr' },
+    { id: 'BossStone_TheElder', item: 'TrophyTheElder', power: 'GP_TheElder' },
+    { id: 'BossStone_Bonemass', item: 'TrophyBonemass', power: 'GP_Bonemass' },
+    { id: 'BossStone_DragonQueen', item: 'TrophyModer', power: 'GP_DragonQueen' },
+    { id: 'BossStone_Yagluth', item: 'TrophyGoblinKing', power: 'GP_Yagluth' },
+    { id: 'BossStone_TheQueen', item: 'TrophySeekerQueen', power: 'GP_Queen' },
+    { id: 'BossStone_Fader', item: 'TrophyFader', power: 'GP_Fader' },
+    { id: 'StartPlatform', item: 'FrozenKingDrop', power: undefined },
+  ].map<PhysicalObject>(({ id, item, power }, tier) => ({
+    type: 'object',
+    id,
+    iconId: `resource/${item}`,
+    subtype: 'indestructible',
+    tier,
+    BossStone: { item, power },
+  })),
   {
     type: 'object',
     id: 'MountainKit_wood_gate',
@@ -2403,18 +2822,21 @@ export const objects: PhysicalObject[] = [
   }),
   ...rock({
     id: ['rock1_mountain', 'rock1_mountain_frac'],
+    tier: 4,
     hp: 50,
     children: 165,
     drop: singleDrop('Stone', 4, 8),
   }),
   ...rock({
     id: ['rock2_mountain', 'rock2_mountain_frac'],
+    tier: 4,
     hp: 50,
     children: 122,
     drop: singleDrop('Stone', 4, 8),
   }),
   ...rock({
     id: ['rock3_mountain', 'rock3_mountain_frac'],
+    tier: 4,
     hp: 50,
     children: 122,
     drop: singleDrop('Stone', 4, 8),
@@ -2423,18 +2845,21 @@ export const objects: PhysicalObject[] = [
   ...rock({
     id: ['rock4_heath', 'rock4_heath_frac'],
     hp: 50,
+    tier: 5,
     children: 120,
     drop: singleDrop('Stone', 4, 8),
   }),
   ...rock({
     id: ['rock2_heath', 'rock2_heath_frac'],
     hp: 50,
+    tier: 5,
     children: 122,
     drop: singleDrop('Stone', 4, 8),
   }),
   ...rock({
     id: ['HeathRockPillar', 'HeathRockPillar_frac'],
     hp: 60,
+    tier: 5,
     children: 194,
     drop: singleDrop('Stone', 1, 3),
   }),
@@ -2490,17 +2915,23 @@ export const objects: PhysicalObject[] = [
   // DEEP NORTH
   {
     type: 'object',
-    disabled: true,
-    subtype: 'indestructible',
+    subtype: 'rock',
     id: 'ice1',
     floating: true,
-    tier: 6,
+    tier: 8,
+    Destructible: {
+      hp: 20,
+      damageModifiers: mods([0, 1, 1, 3, 0, 2, 3, 0, 3, 0]),
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('Ice', 3, 5)],
   },
   {
     type: 'object',
     subtype: 'indestructible',
     id: 'ice_rock1',
-    tier: 6,
+    tier: 8,
   },
   {
     type: 'object',
@@ -2804,7 +3235,6 @@ export const objects: PhysicalObject[] = [
     hp: 70,
     drop: singleDrop('Stone', 4, 8),
   }),
-  // cliff_ashlands1
   ...rock({
     id: ['cliff_ashlands2', 'cliff_ashlands2_frac'],
     tier: 7,
@@ -2822,8 +3252,8 @@ export const objects: PhysicalObject[] = [
   ...rock({
     id: ['cliff_ashlands4', 'cliff_ashlands4_frac'],
     tier: 7,
-    children: 196,
-    hp: 70,
+    children: 88,
+    hp: 100,
     drop: singleDrop('Grausten', 4, 8),
   }),
   ...rock({
@@ -2839,33 +3269,12 @@ export const objects: PhysicalObject[] = [
       ],
     }
   }),
-  ...rock({
-    id: ['cliff_ashlands6', 'cliff_ashlands6_frac'],
-    tier: 7,
-    children: 2,
-    hp: 50,
-    drop: {
-      num: [2, 4],
-      options: [
-        { weight: 1, item: 'Stone' },
-        { weight: 5, item: 'Grausten' },
-      ],
-    }
-  }),
-  // cliff_ashlands7
-  ...rock({
-    id: ['cliff_ashlands4', 'cliff_ashlands4_frac'],
-    tier: 7,
-    children: 88,
-    hp: 100,
-    drop: singleDrop('Grausten', 4, 8),
-  }),
-  // cliff_ashlands9
   ...tree({
     id: ['AshlandsTree1', 'AshlandsTreeStump1', 'AshlandsTreeLog1', 'AshlandsTreeLogHalf1'],
     group: 'ashtree',
     tier: 7,
     minToolTier: 0,
+    statType: PlayerStatType.TreeAshlands,
     hp: [200, 90, 90],
     drop: [{
       chance: 0.5,
@@ -2883,40 +3292,61 @@ export const objects: PhysicalObject[] = [
     }],
     stubWood: 'Blackwood',
   }),
-  ...tree({
-    id: ['AshlandsTree3', 'AshlandsTreeStump2', 'AshlandsTreeLog1', 'AshlandsTreeLogHalf1'],
+  {
+    type: 'object',
+    subtype: 'tree',
+    tags: ['plant'],
+    id: 'AshlandsTree3',
+    components: ['TreeBase'],
     group: 'ashtree',
     tier: 7,
-    minToolTier: 0,
-    hp: [200, 90, 90],
+    statType: PlayerStatType.TreeAshlands,
+    Destructible: {
+      hp: 200,
+      damageModifiers: chopOnly,
+      minToolTier: 0,
+      parts: [
+        { id: 'AshlandsTreeStump2', num: 1 },
+        { id: 'AshlandsTreeLog1', num: 1 },
+      ],
+    },
     drop: [{
       chance: 0.5,
       num: [1, 2],
       options: [
-        { weight: 2, item: 'Blackwood', num: [1, 2] },
-        { weight: 1, item: 'CharcoalResin', num: [1, 1] },
+        { item: 'Blackwood', num: [1, 2] },
+        { item: 'CharcoalResin', num: [1, 1], weight: 0.25 },
       ]
-    }, {
-      num: [10, 10],
-      options: [
-        { weight: 2, item: 'Blackwood' },
-        { weight: 1, item: 'Wood' },
-      ],
     }],
-    stubWood: 'Blackwood',
-  }),
+  },
+  {
+    type: 'object',
+    subtype: 'misc',
+    id: 'AshlandsTreeStump2',
+    iconId: 'object/Stub',
+    components: ['Destructible'],
+    tier: 7,
+    Destructible: {
+      hp: 80,
+      damageModifiers: chopPickOnly,
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('Blackwood', 2)],
+  },
   ...tree({
     id: ['AshlandsTree6', 'AshlandsTreeStump3', 'AshlandsTreeLog2', 'AshlandsTreeLogHalf2'],
     group: 'ashtree',
     tier: 7,
     minToolTier: 0,
+    statType: PlayerStatType.TreeAshlands,
     hp: [200, 90, 90],
     drop: [{
       chance: 0.5,
       num: [1, 2],
       options: [
-        { weight: 2, item: 'Blackwood', num: [1, 2] },
-        { weight: 1, item: 'CharcoalResin', num: [1, 1] },
+        { item: 'Blackwood', num: [1, 2] },
+        { item: 'CharcoalResin', num: [1, 1], weight: 0.5 },
       ]
     }, {
       num: [10, 10],
@@ -2927,6 +3357,34 @@ export const objects: PhysicalObject[] = [
     }],
     stubWood: 'Blackwood',
   }),
+  {
+    type: 'object',
+    subtype: 'tree',
+    tags: ['plant'],
+    id: 'AshlandsTree6_big',
+    iconId: 'object/AshlandsTree6',
+    components: ['TreeBase'],
+    group: 'ashtree',
+    tier: 7,
+    statType: PlayerStatType.TreeAshlands,
+    Destructible: {
+      hp: 200,
+      damageModifiers: chopOnly,
+      minToolTier: 0,
+      parts: [
+        { id: 'AshlandsTreeStump3', num: 1 },
+        { id: 'AshlandsTreeLog2', num: 1 },
+      ],
+    },
+    drop: [{
+      chance: 0.5,
+      num: [1, 2],
+      options: [
+        { item: 'Blackwood', num: [1, 2] },
+        { item: 'CharcoalResin', num: [1, 1], weight: 0.25 },
+      ]
+    }],
+  },
   { // rock_ashlands1
     type: 'object',
     subtype: 'rock',
@@ -3239,22 +3697,28 @@ export const objects: PhysicalObject[] = [
     drop: [singleDrop('Grausten')],
   },
   // pot2_red
-  {
+  ...[
+    { id: '1', color: 'green', hp: 40 },
+    { id: '2', color: 'green', hp: 50 },
+    { id: '3', color: 'green', hp: 30 },
+    { id: '1', color: 'red', hp: 40 },
+    { id: '2', color: 'red', hp: 50 },
+    { id: '3', color: 'red', hp: 30 },
+  ].map<PhysicalObject>(({ id, color, hp }) => ({
     type: 'object',
     subtype: 'misc',
-    id: 'ashland_pot2_red',
-    // iconId: 'piece/piece_pot2_cracked',
+    id: `ashland_pot${id}_${color}`,
     tier: 7,
     Destructible: {
-      hp: 40,
-      damageModifiers: mods([0, 0, 0, 0, 0, 1, 1, 1, 3, 3]),
+      hp,
+      damageModifiers: mods([2, 0, 1, 0, 2, 1, 1, 1, 3, 3]),
       minToolTier: 0,
       ashResist,
       parts: [],
     },
     drop: [{
-      num: [1, 2],
       oneOfEach,
+      num: [2, 3],
       options: [
         { item: 'Pot_Shard_Green' },
         { item: 'Pot_Shard_Green' },
@@ -3264,9 +3728,13 @@ export const objects: PhysicalObject[] = [
         { item: 'MeadHealthMinor', weight: 0.1 },
         { item: 'MeadStaminaMinor', weight: 0.1 },
         { item: 'MeadTasty', weight: 0.1 },
+        { item: 'Upgrader5Armor', weight: 0.025 },
+        { item: 'Upgrader5Weapon', weight: 0.0125 },
+        { item: 'Upgrader6Armor', weight: 0.01 },
+        { item: 'Upgrader6Weapon', weight: 0.01 },
       ],
     }],
-  },
+  })),
   {
     type: 'object',
     subtype: 'treasure',
@@ -3392,6 +3860,608 @@ export const objects: PhysicalObject[] = [
   },
   {
     type: 'object',
+    subtype: 'tree',
+    id: 'stubbe_deepnorth',
+    tier: 8,
+    Destructible: {
+      hp: 100,
+      damageModifiers: { ...chopPickOnly, fire: 'normal' },
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('Frostwood', 3, 4)],
+  },
+  {
+    type: 'object',
+    subtype: 'tree',
+    id: 'FirTree_oldLog_deepnorth',
+    iconId: 'object/FirTree_oldLog',
+    tier: 8,
+    Destructible: {
+      hp: 150,
+      damageModifiers: chopOnly,
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('Frostwood', 4, 6)],
+  },
+  ...tree({
+    id: ['SnowFirTree', 'FirTree_Snow_Stub', 'FirTree_Snow_log', 'FirTree_Snow_log_half'],
+    group: 'fir',
+    tier: 8,
+    minToolTier: 0,
+    statType: PlayerStatType.TreeSnowFir,
+    hp: [200, 60, 40, 100],
+    drop: [{
+      chance: 0.5,
+      num: [1, 2],
+      options: [
+        { weight: 4, item: 'FirCone' },
+        { weight: 1, item: 'Feathers' },
+        { weight: 1, item: 'Resin' },
+      ]
+    }, {
+      num: [10, 10],
+      options: [
+        { item: 'Frostwood', weight: 0.5 },
+        { item: 'Wood' },
+        { item: 'FirConeFrost' },
+      ],
+    }],
+  }),
+  {
+    type: 'object',
+    subtype: 'tree',
+    tags: ['plant'],
+    id: 'SnowFirTree 2',
+    group: 'fir',
+    components: ['TreeBase'],
+    tier: 8,
+    statType: PlayerStatType.TreeSnowFir,
+    Destructible: {
+      hp: 200,
+      damageModifiers: chopOnly,
+      minToolTier: 0,
+      parts: [
+        { id: 'FirTree_Snow_Stub', num: 1 },
+        { id: 'FirTree_Snow_log', num: 1 },
+      ],
+    },
+    drop: [{
+      chance: 0.5,
+      num: [1, 2],
+      options: [
+        { item: 'FirCone' },
+        { item: 'Feathers', weight: 0.25 },
+        { item: 'Resin', weight: 0.25 },
+      ]
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'tree',
+    id: 'SnowFirTree_small',
+    group: 'fir',
+    tier: 8,
+    Destructible: {
+      hp: 80,
+      damageModifiers: chopPickOnly,
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('Frostwood', 1, 3)],
+  },
+  ...tree({
+    id: ['Pinetree_Snow', 'Pinetree_Snow_Stub', 'PineTree_Snow_log', 'PineTree_Snow_log_half'],
+    group: 'pine',
+    tier: 8,
+    minToolTier: 0,
+    statType: PlayerStatType.TreeSnowPine,
+    hp: [120, 60, 40, 120],
+    drop: [{
+      chance: 0.5,
+      num: [1, 2],
+      options: [
+        { item: 'Resin' },
+        { item: 'Feathers', weight: 0.25 },
+        { item: 'PineCone' },
+      ]
+    }, {
+      num: [15, 15],
+      options: [
+        { item: 'Frostwood', weight: 0.5 },
+        { item: 'Wood' },
+      ],
+    }],
+    stubWood: 'Frostwood',
+  }),
+  {
+    type: 'object',
+    subtype: 'tree',
+    tags: ['plant'],
+    id: 'Pinetree_Snow_dead',
+    group: 'pine',
+    components: ['TreeBase'],
+    tier: 8,
+    statType: PlayerStatType.TreeSnowPine,
+    Destructible: {
+      hp: 120,
+      damageModifiers: chopOnly,
+      minToolTier: 0,
+      parts: [
+        { id: 'Pinetree_Snow_Stub', num: 1 },
+        { id: 'PineTree_Snow_log', num: 1 },
+      ],
+    },
+    drop: [{
+      chance: 0.5,
+      num: [1, 2],
+      options: [
+        { item: 'Resin' },
+        { item: 'Feathers', weight: 0.25 },
+        { item: 'PineCone' },
+      ]
+    }],
+  },
+  ...tree({
+    id: ['FirTree_big', 'FirTree_plantable_Stub', 'FirTree_Big_log', 'FirTree_log_half'],
+    group: 'fir',
+    tier: 8,
+    minToolTier: 0,
+    statType: PlayerStatType.TreeFir,
+    hp: [200, 60, 40],
+    drop: [{
+      chance: 0.5,
+      num: [1, 2],
+      options: [
+        { item: 'FirCone' },
+        { item: 'Feathers', weight: 0.25 },
+        { item: 'Resin', weight: 0.25 },
+      ]
+    }, {
+      num: [10, 10],
+      options: [
+        { item: 'Frostwood', weight: 0.5 },
+        { item: 'Wood' },
+        { item: 'FirConeFrost' },
+      ],
+    }],
+    Plant: {
+      subtype: 'tree',
+      plantedWith: 'FirConeFrost',
+      growTime: [3000, 5000],
+      cultivatedGround: false,
+      destroyUnhealthy: true,
+      freeSpaceRadius: 2,
+      biomes: ['Meadows', 'BlackForest', 'Mountain', 'Plains'],
+    },
+  }),
+  {
+    type: 'object',
+    subtype: 'tree',
+    id: 'StumpHut',
+    tier: 8,
+    Destructible: {
+      hp: 1,
+      damageModifiers: { ...chopPickOnly, fire: 'normal' },
+      minToolTier: 0,
+      parts: [{ id: 'StumpHut_frac', num: 17 }],
+    },
+  },
+  {
+    type: 'object',
+    subtype: 'tree',
+    id: 'StumpHut_frac',
+    tier: 8,
+    Destructible: {
+      hp: 100,
+      damageModifiers: { ...chopPickOnly, fire: 'normal' },
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('Frostwood', 1, 3)],
+  },
+  {
+    type: 'object',
+    subtype: 'tree',
+    id: 'StumpHole',
+    tier: 8,
+    Destructible: {
+      hp: 200,
+      damageModifiers: chopPickOnly,
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('Frostwood', 4, 6)],
+  },
+  {
+    type: 'object',
+    subtype: 'tree',
+    id: 'StumpLog',
+    tier: 8,
+    Destructible: {
+      hp: 200,
+      damageModifiers: chopPickOnly,
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('Frostwood', 4, 6)],
+  },
+  
+  ...rock({
+    id: ['IceShore_1', 'IceShore_frac'],
+    tier: 8,
+    minToolTier: 2,
+    children: 18,
+    hp: 50,
+    drop: singleDrop('Ice', 2, 3),
+  }),
+  ...rock({
+    subtype: 'ore',
+    id: ['TrollFrost_Dead', 'TrollFrost_Frac'],
+    tier: 8,
+    minToolTier: 6,
+    children: 52,
+    hp: 50,
+    drop: {
+      num: [2, 3],
+      options: [
+        { item: 'Stone', weight: 2 },
+        { item: 'GoldOre' },
+      ],
+    },
+  }),
+  {
+    type: 'object',
+    subtype: 'ore',
+    id: 'TrollFrost_Frac_legs',
+    components: ['MineRock5'],
+    tier: 8,
+    Destructible: {
+      hp: 0,
+      damageModifiers: pickOnly,
+      minToolTier: 6,
+      parts: [{ id: 'TrollFrost_Frac', num: 24 }],
+    },
+  },
+  {
+    type: 'object',
+    subtype: 'ore',
+    id: 'TrollFrost_Frac_arm',
+    components: ['MineRock5'],
+    tier: 8,
+    Destructible: {
+      hp: 0,
+      damageModifiers: pickOnly,
+      minToolTier: 6,
+      parts: [{ id: 'TrollFrost_Frac', num: 7 }],
+    },
+  },
+  ...[
+    'FrozenGD',
+    'FrozenSkeleton_Pose1',
+    'FrozenSkeleton_Pose2',
+  ].map<PhysicalObject>(id => ({
+    id,
+    iconId: 'resource/Ice',
+    type: 'object',
+    subtype: 'misc',
+    tier: 8,
+    Destructible: {
+      hp: 30, damageModifiers: mods([0, 0, 1, 2, 0, 0, 0, 0, 3, 3]), minToolTier: 0, parts: [],
+    },
+    drop: [singleDrop('Ice'), {
+      num: [1, 3],
+      oneOfEach: true,
+      options: [
+        { item: 'Ice' },
+        { item: 'Ice', num: [1, 2] },
+        { item: 'Resin' },
+      ],
+    }],
+  })),
+  {
+    type: 'object',
+    subtype: 'misc',
+    id: 'Spawner_Hole',
+    components: ['SpawnArea'],
+    tier: 8,
+    Destructible: {
+      minToolTier: 0,
+      hp: 300,
+      damageModifiers: {
+        blunt: 'normal',
+        slash: 'normal',
+        pierce: 'normal',
+        chop: 'normal',
+        pickaxe: 'weak',
+        fire: 'resistant',
+        frost: 'resistant',
+        lightning: 'resistant',
+        poison: 'immune',
+        spirit: 'immune',
+      },
+      parts: [],
+    },
+    SpawnArea: {
+      levelUpChance: 0.15,
+      maxNear: 2,
+      interval: 10,
+      prefabs: [
+        { prefab: 'Skeleton', weight: 1, level: [1, 3] },
+      ],
+    },
+    drop: [singleDrop('Frostwood'), {
+      offByOneBug: false,
+      num: [1, 3],
+      options: [
+        { item: 'Frostwood', num: [1, 3], weight: 10 },
+        { item: 'IronScrap', num: [1, 1], weight: 2 },
+        { item: 'SilverNecklace', num: [1, 1], weight: 2 },
+        { item: 'MoldAtgeir', num: [1, 1], weight: 1 },
+        { item: 'MoldAxe', num: [1, 1], weight: 1 },
+        { item: 'MoldAxe2H', num: [1, 1], weight: 1 },
+        { item: 'MoldBow', num: [1, 1], weight: 1 },
+        { item: 'MoldCrossbow', num: [1, 1], weight: 1 },
+        { item: 'MoldFistweapon', num: [1, 1], weight: 1 },
+        { item: 'MoldKnife', num: [1, 1], weight: 1 },
+        { item: 'MoldMace', num: [1, 1], weight: 1 },
+        { item: 'MoldMace2H', num: [1, 1], weight: 1 },
+        { item: 'MoldShieldBuckler', num: [1, 1], weight: 1 },
+        { item: 'MoldShieldRound', num: [1, 1], weight: 1 },
+        { item: 'MoldShieldTower', num: [1, 1], weight: 1 },
+        { item: 'MoldSpear', num: [1, 1], weight: 1 },
+        { item: 'MoldSword', num: [1, 1], weight: 1 },
+        { item: 'MoldSword2H', num: [1, 1], weight: 1 },
+        { item: 'MoldKeys', num: [1, 1], weight: 2 },
+      ],
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'misc',
+    id: 'BlobMorkBig',
+    components: ['CreatureSpawner'],
+    iconId: 'creature/BlobMork',
+    tier: 8,
+    Destructible: {
+      minToolTier: 0,
+      hp: 600,
+      damageModifiers: mods([0, 0, 1, 0, 1, 2, 2, 0, 3, 1]),
+      parts: [],
+    },
+    drop: [{
+      num: [2, 3],
+      options: [
+        { item: 'IronScrap', weight: 0.5 },
+        { item: 'Frostwood', weight: 0.5 },
+        { item: 'Lingonberry' },
+        { item: 'OozeMork' },
+      ],
+    }],
+    SpawnArea: {
+      levelUpChance: 0.15,
+      maxNear: 1,
+      interval: 5,
+      prefabs: [
+        { prefab: 'BlobMork', weight: 1, level: [1, 3] },
+      ],
+    },
+  },
+  {
+    type: 'object',
+    subtype: 'misc',
+    id: 'elaking_trashpile',
+    tier: 8,
+    Destructible: {
+      minToolTier: 0,
+      hp: 200,
+      damageModifiers: allNormal,
+      parts: [],
+    },
+    drop: [singleDrop('Frostwood'), {
+      num: [1, 3],
+      options: [
+        { item: 'Frostwood', num: [1, 3] },
+        { item: 'IronScrap', weight: 0.2 },
+        { item: 'SilverNecklace', weight: 0.2 },
+        { item: 'MoldAtgeir', weight: 0.1 },
+        { item: 'MoldAxe', weight: 0.1 },
+        { item: 'MoldAxe2H', weight: 0.1 },
+        { item: 'MoldBow', weight: 0.1 },
+        { item: 'MoldCrossbow', weight: 0.1 },
+        { item: 'MoldFistweapon', weight: 0.1 },
+        { item: 'MoldKnife', weight: 0.1 },
+        { item: 'MoldMace', weight: 0.1 },
+        { item: 'MoldMace2H', weight: 0.1 },
+        { item: 'MoldShieldBuckler', weight: 0.1 },
+        { item: 'MoldShieldRound', weight: 0.1 },
+        { item: 'MoldShieldTower', weight: 0.1 },
+        { item: 'MoldSpear', weight: 0.1 },
+        { item: 'MoldSword', weight: 0.1 },
+        { item: 'MoldSword2H', weight: 0.1 },
+        { item: 'MoldKeys', weight: 0.1 },
+        { item: 'MoldStafffrostorbs', weight: 0.1 },
+        { item: 'MoldStaffOrbofAhri', weight: 0.1 },
+        { item: 'MoldStaffspiritcaller', weight: 0.1 },
+        { item: 'MoldStaffthunderblood', weight: 0.1 },
+      ],
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'misc',
+    id: 'Morkhalla_WeaponStand',
+    components: ['CreatureSpawner'],
+    tier: 8,
+    Destructible: {
+      minToolTier: 0,
+      hp: 200,
+      damageModifiers: mods([0, 0, 1, 0, 1, 2, 2, 0, 3, 1]),
+      parts: [],
+    },
+    drop: [singleDrop('Frostwood'), {
+      num: [1, 3],
+      options: [
+        { item: 'Frostwood', num: [1, 3] },
+        { item: 'IronScrap', weight: 0.2 },
+        { item: 'MoldAtgeir', weight: 0.1 },
+        { item: 'MoldAxe', weight: 0.1 },
+        { item: 'MoldAxe2H', weight: 0.1 },
+        { item: 'MoldBow', weight: 0.1 },
+        { item: 'MoldCrossbow', weight: 0.1 },
+        { item: 'MoldFistweapon', weight: 0.1 },
+        { item: 'MoldKnife', weight: 0.1 },
+        { item: 'MoldMace', weight: 0.1 },
+        { item: 'MoldMace2H', weight: 0.1 },
+        { item: 'MoldShieldBuckler', weight: 0.1 },
+        { item: 'MoldShieldRound', weight: 0.1 },
+        { item: 'MoldShieldTower', weight: 0.1 },
+        { item: 'MoldSpear', weight: 0.1 },
+        { item: 'MoldSword', weight: 0.1 },
+        { item: 'MoldSword2H', weight: 0.1 },
+        { item: 'MoldKeys', weight: 0.1 },
+        { item: 'MoldStafffrostorbs', weight: 0.1 },
+        { item: 'MoldStaffOrbofAhri', weight: 0.1 },
+        { item: 'MoldStaffspiritcaller', weight: 0.1 },
+        { item: 'MoldStaffthunderblood', weight: 0.1 },
+      ],
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'misc',
+    id: 'Morkhalla_RandomEye',
+    tier: 8,
+    drop: [{
+      num: [1, 1],
+      chance: 11 / 14,
+      options: [
+        { item: 'AncientGemstoneBlack', weight: 2 },
+        { item: 'AncientGemstoneGreen', weight: 2 },
+        { item: 'AncientGemstoneOrange', weight: 2 },
+        { item: 'AncientGemstonePurple', weight: 2 },
+        { item: 'GemstoneBlue', weight: 1 },
+        { item: 'GemstoneGreen', weight: 1 },
+        { item: 'GemstoneRed', weight: 1 },
+      ],
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'misc',
+    id: 'Morkhalla_RandomWallDeco',
+    tier: 8,
+    drop: [{
+      num: [1, 1],
+      chance: 8 / 22,
+      options: [
+        // Morkhalla_Eye<N>
+        { item: 'AncientGemstoneBlack', weight: 1 },
+        { item: 'AncientGemstoneGreen', weight: 1 },
+        { item: 'AncientGemstoneOrange', weight: 1 },
+        { item: 'AncientGemstonePurple', weight: 1 },
+        // Morkhalle_Banner<N>
+        { item: 'JuteRed', weight: 4, num: [1, 2] },
+      ],
+    }],
+  },
+
+  {
+    type: 'object',
+    subtype: 'misc',
+    id: 'Morkhalla_RandomLoot',
+    tier: 8,
+    drop: [{
+      num: [1, 1],
+      chance: 6 / 8,
+      options: [
+        // none
+        { item: 'Morkhalla_ChestAncient' },
+        { item: 'TreasureChest_morkhalla' },
+        // Morkhalla_Block
+        { item: 'Morkhalla_Rubble1' },
+        { item: 'Morkhalla_Rubble2' },
+        { item: 'Morkhalla_Rubble3' },
+        { item: 'Morkhalla_Rubble4' },
+      ],
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'misc',
+    id: 'Morkhalla_ChestAncient',
+    tier: 8,
+    drop: [{
+      num: [5, 7],
+      options: [
+        // none
+        { item: 'AncientCoin', num: [11, 55], weight: 2 },
+        { item: 'AncientGemstoneBlack', weight: 0.2 },
+        { item: 'AncientGemstoneGreen', weight: 0.5 },
+        { item: 'AncientGemstoneOrange', weight: 0.4 },
+        { item: 'AncientGemstonePurple', weight: 0.3 },
+        { item: 'Copper', num: [1, 5] },
+        { item: 'Bronze', num: [1, 5] },
+        { item: 'Tin', num: [1, 5] },
+        { item: 'Upgrader6Armor', weight: 0.05 },
+        { item: 'Upgrader6Weapon', weight: 0.025 },
+        { item: 'Upgrader7Armor', weight: 0.025 },
+        { item: 'Upgrader7Weapon', weight: 0.0125 },
+        { item: 'BlackCore', weight: 0.5 },
+      ],
+    }],
+  },
+  ...[1, 2, 3, 4].map<PhysicalObject>(id => ({
+    type: 'object',
+    subtype: 'misc',
+    id: `Morkhalla_Rubble${id}`,
+    tier: 8,
+    Destructible: {
+      minToolTier: 0,
+      hp: 100,
+      damageModifiers: mods([0, 0, 1, 0, 2, 1, 1, 1, 3, 3]),
+      parts: [],
+    },
+    drop: [{
+      num: [1, 5],
+      options: [
+        // none
+        { item: 'Grausten' },
+        { item: 'AncientCoin' },
+      ],
+    }],
+  })),
+  {
+    type: 'object',
+    subtype: 'misc',
+    id: 'Morkhalla_firepit',
+    iconId: 'piece/fire_pit_iron',
+    tier: 8,
+    Destructible: {
+      minToolTier: 0,
+      hp: 200,
+      damageModifiers: mods([0, 0, 1, 0, 1, 2, 3, 1, 3, 3]),
+      parts: [],
+    },
+    drop: [{
+      num: [2, 4],
+      options: [
+        { item: 'Coal' },
+        { item: 'MemorialCoal' },
+      ],
+    }],
+  },
+  {
+    type: 'object',
+    subtype: 'misc',
+    id: 'Morkhalla_coal_pile_memorial',
+    iconId: 'resource/MemorialCoal',
+    tier: 8,
+    drop: [singleDrop('MemorialCoal', 3, 5)],
+  },
+  ...variations<PhysicalObject>({
+    type: 'object',
     subtype: 'misc',
     id: 'shipwreck_karve_bottomboards',
     tier: 1,
@@ -3402,59 +4472,42 @@ export const objects: PhysicalObject[] = [
       parts: [],
     },
     drop: [singleDrop('FineWood', 3, 5)]
-  },
-  {
+  }, {
+    'shipwreck_karve_bow': {},
+    'shipwreck_karve_dragonhead': {},
+    'shipwreck_karve_stern': {},
+    'shipwreck_karve_sternpost': {},
+  }),
+  ...([
+    { id: 'shipwreck_vikingship_front', hp: 200, dropMin: 10, dropMax: 15 },
+    { id: 'shipwreck_vikingship_frontpiece', hp: 200, dropMin: 10, dropMax: 15 },
+    { id: 'shipwreck_vikingship_mast1', hp: 100, dropMin: 3, dropMax: 6 },
+    { id: 'shipwreck_vikingship_rear', hp: 100, dropMin: 3, dropMax: 6 },
+  ] as const).map<PhysicalObject>(({ id, hp, dropMin, dropMax }) => ({
     type: 'object',
     subtype: 'misc',
-    id: 'shipwreck_karve_bow',
-    tier: 1,
+    id,
+    tier: 8,
     Destructible: {
-      hp: 60,
-      damageModifiers: chopOnly,
+      hp,
+      damageModifiers: { ...allNormal, pierce: 'resistant', chop: 'weak' },
       minToolTier: 1,
       parts: [],
     },
-    drop: [singleDrop('FineWood', 3, 5)]
-  },
-  {
+    drop: [singleDrop('FineWood', dropMin, dropMax)]
+  })),
+  ...['', '02', '03'].map<PhysicalObject>(suffix => ({
     type: 'object',
     subtype: 'misc',
-    id: 'shipwreck_karve_dragonhead',
-    tier: 1,
+    id: `frozenship${suffix}`,
+    tier: 8,
     Destructible: {
-      hp: 60,
-      damageModifiers: chopOnly,
-      minToolTier: 1,
+      hp: 900,
+      damageModifiers: mods([0, 0, 1, 2, 1, 2, 3, 0, 3, 3]),
+      minToolTier: 0,
       parts: [],
     },
-    drop: [singleDrop('FineWood', 3, 5)]
-  },
-  {
-    type: 'object',
-    subtype: 'misc',
-    id: 'shipwreck_karve_stern',
-    tier: 1,
-    Destructible: {
-      hp: 60,
-      damageModifiers: chopOnly,
-      minToolTier: 1,
-      parts: [],
-    },
-    drop: [singleDrop('FineWood', 3, 5)]
-  },
-  {
-    type: 'object',
-    subtype: 'misc',
-    id: 'shipwreck_karve_sternpost',
-    tier: 1,
-    Destructible: {
-      hp: 60,
-      damageModifiers: chopOnly,
-      minToolTier: 1,
-      parts: [],
-    },
-    drop: [singleDrop('FineWood', 3, 5)]
-  },
+  })),
   ...[
     { id: 'Vegvisir_Eikthyr', loc: 'Eikthyrnir', tier: 0 },
     { id: 'Vegvisir_GDKing', loc: 'GDKing', tier: 2 },
@@ -3463,6 +4516,7 @@ export const objects: PhysicalObject[] = [
     { id: 'Vegvisir_GoblinKing', loc: 'GoblinKing', tier: 4 },
     { id: 'Vegvisir_SeekerQueen', loc: 'Mistlands_DvergrBossEntrance1', tier: 6 },
     { id: 'Vegvisir_Fader', loc: 'Fader', tier: 7 },
+    { id: 'Vegvisir_DNBoss', loc: 'FrozenKing', tier: 8 },
     { id: 'Vegvisir_placeofmystery_1', loc: 'PlaceofMystery1', tier: 7 },
     { id: 'Vegvisir_placeofmystery_2', loc: 'PlaceofMystery2', tier: 7 },
     { id: 'Vegvisir_placeofmystery_3', loc: 'PlaceofMystery3', tier: 7 },
@@ -3923,7 +4977,7 @@ export const objects: PhysicalObject[] = [
   },
   {
     id: 'dvergrprops_barrel',
-    iconId: 'piece/Fermenter',
+    iconId: 'object/barrel',
     type: 'object',
     subtype: 'misc',
     tier: 6,
@@ -4134,7 +5188,7 @@ export const objects: PhysicalObject[] = [
   },
   {
     id: 'dvergrprops_crate_ashlands',
-    iconId: 'objects/crate',
+    iconId: 'object/dvergrprops_crate',
     type: 'object',
     subtype: 'misc',
     tier: 7,
@@ -4326,7 +5380,7 @@ export const objects: PhysicalObject[] = [
     components: ['Pickable'], // drop exactly 5 on pick
     tier: 6,
     drop: [singleDrop('RoyalJelly', 4, 7)],
-    Destructible: { hp: 1, damageModifiers: allNormal, minToolTier: 0, parts: [], },
+    // respawn: 4 * REAL_HOUR,
   },
   // highstone, widestone
   {
@@ -4347,11 +5401,12 @@ export const objects: PhysicalObject[] = [
   },
 ];
 
-export const structures: Structure[] = [
+export const structures: (Structure | PhysicalObject)[] = [
   {
     id: 'sign_notext',
     iconId: 'piece/sign',
-    type: 'structure',
+    type: 'object',
+    subtype: 'misc',
     tier: 1,
     Destructible: {
       hp: 50,
@@ -4359,6 +5414,18 @@ export const structures: Structure[] = [
       minToolTier: 0,
       parts: [],
     }
+  },
+  {
+    id: 'fenrirhide_hanging',
+    type: 'structure',
+    tier: 1,
+    Destructible: {
+      hp: 10,
+      damageModifiers: mods([1, 0, 0, 0, 1, 2, 1, 4, 4, 4]),
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('WolfHairBundle', 1, 2)],
   },
   {
     id: 'goblin_banner',
@@ -4527,6 +5594,183 @@ export const structures: Structure[] = [
       parts: [],
     }
   },
+  {
+    id: 'prop_ashwood_bed',
+    iconId: 'piece/ashwood_bed',
+    type: 'object',
+    subtype: 'misc',
+    tier: 7,
+    Destructible: {
+      hp: 200,
+      damageModifiers: allNormal,
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('Blackwood', 1, 5)],
+  },
+  {
+    id: 'Ashlands_Floor',
+    iconId: 'piece/Piece_grausten_floor_2x2',
+    type: 'object',
+    subtype: 'misc',
+    tier: 7,
+    Destructible: {
+      hp: 333,
+      damageModifiers: mods([0, 1, 1, 3, 2, 3, 1, 3, 4, 4]),
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('Grausten', 2, 4)],
+  },
+  {
+    id: 'prop_bed02',
+    iconId: 'piece/piece_bed02',
+    type: 'structure',
+    tier: 8,
+    Destructible: {
+      hp: 50,
+      damageModifiers: { ...allNormal, chop: 'weak' },
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('Finewood', 1, 5)],
+  },
+  {
+    id: 'prop_hearth',
+    iconId: 'piece/hearth',
+    type: 'structure',
+    tier: 8,
+    Destructible: {
+      hp: 50,
+      damageModifiers: allNormal,
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('Stone', 1, 5)],
+  },
+  {
+    id: 'prop_wood_stack',
+    iconId: 'piece/wood_stack',
+    type: 'structure',
+    tier: 8,
+    Destructible: {
+      hp: 30,
+      damageModifiers: allNormal,
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('Wood', 3, 10)],
+  },
+  ...[
+    { id: 1, material: 'Wood' },
+    { id: 2, material: 'Wood' },
+    { id: 3, material: 'Finewood' },
+    { id: 4, material: 'Finewood' },
+  ].map<Structure>(({ id, material }) => ({
+    id: `prop_piece_workbench_ext${id}`,
+    iconId: `piece/piece_workbench_ext${id}`,
+    type: 'structure',
+    tier: 8,
+    Destructible: {
+      hp: 30,
+      damageModifiers: allNormal,
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop(material, 1, 5)],
+  })),
+  ...[
+    { id: 2, material: 'Wood' },
+    { id: 5, material: 'Finewood' },
+  ].map<Structure>(({ id, material }) => ({
+    id: `prop_forge_ext${id}`,
+    iconId: `piece/forge_ext${id}`,
+    type: 'structure',
+    tier: 8,
+    Destructible: {
+      hp: 30,
+      damageModifiers: allNormal,
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop(material, 1, 5)],
+  })),
+  ...variations<Structure>({
+    id: `prop_itemstand`,
+    iconId: `piece/itemstand`,
+    type: 'structure',
+    tier: 8,
+    Destructible: {
+      hp: 10,
+      damageModifiers: allNormal,
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [singleDrop('FineWood')],
+  }, {
+    'prop_itemstand_TrophyDraugrElite': {
+      iconId: 'resource/TrophyDraugrElite',
+      drop: [{ num: [1, 1], options: [
+        { item: 'FineWood', weight: 0.9 },
+        { item: 'TrophyDraugrElite', weight: 0.05 },
+      ]}]
+    },
+    'prop_itemstand_TrophyGoblinShaman': {
+      iconId: 'resource/TrophyGoblinShaman',
+      drop: [{ num: [1, 1], options: [
+        { item: 'FineWood', weight: 0.9 },
+        { item: 'TrophyGoblinShaman', weight: 0.05 },
+      ]}]
+    },
+    'prop_itemstand_TrophyGreydwarf': {
+      iconId: 'resource/TrophyGreydwarf',
+      drop: [{ num: [1, 1], options: [
+        { item: 'FineWood', weight: 0.9 },
+        { item: 'TrophyGreydwarf', weight: 0.1 },
+      ]}]
+    },
+    'prop_itemstand_TrophySeekerBrute': {
+      iconId: 'resource/TrophySeekerBrute',
+      drop: [{ num: [1, 1], options: [
+        { item: 'FineWood', weight: 0.9 },
+        { item: 'TrophySeekerBrute', weight: 0.05 },
+      ]}]
+    },
+  }),
+  ...[
+    { id: 'Morkhalla_Bench', iconId: 'piece/bench_02' },
+    { id: 'Morkhalla_Stool', iconId: 'piece/stool' },
+    { id: 'Morkhalla_Table', iconId: 'piece/table' },
+  ].map<Structure>(({ id, iconId }) => ({
+    id,
+    iconId,
+    type: 'structure',
+    tier: 8,
+    Destructible: {
+      hp: 100,
+      damageModifiers: mods([0, 0, 1, 2, 0, 2, 3, 1, 3, 3]),
+      minToolTier: 0,
+      parts: [],
+    },
+    drop: [{
+      num: [2, 3], options: [
+        { item: 'Frostwood' },
+        { item: 'Frostwood' },
+        { item: 'Chain' },
+      ]
+    }],
+  })),
+  { id: 'Morkhalla_Trainingdummy1', iconId: 'piece/piece_TrainingDummy', type: 'structure', tier: 8,
+    Destructible: { hp: 800, damageModifiers: mods([0, 0, 1, 2, 0, 2, 3, 1, 3, 3]), minToolTier: 0, parts: [] },
+    drop: [{ num: [2, 3], options: [{ item: 'Frostwood' }, { item: 'Barley' }, { item: 'Flax' }] }],
+  },
+  { id: 'Morkhalla_Trainingdummy2', iconId: 'piece/piece_TrainingDummy', type: 'structure', tier: 8,
+    Destructible: { hp: 200, damageModifiers: mods([0, 0, 1, 2, 0, 2, 3, 1, 3, 3]), minToolTier: 0, parts: [] },
+    drop: [{ num: [2, 3], options: [{ item: 'Frostwood' }, { item: 'Barley' }, { item: 'Flax' }] }],
+  },
+  // "Morkhalla_Floor_RandomHole",
+  // "Morkhalla_RandomRubble",
+  // "Morkhalla_RandomSpawner",
 ];
 
 for (const obj of objects) {

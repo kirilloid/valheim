@@ -97,7 +97,7 @@ export const woodfarm: CampConfig = {
         locItem('wood_roof_45', 0.66, 4),
         locItem('wood_roof_45', 1, 8),
         locItem('wood_beam_45', 1, 4),
-        locItem('wood_wall', 1),
+        locItem('woodwall', 1),
         locItem('wood_wall_roof_45', 1, 4),
         locItem('wood_wall_roof_top_45', 0.66, 2),
         locItem('wood_floor', 1, 12),
@@ -181,7 +181,7 @@ export const woodfarm: CampConfig = {
         locItem([
           locItem('wood_roof'),
           locItem('wood_wall_half', 1, 4),
-          locItem('wood_wall_roof', 1, 2),
+          locItem('wood_wall_roof_a', 1, 2),
           locItem('wood_pole', 1, 9),
           locItem('wood_floor'),
         ], 0.75),

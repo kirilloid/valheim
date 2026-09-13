@@ -14,6 +14,8 @@ export default loc(
       ], 0.5, 1),
       locItem('Vegvisir_GoblinKing', 0.4),
       // locItem('Rock_3', 1, 6),
+      locItem('highstone', 0.5, 20),
+      locItem('widestone', 0.5, 8),
     ]
   },
   'StoneHengeL',

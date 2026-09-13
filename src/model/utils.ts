@@ -1,3 +1,4 @@
+import type { EntityId, GameObject } from '../types';
 import { GAME_DAY } from './game';
 import { stableHashCode } from './hash';
 
@@ -210,4 +211,12 @@ export interface PlayersData {
   names: Map<bigint, string>;
   beds: Map<bigint, Vector3>;
   startLocation: Vector3;
+}
+
+export function variations<T extends { id: EntityId } = GameObject>(main: T, options: Record<EntityId, Partial<T>>): T[] {
+  return [
+    main,
+    ...Object.entries(options)
+      .map(([id, override]) => ({ ...main, id, ...override }))
+  ];
 }

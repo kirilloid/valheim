@@ -8,3 +8,6 @@ export { forestcrypt } from './forestcrypt';
 export { woodvillage } from './woodvillage';
 export { dvergrTown } from './dvergrtown';
 export { charredRuins, fortressRuins } from './ashlands';
+export { northvillage } from './northvillage';
+export { morkhalla } from './morkhalla';
+export { theHole } from './thehole';

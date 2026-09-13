@@ -187,7 +187,7 @@ function addObjects(dict: Record<string, string>) {
 export function setLanguageDict(dict: Record<string, string>) {
   addArray(pages, 'page', '/', dict, id => `ui.page.${id}`);
   addArray(locations, 'loc', '/loc/', dict, id => `ui.location.${id}`, { id: ({ typeId }) => typeId });
-  addArray(biomes, 'biome', '/biome/', dict, id => `ui.biome.${id}`, { tags: 'ui.biome', disabled: (b) => !b.active });
+  addArray(biomes, 'biome', '/biome/', dict, id => `ui.biome.${id}`, { tags: 'ui.biome' });
   addObjects(dict);
   addArray(events, 'event', '/event/', dict, id => id, { tags: 'ui.event ui.page.events.tags' });
   addArray(effects, 'effect', '/effect/', dict, id => `ui.effect.${id}`, { tags: 'ui.effect' });

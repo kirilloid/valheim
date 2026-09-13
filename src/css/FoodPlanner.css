@@ -50,27 +50,6 @@
   }
 }
 
-@media screen and (min-width: 1024px) {
-  .FoodPresets {
-    grid-auto-flow: column;
-    grid-template-rows: auto repeat(4, 1fr);
-    grid-template-columns: auto;
-    grid-auto-columns: calc(42px + 10%);
-  }
-  .FoodPresets__title {
-    text-align: left;
-    width: auto;
-  }
-  .FoodPresets__biome {
-    text-align: center;
-    padding: 0;
-  }
-  .FoodPresets__button img {
-    width: 32px;
-    height: 32px;
-  }
-}
-
 /* PLANNER */
 .FoodPlanner {
   width: 100%;

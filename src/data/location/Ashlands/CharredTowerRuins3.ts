@@ -1,5 +1,6 @@
 import { locItem } from '../../../model/game';
 import { loc } from '../common';
+import CharredStone_Spawner from './CharredStone_Spawner';
 
 export default loc(
   7, 'CharredTowerRuins3', ['Ashlands'],
@@ -7,7 +8,7 @@ export default loc(
     biomeArea: 7, quantity: 40, minApart: 500,
     terrainDelta: [0, 4], minAlt: 0, radius: [12, 12],
     items: [
-      locItem('Spawner_CharredTwitcherNest'),
+      locItem(CharredStone_Spawner.items),
       locItem('GraveStone_Broken_CharredTwitcherNest', 0.5, 10),
       locItem('GraveStone_CharredTwitcherNest', 0.5, 10),
     ],

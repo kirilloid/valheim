@@ -42,6 +42,14 @@ export const cauldronRecipe = (
   onlyOneIngredient = false,
 ) => genericRecipe('piece_cauldron', level, CAULDRON_TIME, materials, {}, item, number, onlyOneIngredient);
 
+export const meadCauldronRecipe = (
+  level: number,
+  materials: Record<EntityId, number>,
+  item: EntityId,
+  number = 1,
+  onlyOneIngredient = false,
+) => genericRecipe('piece_MeadCauldron', level, CAULDRON_TIME, materials, {}, item, number, onlyOneIngredient);
+
 export const prepTableRecipe = (
   level: number,
   materials: Record<EntityId, number>,
@@ -70,6 +78,16 @@ export const workbenchRecipe = (
   item: EntityId,
   number = 1,
 ) => genericRecipe('piece_workbench', level, 3, materials, materialsPerLevel, item, number);
+
+export const ovenRecipe = (
+  raw: EntityId,
+  item: EntityId,
+) => genericRecipe('piece_oven', 1, 50, { [raw]: 1 }, {}, item, 1);
+
+export const frostFoundryRecipe = (
+  cast: EntityId,
+  item: EntityId,
+) => genericRecipe('piece_FrostFoundry', 1, 50, { [cast]: 1, FrozenFuel: 5 }, {}, item, 1);
 
 export const forgeRecipe = (
   level: number,

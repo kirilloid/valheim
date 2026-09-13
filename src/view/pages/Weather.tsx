@@ -18,7 +18,6 @@ import { Icon } from '../parts/Icon';
 
 const biomeIds = biomes
   .sort((a, b) => a.tier - b.tier)
-  .filter(b => b.active)
   .map(({ id }) => id);
 
 const rollWeather = (weathers: WeatherBalance, roll: number) => {

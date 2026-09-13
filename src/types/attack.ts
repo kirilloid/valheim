@@ -29,11 +29,15 @@ export type AttackAnimation =
 | 'staff_rapidfire'
 | 'staff_fireball'
 | 'staff_summon'
+| 'staff_TrollSummon'
 | 'throw_bomb'
 | 'dualaxes'
 | 'dualaxes_secondary'
 | 'staff_lightningshot'
 | 'recharge_lightningstaff'
+| 'staff_thunder'
+| 'staff_frostorb'
+| 'staff_thrust'
 ;
 
 interface BaseAttack {
@@ -71,7 +75,7 @@ interface BowAttack extends BaseAttack {
 }
 
 interface SummonAttack extends BaseAttack {
-  summons: EntityId;
+  summons: EntityId[];
   skillFactor: number;
 }
 

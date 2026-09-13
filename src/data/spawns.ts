@@ -20,7 +20,9 @@ for (const weapon of items) {
   if (weapon.type === 'weapon') {
     for (const attack of weapon.attacks) {
       if (attack.type === 'summon') {
-        spawnedByMap[attack.summons] = weapon.id;
+        for (const id of attack.summons) {
+          spawnedByMap[id] = weapon.id;
+        }
       }
     }
   }

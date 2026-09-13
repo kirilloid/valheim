@@ -1,6 +1,6 @@
 import type { DamageModifier, DamageModifiers, DamageProfile, DropEntry, EntityId, GeneralDrop, ItemGrow, ItemGrowConfig, LocationItem, Pair } from '../types';
 import type { EnvId } from '../data/env';
-import type { Vector2i } from './utils';
+import { clamp, clamp01, lerp, Vector2i } from './utils';
 
 // TIME
 export const FRAME = 1 / 50;
@@ -118,7 +118,9 @@ export function itemGrow(...grows: ItemGrowConfig[]): ItemGrow[] {
     group: [1, 1],
     groupRadius: 20,
     onSurface: false,
+    snapToWater: false,
     inForest: null,
+    distanceFromCenter: [0, 0],
     respawn: 0,
     ...grow,
   }));
@@ -143,4 +145,45 @@ export function fromZoneId(sector: number): Vector2i {
   const x = (sector & 511) - 256;
   const y = (sector >> 9) - 256;
   return { x, y };
+}
+
+const updageGradientPoints = [
+  { c:     0, r: 255, g: 255, b: 255 },
+  { c:  8096, r: 100, g: 244, b: 250 },
+  { c: 16769, r: 100, g: 124, b: 250 },
+  { c: 26214, r: 166, g: 100, b: 250 },
+  { c: 38357, r: 250, g: 100, b: 180 },
+  { c: 50308, r: 245, g:  75, b:  59 },
+  { c: 63029, r: 233, g: 219, b: 111 },
+  { c: 65535, r: 127, g: 248, b:  81 },
+];
+
+function evaluateGradient(value: number) {
+  value = Math.round(clamp01(value) * 65535);
+  let i = 0;
+  while (updageGradientPoints[i]!.c < value) { i++; }
+  const lo = updageGradientPoints[i - 1];
+  const hi = updageGradientPoints[i];
+  if (!lo) return updageGradientPoints[0]!;
+  if (!hi) return updageGradientPoints.slice(-1)[0]!;
+  const t = (value - lo.c) / (hi.c - lo.c);
+  return {
+    r: lerp(lo.r, hi.r, t),
+    g: lerp(lo.g, hi.g, t),
+    b: lerp(lo.b, hi.b, t),
+  }
+}
+
+const maxQuality = 4;
+const itemDropLevelMultiplier = 0.1
+const intensityColorMax = 3;
+
+export function getUpgradeColorIntensity(quality: number) {
+  if (quality <= maxQuality) return 0;
+  return clamp((quality - maxQuality) * itemDropLevelMultiplier, 1, intensityColorMax);
+}
+
+export function getUpgradeColorHue(quality: number) {
+  const intensity = getUpgradeColorIntensity(quality);
+  evaluateGradient(intensity / intensityColorMax);
 }

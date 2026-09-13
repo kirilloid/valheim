@@ -114,7 +114,7 @@ function VanillaSkillLevelUp({ skill }: { skill: SkillType }) {
           if (atk?.type === 'summon') {
             return <React.Fragment key={item.id}>
               <dt>+0.5 xp</dt>
-              <dd>enemy hit by <InlineObjectWithIcon id={atk.summons} /></dd>
+              <dd>enemy hit by summons: <List separator=" ">{atk.summons.map(id => <InlineObjectWithIcon key={id} id={id} />)}</List></dd>
             </React.Fragment>
           }
           return null;

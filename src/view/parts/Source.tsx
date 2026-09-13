@@ -7,7 +7,7 @@ import { assertNever, days, timeI2S } from '../../model/utils';
 import { data } from '../../data/itemDB';
 import { getRecipe } from '../../data/recipes';
 import { creatures } from '../../data/creatures';
-import { miningMap, resourceBuildMap, resourceCraftMap } from '../../data/resource-usage';
+import { miningMap, resourceBuildMap, resourceCraftMap, resourcePlantMap } from '../../data/resource-usage';
 import { locationBiomes, locationsByTypeId, objectLocationMap, objectLocationUniqueMap } from '../../data/location';
 
 import { TranslationContext, useGlobalState, useSettingsFilter } from '../../effects';
@@ -29,17 +29,22 @@ export const SOURCE_BAIT = 32;
 export const SOURCE_ALL = SOURCE_CRAFT | SOURCE_DROP | SOURCE_RECIPE | SOURCE_GROW | SOURCE_MINING | SOURCE_BAIT;
 
 const source: Record<EntityId, EntityId[]> = {};
-for (const { id, drop } of creatures) {
+for (const { id, drop, spawnOnDeath } of creatures) {
   for (const { item } of drop) {
     (source[item] ?? (source[item] = [])).push(id);
+  }
+  if (spawnOnDeath) {
+    source[spawnOnDeath]?.push(id);
   }
 }
 
 function DropsFrom({ sources }: { sources: EntityId[] }) {
+  const filter = useSettingsFilter();
+  const validSources = sources.filter(id => data[id] && filter(data[id]!));
   return (
-    sources.length === 1
-    ? <InlineObjectWithIcon id={sources[0]!} />
-    : <ul>{sources.map(id => <li key={id}><InlineObjectWithIcon id={id} /></li>)}</ul>
+    validSources.length === 1
+    ? <InlineObjectWithIcon id={validSources[0]!} />
+    : <ul>{validSources.map(id => <li key={id}><InlineObjectWithIcon id={id} /></li>)}</ul>
   );
 }
 
@@ -141,6 +146,7 @@ const CraftingSection = React.memo(({ id }: { id: EntityId }) => {
   const filter = useSettingsFilter();
   const crafts = resourceCraftMap[id]?.filter(filter);
   const builds = resourceBuildMap[id]?.filter(filter);
+  const plants = resourcePlantMap[id]?.filter(filter);
   return <>
     {crafts?.length
       ? <section>
@@ -159,6 +165,17 @@ const CraftingSection = React.memo(({ id }: { id: EntityId }) => {
           <div>{translate('ui.usedToBuild')}:</div>
           <ul className="CraftList">
             {builds.sort((a, b) => a.tier - b.tier).map(item => <li key={item.id}>
+              <InlineObjectWithIcon id={item.id} />
+            </li>)}
+          </ul>
+        </section>
+      : null}
+    {plants?.length
+      ? <section>
+          <h2>{translate('ui.planting')}</h2>
+          <div>{translate('ui.usedToPlant')}:</div>
+          <ul className="CraftList">
+            {plants.sort((a, b) => a.tier - b.tier).map(item => <li key={item.id}>
               <InlineObjectWithIcon id={item.id} />
             </li>)}
           </ul>

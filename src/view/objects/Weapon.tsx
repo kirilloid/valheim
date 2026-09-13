@@ -149,7 +149,9 @@ function AttackTypeSpecific({ attack }: { attack: TAttack }) {
     case 'summon':
       return <>
         <dt>{translate('ui.creature')}</dt>
-        <dd><InlineObjectWithIcon id={attack.summons} /></dd>
+        <dd><ul>
+          {attack.summons.map(id => <li key={id}><InlineObjectWithIcon id={id} /></li>)}
+        </ul></dd>
         <dt>attack strength</dt>
         <dd>+{showPercent(attack.skillFactor)} / level</dd>
       </>;

@@ -57,12 +57,23 @@ export type PlayerData = {
   customData: Map<string, string>;
 };
 
-type PlayerStats = number[] ;
+interface PlayerFatStats {
+  stats: Map<PlayerStatType, number>;
+  knownWorlds: Map<string, number>;
+  knownWorldKeys: Map<string, number>;
+  knownCommands: Map<string, number>;
+  enemyStats: Map<string, number>[];
+  itemPickupStats: Map<string, number>;
+  itemCraftStats: Map<string, number>;
+  pickableStats: Map<string, number>;
+  foodEatenStats: Map<string, number>;
+  piecesPlacedStats: Map<string, number>;
+}
 
 export type Player = {
   version: number;
   firstSpawn: boolean;
-  stats: PlayerStats;
+  stats: PlayerFatStats[];
   worlds: Map<bigint, World>;
   playerName: string;
   playerID: bigint;
@@ -78,28 +89,103 @@ export type Player = {
   playerData?: PlayerData;
 };
 
-function readPlayerStats(version: number, reader: PackageReader): PlayerStats {
-  if (version >= 38) {
-    return reader.readArray(reader.readFloat);
-  }
-  const result: PlayerStats = [];
-  if (version >= 28) {
-    result[PlayerStatType.EnemyKills] = reader.readInt();
-    result[PlayerStatType.Deaths] = reader.readInt();
-    result[PlayerStatType.CraftsOrUpgrades] = reader.readInt();
-    result[PlayerStatType.Builds] = reader.readInt();
-  }
-  return result;
+function createPlayerFatStats(): PlayerFatStats {
+  return {
+    stats: new Map<PlayerStatType, number>(),
+    knownWorlds: new Map<string, number>(),
+    knownWorldKeys: new Map<string, number>(),
+    knownCommands: new Map<string, number>(),
+    enemyStats: Array(5).fill(null).map(() => new Map<string, number>()),
+    itemPickupStats: new Map<string, number>(),
+    itemCraftStats: new Map<string, number>(),
+    pickableStats: new Map<string, number>(),
+    foodEatenStats: new Map<string, number>(),
+    piecesPlacedStats: new Map<string, number>()
+  };
 }
 
-function writePlayerStats(version: number, pkg: PackageWriter, stats: PlayerStats): void {
+export enum DifficultyRequirement {
+  RawStats,
+  Any,
+  Hammer,
+  Casual,
+  VeryEasy,
+  Easy,
+  Default,
+  Hard,
+  VeryHard,
+  Hardcore,
+  Count,
+}
+
+export enum KillModifiers {
+  MixedAndTotal,
+  Unarmed,
+  Magic,
+  Ranged,
+  Melee,
+  CountNone,
+}
+
+function readPlayerStats(version: number, reader: PackageReader): PlayerFatStats[] {
+  if (version >= 46) {
+    const statsNum = reader.readInt();
+    const statsCopies = reader.readInt();
+    const result: PlayerFatStats[] = [];
+    for (let index = 0; index < statsCopies; ++index) {
+      const stats = new Map<PlayerStatType, number>();
+      for (let type = 0; type < statsNum; ++type) {
+        stats.set(type as PlayerStatType, reader.readFloat());
+      }
+      const knownWorlds = reader.readMap(reader.readString, reader.readFloat);
+      const knownWorldKeys = reader.readMap(reader.readString, reader.readFloat);
+      const knownCommands = reader.readMap(reader.readString, reader.readFloat);
+      const enemyStats = reader.readArray(() => reader.readMap(reader.readString, reader.readFloat));
+      const itemPickupStats = reader.readMap(reader.readString, reader.readFloat);
+      const itemCraftStats = reader.readMap(reader.readString, reader.readFloat);
+      const pickableStats = reader.readMap(reader.readString, reader.readFloat);
+      const foodEatenStats = reader.readMap(reader.readString, reader.readFloat);
+      const piecesPlacedStats = reader.readMap(reader.readString, reader.readFloat);
+      result.push({
+        stats,
+        knownWorlds,
+        knownWorldKeys,
+        knownCommands,
+        enemyStats,
+        itemPickupStats,
+        itemCraftStats,
+        pickableStats,
+        foodEatenStats,
+        piecesPlacedStats
+      });
+    }
+    return result;
+  }
+  const fatStats = createPlayerFatStats();
   if (version >= 38) {
-    pkg.writeArray(pkg.writeFloat, stats);
+    const basicStats = reader.readArray(reader.readFloat);
+    fatStats.stats = new Map<PlayerStatType, number>(basicStats.map((s, i) => [i, s]));
   } else if (version >= 28) {
-    pkg.writeInt(stats[PlayerStatType.EnemyKills] ?? 0);
-    pkg.writeInt(stats[PlayerStatType.Deaths] ?? 0);
-    pkg.writeInt(stats[PlayerStatType.CraftsOrUpgrades] ?? 0);
-    pkg.writeInt(stats[PlayerStatType.Builds] ?? 0);
+    fatStats.stats = new Map<PlayerStatType, number>([
+      [PlayerStatType.EnemyKills, reader.readInt()],
+      [PlayerStatType.Deaths, reader.readInt()],
+      [PlayerStatType.CraftsOrUpgrades, reader.readInt()],
+      [PlayerStatType.Builds, reader.readInt()],
+    ]);
+  }
+  return [fatStats];
+}
+
+function writePlayerStats(version: number, pkg: PackageWriter, stats: PlayerFatStats[]): void {
+  if (version >= 46) {
+    
+  } else if (version >= 38 && stats[0]) {
+    pkg.writeArray(pkg.writeFloat, [...stats[0].stats.values()]);
+  } else if (version >= 28 && stats[0]) {
+    pkg.writeInt(stats[0].stats.get(PlayerStatType.EnemyKills) ?? 0);
+    pkg.writeInt(stats[0].stats.get(PlayerStatType.Deaths) ?? 0);
+    pkg.writeInt(stats[0].stats.get(PlayerStatType.CraftsOrUpgrades) ?? 0);
+    pkg.writeInt(stats[0].stats.get(PlayerStatType.Builds) ?? 0);
   }
 }
 
@@ -304,6 +390,9 @@ function readPlayerData(data: Uint8Array<ArrayBuffer>): PlayerData {
   const pkg = new PackageReader(data);
   const version = pkg.readInt();
   checkVersion('player data', version, PLAYER_DATA);
+  if (version >= 46) {
+
+  }
   const maxHealth = version >= 7 ? pkg.readFloat() : NaN;
   const health = pkg.readFloat();
   const maxStamina = version >= 10 ? pkg.readFloat() : NaN;

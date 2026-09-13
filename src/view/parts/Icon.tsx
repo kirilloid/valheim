@@ -118,7 +118,7 @@ export function ItemIcon(props: ItemIconProps) {
   }
   const path = iconPath(item) + ((item as any).variants > 0 && variant != null ? variant : '');
   return <picture>
-    <source srcSet={`${path}.webp`} type="image/webp" />
+    <source srcSet={`${encodeURI(path)}.webp`} type="image/webp" />
     <img
       className={'icon ' + (props.className ?? '')}
       src={`${path}.png`}

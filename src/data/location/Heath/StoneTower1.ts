@@ -13,6 +13,7 @@ export default loc(
         locItem('TreasureChest_heath', 1, 1),
         locItem('Goblin', 0.54, 3),
       ], 0.5, 1),
+      locItem('Vegvisir_GoblinKing', 0.25),
     ],
   },
   'StoneTower',

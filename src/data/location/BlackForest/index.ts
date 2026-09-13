@@ -1,3 +1,4 @@
+export { default as BearCave } from './BearCave';
 export { default as Crypt2 } from './Crypt2';
 export { default as Crypt3 } from './Crypt3';
 export { default as Crypt4 } from './Crypt4';

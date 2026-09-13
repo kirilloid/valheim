@@ -71,7 +71,6 @@ for (const f of fishes) {
 
 for (const r of resources) {
   // SOURCE_GROW
-  if (r.grow) sourced.add(r.id);
   if (r.EggGrow) sourced.add(r.EggGrow.grownId);
 }
 
@@ -81,6 +80,7 @@ for (const o of objects) {
   }
   for (const { id } of (o.Destructible?.parts ?? [])) sourced.add(id);
   if (o.Plant) sourced.add(o.id);
+  for (const { prefab } of (o.SpawnArea?.prefabs ?? [])) sourced.add(prefab);
 }
 
 function walkAddItem({ item }: LocationItem) {
@@ -129,7 +129,9 @@ for (const i of items) {
   if (i.type === 'weapon') {
     for (const a of i.attacks) {
       if (a.type === 'summon') {
-        sourced.add(a.summons);
+        for (const id of a.summons) {
+          sourced.add(id);
+        }
       }
     }
   }
@@ -160,6 +162,26 @@ describe('traceability of all objects', () => {
       if (obj.disabled) continue;
       if (!sourced.has(id) && !exceptions.has(id)) {
         untraced.push(id);
+      }
+    }
+    expect(untraced).toEqual([]);  
+  });
+
+  test('all creature spawners produce valid entities', () => {
+    const untraced = [];
+    for (const { prefab } of spawnList.creatures) {
+      if (!data[prefab]) {
+        untraced.push(prefab);
+      }
+    }
+    expect(untraced).toEqual([]);  
+  });
+
+  test('all vegetation spawners produce valid entities', () => {
+    const untraced = [];
+    for (const { prefab } of spawnList.vegetation) {
+      if (!data[prefab]) {
+        untraced.push(prefab);
       }
     }
     expect(untraced).toEqual([]);  
@@ -212,6 +234,9 @@ describe('traceability of all objects', () => {
       for (const entry of c.drop) {
         check(c.id, entry.item);
       }
+      if (c.spawnOnDeath) {
+        check(c.id, c.spawnOnDeath);
+      }
     }
     objects.forEach(obj => checkWithDrop(obj.id, obj.drop));
     fishes.forEach(fish => checkWithDrop(fish.id, [fish.extraDrop]));
@@ -239,8 +264,12 @@ describe('traceability of all objects', () => {
     expect(failPairs).toEqual([]);
   });
 
-  test.skip('all location items are valid entities', () => {
+  describe.skip('all location items are valid entities', () => {
     const failItems = new Set<EntityId>();
+
+    beforeEach(() => {
+      failItems.clear();
+    });
 
     function walkCheckItem({ item }: LocationItem) {
       if (typeof item === 'string') {
@@ -253,25 +282,27 @@ describe('traceability of all objects', () => {
     }
     
     for (const l of locations) {
-      // too many undeclared objects
       if (l.id === 'Hildir_camp') continue;
-      l.items.forEach(walkCheckItem);
-      if (l.dungeon) {
-        for (const r of l.dungeon.rooms) {
-          r.items.forEach(walkCheckItem);
+      test(`location: ${l.id}`, () => {
+        // too many undeclared objects
+        l.items.forEach(walkCheckItem);
+        if (l.dungeon) {
+          for (const r of l.dungeon.rooms) {
+            r.items.forEach(walkCheckItem);
+          }
         }
-      }
-      if (l.camp) {
-        for (const r of l.camp.inner) {
-          r.items.forEach(walkCheckItem);
+        if (l.camp) {
+          for (const r of l.camp.inner) {
+            r.items.forEach(walkCheckItem);
+          }
+          for (const r of l.camp.perimeter) {
+            r.items.forEach(walkCheckItem);
+          }
         }
-        for (const r of l.camp.perimeter) {
-          r.items.forEach(walkCheckItem);
-        }
-      }
+        expect(failItems).toEqual(new Set());
+      });
     }
     
-    expect(failItems).toEqual(new Set());
   });
 });
 
@@ -315,11 +346,14 @@ describe('dungeons - rooms', () => {
   testDungeon('forestcrypt', rooms.forestcrypt);
   testDungeon('frostCaves', rooms.frostCaves);
   testDungeon('sunkencrypt', rooms.sunkencrypt);
+  testDungeon('morkhalla', rooms.morkhalla);
+  testDungeon('the hole', rooms.theHole);
   testCamp('woodfarm', rooms.woodfarm);
   testCamp('woodvillage', rooms.woodvillage);
   testCamp('gobvill', rooms.gobvill);
   testCamp('charredRuins', rooms.charredRuins);
   testCamp('fortressRuins', rooms.fortressRuins);
+  testCamp('northvillage', rooms.northvillage);
 });
 
 test.skip('icons', (done) => {

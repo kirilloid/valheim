@@ -80,6 +80,7 @@ function inventoryFromPreset(preset: PlayerPreset, worldLevel: number): TInvento
       customData,
       worldLevel,
       pickedUp: true,
+      cheated: true,
     });
   }
 

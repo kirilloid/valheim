@@ -382,3 +382,17 @@ option.spoiler {
   vertical-align: middle;
 }
 
+@media screen and (min-width: 920px) {
+  .TraderCatalogue {
+    column-count: 2;
+    margin-top: 2.25rem;
+  }
+
+  .TraderCatalogue__table {
+    margin-top: -2rem;
+  }
+}
+
+.TraderCatalogue__headcell {
+  padding-left: calc(2rem + 6px); /* 2px cell padding + gap */
+}

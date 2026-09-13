@@ -2,20 +2,20 @@ import { itemGrow } from '../model/game';
 import { spawner, type SpawnerSetup } from '../model/spawner';
 import type { EntityId, ItemGrow, ItemGrowConfig, SpawnerConfig } from '../types';
 
-
-
 type SpawnList = {
   locations: {}[];
   vegetation: ({ prefab: EntityId } & ItemGrow)[];
   creatures: ({ prefab: EntityId } & SpawnerConfig)[];
 }
 
+const snapToWater = true;
+
 export const spawnList: SpawnList = {
   locations: [],
   vegetation: ([
     {
       prefab: 'rock4_coast',
-      locations: ['Meadows', 'BlackForest', 'Ocean', 'Mistlands', 'DeepNorth'],
+      locations: ['Meadows', 'BlackForest', 'Ocean', 'Mistlands'],
       scale: [0.6, 1.2],
       randTilt: 15,
       num: [3, 3],
@@ -503,14 +503,14 @@ export const spawnList: SpawnList = {
     {
       prefab: 'ice1',
       locations: ['DeepNorth'],
-      // snap to water
+      snapToWater,
       altitude: [-1000, -1],
       num: [10, 20],
     },
     {
       prefab: 'ice_rock1',
       locations: ['DeepNorth'],
-      // snap to water
+      snapToWater,
       altitude: [-1000, -1],
       offset: -2,
       num: [0, 1],
@@ -841,6 +841,319 @@ export const spawnList: SpawnList = {
     // veg: Ashlands_ArchRoofDamaged
     // veg: Ashlands_Pillar4
     // veg: Ashlands_Ruins_Wall_Windows_Broken_4x6
+  // DEEP NORTH
+    // rock 4
+    {
+      prefab: 'Rock_4_deepnorth',
+      num: [2, 6],
+      scale: [4, 6],
+      randTilt: 0,
+      locations: ['DeepNorth'],
+      altitude: [-10, 1000],
+      groupRadius: 0,
+    },
+    // rock 3
+    {
+      prefab: 'Rock_3_deepnorth',
+      num: [1, 4],
+      scale: [2, 8],
+      randTilt: 0,
+      locations: ['DeepNorth'],
+      altitude: [-10, 1000],
+      groupRadius: 0,
+      offset: -0.5,
+    },
+    // rock 7
+    {
+      prefab: 'Rock_7_deepnorth',
+      num: [0, 1],
+      scale: [1.5, 2],
+      randTilt: 20,
+      chanceToUseGroundTilt: 0.75,
+      locations: ['DeepNorth'],
+      tilt: [0, 45],
+      offset: -0.5,
+      group: [2, 3],
+    },
+    // snowfirtree
+    {
+      prefab: 'SnowFirTree',
+      num: [3, 7],
+      scale: [0.5, 1],
+      randTilt: 4,
+      chanceToUseGroundTilt: 0.1,
+      locations: ['DeepNorth'],
+      altitude: [0.2, 1000],
+      groupRadius: 0,
+      tilt: [0, 30],
+      inForest: [0, 1.15],
+    },
+    // snowfirtree_sparse
+    {
+      prefab: 'SnowFirTree 2',
+      num: [15, 25],
+      scale: [0.5, 1],
+      randTilt: 4,
+      chanceToUseGroundTilt: 0.1,
+      locations: ['DeepNorth'],
+      altitude: [0.2, 1000],
+      groupRadius: 0,
+      tilt: [0, 30],
+      inForest: [0, 1.15],
+    },
+    // pinetree_snow
+    {
+      prefab: 'Pinetree_Snow',
+      num: [10, 20],
+      scale: [1, 2],
+      randTilt: 4,
+      chanceToUseGroundTilt: 0.05,
+      locations: ['DeepNorth'],
+      altitude: [0.2, 1000],
+      groupRadius: 0,
+      tilt: [0, 30],
+      inForest: [0, 1.15],
+    },
+    // pinetree_snow_dead
+    {
+      prefab: 'Pinetree_Snow_dead',
+      num: [15, 30],
+      scale: [0.5, 1.5],
+      randTilt: 4,
+      chanceToUseGroundTilt: 0.2,
+      locations: ['DeepNorth'],
+      altitude: [0.2, 1000],
+      groupRadius: 0,
+      tilt: [0, 30],
+      inForest: [0, 1.15],
+    },
+    // pinetree_snow
+    {
+      prefab: 'Pinetree_Snow',
+      num: [15, 20],
+      scale: [1, 2],
+      randTilt: 10,
+      locations: ['DeepNorth'],
+      groupRadius: 0,
+      tilt: [0, 30],
+      inForest: [1.1, 1.15],
+    },
+    // snowfirtree_small
+    {
+      prefab: 'SnowFirTree_small',
+      num: [25, 35],
+      scale: [1, 2],
+      randTilt: 10,
+      chanceToUseGroundTilt: 0.5,
+      locations: ['DeepNorth'],
+      altitude: [0.2, 1000],
+      groupRadius: 0,
+      tilt: [0, 30],
+      inForest: [0, 1.15],
+    },
+    // snowfirtree_small
+    {
+      prefab: 'SnowFirTree_small',
+      num: [5, 10],
+      scale: [1, 2],
+      randTilt: 10,
+      chanceToUseGroundTilt: 0.5,
+      locations: ['DeepNorth'],
+      groupRadius: 0,
+      tilt: [0, 30],
+      inForest: [1, 2],
+    },
+    // stubbe
+    {
+      prefab: 'stubbe_deepnorth',
+      num: [1, 3],
+      scale: [0.8, 1.2],
+      randTilt: 10,
+      chanceToUseGroundTilt: 0.9,
+      locations: ['DeepNorth'],
+      altitude: [0, 1000],
+      tilt: [0, 30],
+      group: [0, 1],
+      groupRadius: 0,
+    },
+    // oldLog
+    {
+      prefab: 'FirTree_oldLog_deepnorth',
+      num: [1, 3],
+      scale: [1, 1.2],
+      randTilt: 10,
+      chanceToUseGroundTilt: 0.9,
+      locations: ['DeepNorth'],
+      altitude: [0, 1000],
+      tilt: [0, 30],
+      group: [0, 1],
+      groupRadius: 0,
+    },
+    // runestone: disabled
+    // branch
+    {
+      prefab: 'Pickable_Branch_Snow',
+      num: [15, 15],
+      locations: ['DeepNorth'],
+      altitude: [0, 1000],
+      groupRadius: 0,
+      inForest: [0, 1.1],
+    },
+    // snowball: disabled
+    // snowball
+    {
+      prefab: 'Pickable_Snowball',
+      num: [2, 5],
+      locations: ['DeepNorth'],
+      altitude: [0, 1000],
+      groupRadius: 0,
+    },
+    // ice: disabled
+    // icerock
+    {
+      prefab: 'ice_rock1',
+      num: [0, 1],
+      locations: ['DeepNorth'],
+      altitude: [-1000, -1],
+      snapToWater,
+      offset: -2,
+      groupRadius: 0,
+    },
+    // rock 4
+    {
+      prefab: 'rock4_coast',
+      num: [4, 6],
+      scale: [0.6, 1.2],
+      locations: ['DeepNorth'],
+      randTilt: 15,
+      altitude: [-2, -0.5],
+      group: [3, 3],
+      groupRadius: 20,
+    },
+    // Lingonberries
+    {
+      prefab: 'LingonberryBush',
+      num: [1, 2],
+      locations: ['DeepNorth'],
+      group: [3, 6],
+      groupRadius: 8,
+      inForest: [0, 1],
+    },
+    // frozengd
+    {
+      prefab: 'FrozenGD',
+      num: [0, 2],
+      scale: [0.5, 1],
+      locations: ['DeepNorth'],
+      tilt: [0, 40],
+      groupRadius: 1,
+    },
+    // frozenSkeleton1
+    {
+      prefab: 'FrozenSkeleton_Pose1',
+      num: [0, 4],
+      scale: [1, 1.2],
+      locations: ['DeepNorth'],
+      tilt: [0, 40],
+      groupRadius: 1,
+    },
+    // frozenSkeleton2
+    {
+      prefab: 'FrozenSkeleton_Pose2',
+      num: [0, 4],
+      scale: [1, 1.2],
+      locations: ['DeepNorth'],
+      tilt: [0, 40],
+      groupRadius: 1,
+    },
+    // bush01
+    {
+      prefab: 'Bush01_deepnorth',
+      num: [1, 2],
+      scale: [1, 1.75],
+      locations: ['DeepNorth'],
+      tilt: [0, 40],
+      randTilt: 0,
+      offset: -0.1,
+      group: [5, 10],
+      groupRadius: 20,
+    },
+    // StumpHut
+    {
+      prefab: 'StumpHut',
+      num: [0, 1],
+      scale: [0.75, 1],
+      randTilt: 0,
+      locations: ['DeepNorth'],
+      groupRadius: 0,
+    },
+    // StumpHole_small
+    {
+      prefab: 'StumpHole',
+      num: [0, 1],
+      scale: [0.4, 0.7],
+      randTilt: 0,
+      locations: ['DeepNorth'],
+      group: [1, 2],
+      groupRadius: 24,
+    },
+    // StumpLog
+    {
+      prefab: 'StumpLog',
+      num: [0, 1],
+      scale: [0.66, 1],
+      randTilt: 180,
+      locations: ['DeepNorth'],
+      groupRadius: 0,
+    },
+    // lantern: disabled
+    // ice: disabled
+    // shore ice: disabled
+    // shore ice: disabled
+    // ice
+    {
+      prefab: 'ice1',
+      num: [7, 13],
+      randTilt: 0,
+      locations: ['DeepNorth'],
+      altitude: [-1000, -19],
+      snapToWater,
+      offset: -0.1,
+      groupRadius: 0,
+    },
+    // shore ice
+    {
+      prefab: 'IceShore_1',
+      num: [5, 10],
+      randTilt: 0,
+      locations: ['DeepNorth'],
+      altitude: [-20, 0.5],
+      snapToWater,
+      offset: -0.9,
+      groupRadius: 1,
+    },
+    // shore ice
+    {
+      prefab: 'IceShore_1',
+      num: [5, 10],
+      randTilt: 0,
+      locations: ['DeepNorth'],
+      altitude: [-20, 0.5],
+      snapToWater,
+      offset: -0.9,
+      groupRadius: 1,
+    },
+    // Kale
+    {
+      prefab: 'Pickable_SeedKale',
+      num: [0, 0.5],
+      scale: [1, 1.5],
+      locations: ['DeepNorth'],
+      biomeArea: 3,
+      altitude: [1, 2000],
+      tilt: [0, 25],
+      groupRadius: 5,
+    },
   ] satisfies ItemGrowConfig[]).flatMap(x => itemGrow(x)),
   creatures: ([
     {
@@ -1323,7 +1636,7 @@ export const spawnList: SpawnList = {
       altitude: [-1.5, 10],
     },
     {
-      prefab: 'Skeleton',
+      prefab: 'Skeleton_Swamps',
       tier: 2,
       biomes: ['Swamp'],
       maxSpawned: 4,
@@ -1543,6 +1856,20 @@ export const spawnList: SpawnList = {
       distance: 30,
       altitude: [-2, 5],
       levels: [1, 1],
+    },
+    {
+      prefab: 'Writhan',
+      tier: 3,
+      biomes: ['Swamp'],
+      biomeAreas: 4,
+      maxSpawned: 1,
+      interval: 8000,
+      chance: 0.05,
+      distance: 30,
+      groupSize: [1, 1],
+      groupRadius: 1,
+      altitude: [-2, 10],
+      minDistance: 5000,
     },
     // MISTLANDS
     {
@@ -1906,6 +2233,213 @@ export const spawnList: SpawnList = {
       night: true,
       levels: [1, 1],
     },
+  // DEEP NORTH
+    {
+      prefab: 'Seal',
+      tier: 8,
+      biomes: ['DeepNorth'],
+      maxSpawned: 5,
+      interval: 100,
+      chance: 0.5,
+      distance: 64,
+      groupSize: [1, 2],
+      groupRadius: 6,
+      altitude: [-2, 5],
+    },
+    // Shadow People
+    {
+      prefab: 'Greydwarf_Frozen',
+      tier: 8,
+      biomes: ['DeepNorth'],
+      maxSpawned: 5,
+      interval: 600,
+      chance: 0.1,
+      distance: 10,
+      groupSize: [2, 4],
+      groupRadius: 6,
+      altitude: [10, 1000],
+    },
+    {
+      prefab: 'Greydwarf_Shaman_Frozen',
+      tier: 8,
+      biomes: ['DeepNorth'],
+      maxSpawned: 1,
+      interval: 600,
+      chance: 0.1,
+      distance: 10,
+      groupSize: [2, 4],
+      groupRadius: 6,
+      altitude: [10, 1000],
+    },
+    {
+      prefab: 'Skeleton_DeepNorth',
+      tier: 8,
+      biomes: ['DeepNorth'],
+      maxSpawned: 5,
+      interval: 600,
+      chance: 0.1,
+      distance: 10,
+      groupSize: [2, 4],
+      groupRadius: 6,
+      altitude: [10, 1000],
+    },
+    {
+      prefab: 'Seal_Pup',
+      tier: 8,
+      biomes: ['DeepNorth'],
+      maxSpawned: 3,
+      interval: 200,
+      chance: 0.5,
+      distance: 64,
+      groupSize: [1, 3],
+      groupRadius: 6,
+      altitude: [-2, 5],
+      levels: [1, 1],
+    },
+    {
+      // Elakingar NIGHT
+      prefab: 'Elaking',
+      tier: 8,
+      biomes: ['DeepNorth'],
+      maxSpawned: 2,
+      interval: 120,
+      chance: 0.15,
+      groupSize: [2, 3],
+      groupRadius: 3,
+      night: true,
+      levels: [1, 2],
+    },
+    {
+      // Elakingar Lantern NIGHT
+      prefab: 'ElakingLantern',
+      tier: 8,
+      biomes: ['DeepNorth'],
+      maxSpawned: 2,
+      interval: 120,
+      chance: 0.1,
+      groupSize: [1, 2],
+      groupRadius: 3,
+      night: true,
+      levels: [1, 2],
+    },
+    {
+      // Jotun Melee Patrol
+      prefab: 'JotunWarrior',
+      tier: 8,
+      biomes: ['DeepNorth'],
+      maxSpawned: 2,
+      interval: 3000,
+      chance: 0.05,
+      distance: 40,
+      groupSize: [1, 2],
+      night: false,
+      killed: 'jotun',
+      levels: [1, 1],
+    },
+    {
+      // Jotun Witch Patrol
+      prefab: 'JotunWitch',
+      tier: 8,
+      biomes: ['DeepNorth'],
+      maxSpawned: 2,
+      interval: 3000,
+      chance: 0.05,
+      distance: 40,
+      groupSize: [1, 1],
+      night: false,
+      killed: 'jotun',
+      levels: [1, 1],
+    },
+    {
+      // Giant Troll
+      prefab: 'TrollFrost', // Spawner_TrollFrost
+      tier: 8,
+      biomes: ['DeepNorth'],
+      maxSpawned: 1,
+      interval: 1500,
+      chance: 0.15,
+      distance: 30,
+      groupSize: [1, 1],
+      altitude: [10, 1000],
+      levels: [1, 1],
+    },
+    {
+      prefab: 'Barka',
+      tier: 8,
+      biomes: ['DeepNorth'],
+      maxSpawned: 1,
+      interval: 1000,
+      chance: 0.12,
+      groupSize: [1, 1],
+      groupRadius: 3,
+      levels: [1, 1],
+    },
+    {
+      prefab: 'Moose',
+      tier: 8,
+      biomes: ['DeepNorth'],
+      maxSpawned: 3,
+      interval: 1200,
+      chance: 0.1,
+      distance: 70,
+      groupSize: [1, 1],
+      altitude: [3, 1000],
+    },
+    /*
+    {
+      // Fimbulvinter - Jotun Warriors: jotun_invasion
+      prefab: 'JotunWarrior',
+      tier: 8,
+      biomes: ['Meadows', 'BlackForest', 'Ocean', 'Swamp', 'Mountain', 'Plains', 'Mistlands', 'Ashlands', 'DeepNorth'],
+      maxSpawned: 4,
+      interval: 500,
+      chance: 1,
+      distance: 10,
+      groupSize: [1, 2],
+      groupRadius: 3,
+      levels: [1, 1],
+    },
+    {
+      // Fimbulvinter - Jotun Witches: jotun_invasion
+      prefab: 'JotunWitch',
+      tier: 8,
+      biomes: ['Meadows', 'BlackForest', 'Ocean', 'Swamp', 'Mountain', 'Plains', 'Mistlands', 'Ashlands', 'DeepNorth'],
+      maxSpawned: 2,
+      interval: 500,
+      chance: 1,
+      distance: 10,
+      groupSize: [1, 1],
+      killed: 'jotun',
+      levels: [1, 1],
+    },
+    {
+      // Fimbulvinter - Elakingar: jotun_invasion
+      prefab: 'Elaking',
+      tier: 8,
+      biomes: ['Meadows', 'BlackForest', 'Ocean', 'Swamp', 'Mountain', 'Plains', 'Mistlands', 'Ashlands', 'DeepNorth'],
+      maxSpawned: 6,
+      interval: 1000,
+      chance: 1,
+      distance: 10,
+      groupSize: [1, 3],
+      groupRadius: 3,
+      levels: [1, 1],
+    },
+    {
+      // Fimbulvinter - Meteors: jotun_invasion
+      prefab: 'projectile_FimbulvinterMeteor',
+      // { blunt: 40, chop: 50, pickaxe: 50, fire: 120 }
+      tier: 8,
+      biomes: ['Meadows', 'BlackForest', 'Ocean', 'Swamp', 'Mountain', 'Plains', 'Mistlands', 'Ashlands', 'DeepNorth'],
+      maxSpawned: 6,
+      interval: 1000,
+      chance: 1,
+      distance: 10,
+      groupSize: [1, 3],
+      groupRadius: 3,
+      levels: [1, 1],
+    },
+    */
   ] satisfies SpawnerSetup[]).map(spawner)
 };
 

@@ -21,6 +21,7 @@ import { TranslationContext, Translator, useGlobalState, useLanguage } from '../
 import { averageAttacksDamage, findDropChanceFromCreature, itemClasses, List, Materials, rangeBy, ShortWeaponDamage } from './helpers';
 import { EffectIcon, Icon, ItemIcon, SkillIcon } from './parts/Icon';
 import { creaturesById } from '../data/spawn-list';
+import { pickables } from '../data/pickable';
 
 function first(val: number | [number, number]) {
   if (typeof val === 'number') return val;
@@ -83,6 +84,8 @@ function showSpecialIcon(special: ItemSpecial, translate: Translator) {
     case 'butcher': return null;
     case 'feast': return null; // TODO
     case 'harvest': return null; // TODO
+    case 'desnow': return null; // TODO
+    case 'hook': return null; // TODO
     default: return assertNever(special);
   }
 }
@@ -234,7 +237,7 @@ function showRelativePercent(x: number) {
 
 function ItemExtra({ item }: { item: Resource }) {
   const translate = useContext(TranslationContext);
-  const respawn = item.grow?.find(g => g.respawn)?.respawn ?? 0;
+  const respawn = pickables.find(p => p.item === item.id)?.respawn ?? 0;
   if (item.summon) return <ItemIcon item={data[item.summon[0]]} useAlt size={32} />;
   if (item.Food != null) {
     return <span style={{ display: 'flex', gap: 4 }}>

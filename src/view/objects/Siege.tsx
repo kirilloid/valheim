@@ -12,6 +12,10 @@ function SiegeMachine({ component }: { component: Exclude<SiegePiece['SiegeMachi
   return (<>
     <dt>fuel</dt>
     <dd><List separator="">{component.fuel.map(f => <ItemIcon item={data[f]} />)}</List></dd>
+    <dt>each lasts</dt>
+    <dd>{component.secPerFuel} s</dd>
+    <dt>max</dt>
+    <dd>{component.maxFuel}</dd>
   </>);
 }
 

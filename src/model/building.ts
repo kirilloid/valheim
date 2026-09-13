@@ -34,6 +34,7 @@ export const woodResist: DamageModifiers = mods([0, 0, 1, 2, 0, 0, 0, 0, 3, 3]);
 export const torchResist: DamageModifiers = mods([0, 0, 1, 0, 0, 3, 3, 0, 3, 3]);
 export const darkwoodResist: DamageModifiers = mods([0, 0, 1, 2, 1, 2, 0, 0, 3, 3]);
 export const ashwoodResist: DamageModifiers = mods([0, 0, 1, 2, 0, 1, 0, 0, 3, 3]);
+export const frostwoodResist: DamageModifiers = mods([0, 0, 0, 0, 2, 1, 1, 0, 3, 3]);
 export const stoneResist: DamageModifiers = mods([0, 0, 0, 0, 2, 1, 1, 0, 3, 3]);
 export const marbleResist: DamageModifiers = mods([1, 1, 1, 1, 0, 3, 3, 4, 4, 3]);
 export const graustenResist: DamageModifiers = mods([0, 1, 1, 0, 2, 1, 1, 1, 4, 4]);
@@ -70,3 +71,5 @@ export const ashwoodStructureRecipe = (Blackwood: number): Piece['recipe'] =>
 export const graustenStructureRecipe = (Grausten: number): Piece['recipe'] =>
   ({ type: 'craft_piece', materials: { Grausten }, station: 'piece_stonecutter', });
 
+export const frostwoodStructureRecipe = (Frostwood: number): Piece['recipe'] =>
+  ({ type: 'craft_piece', materials: { Frostwood }, station: 'piece_workbench' });

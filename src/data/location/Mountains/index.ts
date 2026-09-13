@@ -1,6 +1,7 @@
 export { default as AbandonedLogCabin02 } from './AbandonedLogCabin02';
 export { default as AbandonedLogCabin03 } from './AbandonedLogCabin03';
 export { default as AbandonedLogCabin04 } from './AbandonedLogCabin04';
+export { default as AncientUpgradeStation } from './AncientUpgradeStation';
 export { default as Dragonqueen } from './Dragonqueen';
 export { default as DrakeLorestone } from './DrakeLorestone';
 export { default as DrakeNest01 } from './DrakeNest01';

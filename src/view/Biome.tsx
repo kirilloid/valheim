@@ -7,7 +7,7 @@ import type { BiomeConfig, EntityId, Feast, GameObject, Item, PhysicalObject, Re
 import { biomes } from '../data/location';
 import { maxLvl } from '../data/creatures';
 import { data } from '../data/itemDB';
-import { resourceCraftMap } from '../data/resource-usage';
+import { resourceCraftMap, resourcePlantMap } from '../data/resource-usage';
 import { envSetup, envStates } from '../data/env';
 
 import { TranslationContext } from '../effects';
@@ -40,17 +40,28 @@ function isFoodOrUsedForFood(item: Item, settingsFilter: (item: GameObject) => b
   let idx = 0;
   while (idx < queue.length) {
     const { item: next, track } = queue[idx++]!;
-    if ((next as Resource).Food != null) {
+    if ((next as Resource | Feast).Food != null) {
       foodTracking[item.id] = track.concat(next.id);
       return true;
     }
     visited.add(next.id);
-    for (const item of resourceCraftMap[next.id] ?? []) {
-      if (!settingsFilter(item)) continue;
-      const { id } = item;
+    for (const res of resourceCraftMap[next.id] ?? []) {
+      if (!settingsFilter(res)) continue;
+      const { id } = res;
       if (!visited.has(id)) {
-        queue.push({ item, track: track.concat(next.id) });
+        queue.push({ item: res, track: track.concat(next.id) });
         visited.add(id);
+      }
+    }
+    for (const plant of resourcePlantMap[next.id] ?? []) {
+      if (!settingsFilter(plant)) continue;
+      for (const id of plant.drop?.flatMap(d => d.options.map(opt => opt.item)) ?? []) {
+        const res = data[id];
+        if (res?.type !== 'item') continue;
+        if (!visited.has(id)) {
+          queue.push({ item: res, track: track.concat(next.id) });
+          visited.add(id);
+        }
       }
     }
   }
@@ -110,7 +121,7 @@ function Resources({ biome }: { biome: BiomeConfig }) {
       case 'item':
         if (isFoodOrUsedForFood(item, settingsFilter)) {
           resources.food.push(item);
-        } else {
+        } else if (item.tier >= biome.tier) {
           resources.others.push(item);
         }
         break;
@@ -121,44 +132,21 @@ function Resources({ biome }: { biome: BiomeConfig }) {
         resources.others.push(item);
     }
   }
-  for (const item of biome.destructibles) {
-    const obj = data[item];
-    if (obj?.type === 'object') {
-      switch (obj.subtype) {
-        case 'tree':
-          resources.tree.push(obj);
-          break;
-        case 'rock':
-          resources.rock.push(obj);
-          break;
-        case 'indestructible':
-          break;
-        default:
-          if (obj.drop?.length === 1
-          &&  obj.drop[0]?.options.length === 1
-          &&  biome.resources.has(obj.drop[0]?.options[0]?.item ?? '')) {
-            // this should be pickable
-          } else {
-            resources.misc.push(obj);
-          }
-      }
-    }
-  }
 
   return <section>
     <h2>{translate('ui.resources')}</h2>
     <div className="multiList">
       <div>
-        <h3>{translate('ui.itemType.food')}</h3>
-        <ResourceList list={resources.food} />
-      </div>
-      <div>
         <h3>{translate('ui.resources')}</h3>
-        <ResourceList list={resources.others} />
+        <ResourceList list={biome.resources.map(id => data[id]).filter((x): x is Resource => x?.type === 'item')} />
       </div>
       <div>
-        <h3>{translate('ui.trophies')}</h3>
-        <ResourceList list={resources.trophies} />
+        <h3>{translate('ui.itemType.ingridients')}</h3>
+        <ResourceList list={biome.ingridients.map(id => data[id]).filter((x): x is Resource => x?.type === 'item')} />
+      </div>
+      <div>
+        <h3>{translate('ui.itemType.food')}</h3>
+        <ResourceList list={biome.foods.map(id => data[id]).filter((x): x is Resource => x?.type === 'item')} />
       </div>
     </div>
     <div className="multiList">
@@ -167,12 +155,12 @@ function Resources({ biome }: { biome: BiomeConfig }) {
         <ResourceList list={resources.misc} />
       </div>
       <div>
-        <h3>{translate('ui.mineType.trees')}</h3>
-        <ResourceList list={resources.tree} />
+        <h3>{translate('ui.trophies')}</h3>
+        <ResourceList list={biome.trophies.map(id => data[id]).filter((x): x is Resource => x?.type === 'trophy')} />
       </div>
       <div>
-        <h3>{translate('ui.mineType.rocks')}</h3>
-        <ResourceList list={resources.rock} />
+        <h3>resource nodes</h3>
+        <ResourceList list={[...biome.trees, ...biome.rocks]} />
       </div>
     </div>
   </section>
@@ -180,7 +168,8 @@ function Resources({ biome }: { biome: BiomeConfig }) {
 
 function Creatures({ biome }: { biome: BiomeConfig }) {
   const translate = useContext(TranslationContext);
-  const creatures = [...biome.creatures];
+  const filter = useSettingsFilter();
+  const creatures = [...biome.creatures].filter(filter);
   sortBy(creatures, c => c.type === 'fish' ? 0 : c.hp)
   return <section>
     <h2>{translate('ui.creatures')}</h2>
@@ -225,11 +214,9 @@ function BiomeList({ id }: { id: string }) {
 
   return <div>{translate('ui.biomes')}: <List separator=" | ">{biomes.map(biome => {
     const name = translate(`ui.biome.${biome.id}`);
-    return biome.active
-      ? biome.id === id
-        ? <strong key={biome.id}>{name}</strong>
-        : <Link key={biome.id} to={`/biome/${biome.id}`}>{name}</Link>
-      : <span key={biome.id} className="disabled">{name}</span>
+    return biome.id === id
+      ? <strong key={biome.id}>{name}</strong>
+      : <Link key={biome.id} to={`/biome/${biome.id}`}>{name}</Link>
   })}</List></div>
 }
 
@@ -260,7 +247,6 @@ export function Biome() {
       </picture>
       <section>
         <dl>
-          <dt>active</dt><dd>{yesNo(biome.active)}</dd>
           <dt>tier</dt><dd>{biome.tier}</dd>
         </dl>
       </section>

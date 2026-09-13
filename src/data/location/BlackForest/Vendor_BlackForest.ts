@@ -14,12 +14,12 @@ export default loc(
       locItem('TraderRune', 1, 4),
       // stuff
       locItem([
-        locItem('TraderChest_static', 1, 6),
+        // locItem('TraderChest_static', 1, 6),
         locItem('barrell_static', 1, 5),
-        locItem('fi_vil_container_barrel_small', 1, 7),
+        // locItem('fi_vil_container_barrel_small', 1, 7),
       ]),
-      locItem('TraderTent'),
-      locItem('TraderLamp'),
+      // locItem('TraderTent'),
+      // locItem('TraderLamp'),
       locItem('fire_pit_haldor'),
       // carrots
     ]

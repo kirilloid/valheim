@@ -54,7 +54,8 @@ function Editor({ value: zdo, onChange, playersData, time, index, components }: 
   if (index > -1) {
     return <ContainedItemComp value={zdo} onChange={onChange} index={index} />
   }
-  const editors = components.flatMap(cmp => InterfaceFields[cmp] ?? []);
+  // cheatedMark might be assigned to multiple components, so we need to deduplicate it
+  const editors = [...new Set(components.flatMap(cmp => InterfaceFields[cmp] ?? []))];
   return <List separator="">{editors.map((C, i) => <C key={i} value={zdo} onChange={onChange} playersData={playersData} time={time} />)}</List>
 }
 

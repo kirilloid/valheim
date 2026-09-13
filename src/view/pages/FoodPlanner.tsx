@@ -177,7 +177,7 @@ export function FoodPlanner() {
   );
   const mul = (nightEat ? 1 : 0.7) * players * daysDuration * repeat;
 
-  const biomes: Biome[] = ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains', 'Mistlands', 'Ashlands'];
+  const biomes: Biome[] = ['Meadows', 'BlackForest', 'Swamp', 'Mountain', 'Plains', 'Mistlands', 'Ashlands', 'DeepNorth'];
 
   return (<>
     <h1>{translate('ui.page.food-planner')}</h1>

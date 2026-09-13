@@ -16,6 +16,7 @@ export type Item = {
   customData: Map<string, string>;
   worldLevel: number;
   pickedUp: boolean;
+  cheated: boolean;
 };
 
 export type Data = {
@@ -36,7 +37,8 @@ function readItemOld(pkg: PackageReader, version: number): Item {
   const customData = version >= 104 ? pkg.readMap(pkg.readString, pkg.readString) : new Map<string, string>();
   const worldLevel = version >= 105 ? pkg.readInt() : 0;
   const pickedUp = version >= 106 ? pkg.readBool() : false;
-  return { id, stack, durability, gridPos, equipped, quality, variant, crafterID, crafterName, customData, worldLevel, pickedUp };
+  const cheated = version === 107 ? pkg.readBool() : false;
+  return { id, stack, durability, gridPos, equipped, quality, variant, crafterID, crafterName, customData, worldLevel, pickedUp, cheated };
 }
 
 function readItemNew(pkg: PackageReader, version: number): Item {
@@ -64,8 +66,9 @@ function readItemNew(pkg: PackageReader, version: number): Item {
       customData.set(key, val);
     }
   }
+  const cheated = version >= 109 ? Boolean(pkg.readByte() & 1) : false;
   const id = itemHashes.get(prefab) ?? `${prefab}_unknown_`;
-  return { id, stack, durability, gridPos, equipped, quality, variant, crafterID, crafterName, customData, worldLevel, pickedUp };
+  return { id, stack, durability, gridPos, equipped, quality, variant, crafterID, crafterName, customData, worldLevel, pickedUp, cheated };
 }
 
 export function read(pkg: PackageReader): Data {

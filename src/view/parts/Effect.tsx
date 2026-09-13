@@ -7,7 +7,7 @@ import { assertNever, timeI2S } from '../../model/utils';
 import { getTotalDamage } from '../../model/combat';
 
 import { TranslationContext } from '../../effects';
-import { InlineObjectWithIcon, List, rangeBy, Resistances, showNumber, showPercent } from '../helpers';
+import { InlineObjectWithIcon, List, rangeBy, Resistances, shortCreatureDamage, showNumber, showPercent } from '../helpers';
 import { SkillIcon } from './Icon';
 import { creaturesById } from '../../data/spawn-list';
 import { spawnChance } from '../../model/game';
@@ -37,6 +37,8 @@ function Special({ type }: { type: TEffect['special'] }) {
         <dd>Helps finding hidden treasures</dd>
         <ul>{findables.map(obj => <li key={obj.id}><InlineObjectWithIcon id={obj.id} /></li>)}</ul>
       </>;
+    case 'Crowned':
+      return <><dt>Special</dt><dd>Creatures don't attack you [first]</dd></>;
     default:
       return assertNever(type);
   }
@@ -117,6 +119,7 @@ export function Effect({ effect, level }: { effect: TEffect; level?: number }) {
     // comfort?: { value: number; };
     cooldown,
     absorbDamage,
+    reflectDamage,
     healthOverTime, // [change: number, interval: number],
     healthUpfront,
     damageModifiers,
@@ -190,6 +193,10 @@ export function Effect({ effect, level }: { effect: TEffect; level?: number }) {
         ? `${absorbDamage[0]} + ${absorbDamage[1]} per level`
         : absorbDamage[0] + absorbDamage[1] * level
       }</dd>
+    </React.Fragment>}
+    {reflectDamage && <React.Fragment>
+      <dt>reflect on hit</dt>
+      <dd>{shortCreatureDamage(reflectDamage)}</dd>
     </React.Fragment>}
     {damageModifiers && <Resistances key="resistances" mods={damageModifiers} />}
     {damageValueModifiers && <React.Fragment key="damageValueModifiers">

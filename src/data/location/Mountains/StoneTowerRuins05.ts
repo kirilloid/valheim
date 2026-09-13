@@ -7,14 +7,14 @@ export default loc(
     customMusic: 'Music_MountainCottage',
     items: [
       // corner towers
-      locItem([locItem('Skeleton', 0.33, 3)], 0.33, 4),
+      locItem([locItem('Skeleton_Mountain', 0.33, 3)], 0.33, 4),
       // central towers
       locItem([
-        locItem('Skeleton', 0.33, 3),
+        locItem('Skeleton_Mountain', 0.33, 3),
         locItem('TreasureChest_mountains'),
       ], 0.5),
       // spawn
-      locItem('Skeleton', 0.33, 4),
+      locItem('Skeleton_Mountain', 0.33, 4),
       locItem('BonePileSpawner', 0.5),
     ],
   },

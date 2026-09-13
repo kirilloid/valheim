@@ -5,7 +5,7 @@ export default loc(
   2, 'BearCave', ['BlackForest'],
   { type: 'dungeon',
     biomeArea: 2, quantity: 50, minApart: 256,
-    terrainDelta: [5, 10], minAlt: 5, radius: [24, 12],
+    radius: [24, 12], terrainDelta: [5, 10], minAlt: 5,
     customMusic: 'BlackForestLocationMusic',
     items: [
       // entrance
@@ -18,7 +18,7 @@ export default loc(
       locItem('BlueberryBush', 0.5, 3),
       // growing
       locItem('Pickable_Mushroom_yellow', 0.5, 22),
-      locItem('Bear', 0.75),
+      locItem('Bjorn', 0.75),
     ],
   },
 );

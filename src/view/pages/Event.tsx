@@ -100,7 +100,7 @@ const kills: EntityId[] = [
   'SeekerQueen',
   'Fader',
 ];
-const biomeIds = biomes.filter(b => b.active).map(b => b.id);
+const biomeIds = biomes.map(b => b.id);
 
 export function GameEventFilterTable() {
   const [spoiler] = useGlobalState('spoiler');

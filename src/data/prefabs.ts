@@ -47,6 +47,7 @@ export const prefabNames: string[] = [
   'FireFlies', 'Flies',
   'Fish1', 'Fish2', 'Fish3', 'Fish4_cave', 'FishingRodFloat', 'FishingRodFloatProjectile',
   'Flash', 'flintspear_projectile',
+  'frozenship', 'frozenship02', 'frozenship03',
 
   'gd_king_punch', 'gd_king_rootspawn', 'gd_king_scream', 'gd_king_shoot', 'gd_king_stomp', 'gdking_root_projectile',
   'Ghost_attack',
@@ -78,6 +79,7 @@ export const prefabNames: string[] = [
 
   'Ice_floor', 'Ice_floor_fractured',
   'ice_rock1', 'ice_rock1_frac', 'ice1', 'IceBlocker',
+  'Ice_ship_1', 'Ice_ship_2', 'Ice_ship_3', 'Ice_ship_4', 'Ice_ship_5', 'Ice_ship_6', 'Ice_ship_7',
   'imp_fireball_attack', 'Imp_fireball_projectile', 'instanced_forest_groundcover', 'instanced_forest_groundcover_brown', 'instanced_heathflower', 'instanced_heathgrass', 'instanced_meadowsgrass', 'instanced_meadowsgrass_short', 'instanced_ormbunke', 'instanced_shrub', 'instanced_small_rock1', 'instanced_swamp_grass', 'instanced_swamp_ormbunke', 'instanced_vass', 'instanced_waterlilies',
 
   'jute_carpet', 'JuteRed',
@@ -115,7 +117,7 @@ export const prefabNames: string[] = [
   'Root', 'root07', 'root08', 'root11', 'root12',
 
   'sapling_barley', 'sapling_carrot', 'sapling_flax', 'sapling_onion', 'sapling_seedcarrot', 'sapling_seedonion', 'sapling_seedturnip', 'sapling_turnip', 'Sausages',
-  'Beech_Sapling', 'FirTree_Sapling', 'PineTree_Sapling', 'Birch_Sapling', 'Oak_Sapling', 'sapling_seedturnip', 'sapling_seedcarrot', 'sapling_seedonion',
+  'Beech_Sapling', 'FirTree_Sapling', 'PineTree_Sapling', 'Birch_Sapling', 'Oak_Sapling', 'sapling_seedturnip', 'sapling_seedcarrot', 'sapling_seedonion', 'FirTree_big_Sapling',
   'Serpent_attack', 'Serpent_taunt', 'SerpentMeat', 'SerpentMeatCooked', 'SerpentScale', 'SerpentStew',
   'shaman_attack_aoe', 'shaman_heal_aoe', 
   'ship_construction',

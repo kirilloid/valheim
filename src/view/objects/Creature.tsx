@@ -175,13 +175,19 @@ export function Creature({ creature, level }: { creature: TCreature, level?: num
             {' '}
             {min >= max - 1
               ? `${min * dropScale}`
-              : `${rangeBy([min * dropScale, (max - 1) * dropScale], String)}`}
+              : <>
+                  {rangeBy([min * dropScale, (max - 1) * dropScale], String)}
+                  {(max - 1) * dropScale > 100 && <span style={{ color: 'red' }} title="drop is limited to 100 per resource to help poor people who spawned many-star enemy not bork their world">*</span>}
+                </>}
             {' '}
             {Math.min(chance * dropScale, 1) * 100}%
           </li>
         })}
       </ul>
     </section>}
+    {creature.spawnOnDeath != null && <p>
+      Spawns upon death <InlineObjectWithIcon id={creature.spawnOnDeath} />
+    </p>}
     {creature.timedDestruction != null && <p>
       Despawns after {rangeBy(creature.timedDestruction, String)}s
     </p>}

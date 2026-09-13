@@ -8,6 +8,7 @@ import { recipes } from './recipes';
 import { recipes as modsRecipes } from '../mods';
 import { data } from './itemDB';
 
+export const resourcePlantMap: Record<EntityId, (PhysicalObject)[]> = {};
 export const resourceCraftMap: Record<EntityId, (Item | Feast)[]> = {};
 export const resourceBuildMap: Record<EntityId, (Piece | Ship | Cart | Siege | Feast)[]> = {};
 export type Produced = Item | Piece | Ship | Cart | Siege | Feast;
@@ -74,6 +75,12 @@ feasts.forEach(f => addToMap(resourceCraftMap, f, f.recipe));
 ships.forEach(s => addToMap(resourceBuildMap, s, s.recipe));
 carts.forEach(c => addToMap(resourceBuildMap, c, c.recipe));
 siege.forEach(c => addToMap(resourceBuildMap, c, c.recipe));
+for (const p of objects) {
+  if (p.Plant) {
+    const res = p.Plant.plantedWith;
+    (resourcePlantMap[res] ?? (resourcePlantMap[res] = [])).push(p);
+  }
+}
 
 const parents: Record<EntityId, PhysicalObject> = {};
 

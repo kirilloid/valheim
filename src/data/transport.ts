@@ -295,6 +295,8 @@ export const siege: Siege[] = [
     },
     SiegeMachine: {
       fuel: ['Wood', 'FineWood', 'RoundLog', 'Blackwood'],
+      secPerFuel: 20,
+      maxFuel: 25,
       damage: dmg({ pickaxe: 600 }),
       toolTier: 5,
     },

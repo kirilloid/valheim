@@ -56,11 +56,20 @@ export const arrows: Arrow[] = [
   { type: 'arrow', id: 'ArrowCharred', tier: 7, weight: 0.1, stack: 100,
     damage: dmg({ pierce: 82 }), knockback: 15,
   },
+  { type: 'arrow', id: 'ArrowBloodGold', tier: 8, weight: 0.1, stack: 100,
+    damage: dmg({ pierce: 92 }), knockback: 15,
+  },
   { type: 'bolt', id: 'BoltCharred', tier: 7, weight: 0.1, stack: 100,
     damage: dmg({ pierce: 82 }), knockback: 0,
   },
+  { type: 'bolt', id: 'BoltBloodGold', tier: 8, weight: 0.1, stack: 100,
+    damage: dmg({ pierce: 92 }), knockback: 0,
+  },
   { type: 'missile', id: 'TurretBoltFlametal', tier: 7, weight: 0.5, stack: 100,
     damage: dmg({ pierce: 140 }), knockback: 60,
+  },
+  { type: 'missile', id: 'TurretBoltBloodgold', tier: 8, weight: 0.5, stack: 100,
+    damage: dmg({ pierce: 180 }), knockback: 60,
   },
   { type: 'catapult', id: 'Catapult_ammo', tier: 7, weight: 0.3, stack: 50,
     // toolTier: 5, radius: 3
@@ -69,6 +78,10 @@ export const arrows: Arrow[] = [
   { type: 'catapult', id: 'BombSiege', emoji: '💣', tier: 7, weight: 0.3, stack: 50,
     // toolTier: 5, radius: 2
     damage: dmg({ pickaxe: 400, chop: 100/*, damage: 100*/ }), knockback: 0,
+  },
+  { type: 'catapult', id: 'Catapult_Ammo_BloodGold', emoji: '💣', tier: 8, weight: 0.3, stack: 50,
+    // toolTier: 5, radius: 2
+    damage: dmg({ pickaxe: 600, chop: 200/*, damage: 200*/ }), knockback: 0,
   },
 
   /*{ type: 'ammo', id: 'draugr_arrow', tier: -1, weight: 1, stack: 20,

@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 
 import type * as T from '../../types';
 import { timeI2S } from '../../model/utils';
@@ -93,22 +94,24 @@ function TraderRecipes({ id }: { id: T.TraderId }) {
     })
   return <>
     <h2>Sells</h2>
-    <table>
-      <thead>
-        <tr>
-          <td>item</td>
-          <td>price</td>
-          <td>requires kill</td>
-        </tr>
-      </thead>
-      <tbody>
-        {rr.map((r, i) => <tr key={i}>
-          <td><InlineObjectWithIcon id={r.item} /></td>
-          <td><ItemIcon item={data.Coins} /> {r.value}</td>
-          <td>{r.killed ? <InlineObjectWithIcon id={r.killed} /> : null}</td>
-        </tr>)}
-      </tbody>
-    </table>
+    <div className="TraderCatalogue">
+      <table className="TraderCatalogue__table">
+        <thead>
+          <tr>
+            <td className="TraderCatalogue__headcell">item</td>
+            <td className="TraderCatalogue__headcell">price</td>
+            <td className="TraderCatalogue__headcell">requires kill</td>
+          </tr>
+        </thead>
+        <tbody>
+          {rr.map((r, i) => <tr key={i}>
+            <td><InlineObjectWithIcon id={r.item} /></td>
+            <td><ItemIcon item={data.Coins} /> {r.value}</td>
+            <td>{r.killed ? <InlineObjectWithIcon id={r.killed} nobr /> : null}</td>
+          </tr>)}
+        </tbody>
+      </table>
+    </div>
   </>
 }
 
@@ -165,6 +168,18 @@ function Vegvisir({ to }: { to: T.GameLocationId }) {
   </dl>
 }
 
+function BossStone({ item, power }: { item: T.EntityId, power?: string }) {
+  const translate = useContext(TranslationContext);
+
+  return <dl>
+    <dt>Boss power stone</dt>
+    <dd>attach <InlineObjectWithIcon id={item} /> in order to {power
+      ? <>get power: <Link to={`/effect/${power}`}>{translate(`ui.effect.${power}`)}</Link></>
+      : <>finish the game</>}
+    </dd>
+  </dl>
+}
+
 export function PhysicalObject({ item }: { item: T.PhysicalObject }) {
   const full = fullDestructible(item);
 
@@ -178,9 +193,10 @@ export function PhysicalObject({ item }: { item: T.PhysicalObject }) {
       {item.Leviathan && <Leviathan leviathan={item.Leviathan} />}
       {item.RuneStone && <Runestone texts={item.RuneStone} />}
       {item.Vegvisir && <Vegvisir to={item.Vegvisir} />}
+      {item.BossStone && <BossStone item={item.BossStone.item} power={item.BossStone.power} />}
       {item.ResourceRoot && <ResourceRoot params={item.ResourceRoot} />}
       {full?.Destructible && <Destructible item={full.Destructible} />}
-      {item?.SpawnArea && <SpawnArea params={item.SpawnArea} />}
+      {item.SpawnArea && <SpawnArea params={item.SpawnArea} />}
       {item.drop && <Drop drop={item.drop} />}
     </>
   );

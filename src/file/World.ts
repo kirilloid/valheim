@@ -1,8 +1,11 @@
+import { compress, decompress } from 'brotli-compress';
+
 import type { ZDO, ZDOCorruption, ZDOData, ZDOID } from './types';
 import type { Vector2i, Vector3 } from '../model/utils';
 
 import { gunzip, gzip } from '../model/fflate';
 import { hashPrefab } from '../model/utils';
+import { decode, encode } from '../model/utf8';
 import { locationHashes } from '../data/location-hashes';
 import { PackageReader, PackageWriter } from './Package';
 import {
@@ -28,14 +31,23 @@ export type ZoneSystemData = {
   }[];
 };
 
-export type RandEventData = {
+export interface RandEventData {
   eventTimer: number;
   name?: string;
   time?: number;
   pos?: Vector3;
 };
 
-export type WorldData = {
+export interface PersistentEventData {
+  sourceEventId: number;
+  eventId: number;
+  position: Vector3;
+  radius: number;
+  startTime: number;
+  duration: number;
+};
+
+export interface WorldData {
   _name: string;
   version: number;
   // time since t=0 in seconds
@@ -43,6 +55,7 @@ export type WorldData = {
   zdo: ZDOData;
   zoneSystem?: ZoneSystemData;
   randEvent?: RandEventData;
+  persistentEvent?: PersistentEventData;
 }
 
 function* readZDOData(reader: PackageReader, version: number, options: { removeDuplicates?: boolean } = {}): Generator<number, ZDOData> {
@@ -158,7 +171,7 @@ async function readZoneSystem(reader: PackageReader, version: number): Promise<Z
   if (version >= 14) result.globalKeys = reader.readArray(reader.readString);
   if (version < 18) return result;
   if (version >= 20) result.locationsGenerated = reader.readBool();
-  result.locationInstances = reader.readArray(function () {
+  result.locationInstances = reader.readArray(function (this: PackageReader) {
     let name = '';
     if (version >= 40) {
       const hash = this.readInt();
@@ -173,7 +186,7 @@ async function readZoneSystem(reader: PackageReader, version: number): Promise<Z
       name = this.readString();
     }
     const pos = this.readVector3();
-    const generated = version >= 19 ? reader.readBool() : false;
+    const generated = version >= 19 ? this.readBool() : false;
     return { name, pos, generated };
   });
   return result;
@@ -234,6 +247,19 @@ function writeRandEvent(writer: PackageWriter, version: number, event: RandEvent
   writer.writeVector3(event.pos!);
 }
 
+async function readPersistentEvent(reader: PackageReader, version: number): Promise<PersistentEventData> {
+  const bytes = await decompress(reader.readByteArray());
+  const str = decode(bytes);
+  return JSON.parse(str);
+}
+
+async function writePersistentEvent(writer: PackageWriter, version: number, event: PersistentEventData): Promise<void> {
+  const str = JSON.stringify(event);
+  const bytes = encode(str);
+  const packed = await compress(bytes);
+  writer.writeByteArray(packed);
+}
+
 export async function* read(files: Map<string, File>): AsyncGenerator<number, WorldData> {
   const [_name, file] = getFirstFile(files, name => name.endsWith('.db') || name.endsWith('.db2'));
   const bytes = new Uint8Array(await file.arrayBuffer());
@@ -246,6 +272,7 @@ export async function* read(files: Map<string, File>): AsyncGenerator<number, Wo
     : yield* readZDOData(reader, version);
   const zoneSystem = version >= 12 ? await readZoneSystem(reader, version) : undefined;
   const randEvent = version >= 15 ? readRandEvent(reader, version) : undefined;
+  const persistentEvent = version >= 41 ? await readPersistentEvent(reader, version) : undefined;
   return {
     _name,
     version,
@@ -253,6 +280,7 @@ export async function* read(files: Map<string, File>): AsyncGenerator<number, Wo
     zdo,
     zoneSystem,
     randEvent,
+    persistentEvent,
   };
 }
 
@@ -263,6 +291,7 @@ export async function* write({
   zdo,
   zoneSystem,
   randEvent,
+  persistentEvent,
 }: WorldData): AsyncGenerator<number, Map<string, Uint8Array<ArrayBuffer>>> {
   const writer = new PackageWriter();
   writer.writeInt(version);
@@ -275,6 +304,7 @@ export async function* write({
   }
   if (version >= 12) await writeZoneSystem(writer, version, zoneSystem!);
   if (version >= 15) writeRandEvent(writer, version, randEvent!);
+  if (version >= 41) writePersistentEvent(writer, version, persistentEvent!);
   files.set(_name, writer.flush());
   return files;
 }

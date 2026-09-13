@@ -102,4 +102,15 @@ export const feasts: Feast[] = [
     Food: { health: 75, stamina: 75, eitr: 38, duration: 3000, regen: 6 },
     recipe: { type: 'craft_piece', materials: { FeastAshlands_Material: 1 }, station: null },
   },
+  {
+    id: 'FeastDeepNorth',
+    iconId: 'resource/FeastDeepNorth',
+    type: 'feast',
+    wear: { hp: 50, damageModifiers },
+    piece: { target: 'random', water: false, size: [3, 1.45, 1.55], onlyOnFlat: true },
+    tier: 8,
+    stack: 10,
+    Food: { health: 85, stamina: 85, eitr: 43, duration: 3000, regen: 7 },
+    recipe: { type: 'craft_piece', materials: { FeastDeepNorth_Material: 1 }, station: null },
+  },
 ];

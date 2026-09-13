@@ -39,10 +39,18 @@ export const envStates = {
   'Ashlands_misty': { emoji: '🌫️', wind: [0.1, 0.5], light: [0.6, 1.0], flags: 0 },
   'Ashlands_CinderRain': { emoji: '☔', wind: [0.75, 0.7], light: [0.8, 1.3], flags: 0 },
   'Ashlands_SeaStorm': { emoji: '⛈️', wind: [0.8, 1.0], light: [0.5, 0.77], flags: DARK },
+  'JotunInvasion_swamp': { emoji: '🥶', wind: [0.1, 0.6], light: [0.5, 0.9], flags: FREEZE },
+  'JotunInvasion_meadows': { emoji: '🥶', wind: [0.1, 0.6], light: [0.76, 1.3], flags: FREEZE },
+  'JotunInvasion_mountain': { emoji: '🥶', wind: [0.1, 0.6], light: [0.4, 1.2], flags: FREEZE },
+  'JotunInvasion_blackforest': { emoji: '🥶', wind: [0.1, 0.6], light: [1.1, 1.5], flags: FREEZE },
+  'JotunInvasion_plains': { emoji: '🥶', wind: [0.1, 0.6], light: [0.4, 0.8], flags: FREEZE },
+  'JotunInvasion_mistlands': { emoji: '🥶', wind: [0.05, 0.2], light: [0.4, 1.2], flags: FREEZE },
   'Crypt': { emoji: '⬛', wind: [0, 0], light: [0, 0], flags: DARK },
   'SunkenCrypt': { emoji: '⬛', wind: [0, 0], light: [0, 0], flags: DARK },
   'Caves': { emoji: '⬛', wind: [0, 0], light: [0.1, 0.1], flags: DARK | FREEZE },
   'InfectedMine': { emoji: '⬛', wind: [0, 0], light: [0.1, 0.1], flags: DARK },
+  'Morkhalla': { emoji: '⬛', wind: [0.05, 0.1], light: [0.1, 0.1], flags: COLD | DARK },
+  'TheHollow': { emoji: '⬛', wind: [0, 0], light: [0, 0], flags: DARK },
 } as const;
 
 export type ES = typeof envStates;
@@ -55,7 +63,7 @@ export const envSetup: Record<Biome, WeatherBalance> = {
   BlackForest: [['DeepForest_Mist', 20], ['Rain', 1], ['Misty', 1], ['ThunderStorm', 1]],
   Swamp: [['SwampRain', 1]],
   Mountain: [['SnowStorm', 1], ['Snow', 5]],
-  DeepNorth: [['Twilight_SnowStorm', 1], ['Twilight_Snow', 2], ['Twilight_Clear', 1]],
+  DeepNorth: [['Twilight_SnowStorm', 1], ['Twilight_Snow', 2], ['Twilight_Clear', 2]],
   Plains: [['Heath_clear', 5], ['Misty', 1], ['LightRain', 1]],
   Ashlands: [['Ashlands_ashrain', 30], ['Ashlands_misty', 2], ['Ashlands_CinderRain', 4], ['Ashlands_storm', 1]],
   Mistlands: [['Mistlands_clear', 15], ['Mistlands_rain', 1], ['Mistlands_thunder', 1]],

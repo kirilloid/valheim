@@ -7,7 +7,7 @@ export default loc(
     customMusic: 'Music_MountainCottage',
     items: [
       locItem('TreasureChest_mountains'),
-      locItem('Skeleton', 0.5, 2),
+      locItem('Skeleton_Mountain', 0.5, 2),
       locItem('StoneGolem', 0.1, 2),
     ],  
   },

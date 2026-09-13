@@ -9,6 +9,7 @@ import { zoneHash, fromZoneId } from '../../../model/game';
 
 import { boolComp } from './bool';
 import { colorComp } from './color';
+import { cheatedMark } from './cheated';
 import { DropComp } from './drop';
 import { enumComp } from './enum';
 import { floatComp } from './float';
@@ -76,6 +77,7 @@ export const InterfaceFields: Partial<Record<
     // quaternionComp('tiltrot'),
     vectorComp('BodyVelocity'),
     floatComp('RandomSkillFactor', { readOnly, label: 'scale bonus' }),
+    cheatedMark,
     /* EpicLoot
       string BountyData
       string BountyID
@@ -85,8 +87,9 @@ export const InterfaceFields: Partial<Record<
     */
   ],
   Container: [
+    cheatedMark,
     boolComp('addedDefaultItems', { readOnly }),
-    // boolComp('InUse'),
+    boolComp('InUse', { readOnly }),
     ItemsComp,
     /* EpicLoot:
       bool 'TreasureMapChest.HasBeenFound'
@@ -95,6 +98,7 @@ export const InterfaceFields: Partial<Record<
     */
   ],
   CookingStation: [
+    cheatedMark,
     timeComp('StartTime'),
     floatComp('fuel'),
     ...[0, 1, 2, 3, 4].flatMap(idx => [
@@ -112,7 +116,7 @@ export const InterfaceFields: Partial<Record<
   Door: [enumComp('state', [[1, 'opened'], [0, 'closed'], [-1, 'opened opposite']])],
   DungeonGenerator: [RoomsComp],
   EggGrow: [timeComp('growStart')],
-  Fermenter: [stringComp('Content'), timeComp('StartTime')],
+  Fermenter: [stringComp('Content'), timeComp('StartTime'), cheatedMark],
   Feast: [intComp('Value')],
   Fireplace: [floatComp('fuel'), timeComp('lastTime')],
   Fish: [vectorComp('spawnpoint')],
@@ -130,7 +134,7 @@ export const InterfaceFields: Partial<Record<
   // ItemStyle: [floatComp('_Style')],
   Leviathan: [boolComp('submerged', { hashFn: crc32 })],
   LiquidVolume: [LiquidComp],
-  LocationProxy: [hashedLocationComp('location'), intComp('seed', { readOnly }), ({ value: zdo }) => <>
+  LocationProxy: [hashedLocationComp('location'), intComp('seed', { readOnly }), cheatedMark, ({ value: zdo }) => <>
     <dt>world seed</dt>
     <dd>{(zdo.ints.get(stableHashCode('seed')) ?? 0) - zoneHash(fromZoneId(zdo.sector))}</dd>
   </>],
@@ -149,7 +153,7 @@ export const InterfaceFields: Partial<Record<
     hashedItemComp('itemPrefab'),
     intComp('itemStack'),
   ],
-  Piece: [idComp('creator')],
+  Piece: [idComp('creator'), cheatedMark],
   Plant: [PlantComp],
   Player: [
     // 'emoteID', 'emote', 'emote_oneshot',
@@ -172,6 +176,7 @@ export const InterfaceFields: Partial<Record<
     floatComp('Value'),
     vectorComp('InitVel'),
     DropComp,
+    cheatedMark,
   ],
   // RandomAnimation: ['<name>', 'RA_<name>',],
   RandomFlyingBird: [vectorComp('spawnpoint'), boolComp('landed'),],

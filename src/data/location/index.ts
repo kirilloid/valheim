@@ -1,10 +1,8 @@
 import type {
   Biome,
   BiomeConfig,
-  Creature,
   DungeonGenConfig,
   EntityId,
-  Fish,
   GameLocationId,
   LocationConfig,
   LocationItem,
@@ -13,48 +11,24 @@ import type {
 
 import * as L from './locations';
 
-import { fullDestructible, objects } from '../objects';
+import { fullDestructible } from '../objects';
 import { data } from '../itemDB';
-import { resources } from '../resources';
 import {
   Distribution, DropDist,
   mergeDist, power, powerDist, scaleDist,
   sum, sumDist, gatherDrop, mul, weightedAdd
 } from '../../model/dist';
 import { groupBy, mapValues, maybePush } from '../../model/utils';
-import { creatures } from '../creatures';
 import { spawners } from '../spawners';
 import { CamplaceConfig, RoomConfig } from '../rooms/types';
-import { spawnList } from '../spawn-list';
+import { biomes } from './biomes';
+
+export { biomes };
 
 export const locationBiomes: Record<GameLocationId, Biome> = {};
 
 export const locationToBiome = (loc: GameLocationId | Biome) => (locationBiomes[loc as GameLocationId] ?? loc) as Biome;
 
-function biome(emoji: string, id: Biome, tier: number, active: boolean): BiomeConfig {
-  return {
-    id,
-    active,
-    tier,
-    emoji,
-    destructibles: new Set(),
-    creatures: new Set(),
-    locations: [],
-    resources: new Set(),
-  };
-}
-
-export const biomes: BiomeConfig[] = [
-  biome('⛳', 'Meadows', 1, true),
-  biome('🌲', 'BlackForest', 2, true),
-  biome('🐸', 'Swamp', 3, true),
-  biome('⛰️', 'Mountain', 4, true),
-  biome('🍂', 'Plains', 5, true),
-  biome('🌊', 'Ocean', 3, true),
-  biome('🌫', 'Mistlands', 6, true),
-  biome('🔥', 'Ashlands', 7, true),
-  biome('🧊', 'DeepNorth', 8, false),
-];
 
 const biomeMap = Object.fromEntries(biomes.map(b => [b.id, b])) as Record<Biome, BiomeConfig>;
 
@@ -196,6 +170,7 @@ export const locations: LocationConfig[] = [
 
   // locations_mountaincaves, sortOrder: 3
   L.MountainCave02,
+  L.AncientUpgradeStation,
 
   // locations_mistlands, sortOrder: 3
   L.Mistlands_GuardTower1_new,
@@ -251,6 +226,32 @@ export const locations: LocationConfig[] = [
   L.CharredRuins3,
   L.CharredRuins4,
   L.BogWitch_Camp,
+
+  L.DN_Bossroom,
+  // TheDarkestHole: disabled
+  L.TheHole01,
+  L.NorthVillage,
+  L.MorkBorg,
+  L.NorthMemorialPlace,
+  L.FrozenShip01_DN,
+  L.FrozenShip02_DN,
+  L.FrozenShip03_DN,
+  L.IcePond1,
+  // hotspring: disabled
+  // hotspring2: disabled
+  // hotspring3: disabled
+  L.DN_hut01,
+  L.ShipSetting02,
+  L.ShipSetting03,
+  L.LumberCamp,
+  L.ShipWreck01_DN,
+  L.ShipWreck02_DN,
+  // HalfBurried_ForestCrypt: disabled
+  // FimbulLocation01: disabled
+  L.Runestone_DeepNorth,
+  L.DN_gammeltrollFrac01,
+  L.DN_gammeltrollFrac02,
+  L.BearCave,
 ];
 
 
@@ -355,6 +356,15 @@ export const dungeons: DungeonGenConfig[] = [
       'FortressRuins_shieldgen',
     ], */
   },
+  {
+    id: 'Morkhalla',
+    type: 'Dungeon',
+    rooms: [4, 5],
+    minRequiredRooms: 0,
+    requiredRooms: [],
+    doorTypes: [],
+    doorChance: 0,
+  },
 ];
 
 export const locationsIdMap = new Map(locations.map(l => [l.id, l]));
@@ -367,46 +377,6 @@ for (const loc of locations) {
     if (!biome) continue;
     biome.locations.push(loc.typeId);
     locationBiomes[loc.typeId] = biome.id;
-  }
-}
-
-function addToBiome(
-  biomeId: Biome,
-  items: EntityId[],
-  creatures: (Creature | Fish)[],
-  destructibles: EntityId[],
-) {
-  const biome = biomes.find(b => b.id === biomeId);
-  if (biome != null) {
-    for (const i of items) biome.resources.add(i);
-    for (const c of creatures) biome.creatures.add(c);
-    for (const d of destructibles) biome.destructibles.add(d);
-  }
-}
-
-for (const s of spawnList.vegetation) {
-  for (const loc of s.locations) {
-    addToBiome(loc, [], [], [s.prefab]);
-  }
-}
-
-for (const spawner of spawnList.creatures) {
-  for (const biome of spawner.biomes) {
-    const killed = spawner.killed;
-    const biomeConfig = biomes.find(b => b.id === biome);
-    if (!biomeConfig) continue;
-    if (killed != null && (data[killed]?.tier ?? 0) >= biomeConfig.tier) continue;
-    const creature = creatures.find(c => c.id === spawner.prefab);
-    if (creature == null) continue;
-    const items = creature.drop.map(drop => drop.item);
-    addToBiome(biome, items, [creature], []);
-  }
-}
-
-for (const { id, grow } of resources) {
-  if (!grow) continue;
-  for (const loc of grow.flatMap(g => g.locations)) {
-    addToBiome(loc, [id], [], []);
   }
 }
 
@@ -456,6 +426,7 @@ function addDistToLocation(loc: LocationConfig, drop: DropDist) {
     }
     switch (obj.type) {
       case 'piece':
+      case 'structure':
         addToDist(loc.destructibles, item, dist);
         break;
       case 'object':
@@ -508,10 +479,9 @@ function addToMap(id: GameLocationId, index: number, item: EntityId): void {
     if (biome == null) continue;
     switch (obj.type) {
       case 'piece':
-        addToBiomes(loc.biomes, b => b.destructibles, item);
+      case 'structure':
         break;
       case 'object':
-        addToBiomes(loc.biomes, b => b.destructibles, item);
         for (const drop of obj.drop ?? []) {
           for (const option of drop.options) {
             addToMap(id, index, option.item);
@@ -521,18 +491,7 @@ function addToMap(id: GameLocationId, index: number, item: EntityId): void {
           maybePush(loc, 'tags', 'vegvisir');
         }
         break;
-      case 'spawner':
-        const creature = data[obj.spawn];
-        addToBiomes(loc.biomes, b => b.creatures, creature);
-        break;
-      case 'creature':
-        addToBiomes(loc.biomes, b => b.creatures, obj);
-        obj.drop.forEach(({ item }) => {
-          addToBiomes(loc.biomes, b => b.resources, item);
-        });
-        break;
       default:
-        addToBiomes(loc.biomes, b => b.resources, item);
     }
   }
 }

@@ -504,3 +504,25 @@ export const staff_summon: Motion = {
     { type: 'hit', time: 0.7604965 },
   ],
 };
+
+export const staff_thunder: Motion = {
+  speed: 1,
+  exit: 0.9,
+  duration: 1.1666667,
+  events: [
+    { type: 'trailOn', time: 0.5071111 },
+    { type: 'speed', time: 0.5132611, value: 1.5 },
+    { type: 'hit', time: 0.7604965 },
+  ],
+};
+
+export const staff_frostorb: Motion = {
+  speed: 1,
+  exit: 0.9,
+  duration: 1.1666667,
+  events: [
+    { type: 'trailOn', time: 0.5071111 },
+    { type: 'speed', time: 0.5132611, value: 1.5 },
+    { type: 'hit', time: 0.7604965 },
+  ],
+};

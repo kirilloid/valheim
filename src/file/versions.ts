@@ -1,11 +1,11 @@
 export const SKILLS = 2; // Skills.c_SaveFileDataVersion
 // is used for both as primary DB as well as FWL versions
-export const WORLD = 40; // Version.m_worldVersion
+export const WORLD = 41; // Version.m_worldVersion
 export const MAP = 8; // Minimap.MAPVERSION
 export const SHARED_MAP = 3; // Minimap.sharedMapDataVersion
-export const PLAYER = 45; // Version.m_playerVersion
-export const PLAYER_DATA = 32; // Player.dataVersion
-export const INVENTORY = 108; // Version.m_itemDataVersion
+export const PLAYER = 46; // Version.m_playerVersion
+export const PLAYER_DATA = 33; // Player.dataVersion
+export const INVENTORY = 109; // Version.m_itemDataVersion
 export const WORLD_GEN = 2; // Version.m_worldGenVersion
 export const LIQUID = 2; // LiquidVolume.liquidSaveVersion
 export const TERRAIN_COMP = 1; // TerrainComp.terrainCompVersion

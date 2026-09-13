@@ -239,6 +239,14 @@ export const pickables: {
     subtype: 'misc',
   },
   {
+    id: 'Pickable_SmokePuff',
+    iconId: 'resource/MushroomSmokePuff',
+    tier: 7,
+    item: 'MushroomSmokePuff',
+    number: 1,
+    subtype: 'misc',
+  },
+  {
     id: 'Pickable_MoltenCoreStand',
     iconId: 'resource/MoltenCore',
     tier: 7,
@@ -258,5 +266,37 @@ export const pickables: {
     tier: 7,
     item: 'DyrnwynTipFragment',
     subtype: 'misc',
+  },
+  {
+    id: 'Pickable_Branch_Snow',
+    tier: 8,
+    item: 'Frostwood',
+    subtype: 'misc',
+    respawn: 4 * HOUR,
+  },
+  {
+    id: 'Pickable_Snowball',
+    tier: 8,
+    item: 'Snowball',
+    subtype: 'misc',
+  },
+  {
+    id: 'Pickable_FrostCoreHanger',
+    tier: 8,
+    item: 'FrostCore',
+    subtype: 'misc',
+  },
+  {
+    id: 'Pickable_GlowWorm',
+    tier: 8,
+    item: 'GlowWorm',
+    subtype: 'misc',
+  },
+  {
+    id: 'LingonberryBush',
+    tier: 8,
+    item: 'Lingonberry',
+    subtype: 'plant',
+    respawn: 5 * HOUR,
   },
 ];

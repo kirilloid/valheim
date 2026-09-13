@@ -10,6 +10,7 @@ import { SkillType } from '../model/skills';
 import { CampConfig, DungeonRoomsConfig } from '../data/rooms';
 import { Deadspeak, EggGrow, Food, PointLight, Potion, Radiation, SapCollector, ShieldGenerator, Turret } from './components';
 import { DropEntry, GeneralDrop } from './drop';
+import { PlayerStatType } from '../file/PlayerStatType';
 
 export type GameComponent = 
 | 'ArmorStand'
@@ -25,7 +26,7 @@ export type GameComponent =
 | 'MapTable' | 'MineRock' | 'MineRock5' | 'MonsterAI'
 | 'Pickable' | 'PickableItem' | 'Piece' | 'Plant' | 'Player' | 'PrivateArea' | 'Procreation'
 | 'Ragdoll' | 'RandomAnimation' | 'RandomFlyingBird' | 'ResourceRoot' | 'Runestone' /* boss stones */
-| 'Saddle' | 'SapCollector' | 'SEMan' | 'ShieldGenerator' | 'ShipConstructor' | 'Ship' | 'SiegeMachine' | 'Sign' | 'Smelter'
+| 'Saddle' | 'SapCollector' | 'SEMan' | 'ShieldGenerator' | 'ShipConstructor' | 'Ship' | 'SiegeMachine' | 'Sign' | 'Smelter' | 'SpawnArea'
 | 'Tameable' | 'TeleportWorld' | 'TerrainComp' | 'TerrainModifier' | 'TombStone' | 'Trader' | 'Trap' | 'TreeBase' | 'TreeLog' | 'Turret'
 | 'Vagon' | 'Vegvisir' | 'VisEquipment'
 | 'WearNTear' | 'Windmill' | 'WispSpawner'
@@ -42,9 +43,11 @@ export type EntityGroup =
   | 'lumber'
   | 'metal'
   | 'ore'
+  | 'pine'
   | 'rug' | 'runestone'
-  | 'seedTree' | 'seedVeg' | 'seeker' | 'ship' | 'smelt' | 'stack' | 'stand'
+  | 'saddle' | 'seedTree' | 'seedVeg' | 'seeker' | 'ship' | 'smelt' | 'stack' | 'stand'
   | 'torch' | 'trader'
+  | 'upgrader'
   | 'value'
   | 'semiboss'
 
@@ -82,17 +85,22 @@ export type Faction =
   | 'Dverger' // 10
   | 'PlayerSpawned' // 11
   | 'TrainingDummy' // 12
+  | 'DeepNorth' // 13
   ;
 
 export type BiomeConfig = {
   id: Biome;
-  active: boolean;
   tier: number;
   emoji: string;
   locations: GameLocationId[];
-  destructibles: Set<EntityId>;
-  creatures: Set<Creature | Fish>;
-  resources: Set<EntityId>;
+  trees: PhysicalObject[];
+  rocks: PhysicalObject[];
+  creatures: (Creature | Fish)[];
+  resources: EntityId[];
+  ingridients: EntityId[];
+  foods: EntityId[];
+  chestLoot: EntityId[];
+  trophies: EntityId[];
 };
 
 export type LocationItem = { item: EntityId | LocationItem[], chance: number, number: number };
@@ -187,11 +195,12 @@ export type Effect = {
   disabled?: boolean;
   iconId?: string;
   tier: number;
-  special?: 'Tailwind' | 'Demister' | 'TameBoost' | 'Wishbone';
+  special?: 'Tailwind' | 'Demister' | 'TameBoost' | 'Wishbone' | 'Crowned';
   time?: number;
   comfort?: { value: number; };
   cooldown?: number;
   absorbDamage?: Pair<number>;
+  reflectDamage?: DamageProfile;
   healthUpfront?: number;
   healthOverTime?: [change: number, interval: number];
   damageModifiers?: Partial<DamageModifiers>;
@@ -282,6 +291,7 @@ export interface Spawner extends GameObjectBase {
   spawn: EntityId;
   levels: Pair<number>;
   levelUpChance: number;
+  night?: boolean;
   respawnMinutes?: number;
 }
 
@@ -352,6 +362,7 @@ export interface Creature extends GameObjectBase {
   weakSpots?: { location: string; damageModifiers: DamageModifiers }[];
   // Gjall, SeekerBrute, TheHive, SeekerQueen 
   drop: DropEntry[];
+  spawnOnDeath?: EntityId;
   timedDestruction?: Pair<number>;
   tame?: { fedTime: number; tameTime: number; commandable: boolean; eats: EntityId[] };
   pregnancy?: { points: number; time: number; chance: number; grow: number; childId: EntityId };
@@ -404,6 +415,7 @@ export interface ResourceRoot {
 
 export interface Aoe {
   damage: DamageProfile;
+  toolTier?: number;
   radius: number;
   backstabBonus: number;
   ttl: number;
@@ -419,6 +431,11 @@ export interface Plantable {
   freeSpaceRadius: number;
   biomes: Biome[];
 };
+
+export interface BossStone {
+  item: EntityId;
+  power?: string;
+}
 
 export interface Leviathan {
   chance: number;
@@ -437,6 +454,7 @@ export type TraderId = 'haldor' | 'hildir' | 'bogWitch';
 export type PhysicalObject = GameObjectBase & {
   type: 'object';
   subtype: 'tree' | 'plant' | 'rock' | 'ore' | 'indestructible' | 'misc' | 'treasure' | 'trader';
+  statType?: PlayerStatType;
   PointLight?: PointLight;
   Destructible?: Destructible;
   Leviathan?: Leviathan;
@@ -447,6 +465,7 @@ export type PhysicalObject = GameObjectBase & {
   Plant?: Plantable;
   Beacon?: number;
   Smoke?: number;
+  BossStone?: BossStone;
   Vegvisir?: GameLocationId;
   RuneStone?: string[];
   SpawnArea?: SpawnArea;
@@ -461,6 +480,8 @@ export enum MaterialType {
   Marble,
   Ashstone,
   Ancient,
+  Ice,
+  Timberwood,
 };
 
 export type ComfortGroup = 'fire' | 'bed' | 'banner' | 'chair' | 'table' | 'carpet';
@@ -574,6 +595,7 @@ export type Piece = BasePiece & {
   space: [width: number, height: number];
 } | {
   subtype: 'external';
+  drop?: GeneralDrop[];
 });
 
 export interface Feast extends BasePiece {
@@ -590,6 +612,7 @@ export interface Feast extends BasePiece {
 export interface Structure extends GameObjectBase {
   type: 'structure';
   Destructible?: Destructible;
+  drop?: GeneralDrop[];
 }
 
 export interface Transport extends BasePiece {
@@ -601,6 +624,8 @@ export interface Siege extends BasePiece {
   type: 'siege';
   SiegeMachine?: {
     fuel: EntityId[];
+    secPerFuel: number;
+    maxFuel: number;
     damage: DamageProfile;
     toolTier: number;
   };
@@ -708,6 +733,7 @@ export interface ItemGrowConfig {
   terrainDelta?: Pair<number>;
   terrainDeltaRadius?: number;
   offset?: number;
+  snapToWater?: boolean;
   group?: Pair<number>;
   groupRadius?: number;
   onSurface?: boolean;
@@ -741,6 +767,7 @@ export type ItemRecipe = {
 };
 
 export interface BaseItem extends GameObjectBase {
+  cheated?: boolean;
   stack?: number;
   maxLvl?: number;
   variants?: number;
@@ -749,7 +776,6 @@ export interface BaseItem extends GameObjectBase {
   floating?: true;
   teleportable?: false;
   demister?: number;
-  grow?: ItemGrow[];
   PointLight?: PointLight;
 }
 
@@ -801,7 +827,7 @@ export interface Arrow extends BaseItem {
 
 export interface Tool extends BaseItem {
   type: 'tool';
-  special: 'build' | 'garden' | 'ground' | 'fishing' | 'butcher' | 'demister' | 'feast' | 'harvest';
+  special: 'build' | 'garden' | 'ground' | 'fishing' | 'butcher' | 'demister' | 'feast' | 'harvest' | 'desnow' | 'hook';
   maxLvl: number;
   durability: Pair<number>;
   produces: EntityId[];
@@ -867,7 +893,7 @@ export interface Armor extends BaseItem {
   maxLvl: number;
   moveSpeed: number;
   adrenaline?: { max: number; effect: Effect };
-  staminaModifiers?: Partial<Record<'dodge' | 'block' | 'attack' | 'home', number>>;
+  staminaModifiers?: Partial<Record<'dodge' | 'block' | 'attack' | 'home' | 'run' | 'sneak' | 'swim', number>>;
   armor: Pair<number>;
   damageModifiers?: Partial<DamageModifiers>;
   durability: Pair<number>;

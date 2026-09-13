@@ -100,7 +100,9 @@ const TooltipBody = React.memo(({ invItem, item, equippedItems }: { invItem: Inv
   return <>
     <header className={headerClasses.join(' ')}>{translate(item.id)}</header>
     {item.dlc != null && <div className="InvTooltip__DLC">{item.dlc}</div>}
+    {/* {item.worldLevel != null && <div className="InvTooltip__value">{item.worldLevel}</div>} */}
     {item.teleportable === false && <div className="InvTooltip__value">{translate('ui.nonTeleportable')}</div>}
+    {item.cheated && <div className="InvTooltip__value">{translate('ui.cheated')}</div>}
     <EpicLootSetName epicLoot={epicLoot} />
     <CommonStats item={item} invItem={invItem} />
     <Durability item={item} invItem={invItem} />

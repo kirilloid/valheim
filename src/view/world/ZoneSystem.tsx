@@ -21,6 +21,7 @@ const baseKeys = [
   ['KilledBat', 'Bat'],
   ['BossHildir2', 'Fenring_Cultist_Hildir'],
   ['defeated_dragon', 'Dragon'],
+  ['elakingmole_defeated', 'ElakingMole'],
   ['BossHildir3', 'GoblinBruteBros'],
   ['defeated_goblinking', 'GoblinKing'],
   ['defeated_queen', 'SeekerQueen'],

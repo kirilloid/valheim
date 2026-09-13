@@ -75,8 +75,9 @@ export function useRuneTranslate(): RuneTranslator {
   const translate = useContext(TranslationContext);
   const [spoiler] = useGlobalState('spoiler');
   return useCallback(({ tier, type, id } : { tier: number, type: string, id: string }) => {
+    const text = translate(type === 'effect' ? `ui.effect.${id}` : id);
     return tier > spoiler
-      ? runeText(id)
-      : translate(type === 'effect' ? `ui.effect.${id}` : id);
+      ? runeText(text)
+      : text;
   }, [translate, spoiler]);
 }

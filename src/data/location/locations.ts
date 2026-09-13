@@ -1,5 +1,6 @@
 export * from './Ashlands';
 export * from './BlackForest';
+export * from './DeepNorth';
 export * from './Heath';
 export * from './Meadows';
 export * from './Misc';
