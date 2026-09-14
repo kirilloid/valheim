@@ -1,9 +1,8 @@
-import { compress, decompress } from 'brotli-compress';
-
 import type { ZDO, ZDOCorruption, ZDOData, ZDOID } from './types';
 import type { Vector2i, Vector3 } from '../model/utils';
 
 import { gunzip, gzip } from '../model/fflate';
+import * as brotli from '../model/brotli';
 import { hashPrefab } from '../model/utils';
 import { decode, encode } from '../model/utf8';
 import { locationHashes } from '../data/location-hashes';
@@ -248,7 +247,7 @@ function writeRandEvent(writer: PackageWriter, version: number, event: RandEvent
 }
 
 async function readPersistentEvent(reader: PackageReader, version: number): Promise<PersistentEventData> {
-  const bytes = await decompress(reader.readByteArray());
+  const bytes = await brotli.decompress(reader.readByteArray());
   const str = decode(bytes);
   return JSON.parse(str);
 }
@@ -256,7 +255,7 @@ async function readPersistentEvent(reader: PackageReader, version: number): Prom
 async function writePersistentEvent(writer: PackageWriter, version: number, event: PersistentEventData): Promise<void> {
   const str = JSON.stringify(event);
   const bytes = encode(str);
-  const packed = await compress(bytes);
+  const packed = await brotli.compress(bytes);
   writer.writeByteArray(packed);
 }
 

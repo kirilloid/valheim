@@ -16,6 +16,11 @@ export function getDefaultUserLanguage(): string {
 
 type Dictionary<T = string> = Record<string, T>;
 const langCache: Dictionary<Promise<Dictionary>> = {};
+const languageImports: Dictionary<() => Promise<Dictionary>> = {
+  en: () => import('../../public/lang/en.json').then(module => module.default),
+  de: () => import('../../public/lang/de.json').then(module => module.default),
+  ru: () => import('../../public/lang/ru.json').then(module => module.default),
+};
 
 export type Translator = {
   // this makes IDE providing key hints
@@ -31,8 +36,7 @@ function loadLanguage(userLang: string): Promise<Dictionary> {
           ? require('node:fs/promises')
               .readFile(process.cwd() + `/public/lang/${userLang}.json`, { encoding: 'utf8' })
               .then((text: string) => JSON.parse(text))
-          : fetch(`/lang/${userLang}.json`)
-              .then(r => r.json()));
+          : languageImports[userLang]?.());
 }
 
 export function useLanguage() {
