@@ -1711,7 +1711,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
       range: 1,
       draw: { animation: 'bow_aim', duration: 2.5, stamina: 14 },
     }],
-    durability: [100, 50],
+    durability: [250, 50],
   },
   {
     type: 'weapon', slot: 'bow',
@@ -2024,7 +2024,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     knockback: 40,
     backstab: 3,
     attacks: [attack.atgeir_attack(20), attack.atgeir_secondary(40)],
-    durability: [175, 50],
+    durability: [250, 50],
   },
   {
     type: 'weapon', slot: 'primary',
@@ -2048,7 +2048,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     knockback: 60,
     backstab: 3,
     attacks: [attack.swing_axe(16), attack.axe_secondary(32)],
-    durability: [175, 50],
+    durability: [250, 50],
   },
   {
     type: 'weapon', slot: 'both',
@@ -2071,7 +2071,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     knockback: 70,
     backstab: 3,
     attacks: [attack.battleaxe_attack(22), attack.battleaxe_secondary(11)],
-    durability: [200, 50],
+    durability: [250, 50],
   },
   {
     type: 'weapon', slot: 'both',
@@ -2118,7 +2118,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
       range: 1.8,
       mul: { damage: 3, force: 4, stagger: 1 },
     }],
-    durability: [200, 50],
+    durability: [250, 50],
   },
   {
     type: 'weapon', slot: 'primary',
@@ -2142,7 +2142,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     knockback: 40,
     backstab: 3,
     attacks: [attack.swing_longsword(16), attack.sword_secondary(32)],
-    durability: [200, 50],
+    durability: [250, 50],
   },
   {
     type: 'weapon', slot: 'both',
@@ -2164,7 +2164,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     knockback: 55,
     backstab: 3,
     attacks: [attack.greatsword(20), attack.greatsword_secondary(40)],
-    durability: [200, 50],
+    durability: [250, 50],
   },
   {
     type: 'weapon', slot: 'primary',
@@ -2184,7 +2184,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     knockback: 20,
     backstab: 3,
     attacks: [attack.spear_poke(16), attack.spear_throw(16)],
-    durability: [100, 50],
+    durability: [250, 50],
   },
   {
     type: 'weapon', slot: 'both',
@@ -2203,7 +2203,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     knockback: 210,
     backstab: 2,
     attacks: [attack.swing_sledge(28)],
-    durability: [100, 50],
+    durability: [250, 50],
   },
   { type: 'shield', slot: 'secondary',
     id: 'ShieldCarapaceBuckler',
@@ -2428,7 +2428,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
       range: 1,
       draw: { animation: 'bow_aim', duration: 2.5, stamina: 14 },
     }],
-    durability: [100, 50],
+    durability: [300, 50],
   }, {
     'BowAshlandsBlood': {
       damageMultiplierPerMissingHP: 0.002,
@@ -2483,7 +2483,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
       range: 1,
       reload: { animation: 'reload_crossbow', time: 3.5, stamina: 1 },
     }],
-    durability: [50, 50],
+    durability: [300, 50],
   }, {
     'CrossbowRipperBlood': {
       damageMultiplierPerMissingHP: 0.002,
@@ -2524,7 +2524,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     // blood: damageMultiplierPerMissingHP: 0.002
     // lightning: lightning: blunt-10, lightning +10, spawnOnHit: AoE ChainLightning 20% (lightning: 75)
     // nature: pierce -10, poison +10, 15% to immobilize
-    durability: [100, 50],
+    durability: [300, 50],
   }, {
     'SpearSplitner_Blood': {
       damageMultiplierPerMissingHP: 0.002,
@@ -2565,7 +2565,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     knockback: 20,
     backstab: 3,
     attacks: [attack.dualaxes(16), attack.dualaxes_secondary(32)],
-    durability: [175, 50],
+    durability: [300, 50],
   }, {
     'AxeBerzerkrBlood': {
       damageMultiplierPerMissingHP: 0.002,
@@ -2606,7 +2606,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     knockback: 100,
     backstab: 3,
     attacks: [attack.swing_longsword(16), attack.mace_secondary(28)],
-    durability: [150, 50],
+    durability: [300, 50],
   }, {
     'MaceEldnerBlood': {
       damageMultiplierPerMissingHP: 0.002,
@@ -2643,7 +2643,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     knockback: 40,
     backstab: 3,
     attacks: [attack.swing_longsword(16), attack.sword_secondary(28)],
-    durability: [200, 50],
+    durability: [300, 50],
   }, {
     'SwordNiedhoggBlood': {
       damageMultiplierPerMissingHP: 0.002,
@@ -2683,7 +2683,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     knockback: 50,
     backstab: 3,
     attacks: [attack.greatsword(20), attack.greatsword_secondary(40)],
-    durability: [200, 50],
+    durability: [300, 50],
   }, {
     'THSwordSlayerBlood': {
       damageMultiplierPerMissingHP: 0.002,
@@ -2725,7 +2725,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     knockback: 40,
     backstab: 3,
     attacks: [attack.swing_longsword(16), attack.sword_secondary(28)],
-    durability: [200, 50],
+    durability: [300, 50],
   },
   {
     type: 'shield', slot: 'secondary',
@@ -2742,7 +2742,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     parryForce: [50, 5],
     parryBonus: 1.5,
     skill: SkillType.Blocking,
-    durability: [200, 50],
+    durability: [300, 50],
   },
   {
     type: 'shield', slot: 'secondary',
@@ -2759,7 +2759,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     parryForce: [150, 5],
     parryBonus: 1,
     skill: SkillType.Blocking,
-    durability: [200, 50],
+    durability: [300, 50],
   },
   {
     type: 'bomb', slot: 'primary',
@@ -2964,7 +2964,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
       range: 1,
       draw: { animation: 'bow_aim', duration: 2.5, stamina: 14 },
     }],
-    durability: [100, 50],
+    durability: [400, 50],
   }, {
     'BowGold_BloodLightning': {
       hitEffect: { id: 'ChainLightningRed', chance: 0.25 },
@@ -3010,7 +3010,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
       range: 1,
       reload: { animation: 'reload_crossbow', time: 3.5, stamina: 1 },
     }],
-    durability: [50, 50],
+    durability: [400, 50],
   }, {
     'CrossbowGold_BloodLightning': {
       hitEffect: { id: 'ChainLightningRed', chance: 0.25 },
@@ -3039,7 +3039,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     knockback: 20,
     backstab: 3,
     attacks: [attack.spear_poke(16), attack.spear_throw(18)],
-    durability: [100, 50],
+    durability: [400, 50],
   }, {
     'SpearGold_BloodLightning': {
       hitEffect: { id: 'ChainLightningRed', chance: 0.25 },
@@ -3067,7 +3067,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     knockback: 30,
     backstab: 3,
     attacks: [attack.atgeir_attack(20), attack.atgeir_secondary(40)],
-    durability: [125, 50],
+    durability: [400, 50],
   }, {
     'AtgeirGold_BloodLightning': {
       hitEffect: { id: 'ChainLightningRed', chance: 0.25 },
@@ -3099,7 +3099,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     knockback: 20,
     backstab: 3,
     attacks: [attack.swing_axe(16), attack.axe_secondary(28)],
-    durability: [175, 50],
+    durability: [400, 50],
   }, {
     'AxeGold_BloodLightning': {
       hitEffect: { id: 'ChainLightningRed', chance: 0.25 },
@@ -3131,7 +3131,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     knockback: 70,
     backstab: 3,
     attacks: [attack.battleaxe_attack(22), attack.battleaxe_secondary(11)],
-    durability: [200, 50],
+    durability: [400, 50],
   }, {
     'BattleaxeGold_BloodLightning': {
       hitEffect: { id: 'ChainLightningRed', chance: 0.25 },
@@ -3163,7 +3163,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     knockback: 90,
     backstab: 3,
     attacks: [attack.swing_longsword(16), attack.mace_secondary(28)],
-    durability: [200, 50],
+    durability: [400, 50],
   }, {
     'MaceGold_BloodLightning': {
       hitEffect: { id: 'ChainLightningRed', chance: 0.25 },
@@ -3192,7 +3192,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     knockback: 210,
     backstab: 2,
     attacks: [attack.swing_sledge(28)],
-    durability: [100, 50],
+    durability: [400, 50],
   }, {
     'SledgeGold_BloodLightning': {
       hitEffect: { id: 'ChainLightningRed', chance: 0.25 },
@@ -3221,7 +3221,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     knockback: 40,
     backstab: 3,
     attacks: [attack.swing_longsword(16), attack.sword_secondary(28)],
-    durability: [200, 50],
+    durability: [400, 50],
   }, {
     'SwordGold_BloodLightning': {
       hitEffect: { id: 'ChainLightningRed', chance: 0.25 },
@@ -3249,7 +3249,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     knockback: 55,
     backstab: 3,
     attacks: [attack.greatsword(20), attack.greatsword_secondary(40)],
-    durability: [200, 50],
+    durability: [400, 50],
   }, {
     'THSwordGold_BloodLightning': {
       hitEffect: { id: 'ChainLightningRed', chance: 0.25 },
@@ -3280,7 +3280,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     knockback: 10,
     backstab: 6,
     attacks: [attack.knife_stab(14), attack.knife_secondary(42)],
-    durability: [200, 50],
+    durability: [400, 50],
   }, {
     'KnifeGold_BloodLightning': {
       hitEffect: { id: 'ChainLightningRed', chance: 0.25 },
@@ -3318,7 +3318,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     knockback: 20,
     backstab: 6,
     attacks: [attack.claw_attack(14), attack.kick(20)],
-    durability: [300, 50],
+    durability: [400, 50],
   }, {
     'FistGold_BloodLightning': {
       hitEffect: { id: 'ChainLightningRed', chance: 0.25 },
@@ -3344,7 +3344,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     parryForce: [50, 5],
     parryBonus: 1.5,
     skill: SkillType.Blocking,
-    durability: [200, 50],
+    durability: [400, 50],
   },
   {
     type: 'shield', slot: 'secondary',
@@ -3360,7 +3360,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     parryForce: [30, 0],
     parryBonus: 2.5,
     skill: SkillType.Blocking,
-    durability: [200, 50],
+    durability: [400, 50],
   },
   {
     type: 'shield', slot: 'secondary',
@@ -3377,7 +3377,7 @@ export const items: (Weapon | Shield | Bomb)[] = [
     parryForce: [150, 5],
     parryBonus: 1,
     skill: SkillType.Blocking,
-    durability: [200, 50],
+    durability: [400, 50],
   },
   {
     type: 'bomb', slot: 'primary',

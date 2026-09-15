@@ -1,9 +1,9 @@
 .Inventory {
+  --rows: 4;
   position: relative;
   width: 590px;
-  height: 308px;
-  background-image: url('../img/inventory@2x.png');
-  background-size: 590px 308px;
+  height: calc(32px + 69px * var(--rows));
+  border-image: url('/src/img/inventory@2x.png') 2 0 fill;
   /* background-color: #503A2B; */
 }
 

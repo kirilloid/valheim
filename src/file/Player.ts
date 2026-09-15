@@ -44,7 +44,8 @@ export type PlayerData = {
   shownTutorials: string[];
   uniques: string[];
   trophies: string[];
-  knownBiome: number[];
+  knownBiomeStr: string[];
+  knownBiomeInt: number[];
   knownTexts: Map<string, string>;
   
   beardItem: string;
@@ -232,12 +233,12 @@ function* readPlayer(bytes: Uint8Array<ArrayBuffer>): Generator<number, Player> 
     const usedCheats = reader.readBool();
     const dateCreated = new Date(Number(reader.readLong()) * 1000);
 
-    const knownWorlds = reader.readMap(reader.readString, reader.readFloat);
-    const knownWorldKeys = reader.readMap(reader.readString, reader.readFloat);
-    const knownCommands = reader.readMap(reader.readString, reader.readFloat);
-    const enemyStats = version >= 42 ? reader.readMap(reader.readString, reader.readFloat) : new Map();
-    const itemPickupStats = version >= 42 ? reader.readMap(reader.readString, reader.readFloat) : new Map();
-    const itemCraftStats = version >= 42 ? reader.readMap(reader.readString, reader.readFloat) : new Map();
+    const knownWorlds = version < 46 ? reader.readMap(reader.readString, reader.readFloat) : new Map();
+    const knownWorldKeys = version < 46 ? reader.readMap(reader.readString, reader.readFloat) : new Map();
+    const knownCommands = version < 46 ? reader.readMap(reader.readString, reader.readFloat) : new Map();
+    const enemyStats = version >= 42 && version < 46 ? reader.readMap(reader.readString, reader.readFloat) : new Map();
+    const itemPickupStats = version >= 42 && version < 46 ? reader.readMap(reader.readString, reader.readFloat) : new Map();
+    const itemCraftStats = version >= 42 && version < 46 ? reader.readMap(reader.readString, reader.readFloat) : new Map();
 
     const playerData = reader.readIf(reader.readByteArray);
 
@@ -309,12 +310,13 @@ function* writePlayer(
   if (player.version >= 38) {
     writer.writeBool(player.usedCheats);
     writer.writeLong(BigInt(player.dateCreated.getTime() / 1000));
-    
-    writer.writeMap(writer.writeString, writer.writeFloat, player.knownWorlds);
-    writer.writeMap(writer.writeString, writer.writeFloat, player.knownWorldKeys);
-    writer.writeMap(writer.writeString, writer.writeFloat, player.knownCommands);
+    if (player.version < 46) {
+      writer.writeMap(writer.writeString, writer.writeFloat, player.knownWorlds);
+      writer.writeMap(writer.writeString, writer.writeFloat, player.knownWorldKeys);
+      writer.writeMap(writer.writeString, writer.writeFloat, player.knownCommands);
+    }
   }
-  if (player.version >= 42) {
+  if (player.version >= 42 && player.version < 46) {
     writer.writeMap(writer.writeString, writer.writeFloat, player.enemyStats);
     writer.writeMap(writer.writeString, writer.writeFloat, player.itemPickupStats);
     writer.writeMap(writer.writeString, writer.writeFloat, player.itemCraftStats);
@@ -390,9 +392,6 @@ function readPlayerData(data: Uint8Array<ArrayBuffer>): PlayerData {
   const pkg = new PackageReader(data);
   const version = pkg.readInt();
   checkVersion('player data', version, PLAYER_DATA);
-  if (version >= 46) {
-
-  }
   const maxHealth = version >= 7 ? pkg.readFloat() : NaN;
   const health = pkg.readFloat();
   const maxStamina = version >= 10 ? pkg.readFloat() : NaN;
@@ -416,7 +415,8 @@ function readPlayerData(data: Uint8Array<ArrayBuffer>): PlayerData {
   const shownTutorials = (version < 19 || version >= 21) ? pkg.readArray(pkg.readString) : [];
   const uniques = version >= 6 ? pkg.readArray(pkg.readString) : [];
   const trophies = version >= 9 ? pkg.readArray(pkg.readString) : [];
-  const knownBiome = version >= 18 ? pkg.readArray(pkg.readInt) : [];
+  const knownBiomeStr = version >= 33 ? pkg.readArray(pkg.readString) : [];
+  const knownBiomeInt = version >= 18 && version < 33 ? pkg.readArray(pkg.readInt) : [];
   const knownTexts = version >= 22 ? pkg.readMap(pkg.readString, pkg.readString) : new Map();
 
   const [beardItem, hairItem] = version >= 4
@@ -453,7 +453,8 @@ function readPlayerData(data: Uint8Array<ArrayBuffer>): PlayerData {
     shownTutorials,
     uniques,
     trophies,
-    knownBiome,
+    knownBiomeStr,
+    knownBiomeInt,
     knownTexts,
     foods,
     beardItem,
@@ -489,7 +490,11 @@ function writePlayerData(data: PlayerData): Uint8Array<ArrayBuffer> {
   }
   if (data.version >= 6) writer.writeArray(writer.writeString, data.uniques);
   if (data.version >= 9) writer.writeArray(writer.writeString, data.trophies);
-  if (data.version >= 18) writer.writeArray(writer.writeInt, data.knownBiome);
+  if (data.version >= 33) {
+    writer.writeArray(writer.writeString, data.knownBiomeStr);
+  } else if (data.version >= 18) {
+    writer.writeArray(writer.writeInt, data.knownBiomeInt);
+  }
   if (data.version >= 22) writer.writeMap(writer.writeString, writer.writeString, data.knownTexts);
 
   if (data.version >= 4) {

@@ -193,6 +193,7 @@ export const recipes: ItemRecipe[] = [
   cauldronRecipe(1, { Raspberry: 8, Blueberries: 6 }, 'QueensJam', 4),
   cauldronRecipe(1, { Mushroom: 1, Carrot: 3 }, 'CarrotSoup'),
   cauldronRecipe(1, { CookedDeerMeat: 1, Blueberries: 1, Carrot: 1 }, 'DeerStew'),
+  cauldronRecipe(1, { CookedBjornMeat: 1, Carrot: 2, Blueberries: 1 }, 'PulledBear'),
   cauldronRecipe(1, { RawMeat: 1, NeckTail: 1, Carrot: 1 }, 'MinceMeatSauce'),
   cauldronRecipe(1, { ChickenEgg: 1 }, 'CookedEgg'),
   // LEVEL 2

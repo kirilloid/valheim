@@ -28,7 +28,7 @@ import {
 } from './epic-loot';
 import { JewelCraftingTooltip } from './jewel-crafting';
 import { EitrRegen } from './eitr-regen';
-import { INVENTORY_HEIGHT, INVENTORY_SIZE, INVENTORY_WIDTH } from '../../../model/game';
+import { INVENTORY_HEIGHT, INVENTORY_WIDTH } from '../../../model/game';
 
 function Tooltip({ invItem, x, y, equippedItems, moClass }: {
   invItem: InvItem;
@@ -72,7 +72,7 @@ function Tooltip({ invItem, x, y, equippedItems, moClass }: {
     }
   }
 
-return <div className={classes.join(' ')} ref={ref} style={{ left: x, top: y }}>
+  return <div className={classes.join(' ')} ref={ref} style={{ left: x, top: y }}>
     <TooltipBody invItem={invItem} item={modifyClassItemStats(item, moClass)} equippedItems={equippedItems} />
   </div>;
 }
@@ -129,7 +129,12 @@ export function Inventory({ playerData, extras } : { playerData: PlayerData, ext
   const rootRef = useRef<HTMLDivElement>(null);
   const equippedItems = getEquippedIds(inventory, extras);
 
-  const invMap: (InvItem | undefined)[] = Array.from({ length: INVENTORY_SIZE });
+  const outOfRangeItems = [];
+  const invRowsVal = playerData.uniques
+    .find(s => /invrows \d/.test(s))
+    ?.split(' ')[1];
+  const invRows = invRowsVal != null ? parseInt(invRowsVal) : INVENTORY_HEIGHT;
+  const invMap: (InvItem | undefined)[] = Array.from({ length: INVENTORY_WIDTH * invRows });
   for (const invItem of inventory.items) {
     const { x, y } = invItem.gridPos;
     invMap[y * INVENTORY_WIDTH + x] = invItem;
@@ -137,11 +142,10 @@ export function Inventory({ playerData, extras } : { playerData: PlayerData, ext
 
   let hasUnknownItems = invMap.some(e => e != null && data[e.id] == null);
   const extraItems = extras.map(inv => inv.items);
-  const outOfRangeItems = [];
 
   for (const e of inventory.items) {
     if (e.gridPos.x >= INVENTORY_WIDTH
-    || e.gridPos.y >= INVENTORY_HEIGHT) {
+    || e.gridPos.y >= invRows) {
       outOfRangeItems.push(e);
     }
   }
@@ -152,7 +156,7 @@ export function Inventory({ playerData, extras } : { playerData: PlayerData, ext
   const moClass = readCharClass(playerData);
 
   return <>
-    <div className="Inventory" ref={rootRef}>
+    <div className="Inventory" ref={rootRef} style={{ '--rows': invRows } as React.CSSProperties}>
       <div className="Inventory__container"
         onMouseOut={() => setTooltipData(undefined)}
       >

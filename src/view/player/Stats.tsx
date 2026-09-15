@@ -18,8 +18,11 @@ const stations: Record<string, string> = {
   '$piece_workbench': 'piece_workbench',
   '$piece_forge': 'forge',
   '$piece_cauldron': 'piece_cauldron',
+  '$piece_meadcauldron': 'piece_MeadCauldron',
   '$piece_stonecutter': 'piece_stonecutter',
   '$piece_artisanstation': 'piece_artisanstation',
+  '$piece_blackforge': 'blackforge',
+  '$piece_preptable': 'piece_preptable',
   '$piece_magetable': 'piece_magetable',
 };
 
@@ -64,7 +67,7 @@ export function Stats({ player }: { player: Player }) {
             <dt>structures built</dt><dd>{stat.stats.get(PlayerStatType.Builds) ?? 0}</dd>
             <dt>trophies</dt><dd>{playerData?.trophies.length ?? 0}</dd>
           {playerData != null && <>
-            <dt>biomes</dt><dd>{playerData.knownBiome.length}</dd>
+            <dt>biomes</dt><dd>{playerData.knownBiomeStr.length || playerData.knownBiomeInt.length}</dd>
             <dt>known items</dt><dd>{playerData.knownMaterials.length}</dd>
             <dt>known recipes</dt><dd>{playerData.knownRecipes.length}</dd>
             <dt>known stations</dt><dd>{playerData.knownStations.size}</dd>
@@ -245,8 +248,8 @@ export function Stats({ player }: { player: Player }) {
         renderer: () => <div>
           <dl>
             <dt><ItemIcon item={data.Hammer} /> Builds</dt><dd>{stat.stats.get(PlayerStatType.Builds) ?? 0}</dd>
-            <dt>MaxBuildingHeight</dt><dd>{stat.stats.get(PlayerStatType.MaxBuildingHeight) ?? 0}</dd>
-            <dt>MaxBuildingHeightWorld</dt><dd>{stat.stats.get(PlayerStatType.MaxBuildingHeightWorld) ?? 0}</dd>
+            <dt>MaxBuildingHeight</dt><dd>{(stat.stats.get(PlayerStatType.MaxBuildingHeight) ?? 0).toFixed(2)} m</dd>
+            <dt>MaxBuildingHeightWorld</dt><dd>{(stat.stats.get(PlayerStatType.MaxBuildingHeightWorld) ?? 0).toFixed(2)} m</dd>
             <dt>BuiltPieces</dt><dd>{stat.stats.get(PlayerStatType.BuiltPieces) ?? 0}</dd>
             <dt>BuiltPiecesNoDebt</dt><dd>{stat.stats.get(PlayerStatType.BuiltPiecesNoDebt) ?? 0}</dd>
             <dt>BuildPiecesRemoved</dt><dd>{stat.stats.get(PlayerStatType.BuildPiecesRemoved) ?? 0}</dd>
@@ -374,9 +377,11 @@ export function Stats({ player }: { player: Player }) {
         renderer: () => <dl>
         <dt>known biomes</dt><dd>
           <ul>
-            {playerData.knownBiome
-              .map(b => biomes.get(b) ?? '')
-              .filter(Boolean)
+            {(playerData.knownBiomeStr.length
+              ? playerData.knownBiomeStr.filter(s => !s.startsWith('$'))
+              : playerData.knownBiomeInt
+                .map(b => biomes.get(b) ?? '')
+                .filter(Boolean))
               .map(b => <li key={b}>{translate(`ui.biome.${b}`)}</li>)}
           </ul>
         </dd>
