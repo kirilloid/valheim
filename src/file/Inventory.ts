@@ -66,7 +66,7 @@ function readItemNew(pkg: PackageReader, version: number): Item {
       customData.set(key, val);
     }
   }
-  const cheated = version >= 109 ? Boolean(pkg.readByte() & 1) : false;
+  const cheated = version >= 109 && pkg.readBool();
   const id = itemHashes.get(prefab) ?? `${prefab}_unknown_`;
   return { id, stack, durability, gridPos, equipped, quality, variant, crafterID, crafterName, customData, worldLevel, pickedUp, cheated };
 }
@@ -135,6 +135,9 @@ function writeItemNew(pkg: PackageWriter, itemData: Item, _version: number): voi
   for (const [key, value] of itemData.customData.entries()) {
     pkg.writeString(key);
     pkg.writeString(value);
+  }
+  if (_version >= 109) {
+    pkg.writeBool(itemData.cheated);
   }
 }
 

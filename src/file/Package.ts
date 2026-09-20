@@ -200,14 +200,19 @@ export class PackageReader<A extends ArrayBufferLike = ArrayBuffer> {
 
   public readString(): string {
     const length = this.read7BitInt();
-    const base = this.bytes.byteOffset;
-    const start = this.offset;
-    const end = this.offset += length;
-    return decode(this.bytes.subarray(start - base, end - base));
+    const bytes = this.readBytes(length);
+    return decode(bytes);
   }
   public skipString(): void {
     const length = this.read7BitInt();
     this.skipBytes(length);
+  }
+
+  public readBytes(length: number): Uint8Array<A> {
+    const base = this.bytes.byteOffset;
+    const start = this.offset;
+    const end = this.offset += length;
+    return this.bytes.subarray(start - base, end - base);
   }
 
   public readByteArray(): Uint8Array<A> {
@@ -215,14 +220,18 @@ export class PackageReader<A extends ArrayBufferLike = ArrayBuffer> {
     if (length < 0) {
       throw new RangeError(`Negative byte array length at ${this.offset}`);
     }
-    const base = this.bytes.byteOffset;
-    const start = this.offset;
-    const end = this.offset += length;
-    return this.bytes.subarray(start - base, end - base);
+    return this.readBytes(length);
   }
   public skipByteArray(): void {
     const length = this.readInt();
     this.skipBytes(length);
+  }
+
+  // abomination which utilizes byte array
+  public readString4(): string {
+    const length = this.readInt();
+    const bytes = this.readBytes(length);
+    return decode(bytes);
   }
 
   public skipBytes(n: number): void {
@@ -488,6 +497,12 @@ export class PackageWriter {
     const length = value.length;
     this.writeInt(length);
     this.writeBytes(value);
+  }
+
+  public writeString4(value: string): void {
+    const encoded = encode(value);
+    this.writeInt(encoded.byteLength);
+    this.writeBytes(encoded);
   }
 
   public writeArray<T>(writer: (this: PackageWriter, value: T) => void, values: ArrayLike<T>): void {

@@ -56,6 +56,9 @@ export type PlayerData = {
   foods: FoodData[];
   skillData?: SkillData;
   customData: Map<string, string>;
+  recentPieceList: string[];
+  tags: string[];
+  favoritePieceList: Map<string, number[]>;
 };
 
 interface PlayerFatStats {
@@ -179,7 +182,29 @@ function readPlayerStats(version: number, reader: PackageReader): PlayerFatStats
 
 function writePlayerStats(version: number, pkg: PackageWriter, stats: PlayerFatStats[]): void {
   if (version >= 46) {
-    
+    const statsNum = stats.reduce(
+      (maximum, stat) => Math.max(maximum, ...[...stat.stats.keys()].map(type => type + 1)),
+      0,
+    );
+    pkg.writeInt(statsNum);
+    pkg.writeInt(stats.length);
+    for (const stat of stats) {
+      for (let type = 0; type < statsNum; ++type) {
+        pkg.writeFloat(stat.stats.get(type as PlayerStatType) ?? 0);
+      }
+      pkg.writeMap(pkg.writeString, pkg.writeFloat, stat.knownWorlds);
+      pkg.writeMap(pkg.writeString, pkg.writeFloat, stat.knownWorldKeys);
+      pkg.writeMap(pkg.writeString, pkg.writeFloat, stat.knownCommands);
+      pkg.writeArray(
+        enemyStats => pkg.writeMap(pkg.writeString, pkg.writeFloat, enemyStats),
+        stat.enemyStats,
+      );
+      pkg.writeMap(pkg.writeString, pkg.writeFloat, stat.itemPickupStats);
+      pkg.writeMap(pkg.writeString, pkg.writeFloat, stat.itemCraftStats);
+      pkg.writeMap(pkg.writeString, pkg.writeFloat, stat.pickableStats);
+      pkg.writeMap(pkg.writeString, pkg.writeFloat, stat.foodEatenStats);
+      pkg.writeMap(pkg.writeString, pkg.writeFloat, stat.piecesPlacedStats);
+    }
   } else if (version >= 38 && stats[0]) {
     pkg.writeArray(pkg.writeFloat, [...stats[0].stats.values()]);
   } else if (version >= 28 && stats[0]) {
@@ -370,7 +395,7 @@ function readFoods(pkg: PackageReader, version: number): FoodData[] {
     }
     const id = pkg.readString();
     let time = 0;
-    if (version >= 25) {
+    if (version >= 25) { // FoodTime
       time = pkg.readFloat();
     } else {
       pkg.readFloat(); // health
@@ -378,11 +403,10 @@ function readFoods(pkg: PackageReader, version: number): FoodData[] {
         pkg.readFloat(); // stamina
       }
     }
+    result.push({ id, time });
     const obj = itemDB[id];
-    if (obj != null && 'Food' in obj) {
-      // error, unknown prefab
-    } else {
-      result.push({ id, time });
+    if (obj == null || !('Food' in obj)) {
+      console.warn(`Unknown food item: ${id}`);
     }
   }
   return result;
@@ -424,7 +448,7 @@ function readPlayerData(data: Uint8Array<ArrayBuffer>): PlayerData {
     : ['beard0', 'hair0'];
   const [skinColor, hairColor] = version >= 5
     ? [pkg.readVector3(), pkg.readVector3()]
-    : [{ x: 1, y: 1, z: 1 }, { x: 1, y: 1, z: 1 }];
+    : [{ x: 1, y: 1, z: 1 }, { x: 0, y: 0, z: 0 }];
   const modelIndex = version >= 11 ? pkg.readInt() : 0;
   const foods = version >= 12 ? readFoods(pkg, version) : [];
   const skillData = version >= 17 ? readSkills(pkg) : new Map();
@@ -433,6 +457,13 @@ function readPlayerData(data: Uint8Array<ArrayBuffer>): PlayerData {
   const stamina = version >= 26 ? clamp(pkg.readFloat(), 0, maxStamina) : 0;
   const maxEitr = version >= 26 ? pkg.readFloat() : 0;
   const eitr = version >= 26 ? clamp(pkg.readFloat(), 0, maxEitr) : 0;
+
+  const zpkg = version >= 33 ? new PackageReader(pkg.readByteArray()) : pkg;
+  const recentPieceList = version >= 33 ? zpkg.readArray(zpkg.readString4) : []
+  const tags = version >= 33 ? zpkg.readArray(zpkg.readString4) : [];
+  const favoritePieceList = version >= 33
+    ? zpkg.readMap(zpkg.readString4, () => zpkg.readArray(zpkg.readInt))
+    : new Map<string, number[]>();
 
   return {
     version,
@@ -464,6 +495,9 @@ function readPlayerData(data: Uint8Array<ArrayBuffer>): PlayerData {
     modelIndex,
     skillData,
     customData,
+    recentPieceList,
+    tags,
+    favoritePieceList,
   };
 }
 
@@ -520,6 +554,13 @@ function writePlayerData(data: PlayerData): Uint8Array<ArrayBuffer> {
     writer.writeFloat(data.maxEitr);
     writer.writeFloat(data.eitr);
   }
+  if (data.version >= 33) {
+    const zpkg = new PackageWriter();
+    zpkg.writeArray(zpkg.writeString4, data.recentPieceList);
+    zpkg.writeArray(zpkg.writeString4, data.tags);
+    zpkg.writeMap(zpkg.writeString4, a => zpkg.writeArray(zpkg.writeInt, a), data.favoritePieceList);
+    writer.writeByteArray(zpkg.flush());
+  }
   return writer.flush();
 }
 
@@ -540,7 +581,7 @@ export async function* read(bytes: Uint8Array<ArrayBuffer>): AsyncGenerator<numb
 
 export async function* write(
   player: Player,
-  sizeHint: number = 10e6, // 10 megabytes
+  sizeHint: number = 1e6, // 1 megabyte
 ): AsyncGenerator<number, Uint8Array<ArrayBuffer>> {
   const writer = new PackageWriter(sizeHint);
   yield* writePlayer(player, writer);
